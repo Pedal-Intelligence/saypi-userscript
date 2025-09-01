@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "குரல் அழைப்பின் போது ChatGPT பதில்களை தானாகக் கன்னடிக்கச் செய்யும்/செயலிழக்கும் என்பதற்கான தேர்வுத்தொகையுக்கான குறி.",
+    "message": "தானாக கன்னடித்தல் (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "தானியங்கி சமர்ப்பிக்க"

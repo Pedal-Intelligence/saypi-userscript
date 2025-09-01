@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Popis za zaškrtávacie políčko na povolenie alebo zakázanie automatického čítania odpovedí ChatGPT počas hlasových hovorov.",
+    "message": "Automatické čítanie nahlas (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatické odoslanie"

@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Etiqueta para la casilla que permite activar o desactivar la lectura automática de las respuestas de ChatGPT durante las llamadas de voz.",
+    "message": "Lectura Automática (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Envío automático"

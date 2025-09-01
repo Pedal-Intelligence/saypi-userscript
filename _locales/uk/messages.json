@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Позначка для ввімкнення або вимкнення автоматичного озвучування відповідей ChatGPT під час голосових дзвінків.",
+    "message": "Автоматичне озвучування (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Автоматичне надсилання"

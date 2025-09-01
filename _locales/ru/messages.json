@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Метка для флажка, позволяющего включать или отключать автоматическое озвучивание ответов ChatGPT во время голосовых вызовов.",
+    "message": "Автоматическое озвучивание (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Авто-отправка"

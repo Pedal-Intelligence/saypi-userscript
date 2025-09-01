@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Jelölőnégyzet felirat az automatikus válaszolvasás engedélyezéséhez vagy letiltásához hanghívások alatt ChatGPT válaszainak esetén.",
+    "message": "Automatikus felolvasás (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatikus beküldés"

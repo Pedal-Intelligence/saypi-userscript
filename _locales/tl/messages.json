@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Tanda para sa checkbox upang paganahin/huwag paganahin ang awtomatikong pagbabasa ng mga sagot ng ChatGPT habang may tawag na boses.",
+    "message": "Awtomatikong Pagbasa (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Awtomatikong ipasa"

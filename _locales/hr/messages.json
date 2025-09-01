@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Oznaka za okvir za potvrdu kojim se omogućuje ili onemogućuje automatsko čitanje ChatGPT odgovora tijekom glasovnih poziva.",
+    "message": "Automatsko glasno čitanje (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatsko slanje"

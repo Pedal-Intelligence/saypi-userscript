@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Beschriftung für das Kontrollkästchen, um das automatische Vorlesen von ChatGPT-Antworten während Sprachanrufen zu aktivieren/deaktivieren.",
+    "message": "Automatisches Vorlesen (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatisch senden"

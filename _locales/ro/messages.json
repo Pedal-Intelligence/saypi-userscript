@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Etichetă pentru caseta de selectare care activează sau dezactivează citirea automată a răspunsurilor ChatGPT în timpul apelurilor vocale.",
+    "message": "Citire automată cu voce tare (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Trimitere automată"

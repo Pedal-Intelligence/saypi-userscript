@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Etikett för kryssrutan som aktiverar eller inaktiverar automatisk uppläsning av ChatGPT:s svar under röstsamtal.",
+    "message": "Automatisk uppläsning (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatisk inlämning"

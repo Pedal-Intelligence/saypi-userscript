@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "음성 통화 중 ChatGPT 응답을 자동으로 읽어주는 기능을 켜거나 끄는 확인란 레이블입니다.",
+    "message": "자동 읽기 (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "자동 제출"

@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "وصف لمربع الاختيار لتمكين أو تعطيل قراءة ردود ChatGPT تلقائياً خلال المكالمات الصوتية.",
+    "message": "القراءة التلقائية بصوت عالٍ (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "الإرسال التلقائي"

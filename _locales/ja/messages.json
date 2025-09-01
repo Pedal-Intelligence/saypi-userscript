@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "音声通話中にChatGPTの回答を自動で読み上げる機能のオン・オフを切り替えるチェックボックスのラベルです。",
+    "message": "自動読み上げ（ChatGPT）"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "自動送信"

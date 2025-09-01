@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Label untuk kotak semak bagi mengaktifkan atau menyahaktifkan bacaan automatik tindak balas ChatGPT semasa panggilan suara.",
+    "message": "Bacaan Automatik (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Hantar secara automatik"

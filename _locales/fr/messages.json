@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Libellé pour la case à cocher permettant d'activer ou de désactiver la lecture automatique des réponses de ChatGPT lors des appels vocaux.",
+    "message": "Lecture automatique à voix haute (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Soumission automatique"
