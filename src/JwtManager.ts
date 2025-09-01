@@ -1,4 +1,5 @@
 import { config } from './ConfigModule';
+import { serializeApiRequest, shouldRouteViaBackground } from './utils/ApiRequestSerializer';
 import { isFirefox as isFirefoxBrowser } from './UserAgentModule';
 import EventBus from './events/EventBus';
 
@@ -238,38 +239,79 @@ export class JwtManager {
         requestOptions.body = JSON.stringify({}); // Empty body but still valid JSON
       }
       
-      const response = await fetch(refreshUrl, requestOptions);
+      // Decide whether to route via background to avoid CSP issues
+      let respOk = false;
+      let respStatus = 0;
+      let respStatusText = '';
+      let respBody: any = null;
 
-      if (!response.ok) {
-        const errorText = await response.text().catch(() => 'No error details');
-        
+      if (
+        typeof window !== 'undefined' &&
+        typeof chrome !== 'undefined' &&
+        typeof (chrome as any).runtime !== 'undefined' &&
+        typeof (chrome as any).runtime.sendMessage === 'function' &&
+        shouldRouteViaBackground(refreshUrl)
+      ) {
+        const serialized = await serializeApiRequest(
+          refreshUrl,
+          { ...(requestOptions as any), responseType: 'json' as const }
+        );
+        const bg = await new Promise<any>((resolve, reject) => {
+          chrome.runtime.sendMessage({ type: 'API_REQUEST', ...serialized }, (response) => {
+            if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
+            resolve(response);
+          });
+        });
+        if (!bg?.success) {
+          throw new Error(bg?.error || 'Background API request failed');
+        }
+        const data = bg.response;
+        respOk = !!data.ok;
+        respStatus = data.status;
+        respStatusText = data.statusText;
+        respBody = data.body;
+      } else {
+        const response = await fetch(refreshUrl, requestOptions);
+        respOk = response.ok;
+        respStatus = response.status;
+        respStatusText = response.statusText;
+        try {
+          respBody = await response.json();
+        } catch {
+          respBody = null;
+        }
+      }
+
+      if (!respOk) {
+        const errorText = typeof respBody === 'string' ? respBody : 'No error details';
+
         // Special handling for 403 responses during onboarding
-        if (response.status === 403) {
+        if (respStatus === 403) {
           console.info('User has a valid session but profile is not fully populated yet (likely during onboarding)');
-          
+
           // Don't clear the authentication state
           // Schedule another refresh attempt after 1 minute
           setTimeout(() => this.refresh(), 60000);
-          
+
           return; // Exit without throwing an error
         }
-        
+
         // Special handling for 401 responses during polling
-        if (response.status === 401 && silent401) {
+        if (respStatus === 401 && silent401) {
           console.debug('Auth check during polling: not authenticated (expected)');
-          
+
           // Clear the token but don't log an error
           this.jwtToken = null;
           this.expiresAt = null;
           await this.saveToStorage();
-          
+
           return; // Exit without throwing an error
         }
-        
-        throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${errorText}`);
+
+        throw new Error(`Failed to refresh token: ${respStatus} ${respStatusText} - ${errorText}`);
       }
 
-      const { token, expiresIn } = await response.json();
+      const { token, expiresIn } = respBody || {};
       
       console.debug('Token refreshed successfully, expires in:', expiresIn);
       

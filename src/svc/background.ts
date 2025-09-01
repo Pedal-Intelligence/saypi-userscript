@@ -457,14 +457,22 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
     
     // Get JWT manager and add auth headers if needed
     const headers = new Headers(options.headers);
-    
-    // Add authorization header only for whitelisted SayPi hosts
+
+    // Determine if this is an auth refresh request; avoid attaching bearer to refresh calls
+    const isAuthRefreshRequest = (() => {
+      try {
+        const u = new URL(url);
+        return u.pathname.includes('/auth/refresh');
+      } catch { return false; }
+    })();
+
+    // Add authorization header only for whitelisted SayPi hosts, excluding auth refresh
     try {
       const hostname = new URL(url).hostname;
       const allowedHosts = new Set<string>(['api.saypi.ai', 'www.saypi.ai']);
       try { if (config?.apiServerUrl) allowedHosts.add(new URL(config.apiServerUrl).hostname); } catch {}
       try { if (config?.authServerUrl) allowedHosts.add(new URL(config.authServerUrl).hostname); } catch {}
-      if (allowedHosts.has(hostname)) {
+      if (allowedHosts.has(hostname) && !isAuthRefreshRequest) {
         const authHeader = jwtManager.getAuthHeader();
         if (authHeader) {
           headers.set('Authorization', authHeader);
@@ -487,8 +495,8 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
     // Perform the fetch request
     let response = await fetch(url, requestOptions);
     
-    // Handle 401/403 responses with token refresh and retry
-    if ((response.status === 401 || response.status === 403) && headers.has('Authorization')) {
+    // Handle 401/403 responses with token refresh and retry (not for auth refresh requests)
+    if (!isAuthRefreshRequest && (response.status === 401 || response.status === 403) && headers.has('Authorization')) {
       logger.debug('[Background] Received 401/403, attempting to refresh token...');
       await jwtManager.refresh(true);
       
