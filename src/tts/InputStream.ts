@@ -1,5 +1,6 @@
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { logger } from "../LoggingModule.js";
 
 export const STREAM_TIMEOUT: number = 5000; // finding middle ground between original 10000ms and too aggressive 3000ms
 
@@ -91,7 +92,7 @@ export abstract class ElementTextStream {
     });
     this.resetStreamTimeout(); // set the initial timeout
     this.streamStartTime = Date.now();
-    console.debug(
+    logger.debug(
       "Starting stream on",
       this.element.id ? this.element.id : this.element
     );
@@ -105,11 +106,11 @@ export abstract class ElementTextStream {
     if (this.closed()) {
       if (this.completionReason) {
         const timeElapsed = Date.now() - this.completionReason.time;
-        console.debug(
+        logger.debug(
           `Skipping next event for "${value.text}" because the stream has already completed on ${this.completionReason.type} ${timeElapsed}ms ago`
         );
       } else {
-        console.debug(
+        logger.debug(
           `Skipping next event for "${value.text}" because the stream was closed for no reason`
         );
       }
@@ -120,14 +121,14 @@ export abstract class ElementTextStream {
 
   protected complete(reason: Completion): void {
     if (this.closed()) {
-      console.debug(
+      logger.debug(
         `Cannot complete the stream on ${reason.type} because the stream has already been completed on ${this.completionReason?.type}`
       );
       return;
     }
     this.completionReason = reason;
     const streamDuration = Date.now() - this.streamStartTime;
-    console.debug(
+    logger.debug(
       `Completing stream on ${reason.type}, ${streamDuration}ms after starting.`,
       this.element.id ? this.element.id : this.element
     );
@@ -180,7 +181,7 @@ export abstract class ElementTextStream {
       if (this.closed() && this.completionReason) {
         const timeSinceCompletion = Date.now() - this.completionReason!.time;
         const warningMessage = `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${this.languageGuess}.`;
-        console.warn(warningMessage);
+        logger.warn(warningMessage);
         const lateChange = new LateChangeEvent(
           timeSinceCompletion,
           this.completionReason!,
