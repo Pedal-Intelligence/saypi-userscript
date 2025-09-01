@@ -365,6 +365,24 @@ class ChatGPTMessageControls extends MessageControls {
 
   private readAloudObserver: MutationObserver | null = null;
 
+  /**
+   * Checks if a voice call is currently active by examining the conversation state.
+   * Uses lazy access to StateMachineService to avoid circular import issues.
+   * @returns true if the conversation is in listening or responding state
+   */
+  private isCallActive(): boolean {
+    try {
+      // Lazy import to avoid module initialization ordering issues
+      const svc = (globalThis as any).StateMachineService || (window as any).StateMachineService;
+      const actor = svc?.conversationActor;
+      const state = actor?.getSnapshot?.() || actor?.state;
+      if (!state) return false;
+      return state.matches?.('listening') || state.matches?.('responding');
+    } catch (_) {
+      return false;
+    }
+  }
+
   // Prefer stable resolution through the known native buttons
   public override findActionBar(): HTMLElement | null {
     const existing = super.findActionBar();
@@ -447,6 +465,11 @@ class ChatGPTMessageControls extends MessageControls {
       const btn = this.getReadAloudButton();
       if (!btn) return;
       if (!this.message.isLastMessage()) return; // ensure it's the newest turn
+      // Respect user preference and only autoplay during a voice call
+      const prefs = UserPreferenceModule.getInstance();
+      const enabled = prefs.getCachedAutoReadAloudChatGPT();
+      if (!enabled) return;
+      if (!this.isCallActive()) return;
       if ((btn as any)._saypiClicked) return; // idempotent guard
       (btn as any)._saypiClicked = true;
       try {

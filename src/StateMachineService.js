@@ -92,3 +92,8 @@ async function initializeService() {
 }
 
 export default await initializeService();
+
+// Also expose the instance on globalThis to allow lazy, non-import access
+try {
+  (globalThis || window).StateMachineService = instance;
+} catch {}
