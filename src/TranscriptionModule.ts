@@ -159,7 +159,7 @@ function transcriptionReceived(seq: number): void {
 
 export function isTranscriptionPending(): boolean {
   checkForExpiredEntries();
-  console.debug(`[TranscriptionModule] in-flight transcription requests: ${sequenceNumsPendingTranscription.size}`);
+  logger.debug(`[TranscriptionModule] in-flight transcription requests: ${sequenceNumsPendingTranscription.size}`);
   return sequenceNumsPendingTranscription.size > 0;
 }
 
@@ -250,7 +250,7 @@ export async function uploadAudioWithRetry(
     }
   }
 
-  console.error("Max retries reached. Giving up.");
+  logger.error("Max retries reached. Giving up.");
   StateMachineService.conversationActor.send("saypi:transcribeFailed", {
     detail: new Error("Max retries reached"),
   });
@@ -368,7 +368,7 @@ async function uploadAudio(
       payload.responseAnalysis = responseJson.responseAnalysis;
     }
 
-    logger.info(
+    logger.debug(
       `Transcribed ${Math.round(
         audioDurationMillis / 1000
       )}s of audio into ${wc} words in ${Math.round(
@@ -397,12 +397,12 @@ async function uploadAudio(
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.name === "AbortError") {
-        console.error("Fetch aborted due to timeout", error);
+        logger.error("Fetch aborted due to timeout", error);
       } else {
-        console.error("An unexpected error occurred:", error);
+        logger.error("An unexpected error occurred:", error);
       }
     } else {
-      console.error("Something thrown that is not an Error object:", error);
+      logger.error("Something thrown that is not an Error object:", error);
     }
 
     // re-throw the error if your logic requires it

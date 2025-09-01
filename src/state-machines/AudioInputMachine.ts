@@ -127,7 +127,8 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
   );
   
   if (frameCount === 0) {
-    console.warn("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
+    // Expected in VAD misfire/short non-speech cases; keep at debug to avoid noise
+    logger.debug("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
     return;
   }
   

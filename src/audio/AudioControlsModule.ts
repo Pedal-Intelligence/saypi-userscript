@@ -45,12 +45,12 @@ export default class AudioControlsModule {
   }
 
   notifyAudioProviderSelection(provider: AudioProvider): void {
-    logger.info(`Speech provided by ${provider.name}`);
+    logger.debug(`Speech provided by ${provider.name}`);
     EventBus.emit("audio:changeProvider", { provider });
   }
 
   notifyAudioVoiceSelection(voice: AIVoice | SpeechSynthesisVoiceRemote): void {
-    logger.info(`Using ${voice.name} voice for speech`);
+    logger.debug(`Using ${voice.name} voice for speech`);
     const matchableVoice =
       voice instanceof AIVoice
         ? voice
@@ -66,7 +66,7 @@ export default class AudioControlsModule {
   }
 
   notifyAudioVoiceDeselection(): void {
-    logger.info("Using default voice for speech");
+    logger.debug("Using default voice for speech");
     EventBus.emit("audio:changeVoice", { voice: null });
     this.notifyAudioProviderSelection(audioProviders.Pi);
   }

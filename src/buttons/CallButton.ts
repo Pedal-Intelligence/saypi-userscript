@@ -11,6 +11,7 @@ import callStartingIconSVG from "../icons/call-starting.svg";
 import hangupIconSVG from "../icons/hangup.svg";
 import interruptIconSVG from "../icons/interrupt.svg";
 import { State } from 'xstate'; // Import State type
+import { logger } from "../LoggingModule";
 // import hangupMincedIconSVG from "../icons/hangup-minced.svg"; // Not used anymore
 
 interface Segment {
@@ -137,7 +138,7 @@ class CallButton {
              status: 'capturing',
              startTime: Date.now(),
            };
-           console.debug(`Segment ${this.currentSeqNum}: Started capturing`);
+           logger.debug(`Segment ${this.currentSeqNum}: Started capturing`);
            this.updateButtonSegments();
         } else if (this.currentSegment.status !== 'capturing') {
             this.currentSegment.status = 'capturing';
@@ -148,17 +149,17 @@ class CallButton {
     handleUserStoppedSpeaking(data: { duration: number; blob?: Blob }) {
        if (!this.callIsActive || !this.currentSegment) return;
        if (this.currentSegment.status === 'capturing') {
-          console.debug(`Segment ${this.currentSegment.seqNum}: VAD stopped (raw userStoppedSpeaking event)`);
+          logger.debug(`Segment ${this.currentSegment.seqNum}: VAD stopped (raw userStoppedSpeaking event)`);
           // Actual finalization logic based on blob/duration:
           if (data.blob && data.blob.size > 0 && data.duration > 0) {
             this.currentSegment.endTime = Date.now();
             this.currentSegment.status = 'processing'; // Optimistically mark as processing
             this.segments.push({...this.currentSegment});
-            console.debug(`Segment ${this.currentSegment.seqNum}: Finalized as processing, duration: ${data.duration}ms`);
+            logger.debug(`Segment ${this.currentSegment.seqNum}: Finalized as processing, duration: ${data.duration}ms`);
             this.currentSeqNum++; // Prepare for the next segment
             this.currentSegment = null; // Current capture is done
           } else {
-            console.debug(`Segment ${this.currentSegment.seqNum}: No audio data, cancelling capture.`);
+            logger.debug(`Segment ${this.currentSegment.seqNum}: No audio data, cancelling capture.`);
             this.currentSegment = null; // Cancel this empty/false-positive segment
           }
           this.updateButtonSegments();
@@ -170,7 +171,7 @@ class CallButton {
         const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
         if (segment && segment.status !== 'processing') {
             segment.status = 'processing';
-            console.debug(`Segment ${data.sequenceNumber}: Confirmed processing`);
+            logger.debug(`Segment ${data.sequenceNumber}: Confirmed processing`);
             this.updateButtonSegments();
         }
     }

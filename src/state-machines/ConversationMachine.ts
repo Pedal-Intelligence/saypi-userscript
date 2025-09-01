@@ -28,6 +28,7 @@ import getMessage from "../i18n";
 import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
+import { logger } from "../LoggingModule";
 
 type ConversationTranscribedEvent = {
   type: "saypi:transcribed";
@@ -1110,7 +1111,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         const shouldRespondToThis = event.responseAnalysis?.shouldRespond;
-        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\\'t respond"}]`);
+        logger.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\\'t respond"}]`);
         
         if (transcription && transcription.trim() !== "") {
           ConversationContext.transcriptions[sequenceNumber] = transcription;
@@ -1227,7 +1228,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           if (promptEditor) {
             promptEditor.setMessage(message);
           } else {
-            console.warn("[ConversationMachine] [thinkingPrompt] no prompt editor found");
+            logger.warn("[ConversationMachine] [thinkingPrompt] no prompt editor found");
           }
         }
       },
@@ -1368,7 +1369,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         const mustRespond = mustRespondToMessage(context);
         const shouldRespond = shouldAlwaysRespond() || context.shouldRespond;
         const shouldSetFlag = mustRespond && !shouldRespond;
-        console.debug(shouldSetFlag 
+        logger.debug(shouldSetFlag 
           ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
           : "Clearing maintainance flag since below context window capacity and timeout threshold"
         );
@@ -1380,27 +1381,27 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         if (context.isMaintainanceMessage) {
           // these actions can be performed early, before the message is fully written
           EventBus.emit("saypi:tts:skipCurrent");
-          console.debug("Skipping speech generation due to this being a maintainance message");
+          logger.debug("Skipping speech generation due to this being a maintainance message");
         }
       },
       suppressWrittenResponseWhenMaintainance: (context: ConversationContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("saypi:ui:hide-message");
-          console.debug("Hiding message due to this being a maintainance message");
+          logger.debug("Hiding message due to this being a maintainance message");
         }
       },
       suppressSpokenResponseWhenMaintainance: (context: ConversationContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("saypi:ui:hide-message"); // send again to ensure the message is hidden
           EventBus.emit("audio:skipCurrent");
-          console.debug("Skipping speech due to this being a maintainance message");
+          logger.debug("Skipping speech due to this being a maintainance message");
         }
       },
       clearMaintainanceFlag: (ConversationContext, event) => {
         assign({ isMaintainanceMessage: () => false });
       },
       pauseAudio: () => {
-        console.debug("[ConversationMachine] [pauseAudio] Pausing audio for user interruption");
+        logger.debug("[ConversationMachine] [pauseAudio] Pausing audio for user interruption");
         EventBus.emit("audio:output:pause");
       },
       resumeAudio: () => {
@@ -1417,7 +1418,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           TranscriptionErrorManager.reset();
         } else {
           // Optionally, log that the hint was suppressed, or do nothing.
-          console.debug("Transcription failure hint suppressed due to low error rate.");
+          logger.debug("Transcription failure hint suppressed due to low error rate.");
         }
       },
     },
@@ -1466,12 +1467,12 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         let reason = criteria.length > 0 ? criteria.join(", ") : "no thresholds met";
         if (mustRespond) {
           reason = reason + (ready ? " and ready to submit" : " but not ready to submit");
-          console.debug(`Submission needed because ${reason}`);
+          logger.debug(`Submission needed because ${reason}`);
         } else {
           if (context.timeUserStoppedSpeaking > 0) {
             reason = reason + ` (time since stopped speaking: ${timeSinceStoppedSpeaking / 1000} seconds)`;
           }
-          console.debug(`Submission not needed because ${reason}`, context);
+          logger.debug(`Submission not needed because ${reason}`, context);
         }
         /* end debug logging */
 
@@ -1521,7 +1522,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         );
 
         if (finalDelay > 0) {
-          console.info(
+          logger.debug(
             "Waiting for",
             (finalDelay / 1000).toFixed(1),
             "seconds before submitting"
