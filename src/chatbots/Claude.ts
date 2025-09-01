@@ -231,7 +231,7 @@ class ClaudeMessageControls extends MessageControls {
     return ["text-sm"];
   }
 
-  getHoverMenuSelector(): string {
+  getActionBarSelector(): string {
     return "div.flex.items-stretch";
   }
 }

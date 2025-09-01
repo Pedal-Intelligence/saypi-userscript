@@ -60,3 +60,6 @@ doc/editors/chatgpt/*.html
 
 # Test files
 test-csp-bypass.html
+doc/dom/chatgpt/action-bar.html
+doc/dom/chatgpt/agent-turn-article.html
+doc/dom/chatgpt/read-aloud-button.html

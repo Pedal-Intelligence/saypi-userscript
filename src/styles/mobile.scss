@@ -129,11 +129,13 @@ html.immersive-view {
     display: none;
   }
 }
+html.mobile-device .chat-message .message-action-bar .saypi-tts-controls,
 html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {
   /* on mobile, speech controls are in a popup menu instead */
   display: none;
 }
 /* styling for the speech controls in the popup menu */
+html.mobile-device .chat-message .message-action-bar .saypi-cost-container,
 html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
   display: flex;
   align-items: center;
@@ -181,4 +183,3 @@ html.mobile-device .assistant-message.maintenance-message {
     }
   }
 }
-
