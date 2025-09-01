@@ -332,9 +332,9 @@ export class JwtManager {
         throw new Error(`Failed to refresh token: ${respStatus} ${respStatusText} - ${errorText}`);
       }
 
-      const { token, expiresIn } = respBody || {};
+      // Handle different response body types - could be string or object
+      let parsedBody: any = null;
       
-      // Defensive checks with detailed logging for remote server issues
       if (!respBody) {
         logger.error('Auth server error: Empty response body received', {
           status: respStatus,
@@ -344,27 +344,47 @@ export class JwtManager {
         throw new Error('Token refresh failed: empty response from auth server');
       }
       
+      // Parse response body if it's a string
+      if (typeof respBody === 'string') {
+        try {
+          parsedBody = JSON.parse(respBody);
+        } catch (parseError) {
+          logger.error('Auth server error: Invalid JSON response', {
+            responseBody: respBody,
+            status: respStatus,
+            statusText: respStatusText,
+            url: refreshUrl,
+            parseError: parseError
+          });
+          throw new Error('Token refresh failed: invalid JSON response from auth server');
+        }
+      } else {
+        parsedBody = respBody;
+      }
+      
+      const { token, expiresIn } = parsedBody || {};
+      
       if (!token) {
         logger.error('Auth server error: Missing token in response', {
-          responseBody: respBody,
+          responseBody: parsedBody,
           status: respStatus,
           statusText: respStatusText,
           url: refreshUrl,
-          hasToken: 'token' in respBody,
-          tokenValue: typeof respBody.token
+          hasToken: parsedBody && typeof parsedBody === 'object' && 'token' in parsedBody,
+          tokenValue: parsedBody?.token ? typeof parsedBody.token : 'undefined'
         });
         throw new Error('Token refresh failed: no token returned by auth server');
       }
       
       if (!expiresIn) {
         logger.error('Auth server error: Missing expiresIn in response', {
-          responseBody: respBody,
+          responseBody: parsedBody,
           status: respStatus,
           statusText: respStatusText,
           url: refreshUrl,
-          hasExpiresIn: 'expiresIn' in respBody,
-          expiresInValue: typeof respBody.expiresIn,
-          expiresInActual: respBody.expiresIn
+          hasExpiresIn: parsedBody && typeof parsedBody === 'object' && 'expiresIn' in parsedBody,
+          expiresInValue: parsedBody?.expiresIn ? typeof parsedBody.expiresIn : 'undefined',
+          expiresInActual: parsedBody?.expiresIn
         });
         throw new Error('Token refresh failed: no expiration time returned by auth server');
       }
