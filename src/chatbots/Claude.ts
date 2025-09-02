@@ -199,6 +199,25 @@ class ClaudeChatbot extends AbstractChatbot {
   getContextWindowCapacityCharacters(): number {
     return 200000; // Claude has a 200k token limit
   }
+
+  simulateFormSubmit(): boolean {
+    // Claude.ai uses the standard SayPi submit button, so fallback to keyboard events
+    const textarea = document.getElementById("saypi-prompt");
+    if (textarea) {
+      const enterEvent = new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "Enter",
+        keyCode: 13,
+        which: 13,
+      });
+      textarea.dispatchEvent(enterEvent);
+      console.debug("Dispatched Enter keydown event to Claude at", Date.now());
+      return true;
+    }
+    
+    console.error("Cannot simulate submit for Claude: No textarea found.");
+    return false;
+  }
 }
 
 class ClaudeResponse extends AssistantResponse {

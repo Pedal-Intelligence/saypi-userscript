@@ -178,6 +178,25 @@ class PiAIChatbot extends AbstractChatbot {
   getContextWindowCapacityCharacters(): number {
     return 500; // Pi has a 4k character limit
   }
+
+  simulateFormSubmit(): boolean {
+    // Pi.ai uses the standard SayPi submit button, so fallback to keyboard events
+    const textarea = document.getElementById("saypi-prompt");
+    if (textarea) {
+      const enterEvent = new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "Enter",
+        keyCode: 13,
+        which: 13,
+      });
+      textarea.dispatchEvent(enterEvent);
+      console.debug("Dispatched Enter keydown event to Pi at", Date.now());
+      return true;
+    }
+    
+    console.error("Cannot simulate submit for Pi: No textarea found.");
+    return false;
+  }
 }
 
 class PiResponse extends AssistantResponse {

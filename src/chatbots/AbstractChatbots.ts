@@ -47,6 +47,8 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getPromptContainer(prompt: HTMLElement): HTMLElement;
     abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
     
+    abstract simulateFormSubmit(): boolean;
+    
     protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
 
     getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse {

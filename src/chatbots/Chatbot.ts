@@ -43,6 +43,9 @@ export interface Chatbot {
   hasNickname(): Promise<boolean>;
   getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
 
+  // Submit method - chatbot-specific submission logic
+  simulateFormSubmit(): boolean;
+
   // Cache and utility methods - implementations are in AbstractChatbot
   getCachedAssistantResponse(element: HTMLElement): AssistantResponse | undefined;
   clearCachedAssistantResponse(element: HTMLElement): boolean;
