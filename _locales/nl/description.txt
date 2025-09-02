@@ -1,42 +1,42 @@
-Say, Pi maakt van je gesprekken met Pi en Claude vloeiende, stembestuurde ervaringen en brengt hoogwaardige stemtypering naar elke website.  
-Tik gewoon op de oproepknop, spreek zoals je met een persoon zou doen, en ontvang levensechte gesproken antwoorden. Bovendien kun je tekst dicteren in elk invoerveld op het web met dezelfde nauwkeurigheid die je waardeert.  
-Perfect voor multitasking, toegankelijkheid, of iedereen die beter denkt door te spreken.
+Say, Pi verandert je gesprekken met ChatGPT, Pi en Claude in soepele, spraakgestuurde ervaringen en brengt hoogwaardige spraakherkenning naar elke website.  
+Tik gewoon op de belknop, spreek zoals je met een persoon zou doen, en ontvang levensechte gesproken antwoorden. Bovendien kun je tekst dicteren in elk invoerveld op het web met dezelfde nauwkeurigheid die je gewend bent. Perfect voor multitasking, toegankelijkheid, of voor iedereen die beter denkt door hardop te spreken.
 
+NIEUW IN v1.10.0 — “Say, Pi voor ChatGPT” (Bewaar Standaard Stem)
+- Breng het gevoel van ChatGPT’s Standaard Stemmodus (SVM) terug met een geduldige, voorspelbare, handsfree ervaring.
+- Direct beschikbaar op chatgpt.com: een belknop verschijnt in de ChatGPT-composer; start/stop net als SVM.
+- Automatisch Voorlezen: wanneer ingeschakeld, drukken we ChatGPT’s eigen “voorlezen” één keer per reactie in—geen dubbele audio.
+- Ontworpen voor het #SaveStandardVoice moment: warmte, aanwezigheid en betrouwbare timing.
 
 GRATIS PLAN – PROBEER DIRECT, GEEN ACCOUNT NODIG
-- Spraakchat met AI: Praat met Pi en Claude met Whisper-aangedreven spraakherkenning die weet wanneer je klaar bent met spreken.  
-- Universele Stemtypering: Dicteer in elk tekstveld of e-mail op elke website – klik met de rechtermuisknop en selecteer "Start dictation with Say, Pi."
-- Nauwkeurig & Snel: Geniet van zeer nauwkeurige spraak-naar-tekst, zelfs met accenten en achtergrondgeluid.  
-- Hoor Pi's Echte Stem: Natuurlijke stemantwoorden in Pi's ingebouwde stijlen.  
-- Flexibele Indelingen: Gebruik de volledig scherm meeslepende modus of de standaard chatweergave.  
-- Donkere Modus Ondersteuning: Oogvriendelijk ontwerp dat opgaat in de interface van Pi.  
-- Werkt Overal: Mac, Windows, Linux, Android, iOS – allemaal ondersteund.
+- Spraakchat met AI: Praat met ChatGPT, Pi en Claude met Whisper-gestuurde spraakherkenning die weet wanneer je klaar bent met spreken.
+- Universele Spraakherkenning: Dicteer in elk tekstveld of e-mail op elke website – klik met de rechtermuisknop en selecteer "Start dictatie met Say, Pi."
+- Nauwkeurig & Snel: Geniet van zeer nauwkeurige spraak-naar-tekst, zelfs met accenten en achtergrondgeluid.
+- Hoor Natuurlijke Stemmen: Warme, levensechte antwoorden in ondersteunde modi.
+- Flexibele Indelingen: Gebruik de volledige schermmodus of de standaard chatweergave.
+- Ondersteuning voor Donkere Modus: Oogvriendelijk ontwerp dat aansluit bij Pi's interface.
+- Werkt Overal: Mac, Windows, Linux, Android, iOS – alles gedekt.
 
-
-SAY, PI PREMIUM – ONTSLUIT DE VOLLEDIGE ERVARING
-Je stem, je taal, je AI – op al je apparaten en websites.  
-- Claude & Pi Ondersteuning: Naadloos schakelen tussen toonaangevende AI-assistenten.  
-- Universele Dictatie: Professionele stemtypering voor e-mails, documenten en formulieren overal op het web.  
-- Levensechte Antwoorden in 32+ Talen: Aangedreven door ElevenLabs, ontworpen om natuurlijk te klinken in jouw taal.  
-- Grotere Gebruiksbeperkingen: Meer spreektijd, meer luistertijd, meer dictatie.  
-- Eén Account, Overal: Premium volgt je op platforms en browsers.
+SAY, PI PREMIUM – ONTGRENDEL DE VOLLEDIGE ERVARING
+Je stem, je taal, je AI – op al je apparaten en websites.
+- Ondersteuning voor ChatGPT, Claude & Pi: Naadloos schakelen tussen top AI-assistenten.
+- Universele Dictatie: Professionele spraakherkenning voor e-mails, documenten en formulieren overal op het web.
+- Levensechte Antwoorden in 32+ Talen: Aangedreven door ElevenLabs, ontworpen om natuurlijk te klinken in jouw taal.
+- Grotere Gebruiksbeperkingen: Meer spreektijd, meer luistertijd, meer dictatie.
+- Eén Account, Overal: Premium volgt je op alle platforms en browsers.
 
 Zie prijzen op: https://saypi.ai/pricing
 
-
 WAAROM DUIZENDEN VAN SAY, PI HOUDEN
-- Verbeter Je Workflow: Maak notities, schrijf e-mails, bedenk ideeën, of maak concepten terwijl je handen vrij blijven.  
-- Spreek Elke Taal: Meertalige ondersteuning met soepele midden-gespreksschakeling.  
-- Gebouwd voor Toegankelijkheid: Ontworpen met inclusiviteit in gedachten – geweldig voor gebruikers met motorische of visuele uitdagingen.  
-- Beoordeeld met ★ 4.9/5 door 2.000+ Gebruikers: Vertrouwd door een groeiende wereldwijde gemeenschap.  
-- Privacy Eerst: Je stemgegevens zijn veilig en worden nooit misbruikt. Zie ons beleid op: https://saypi.ai/legal/privacy
-
+- Verbeter Je Workflow: Maak notities, schrijf e-mails, bedenk ideeën of stel op terwijl je handen vrij blijven.
+- Spreek Elke Taal: Meertalige ondersteuning met soepel schakelen midden in een gesprek.
+- Ontworpen voor Toegankelijkheid: Ontworpen met inclusiviteit in gedachten – geweldig voor gebruikers met motorische of visuele uitdagingen.
+- Beoordeeld met ★ 4.9/5 door 2.000+ Gebruikers: Vertrouwd door een groeiende wereldwijde gemeenschap.
+- Privacy Eerst: Je spraakgegevens zijn veilig en worden nooit misbruikt. Zie ons beleid op: https://saypi.ai/legal/privacy
 
 BEGIN BINNEN ENKELE SECONDEN
-1. Installeer de extensie.  
-2. Voor AI-chat: Open pi.ai of claude.ai en klik op de oproepknop.  
-3. Voor stemtypering: Druk vanuit elk tekstveld op het zwevende "Say, Pi" pictogram of klik met de rechtermuisknop en selecteer "Start dictation with Say, Pi."  
+1. Installeer de extensie.
+2. Voor AI-chat: Open chatgpt.com, pi.ai of claude.ai en klik op de belknop.
+3. Voor spraakherkenning: Vanuit elk tekstveld, druk op het zwevende "Say, Pi" pictogram of klik met de rechtermuisknop en selecteer "Start dictatie met Say, Pi."
 4. Spreek natuurlijk. Dat is alles.
 
-
-Begin op een natuurlijke manier met AI te praten en met je stem te typen—installeer Say, Pi en ervaar de toekomst van conversatie en productiviteit.
+Begin op een natuurlijke manier met AI te praten en te typen met je stem—installeer Say, Pi en ervaar de toekomst van conversatie en productiviteit.

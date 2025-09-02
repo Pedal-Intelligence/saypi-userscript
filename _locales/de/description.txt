@@ -1,35 +1,42 @@
-Say, Pi verwandelt Ihre Gespräche mit Pi und Claude in flüssige, sprachgesteuerte Erlebnisse und bringt hochwertige Sprachschreiberkennung auf jede Website. Tippen Sie einfach auf die Anruftaste, sprechen Sie wie mit einer Person und erhalten Sie lebensechte gesprochene Antworten. Außerdem können Sie Text mit der gleichen Genauigkeit in jedes Eingabefeld im Web diktieren. Perfekt für Multitasking, Barrierefreiheit oder alle, die besser laut denken.
+Say, Pi verwandelt Ihre Gespräche mit ChatGPT, Pi und Claude in reibungslose, sprachgesteuerte Erlebnisse und bringt hochwertige Spracherkennung auf jede Website.  
+Tippen Sie einfach auf die Anruftaste, sprechen Sie wie mit einer Person und erhalten Sie lebensechte gesprochene Antworten. Außerdem können Sie Text in jedes Eingabefeld im Web mit der gewohnten Genauigkeit diktieren. Perfekt für Multitasking, Barrierefreiheit oder für alle, die besser laut denken.
 
-KOSTENLOSER PLAN – SOFORT AUSPROBIEREN, KEIN KONTO NÖTIG
-- Sprachchat mit KI: Sprechen Sie mit Pi und Claude mit flüsterbetriebener Spracherkennung, die weiß, wann Sie fertig sind.  
-- Universelle Sprachschreiberkennung: Diktieren Sie in jedes Textfeld oder E-Mail auf jeder Website – einfach mit der rechten Maustaste klicken und "Diktat mit Say, Pi starten" auswählen.
-- Genau und Schnell: Genießen Sie hochpräzise Sprach-zu-Text-Wandlung, auch bei Akzenten und Hintergrundgeräuschen.  
-- Höre Pi's echte Stimme: Natürliche Sprachantworten in Pi's eingebauten Stilen.  
-- Flexible Layouts: Verwenden Sie den Vollbild-Immersionsmodus oder die Standard-Chatansicht.  
-- Dunkelmodus-Unterstützung: Augenfreundliches Design, das sich in Pi's Oberfläche einfügt.  
+NEU IN v1.10.0 — „Say, Pi für ChatGPT“ (Save Standard Voice)
+- Bringen Sie das Gefühl des Standard Voice Mode (SVM) von ChatGPT zurück mit einer geduldigen, vorhersehbaren, freihändigen Erfahrung.
+- Drop-in auf chatgpt.com: Eine Anruftaste erscheint im ChatGPT-Komponisten; starten/stoppen wie SVM.
+- Automatisches Vorlesen: Wenn aktiviert, drücken wir ChatGPTs native „Vorlesen“-Funktion einmal pro Antwort – kein doppelter Ton.
+- Entwickelt für den #SaveStandardVoice-Moment: Wärme, Präsenz und zuverlässiges Tempo.
+
+KOSTENLOSER PLAN – SOFORT AUSPROBIEREN, KEIN KONTO ERFORDERLICH
+- Sprach-Chat mit KI: Sprechen Sie mit ChatGPT, Pi und Claude mit Whisper-gestützter Spracherkennung, die erkennt, wenn Sie fertig sind.
+- Universelle Spracherkennung: Diktieren Sie in jedes Textfeld oder jede E-Mail auf jeder Website – einfach mit der rechten Maustaste klicken und „Diktat mit Say, Pi starten“ auswählen.
+- Genau & Schnell: Genießen Sie hochpräzise Spracherkennung, auch mit Akzenten und Hintergrundgeräuschen.
+- Natürliche Stimmen hören: Warme, lebensechte Antworten in unterstützten Modi.
+- Flexible Layouts: Verwenden Sie den Vollbild-Immersive-Modus oder die Standard-Chat-Ansicht.
+- Dunkelmodus-Unterstützung: Augenfreundliches Design, das sich nahtlos in die Pi-Oberfläche einfügt.
 - Funktioniert überall: Mac, Windows, Linux, Android, iOS – alles abgedeckt.
 
-SAY, PI PREMIUM – ERLEBEN SIE DAS VOLLE ERLEBNIS
-Ihre Stimme, Ihre Sprache, Ihre KI – über alle Ihre Geräte und Websites hinweg.  
-- Claude- & Pi-Unterstützung: Nahtloses Wechseln zwischen erstklassigen KI-Assistenten.  
-- Universelles Diktat: Professionelle Sprachschreiberkennung für E-Mails, Dokumente und Formulare überall im Web.
-- Lebensechte Antworten in 32+ Sprachen: Angetrieben von ElevenLabs, entwickelt, um in Ihrer Sprache natürlich zu klingen.  
-- Größere Nutzungsgrenzen: Mehr Sprechzeit, mehr Hörzeit, mehr Diktat.  
+SAY, PI PREMIUM – DAS VOLLE ERLEBNIS FREISCHALTEN
+Ihre Stimme, Ihre Sprache, Ihre KI – auf all Ihren Geräten und Websites.
+- ChatGPT-, Claude- & Pi-Unterstützung: Nahtloses Wechseln zwischen den führenden KI-Assistenten.
+- Universelle Diktation: Professionelle Spracherkennung für E-Mails, Dokumente und Formulare überall im Web.
+- Lebensechte Antworten in über 32 Sprachen: Angetrieben von ElevenLabs, gestaltet, um in Ihrer Sprache natürlich zu klingen.
+- Größere Nutzungslimits: Mehr Sprechzeit, mehr Hörzeit, mehr Diktation.
 - Ein Konto, überall: Premium folgt Ihnen über Plattformen und Browser hinweg.
 
-Preise einsehen unter: https://saypi.ai/pricing
+Preise ansehen unter: https://saypi.ai/pricing
 
 WARUM TAUSENDE SAY, PI LIEBEN
-- Steigern Sie Ihren Workflow: Machen Sie Notizen, schreiben Sie E-Mails, entwickeln Sie Ideen oder entwerfen Sie Entwürfe, während Sie Ihre Hände frei halten.  
-- Sprechen Sie jede Sprache: Mehrsprachige Unterstützung mit flüssigem Wechsel mitten im Gespräch.  
-- Für Barrierefreiheit gebaut: Mit dem Gedanken an Inklusivität entworfen – ideal für Benutzer mit motorischen oder visuellen Herausforderungen.  
-- Bewertet mit ★ 4.9/5 von 2.000+ Benutzern: Vertrauen von einer wachsenden globalen Gemeinschaft.  
-- Datenschutz an erster Stelle: Ihre Sprachdaten sind sicher und werden niemals missbraucht. Sehen Sie unsere Richtlinie unter: https://saypi.ai/legal/privacy
+- Steigern Sie Ihren Arbeitsablauf: Notizen machen, E-Mails schreiben, Ideen entwickeln oder Entwürfe erstellen, während Ihre Hände frei bleiben.
+- Sprechen Sie jede Sprache: Mehrsprachige Unterstützung mit reibungslosem Wechsel während des Gesprächs.
+- Für Barrierefreiheit gebaut: Mit Inklusivität im Hinterkopf entwickelt – ideal für Benutzer mit motorischen oder visuellen Herausforderungen.
+- Bewertet mit ★ 4,9/5 von über 2.000 Nutzern: Vertrauenswürdig von einer wachsenden globalen Gemeinschaft.
+- Datenschutz an erster Stelle: Ihre Sprachdaten sind sicher und werden niemals missbraucht. Unsere Richtlinien finden Sie unter: https://saypi.ai/legal/privacy
 
-IN SEKUNDEN STARTEN
-1. Installieren Sie die Erweiterung.  
-2. Für den KI-Chat: Öffnen Sie pi.ai oder claude.ai und klicken Sie auf die Anruftaste.
-3. Für die Sprachschreiberkennung: Drücken Sie in einem Textfeld das schwebende "Say, Pi"-Symbol oder klicken mit der rechten Maustaste und wählen Sie "Diktat mit Say, Pi starten".
-4. Sprechen Sie natürlich. Das ist alles.
+IN SEKUNDEN STARTKLAR
+1. Installieren Sie die Erweiterung.
+2. Für KI-Chat: Öffnen Sie chatgpt.com, pi.ai oder claude.ai und klicken Sie auf die Anruftaste.
+3. Für Spracherkennung: Drücken Sie in jedem Textfeld das schwebende „Say, Pi“-Symbol oder klicken Sie mit der rechten Maustaste und wählen Sie „Diktat mit Say, Pi starten“.
+4. Sprechen Sie natürlich. Das war's.
 
-Beginnen Sie, auf natürliche Weise mit KI zu sprechen und mit Ihrer Stimme zu tippen – installieren Sie Say, Pi und erleben Sie die Zukunft von Konversation und Produktivität.
+Beginnen Sie, auf natürliche Weise mit KI zu sprechen und mit Ihrer Stimme zu tippen – installieren Sie Say, Pi und erleben Sie die Zukunft der Konversation und Produktivität.

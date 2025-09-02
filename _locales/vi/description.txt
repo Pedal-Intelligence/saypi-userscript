@@ -1,42 +1,41 @@
-Say, Pi biến các cuộc trò chuyện của bạn với Pi và Claude thành trải nghiệm mượt mà, vận hành bằng giọng nói, và mang đến chức năng nhập liệu giọng nói chất lượng cao cho bất kỳ trang web nào.  
-Chỉ cần nhấn nút gọi, nói như với một người và nhận được các phản hồi giọng nói sống động. Thêm vào đó, bạn có thể đọc văn bản vào bất kỳ trường nhập liệu nào trên web với độ chính xác mà bạn yêu thích.  
-Hoàn hảo cho làm nhiều việc cùng lúc, tiếp cận, hoặc cho bất kỳ ai suy nghĩ tốt hơn khi nói ra.
+Say, Pi biến các cuộc trò chuyện của bạn với ChatGPT, Pi và Claude thành những trải nghiệm mượt mà, điều khiển bằng giọng nói, và mang lại khả năng nhập liệu bằng giọng nói chất lượng cao cho bất kỳ trang web nào. Chỉ cần nhấn nút gọi, nói như bạn đang trò chuyện với một người, và nhận được phản hồi bằng giọng nói sống động. Thêm vào đó, bạn có thể nhập liệu bằng giọng nói vào bất kỳ trường nhập liệu nào trên web với độ chính xác mà bạn yêu thích. Hoàn hảo cho việc đa nhiệm, khả năng tiếp cận, hoặc bất kỳ ai suy nghĩ tốt hơn khi nói ra.
 
+MỚI TRONG v1.10.0 — “Say, Pi for ChatGPT” (Lưu Giọng Nói Tiêu Chuẩn)
+- Mang lại cảm giác của Chế Độ Giọng Nói Tiêu Chuẩn (SVM) của ChatGPT với trải nghiệm kiên nhẫn, dễ đoán, không cần dùng tay.
+- Thả vào chatgpt.com: một nút gọi xuất hiện trong trình soạn thảo ChatGPT; bắt đầu/dừng như SVM.
+- Đọc To Tự Động: khi được kích hoạt, chúng tôi nhấn “đọc to” gốc của ChatGPT một lần mỗi phản hồi—không có âm thanh đôi.
+- Thiết kế cho khoảnh khắc #SaveStandardVoice: ấm áp, hiện diện, và nhịp độ đáng tin cậy.
 
-GÓI MIỄN PHÍ – THỬ NGAY LẬP TỨC, KHÔNG CẦN TÀI KHOẢN
-- Trò chuyện bằng giọng nói với AI: Nói chuyện với Pi và Claude với công nghệ nhận dạng giọng nói Whisper biết khi nào bạn dừng nói.  
-- Nhập liệu giọng nói phổ quát: Đọc vào bất kỳ trường văn bản hoặc email nào trên bất kỳ trang web nào – chỉ cần nhấp chuột phải và chọn "Start dictation with Say, Pi."  
-- Chính xác & Nhanh chóng: Tận hưởng chuyển giọng nói thành văn bản với độ chính xác cao, ngay cả với giọng điệu và tiếng ồn nền.  
-- Nghe Giọng Nói Thực Của Pi: Các phản hồi giọng nói tự nhiên trong các phong cách tích hợp của Pi.  
-- Bố Cục Linh Hoạt: Sử dụng chế độ toàn màn hình hòa nhập hoặc chế độ chat tiêu chuẩn.  
-- Hỗ Trợ Chế Độ Tối: Thiết kế thân thiện với mắt hòa hợp với giao diện của Pi.  
-- Hoạt Động Mọi Nơi: Mac, Windows, Linux, Android, iOS – tất cả đều được hỗ trợ.
+GÓI MIỄN PHÍ – DÙNG THỬ NGAY LẬP TỨC, KHÔNG CẦN TÀI KHOẢN
+- Trò Chuyện Bằng Giọng Nói Với AI: Nói chuyện với ChatGPT, Pi, và Claude với nhận diện giọng nói Whisper biết khi nào bạn kết thúc nói.
+- Nhập Liệu Bằng Giọng Nói Toàn Cầu: Nhập liệu vào bất kỳ trường văn bản hoặc email nào trên bất kỳ trang web nào – chỉ cần nhấp chuột phải và chọn "Bắt đầu nhập liệu với Say, Pi."
+- Chính Xác & Nhanh Chóng: Thưởng thức chuyển đổi giọng nói thành văn bản với độ chính xác cao, ngay cả với giọng điệu và tiếng ồn nền.
+- Nghe Giọng Nói Tự Nhiên: Phản hồi ấm áp, sống động trong các chế độ được hỗ trợ.
+- Bố Cục Linh Hoạt: Sử dụng chế độ toàn màn hình hoặc chế độ trò chuyện tiêu chuẩn.
+- Hỗ Trợ Chế Độ Tối: Thiết kế thân thiện với mắt hòa quyện với giao diện của Pi.
+- Hoạt Động Ở Mọi Nơi: Mac, Windows, Linux, Android, iOS – tất cả đều được hỗ trợ.
 
-
-SAY, PI PREMIUM – TRẢI NGHIỆM TỐI ĐA
-Giọng nói của bạn, ngôn ngữ của bạn, AI của bạn – trên tất cả thiết bị và trang web của bạn.  
-- Hỗ Trợ Claude & Pi: Chuyển đổi liền mạch giữa các trợ lý AI hàng đầu.  
-- Đọc Chính Tả Phổ Quát: Nhập văn bản bằng giọng nói chuyên nghiệp cho email, tài liệu và biểu mẫu bất kỳ đâu trên web.  
-- Phản Hồi Sống Động Trong Hơn 32 Ngôn Ngữ: Được hỗ trợ bởi ElevenLabs, được tạo ra để nghe tự nhiên trong ngôn ngữ của bạn.  
-- Giới Hạn Sử Dụng Lớn Hơn: Thời gian nói nhiều hơn, thời gian nghe nhiều hơn, đọc chính tả nhiều hơn.  
-- Một Tài Khoản, Khắp Mọi Nơi: Premium đi theo bạn trên các nền tảng và trình duyệt.
+SAY, PI PREMIUM – MỞ KHÓA TRẢI NGHIỆM ĐẦY ĐỦ
+Giọng nói của bạn, ngôn ngữ của bạn, AI của bạn – trên tất cả các thiết bị và trang web của bạn.
+- Hỗ Trợ ChatGPT, Claude & Pi: Chuyển đổi liền mạch giữa các trợ lý AI hàng đầu.
+- Nhập Liệu Toàn Cầu: Nhập liệu bằng giọng nói chuyên nghiệp cho email, tài liệu và biểu mẫu ở bất kỳ đâu trên web.
+- Phản Hồi Sống Động Trong 32+ Ngôn Ngữ: Được cung cấp bởi ElevenLabs, được thiết kế để nghe tự nhiên trong ngôn ngữ của bạn.
+- Giới Hạn Sử Dụng Lớn Hơn: Thời gian nói nhiều hơn, thời gian nghe nhiều hơn, nhập liệu nhiều hơn.
+- Một Tài Khoản, Ở Mọi Nơi: Premium theo bạn qua các nền tảng và trình duyệt.
 
 Xem giá tại: https://saypi.ai/pricing
 
-
-VÌ SAO HÀNG NGÀN NGƯỜI YÊU THÍCH SAY, PI
-- Tăng Cường Quy Trình Làm Việc Của Bạn: Ghi chú, viết email, ý tưởng, hoặc phác thảo trong khi giữ tay bạn tự do.  
-- Nói Bất Kỳ Ngôn Ngữ Nào: Hỗ trợ đa ngôn ngữ với chuyển đổi mượt mà giữa cuộc trò chuyện.  
-- Được Xây Dựng Cho Tiếp Cận: Thiết kế với sự bao dung trong tâm trí – tuyệt vời cho người dùng có thách thức về vận động hoặc thị giác.  
-- Được Đánh Giá ★ 4.9/5 bởi 2,000+ người dùng: Được tin tưởng bởi một cộng đồng toàn cầu đang phát triển.  
-- Ưu Tiên Quyền Riêng Tư: Dữ liệu giọng nói của bạn an toàn và không bị lạm dụng. Xem chính sách của chúng tôi tại: https://saypi.ai/legal/privacy
-
+TẠI SAO HÀNG NGHÌN NGƯỜI YÊU THÍCH SAY, PI
+- Tăng Cường Quy Trình Làm Việc: Ghi chú, viết email, lên ý tưởng, hoặc soạn thảo trong khi giữ tay rảnh rỗi.
+- Nói Bất Kỳ Ngôn Ngữ Nào: Hỗ trợ đa ngôn ngữ với chuyển đổi mượt mà giữa các cuộc trò chuyện.
+- Xây Dựng Cho Khả Năng Tiếp Cận: Thiết kế với sự bao gồm trong tâm trí – tuyệt vời cho người dùng có thách thức về vận động hoặc thị giác.
+- Được Đánh Giá ★ 4.9/5 bởi 2,000+ Người Dùng: Được tin tưởng bởi một cộng đồng toàn cầu đang phát triển.
+- Ưu Tiên Quyền Riêng Tư: Dữ liệu giọng nói của bạn được bảo mật và không bao giờ bị lạm dụng. Xem chính sách của chúng tôi tại: https://saypi.ai/legal/privacy
 
 BẮT ĐẦU TRONG VÀI GIÂY
-1. Cài đặt tiện ích mở rộng.  
-2. Đối với chat AI: Mở pi.ai hoặc claude.ai và nhấp vào nút gọi.  
-3. Đối với nhập liệu giọng nói: Từ bất kỳ trường văn bản nào, nhấn biểu tượng nổi "Say, Pi" hoặc nhấp chuột phải và chọn "Start dictation with Say, Pi."  
+1. Cài đặt tiện ích mở rộng.
+2. Đối với trò chuyện AI: Mở chatgpt.com, pi.ai, hoặc claude.ai và nhấp vào nút gọi.
+3. Đối với nhập liệu bằng giọng nói: Từ bất kỳ trường văn bản nào, nhấn biểu tượng "Say, Pi" nổi hoặc nhấp chuột phải và chọn "Bắt đầu nhập liệu với Say, Pi."
 4. Nói tự nhiên. Thế là xong.
 
-
-Bắt đầu trò chuyện với AI và nhập liệu bằng giọng nói một cách tự nhiên – cài đặt Say, Pi và trải nghiệm tương lai của cuộc trò chuyện và năng suất.
+Bắt đầu trò chuyện với AI và nhập liệu bằng giọng nói theo cách tự nhiên—cài đặt Say, Pi và trải nghiệm tương lai của cuộc trò chuyện và năng suất.

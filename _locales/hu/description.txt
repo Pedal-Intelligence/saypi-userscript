@@ -1,42 +1,41 @@
-A Say, Pi az ön beszélgetéseit Pi-vel és Claude-dal zökkenőmentes, hangvezérelt élményekké alakítja, és kiváló minőségű hangalapú gépelést hoz bármely weboldalra.  
-Csak koppintson a hívás gombra, beszéljen úgy, mintha egy emberrel beszélne, és kapjon életszerű, kimondott válaszokat. Ráadásul diktáljon szöveget bármelyik beviteli mezőbe az interneten ugyanazzal a pontossággal, amelyet szeret.  
-Tökéletes többfeladatos munkához, akadálymentességhez, vagy bárkinek, aki jobb szóbeli kifejezésre képes.
+A Say, Pi zökkenőmentes, hangvezérelt élményekké alakítja a ChatGPT, Pi és Claude beszélgetéseit, és kiváló minőségű hangalapú gépelést hoz bármely weboldalra. Csak érintse meg a hívás gombot, beszéljen úgy, mintha egy személlyel beszélne, és kapjon élethű, beszélt válaszokat. Ráadásul diktáljon szöveget bármelyik beviteli mezőbe az interneten, az Ön által megszokott pontossággal. Tökéletes multitaskinghoz, akadálymentesítéshez, vagy bárkinek, aki jobban gondolkodik hangosan.
 
+ÚJ A v1.10.0 VERZIÓBAN — „Say, Pi a ChatGPT-hez” (Mentse el a Standard Hangot)
+- Hozza vissza a ChatGPT Standard Hang Mód (SVM) érzését türelmes, kiszámítható, kéz nélküli élménnyel.
+- Csatlakozzon a chatgpt.com-hoz: egy hívás gomb jelenik meg a ChatGPT szerkesztőjében; indítás/leállítás, mint az SVM.
+- Automatikus Hangos Olvasás: ha engedélyezve van, egyszer nyomjuk meg a ChatGPT natív „hangos olvasás” gombját válaszonként – nincs kettős hang.
+- A #SaveStandardVoice pillanatra tervezve: melegség, jelenlét és megbízható tempó.
 
-INGYENES TERV – PRÓBÁLJA KI AZONNAL, NINCS SZÜKSÉG FIÓKRA  
-- Hangos csevegés az AI-val: Beszélgessen Pi-vel és Claude-dal Whisper-alapú hangfelismeréssel, amely tudja, mikor fejezte be a beszédet.  
-- Univerzális hangalapú gépelés: Diktáljon bármelyik szövegmezőbe vagy e-mailbe bármelyik weboldalon – csak kattintson jobb gombbal, és válassza a "Diktálás indítása Say, Pi-vel."  
-- Pontos és gyors: Élvezze a nagy pontosságú beszédfelismerést még akcentusokkal és háttérzajjal is.  
-- Hallja Pi valódi hangját: Természetes hangú válaszok Pi beépített stílusaiban.  
-- Rugalmas elrendezések: Használja a teljes képernyős lebilincselő módot vagy a normál csevegőnézetet.  
-- Sötét mód támogatás: Szembarát kialakítás, amely beleolvad Pi interfészébe.  
-- Mindenhol működik: Mac, Windows, Linux, Android, iOS – mind lefedve.
+INGYENES TERV – PRÓBÁLJA KI AZONNAL, NINCS SZÜKSÉG FIÓKRA
+- Hangos csevegés AI-val: Beszéljen a ChatGPT-vel, Pi-vel és Claude-dal Whisper-alapú hangfelismeréssel, amely tudja, mikor fejezte be a beszédet.
+- Univerzális Hangalapú Gépelés: Diktáljon bármely szövegmezőbe vagy e-mailbe bármely weboldalon – csak kattintson jobb gombbal és válassza a „Diktálás indítása a Say, Pi-vel” lehetőséget.
+- Pontos és Gyors: Élvezze a nagy pontosságú beszéd-szöveg átalakítást, még akcentusokkal és háttérzajjal is.
+- Halljon Természetes Hangokat: Meleg, élethű válaszok a támogatott módokban.
+- Rugalmas Elrendezések: Használjon teljes képernyős elmerülési módot vagy standard csevegőnézetet.
+- Sötét Mód Támogatás: Szembarát dizájn, amely beleolvad a Pi felületébe.
+- Mindenhol Működik: Mac, Windows, Linux, Android, iOS – minden lefedve.
 
-
-SAY, PI PREMIUM – AKTIVÁLJA A TELJES ÉLMÉNYT  
-Az ön hangja, nyelve, AI-ja – az összes eszközén és weboldalon.  
-- Claude & Pi támogatás: Zökkenőmentes váltás a legjobb AI asszisztensek között.  
-- Univerzális diktálás: Professzionális szintű hangalapú gépelés e-mailekhez, dokumentumokhoz és űrlapokhoz bárhol az interneten.  
-- Életszerű válaszok 32+ nyelven: Az ElevenLabs által működtetve, hogy természetes hangzású legyen az ön nyelvén.  
-- Nagyobb használati korlátok: Több beszédidő, több hallgatási idő, több diktálás.  
-- Egyetlen fiók, mindenhol: A prémium minden platformon és böngészőben követi önt.
+SAY, PI PRÉMIUM – OLDJA FEL A TELJES ÉLMÉNYT
+Az Ön hangja, az Ön nyelve, az Ön AI-ja – minden eszközén és weboldalán.
+- ChatGPT, Claude és Pi Támogatás: Zökkenőmentes váltás a legjobb AI asszisztensek között.
+- Univerzális Diktálás: Professzionális szintű hangalapú gépelés e-mailekhez, dokumentumokhoz és űrlapokhoz bárhol az interneten.
+- Élethű Válaszok 32+ Nyelven: Az ElevenLabs által támogatott, természetes hangzású válaszok az Ön nyelvén.
+- Nagyobb Használati Korlátok: Több beszélgetési idő, több hallgatási idő, több diktálás.
+- Egy Fiók, Mindenhol: A prémium követi Önt platformokon és böngészőkön keresztül.
 
 Árak megtekintése: https://saypi.ai/pricing
 
+MIÉRT SZERETIK EZREK A SAY, PI-T
+- Növelje Munkafolyamatát: Jegyzeteljen, írjon e-maileket, ötleteljen vagy vázlatoljon, miközben kezei szabadon maradnak.
+- Beszéljen Bármilyen Nyelven: Többnyelvű támogatás zökkenőmentes középső beszélgetés váltással.
+- Akadálymentességre Tervezve: Befogadással tervezve – nagyszerű a motoros vagy látási kihívásokkal küzdő felhasználók számára.
+- ★ 4.9/5 értékelés 2000+ felhasználótól: Egy növekvő globális közösség által megbízható.
+- Adatvédelem Első: Az Ön hangadatai biztonságban vannak és soha nem kerülnek visszaélésre. Adatvédelmi irányelveink megtekintése: https://saypi.ai/legal/privacy
 
-EZÉRT SZERETIK EZREK A SAY, PI-T  
-- Fokozza a munkafolyamatát: Jegyzeteljen, írjon e-maileket, ötleteljen vagy piszkozatokat készítsen, miközben a kezei szabadok maradnak.  
-- Beszéljen bármilyen nyelvet: Többnyelvű támogatás gördülékeny közepes beszélgetési váltásokkal.  
-- Akadálymentességre tervezve: Beépített inkluzivitással tervezve – nagyszerű a motoros vagy látási kihívásokkal küzdő felhasználók számára.  
-- ★ 4.9/5-ös értékelés 2000+ felhasználótól: Növekvő globális közösség által megbízható.  
-- Adatvédelem az első: Az ön hangadatai biztosítva vannak, és soha nem használjuk vissza. Lásd irányelveinket: https://saypi.ai/legal/privacy
-
-
-KEZDJEN EL PÁR MÁSODPERC ALATT  
-1. Telepítse a kiterjesztést.  
-2. AI chat esetén: Nyissa meg a pi.ai vagy a claude.ai oldalt, és kattintson a hívás gombra.  
-3. Hangalapú gépeléshez: Bármelyik szövegmezőből nyomja meg a lebegő "Say, Pi" ikont vagy kattintson jobb gombbal és válassza a "Diktálás indítása Say, Pi-vel."  
+KEZDJE EL MÁSODPERCEK ALATT
+1. Telepítse a bővítményt.
+2. AI csevegéshez: Nyissa meg a chatgpt.com, pi.ai vagy claude.ai oldalt, és kattintson a hívás gombra.
+3. Hangalapú gépeléshez: Bármely szövegmezőből nyomja meg a lebegő "Say, Pi" ikont, vagy kattintson jobb gombbal és válassza a „Diktálás indítása a Say, Pi-vel” lehetőséget.
 4. Beszéljen természetesen. Ennyi.
 
-
-Kezdje el beszélni az AI-hoz és gépelni a hangjával természetes módon – telepítse a Say, Pi-t, és élvezze a beszélgetés és a produktivitás jövőjét.
+Kezdje el természetesen beszélgetni az AI-val és gépelni a hangjával – telepítse a Say, Pi-t, és tapasztalja meg a beszélgetés és a termelékenység jövőjét.

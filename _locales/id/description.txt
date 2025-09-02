@@ -1,37 +1,41 @@
-Say, Pi mengubah percakapan Anda dengan Pi dan Claude menjadi pengalaman yang lancar dan berbasis suara, serta menghadirkan pengetikan suara berkualitas tinggi ke situs web mana pun.  
-Cukup ketuk tombol panggilan, bicaralah seperti Anda berbicara kepada manusia, dan dapatkan balasan berbicara yang seperti nyata. Plus, ditikkan teks ke dalam kotak isian apa pun di web dengan akurasi yang Anda sukai.  
-Sempurna untuk multitasking, aksesibilitas, atau siapa saja yang lebih berpikir ketika berbicara.
+Say, Pi mengubah percakapan Anda dengan ChatGPT, Pi, dan Claude menjadi pengalaman berbasis suara yang mulus, dan menghadirkan pengetikan suara berkualitas tinggi ke situs web mana pun. Cukup ketuk tombol panggilan, berbicaralah seperti Anda berbicara dengan seseorang, dan dapatkan balasan yang terdengar alami. Selain itu, diktekan teks ke dalam bidang input mana pun di seluruh web dengan akurasi yang Anda sukai. Sempurna untuk multitasking, aksesibilitas, atau siapa pun yang berpikir lebih baik dengan berbicara.
 
-PLANO GRATIS – COBA SEKARANG JUGA, TIDAK PERLU AKUN  
-- Obrolan Suara dengan AI: Bicara dengan Pi dan Claude dengan pengenalan suara yang didukung Whisper yang tahu kapan Anda selesai berbicara.  
-- Pengetikan Suara Universal: Diktekan ke kotak teks atau email mana pun di situs web mana pun – cukup klik kanan dan pilih "Mulai dikte dengan Say, Pi."  
-- Akurat & Cepat: Nikmati konversi suara-ke-teks dengan akurasi tinggi, bahkan dengan aksen dan kebisingan latar belakang.  
-- Dengarkan Suara Asli Pi: Balasan suara alami dalam gaya bawaan Pi.  
-- Tata Letak yang Fleksibel: Gunakan mode imersif layar penuh atau tampilan obrolan standar.  
-- Dukungan Mode Gelap: Desain ramah mata yang menyatu dengan antarmuka Pi.  
+BARU DI v1.10.0 — “Say, Pi untuk ChatGPT” (Simpan Suara Standar)
+- Kembalikan nuansa Mode Suara Standar (SVM) ChatGPT dengan pengalaman yang sabar, dapat diprediksi, dan bebas genggam.
+- Masuk ke chatgpt.com: tombol panggilan muncul di komposer ChatGPT; mulai/berhenti seperti SVM.
+- Baca Keras Otomatis: ketika diaktifkan, kami menekan "baca keras" asli ChatGPT sekali per respons—tanpa audio ganda.
+- Dirancang untuk momen #SaveStandardVoice: kehangatan, kehadiran, dan tempo yang dapat diandalkan.
+
+RENCANA GRATIS – COBA SEGERA, TANPA AKUN
+- Obrolan Suara dengan AI: Berbicaralah dengan ChatGPT, Pi, dan Claude dengan pengenalan suara Whisper yang tahu kapan Anda selesai berbicara.
+- Pengetikan Suara Universal: Diktekan ke dalam bidang teks atau email di situs web mana pun – cukup klik kanan dan pilih "Mulai dikte dengan Say, Pi."
+- Akurat & Cepat: Nikmati konversi suara-ke-teks dengan akurasi tinggi, bahkan dengan aksen dan kebisingan latar belakang.
+- Dengar Suara Alami: Balasan yang hangat dan nyata dalam mode yang didukung.
+- Tata Letak Fleksibel: Gunakan mode imersif layar penuh atau tampilan obrolan standar.
+- Dukungan Mode Gelap: Desain ramah mata yang menyatu dengan antarmuka Pi.
 - Bekerja di Mana Saja: Mac, Windows, Linux, Android, iOS – semuanya tercakup.
 
-SAY, PI PREMIUM – BUAT PENGALAMAN LENGKAP  
-Suara Anda, bahasa Anda, AI Anda – di semua perangkat dan situs web Anda.  
-- Dukungan Claude & Pi: Peralihan mulus antara asisten AI terbaik.  
-- Diktekan Universal: Pengetikan suara profesional untuk email, dokumen, dan formulir di seluruh web.  
-- Balasan Seperti Nyata dalam 32+ Bahasa: Didukung oleh ElevenLabs, dirancang agar terdengar alami dalam bahasa Anda.  
-- Batas Pemakaian Lebih Besar: Waktu bicara lebih banyak, waktu mendengarkan lebih banyak, lebih banyak diktean.  
+SAY, PI PREMIUM – BUKA PENGALAMAN PENUH
+Suara Anda, bahasa Anda, AI Anda – di semua perangkat dan situs web Anda.
+- Dukungan ChatGPT, Claude & Pi: Beralih mulus antara asisten AI teratas.
+- Dikte Universal: Pengetikan suara kelas profesional untuk email, dokumen, dan formulir di mana saja di web.
+- Balasan Nyata dalam 32+ Bahasa: Didukung oleh ElevenLabs, dirancang agar terdengar alami dalam bahasa Anda.
+- Batas Penggunaan Lebih Besar: Lebih banyak waktu berbicara, lebih banyak waktu mendengarkan, lebih banyak dikte.
 - Satu Akun, Di Mana Saja: Premium mengikuti Anda di seluruh platform dan browser.
 
 Lihat harga di: https://saypi.ai/pricing
 
-MENGAPA RIBUAN MENYUKAI SAY, PI  
-- Tingkatkan Produktivitas Anda: Ambil catatan, tulis email, ide, atau draf sambil menjaga tangan Anda bebas.  
-- Berbicara dalam Bahasa Apa Pun: Dukungan multibahasa dengan peralihan di pertengahan percakapan yang mulus.  
-- Dibangun untuk Aksesibilitas: Dirancang dengan inklusi dalam pikiran – bagus untuk pengguna dengan tantangan motorik atau visual.  
-- Dinilai ★ 4,9/5 oleh 2.000+ Pengguna: Dipercaya oleh komunitas global yang semakin berkembang.  
+MENGAPA RIBUAN ORANG MENYUKAI SAY, PI
+- Tingkatkan Alur Kerja Anda: Catat, tulis email, ide, atau buat draf sambil tetap membebaskan tangan Anda.
+- Berbicara dalam Bahasa Apa Pun: Dukungan multibahasa dengan pergantian halus di tengah percakapan.
+- Dibuat untuk Aksesibilitas: Dirancang dengan inklusivitas dalam pikiran – bagus untuk pengguna dengan tantangan motorik atau visual.
+- Dinilai ★ 4.9/5 oleh 2.000+ Pengguna: Dipercaya oleh komunitas global yang terus berkembang.
 - Privasi Utama: Data suara Anda aman dan tidak pernah disalahgunakan. Lihat kebijakan kami di: https://saypi.ai/legal/privacy
 
-MULAI DALAM HITUNG DETIK  
-1. Pasang ekstensi.  
-2. Untuk obrolan AI: Buka pi.ai atau claude.ai dan klik tombol panggilan.  
-3. Untuk pengetikan suara: Dari kotak teks mana pun, tekan ikon "Say, Pi" mengambang atau klik kanan dan pilih "Mulai dikte dengan Say, Pi."  
-4. Bicara secara alami. Itu saja.
+MULAI DALAM HITUNGAN DETIK
+1. Pasang ekstensi.
+2. Untuk obrolan AI: Buka chatgpt.com, pi.ai, atau claude.ai dan klik tombol panggilan.
+3. Untuk pengetikan suara: Dari bidang teks mana pun, tekan ikon "Say, Pi" yang mengambang atau klik kanan dan pilih "Mulai dikte dengan Say, Pi."
+4. Berbicaralah secara alami. Itu saja.
 
 Mulailah berbicara dengan AI dan mengetik dengan suara Anda dengan cara yang alami—pasang Say, Pi dan rasakan masa depan percakapan dan produktivitas.

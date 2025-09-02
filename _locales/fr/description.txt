@@ -1,37 +1,43 @@
-Say, Pi transforme vos conversations avec Pi et Claude en expériences fluides et vocales, et apporte une saisie vocale de haute qualité à n'importe quel site web.  
-Il suffit de toucher le bouton d'appel, de parler comme vous le feriez à une personne et d'obtenir des réponses orales réalistes. De plus, dictez du texte dans n'importe quel champ de saisie sur le web avec la même précision que vous appréciez.  
-Parfait pour le multitâche, l'accessibilité ou pour ceux qui pensent mieux à voix haute.  
+Say, Pi transforme vos conversations avec ChatGPT, Pi et Claude en expériences fluides et vocales, et apporte une saisie vocale de haute qualité à n'importe quel site web.  
+Il vous suffit d'appuyer sur le bouton d'appel, de parler comme vous le feriez à une personne, et d'obtenir des réponses parlées réalistes. De plus, dictez du texte dans n'importe quel champ de saisie sur le web avec la même précision que vous appréciez.  
+Parfait pour le multitâche, l'accessibilité ou toute personne qui réfléchit mieux à voix haute.
 
-PLAN GRATUIT – ESSAYEZ INSTANTANÉMENT, AUCUN COMPTE NÉCESSAIRE  
-- Chat vocal avec l'IA : Parlez à Pi et Claude avec une reconnaissance vocale alimentée par Whisper qui sait quand vous avez terminé de parler.  
-- Saisie vocale universelle : Dictez dans n'importe quel champ texte ou e-mail sur n'importe quel site web – il suffit de faire un clic droit et de sélectionner "Start dictation with Say, Pi."  
-- Précis et rapide : Profitez d'une conversion parole-texte de haute précision, même avec des accents et du bruit de fond.  
-- Entendez la vraie voix de Pi : Réponses vocales naturelles dans les styles intégrés de Pi.  
-- Dispositions flexibles : Utilisez le mode immersif plein écran ou la vue de chat standard.  
-- Prise en charge du mode sombre : Design respectueux des yeux qui s'harmonise avec l'interface de Pi.  
-- Fonctionne partout : Mac, Windows, Linux, Android, iOS – tous couverts.  
+NOUVEAUTÉ EN v1.10.0 — « Say, Pi pour ChatGPT » (Sauvegarde de la Voix Standard)  
+- Retrouvez la sensation du Mode Voix Standard (SVM) de ChatGPT avec une expérience patiente, prévisible et mains libres.  
+- Intégration sur chatgpt.com : un bouton d'appel apparaît dans le compositeur de ChatGPT ; démarrez/arrêtez comme avec le SVM.  
+- Lecture Automatique : lorsqu'elle est activée, nous appuyons sur la fonction native de « lecture à haute voix » de ChatGPT une fois par réponse — pas de double audio.  
+- Conçu pour le moment #SaveStandardVoice : chaleur, présence et rythme fiable.
 
-SAY, PI PREMIUM – DÉVERROUILLEZ L'EXPÉRIENCE COMPLÈTE  
+PLAN GRATUIT – ESSAYEZ IMMÉDIATEMENT, AUCUN COMPTE NÉCESSAIRE  
+- Chat Vocal avec l'IA : Parlez à ChatGPT, Pi et Claude avec la reconnaissance vocale Whisper qui sait quand vous avez terminé de parler.  
+- Saisie Vocale Universelle : Dictez dans n'importe quel champ de texte ou email sur n'importe quel site web – faites un clic droit et sélectionnez « Commencer la dictée avec Say, Pi ».  
+- Précis & Rapide : Profitez d'une conversion parole-texte de haute précision, même avec des accents et des bruits de fond.  
+- Entendez des Voix Naturelles : Réponses chaleureuses et réalistes dans les modes pris en charge.  
+- Dispositions Flexibles : Utilisez le mode immersif plein écran ou la vue de chat standard.  
+- Support du Mode Sombre : Design agréable pour les yeux qui s'intègre à l'interface de Pi.  
+- Fonctionne Partout : Mac, Windows, Linux, Android, iOS – tout est couvert.
+
+SAY, PI PREMIUM – DÉBLOQUEZ L'EXPÉRIENCE COMPLÈTE  
 Votre voix, votre langue, votre IA – sur tous vos appareils et sites web.  
-- Support Claude & Pi : Basculez sans problème entre les meilleurs assistants IA.  
-- Dictée universelle : Saisie vocale de qualité professionnelle pour les e-mails, documents et formulaires partout sur le web.  
-- Réponses réalistes en 32+ langues : Propulsé par ElevenLabs, conçu pour sonner naturellement dans votre langue.  
-- Limites d'utilisation accrues : Plus de temps de parole, plus de temps d'écoute, plus de dictée.  
-- Un compte, partout : Premium vous suit sur toutes les plateformes et navigateurs.  
+- Support de ChatGPT, Claude & Pi : Basculez facilement entre les meilleurs assistants IA.  
+- Dictée Universelle : Saisie vocale de qualité professionnelle pour les emails, documents et formulaires partout sur le web.  
+- Réponses Réalistes en 32+ Langues : Propulsé par ElevenLabs, conçu pour sonner naturellement dans votre langue.  
+- Limites d'Utilisation Plus Grandes : Plus de temps de parole, plus de temps d'écoute, plus de dictée.  
+- Un Compte, Partout : Le premium vous suit sur toutes les plateformes et navigateurs.
 
-Voir les tarifs sur : https://saypi.ai/pricing  
+Voir les tarifs sur : https://saypi.ai/pricing
 
-POURQUOI DES MILLIERS ADORENT SAY, PI  
-- Améliorez votre flux de travail : Prenez des notes, écrivez des e-mails, faites des idées ou rédigez tout en gardant les mains libres.  
-- Parlez n'importe quelle langue : Support multilingue avec changement fluide en cours de conversation.  
-- Conçu pour l'accessibilité : Pensé pour l'inclusivité – idéal pour les utilisateurs ayant des défis moteurs ou visuels.  
-- Noté ★ 4.9/5 par 2 000+ utilisateurs : Approuvé par une communauté mondiale en pleine croissance.  
-- Confidentialité avant tout : Vos données vocales sont sécurisées et jamais utilisées à mauvais escient. Consultez notre politique à : https://saypi.ai/legal/privacy  
+POURQUOI DES MILLIERS AIMENT SAY, PI  
+- Améliorez Votre Flux de Travail : Prenez des notes, écrivez des emails, générez des idées ou rédigez tout en gardant les mains libres.  
+- Parlez N'importe Quelle Langue : Support multilingue avec changement fluide en cours de conversation.  
+- Conçu pour l'Accessibilité : Conçu avec l'inclusivité à l'esprit – idéal pour les utilisateurs ayant des défis moteurs ou visuels.  
+- Noté ★ 4.9/5 par plus de 2 000 Utilisateurs : Approuvé par une communauté mondiale en pleine croissance.  
+- Priorité à la Confidentialité : Vos données vocales sont sécurisées et jamais mal utilisées. Consultez notre politique sur : https://saypi.ai/legal/privacy
 
-COMMENCER EN QUELQUES SECONDES  
+COMMENCEZ EN QUELQUES SECONDES  
 1. Installez l'extension.  
-2. Pour le chat IA : Ouvrez pi.ai ou claude.ai et cliquez sur le bouton d'appel.  
-3. Pour la saisie vocale : Depuis n'importe quel champ de texte, appuyez sur l'icône flottante "Say, Pi" ou faites un clic droit et sélectionnez "Start dictation with Say, Pi."  
-4. Parlez naturellement. C'est tout.  
+2. Pour le chat IA : Ouvrez chatgpt.com, pi.ai ou claude.ai et cliquez sur le bouton d'appel.  
+3. Pour la saisie vocale : Depuis n'importe quel champ de texte, appuyez sur l'icône flottante "Say, Pi" ou faites un clic droit et sélectionnez "Commencer la dictée avec Say, Pi."  
+4. Parlez naturellement. C'est tout.
 
-Commencez à parler à l'IA et à taper avec votre voix de manière naturelle – installez Say, Pi et découvrez l'avenir de la conversation et de la productivité.
+Commencez à parler à l'IA et à taper avec votre voix de manière naturelle — installez Say, Pi et découvrez l'avenir de la conversation et de la productivité.

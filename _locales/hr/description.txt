@@ -1,37 +1,41 @@
-Say, Pi pretvara vaše razgovore s Pi i Claudeom u glatka iskustva vođena glasom i donosi visokokvalitetno glasovno tipkanje na bilo koje web stranice.  
-Samo dodirnite dugme za poziv, govorite kao da razgovarate s osobom i dobivajte odgovore koji zvuče realistično. Osim toga, diktirajte tekst u bilo koje polje za unos na webu s istom preciznošću koju volite.  
-Savršeno za multitasking, pristupačnost ili bilo koga tko bolje razmišlja naglas.
+Say, Pi pretvara vaše razgovore s ChatGPT, Pi i Claude u glatka, glasom vođena iskustva i donosi visokokvalitetno glasovno tipkanje na bilo koju web stranicu. Samo dodirnite gumb za poziv, govorite kao da razgovarate s osobom i dobijte odgovore koji zvuče prirodno. Osim toga, diktirajte tekst u bilo koje polje za unos na internetu s istom preciznošću koju volite. Savršeno za multitasking, pristupačnost ili bilo koga tko bolje razmišlja naglas.
 
-BESPLATAN PLAN – ISPROBAJTE ODMAH, BEZ POTREBE ZA RAČUNOM  
-- Glasovni chat s AI: Razgovarajte s Pi i Claudeom uz glasovno prepoznavanje podržano Whisper tehnologijom koje zna kada završite s govorom.  
-- Univerzalno glasovno tipkanje: Diktirajte u bilo koje tekstualno polje ili e-mail na bilo kojoj web stranici – desnom tipkom miša kliknite i odaberite "Start dictation with Say, Pi."  
-- Precizno i Brzo: Uživajte u visokoj preciznosti pretvaranja govora u tekst, čak i uz naglaske i pozadinsku buku.  
-- Čujte Pi-jev pravi glas: Prirodni glasovni odgovori u Pi-jevim ugrađenim stilovima.  
-- Fleksibilni rasporedi: Koristite način rada preko cijelog zaslona ili standardni pregled chata.  
-- Podrška za tamni način rada: Dizajn prilagođen očima koji se uklapa u Pi-jevo sučelje.  
-- Radi svuda: Mac, Windows, Linux, Android, iOS – sve pokriveno.
+NOVO U v1.10.0 — “Say, Pi za ChatGPT” (Spremi Standardni Glas)
+- Vratite osjećaj ChatGPT-ovog Standardnog Glasovnog Načina (SVM) s strpljivim, predvidljivim, hands-free iskustvom.
+- Uključite se na chatgpt.com: gumb za poziv pojavljuje se u ChatGPT kompozitoru; pokrenite/zaustavite baš kao SVM.
+- Automatsko Čitanje Naglas: kada je omogućeno, pritisnemo ChatGPT-ovu nativnu funkciju “čitanje naglas” jednom po odgovoru — bez dvostrukog zvuka.
+- Dizajnirano za trenutak #SaveStandardVoice: toplina, prisutnost i pouzdano tempiranje.
 
-SAY, PI PREMIUM – OTKLJUČAJTE PUNO ISKUSTVO  
-Vaš glas, vaš jezik, vaš AI – na svim vašim uređajima i web stranicama.  
-- Podrška za Claude i Pi: Besprijekorno prebacivanje između vrhunskih AI asistenata.  
-- Univerzalna diktacija: Profesionalno glasovno tipkanje za e-mailove, dokumente i obrasce bilo gdje na webu.  
-- Odgovori koji zvuče prirodno na 32+ jezika: Pogonjeno ElevenLabs tehnologijom, dizajnirano da zvuči prirodno na vašem jeziku.  
-- Veće granice korištenja: Više razgovornog vremena, više vremena za slušanje, više diktiranja.  
-- Jedan račun, svugdje: Premium vas prati kroz platforme i preglednike.
+BESPLATNI PLAN – ISPROBAJTE ODMAH, NIJE POTREBAN RAČUN
+- Glasovni Chat s AI: Razgovarajte s ChatGPT, Pi i Claude uz Whisper-pokretano prepoznavanje glasa koje zna kada ste završili s govorom.
+- Univerzalno Glasovno Tipkanje: Diktirajte u bilo koje tekstualno polje ili e-mail na bilo kojoj web stranici – samo desnim klikom odaberite "Započni diktiranje sa Say, Pi."
+- Precizno i Brzo: Uživajte u visokoj preciznosti pretvaranja govora u tekst, čak i s naglascima i pozadinskom bukom.
+- Čujte Prirodne Glasove: Topli, prirodni odgovori u podržanim načinima.
+- Fleksibilni Izgledi: Koristite način rada preko cijelog zaslona ili standardni prikaz chata.
+- Podrška za Tamni Način: Dizajn prilagođen očima koji se uklapa u Pi-ovo sučelje.
+- Radi Svugdje: Mac, Windows, Linux, Android, iOS – sve pokriveno.
+
+SAY, PI PREMIUM – OTKLJUČAJTE PUNO ISKUSTVO
+Vaš glas, vaš jezik, vaš AI – na svim vašim uređajima i web stranicama.
+- Podrška za ChatGPT, Claude & Pi: Besprijekorno prebacivanje između vrhunskih AI asistenata.
+- Univerzalno Diktiranje: Profesionalno glasovno tipkanje za e-mailove, dokumente i obrasce bilo gdje na internetu.
+- Prirodni Odgovori na 32+ Jezika: Pokretano ElevenLabs, osmišljeno da zvuči prirodno na vašem jeziku.
+- Veće Granice Korištenja: Više vremena za razgovor, više vremena za slušanje, više diktiranja.
+- Jedan Račun, Svugdje: Premium vas prati na svim platformama i preglednicima.
 
 Pogledajte cijene na: https://saypi.ai/pricing
 
-ZAŠTO TISUĆE LJUDI VOLE SAY, PI  
-- Poboljšajte svoj radni tok: Bilježite, pišite e-mailove, stvarajte ideje ili radite nacrte, a da vam ruke ostanu slobodne.  
-- Govorite bilo koji jezik: Podrška za više jezika s glatkim prebacivanjem usred razgovora.  
-- Dizajnirano za pristupačnost: Razvijeno s inkluzivnošću na umu – odlično za korisnike s motoričkim ili vizualnim izazovima.  
-- Ocijenjeno ★ 4.9/5 od 2000+ korisnika: Pouzdano od strane rastuće globalne zajednice.  
-- Privatnost na prvom mjestu: Vaši glasovni podaci su sigurni i nikad zloupotrijebljeni. Pogledajte našu politiku na: https://saypi.ai/legal/privacy
+ZAŠTO TISUĆE VOLE SAY, PI
+- Povećajte Svoj Radni Tok: Bilježite, pišite e-mailove, smišljajte ideje ili sastavljajte dok držite ruke slobodnima.
+- Govorite Bilo Koji Jezik: Podrška za više jezika s glatkim prebacivanjem usred razgovora.
+- Izgrađeno za Pristupačnost: Dizajnirano s inkluzivnošću na umu – odlično za korisnike s motoričkim ili vizualnim izazovima.
+- Ocijenjeno ★ 4.9/5 od strane 2,000+ korisnika: Pouzdano od strane rastuće globalne zajednice.
+- Privatnost na Prvom Mjestu: Vaši glasovni podaci su sigurni i nikad zloupotrebljeni. Pogledajte našu politiku na: https://saypi.ai/legal/privacy
 
-POČNITE ZA NEKOLIKO SEKUNDI  
-1. Instalirajte ekstenziju.  
-2. Za AI chat: Otvorite pi.ai ili claude.ai i kliknite na dugme za poziv.  
-3. Za glasovno tipkanje: Iz bilo kojeg tekstualnog polja pritisnite lebdeći "Say, Pi" ikon ili desnim klikom odaberite "Start dictation with Say, Pi."  
+POČNITE ZA NEKOLIKO SEKUNDI
+1. Instalirajte ekstenziju.
+2. Za AI chat: Otvorite chatgpt.com, pi.ai ili claude.ai i kliknite gumb za poziv.
+3. Za glasovno tipkanje: Iz bilo kojeg tekstualnog polja, pritisnite plutajući "Say, Pi" ikonu ili desnim klikom odaberite "Započni diktiranje sa Say, Pi."
 4. Govorite prirodno. To je to.
 
-Počnite razgovarati s AI i tipkati svojim glasom na prirodan način – instalirajte Say, Pi i iskusite budućnost razgovora i produktivnosti.
+Počnite razgovarati s AI i tipkati svojim glasom na prirodan način—instalirajte Say, Pi i doživite budućnost razgovora i produktivnosti.

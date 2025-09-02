@@ -1,35 +1,41 @@
-Say, Pi, Pi ve Claude ile sohbetlerinizi sorunsuz, ses odaklı deneyimlere dönüştürür ve herhangi bir web sitesine yüksek kaliteli sesli yazma özelliği getirir. Sadece arama düğmesine dokunun, bir insanla konuşur gibi konuşun ve gerçeğe yakın sesli yanıtlar alın. Ayrıca, web üzerindeki herhangi bir giriş alanına sevdiğiniz aynı doğrulukla metin dikte edebilirsiniz. Çoklu görev, erişilebilirlik veya sesli düşünmeyi tercih eden herkes için mükemmel.
+Say, Pi, ChatGPT, Pi ve Claude ile olan konuşmalarınızı sorunsuz, sesle yönlendirilen deneyimlere dönüştürür ve herhangi bir web sitesine yüksek kaliteli sesli yazma özelliği getirir. Sadece arama düğmesine dokunun, bir kişiyle konuşur gibi konuşun ve gerçekçi sesli yanıtlar alın. Ayrıca, web genelindeki herhangi bir giriş alanına sevdiğiniz aynı doğrulukla metin dikte edin. Çoklu görev, erişilebilirlik veya düşüncelerini sesli ifade etmeyi tercih eden herkes için mükemmel.
 
-ÜCRETSİZ PLAN – ANINDA DENE, HESAP GEREKMEZ
-- AI ile Sesli Sohbet: Whisper destekli ses tanıma ile Pi ve Claude ile konuşun ve konuşmanız bittiğinde bunu anlar.
-- Evrensel Sesli Yazma: Herhangi bir web sitesindeki herhangi bir metin alanına veya e-postaya dikte edin – sağ tıklayın ve "Say, Pi ile dikte başlat"ı seçin.
-- Doğru ve Hızlı: Aksanlar ve arka plan gürültüsüne rağmen yüksek doğrulukta sesli yazmanın keyfini çıkarın.
-- Pi'nin Gerçek Sesini Dinleyin: Pi'nin yerleşik tarzlarında doğal sesli yanıtlar.
-- Esnek Düzenler: Tam ekran sürükleyici modu veya standart sohbet görünümünü kullanın.
+YENİ v1.10.0 — “ChatGPT için Say, Pi” (Standart Sesi Kaydet)
+- ChatGPT'nin Standart Ses Modu (SVM) hissini sabırlı, öngörülebilir, eller serbest bir deneyimle geri getirin.
+- chatgpt.com'a girin: ChatGPT bestecisinde bir arama düğmesi belirir; SVM gibi başlat/durdur.
+- Otomatik Sesli Okuma: etkinleştirildiğinde, ChatGPT'nin yerel "sesli oku" işlevini yanıt başına bir kez basarız—çift ses yok.
+- #SaveStandardVoice anı için tasarlandı: sıcaklık, varlık ve güvenilir tempo.
+
+ÜCRETSİZ PLAN – ANINDA DENEYİN, HESAP GEREKMEZ
+- AI ile Sesli Sohbet: ChatGPT, Pi ve Claude ile, konuşmayı bitirdiğinizi bilen Whisper destekli ses tanıma ile konuşun.
+- Evrensel Sesli Yazma: Herhangi bir web sitesindeki herhangi bir metin alanına veya e-postaya dikte edin – sağ tıklayın ve "Say, Pi ile dikte etmeye başla" seçeneğini seçin.
+- Doğru ve Hızlı: Aksanlar ve arka plan gürültüsü olsa bile yüksek doğrulukta konuşma metne dönüştürmenin keyfini çıkarın.
+- Doğal Sesler Duyun: Desteklenen modlarda sıcak, gerçekçi yanıtlar.
+- Esnek Düzenler: Tam ekran sürükleyici mod veya standart sohbet görünümünü kullanın.
 - Karanlık Mod Desteği: Pi'nin arayüzüyle uyumlu göz dostu tasarım.
-- Her Yerde Çalışır: Mac, Windows, Linux, Android, iOS – hepsi kapsanır.
+- Her Yerde Çalışır: Mac, Windows, Linux, Android, iOS – hepsi kapsanıyor.
 
-SAY, PI PREMIUM – TAM DENEYİMİN KİLİDİNİ AÇ
-Sesiniz, diliniz, AI'niz – tüm cihazlarınızda ve web sitelerinde.  
-- Claude & Pi Desteği: En iyi AI asistanları arasında sorunsuz geçiş.  
-- Evrensel Dikte: Web üzerinde herhangi bir yerde e-posta, belge ve formlar için profesyonel düzeyde sesli yazma.
-- 32+ Dilde Gerçekçi Yanıtlar: ElevenLabs tarafından desteklenir, dilinizde doğal duyulacak şekilde tasarlanmıştır.
-- Daha Büyük Kullanım Sınırları: Daha fazla konuşma süresi, daha fazla dinleme süresi, daha fazla yazma.
-- Tek Hesap, Her Yerde: Premium, platformlar ve tarayıcılarda sizinle gelir.
+SAY, PI PREMIUM – TAM DENEYİMİN KİLİDİNİ AÇIN
+Sesiniz, diliniz, AI'niz – tüm cihazlarınız ve web sitelerinizde.
+- ChatGPT, Claude & Pi Desteği: En iyi AI asistanları arasında sorunsuz geçiş.
+- Evrensel Dikte: Web üzerindeki e-postalar, belgeler ve formlar için profesyonel düzeyde sesli yazma.
+- 32+ Dilde Gerçekçi Yanıtlar: ElevenLabs tarafından desteklenir, dilinizde doğal ses çıkacak şekilde tasarlanmıştır.
+- Daha Büyük Kullanım Sınırları: Daha fazla konuşma süresi, daha fazla dinleme süresi, daha fazla dikte.
+- Tek Hesap, Her Yerde: Premium, platformlar ve tarayıcılar arasında sizi takip eder.
 
 Fiyatları görün: https://saypi.ai/pricing
 
-SAY, PI'YI NEDEN BİNLERCE KİŞİ SEVİYOR
-- İş Akışınızı Artırın: Not alın, e-posta yazın, fikir üretiin veya taslak hazırlayın ve elleriniz serbest kalsın.
-- Her Dili Konuşun: Akıcı bir şekilde konuşma ortasında çok dilli destek.
-- Erişilebilirlik İçin Tasarlanmıştır: Kapsayıcılığı göz önünde bulundurarak tasarlanmıştır – görsel veya motor zorluk yaşayan kullanıcılar için harika.
-- 2.000+ Kullanıcı Tarafından ★ 4.9/5 Olarak Derecelendirildi: Büyüyen küresel bir topluluk tarafından güveniliyor.
-- Özel Hayata Öncelik: Ses verileriniz güvende ve asla kötüye kullanılmaz. Politikamıza bakın: https://saypi.ai/legal/privacy
+NEDEN BİNLERCE KİŞİ SAY, PI'Yİ SEVİYOR
+- İş Akışınızı Hızlandırın: Not alın, e-posta yazın, fikir geliştirin veya taslak hazırlayın, elleriniz serbestken.
+- Her Dilde Konuşun: Akıcı bir şekilde konuşma ortasında geçiş yapabilen çok dilli destek.
+- Erişilebilirlik İçin Tasarlandı: Kapsayıcılık düşünülerek tasarlandı – motor veya görsel zorlukları olan kullanıcılar için harika.
+- 2.000+ Kullanıcı Tarafından ★ 4.9/5 Oylanmış: Büyüyen küresel bir topluluk tarafından güveniliyor.
+- Gizlilik Öncelikli: Ses verileriniz güvende ve asla kötüye kullanılmaz. Politikamızı görün: https://saypi.ai/legal/privacy
 
-BAŞLAMAK SADECE SANİYELER ALIR
-1. Uzantıyı yükleyin.
-2. AI sohbeti için: pi.ai veya claude.ai'yi açın ve arama düğmesine tıklayın.
-3. Sesli yazma için: Herhangi bir metin alanından, yüzer "Say, Pi" simgesine basın veya sağ tıklayın ve "Say, Pi ile dikte başlat"ı seçin.
+BİRKAÇ SANİYEDE BAŞLAYIN
+1. Eklentiyi yükleyin.
+2. AI sohbeti için: chatgpt.com, pi.ai veya claude.ai adresini açın ve arama düğmesine tıklayın.
+3. Sesli yazma için: Herhangi bir metin alanından, yüzen "Say, Pi" simgesine basın veya sağ tıklayın ve "Say, Pi ile dikte etmeye başla" seçeneğini seçin.
 4. Doğal bir şekilde konuşun. Hepsi bu.
 
-AI ile konuşmaya ve sesinizle yazmaya doğal yoldan başlayın—Say, Pi'yi yükleyin ve konuşma ile verimliliğin geleceğini deneyimleyin.
+AI ile konuşmaya ve sesinizle yazmaya doğal bir şekilde başlayın—Say, Pi'yi yükleyin ve sohbetin ve üretkenliğin geleceğini deneyimleyin.

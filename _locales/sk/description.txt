@@ -1,35 +1,41 @@
-Say, Pi mení vaše rozhovory s Pi a Claude na plynulé zážitky ovládané hlasom a prináša vysokokvalitné hlasové písanie na akúkoľvek webovú stránku. Stačí klepnúť na tlačidlo hovoru, hovoriť, ako by ste hovorili s človekom, a získať realistické hovorené odpovede. Navyše, diktujte text do akéhokoľvek vstupného poľa na webe s rovnakou presnosťou, ktorú milujete. Perfektné pre multitasking, dostupnosť alebo pre kohokoľvek, kto premýšľa lepšie nahlas.
+Say, Pi premení vaše rozhovory s ChatGPT, Pi a Claude na plynulé, hlasom riadené zážitky a prináša vysokokvalitné hlasové písanie na akúkoľvek webovú stránku. Stačí klepnúť na tlačidlo hovoru, hovoriť ako s človekom a získať realistické hovorené odpovede. Navyše, diktujte text do akéhokoľvek vstupného poľa na webe s rovnakou presnosťou, ktorú milujete. Ideálne pre multitasking, prístupnosť alebo pre kohokoľvek, kto myslí lepšie nahlas.
 
-ZADARMO PLÁN – VYSKÚŠAJTE OKAMŽITE, NIE JE POTREBNÝ ÚČET
-- Hlasový chat s AI: Rozprávajte sa s Pi a Claude pomocou hlasového rozpoznávania podporovaného Whisper, ktoré vie, kedy skončíte hovoriť.
-- Univerzálne hlasové písanie: Diktujte do akéhokoľvek textového poľa alebo e-mailu na akejkoľvek webovej stránke – stačí kliknúť pravým tlačidlom a vybrať „Začať diktovanie so Say, Pi.“
-- Presné a rýchle: Užívajte si vysoko presné prepisovanie reči na text, aj s prízvukmi a hlukom na pozadí.
-- Počujte skutočný hlas Pi: Prirodzené hlasové odpovede v Pi-ových vstavaných štýloch.
-- Flexibilné rozloženia: Použite režim na celú obrazovku alebo štandardné zobrazenie chatu.
-- Podpora tmavého režimu: Očiam prívetivý dizajn, ktorý zapadá do rozhrania Pi.
-- Funguje všade: Mac, Windows, Linux, Android, iOS – všetko je pokryté.
+NOVINKA VO VERZII v1.10.0 — „Say, Pi pre ChatGPT“ (Uložiť štandardný hlas)
+- Vráťte pocit zo štandardného hlasového režimu (SVM) ChatGPT s trpezlivým, predvídateľným, bezdotykovým zážitkom.
+- Vstúpte na chatgpt.com: tlačidlo hovoru sa objaví v kompozéri ChatGPT; začnite/zastavte rovnako ako SVM.
+- Automatické čítanie nahlas: keď je povolené, stlačíme natívne „čítanie nahlas“ ChatGPT raz na odpoveď—žiadne dvojité audio.
+- Navrhnuté pre moment #SaveStandardVoice: teplo, prítomnosť a spoľahlivé tempo.
+
+BEZPLATNÝ PLÁN – VYSKÚŠAJTE OKAMŽITE, NIE JE POTREBNÝ ÚČET
+- Hlasový chat s AI: Rozprávajte sa s ChatGPT, Pi a Claude s rozpoznávaním hlasu poháňaným Whisper, ktoré vie, kedy skončíte hovoriť.
+- Univerzálne hlasové písanie: Diktujte do akéhokoľvek textového poľa alebo e-mailu na akejkoľvek webovej stránke – stačí kliknúť pravým tlačidlom myši a vybrať „Začať diktovanie so Say, Pi.“
+- Presné a rýchle: Užívajte si vysokú presnosť prevodu reči na text, aj s prízvukmi a hlukom na pozadí.
+- Počúvajte prirodzené hlasy: Teplé, realistické odpovede v podporovaných režimoch.
+- Flexibilné rozloženia: Použite režim na celú obrazovku alebo štandardný chatový pohľad.
+- Podpora tmavého režimu: Dizajn šetrný k očiam, ktorý sa hodí do rozhrania Pi.
+- Funguje všade: Mac, Windows, Linux, Android, iOS – všetko pokryté.
 
 SAY, PI PREMIUM – ODOMKNITE PLNÝ ZÁŽITOK
-Váš hlas, váš jazyk, vaše AI – na všetkých vašich zariadeniach a webových stránkach.
-- Podpora Claude & Pi: Plynulé prepínanie medzi poprednými AI asistentmi.
+Váš hlas, váš jazyk, vaša AI – na všetkých vašich zariadeniach a webových stránkach.
+- Podpora ChatGPT, Claude & Pi: Bezproblémové prepínanie medzi špičkovými AI asistentmi.
 - Univerzálne diktovanie: Profesionálne hlasové písanie pre e-maily, dokumenty a formuláre kdekoľvek na webe.
-- Realistické odpovede v 32+ jazykoch: Podporované ElevenLabs, pripravené znieť prirodzene vo vašom jazyku.
-- Väčšie limity používania: Viac času na rozprávanie, viac času na počúvanie, viac diktovania.
-- Jeden účet, všade: Premium vás sleduje cez platformy a prehliadače.
+- Realistické odpovede v 32+ jazykoch: Poháňané ElevenLabs, navrhnuté tak, aby zneli prirodzene vo vašom jazyku.
+- Väčšie limity používania: Viac času na hovorenie, viac času na počúvanie, viac diktovania.
+- Jeden účet, všade: Premium vás sleduje naprieč platformami a prehliadačmi.
 
 Pozrite si ceny na: https://saypi.ai/pricing
 
-PREČO TISÍCKY MILUJÚ SAY, PI
-- Zvýšte svoju pracovnú produktivitu: Robte si poznámky, píšte e-maily, rozvíjajte nápady alebo navrhovate, pričom máte voľné ruky.
-- Hovorte akýmkoľvek jazykom: Podpora viacerých jazykov s hladkým prepínaním počas konverzácie.
-- Vytvorené pre dostupnosť: Navrhnuté s ohľadom na inkluzívnosť – skvelé pre používateľov s motorickými alebo zrakovými obmedzeniami.
-- Hodnotené ★ 4.9/5 od 2,000+ používateľov: Dôverujú mu rastúca globálna komunita.
-- Ochrana súkromia na prvom mieste: Vaše hlasové údaje sú zabezpečené a nikdy nie sú zneužité. Pozrite si našu politiku na: https://saypi.ai/legal/privacy
+PREČO TISÍCE MILUJÚ SAY, PI
+- Zvýšte svoju produktivitu: Robte si poznámky, píšte e-maily, vymýšľajte alebo píšte návrhy, zatiaľ čo máte voľné ruky.
+- Hovorte akýmkoľvek jazykom: Podpora viacerých jazykov s plynulým prepínaním počas konverzácie.
+- Navrhnuté pre prístupnosť: Navrhnuté s ohľadom na inkluzivitu – skvelé pre používateľov s motorickými alebo zrakovými problémami.
+- Hodnotené ★ 4.9/5 od 2,000+ používateľov: Dôveryhodné rastúcou globálnou komunitou.
+- Ochrana súkromia na prvom mieste: Vaše hlasové údaje sú bezpečné a nikdy nesprávne použité. Pozrite si našu politiku na: https://saypi.ai/legal/privacy
 
-ZAČNITE O PÁR SEKÚND
+ZAČNITE V PRIEBEHU SEKÚND
 1. Nainštalujte rozšírenie.
-2. Pre AI chat: Otvorte pi.ai alebo claude.ai a kliknite na tlačidlo hovoru.
-3. Pre hlasové písanie: Z akéhokoľvek textového poľa stlačte plávajúcu ikonu „Say, Pi“ alebo kliknite pravým tlačidlom a vyberte „Začať diktovanie so Say, Pi.“
+2. Pre AI chat: Otvorte chatgpt.com, pi.ai alebo claude.ai a kliknite na tlačidlo hovoru.
+3. Pre hlasové písanie: Z akéhokoľvek textového poľa stlačte plávajúcu ikonu "Say, Pi" alebo kliknite pravým tlačidlom myši a vyberte "Začať diktovanie so Say, Pi."
 4. Hovorte prirodzene. To je všetko.
 
-Začnite rozprávať sa s AI a písať svojím hlasom prirodzeným spôsobom – nainštalujte Say, Pi a zažite budúcnosť konverzácie a produktivity.
+Začnite hovoriť s AI a písať svojím hlasom prirodzeným spôsobom—nainštalujte Say, Pi a zažite budúcnosť konverzácie a produktivity.
