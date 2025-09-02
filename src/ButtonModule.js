@@ -101,6 +101,7 @@ class ButtonModule {
   }
 
   simulateFormSubmit() {
+    // First try the standard SayPi submit button (for Pi.ai and other chatbots)
     const submitButton = document.getElementById("saypi-submitButton");
 
     if (submitButton) {
@@ -115,20 +116,64 @@ class ButtonModule {
         submitButton.click();
       }
       console.debug("Sending message to Pi at", Date.now());
+      return;
+    }
+
+    // Try to find ChatGPT submit button using proper selectors
+    const chatgptSubmitButton = this.findChatGPTSubmitButton();
+    if (chatgptSubmitButton) {
+      this.submissionsWithoutAnError++;
+      chatgptSubmitButton.click();
+      console.debug("Sending message to ChatGPT at", Date.now());
+      return;
+    }
+
+    // Fallback to keyboard event for other cases
+    const textarea = document.getElementById("saypi-prompt");
+    if (textarea) {
+      const enterEvent = new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "Enter",
+        keyCode: 13,
+        which: 13,
+      });
+      textarea.dispatchEvent(enterEvent);
+      console.debug("Dispatched Enter keydown event at", Date.now());
     } else {
-      const textarea = document.getElementById("saypi-prompt");
-      if (textarea) {
-        const enterEvent = new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "Enter",
-          keyCode: 13,
-          which: 13,
-        });
-        textarea.dispatchEvent(enterEvent);
-      } else {
-        console.error("Cannot simulate submit: Textarea not found.");
+      console.error("Cannot simulate submit: No submit button or textarea found.");
+    }
+  }
+
+  /**
+   * Find ChatGPT's submit button using various selectors
+   * @returns {HTMLElement|null} The submit button element or null if not found
+   */
+  findChatGPTSubmitButton() {
+    // ChatGPT submit button selectors in order of preference
+    const selectors = [
+      'form[data-type="unified-composer"] button[type="submit"]',
+      'form[data-type="unified-composer"] [data-testid="send-button"]',
+      'form[data-type="unified-composer"] button[aria-label*="Send" i]',
+      'form[data-type="unified-composer"] button[title*="Send" i]',
+      // Fallback selectors for cases where the form might not be found
+      'button[data-testid="send-button"]',
+      'button[aria-label*="Send" i]:not([aria-label*="Stop" i])',
+      'button[title*="Send" i]:not([title*="Stop" i])'
+    ];
+
+    for (const selector of selectors) {
+      try {
+        const button = document.querySelector(selector);
+        if (button && !button.disabled) {
+          return button;
+        }
+      } catch (e) {
+        // Continue to next selector if this one fails
+        console.debug("Failed to query selector:", selector, e);
       }
     }
+
+    return null;
   }
 
   async handleAutoSubmit() {
