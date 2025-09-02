@@ -509,7 +509,8 @@ export class DOMObserver {
 
   findChatHistory(searchRoot: HTMLElement): Observation {
     const id = "saypi-chat-history";
-    const existingChatHistory = searchRoot.querySelector("#" + id);
+    // Check globally to avoid assigning the same id in different subtrees
+    const existingChatHistory = document.getElementById(id);
     if (existingChatHistory) {
       // Chat history already exists, no need to search
       return Observation.foundAlreadyDecorated(id, existingChatHistory);

@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Etiket for afkrydsningsfeltet til at aktivere/deaktivere automatisk oplæsning af ChatGPT-svar under opkald med stemme.",
+    "message": "Automatisk oplæsning (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Auto-indsend"

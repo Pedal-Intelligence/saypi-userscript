@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "用于启用或禁用通话中自动朗读ChatGPT回复的复选框标签。",
+    "message": "自动朗读（ChatGPT）"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "自动提交"

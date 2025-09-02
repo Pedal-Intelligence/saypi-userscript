@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Sesli aramalar sırasında ChatGPT yanıtlarının otomatik olarak okunmasını etkinleştirmek/devre dışı bırakmak için onay kutusu etiketi.",
+    "message": "Otomatik Okuma (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Otomatik gönder"

@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Ετικέτα για το πλαίσιο επιλογής που ενεργοποιεί ή απενεργοποιεί την αυτόματη ανάγνωση των απαντήσεων του ChatGPT κατά τη διάρκεια φωνητικών κλήσεων.",
+    "message": "Αυτόματη Ανάγνωση (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Αυτόματη υποβολή"

@@ -146,14 +146,24 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getChatHistory(searchRoot: HTMLElement): HTMLElement {
-    // Only return a concrete history root when it's available; otherwise defer setup
+    // Prefer the container whose direct children are conversation <article/>s
     const thread = findThreadRoot(searchRoot) as HTMLElement | null;
-    return (thread as HTMLElement) || (null as unknown as HTMLElement);
+    const scope: ParentNode = (thread as ParentNode) || (searchRoot as ParentNode) || document;
+    const firstTurn = (scope as Element | Document).querySelector?.(
+      'article[data-testid^="conversation-turn"], article[data-testid^="conversation-turn-"]'
+    ) as HTMLElement | null;
+    if (firstTurn && firstTurn.parentElement) {
+      return firstTurn.parentElement as HTMLElement;
+    }
+    // No valid message list yet; defer setup so we don't tag the wrong node
+    return null as unknown as HTMLElement;
   }
 
   getChatHistorySelector(): string {
-    // Prefer explicit thread id when available
-    return '#thread';
+    // Target the container whose direct children are turn <article/> nodes
+    // Scopes under #thread when present but also works globally as a fallback
+    const listByArticles = 'div:has(> article[data-testid^="conversation-turn"])';
+    return ['#thread ' + listByArticles, listByArticles].join(', ');
   }
 
   getPastChatHistorySelector(): string {
@@ -169,8 +179,10 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getAssistantResponseSelector(): string {
-    // Prefer content blocks scoped to the thread root when present, with global fallback
-    return getAssistantResponseSelectorScopedToThread();
+    // Match the turn container itself to avoid confusing user content blocks
+    // e.g., <article data-testid="conversation-turn-32" data-turn="assistant">
+    const sel = 'article[data-turn="assistant"]';
+    return ['#thread ' + sel, sel].join(', ');
   }
 
   getAssistantResponseContentSelector(): string {
@@ -178,7 +190,8 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getUserPromptSelector(): string {
-    return '[data-message-author-role="user"]';
+    // Match the user turn container to avoid misclassification
+    return 'article[data-turn="user"]';
   }
 
   getUserMessageContentSelector(): string {
@@ -195,7 +208,12 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   protected createAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse {
-    return new ChatGPTResponse(element, includeInitialText);
+    // Normalize to the full assistant turn container when selectors match inner content
+    const container = (element.closest('[data-message-author-role="assistant"]') ||
+      element.closest('article[data-testid^="conversation-turn-"]') ||
+      element.closest('article[data-testid^="conversation-turn"]') ||
+      element) as HTMLElement;
+    return new ChatGPTResponse(container, includeInitialText);
   }
 
   getUserMessage(element: HTMLElement): UserMessage {
@@ -299,23 +317,184 @@ class ChatGPTUserMessage extends UserMessage {
 class ChatGPTMessageControls extends MessageControls {
   constructor(message: AssistantResponse, ttsControls: TTSControlsModule) {
     super(message, ttsControls);
+    // Phase 2: auto-activate ChatGPT's native Read Aloud when it appears
+    this.autoClickNativeReadAloudWhenAvailable();
+    // Resilient attach: poll briefly for the native action bar and attach
+    // our controls even if the initial mutation timing was missed.
+    this.scheduleLazyAttach();
   }
 
   protected getExtraControlClasses(): string[] {
     return ["chatgpt-controls"];
   }
 
-  getHoverMenuSelector(): string {
-    return "div.flex.items-center.justify-end, .message-controls";
+  getActionBarSelector(): string {
+    // Robust selector set for ChatGPT action bar.
+    // - include the wrapper divs AND the buttons themselves so watchForActionBar can trigger
+    return [
+      // Direct match of wrapper that holds action buttons
+      'div:has(> button[data-testid="voice-play-turn-action-button"])',
+      'div:has(> button[data-testid="copy-turn-action-button"])',
+      'div:has(> button[aria-label*="Copy" i])',
+      'div:has(> button[title*="Copy" i])',
+      // Buttons (used only for watcher trigger; final container resolved in findHoverMenu override)
+      'button[data-testid="voice-play-turn-action-button"]',
+      'button[data-testid="copy-turn-action-button"]',
+      'button[aria-label*="Copy" i]',
+      'button[title*="Copy" i]',
+      // Fallback legacy
+      'div.flex.items-center.justify-end',
+      '.message-controls'
+    ].join(', ');
   }
 
   getReadAloudButton(): HTMLButtonElement | null {
-    // Look for native read aloud button - this will be used in Phase 2
-    return this.message.element.querySelector('button[aria-label*="Read aloud"], button[title*="Read aloud"]') as HTMLButtonElement;
+    // Prefer stable data-testid; fall back to aria/ title contains
+    const byTestId = this.message.element.querySelector(
+      'button[data-testid="voice-play-turn-action-button"]'
+    ) as HTMLButtonElement | null;
+    if (byTestId) return byTestId;
+    return this.message.element.querySelector(
+      'button[aria-label*="Read aloud" i], button[title*="Read aloud" i]'
+    ) as HTMLButtonElement | null;
   }
 
   getCopyButton(): HTMLButtonElement | null {
     return this.message.element.querySelector('button[aria-label*="Copy"], button[title*="Copy"]') as HTMLButtonElement;
+  }
+
+  private readAloudObserver: MutationObserver | null = null;
+
+  /**
+   * Checks if a voice call is currently active by examining the conversation state.
+   * Uses lazy access to StateMachineService to avoid circular import issues.
+   * @returns true if the conversation is in listening or responding state
+   */
+  private isCallActive(): boolean {
+    try {
+      // Lazy import to avoid module initialization ordering issues
+      const svc = (globalThis as any).StateMachineService || (window as any).StateMachineService;
+      const actor = svc?.conversationActor;
+      const state = actor?.getSnapshot?.() || actor?.state;
+      if (!state) return false;
+      return state.matches?.('listening') || state.matches?.('responding');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // Prefer stable resolution through the known native buttons
+  public override findActionBar(): HTMLElement | null {
+    const existing = super.findActionBar();
+    if (existing) return existing;
+    const btn = this.getReadAloudButton() || this.getCopyButton();
+    if (btn && btn.parentElement) {
+      const wrapper = btn.parentElement as HTMLElement; // immediate parent is the flexible action bar wrapper
+      wrapper.classList.add('message-action-bar');
+      return wrapper;
+    }
+    // Fallback to selector lookup
+    const sel = this.getActionBarSelector();
+    const found = this.message.element.querySelector(sel) as HTMLElement | null;
+    if (found) {
+      found.classList.add('message-action-bar');
+    }
+    return found;
+  }
+
+  /**
+   * ChatGPT already renders a native action bar with Copy / Read‑aloud, so
+   * we do not inject any extra buttons. We simply locate and store the
+   * wrapper so the rest of the machinery (e.g., observers) can reference it.
+   */
+  protected override async decorateControls(message: AssistantResponse): Promise<void> {
+    return new Promise((resolve) => {
+      const establish = () => {
+        let wrapper = this.findActionBar();
+        if (!wrapper) {
+          const sel = this.getActionBarSelector();
+          wrapper = message.element.querySelector(sel) as HTMLElement | null;
+        }
+        if (wrapper) {
+          wrapper.classList.add('message-action-bar');
+          this.actionBar = wrapper;
+        }
+        // Do not create .saypi-tts-controls; ChatGPT has native controls
+        resolve();
+      };
+      establish();
+    });
+  }
+
+  // If the wrapper existed before our observer started, we might miss it.
+  // Do a short, bounded retry to attach controls.
+  private scheduleLazyAttach(): void {
+    const maxTries = 50; // ~5s at 100ms each
+    let tries = 0;
+    const tryAttach = () => {
+      // If already attached, stop
+      if (this.message.element.querySelector('.saypi-tts-controls')) return;
+
+      const wrapper = this.findActionBar();
+      if (wrapper) {
+        // Re-run the normal decorator path which will append our controls
+        this.decorateControls(this.message);
+        return;
+      }
+      if (++tries < maxTries) {
+        setTimeout(tryAttach, 100);
+      }
+    };
+    setTimeout(tryAttach, 0);
+  }
+
+  /**
+   * Auto-click ChatGPT's native Read Aloud for the most recent, newly
+   * generated assistant response. Avoids older messages by only triggering
+   * when the button is created after our controls are initialized.
+   */
+  private autoClickNativeReadAloudWhenAvailable(): void {
+    // If the button already exists, it's likely an older message: don't autoplay
+    const existing = this.getReadAloudButton();
+    if (existing) {
+      return;
+    }
+
+    // Observe the message subtree for the button appearing after streaming ends
+    this.readAloudObserver = new MutationObserver(() => {
+      const btn = this.getReadAloudButton();
+      if (!btn) return;
+      if (!this.message.isLastMessage()) return; // ensure it's the newest turn
+      // Respect user preference and only autoplay during a voice call
+      const prefs = UserPreferenceModule.getInstance();
+      const enabled = prefs.getCachedAutoReadAloudChatGPT();
+      if (!enabled) return;
+      if (!this.isCallActive()) return;
+      if ((btn as any)._saypiClicked) return; // idempotent guard
+      (btn as any)._saypiClicked = true;
+      try {
+        // Click on a microtask to allow any handlers to attach first
+        setTimeout(() => btn.click(), 0);
+      } catch (e) {
+        console.warn('Say, Pi auto read‑aloud click failed:', e);
+      } finally {
+        this.readAloudObserver?.disconnect();
+        this.readAloudObserver = null;
+      }
+    });
+
+    this.readAloudObserver.observe(this.message.element, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  public override teardown(): void {
+    try {
+      this.readAloudObserver?.disconnect();
+      this.readAloudObserver = null;
+    } catch {}
+    super.teardown();
   }
 }
 

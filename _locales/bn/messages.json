@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "ভয়েস কলের সময় ChatGPT এর প্রতিক্রিয়াগুলি স্বয়ংক্রিয়ভাবে পড়ার বিকল্প সক্ষম বা নিষ্ক্রিয় করার জন্য চেকবক্সের লেবেল।",
+    "message": "স্বয়ংক্রিয়ভাবে পড়ুন (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "স্বয়ংক্রিয়-জমা"

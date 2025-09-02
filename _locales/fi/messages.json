@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Valintaruutu ChatGPT-vastausten automaattisen ääneenlukemisen ottamiseksi käyttöön tai pois käytöstä puheluiden aikana.",
+    "message": "Automaattinen ääneenlukeminen (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automaattinen lähetys"

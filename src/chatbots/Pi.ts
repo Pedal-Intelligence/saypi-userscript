@@ -210,8 +210,69 @@ class PiMessageControls extends MessageControls {
     return ["pt-4", "text-neutral-500", "text-sm"];
   }
 
-  getHoverMenuSelector(): string {
+  getActionBarSelector(): string {
     return "div[style]:last-of-type"; // last div child of the message element (usually the second child)
+  }
+
+  // Pi requires us to inject our own controls into the action bar
+  protected override async decorateControls(message: AssistantResponse): Promise<void> {
+    return new Promise((resolve) => {
+      const attach = () => {
+        let bar = this.findActionBar();
+        if (!bar) {
+          bar = message.element.querySelector(this.getActionBarSelector()) as HTMLElement | null;
+          if (bar) {
+            bar.classList.add("message-action-bar");
+            this.actionBar = bar;
+          } else {
+            // Wait until message action bar appears
+            const observer = new MutationObserver(() => {
+              const candidate = message.element.querySelector(this.getActionBarSelector()) as HTMLElement | null;
+              if (candidate) {
+                candidate.classList.add("message-action-bar");
+                this.actionBar = candidate;
+                observer.disconnect();
+                attach();
+              }
+            });
+            observer.observe(message.element, { childList: true, subtree: true });
+            return;
+          }
+        }
+
+        let msgCtrlsElement = message.element.querySelector(
+          ".saypi-tts-controls"
+        ) as HTMLDivElement | null;
+        if (!msgCtrlsElement) {
+          msgCtrlsElement = document.createElement("div");
+          msgCtrlsElement.classList.add(
+            "saypi-tts-controls",
+            ...this.getExtraControlClasses()
+          );
+          this.actionBar?.appendChild(msgCtrlsElement);
+        }
+        this.messageControlsElement = msgCtrlsElement;
+
+        const copyButtonElement =
+          msgCtrlsElement.querySelector(".saypi-copy-button");
+        if (!copyButtonElement) {
+          this.ttsControls.addCopyButton(this.message, msgCtrlsElement);
+        }
+
+        // Add telemetry button at the end
+        const telemetryButtonElement =
+          msgCtrlsElement.querySelector(".saypi-telemetry-button");
+        if (!telemetryButtonElement) {
+          setTimeout(() => {
+            const telemetryButton = this.createTelemetryButton();
+            msgCtrlsElement!.appendChild(telemetryButton);
+          }, 0);
+        }
+
+        resolve();
+      };
+      attach();
+    });
   }
 }
 

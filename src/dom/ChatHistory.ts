@@ -244,8 +244,21 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   ): Observation[] {
     if (!searchRoot) return [];
     if (!querySelector || !querySelector.trim()) return [];
-    const deepMatches = searchRoot.querySelectorAll(querySelector);
     const observations: Observation[] = [];
+    // Include the root element itself if it matches the selector (important
+    // for mutation callbacks where the added node is the message element)
+    try {
+      if ((searchRoot as Element).matches?.(querySelector)) {
+        const observation = ChatHistoryMessageObserver.findAssistantResponse(
+          searchRoot,
+          searchRoot
+        );
+        observations.push(observation);
+      }
+    } catch (_) {
+      // Some selectors may not be supported by matches(); ignore and continue
+    }
+    const deepMatches = searchRoot.querySelectorAll(querySelector);
     for (const match of deepMatches) {
       const observation = ChatHistoryMessageObserver.findAssistantResponse(
         searchRoot,
@@ -276,8 +289,17 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   ): Observation[] {
     if (!searchRoot) return [];
     if (!querySelector || !querySelector.trim()) return [];
-    const deepMatches = searchRoot.querySelectorAll(querySelector);
     const observations: Observation[] = [];
+    try {
+      if ((searchRoot as Element).matches?.(querySelector)) {
+        const observation = ChatHistoryMessageObserver.findUserPrompt(
+          searchRoot,
+          searchRoot
+        );
+        observations.push(observation);
+      }
+    } catch (_) {}
+    const deepMatches = searchRoot.querySelectorAll(querySelector);
     for (const match of deepMatches) {
       const observation = ChatHistoryMessageObserver.findUserPrompt(
         searchRoot,

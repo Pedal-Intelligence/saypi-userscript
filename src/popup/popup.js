@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const vadStatusIndicatorEnabledInput = document.getElementById("vad-status-indicator-enabled");
   const removeFillerWordsInput = document.getElementById("remove-filler-words");
+  const chatgptAutoReadAloudInput = document.getElementById("chatgpt-auto-read-aloud");
 
   // Initialize dictation mode selector via reusable component
   if (window.ModeSelector) {
@@ -621,6 +622,29 @@ document.addEventListener("DOMContentLoaded", function () {
       nicknameInput.value = nickname;
     }
   });
+
+  // Auto Read Aloud (ChatGPT) toggle
+  if (chatgptAutoReadAloudInput) {
+    getStoredValue("autoReadAloudChatGPT", true).then((value) => {
+      selectInput(chatgptAutoReadAloudInput, value);
+      if (value) {
+        chatgptAutoReadAloudInput.parentElement.classList.add("checked");
+      } else {
+        chatgptAutoReadAloudInput.parentElement.classList.remove("checked");
+      }
+    });
+    chatgptAutoReadAloudInput.addEventListener("change", function () {
+      chrome.storage.local.set({ autoReadAloudChatGPT: this.checked }, function () {
+        console.log("Preference saved: Auto Read Aloud (ChatGPT) is " + (chatgptAutoReadAloudInput.checked ? "on" : "off"));
+      });
+      if (this.checked) {
+        this.parentElement.classList.add("checked");
+      } else {
+        this.parentElement.classList.remove("checked");
+      }
+      message({ autoReadAloudChatGPT: this.checked });
+    });
+  }
 
   // Save the nickname when it changes
   nicknameInput.addEventListener("change", function() {

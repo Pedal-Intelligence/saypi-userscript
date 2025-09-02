@@ -30,6 +30,7 @@ interface StorageResult {
   allowInterruptions?: boolean; // Added for migration
   vadStatusIndicatorEnabled?: boolean; // To control VAD status indicator visibility
   removeFillerWords?: boolean; // Prefer cleaned transcripts (LLM-powered)
+  autoReadAloudChatGPT?: boolean; // Auto click ChatGPT Read Aloud during voice calls
 }
 
 // Define feature codes
@@ -41,7 +42,8 @@ export const FEATURE_CODES = {
 const LOCAL_STORAGE_KEYS = [
   "prefer", "language", "discretionaryMode", "nickname",
   "autoSubmit", "allowInterruptions", "soundEffects", "theme", 
-  "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords"
+  "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords",
+  "autoReadAloudChatGPT"
 ];
 
 // Add a flag to mark that sync-to-local migration has completed
@@ -175,6 +177,12 @@ class UserPreferenceModule {
       EventBus.emit("userPreferenceChanged", { removeFillerWords: value });
     });
 
+    // Auto Read Aloud for ChatGPT (default true)
+    this.getStoredValue("autoReadAloudChatGPT", true, 'local').then((value) => {
+      this.cache.setCachedValue("autoReadAloudChatGPT", value);
+      EventBus.emit("userPreferenceChanged", { autoReadAloudChatGPT: value });
+    });
+
     // keepSegments removed (dev-only via env)
 
     // Network-dependent settings (not in chrome.storage)
@@ -267,6 +275,12 @@ class UserPreferenceModule {
           EventBus.emit("userPreferenceChanged", { removeFillerWords: request.removeFillerWords });
         }
 
+        if ("autoReadAloudChatGPT" in request) {
+          this.cache.setCachedValue("autoReadAloudChatGPT", request.autoReadAloudChatGPT);
+          actions.push(this.setStoredValue("autoReadAloudChatGPT", request.autoReadAloudChatGPT, 'local'));
+          EventBus.emit("userPreferenceChanged", { autoReadAloudChatGPT: request.autoReadAloudChatGPT });
+        }
+
         // keepSegments removed (dev-only via env)
 
         if (actions.length > 0) {
@@ -340,6 +354,10 @@ class UserPreferenceModule {
                   case "removeFillerWords":
                     this.cache.setCachedValue("removeFillerWords", newValue);
                     eventData = { removeFillerWords: newValue };
+                    break;
+                  case "autoReadAloudChatGPT":
+                    this.cache.setCachedValue("autoReadAloudChatGPT", newValue);
+                    eventData = { autoReadAloudChatGPT: newValue };
                     break;
                   // keepSegments removed (dev-only via env)
                   default: continue; // Should not happen if LOCAL_STORAGE_KEYS is correct
@@ -591,6 +609,25 @@ class UserPreferenceModule {
     this.cache.setCachedValue("soundEffects", enabled);
     EventBus.emit("userPreferenceChanged", { soundEffects: enabled });
     return this.setStoredValue("soundEffects", enabled, 'local'); // Ensure it uses 'local'
+  }
+
+  // Auto Read Aloud (ChatGPT)
+  public async getAutoReadAloudChatGPT(): Promise<boolean> {
+    const cached = this.cache.getCachedValue("autoReadAloudChatGPT", null);
+    if (cached !== null) return Promise.resolve(cached as boolean);
+    const stored = await this.getStoredValue("autoReadAloudChatGPT", true, 'local') as boolean;
+    this.cache.setCachedValue("autoReadAloudChatGPT", stored);
+    return stored;
+  }
+
+  public getCachedAutoReadAloudChatGPT(): boolean {
+    return this.cache.getCachedValue("autoReadAloudChatGPT", true) as boolean;
+  }
+
+  public setAutoReadAloudChatGPT(enabled: boolean): Promise<void> {
+    this.cache.setCachedValue("autoReadAloudChatGPT", enabled);
+    EventBus.emit("userPreferenceChanged", { autoReadAloudChatGPT: enabled });
+    return this.setStoredValue("autoReadAloudChatGPT", enabled, 'local');
   }
 
   public async getAutoSubmit(): Promise<boolean> {

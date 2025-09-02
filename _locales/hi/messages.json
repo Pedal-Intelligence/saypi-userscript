@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "वॉयस कॉल के दौरान ChatGPT के उत्तरों को स्वत: पढ़ने के विकल्प को चालू या बंद करने के लिए चेकबॉक्स का लेबल।",
+    "message": "स्वत: पढ़ें (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "स्वत: सबमिट"

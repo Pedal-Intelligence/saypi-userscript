@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Label voor het selectievakje om het automatisch voorlezen van ChatGPT-antwoorden tijdens spraakoproepen in of uit te schakelen.",
+    "message": "Automatisch voorlezen (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatisch indienen"

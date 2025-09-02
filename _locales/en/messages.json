@@ -1186,5 +1186,9 @@
   "dashboardLinkTitle": {
     "message": "Open Say, Pi Dashboard",
     "description": "Tooltip text for the link to open the Say, Pi dashboard."
+  },
+  "autoReadAloudChatGPT": {
+    "message": "Auto Read Aloud (ChatGPT)",
+    "description": "Label for the checkbox to enable/disable automatic reading of ChatGPT responses during voice calls."
   }
 }

@@ -1,4 +1,4 @@
-.message-hover-menu {
+.message-action-bar, .message-hover-menu {
   display: flex;
 
   /* If you need specific styling for .create-thread-button, add it here */
@@ -469,7 +469,7 @@
       }
     }
 
-    .message-hover-menu {
+    .message-action-bar, .message-hover-menu {
       display: none;
     }
   }
@@ -620,7 +620,7 @@
       }
     }
     
-    .message-hover-menu {
+    .message-action-bar, .message-hover-menu {
       display: none;
     }
   }

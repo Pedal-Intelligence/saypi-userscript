@@ -145,6 +145,10 @@
       }
     }
   },
+  "autoReadAloudChatGPT": {
+    "description": "Nhãn cho hộp kiểm bật/tắt tính năng đọc tự động các phản hồi của ChatGPT trong cuộc gọi thoại.",
+    "message": "Đọc tự động (ChatGPT)"
+  },
   "autoSubmit": {
     "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Tự động gửi"

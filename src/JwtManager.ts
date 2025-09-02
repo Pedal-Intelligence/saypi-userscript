@@ -104,7 +104,7 @@ export class JwtManager {
         }
       }
     } catch (error) {
-      console.error('[status] Failed to load token from storage:', error);
+      logger.error('[status] Failed to load token from storage:', error);
     }
   }
 
@@ -116,7 +116,7 @@ export class JwtManager {
         authCookieValue: this.authCookieValue
       });
     } catch (error) {
-      console.error('Failed to save token to storage:', error);
+      logger.error('Failed to save token to storage:', error);
     }
   }
 
@@ -149,9 +149,29 @@ export class JwtManager {
   }
 
   private parseDuration(duration: string): number {
+    if (duration === undefined || duration === null) {
+      logger.error('Auth server error: parseDuration called with undefined/null duration', {
+        durationValue: duration,
+        durationType: typeof duration
+      });
+      throw new Error('Invalid duration: undefined or null value received from auth server');
+    }
+    
+    if (typeof duration !== 'string') {
+      logger.error('Auth server error: parseDuration called with non-string duration', {
+        durationValue: duration,
+        durationType: typeof duration
+      });
+      throw new Error(`Invalid duration type: expected string, got ${typeof duration}`);
+    }
+    
     const match = duration.match(/^(\d+)(m|h|d|s)$/);
     if (!match) {
-      throw new Error(`Invalid duration format: ${duration}`);
+      logger.error('Auth server error: Invalid duration format from server', {
+        durationValue: duration,
+        expectedFormat: 'number + unit (s/m/h/d), e.g. "1h", "30m"'
+      });
+      throw new Error(`Invalid duration format from auth server: "${duration}" (expected format: e.g. "1h", "30m")`);
     }
     
     const value = parseInt(match[1]);
@@ -185,7 +205,7 @@ export class JwtManager {
         }
       }
     } catch (error) {
-      console.error('Failed to check auth cookie during initialization:', error);
+      logger.error('Failed to check auth cookie during initialization:', error);
     }
   }
 
@@ -197,7 +217,7 @@ export class JwtManager {
    */
   public async refresh(force: boolean = false, silent401: boolean = true): Promise<void> {
     if (!config.authServerUrl) {
-      console.warn('Auth server URL not configured');
+      logger.warn('Auth server URL not configured');
       return;
     }
 
@@ -312,7 +332,62 @@ export class JwtManager {
         throw new Error(`Failed to refresh token: ${respStatus} ${respStatusText} - ${errorText}`);
       }
 
-      const { token, expiresIn } = respBody || {};
+      // Handle different response body types - could be string or object
+      let parsedBody: any = null;
+      
+      if (!respBody) {
+        logger.error('Auth server error: Empty response body received', {
+          status: respStatus,
+          statusText: respStatusText,
+          url: refreshUrl
+        });
+        throw new Error('Token refresh failed: empty response from auth server');
+      }
+      
+      // Parse response body if it's a string
+      if (typeof respBody === 'string') {
+        try {
+          parsedBody = JSON.parse(respBody);
+        } catch (parseError) {
+          logger.error('Auth server error: Invalid JSON response', {
+            responseBody: respBody,
+            status: respStatus,
+            statusText: respStatusText,
+            url: refreshUrl,
+            parseError: parseError
+          });
+          throw new Error('Token refresh failed: invalid JSON response from auth server');
+        }
+      } else {
+        parsedBody = respBody;
+      }
+      
+      const { token, expiresIn } = parsedBody || {};
+      
+      if (!token) {
+        logger.error('Auth server error: Missing token in response', {
+          responseBody: parsedBody,
+          status: respStatus,
+          statusText: respStatusText,
+          url: refreshUrl,
+          hasToken: parsedBody && typeof parsedBody === 'object' && 'token' in parsedBody,
+          tokenValue: parsedBody?.token ? typeof parsedBody.token : 'undefined'
+        });
+        throw new Error('Token refresh failed: no token returned by auth server');
+      }
+      
+      if (!expiresIn) {
+        logger.error('Auth server error: Missing expiresIn in response', {
+          responseBody: parsedBody,
+          status: respStatus,
+          statusText: respStatusText,
+          url: refreshUrl,
+          hasExpiresIn: parsedBody && typeof parsedBody === 'object' && 'expiresIn' in parsedBody,
+          expiresInValue: parsedBody?.expiresIn ? typeof parsedBody.expiresIn : 'undefined',
+          expiresInActual: parsedBody?.expiresIn
+        });
+        throw new Error('Token refresh failed: no expiration time returned by auth server');
+      }
       
       logger.debug('Token refreshed successfully, expires in:', expiresIn);
       
@@ -334,7 +409,7 @@ export class JwtManager {
         EventBus.emit('jwt:claims:changed', { newClaims });
       }
     } catch (error) {
-      console.error('Failed to refresh token:', error);
+      logger.error('Failed to refresh token:', error);
       this.clear();
     }
   }
@@ -359,7 +434,7 @@ export class JwtManager {
   }
 
   public getAuthHeader(): string | null {
-    console.debug('[status] Getting auth header');
+    logger.debug('[status] Getting auth header');
     if (!this.jwtToken) return null;
     return `Bearer ${this.jwtToken}`;
   }
@@ -376,7 +451,7 @@ export class JwtManager {
       
       return JSON.parse(jsonPayload);
     } catch (error) {
-      console.error('Failed to parse JWT claims:', error);
+      logger.error('Failed to parse JWT claims:', error);
       return null;
     }
   }
@@ -402,7 +477,7 @@ export class JwtManager {
       this.refreshTimeout = null;
     }
     chrome.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue']).catch(error => {
-      console.error('Failed to clear token from storage:', error);
+      logger.error('Failed to clear token from storage:', error);
     });
   }
 

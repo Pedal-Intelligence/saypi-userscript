@@ -50,7 +50,7 @@ html body.claude {
     top: -130%; /* position the tooltip above the button */
   }
 
-  .message-hover-menu .saypi-tts-controls {
+  .message-action-bar .saypi-tts-controls, .message-hover-menu .saypi-tts-controls {
     /* unset pi-specific styles */
     padding: unset;
     margin-top: unset;

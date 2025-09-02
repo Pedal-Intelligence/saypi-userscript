@@ -25,6 +25,8 @@ import { addSvgToButton } from "../tts/VoiceMenu";
 import getMessage from "../i18n";
 
 // Add this interface definition near the top of the file after imports
+// Small alias to make intent clearer when dealing with per‑message control bars
+type ActionBar = HTMLElement;
 interface MetricDefinition {
   key: string;
   label: string;
@@ -152,10 +154,15 @@ abstract class AssistantResponse {
       // content already found and decorated
       return content as HTMLElement;
     }
+    // If the element itself is the content, mark and return it
+    if (this._element.matches?.(this.contentSelector)) {
+      this._element.classList.add("content");
+      return this._element as HTMLElement;
+    }
     const wfull = this._element.querySelector(this.contentSelector);
     if (wfull) {
       // content found but not decorated yet
-      wfull.classList.add("content");
+      (wfull as HTMLElement).classList.add("content");
       return wfull as HTMLElement;
     }
     // content not found, wait for it to load
@@ -165,19 +172,23 @@ abstract class AssistantResponse {
           for (const node of [...mutation.addedNodes]) {
             if (node instanceof HTMLElement) {
               const addedElement = node as HTMLElement;
-              const classNameFromContentSelector =
-                this.contentSelector.split(".")[1];
-              if (
-                addedElement.classList.contains(classNameFromContentSelector)
-              ) {
-                addedElement.classList.add("content");
-                observer.disconnect();
-                resolve(addedElement);
+              // When the matching content node appears anywhere below, capture it
+              if (addedElement.matches?.(this.contentSelector) || addedElement.querySelector(this.contentSelector)) {
+                const target = addedElement.matches?.(this.contentSelector)
+                  ? addedElement
+                  : (addedElement.querySelector(this.contentSelector) as HTMLElement);
+                if (target) {
+                  target.classList.add("content");
+                  observer.disconnect();
+                  resolve(target);
+                  return;
+                }
               }
             }
           }
         }
       });
+      observer.observe(this._element, { childList: true, subtree: true });
     });
   }
 
@@ -437,7 +448,8 @@ abstract class AssistantResponse {
 }
 
 abstract class MessageControls {
-  protected hoverMenu: HTMLElement | null; // hover menu is the container for the message controls
+  // Action bar is the container for a message's built-in controls (copy, read‑aloud, etc.)
+  protected actionBar: ActionBar | null;
   protected messageControlsElement: HTMLElement | null; // message controls is the container for Say, Pi buttons etc.
   protected telemetryData: TelemetryData | null = null;
   protected telemetryContainer: HTMLElement | null = null;
@@ -447,7 +459,7 @@ abstract class MessageControls {
     protected message: AssistantResponse,
     protected ttsControls: TTSControlsModule
   ) {
-    this.hoverMenu = this.messageControlsElement = null; // will be initialized in decorateControls()
+    this.actionBar = this.messageControlsElement = null; // will be initialized in decorateControls()
     this.decorateControls(message);
     
     if (this.message.isLastMessage()) {
@@ -471,88 +483,48 @@ abstract class MessageControls {
   }
 
   /**
-   * Get a CSS selector for the hover menu element, relative to the message element
+   * Get a CSS selector for the action bar element, relative to the message element
    */
-  abstract getHoverMenuSelector(): string;
+  abstract getActionBarSelector(): string;
 
-  findHoverMenu(): HTMLElement | null {
-    return this.message.element.querySelector(".message-hover-menu");
+  findActionBar(): ActionBar | null {
+    return this.message.element.querySelector(".message-action-bar");
   }
 
   protected async decorateControls(message: AssistantResponse): Promise<void> {
+    // Base: locate the native action bar and record it, but do not inject
     return new Promise((resolve) => {
-      const findAndDecorateHoverMenu = () => {
-        let hoverMenu = this.findHoverMenu();
-        if (!hoverMenu) {
-          hoverMenu = message.element.querySelector(
-            this.getHoverMenuSelector()
-          );
-          if (hoverMenu) {
-            hoverMenu.classList.add("message-hover-menu");
-            this.hoverMenu = hoverMenu;
-            // pi-specific thread button (TODO: move to PiAIChatbot)
-            if (hoverMenu.children.length > 0) {
-              const createThreadButton = hoverMenu
-                .children[0] as HTMLDivElement;
-              createThreadButton.classList.add("create-thread-button");
-            }
+      const locate = () => {
+        let bar = this.findActionBar();
+        if (!bar) {
+          bar = message.element.querySelector(
+            this.getActionBarSelector()
+          ) as HTMLElement | null;
+          if (bar) {
+            bar.classList.add("message-action-bar");
+            this.actionBar = bar;
           } else {
-            console.debug(
-              "Hover menu not ready, wait until the message is fully loaded"
-            );
-            this.watchForHoverMenu(message, findAndDecorateHoverMenu);
+            this.watchForActionBar(message, locate);
             return;
           }
         }
-
-        let msgCtrlsElement = message.element.querySelector(
-          ".saypi-tts-controls"
-        ) as HTMLDivElement;
-        if (!msgCtrlsElement) {
-          msgCtrlsElement = document.createElement("div");
-          msgCtrlsElement.classList.add(
-            "saypi-tts-controls",
-            ...this.getExtraControlClasses()
-          );
-          hoverMenu?.appendChild(msgCtrlsElement);
-        }
-        this.messageControlsElement = msgCtrlsElement;
-
-        const copyButtonElement =
-          msgCtrlsElement.querySelector(".saypi-copy-button");
-        if (!copyButtonElement) {
-          this.ttsControls.addCopyButton(this.message, msgCtrlsElement);
-        }
-
-        // Add telemetry button at the end
-        const telemetryButtonElement = 
-          msgCtrlsElement.querySelector(".saypi-telemetry-button");
-        if (!telemetryButtonElement) {
-          // We'll add it after all other controls are added
-          setTimeout(() => {
-            const telemetryButton = this.createTelemetryButton();
-            msgCtrlsElement.appendChild(telemetryButton);
-          }, 0);
-        }
-
         resolve();
       };
-
-      findAndDecorateHoverMenu();
+      locate();
     });
   }
 
-  private watchForHoverMenu(
+  private watchForActionBar(
     message: AssistantResponse,
     callback: () => void
   ): void {
-    // setup an observer to wait for the hover menu to load
+    // setup an observer to wait for the action bar to load
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const node of [...mutation.addedNodes]) {
           if (node instanceof HTMLElement) {
             const addedElement = node as HTMLElement;
-            if (addedElement.querySelector(this.getHoverMenuSelector())) {
+            if (addedElement.querySelector(this.getActionBarSelector())) {
               observer.disconnect();
               callback();
               return;
@@ -581,7 +553,7 @@ abstract class MessageControls {
   }
 
   private watchForPopupMenu(
-    hoverMenu: HTMLElement,
+    actionBar: HTMLElement,
     speech: SpeechUtterance
   ): void {
     const observer = new MutationObserver((mutations) => {
@@ -607,7 +579,7 @@ abstract class MessageControls {
         }
       }
     });
-    observer.observe(hoverMenu, { childList: true, subtree: false });
+    observer.observe(actionBar, { childList: true, subtree: false });
   }
 
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
@@ -714,7 +686,7 @@ abstract class MessageControls {
   /**
    * Create a button to show telemetry visualization
    */
-  private createTelemetryButton(): HTMLButtonElement {
+  protected createTelemetryButton(): HTMLButtonElement {
     const button = document.createElement("button");
     button.className = "saypi-telemetry-button";
     button.title = "View performance metrics";
