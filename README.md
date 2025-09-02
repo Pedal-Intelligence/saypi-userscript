@@ -294,3 +294,23 @@ python3 i18n-translate-release-text.py
 5. Run `npm run build` to validate translations
 
 > **Note**: The unified script replaces the need to run individual translation scripts manually, ensuring both UI strings and store descriptions are always kept in sync during release preparation.
+
+### Chrome Web Store Publishing Helper
+
+The `i18n-translate-release-text.py` script provides a convenient alias for copying locale-specific descriptions to your clipboard for easy pasting into Chrome Web Store:
+
+```bash
+# Set up the alias (run once per terminal session)
+alias lcp='f(){ cat "_locales/$1/description.txt" | pbcopy; }; f'
+
+# Then use it to copy any locale's description to clipboard
+lcp vi        # Copy Vietnamese description
+lcp zh_CN     # Copy Chinese (Simplified) description  
+lcp pt_BR     # Copy Portuguese (Brazil) description
+```
+
+**Quick workflow tip**: Use terminal history to quickly switch between locales:
+1. Type `lcp vi` and press Enter
+2. Press ↑ arrow key to get previous command
+3. Edit `vi` to `fr` and press Enter
+4. Paste into Chrome Web Store and repeat for next locale

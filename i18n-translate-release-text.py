@@ -228,6 +228,20 @@ def translate_all(source_file, skip_confirm=False, model="gpt-4o", verbose=False
     if failed_langs:
         print(f"✘ Failed languages: {', '.join(failed_langs)}", file=sys.stderr)
         sys.exit(1)
+    
+    # Set up lcp alias for easy Chrome Web Store pasting
+    print("\n" + "="*60)
+    print("📋 CHROME WEB STORE HELPER")
+    print("="*60)
+    print("Copy this command to set up the 'lcp' alias:")
+    print()
+    print("alias lcp='f(){ cat \"_locales/$1/description.txt\" | pbcopy; }; f'")
+    print()
+    print("Then use: lcp <locale>  (e.g., lcp vi, lcp zh_CN, lcp pt_BR)")
+    print()
+    print("💡 TIP: Change locale at start of your terminal history:")
+    print("   ↑ arrow key → edit 'lcp vi' → lcp fr → enter")
+    print("="*60)
 
 
 def main():
