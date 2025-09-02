@@ -207,6 +207,65 @@ class ChatGPTChatbot extends AbstractChatbot {
     return 100000;
   }
 
+  simulateFormSubmit(): boolean {
+    // Try to find ChatGPT submit button using proper selectors
+    const chatgptSubmitButton = this.findChatGPTSubmitButton();
+    if (chatgptSubmitButton) {
+      chatgptSubmitButton.click();
+      console.debug("Sending message to ChatGPT at", Date.now());
+      return true;
+    }
+
+    // Fallback to keyboard event for ChatGPT
+    const textarea = document.getElementById("saypi-prompt");
+    if (textarea) {
+      const enterEvent = new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "Enter",
+        keyCode: 13,
+        which: 13,
+      });
+      textarea.dispatchEvent(enterEvent);
+      console.debug("Dispatched Enter keydown event to ChatGPT at", Date.now());
+      return true;
+    }
+    
+    console.error("Cannot simulate submit for ChatGPT: No submit button or textarea found.");
+    return false;
+  }
+
+  /**
+   * Find ChatGPT's submit button using various selectors
+   * @returns {HTMLElement|null} The submit button element or null if not found
+   */
+  private findChatGPTSubmitButton(): HTMLElement | null {
+    // ChatGPT submit button selectors in order of preference
+    const selectors = [
+      'form[data-type="unified-composer"] button[type="submit"]',
+      'form[data-type="unified-composer"] [data-testid="send-button"]',
+      'form[data-type="unified-composer"] button[aria-label*="Send" i]',
+      'form[data-type="unified-composer"] button[title*="Send" i]',
+      // Fallback selectors for cases where the form might not be found
+      'button[data-testid="send-button"]',
+      'button[aria-label*="Send" i]:not([aria-label*="Stop" i])',
+      'button[title*="Send" i]:not([title*="Stop" i])'
+    ];
+
+    for (const selector of selectors) {
+      try {
+        const button = document.querySelector(selector) as HTMLElement;
+        if (button && !(button as HTMLButtonElement).disabled) {
+          return button;
+        }
+      } catch (e) {
+        // Continue to next selector if this one fails
+        console.debug("Failed to query selector:", selector, e);
+      }
+    }
+
+    return null;
+  }
+
   protected createAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse {
     // Normalize to the full assistant turn container when selectors match inner content
     const container = (element.closest('[data-message-author-role="assistant"]') ||

@@ -101,6 +101,7 @@ class ButtonModule {
   }
 
   simulateFormSubmit() {
+    // First try the standard SayPi submit button (for Pi.ai and other chatbots)
     const submitButton = document.getElementById("saypi-submitButton");
 
     if (submitButton) {
@@ -114,21 +115,17 @@ class ButtonModule {
         this.submissionsWithoutAnError++;
         submitButton.click();
       }
-      console.debug("Sending message to Pi at", Date.now());
-    } else {
-      const textarea = document.getElementById("saypi-prompt");
-      if (textarea) {
-        const enterEvent = new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "Enter",
-          keyCode: 13,
-          which: 13,
-        });
-        textarea.dispatchEvent(enterEvent);
-      } else {
-        console.error("Cannot simulate submit: Textarea not found.");
-      }
+      console.debug("Sending message via SayPi button at", Date.now());
+      return;
     }
+
+    // Use chatbot-specific submit logic
+    if (this.chatbot && this.chatbot.simulateFormSubmit()) {
+      this.submissionsWithoutAnError++;
+      return;
+    }
+
+    console.error("Cannot simulate submit: No submit method available.");
   }
 
   async handleAutoSubmit() {
