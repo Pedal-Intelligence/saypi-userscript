@@ -1,5 +1,14 @@
 /* ChatGPT host-specific UI polish */
 body.chatgpt {
+  /* Hide control panel buttons that aren't needed until Phase 3/4 */
+  .immersive-mode-button,
+  .settings-button,
+  #saypi-enter-button,
+  #saypi-exit-button,
+  #saypi-settingsButton,
+  #saypi-control-panel-main {
+    display: none !important;
+  }
   /* Tooltip: compact black pill above the button, matching ChatGPT feel */
   .tooltip[aria-label]::after {
     content: attr(aria-label);

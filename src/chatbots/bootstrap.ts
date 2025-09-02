@@ -257,6 +257,11 @@ export class DOMObserver {
     controlPanel.id = id;
     controlPanel.classList.add("saypi-control-panel");
 
+    // Skip decorating control panel buttons for ChatGPT (Phase 1/2)
+    if ((this.chatbot as any).getID && (this.chatbot as any).getID() === 'chatgpt') {
+      return;
+    }
+
     const toggleModeBtnPos = 1;
     buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
     buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
