@@ -133,4 +133,82 @@ describe('ChatGPT auto Read Aloud', () => {
     expect(oldClickSpy).toHaveBeenCalledTimes(0);
     expect(newClickSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('clicks read aloud button immediately when it exists during route change scenario', async () => {
+    // Mock DOMObserver to simulate recent route change
+    (globalThis as any).DOMObserver = {
+      isRecentRouteChange: () => true
+    };
+
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    // Create read aloud button BEFORE decoration (simulating route change timing)
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const btn = document.createElement('button');
+    btn.setAttribute('data-testid', 'voice-play-turn-action-button');
+    const clickSpy = vi.spyOn(btn, 'click');
+    actionBar.appendChild(btn);
+
+    // Now decorate the assistant response (this is when observers would be set up)
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true);
+
+    // Allow any async operations to complete
+    await new Promise((r) => setTimeout(r, 10));
+
+    // Should click immediately since button exists and we're in route change scenario
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+
+    // Cleanup
+    (globalThis as any).DOMObserver = undefined;
+  });
+
+  it('does not click existing read aloud button when NOT in route change scenario', async () => {
+    // Mock DOMObserver to simulate NO recent route change
+    (globalThis as any).DOMObserver = {
+      isRecentRouteChange: () => false
+    };
+
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    // Create read aloud button BEFORE decoration (simulating existing button)
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const btn = document.createElement('button');
+    btn.setAttribute('data-testid', 'voice-play-turn-action-button');
+    const clickSpy = vi.spyOn(btn, 'click');
+    actionBar.appendChild(btn);
+
+    // Now decorate the assistant response
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true);
+
+    // Allow any async operations to complete
+    await new Promise((r) => setTimeout(r, 10));
+
+    // Should NOT click since button exists and we're NOT in route change scenario
+    expect(clickSpy).toHaveBeenCalledTimes(0);
+
+    // Cleanup
+    (globalThis as any).DOMObserver = undefined;
+  });
 });

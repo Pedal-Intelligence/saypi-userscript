@@ -425,6 +425,20 @@ class ChatGPTMessageControls extends MessageControls {
   private readAloudObserver: MutationObserver | null = null;
 
   /**
+   * Checks if we recently experienced a route change.
+   * Used to determine if auto-click behavior should be more aggressive for new messages.
+   */
+  private isRecentRouteChange(): boolean {
+    try {
+      // Lazy access to DOMObserver to avoid circular import issues
+      const domObserver = (globalThis as any).DOMObserver || (window as any).DOMObserver;
+      return domObserver?.isRecentRouteChange?.() || false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /**
    * Checks if a voice call is currently active by examining the conversation state.
    * Uses lazy access to StateMachineService to avoid circular import issues.
    * @returns true if the conversation is in listening or responding state
@@ -510,12 +524,33 @@ class ChatGPTMessageControls extends MessageControls {
   /**
    * Auto-click ChatGPT's native Read Aloud for the most recent, newly
    * generated assistant response. Avoids older messages by only triggering
-   * when the button is created after our controls are initialized.
+   * when the button is created after our controls are initialized, UNLESS
+   * we're in a recent route change scenario where the button may have appeared
+   * before observers were ready.
    */
   private autoClickNativeReadAloudWhenAvailable(): void {
-    // If the button already exists, it's likely an older message: don't autoplay
+    // If the button already exists, check if we should still auto-click
     const existing = this.getReadAloudButton();
-    if (existing) {
+    const isRecentRoute = this.isRecentRouteChange();
+    
+    if (existing && !isRecentRoute) {
+      // Button exists and we're not in a route change scenario - likely an older message
+      return;
+    }
+    
+    if (existing && isRecentRoute && this.message.isLastMessage()) {
+      // Button exists, we're in route change scenario, and this is the last message
+      // Auto-click immediately since this is likely the first response after route change
+      const prefs = UserPreferenceModule.getInstance();
+      const enabled = prefs.getCachedAutoReadAloudChatGPT();
+      if (enabled && this.isCallActive() && !(existing as any)._saypiClicked) {
+        (existing as any)._saypiClicked = true;
+        try {
+          setTimeout(() => existing.click(), 0);
+        } catch (e) {
+          console.warn('Say, Pi auto read‑aloud click failed:', e);
+        }
+      }
       return;
     }
 

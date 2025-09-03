@@ -14,6 +14,7 @@ export class DOMObserver {
   voiceMenuUiMgr: VoiceMenuUIManager;
   private domObserver: MutationObserver | null = null;
   private isObservingDom: boolean = false;
+  private recentRouteChange: boolean = false;
   private domMutationCallback = (mutations: MutationRecord[]) => {
     // Skip decoration work entirely on non-chatable pages
     if (!this.shouldDecorateUI()) {
@@ -102,6 +103,14 @@ export class DOMObserver {
     return this.chatbot.isChatablePath(window.location.pathname);
   }
 
+  /**
+   * Returns true if we recently experienced a route change.
+   * Used to determine if auto-click behavior should be more aggressive for new messages.
+   */
+  public isRecentRouteChange(): boolean {
+    return this.recentRouteChange;
+  }
+
   monitorForRouteChanges(): void {
     // Store the current URL for comparison
     let lastUrl = window.location.href;
@@ -125,11 +134,17 @@ export class DOMObserver {
   }
 
   handleRouteChange(): void {
-    // Allow time for DOM to update after route change
+    // Mark that we recently had a route change
+    this.recentRouteChange = true;
+    
+    // Allow time for DOM to update after route change, but reduce delay for better responsiveness
     setTimeout(() => {
       EventBus.emit("saypi:ui:content-loaded");
-      // Additional route change handling can be added here
-    }, 300);
+      // Clear the route change flag after a reasonable time
+      setTimeout(() => {
+        this.recentRouteChange = false;
+      }, 5000); // Clear after 5 seconds
+    }, 100); // Reduced from 300ms to 100ms
   }
 
   observeDOM(): void {
@@ -555,11 +570,13 @@ export class DOMObserver {
   /**
    * Progressively searches for the chat history with exponential backoff
    * This makes the chat history detection more resilient to timing differences
-   * between when UI elements are added to the DOM
+   * between when UI elements are added to the DOM.
+   * Reduced initial delay for better responsiveness during route changes.
    */
   startChatHistoryProgressiveSearch(attempt = 1, maxAttempts = 10): void {
-    // Base delay is 100ms, with exponential backoff up to ~3 seconds between attempts
-    const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 3000);
+    // Reduced base delay from 100ms to 50ms for faster initial detection
+    // Keep exponential backoff up to ~3 seconds between attempts for later retries
+    const delay = Math.min(50 * Math.pow(1.5, attempt - 1), 3000);
     
     setTimeout(() => {
       const chatHistoryObs = this.findAndDecorateChatHistory(document.body);

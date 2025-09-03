@@ -54,7 +54,12 @@ export class AIChatModule {
 
     // Initialize chat-specific modules
     EventModule.init();
-    new DOMObserver(chatbot).observeDOM();
+    const domObserver = new DOMObserver(chatbot);
+    domObserver.observeDOM();
+    
+    // Make DOMObserver accessible globally for route change detection
+    (globalThis as any).DOMObserver = domObserver;
+    (window as any).DOMObserver = domObserver;
   }
 
   private startAudioModule(): void {
