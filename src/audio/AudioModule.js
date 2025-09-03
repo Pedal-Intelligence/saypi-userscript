@@ -314,7 +314,7 @@ export default class AudioModule {
           if (mutation.type === "childList") {
             for (const removedNode of mutation.removedNodes) {
               const removedAudioElement = this.findAudioElement(removedNode);
-              if (removedAudioElement === this.audioElement) {
+              if (removedAudioElement && removedAudioElement === this.audioElement) {
                 logger.debug("Audio element removed from the document");
                 this.cleanupAudioElement(this.audioElement);
                 this.audioElement = null;
@@ -333,6 +333,10 @@ export default class AudioModule {
   }
 
   cleanupAudioElement(audioElement) {
+    if (!audioElement) {
+      // Nothing to clean up
+      return;
+    }
     // Deregister all event listeners
     const events = [
       "loadedmetadata",
