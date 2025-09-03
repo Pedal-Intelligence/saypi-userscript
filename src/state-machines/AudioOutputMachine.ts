@@ -290,6 +290,11 @@ export const audioOutputMachine = createMachine(
         if (event.type === "loadstart" || event.type === "play") {
           const sourcedEvent = event as SourcedPlaybackEvent;
           const src = sourcedEvent.source;
+          // If no source URL is available (e.g., WebRTC/MediaStream via srcObject),
+          // never skip based on provider/voice matching. Allow native playback.
+          if (!src || typeof src !== "string" || src.trim() === "") {
+            return shouldSkip; // only honor explicit skip flag
+          }
 
           const isNotReplaying = !context.replaying;
           const isVoiceMismatch =

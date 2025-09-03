@@ -41,7 +41,10 @@ class BaseAudioProvider implements AudioProvider {
         host = url.hostname;
       }
     } catch (_) {
-      throw new Error(`Invalid source: ${source} is not a valid URL.`);
+      // If the source is not a valid URL (e.g., MediaStream via srcObject),
+      // do not throw. Simply report no match so higher-level guards can
+      // choose not to interfere with playback.
+      return false;
     }
 
     if (!host) return false;
@@ -334,15 +337,19 @@ class PiAIVoice extends AIVoice {
   }
 
   matchesSource(source: string): boolean {
-    const url = new URL(source);
-    const voiceId = url.searchParams.get("voice");
-    const matchingSpeechRequest = voiceId === this.id;
+    try {
+      const url = new URL(source);
+      const voiceId = url.searchParams.get("voice");
+      const matchingSpeechRequest = voiceId === this.id;
 
-    // or source is an introduction speech of the type https://pi.ai/public/media/voice-previews/voice-8.mp3
-    const voiceNumber = Number(this.id.slice(-1));
-    const matchingIntroSpeech = source.endsWith(`voice-${voiceNumber}.mp3`);
+      // or source is an introduction speech of the type https://pi.ai/public/media/voice-previews/voice-8.mp3
+      const voiceNumber = Number(this.id.slice(-1));
+      const matchingIntroSpeech = source.endsWith(`voice-${voiceNumber}.mp3`);
 
-    return matchingSpeechRequest || matchingIntroSpeech;
+      return matchingSpeechRequest || matchingIntroSpeech;
+    } catch (_) {
+      return false;
+    }
   }
 
   static fromVoice(v: SpeechSynthesisVoiceRemote): PiAIVoice {
@@ -385,9 +392,13 @@ class SayPiVoice extends AIVoice {
 
   matchesSource(source: string): boolean {
     // voice_id query parameter in the URL should match the voice id
-    const url = new URL(source);
-    const voiceId = url.searchParams.get("voice_id");
-    return voiceId === this.id;
+    try {
+      const url = new URL(source);
+      const voiceId = url.searchParams.get("voice_id");
+      return voiceId === this.id;
+    } catch (_) {
+      return false;
+    }
   }
 }
 
