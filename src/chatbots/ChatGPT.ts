@@ -401,6 +401,9 @@ class ChatGPTMessageControls extends MessageControls {
       'button[data-testid="copy-turn-action-button"]',
       'button[aria-label*="Copy" i]',
       'button[title*="Copy" i]',
+      // Include Replay label variant seen after exiting Voice Mode
+      'button[aria-label*="Replay" i]',
+      'button[title*="Replay" i]',
       // Fallback legacy
       'div.flex.items-center.justify-end',
       '.message-controls'
@@ -414,7 +417,7 @@ class ChatGPTMessageControls extends MessageControls {
     ) as HTMLButtonElement | null;
     if (byTestId) return byTestId;
     return this.message.element.querySelector(
-      'button[aria-label*="Read aloud" i], button[title*="Read aloud" i]'
+      'button[aria-label*="Read aloud" i], button[title*="Read aloud" i], button[aria-label*="Replay" i], button[title*="Replay" i]'
     ) as HTMLButtonElement | null;
   }
 

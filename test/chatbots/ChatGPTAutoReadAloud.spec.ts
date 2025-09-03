@@ -133,4 +133,32 @@ describe('ChatGPT auto Read Aloud', () => {
     expect(oldClickSpy).toHaveBeenCalledTimes(0);
     expect(newClickSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('clicks when only a Replay-labeled button exists (no data-testid)', async () => {
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true);
+
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const btn = document.createElement('button');
+    // Simulate Replay variant after exiting voice mode
+    btn.setAttribute('aria-label', 'Replay');
+    const clickSpy = vi.spyOn(btn, 'click');
+    actionBar.appendChild(btn);
+
+    await new Promise((r) => setTimeout(r, 10));
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+  });
 });
