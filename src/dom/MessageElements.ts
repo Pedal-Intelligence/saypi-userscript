@@ -199,7 +199,7 @@ abstract class AssistantResponse {
   isLastMessage(): boolean {
     // Get all assistant messages in the chat history
     const allAssistantMessages = document.querySelectorAll(".present-messages .assistant-message");
-    if (allAssistantMessages.length === 0) return false;
+    if (allAssistantMessages.length === 0) return true; // if this is the only message, it is the last message
     
     // Check if this element is the last one in the list
     const lastMessage = allAssistantMessages[allAssistantMessages.length - 1];
