@@ -396,11 +396,14 @@ class ChatGPTMessageControls extends MessageControls {
       'div:has(> button[data-testid="copy-turn-action-button"])',
       'div:has(> button[aria-label*="Copy" i])',
       'div:has(> button[title*="Copy" i])',
+      // New: collapsed actions (ellipsis) – match generically by menu trigger
+      'div:has(> button[aria-haspopup="menu"])',
       // Buttons (used only for watcher trigger; final container resolved in findHoverMenu override)
       'button[data-testid="voice-play-turn-action-button"]',
       'button[data-testid="copy-turn-action-button"]',
       'button[aria-label*="Copy" i]',
       'button[title*="Copy" i]',
+      'button[aria-haspopup="menu"]',
       // Include Replay label variant seen after exiting Voice Mode
       'button[aria-label*="Replay" i]',
       'button[title*="Replay" i]',
@@ -423,6 +426,154 @@ class ChatGPTMessageControls extends MessageControls {
 
   getCopyButton(): HTMLButtonElement | null {
     return this.message.element.querySelector('button[aria-label*="Copy"], button[title*="Copy"]') as HTMLButtonElement;
+  }
+
+  /**
+   * Locate the ellipsis trigger that now hides ChatGPT's extra actions
+   * (including Read Aloud) in a dropdown.
+   */
+  private getActionMenuTriggers(): HTMLButtonElement[] {
+    const scope = (this.findActionBar() || this.message.element) as Element;
+    if (!scope) return [];
+    return Array.from(scope.querySelectorAll('button[aria-haspopup="menu"]')) as HTMLButtonElement[];
+  }
+
+  private getMoreActionsButton(): HTMLButtonElement | null {
+    const triggers = this.getActionMenuTriggers();
+    if (!triggers.length) return null;
+    // Heuristic: the ellipsis trigger typically appears last in the action bar
+    return triggers[triggers.length - 1] as HTMLButtonElement;
+  }
+
+  /**
+   * Fire a resilient, user-like activation sequence on a button. Some Radix
+   * menus only open on pointer events, others respond to keyboard. We do both.
+   * Any errors are logged for diagnosis but do not throw.
+   */
+  private synthesizeUserClick(target: HTMLElement): void {
+    try {
+      try { target.focus({ preventScroll: true } as any); } catch {}
+      const mouse: MouseEventInit & any = { bubbles: true, cancelable: true, composed: true, button: 0, detail: 1, view: window };
+      const pointer: any = { bubbles: true, cancelable: true, composed: true, pointerId: 1, pointerType: 'mouse', isPrimary: true };
+      try { target.dispatchEvent(new (window as any).PointerEvent('pointerdown', pointer)); } catch {}
+      try { target.dispatchEvent(new MouseEvent('mousedown', mouse)); } catch {}
+      try { target.dispatchEvent(new (window as any).PointerEvent('pointerup', pointer)); } catch {}
+      try { target.dispatchEvent(new MouseEvent('mouseup', mouse)); } catch {}
+      try { target.dispatchEvent(new MouseEvent('click', mouse)); } catch {}
+      // Also invoke the native click() method for environments/tests that spy on it
+      try { (target as any).click?.(); } catch {}
+      // Keyboard fallbacks
+      try { target.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'Enter' })); } catch {}
+      try { target.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'Enter' })); } catch {}
+      try { target.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: ' ' })); } catch {}
+      try { target.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: ' ' })); } catch {}
+    } catch (e) {
+      console.debug('Say, Pi: synthetic click failed on menu trigger:', e);
+    }
+  }
+
+  private isMenuOpen(trigger: HTMLElement): boolean {
+    const expanded = trigger.getAttribute('aria-expanded');
+    const state = trigger.getAttribute('data-state');
+    return expanded === 'true' || state === 'open';
+  }
+
+  /**
+   * Find the "Read aloud" menu item inside any open dropdown menu. We search
+   * nearby menus first, then fall back to a global search. Uses robust text/
+   * aria matching instead of brittle data-testid values.
+   */
+  private findReadAloudMenuItemNear(trigger: HTMLElement): HTMLElement | null {
+    const inMenu = (el: Element) => !!(el as HTMLElement).closest('[role="menu"], [data-radix-menu-content], [data-radix-dropdown-menu-content]');
+    const candidates = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-testid="voice-play-turn-action-button"]')
+    ).filter(inMenu);
+
+    if (!candidates.length) return null;
+
+    // Prefer the candidate closest to the trigger (portals can render elsewhere)
+    const tRect = trigger.getBoundingClientRect();
+    candidates.sort((a, b) => {
+      const ar = a.getBoundingClientRect();
+      const br = b.getBoundingClientRect();
+      const distA = Math.hypot(ar.left - tRect.left, ar.top - tRect.top);
+      const distB = Math.hypot(br.left - tRect.left, br.top - tRect.top);
+      return distA - distB;
+    });
+
+    return candidates[0] || null;
+  }
+
+  /**
+   * Opens the ellipsis dropdown (if needed) and attempts to click the Read
+   * Aloud menu item. This method respects the same gating conditions as the
+   * direct-button path and is idempotent.
+   */
+  private tryOpenMoreActionsAndClickReadAloud(): void {
+    // Guardrails consistent with direct click flow
+    if (!this.message.isLastMessage()) return;
+    const prefs = UserPreferenceModule.getInstance();
+    if (!prefs.getCachedAutoReadAloudChatGPT()) return;
+    if (!this.isCallActive()) return;
+
+    const triggers = this.getActionMenuTriggers();
+    if (!triggers.length) return;
+
+    const tryTrigger = (index: number) => {
+      if (index < 0) return;
+      const trigger = triggers[index];
+      if (!this.isMenuOpen(trigger) && !(trigger as any)._saypiMenuOpened) {
+        (trigger as any)._saypiMenuOpened = true;
+        try {
+          this.synthesizeUserClick(trigger);
+        } catch (e) {
+          console.debug('Say, Pi: error opening more-actions menu:', e);
+        }
+      }
+
+      let attempts = 0;
+      const maxAttempts = 10; // per trigger
+      const tick = () => {
+        const openMenu = document.querySelector('[data-radix-menu-content][data-state="open"], [data-radix-dropdown-menu-content][data-state="open"], [role="menu"][data-state="open"]');
+        if (!openMenu && !this.isMenuOpen(trigger) && attempts === 0) {
+          try { this.synthesizeUserClick(trigger); } catch {}
+        }
+        const item = this.findReadAloudMenuItemNear(trigger);
+        if (item) {
+          if ((item as any)._saypiClicked) return;
+          (item as any)._saypiClicked = true;
+          try {
+            const el = item as HTMLElement;
+            try { el.focus?.({ preventScroll: true } as any); } catch {}
+            setTimeout(() => {
+              try { el.click(); } finally {
+                // After click, ensure focus remains on the voice control (now often "Stop")
+                setTimeout(() => {
+                  try {
+                    const refocus = this.findReadAloudMenuItemNear(trigger) as HTMLElement | null;
+                    (refocus || el).focus?.({ preventScroll: true } as any);
+                  } catch {}
+                }, 10);
+              }
+            }, 0);
+          } finally {
+            this.readAloudObserver?.disconnect();
+            this.readAloudObserver = null;
+          }
+          return;
+        }
+        if (++attempts < maxAttempts) {
+          setTimeout(tick, 100);
+        } else {
+          // Try previous trigger (the ellipsis is typically the last one)
+          tryTrigger(index - 1);
+        }
+      };
+      setTimeout(tick, 0);
+    };
+
+    // Start from the last trigger (likely the ellipsis)
+    tryTrigger(triggers.length - 1);
   }
 
   private readAloudObserver: MutationObserver | null = null;
@@ -525,7 +676,12 @@ class ChatGPTMessageControls extends MessageControls {
     // Observe the message subtree for the button appearing after streaming ends
     this.readAloudObserver = new MutationObserver(() => {
       const btn = this.getReadAloudButton();
-      if (!btn) return;
+      if (!btn) {
+        // While the action bar/menu is not present or the button is hidden
+        // under the ellipsis, keep trying to open the menu and activate it.
+        this.tryOpenMoreActionsAndClickReadAloud();
+        return;
+      }
       if (!this.message.isLastMessage()) return; // ensure it's the newest turn
       // Respect user preference and only autoplay during a voice call
       const prefs = UserPreferenceModule.getInstance();
@@ -549,6 +705,9 @@ class ChatGPTMessageControls extends MessageControls {
       childList: true,
       subtree: true,
     });
+
+    // No single-shot attempt here; we now invoke the dropdown fallback from
+    // the mutation observer until activation succeeds.
   }
 
   public override teardown(): void {

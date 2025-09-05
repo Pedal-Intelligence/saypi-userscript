@@ -161,4 +161,55 @@ describe('ChatGPT auto Read Aloud', () => {
 
     expect(clickSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('opens the ellipsis menu and clicks Read Aloud (non‑English UI)', async () => {
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true);
+
+    // Action bar with only an ellipsis trigger (menu), labeled in French
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const ellipsis = document.createElement('button');
+    ellipsis.setAttribute('type', 'button');
+    ellipsis.setAttribute('aria-haspopup', 'menu');
+    ellipsis.setAttribute('aria-expanded', 'false');
+    ellipsis.setAttribute('data-state', 'closed');
+    ellipsis.setAttribute('aria-label', 'Plus d’actions');
+    actionBar.appendChild(ellipsis);
+
+    // When the trigger is clicked, simulate Radix menu portal with the item
+    const menu = document.createElement('div');
+    menu.setAttribute('role', 'menu');
+    const menuItem = document.createElement('button');
+    menuItem.setAttribute('data-testid', 'voice-play-turn-action-button');
+    // Also provide a non-English label to ensure we are not relying on English
+    menuItem.setAttribute('aria-label', 'Lire à voix haute');
+    const itemClickSpy = vi.spyOn(menuItem, 'click');
+    menu.appendChild(menuItem);
+
+    vi.spyOn(ellipsis, 'click').mockImplementation(() => {
+      ellipsis.setAttribute('aria-expanded', 'true');
+      ellipsis.setAttribute('data-state', 'open');
+      // Portal-style: append to body, not within the message
+      if (!menu.parentElement) document.body.appendChild(menu);
+    });
+
+    // Allow the auto-click fallback to run (scheduled ~250ms)
+    await new Promise((r) => setTimeout(r, 600));
+
+    expect(itemClickSpy).toHaveBeenCalledTimes(1);
+    // The read-aloud item should receive focus before/after click
+    expect(document.activeElement === menuItem).toBe(true);
+  });
 });
