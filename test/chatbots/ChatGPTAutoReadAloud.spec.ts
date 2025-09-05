@@ -209,5 +209,7 @@ describe('ChatGPT auto Read Aloud', () => {
     await new Promise((r) => setTimeout(r, 600));
 
     expect(itemClickSpy).toHaveBeenCalledTimes(1);
+    // The read-aloud item should receive focus before/after click
+    expect(document.activeElement === menuItem).toBe(true);
   });
 });

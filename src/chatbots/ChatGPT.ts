@@ -543,7 +543,19 @@ class ChatGPTMessageControls extends MessageControls {
           if ((item as any)._saypiClicked) return;
           (item as any)._saypiClicked = true;
           try {
-            setTimeout(() => (item as HTMLElement).click(), 0);
+            const el = item as HTMLElement;
+            try { el.focus?.({ preventScroll: true } as any); } catch {}
+            setTimeout(() => {
+              try { el.click(); } finally {
+                // After click, ensure focus remains on the voice control (now often "Stop")
+                setTimeout(() => {
+                  try {
+                    const refocus = this.findReadAloudMenuItemNear(trigger) as HTMLElement | null;
+                    (refocus || el).focus?.({ preventScroll: true } as any);
+                  } catch {}
+                }, 10);
+              }
+            }, 0);
           } finally {
             this.readAloudObserver?.disconnect();
             this.readAloudObserver = null;
