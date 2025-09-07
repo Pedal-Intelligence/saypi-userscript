@@ -505,6 +505,54 @@ class ChatGPTMessageControls extends MessageControls {
   }
 
   /**
+   * Relocate the discovered "Read aloud" menu item from the Radix popper
+   * into the message action bar, then activate it. This avoids brittle
+   * dismissal/focus interactions tied to the dropdown. If relocation fails
+   * for any reason, falls back to a direct click in-place.
+   */
+  private relocateMenuItemToActionBarAndClick(
+    item: HTMLElement,
+    trigger: HTMLElement
+  ): void {
+    try {
+      const bar = (this.findActionBar() || trigger.parentElement || this.message.element) as HTMLElement;
+      if (!bar) {
+        // As a last resort, click in place
+        item.click();
+        // Defer hiding until after activation so we don't interfere
+        setTimeout(() => this.hideOpenRadixPopperContent(), 50);
+        return;
+      }
+
+      // Container to safely hold the relocated element without affecting layout
+      const holder = document.createElement('span');
+      holder.className = 'saypi-relocated-voice-action';
+
+      // Move the menu item under the action bar and trigger it
+      bar.appendChild(holder);
+      holder.appendChild(item);
+
+      // Activate on a microtask so any event handlers attach first
+      setTimeout(() => {
+        try {
+          item.click();
+        } finally {
+          // Defer popper hiding slightly to avoid interfering with activation
+          setTimeout(() => this.hideOpenRadixPopperContent(), 50);
+          // Clean up shortly after. The Radix menu will likely unmount on its own,
+          // but we remove our temporary holder regardless.
+          setTimeout(() => {
+            try { holder.remove(); } catch {}
+          }, 50);
+        }
+      }, 0);
+    } catch (e) {
+      try { item.click(); } catch {}
+      console.debug('Say, Pi: relocation click fallback due to error:', e);
+    }
+  }
+
+  /**
    * Opens the ellipsis dropdown (if needed) and attempts to click the Read
    * Aloud menu item. This method respects the same gating conditions as the
    * direct-button path and is idempotent.
@@ -542,24 +590,24 @@ class ChatGPTMessageControls extends MessageControls {
         if (item) {
           if ((item as any)._saypiClicked) return;
           (item as any)._saypiClicked = true;
-          try {
-            const el = item as HTMLElement;
-            try { el.focus?.({ preventScroll: true } as any); } catch {}
-            setTimeout(() => {
-              try { el.click(); } finally {
-                // After click, ensure focus remains on the voice control (now often "Stop")
-                setTimeout(() => {
-                  try {
-                    const refocus = this.findReadAloudMenuItemNear(trigger) as HTMLElement | null;
-                    (refocus || el).focus?.({ preventScroll: true } as any);
-                  } catch {}
-                }, 10);
-              }
-            }, 0);
-          } finally {
-            this.readAloudObserver?.disconnect();
-            this.readAloudObserver = null;
+          // Keep the menu open and insulate its outside-dismiss handlers,
+          // then activate the item in-place.
+          const wrapper = this.getOpenMenuWrapperFor(item as HTMLElement) || (openMenu as HTMLElement | null);
+          if (wrapper) {
+            this.enableOutsideDismissShield(wrapper, trigger);
           }
+          // Focus the item to mimic user intent and satisfy accessibility
+          try { (item as HTMLElement).focus?.({ preventScroll: true } as any); } catch {}
+          // Activate in-place to preserve Radix context
+          setTimeout(() => {
+            try { (item as HTMLElement).click(); } finally {
+              // Maintain focus briefly after activation
+              setTimeout(() => { try { (item as HTMLElement).focus?.({ preventScroll: true } as any); } catch {} }, 10);
+            }
+          }, 0);
+          // Stop the observer attempts; ongoing shield manages menu lifetime
+          this.readAloudObserver?.disconnect();
+          this.readAloudObserver = null;
           return;
         }
         if (++attempts < maxAttempts) {
@@ -577,6 +625,11 @@ class ChatGPTMessageControls extends MessageControls {
   }
 
   private readAloudObserver: MutationObserver | null = null;
+  private popperCleanupFns: Array<() => void> = [];
+  private outsideShieldCleanup: (() => void) | null = null;
+  private outsideShieldWatch: number | null = null;
+  private outsideShieldTrigger: HTMLElement | null = null;
+  private outsideShieldEventHandlers: Array<{event: string, handler: (...args: any[]) => void}> = [];
 
   /**
    * Checks if a voice call is currently active by examining the conversation state.
@@ -592,6 +645,21 @@ class ChatGPTMessageControls extends MessageControls {
       if (!state) return false;
       return state.matches?.('listening') || state.matches?.('responding');
     } catch (_) {
+      return false;
+    }
+  }
+
+  /**
+   * True if the conversation is currently in the "responding.piSpeaking" state,
+   * i.e., assistant audio should be playing.
+   */
+  private isPiSpeaking(): boolean {
+    try {
+      const svc = (globalThis as any).StateMachineService || (window as any).StateMachineService;
+      const actor = svc?.conversationActor;
+      const state = actor?.getSnapshot?.() || actor?.state;
+      return !!state?.matches?.('responding.piSpeaking');
+    } catch {
       return false;
     }
   }
@@ -715,7 +783,259 @@ class ChatGPTMessageControls extends MessageControls {
       this.readAloudObserver?.disconnect();
       this.readAloudObserver = null;
     } catch {}
+    try {
+      // Unhide any popper content we hid
+      this.popperCleanupFns.forEach((fn) => {
+        try { fn(); } catch {}
+      });
+      this.popperCleanupFns = [];
+    } catch {}
+    try {
+      this.outsideShieldCleanup?.();
+      this.outsideShieldCleanup = null;
+      if (this.outsideShieldWatch) { clearInterval(this.outsideShieldWatch); this.outsideShieldWatch = null; }
+      // Remove event handlers registered during shield
+      try {
+        this.outsideShieldEventHandlers.forEach(({event, handler}) => {
+          try { EventBus.off(event, handler); } catch {}
+        });
+      } finally {
+        this.outsideShieldEventHandlers = [];
+      }
+    } catch {}
     super.teardown();
+  }
+
+  /**
+   * Visually hide any open Radix popper content (dropdown menu) without
+   * changing its open/closed state. Adds a data attribute that our CSS
+   * targets to set visibility: hidden; opacity: 0; pointer-events: none.
+   * Automatically removes the attribute when the menu closes or unmounts.
+   */
+  private hideOpenRadixPopperContent(): void {
+    const wrappers = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-radix-popper-content-wrapper]')
+    );
+
+    wrappers.forEach((wrapper) => {
+      // Find inner menu/content node with an open state
+      const menu = (wrapper.querySelector(
+        '[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]'
+      ) as HTMLElement | null);
+      if (!menu) return;
+
+      const state = menu.getAttribute('data-state') || wrapper.getAttribute('data-state');
+      if (state !== 'open') return;
+
+      if ((wrapper as any)._saypiHidden) return; // idempotent
+      (wrapper as any)._saypiHidden = true;
+
+      wrapper.setAttribute('data-saypi-hidden', 'true');
+      menu.setAttribute('data-saypi-hidden', 'true');
+
+      const cleanup = () => {
+        try { wrapper.removeAttribute('data-saypi-hidden'); } catch {}
+        try { menu.removeAttribute('data-saypi-hidden'); } catch {}
+        try { (wrapper as any)._saypiHidden = false; } catch {}
+      };
+
+      // Observe for the menu closing or unmounting to auto‑cleanup
+      const obs = new MutationObserver(() => {
+        const cur = menu.getAttribute('data-state') || wrapper.getAttribute('data-state');
+        if (cur !== 'open' || !document.contains(menu)) {
+          try { obs.disconnect(); } catch {}
+          cleanup();
+        }
+      });
+      try {
+        obs.observe(menu, { attributes: true, attributeFilter: ['data-state'] });
+      } catch {}
+      try {
+        obs.observe(wrapper, { attributes: true, attributeFilter: ['data-state', 'style'] });
+      } catch {}
+
+      this.popperCleanupFns.push(() => {
+        try { obs.disconnect(); } catch {}
+        cleanup();
+      });
+    });
+  }
+
+  private getOpenMenuWrapperFor(el: HTMLElement): HTMLElement | null {
+    const menu = (el.closest('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null);
+    return (menu?.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
+  }
+
+  /**
+   * Prevent Radix dropdown from reacting to outside clicks/ESC while voice is playing,
+   * without blocking normal page interaction. We stop propagation early at window
+   * capture for a narrow set of events and re-dispatch a synthetic clone at the
+   * original target so app listeners still run as usual. The Radix document-level
+   * capture listeners do not see the event, so the menu remains open.
+   */
+  private enableOutsideDismissShield(wrapper: HTMLElement, trigger?: HTMLElement): void {
+    if (this.outsideShieldCleanup) return; // already active
+
+    const isInside = (node: EventTarget | null) => !!(node && wrapper.contains(node as Node));
+    this.outsideShieldTrigger = trigger || this.outsideShieldTrigger;
+    try { wrapper.setAttribute('data-saypi-shielded', 'true'); } catch {}
+    try { this.blurTrigger(trigger); } catch {}
+
+    // Reposition the menu to the bottom-right to avoid covering controls
+    try { this.repositionMenuToBottomRight(wrapper); } catch {}
+
+    const cloneAndRedispatch = (e: Event) => {
+      const t = e.target as Element | null;
+      if (!t) return;
+      // Only clone for pointerdown/focusin; ESC we just swallow
+      if (e.type === 'pointerdown') {
+        const src = e as PointerEvent;
+        const clone = new (window as any).PointerEvent('pointerdown', {
+          bubbles: true,
+          cancelable: src.cancelable,
+          composed: true,
+          pointerId: src.pointerId,
+          pointerType: src.pointerType,
+          isPrimary: src.isPrimary,
+          button: src.button,
+          buttons: src.buttons,
+          clientX: src.clientX,
+          clientY: src.clientY,
+          altKey: src.altKey,
+          ctrlKey: src.ctrlKey,
+          metaKey: src.metaKey,
+          shiftKey: src.shiftKey,
+        });
+        // Dispatch on a microtask to avoid interfering with current turn
+        setTimeout(() => { try { t.dispatchEvent(clone); } catch {} }, 0);
+      } else if (e.type === 'focusin') {
+        const clone = new FocusEvent('focusin', { bubbles: true, composed: true });
+        setTimeout(() => { try { t.dispatchEvent(clone); } catch {} }, 0);
+      }
+    };
+
+    const onPointerDown = (e: Event) => {
+      if (!isInside(e.target)) {
+        // Let default actions proceed, but block Radix's outside handlers
+        try { (e as any).stopImmediatePropagation?.(); } catch {}
+        try { e.stopPropagation(); } catch {}
+        cloneAndRedispatch(e);
+      }
+    };
+    const onFocusIn = (e: Event) => {
+      if (!isInside(e.target)) {
+        try { (e as any).stopImmediatePropagation?.(); } catch {}
+        try { e.stopPropagation(); } catch {}
+        cloneAndRedispatch(e);
+      }
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        try { (e as any).stopImmediatePropagation?.(); } catch {}
+        try { e.stopPropagation(); } catch {}
+        // Do not preventDefault to avoid breaking user Esc flows elsewhere
+      }
+    };
+
+    window.addEventListener('pointerdown', onPointerDown, { capture: true });
+    window.addEventListener('focusin', onFocusIn as any, { capture: true } as any);
+    window.addEventListener('keydown', onKeyDown as any, { capture: true } as any);
+
+    // Listen for Say, Pi conversation events that indicate playback ended
+    const endEvents = ['saypi:piStoppedSpeaking', 'saypi:piFinishedSpeaking', 'saypi:hangup'];
+    endEvents.forEach((evt) => {
+      const handler = () => cleanup();
+      this.outsideShieldEventHandlers.push({ event: evt, handler });
+      try { EventBus.on(evt, handler); } catch {}
+    });
+
+    // Auto-disable when menu actually closes or element unmounts
+    const obs = new MutationObserver(() => {
+      const state = (wrapper.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null)?.getAttribute('data-state') || wrapper.getAttribute('data-state');
+      if (state !== 'open' || !document.contains(wrapper)) {
+        cleanup();
+      }
+    });
+    try { obs.observe(wrapper, { attributes: true, subtree: true, attributeFilter: ['data-state'] }); } catch {}
+
+    // Also poll our conversation state to release when a call ends
+    this.outsideShieldWatch = window.setInterval(() => {
+      if (!this.isPiSpeaking()) cleanup();
+    }, 1500);
+
+    const cleanup = () => {
+      try { window.removeEventListener('pointerdown', onPointerDown as any, { capture: true } as any); } catch {}
+      try { window.removeEventListener('focusin', onFocusIn as any, { capture: true } as any); } catch {}
+      try { window.removeEventListener('keydown', onKeyDown as any, { capture: true } as any); } catch {}
+      try { obs.disconnect(); } catch {}
+      // Remove event bus listeners
+      try {
+        this.outsideShieldEventHandlers.forEach(({event, handler}) => {
+          try { EventBus.off(event, handler); } catch {}
+        });
+      } finally {
+        this.outsideShieldEventHandlers = [];
+      }
+      try { wrapper.removeAttribute('data-saypi-shielded'); } catch {}
+      try { this.restoreMenuPosition(wrapper); } catch {}
+      if (this.outsideShieldWatch) { clearInterval(this.outsideShieldWatch); this.outsideShieldWatch = null; }
+      // After releasing the shield (e.g., at playback end), close the menu if still open
+      try { this.gentlyCloseMenu(wrapper, this.outsideShieldTrigger); } catch {}
+      try { this.blurTrigger(this.outsideShieldTrigger); } catch {}
+      this.outsideShieldCleanup = null;
+    };
+
+    this.outsideShieldCleanup = cleanup;
+  }
+
+  private gentlyCloseMenu(wrapper: HTMLElement, trigger?: HTMLElement | null): void {
+    try {
+      const menu = wrapper.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
+      const isOpen = !!menu && (menu.getAttribute('data-state') === 'open' || wrapper.getAttribute('data-state') === 'open');
+      if (!isOpen) return;
+      // Prefer sending Escape so Radix performs a normal close
+      if (menu) {
+        try { menu.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'Escape' })); } catch {}
+      }
+      // If still open shortly after, toggle via trigger as a fallback
+      setTimeout(() => {
+        const stillOpen = menu && (menu.getAttribute('data-state') === 'open' || wrapper.getAttribute('data-state') === 'open');
+        if (stillOpen && trigger) {
+          try { this.synthesizeUserClick(trigger); } catch {}
+        }
+        try { this.blurTrigger(trigger || undefined); } catch {}
+      }, 40);
+    } catch {}
+  }
+
+  private blurTrigger(trigger?: HTMLElement | null): void {
+    try { trigger && trigger.blur?.(); } catch {}
+  }
+
+  // Move the open Radix popper to the bottom-right corner with a small margin.
+  // Records the previous inline transform to restore later.
+  private repositionMenuToBottomRight(wrapper: HTMLElement): void {
+    const menu = wrapper.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
+    const rect = (menu || wrapper).getBoundingClientRect();
+    const margin = 24; // px
+    const x = Math.max(margin, window.innerWidth - rect.width - margin);
+    const y = Math.max(margin, window.innerHeight - rect.height - margin);
+    // Save prior transform if not already saved
+    const prev = (wrapper as any)._saypiPrevTransform ?? wrapper.style.transform;
+    (wrapper as any)._saypiPrevTransform = prev;
+    // Apply translate and keep a subtle minimize scale that matches CSS animation
+    wrapper.style.transform = `translate(${x}px, ${y}px) scale(0.965)`;
+  }
+
+  private restoreMenuPosition(wrapper: HTMLElement): void {
+    const prev = (wrapper as any)._saypiPrevTransform;
+    if (typeof prev === 'string') {
+      wrapper.style.transform = prev;
+    } else {
+      // Clear transform if nothing was saved
+      wrapper.style.removeProperty('transform');
+    }
+    try { delete (wrapper as any)._saypiPrevTransform; } catch {}
   }
 }
 
