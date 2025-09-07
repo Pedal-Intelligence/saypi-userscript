@@ -72,4 +72,38 @@ body.chatgpt {
     white-space: nowrap;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
+
+  /* Invisible holder for temporarily relocated ChatGPT menu item
+     used to trigger Read Aloud outside the Radix popper. */
+  .saypi-relocated-voice-action {
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Hide open Radix dropdown content we’ve flagged as hidden
+     (we do not toggle the popper's actual open state). */
+  [data-radix-popper-content-wrapper][data-saypi-hidden="true"],
+  [data-radix-menu-content][data-saypi-hidden="true"],
+  [data-radix-dropdown-menu-content][data-saypi-hidden="true"] {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Minimize and soften the open menu while shielded. Keep it visible
+     so ChatGPT's playback context remains intact, but less distracting. */
+  [data-radix-popper-content-wrapper][data-saypi-shielded="true"],
+  [data-radix-menu-content][data-saypi-shielded="true"],
+  [data-radix-dropdown-menu-content][data-saypi-shielded="true"] {
+    opacity: 0.28 !important;
+    /* Position/transform is set inline when shielded so we can move it
+       to the bottom-right; keep transitions for a smooth effect. */
+    transition: opacity 120ms ease, transform 140ms ease !important;
+    transform-origin: var(--radix-popper-transform-origin, 50% 0%);
+    pointer-events: none !important; /* allow reading/clicks behind the menu */
+  }
 }
