@@ -1510,9 +1510,13 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           probabilityFinished = event.pFinishedSpeaking;
         }
 
-        // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
-        // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
-        let tempo = event.tempo !== undefined ? event.tempo : 1;
+        // Incorporate the tempo into the delay. If undefined, treat as 0 (neutral)
+        // so we do not zero‑out the delay. In calculateDelay we use (1 - tempo)
+        // as a factor; a default of 1 would make the factor 0 and eliminate
+        // any waiting, which is not desired when tempo is unavailable.
+        let tempo = event.tempo !== undefined ? event.tempo : 0;
+        // Clamp to [0, 1] to avoid unexpected values from upstream
+        tempo = Math.max(0, Math.min(1, tempo));
 
         const finalDelay = calculateDelay(
           context.timeUserStoppedSpeaking,
