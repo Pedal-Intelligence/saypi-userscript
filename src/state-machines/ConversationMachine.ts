@@ -178,6 +178,8 @@ var nextSubmissionTime = Date.now();
 // most recent enforced delay while waiting for additional user input
 // captured here for analytics events
 var lastSubmissionDelay = 0;
+// timestamp when the most recent submission was scheduled
+var lastSubmissionScheduledAt = 0;
 
 const apiServerUrl = config.apiServerUrl;
 if (apiServerUrl === undefined) {
@@ -615,6 +617,9 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                 entry: [
                   {
                     type: "setMaintainanceFlag",
+                  },
+                  {
+                    type: "logSubmissionTiming",
                   },
                   {
                     type: "mergeAndSubmitTranscript",
@@ -1421,6 +1426,24 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           logger.debug("Transcription failure hint suppressed due to low error rate.");
         }
       },
+      logSubmissionTiming: () => {
+        try {
+          const now = Date.now();
+          const actualWait = now - lastSubmissionScheduledAt;
+          const jitter = actualWait - lastSubmissionDelay;
+          logger.debug(
+            "[ConversationMachine] submissionTiming:",
+            JSON.stringify({
+              scheduledAt: lastSubmissionScheduledAt,
+              plannedDelay: lastSubmissionDelay,
+              actualWait,
+              jitter,
+              now,
+              nextSubmissionTime,
+            })
+          );
+        } catch {}
+      },
     },
     services: {},
     guards: {
@@ -1451,6 +1474,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
         const mustRespond = mustRespondToMessage(context);
         const ready = readyToSubmit(state, context);
+        const userHasStoppedSpeaking = context.timeUserStoppedSpeaking > 0;
         const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
 
         /* start debug logging */
@@ -1472,11 +1496,12 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           if (context.timeUserStoppedSpeaking > 0) {
             reason = reason + ` (time since stopped speaking: ${timeSinceStoppedSpeaking / 1000} seconds)`;
           }
-          logger.debug(`Submission not needed because ${reason}`, context);
+          const noStopYet = !userHasStoppedSpeaking;
+          logger.debug(`Submission not needed because ${reason}`, { noStopYet, tUSS: context.timeUserStoppedSpeaking, context });
         }
         /* end debug logging */
 
-        return mustRespond && autoSubmitEnabled && ready;
+        return mustRespond && autoSubmitEnabled && ready && userHasStoppedSpeaking;
       },
       wasListening: (context: ConversationContext) => {
         return context.lastState === "listening";
@@ -1510,10 +1535,16 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           probabilityFinished = event.pFinishedSpeaking;
         }
 
-        // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
-        // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
-        let tempo = event.tempo !== undefined ? event.tempo : 1;
+        // Incorporate the tempo into the delay. If undefined, treat as 0 (neutral)
+        // so we do not zero‑out the delay. In calculateDelay we use (1 - tempo)
+        // as a factor; a default of 1 would make the factor 0 and eliminate
+        // any waiting, which is not desired when tempo is unavailable.
+        let tempo = event.tempo !== undefined ? event.tempo : 0;
+        // Clamp to [0, 1] to avoid unexpected values from upstream
+        tempo = Math.max(0, Math.min(1, tempo));
 
+        const scheduledAt = Date.now();
+        const timeElapsed = scheduledAt - context.timeUserStoppedSpeaking;
         const finalDelay = calculateDelay(
           context.timeUserStoppedSpeaking,
           probabilityFinished,
@@ -1537,11 +1568,34 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         }
 
         // Get the current time (in milliseconds)
-        const currentTime = new Date().getTime();
-        nextSubmissionTime = currentTime + finalDelay;
+        const currentTime = scheduledAt;
+        nextSubmissionTime = scheduledAt + finalDelay;
 
         // Capture the delay for analytics events
         lastSubmissionDelay = finalDelay;
+        lastSubmissionScheduledAt = scheduledAt;
+
+        // Detailed debug to correlate measured vs expected
+        const tempoFactor = 1 - tempo;
+        const initialDelay = Math.max(maxDelay * probabilityFinished * tempoFactor, 0);
+        try {
+          logger.debug(
+            "[ConversationMachine] submissionDelay:",
+            JSON.stringify({
+              seq: (event as any).sequenceNumber,
+              pFinished: probabilityFinished,
+              tempo,
+              tempoFactor,
+              maxDelay,
+              timeUserStoppedSpeaking: context.timeUserStoppedSpeaking,
+              scheduledAt,
+              timeElapsed,
+              initialDelay,
+              finalDelay,
+              nextSubmissionTime,
+            })
+          );
+        } catch {}
 
         return finalDelay;
       },
