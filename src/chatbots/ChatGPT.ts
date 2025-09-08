@@ -591,20 +591,12 @@ class ChatGPTMessageControls extends MessageControls {
           if ((item as any)._saypiClicked) return;
           (item as any)._saypiClicked = true;
           // Keep the menu open and insulate its outside-dismiss handlers,
-          // then activate the item in-place.
+          // then activate the item with a short, robust sequence + retries.
           const wrapper = this.getOpenMenuWrapperFor(item as HTMLElement) || (openMenu as HTMLElement | null);
           if (wrapper) {
             this.enableOutsideDismissShield(wrapper, trigger);
           }
-          // Focus the item to mimic user intent and satisfy accessibility
-          try { (item as HTMLElement).focus?.({ preventScroll: true } as any); } catch {}
-          // Activate in-place to preserve Radix context
-          setTimeout(() => {
-            try { (item as HTMLElement).click(); } finally {
-              // Maintain focus briefly after activation
-              setTimeout(() => { try { (item as HTMLElement).focus?.({ preventScroll: true } as any); } catch {} }, 10);
-            }
-          }, 0);
+          this.activateReadAloudWithRetries(trigger, item as HTMLElement, wrapper || undefined);
           // Stop the observer attempts; ongoing shield manages menu lifetime
           this.readAloudObserver?.disconnect();
           this.readAloudObserver = null;
@@ -622,6 +614,62 @@ class ChatGPTMessageControls extends MessageControls {
 
     // Start from the last trigger (likely the ellipsis)
     tryTrigger(triggers.length - 1);
+  }
+
+  /**
+   * Clicks the Read Aloud item with a slight deferral and verifies that the
+   * dropdown remains open briefly (a strong heuristic that playback engaged).
+   * If the menu closes immediately (failure heuristic), it reopens and tries
+   * again up to a small bound.
+   */
+  private activateReadAloudWithRetries(
+    trigger: HTMLElement,
+    item: HTMLElement,
+    wrapper?: HTMLElement,
+    attempt: number = 0
+  ): void {
+    const maxAttempts = 3;
+    const openCheckDelay = 220; // ms: allow ChatGPT to spin up audio
+    const preClickDelay = 40; // ms: let menu settle before select
+
+    const isWrapperOpen = (w?: HTMLElement | null) => {
+      if (!w) return false;
+      const menu = w.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
+      const openAttr = menu?.getAttribute('data-state') || w.getAttribute('data-state');
+      return openAttr === 'open';
+    };
+
+    const reopenAndRetry = () => {
+      if (attempt + 1 >= maxAttempts) return;
+      try { this.synthesizeUserClick(trigger); } catch {}
+      // Wait a tick for portal to re-mount, then locate and click again
+      setTimeout(() => {
+        const again = this.findReadAloudMenuItemNear(trigger) as HTMLElement | null;
+        const newWrapper = this.getOpenMenuWrapperFor(again || item) || undefined;
+        if (newWrapper) {
+          this.enableOutsideDismissShield(newWrapper, trigger);
+        }
+        if (again) {
+          this.activateReadAloudWithRetries(trigger, again, newWrapper, attempt + 1);
+        }
+      }, 120);
+    };
+
+    try { item.focus?.({ preventScroll: true } as any); } catch {}
+    setTimeout(() => {
+      try { item.click(); } catch {}
+      // Verify shortly after: if the menu stayed open, assume playback engaged.
+      setTimeout(() => {
+        const stillOpen = isWrapperOpen(wrapper || this.getOpenMenuWrapperFor(item));
+        if (!stillOpen) {
+          // Heuristic failure: menu closed immediately; try again.
+          reopenAndRetry();
+          return;
+        }
+        // Keep a hint of focus for keyboard access
+        try { item.focus?.({ preventScroll: true } as any); } catch {}
+      }, openCheckDelay);
+    }, preClickDelay);
   }
 
   private readAloudObserver: MutationObserver | null = null;
