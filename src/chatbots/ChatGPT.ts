@@ -1025,7 +1025,9 @@ class ChatGPTMessageControls extends MessageControls {
     ));
     if (!openMenus.length) return null;
     const tRect = trigger.getBoundingClientRect();
-    let best: { el: HTMLElement, dist: number, idx: number } | null = null;
+    let nearest: HTMLElement | null = null;
+    let bestDist = Number.POSITIVE_INFINITY;
+    let bestIdx = -1;
     openMenus.forEach((el, idx) => {
       const r = el.getBoundingClientRect();
       const cx = r.left + r.width / 2;
@@ -1033,13 +1035,15 @@ class ChatGPTMessageControls extends MessageControls {
       const tx = tRect.left + tRect.width / 2;
       const ty = tRect.top + tRect.height / 2;
       const d = Math.hypot(cx - tx, cy - ty);
-      if (!best || d < best.dist || (d === best.dist && idx > best.idx)) {
-        best = { el, dist: d, idx };
+      if (d < bestDist || (d === bestDist && idx > bestIdx)) {
+        nearest = el;
+        bestDist = d;
+        bestIdx = idx;
       }
     });
-    if (!best) return null;
-    const nearest = best.el;
-    const wrapper = (nearest.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
+    if (!nearest) return null;
+    const nearestEl = nearest as HTMLElement;
+    const wrapper = (nearestEl.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
     return wrapper || nearest;
   }
 
