@@ -13,6 +13,7 @@ import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import getMessage from "../i18n";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
+import { logger } from "../LoggingModule";
 import { UserPrompt } from "./Chatbot";
 import { findControlsContainerInComposer, findPromptInputInComposer, getScopedSubmitSelector } from "./chatgpt/ComposerSelectors";
 import { getAssistantContentSelector, getAssistantResponseSelectorScopedToThread } from "./chatgpt/MessageSelectors";
@@ -630,7 +631,9 @@ class ChatGPTMessageControls extends MessageControls {
   ): void {
     const maxAttempts = 3;
     const openCheckDelay = 220; // ms: allow ChatGPT to spin up audio
+    const verifyStableDelay = 500; // ms: ensure menu stability beyond initial click
     const preClickDelay = 40; // ms: let menu settle before select
+    const playbackCheckDelay = 1200; // ms: observe a media play/playing event
 
     const isWrapperOpen = (w?: HTMLElement | null) => {
       if (!w) return false;
@@ -641,6 +644,7 @@ class ChatGPTMessageControls extends MessageControls {
 
     const reopenAndRetry = () => {
       if (attempt + 1 >= maxAttempts) return;
+      logger.debug("[ChatGPT] ReadAloud: reopen and retry", { attempt: attempt + 1 });
       try { this.synthesizeUserClick(trigger); } catch {}
       // Wait a tick for portal to re-mount, then locate and click again
       setTimeout(() => {
@@ -652,24 +656,96 @@ class ChatGPTMessageControls extends MessageControls {
         if (again) {
           this.activateReadAloudWithRetries(trigger, again, newWrapper, attempt + 1);
         }
-      }, 120);
+      }, 160);
     };
 
+    logger.debug("[ChatGPT] ReadAloud: attempt", { attempt, preClickDelay });
     try { item.focus?.({ preventScroll: true } as any); } catch {}
     setTimeout(() => {
-      try { item.click(); } catch {}
-      // Verify shortly after: if the menu stayed open, assume playback engaged.
+      // Attach ephemeral media listeners to detect playback start
+      let mediaStarted = false;
+      const onMedia = (e: Event) => {
+        try {
+          const t = e.target as any;
+          const tag = (t?.tagName || '').toLowerCase();
+          if (tag === 'audio' || tag === 'video') {
+            mediaStarted = true;
+          }
+        } catch {}
+      };
+      try {
+        document.addEventListener('play', onMedia, { capture: true } as any);
+        document.addEventListener('playing', onMedia, { capture: true } as any);
+      } catch {}
+      try {
+        logger.debug("[ChatGPT] ReadAloud: clicking item", { attempt });
+        item.click();
+      } catch (e) {
+        logger.debug("[ChatGPT] ReadAloud: click threw", { attempt, e });
+      }
+      // Verify shortly after: menu should remain open
       setTimeout(() => {
-        const stillOpen = isWrapperOpen(wrapper || this.getOpenMenuWrapperFor(item));
-        if (!stillOpen) {
-          // Heuristic failure: menu closed immediately; try again.
+        const stillOpen1 = isWrapperOpen(wrapper || this.getOpenMenuWrapperFor(item));
+        logger.debug("[ChatGPT] ReadAloud: post-click check", { attempt, stillOpen: stillOpen1, openCheckDelay });
+        if (!stillOpen1) {
+          try {
+            document.removeEventListener('play', onMedia as any, { capture: true } as any);
+            document.removeEventListener('playing', onMedia as any, { capture: true } as any);
+          } catch {}
           reopenAndRetry();
           return;
         }
-        // Keep a hint of focus for keyboard access
-        try { item.focus?.({ preventScroll: true } as any); } catch {}
+        // Verify it remains open a bit longer; if it closes by then, treat as failure
+        setTimeout(() => {
+          const stillOpen2 = isWrapperOpen(wrapper || this.getOpenMenuWrapperFor(item));
+          logger.debug("[ChatGPT] ReadAloud: stability check", { attempt, stillOpen: stillOpen2, verifyStableDelay });
+          if (!stillOpen2) {
+            try {
+              document.removeEventListener('play', onMedia as any, { capture: true } as any);
+              document.removeEventListener('playing', onMedia as any, { capture: true } as any);
+            } catch {}
+            reopenAndRetry();
+            return;
+          }
+          // Close any other open menus from older turns to avoid ghosts
+          try {
+            this.closeOtherOpenMenus(wrapper || this.getOpenMenuWrapperFor(item) || undefined);
+          } catch {}
+          // Final media-start verification; retry if no media event fired
+          const remaining = Math.max(playbackCheckDelay - verifyStableDelay, 0);
+          setTimeout(() => {
+            logger.debug("[ChatGPT] ReadAloud: media-start", { attempt, mediaStarted, playbackCheckDelay });
+            try {
+              document.removeEventListener('play', onMedia as any, { capture: true } as any);
+              document.removeEventListener('playing', onMedia as any, { capture: true } as any);
+            } catch {}
+            if (!mediaStarted) {
+              reopenAndRetry();
+              return;
+            }
+            // Keep a hint of focus for keyboard access
+            try { item.focus?.({ preventScroll: true } as any); } catch {}
+          }, remaining);
+        }, verifyStableDelay - openCheckDelay);
       }, openCheckDelay);
     }, preClickDelay);
+  }
+
+  // Close stale open Radix popper portals except the current one
+  private closeOtherOpenMenus(exceptWrapper?: HTMLElement): void {
+    const wrappers = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-radix-popper-content-wrapper]')
+    );
+    wrappers.forEach((w) => {
+      if (exceptWrapper && w === exceptWrapper) return;
+      const menu = w.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
+      const state = menu?.getAttribute('data-state') || w.getAttribute('data-state');
+      if (state === 'open') {
+        logger.debug('[ChatGPT] ReadAloud: closing stale menu');
+        try { menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'Escape' })); } catch {}
+        try { w.removeAttribute('data-saypi-shielded'); } catch {}
+      }
+    });
   }
 
   private readAloudObserver: MutationObserver | null = null;
@@ -989,13 +1065,8 @@ class ChatGPTMessageControls extends MessageControls {
     window.addEventListener('focusin', onFocusIn as any, { capture: true } as any);
     window.addEventListener('keydown', onKeyDown as any, { capture: true } as any);
 
-    // Listen for Say, Pi conversation events that indicate playback ended
-    const endEvents = ['saypi:piStoppedSpeaking', 'saypi:piFinishedSpeaking', 'saypi:hangup'];
-    endEvents.forEach((evt) => {
-      const handler = () => cleanup();
-      this.outsideShieldEventHandlers.push({ event: evt, handler });
-      try { EventBus.on(evt, handler); } catch {}
-    });
+    // Do not tie shield lifecycle to Say, Pi conversation events; ChatGPT's
+    // Read Aloud is independent. Cleanup is driven by dropdown close.
 
     // Auto-disable when menu actually closes or element unmounts
     const obs = new MutationObserver(() => {
@@ -1006,10 +1077,7 @@ class ChatGPTMessageControls extends MessageControls {
     });
     try { obs.observe(wrapper, { attributes: true, subtree: true, attributeFilter: ['data-state'] }); } catch {}
 
-    // Also poll our conversation state to release when a call ends
-    this.outsideShieldWatch = window.setInterval(() => {
-      if (!this.isPiSpeaking()) cleanup();
-    }, 1500);
+    // Avoid polling conversation state; allow the menu's lifecycle to govern.
 
     const cleanup = () => {
       try { window.removeEventListener('pointerdown', onPointerDown as any, { capture: true } as any); } catch {}
@@ -1027,8 +1095,7 @@ class ChatGPTMessageControls extends MessageControls {
       try { wrapper.removeAttribute('data-saypi-shielded'); } catch {}
       try { this.restoreMenuPosition(wrapper); } catch {}
       if (this.outsideShieldWatch) { clearInterval(this.outsideShieldWatch); this.outsideShieldWatch = null; }
-      // After releasing the shield (e.g., at playback end), close the menu if still open
-      try { this.gentlyCloseMenu(wrapper, this.outsideShieldTrigger); } catch {}
+      // Do not force-close the menu; allow ChatGPT to close it at the end of playback
       try { this.blurTrigger(this.outsideShieldTrigger); } catch {}
       this.outsideShieldCleanup = null;
     };
