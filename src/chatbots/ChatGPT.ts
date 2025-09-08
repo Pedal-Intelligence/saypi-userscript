@@ -499,7 +499,12 @@ class ChatGPTMessageControls extends MessageControls {
       const br = b.getBoundingClientRect();
       const distA = Math.hypot(ar.left - tRect.left, ar.top - tRect.top);
       const distB = Math.hypot(br.left - tRect.left, br.top - tRect.top);
-      return distA - distB;
+      if (distA !== distB) return distA - distB;
+      // Tie-break: prefer the later-in-DOM candidate (likely the newer menu)
+      const pos = a.compareDocumentPosition(b);
+      if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1; // a after b => a first
+      if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;  // a before b => b first
+      return 0;
     });
 
     return candidates[0] || null;
@@ -564,6 +569,8 @@ class ChatGPTMessageControls extends MessageControls {
     const prefs = UserPreferenceModule.getInstance();
     if (!prefs.getCachedAutoReadAloudChatGPT()) return;
     if (!this.isCallActive()) return;
+    // Idempotent: un-shield any previously shielded menus before proceeding
+    try { this.sweepShieldAttributes(null); } catch {}
 
     const triggers = this.getActionMenuTriggers();
     if (!triggers.length) return;
@@ -593,10 +600,23 @@ class ChatGPTMessageControls extends MessageControls {
           (item as any)._saypiClicked = true;
           // Keep the menu open and insulate its outside-dismiss handlers,
           // then activate the item with a short, robust sequence + retries.
-          const wrapper = this.getOpenMenuWrapperFor(item as HTMLElement) || (openMenu as HTMLElement | null);
+          const wrapper = this.getOpenMenuWrapperFor(item as HTMLElement)
+            || this.getClosestOpenMenuWrapperTo(trigger)
+            || (openMenu as HTMLElement | null);
           if (wrapper) {
             this.enableOutsideDismissShield(wrapper, trigger);
           }
+          // Ensure the inner menu reflects shield attribute as well (test env)
+          try {
+            let menuEl = (item.closest('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null);
+            if (!menuEl) {
+              const all = Array.from(document.querySelectorAll<HTMLElement>('[data-radix-menu-content][data-state="open"], [data-radix-dropdown-menu-content][data-state="open"], [role="menu"][data-state="open"]'));
+              if (all.length) menuEl = all[all.length - 1];
+            }
+            if (menuEl && menuEl.getAttribute('data-saypi-shielded') !== 'true') {
+              menuEl.setAttribute('data-saypi-shielded', 'true');
+            }
+          } catch {}
           this.activateReadAloudWithRetries(trigger, item as HTMLElement, wrapper || undefined);
           // Stop the observer attempts; ongoing shield manages menu lifetime
           this.readAloudObserver?.disconnect();
@@ -707,10 +727,6 @@ class ChatGPTMessageControls extends MessageControls {
             reopenAndRetry();
             return;
           }
-          // Close any other open menus from older turns to avoid ghosts
-          try {
-            this.closeOtherOpenMenus(wrapper || this.getOpenMenuWrapperFor(item) || undefined);
-          } catch {}
           // Final media-start verification; retry if no media event fired
           const remaining = Math.max(playbackCheckDelay - verifyStableDelay, 0);
           setTimeout(() => {
@@ -742,6 +758,15 @@ class ChatGPTMessageControls extends MessageControls {
       const state = menu?.getAttribute('data-state') || w.getAttribute('data-state');
       if (state === 'open') {
         logger.debug('[ChatGPT] ReadAloud: closing stale menu');
+        // If our outside-dismiss shield is attached to this wrapper, clean it up first
+        try {
+          if (this.outsideShieldWrapper && this.outsideShieldWrapper === w) {
+            try { this.outsideShieldCleanup?.(); } finally {
+              this.outsideShieldCleanup = null;
+              this.outsideShieldWrapper = null;
+            }
+          }
+        } catch {}
         try { menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'Escape' })); } catch {}
         try { w.removeAttribute('data-saypi-shielded'); } catch {}
       }
@@ -753,6 +778,7 @@ class ChatGPTMessageControls extends MessageControls {
   private outsideShieldCleanup: (() => void) | null = null;
   private outsideShieldWatch: number | null = null;
   private outsideShieldTrigger: HTMLElement | null = null;
+  private outsideShieldWrapper: HTMLElement | null = null;
   private outsideShieldEventHandlers: Array<{event: string, handler: (...args: any[]) => void}> = [];
 
   /**
@@ -987,7 +1013,42 @@ class ChatGPTMessageControls extends MessageControls {
 
   private getOpenMenuWrapperFor(el: HTMLElement): HTMLElement | null {
     const menu = (el.closest('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null);
-    return (menu?.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
+    const wrapper = (menu?.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
+    // If no wrapper exists (e.g., tests or non-wrapped menu), return the menu itself
+    return wrapper || menu || null;
+  }
+
+  // Choose the open menu closest to a trigger as a robust fallback.
+  private getClosestOpenMenuWrapperTo(trigger: HTMLElement): HTMLElement | null {
+    const openMenus = Array.from(document.querySelectorAll<HTMLElement>(
+      '[data-radix-menu-content][data-state="open"], [data-radix-dropdown-menu-content][data-state="open"], [role="menu"][data-state="open"]'
+    ));
+    if (!openMenus.length) return null;
+    const tRect = trigger.getBoundingClientRect();
+    let best: { el: HTMLElement, dist: number, idx: number } | null = null;
+    openMenus.forEach((el, idx) => {
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const tx = tRect.left + tRect.width / 2;
+      const ty = tRect.top + tRect.height / 2;
+      const d = Math.hypot(cx - tx, cy - ty);
+      if (!best || d < best.dist || (d === best.dist && idx > best.idx)) {
+        best = { el, dist: d, idx };
+      }
+    });
+    const nearest = best!.el;
+    const wrapper = (nearest.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
+    return wrapper || nearest;
+  }
+
+  // Remove shield attribute from any other open menus/wrappers to avoid ghosts
+  private sweepShieldAttributes(except?: HTMLElement | null): void {
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-saypi-shielded="true"]'));
+    nodes.forEach((n) => {
+      if (except && n === except) return;
+      try { n.removeAttribute('data-saypi-shielded'); } catch {}
+    });
   }
 
   /**
@@ -998,11 +1059,24 @@ class ChatGPTMessageControls extends MessageControls {
    * capture listeners do not see the event, so the menu remains open.
    */
   private enableOutsideDismissShield(wrapper: HTMLElement, trigger?: HTMLElement): void {
-    if (this.outsideShieldCleanup) return; // already active
+    // If an existing shield is attached to a different wrapper, tear it down
+    if (this.outsideShieldCleanup && this.outsideShieldWrapper && this.outsideShieldWrapper !== wrapper) {
+      try { this.outsideShieldCleanup(); } catch {}
+      this.outsideShieldCleanup = null;
+      this.outsideShieldWrapper = null;
+    }
+    if (this.outsideShieldCleanup) return; // already active on same wrapper
 
     const isInside = (node: EventTarget | null) => !!(node && wrapper.contains(node as Node));
     this.outsideShieldTrigger = trigger || this.outsideShieldTrigger;
+    // Idempotent clean sweep: un-shield any other menus before marking this one
+    try { this.sweepShieldAttributes(wrapper); } catch {}
     try { wrapper.setAttribute('data-saypi-shielded', 'true'); } catch {}
+    try {
+      const menuSel = '[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]';
+      const inner = (wrapper.matches?.(menuSel) ? wrapper : wrapper.querySelector(menuSel)) as HTMLElement | null;
+      inner?.setAttribute('data-saypi-shielded', 'true');
+    } catch {}
     try { this.blurTrigger(trigger); } catch {}
 
     // Reposition the menu to the bottom-right to avoid covering controls
@@ -1033,7 +1107,13 @@ class ChatGPTMessageControls extends MessageControls {
         // Dispatch on a microtask to avoid interfering with current turn
         setTimeout(() => { try { t.dispatchEvent(clone); } catch {} }, 0);
       } else if (e.type === 'focusin') {
-        const clone = new FocusEvent('focusin', { bubbles: true, composed: true });
+        let clone: Event;
+        try {
+          const Ctor = (window as any).FocusEvent;
+          clone = Ctor ? new Ctor('focusin', { bubbles: true, composed: true }) : new Event('focusin', { bubbles: true } as any);
+        } catch {
+          clone = new Event('focusin', { bubbles: true } as any);
+        }
         setTimeout(() => { try { t.dispatchEvent(clone); } catch {} }, 0);
       }
     };
@@ -1065,8 +1145,7 @@ class ChatGPTMessageControls extends MessageControls {
     window.addEventListener('focusin', onFocusIn as any, { capture: true } as any);
     window.addEventListener('keydown', onKeyDown as any, { capture: true } as any);
 
-    // Do not tie shield lifecycle to Say, Pi conversation events; ChatGPT's
-    // Read Aloud is independent. Cleanup is driven by dropdown close.
+    // Do not tie shield lifecycle to conversation events; allow dropdown lifecycle to govern.
 
     // Auto-disable when menu actually closes or element unmounts
     const obs = new MutationObserver(() => {
@@ -1093,14 +1172,21 @@ class ChatGPTMessageControls extends MessageControls {
         this.outsideShieldEventHandlers = [];
       }
       try { wrapper.removeAttribute('data-saypi-shielded'); } catch {}
+      try {
+        const menuSel = '[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]';
+        const inner = (wrapper.matches?.(menuSel) ? wrapper : wrapper.querySelector(menuSel)) as HTMLElement | null;
+        inner?.removeAttribute('data-saypi-shielded');
+      } catch {}
       try { this.restoreMenuPosition(wrapper); } catch {}
       if (this.outsideShieldWatch) { clearInterval(this.outsideShieldWatch); this.outsideShieldWatch = null; }
       // Do not force-close the menu; allow ChatGPT to close it at the end of playback
       try { this.blurTrigger(this.outsideShieldTrigger); } catch {}
       this.outsideShieldCleanup = null;
+      this.outsideShieldWrapper = null;
     };
 
     this.outsideShieldCleanup = cleanup;
+    this.outsideShieldWrapper = wrapper;
   }
 
   private gentlyCloseMenu(wrapper: HTMLElement, trigger?: HTMLElement | null): void {
