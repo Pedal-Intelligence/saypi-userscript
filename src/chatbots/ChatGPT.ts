@@ -1037,7 +1037,8 @@ class ChatGPTMessageControls extends MessageControls {
         best = { el, dist: d, idx };
       }
     });
-    const nearest = best!.el;
+    if (!best) return null;
+    const nearest = best.el;
     const wrapper = (nearest.closest('[data-radix-popper-content-wrapper]') as HTMLElement | null) || null;
     return wrapper || nearest;
   }
