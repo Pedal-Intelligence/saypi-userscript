@@ -1109,8 +1109,7 @@ class ChatGPTMessageControls extends MessageControls {
       } else if (e.type === 'focusin') {
         let clone: Event;
         try {
-          const Ctor = (window as any).FocusEvent;
-          clone = Ctor ? new Ctor('focusin', { bubbles: true, composed: true }) : new Event('focusin', { bubbles: true } as any);
+          clone = new FocusEvent('focusin', { bubbles: true, composed: true });
         } catch {
           clone = new Event('focusin', { bubbles: true } as any);
         }
