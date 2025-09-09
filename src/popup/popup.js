@@ -121,14 +121,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateSubmitModeUI() {
     hasAgentModeEntitlement().then((hasEntitlement) => {
       const submitModeSelector = document.getElementById("submit-mode-selector");
-      const autoSubmitToggle = document.createElement("div");
-      autoSubmitToggle.className = "user-preference-item w-full max-w-lg";
-      autoSubmitToggle.id = "auto-submit-preference";
       
       if (hasEntitlement) {
         // User is entitled to agent mode - show the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.remove("hidden");
+          submitModeSelector.style.display = ""; // Ensure it's not hidden by inline styles
         }
         
         // Remove the auto-submit toggle if it exists
@@ -136,14 +134,21 @@ document.addEventListener("DOMContentLoaded", function () {
         if (existingToggle) {
           existingToggle.remove();
         }
+        
+        // Initialize slider input handlers for the 3-way selector
+        initializeSubmitModeSlider();
       } else {
         // User is NOT entitled to agent mode - hide the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.add("hidden");
+          submitModeSelector.style.display = "none";
         }
         
         // Only create the toggle if it doesn't already exist
         if (!document.getElementById("auto-submit-preference")) {
+          const autoSubmitToggle = document.createElement("div");
+          autoSubmitToggle.className = "user-preference-item w-full max-w-lg";
+          autoSubmitToggle.id = "auto-submit-preference";
           // Create a simple auto-submit toggle switch instead
           const label = document.createElement("label");
           label.className = "wraper";
@@ -350,13 +355,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function sliderInput() {
+  function initializeSubmitModeSlider() {
+    // Initialize the submit mode slider events only if the element is visible
+    const submitModeSlider = document.getElementById("submitModeRange");
+    if (!submitModeSlider) return;
+    
     const submitModeIcons = document.querySelectorAll("#submit-mode-selector .icon");
     const moveSubmitModeSlider = (position) => {
       submitModeSlider.value = position;
       // fire input event to update submitModeValue
       submitModeSlider.dispatchEvent(new Event("input"));
     };
+    
     // Add event listener for the submit mode icon click
     submitModeIcons.forEach((icon) => {
       icon.addEventListener("click", function () {
@@ -375,6 +385,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
     });
+  }
+
+  function sliderInput() {
+    // This function is kept for backward compatibility
+    // The actual slider initialization for submit mode is now handled by initializeSubmitModeSlider()
+    const preferenceIcons = document.querySelectorAll("#preference-selector .icon");
+    // Add event listeners for dictation mode icons if they exist
+    // This is handled by the ModeSelector component, so this function may not be needed
   }
 
   /**
@@ -673,12 +691,11 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   i18nReplace();
-  sliderInput();
   switchInputs();
   consentButtons();
   showHideConsent();
   resetButton();
   
-  // Check for feature entitlements and update UI accordingly
+  // Check for feature entitlements and update UI accordingly - this must be done early
   updateSubmitModeUI();
 });
