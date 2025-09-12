@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // User is entitled to agent mode - show the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.remove("hidden");
-          submitModeSelector.style.display = ""; // Ensure it's not hidden by inline styles
+          submitModeSelector.style.removeProperty('display'); // Ensure it's not hidden by inline styles
         }
         
         // Remove the auto-submit toggle if it exists
@@ -397,13 +397,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function sliderInput() {
-    // This function is kept for backward compatibility
-    // The actual slider initialization for submit mode is now handled by initializeSubmitModeSlider()
-    const preferenceIcons = document.querySelectorAll("#preference-selector .icon");
-    // Add event listeners for dictation mode icons if they exist
-    // This is handled by the ModeSelector component, so this function may not be needed
-  }
 
   /**
    * Apply a boolean value to the input and its parent label
