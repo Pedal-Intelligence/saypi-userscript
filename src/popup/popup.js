@@ -19,14 +19,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function i18nReplace() {
     // Update elements with internationalised content
     document.querySelectorAll("[data-i18n]").forEach((el) => {
+      // Skip elements marked with data-i18n-skip (handled dynamically elsewhere)
+      if (el.hasAttribute("data-i18n-skip")) {
+        return;
+      }
+      
       let messageKey = el.getAttribute("data-i18n");
       // we use the chrome api instead of i18n.ts because module loading is not supported in the popup
-      // Check if this is a message that needs the chatbot parameter
-      if (messageKey === "submit_mode_agent_description") {
-        el.textContent = chrome.i18n.getMessage(messageKey, ["Pi"]);
-      } else {
-        el.textContent = chrome.i18n.getMessage(messageKey);
-      }
+      el.textContent = chrome.i18n.getMessage(messageKey);
     });
     // Update attributes for internationalisation
     document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
