@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Palayaw"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "Placeholder na teksto para sa input field ng palayaw ng katulong.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang \u003cstrong\u003e \"Payagan habang bumibisita sa site\" \u003c/strong\u003e upang maaari nating simulan ang pakikipag -usap."
+    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang <strong> \"Payagan habang bumibisita sa site\" </strong> upang maaari nating simulan ang pakikipag -usap."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "Nagpapasya ang $chatbot$ kung kailan tutugon batay sa konteksto",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

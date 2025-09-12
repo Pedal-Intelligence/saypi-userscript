@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "كنية"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "نص العنصر النائب لحقل إدخال لقب المساعد.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب \u003cstrong\u003e \"السماح أثناء زيارة الموقع\" \u003c/strong\u003e حتى نتمكن من البدء في الحديث."
+    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب <strong> \"السماح أثناء زيارة الموقع\" </strong> حتى نتمكن من البدء في الحديث."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ يقرر وقت الاستجابة بناءً على السياق",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

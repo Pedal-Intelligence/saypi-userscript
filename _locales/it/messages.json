@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Soprannome"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "Testo segnaposto per il campo di input del soprannome dell'assistente.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Vedrai un prompt del browser nella parte superiore di questa finestra. \nBasta premere \u003cstrong\u003e \"Consenti durante la visita del sito\" \u003c/strong\u003e in modo da poter iniziare a parlare."
+    "message": "Vedrai un prompt del browser nella parte superiore di questa finestra. \nBasta premere <strong> \"Consenti durante la visita del sito\" </strong> in modo da poter iniziare a parlare."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ decide quando rispondere in base al contesto",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

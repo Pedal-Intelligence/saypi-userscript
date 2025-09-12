@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Takma ad"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "Asistan takma adı girişi için yer tutucu metin.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece \u003cstrong\u003e \"Siteyi ziyaret ederken izin ver\" \u003c/strong\u003e, böylece konuşmaya başlayabiliriz."
+    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece <strong> \"Siteyi ziyaret ederken izin ver\" </strong>, böylece konuşmaya başlayabiliriz."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ bağlama göre ne zaman yanıt vereceğine karar verir",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Biệt danh"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "Văn bản mẫu cho trường nhập bí danh trợ lý.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn \u003cstrong\u003e \"cho phép trong khi truy cập trang web\" \u003c/strong\u003e để chúng ta có thể bắt đầu nói chuyện."
+    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn <strong> \"cho phép trong khi truy cập trang web\" </strong> để chúng ta có thể bắt đầu nói chuyện."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ quyết định thời điểm phản hồi dựa trên ngữ cảnh",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

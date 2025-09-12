@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "별명"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "어시스턴트 별명 입력 필드에 대한 플레이스홀더 텍스트입니다.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n\u003cstrong\u003e \"사이트를 방문하는 동안 허용\"\u003c/strong\u003e을 누르면 대화를 시작할 수 있습니다."
+    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n<strong> \"사이트를 방문하는 동안 허용\"</strong>을 누르면 대화를 시작할 수 있습니다."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$은 상황에 따라 응답 시기를 결정합니다.",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

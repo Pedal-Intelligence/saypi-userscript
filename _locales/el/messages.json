@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Παρατσούκλι"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "Κείμενο placeholder για το πεδίο εισαγωγής ψευδωνύμου του βοηθού.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Θα δείτε μια προτροπή του προγράμματος περιήγησης στην κορυφή αυτού του παραθύρου. \nΑπλά χτυπήστε \u003cstrong\u003e, επιτρέψτε κατά την επίσκεψη στον ιστότοπο \"\u003c/strong\u003e έτσι μπορούμε να αρχίσουμε να μιλάμε."
+    "message": "Θα δείτε μια προτροπή του προγράμματος περιήγησης στην κορυφή αυτού του παραθύρου. \nΑπλά χτυπήστε <strong>, επιτρέψτε κατά την επίσκεψη στον ιστότοπο \"</strong> έτσι μπορούμε να αρχίσουμε να μιλάμε."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "Το $chatbot$ αποφασίζει πότε θα απαντήσει με βάση το περιβάλλον",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "ニックネーム"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "アシスタントのニックネーム入力フィールドのプレースホルダーテキスト。",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n\u003cstrong\u003e「サイトにアクセスしながら許可」を押してください\u003c/strong\u003e。"
+    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n<strong>「サイトにアクセスしながら許可」を押してください</strong>。"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ はコンテキストに基づいていつ応答するかを決定します",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

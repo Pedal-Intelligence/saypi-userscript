@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Poreclă"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "Text plasat pentru câmpul de introducere a poreclei asistentului.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește \u003cstrong\u003e „Permiteți -vă în timp ce vizitați site -ul” \u003c/strong\u003e, astfel încât să putem începe să vorbim."
+    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește <strong> „Permiteți -vă în timp ce vizitați site -ul” </strong>, astfel încât să putem începe să vorbim."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ decide când să răspundă în funcție de context",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",

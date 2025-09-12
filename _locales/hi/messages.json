@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "उपनाम"
+    "message": ""
   },
   "nicknamePlaceholder": {
     "description": "सहायक उपनाम इनपुट फ़ील्ड के लिए प्लेसहोल्डर पाठ।",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "आप इस विंडो के शीर्ष पर एक ब्राउज़र प्रॉम्प्ट देखेंगे। \nबस हिट \u003cstrong\u003e \"साइट पर जाने के दौरान\" \u003c/strong\u003e पर जाने की अनुमति दें ताकि हम बात करना शुरू कर सकें।"
+    "message": "आप इस विंडो के शीर्ष पर एक ब्राउज़र प्रॉम्प्ट देखेंगे। \nबस हिट <strong> \"साइट पर जाने के दौरान\" </strong> पर जाने की अनुमति दें ताकि हम बात करना शुरू कर सकें।"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ संदर्भ के आधार पर निर्णय लेता है कि कब प्रतिक्रिया देनी है",
+    "message": "",
     "placeholders": {
       "chatbot": {
         "content": "$1",
