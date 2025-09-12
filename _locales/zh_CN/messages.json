@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "昵称"
+    "message": "助手昵称"
   },
   "nicknamePlaceholder": {
     "description": "助手昵称输入框的占位符文本。",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ 根据上下文决定何时响应",
+    "message": "$chatbot$ 根据上下文决定何时回复",
     "placeholders": {
       "chatbot": {
         "content": "$1",

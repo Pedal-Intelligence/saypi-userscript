@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Becenév"
+    "message": "Segédfelhasználónév"
   },
   "nicknamePlaceholder": {
     "description": "Helyőrző szöveg az asszisztens név mezőhöz.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "A $chatbot$ a kontextus alapján dönti el, hogy mikor válaszoljon",
+    "message": "$chatbot$ a kontextus alapján dönt a válaszadásról",
     "placeholders": {
       "chatbot": {
         "content": "$1",

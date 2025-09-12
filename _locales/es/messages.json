@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Apodo"
+    "message": "Apodo del asistente"
   },
   "nicknamePlaceholder": {
     "description": "Texto de marcador de posición para el campo de entrada del apodo del asistente.",

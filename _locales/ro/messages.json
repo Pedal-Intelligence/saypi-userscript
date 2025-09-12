@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Poreclă"
+    "message": "Porecla asistentului"
   },
   "nicknamePlaceholder": {
     "description": "Text plasat pentru câmpul de introducere a poreclei asistentului.",

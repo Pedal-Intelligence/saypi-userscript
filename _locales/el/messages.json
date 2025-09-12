@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Παρατσούκλι"
+    "message": "Ψευδώνυμο βοηθού"
   },
   "nicknamePlaceholder": {
     "description": "Κείμενο placeholder για το πεδίο εισαγωγής ψευδωνύμου του βοηθού.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "Το $chatbot$ αποφασίζει πότε θα απαντήσει με βάση το περιβάλλον",
+    "message": "Ο $chatbot$ αποφασίζει πότε θα απαντήσει με βάση το πλαίσιο",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Biệt danh"
+    "message": "Tên gọi trợ lý"
   },
   "nicknamePlaceholder": {
     "description": "Văn bản mẫu cho trường nhập bí danh trợ lý.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ quyết định thời điểm phản hồi dựa trên ngữ cảnh",
+    "message": "$chatbot$ quyết định khi nào phản hồi dựa trên ngữ cảnh",
     "placeholders": {
       "chatbot": {
         "content": "$1",

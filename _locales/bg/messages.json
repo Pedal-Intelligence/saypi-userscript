@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Псевдоним"
+    "message": "Псевдоним на асистента"
   },
   "nicknamePlaceholder": {
     "description": "Текст за заместител в полето за въвеждане на прякор на асистента.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ решава кога да отговори въз основа на контекста",
+    "message": "$chatbot$ решава кога да отговори според контекста",
     "placeholders": {
       "chatbot": {
         "content": "$1",

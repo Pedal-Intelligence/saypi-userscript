@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "كنية"
+    "message": "اسم المساعد"
   },
   "nicknamePlaceholder": {
     "description": "نص العنصر النائب لحقل إدخال لقب المساعد.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ يقرر وقت الاستجابة بناءً على السياق",
+    "message": "$chatbot$ يحدد الوقت المناسب للرد بناءً على السياق",
     "placeholders": {
       "chatbot": {
         "content": "$1",

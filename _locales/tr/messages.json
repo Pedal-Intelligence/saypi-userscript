@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Takma ad"
+    "message": "Asistan takma adı"
   },
   "nicknamePlaceholder": {
     "description": "Asistan takma adı girişi için yer tutucu metin.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ bağlama göre ne zaman yanıt vereceğine karar verir",
+    "message": "$chatbot$, yanıt verip vermemeye bağlama göre karar verir",
     "placeholders": {
       "chatbot": {
         "content": "$1",

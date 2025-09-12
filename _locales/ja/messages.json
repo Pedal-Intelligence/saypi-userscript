@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "ニックネーム"
+    "message": "アシスタントのニックネーム"
   },
   "nicknamePlaceholder": {
     "description": "アシスタントのニックネーム入力フィールドのプレースホルダーテキスト。",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ はコンテキストに基づいていつ応答するかを決定します",
+    "message": "$chatbot$ が状況に応じて返信のタイミングを判断します",
     "placeholders": {
       "chatbot": {
         "content": "$1",

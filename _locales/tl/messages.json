@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Palayaw"
+    "message": "Palayaw ng Katulong"
   },
   "nicknamePlaceholder": {
     "description": "Placeholder na teksto para sa input field ng palayaw ng katulong.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "Nagpapasya ang $chatbot$ kung kailan tutugon batay sa konteksto",
+    "message": "Ang $chatbot$ ang nagdedesisyon kung kailan sasagot batay sa konteksto",
     "placeholders": {
       "chatbot": {
         "content": "$1",

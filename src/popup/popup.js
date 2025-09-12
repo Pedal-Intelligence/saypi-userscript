@@ -19,14 +19,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function i18nReplace() {
     // Update elements with internationalised content
     document.querySelectorAll("[data-i18n]").forEach((el) => {
+      // Skip elements marked with data-i18n-skip (handled dynamically elsewhere)
+      if (el.hasAttribute("data-i18n-skip")) {
+        return;
+      }
+      
       let messageKey = el.getAttribute("data-i18n");
       // we use the chrome api instead of i18n.ts because module loading is not supported in the popup
-      // Check if this is a message that needs the chatbot parameter
-      if (messageKey === "submit_mode_agent_description") {
-        el.textContent = chrome.i18n.getMessage(messageKey, ["Pi"]);
-      } else {
-        el.textContent = chrome.i18n.getMessage(messageKey);
-      }
+      el.textContent = chrome.i18n.getMessage(messageKey);
     });
     // Update attributes for internationalisation
     document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
@@ -121,14 +121,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateSubmitModeUI() {
     hasAgentModeEntitlement().then((hasEntitlement) => {
       const submitModeSelector = document.getElementById("submit-mode-selector");
-      const autoSubmitToggle = document.createElement("div");
-      autoSubmitToggle.className = "user-preference-item w-full max-w-lg";
-      autoSubmitToggle.id = "auto-submit-preference";
       
       if (hasEntitlement) {
         // User is entitled to agent mode - show the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.remove("hidden");
+          submitModeSelector.style.removeProperty('display'); // Ensure it's not hidden by inline styles
         }
         
         // Remove the auto-submit toggle if it exists
@@ -136,14 +134,21 @@ document.addEventListener("DOMContentLoaded", function () {
         if (existingToggle) {
           existingToggle.remove();
         }
+        
+        // Initialize slider input handlers for the 3-way selector
+        initializeSubmitModeSlider();
       } else {
         // User is NOT entitled to agent mode - hide the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.add("hidden");
+          submitModeSelector.style.display = "none";
         }
         
         // Only create the toggle if it doesn't already exist
         if (!document.getElementById("auto-submit-preference")) {
+          const autoSubmitToggle = document.createElement("div");
+          autoSubmitToggle.className = "user-preference-item w-full max-w-lg";
+          autoSubmitToggle.id = "auto-submit-preference";
           // Create a simple auto-submit toggle switch instead
           const label = document.createElement("label");
           label.className = "wraper";
@@ -350,13 +355,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function sliderInput() {
+  function updateAgentModeDescription(nickname) {
+    // Update the agent mode description with the current nickname
+    const agentDescription = document.querySelector('[data-i18n="submit_mode_agent_description"]');
+    if (agentDescription) {
+      const chatbotName = nickname && nickname.trim() ? nickname.trim() : 'assistant';
+      const message = chrome.i18n.getMessage('submit_mode_agent_description', [chatbotName]);
+      agentDescription.textContent = message;
+    }
+  }
+
+  function initializeSubmitModeSlider() {
+    // Initialize the submit mode slider events only if the element is visible
+    const submitModeSlider = document.getElementById("submitModeRange");
+    if (!submitModeSlider) return;
+    
     const submitModeIcons = document.querySelectorAll("#submit-mode-selector .icon");
     const moveSubmitModeSlider = (position) => {
       submitModeSlider.value = position;
       // fire input event to update submitModeValue
       submitModeSlider.dispatchEvent(new Event("input"));
     };
+    
     // Add event listener for the submit mode icon click
     submitModeIcons.forEach((icon) => {
       icon.addEventListener("click", function () {
@@ -376,6 +396,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+
 
   /**
    * Apply a boolean value to the input and its parent label
@@ -621,6 +642,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (nickname) {
       nicknameInput.value = nickname;
     }
+    // Update agent mode description with current nickname
+    updateAgentModeDescription(nickname);
   });
 
   // Auto Read Aloud (ChatGPT) toggle
@@ -655,6 +678,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       // Notify content script of the change
       message({ nickname });
+      // Update agent mode description
+      updateAgentModeDescription(nickname);
     } else {
       // If the input is empty, remove the nickname
       chrome.storage.local.remove("nickname", function() {
@@ -662,6 +687,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       // Notify content script of the removal
       message({ nickname: null });
+      // Update agent mode description with default
+      updateAgentModeDescription(null);
     }
   });
 
@@ -673,12 +700,11 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   i18nReplace();
-  sliderInput();
   switchInputs();
   consentButtons();
   showHideConsent();
   resetButton();
   
-  // Check for feature entitlements and update UI accordingly
+  // Check for feature entitlements and update UI accordingly - this must be done early
   updateSubmitModeUI();
 });

@@ -34,7 +34,8 @@
 }
 
 /* Align slider endpoints under icon centers */
-#preference-selector .slider {
+#preference-selector .slider,
+#submit-mode-selector .slider {
   width: calc(100% - 28px);
   margin-left: 14px;
   margin-right: 14px;

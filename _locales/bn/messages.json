@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "ডাকনাম"
+    "message": "সহায়কের ডাকনাম"
   },
   "nicknamePlaceholder": {
     "description": "সহায়কের ডাকনাম ইনপুট ক্ষেত্রের জন্য স্থানধারক টেক্সট।",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ প্রেক্ষাপটের উপর ভিত্তি করে কখন প্রতিক্রিয়া জানাবে তা নির্ধারণ করে",
+    "message": "$chatbot$ প্রাসঙ্গিকতা দেখে কখন উত্তর দিবে তা নির্ধারণ করে",
     "placeholders": {
       "chatbot": {
         "content": "$1",

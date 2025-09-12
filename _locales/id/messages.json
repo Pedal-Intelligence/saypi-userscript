@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Nama panggilan"
+    "message": "Nama panggilan asisten"
   },
   "nicknamePlaceholder": {
     "description": "Teks placeholder untuk kolom input nama panggilan asisten.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ memutuskan kapan harus merespons berdasarkan konteks",
+    "message": "$chatbot$ menentukan kapan harus merespons berdasarkan konteks",
     "placeholders": {
       "chatbot": {
         "content": "$1",

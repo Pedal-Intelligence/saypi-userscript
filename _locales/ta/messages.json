@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "புனைப்பெயர்"
+    "message": "உதவியாளர் பெயர்"
   },
   "nicknamePlaceholder": {
     "description": "உதவியாளர் பெயர் உள்ளீட்டு நிலப்பரப்புக்கான இடமாற்ற உரை.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "சூழலின் அடிப்படையில் எப்போது பதிலளிக்க வேண்டும் என்பதை $chatbot$ தீர்மானிக்கிறது",
+    "message": "சூழலைப் பொறுத்து $chatbot$ பதில் அளிக்கும் நேரத்தை தீர்மானிக்கிறது",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Smeknamn"
+    "message": "Assistents smeknamn"
   },
   "nicknamePlaceholder": {
     "description": "Platstext för inmatningsfältet för assistentens smeknamn.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ bestämmer när man ska svara baserat på sammanhang",
+    "message": "$chatbot$ bestämmer när hen ska svara baserat på sammanhanget",
     "placeholders": {
       "chatbot": {
         "content": "$1",

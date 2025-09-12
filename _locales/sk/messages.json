@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": "Prezývka"
+    "message": "Prezývka asistenta"
   },
   "nicknamePlaceholder": {
     "description": "Text pre zástupný symbol v poli pre zadanie prezývky asistenta.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "$chatbot$ rozhoduje o tom, kedy reagovať na základe kontextu",
+    "message": "$chatbot$ rozhoduje, kedy odpovedať podľa kontextu",
     "placeholders": {
       "chatbot": {
         "content": "$1",

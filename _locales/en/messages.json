@@ -536,7 +536,7 @@
     "description": "Description for the manual submission mode."
   },
   "nicknameLabel": {
-    "message": "Nickname",
+    "message": "Assistant nickname",
     "description": "Label for the input field to set a custom nickname for the AI assistant."
   },
   "profile": {
