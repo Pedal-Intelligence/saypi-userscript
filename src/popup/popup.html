@@ -172,9 +172,15 @@
           <div id="submit-mode-selector" class="w-full max-w-lg user-preference-item mode-selector">
             <div>
               <div class="flex justify-between mb-2">
-                <span role="img" class="icon text-2xl" data-i18n-attr="aria-label:ariaLabelRocket" aria-label="Rocket" slider-value="0" id="auto">🚀</span>
-                <span role="img" class="icon text-2xl" data-i18n-attr="aria-label:ariaLabelRobot" aria-label="Robot" slider-value="1" id="agent">🤖</span>
-                <span role="img" class="icon text-2xl" data-i18n-attr="aria-label:ariaLabelHand" aria-label="Hand" slider-value="2" id="off">🖐️</span>
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelRocket" aria-label="Rocket" slider-value="0" id="auto">
+                  <span class="icon-circle"><i data-lucide="zap"></i></span>
+                </span>
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelRobot" aria-label="Robot" slider-value="1" id="agent">
+                  <span class="icon-circle"><i data-lucide="bot"></i></span>
+                </span>
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelHand" aria-label="Hand" slider-value="2" id="off">
+                  <span class="icon-circle"><i data-lucide="hand"></i></span>
+                </span>
               </div>
               <input type="range" min="0" max="2" value="0" class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" id="submitModeRange" data-i18n-attr="title:submitModeControl" title="Select when to submit your messages" />
             </div>
