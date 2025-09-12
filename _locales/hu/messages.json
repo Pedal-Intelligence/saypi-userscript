@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "Segédfelhasználónév"
   },
   "nicknamePlaceholder": {
     "description": "Helyőrző szöveg az asszisztens név mezőhöz.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Az ablak tetején egy böngésző prompt látható. \nCsak nyomja meg a <strong> \"Engedélyezést, miközben meglátogatja a webhelyet\" </strong>, hogy elkezdhessük a beszélgetést."
+    "message": "Az ablak tetején egy böngésző prompt látható. \nCsak nyomja meg a \u003cstrong\u003e \"Engedélyezést, miközben meglátogatja a webhelyet\" \u003c/strong\u003e, hogy elkezdhessük a beszélgetést."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "$chatbot$ a kontextus alapján dönt a válaszadásról",
     "placeholders": {
       "chatbot": {
         "content": "$1",

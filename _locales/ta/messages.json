@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "உதவியாளர் பெயர்"
   },
   "nicknamePlaceholder": {
     "description": "உதவியாளர் பெயர் உள்ளீட்டு நிலப்பரப்புக்கான இடமாற்ற உரை.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "You'll see a browser prompt at the top of this window. Just hit <strong>\"Allow while visiting the site\"</strong> so we can start talking."
+    "message": "You'll see a browser prompt at the top of this window. Just hit \u003cstrong\u003e\"Allow while visiting the site\"\u003c/strong\u003e so we can start talking."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "சூழலைப் பொறுத்து $chatbot$ பதில் அளிக்கும் நேரத்தை தீர்மானிக்கிறது",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "Assistentin lempinimi"
   },
   "nicknamePlaceholder": {
     "description": "Paikkamerkki apulaisen nimen syöttökentässä.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma <strong> \"Salli vieraillessasi sivustolla\" </strong>, jotta voimme alkaa puhua."
+    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma \u003cstrong\u003e \"Salli vieraillessasi sivustolla\" \u003c/strong\u003e, jotta voimme alkaa puhua."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "$chatbot$ päättää vastaamisen ajankohdan kontekstin perusteella",
     "placeholders": {
       "chatbot": {
         "content": "$1",

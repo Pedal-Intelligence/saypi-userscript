@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "Assistenten-Spitzname"
   },
   "nicknamePlaceholder": {
     "description": "Platzhaltertext für das Eingabefeld des Assistenten-Nicknamens.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach <strong> \"Erlauben Sie beim Besuch der Website\" </strong>, damit wir anfangen können zu reden."
+    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach \u003cstrong\u003e \"Erlauben Sie beim Besuch der Website\" \u003c/strong\u003e, damit wir anfangen können zu reden."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "$chatbot$ entscheidet je nach Kontext, wann geantwortet wird",
     "placeholders": {
       "chatbot": {
         "content": "$1",

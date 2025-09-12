@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "Nama panggilan asisten"
   },
   "nicknamePlaceholder": {
     "description": "Teks placeholder untuk kolom input nama panggilan asisten.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Anda akan melihat prompt browser di bagian atas jendela ini. \nCukup tekan <strong> \"Izinkan saat mengunjungi situs\" </strong> sehingga kita bisa mulai berbicara."
+    "message": "Anda akan melihat prompt browser di bagian atas jendela ini. \nCukup tekan \u003cstrong\u003e \"Izinkan saat mengunjungi situs\" \u003c/strong\u003e sehingga kita bisa mulai berbicara."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "$chatbot$ menentukan kapan harus merespons berdasarkan konteks",
     "placeholders": {
       "chatbot": {
         "content": "$1",

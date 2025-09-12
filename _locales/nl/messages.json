@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "Assistent bijnaam"
   },
   "nicknamePlaceholder": {
     "description": "Plaatsaanduiding voor het invoerveld van de bijnaam van de assistent.",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon <strong> \"Tijdens een bezoek aan de site\" </strong> zodat we kunnen beginnen met praten."
+    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon \u003cstrong\u003e \"Tijdens een bezoek aan de site\" \u003c/strong\u003e zodat we kunnen beginnen met praten."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "$chatbot$ bepaalt op basis van de context wanneer er gereageerd wordt",
     "placeholders": {
       "chatbot": {
         "content": "$1",

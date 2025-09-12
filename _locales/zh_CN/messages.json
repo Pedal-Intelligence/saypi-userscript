@@ -496,7 +496,7 @@
   },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
-    "message": ""
+    "message": "助手昵称"
   },
   "nicknamePlaceholder": {
     "description": "助手昵称输入框的占位符文本。",
@@ -516,7 +516,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "您会在此窗口的顶部看到一个浏览器提示。\n只需点击<strong>“访问网站时允许” </strong>，我们就可以开始交谈。"
+    "message": "您会在此窗口的顶部看到一个浏览器提示。\n只需点击\u003cstrong\u003e“访问网站时允许” \u003c/strong\u003e，我们就可以开始交谈。"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
@@ -774,7 +774,7 @@
   },
   "submit_mode_agent_description": {
     "description": "Description for the AI-driven submission mode.",
-    "message": "",
+    "message": "$chatbot$ 根据上下文决定何时回复",
     "placeholders": {
       "chatbot": {
         "content": "$1",
