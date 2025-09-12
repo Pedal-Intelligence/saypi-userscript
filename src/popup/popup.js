@@ -355,6 +355,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function updateAgentModeDescription(nickname) {
+    // Update the agent mode description with the current nickname
+    const agentDescription = document.querySelector('[data-i18n="submit_mode_agent_description"]');
+    if (agentDescription) {
+      const chatbotName = nickname && nickname.trim() ? nickname.trim() : 'assistant';
+      const message = chrome.i18n.getMessage('submit_mode_agent_description', [chatbotName]);
+      agentDescription.textContent = message;
+    }
+  }
+
   function initializeSubmitModeSlider() {
     // Initialize the submit mode slider events only if the element is visible
     const submitModeSlider = document.getElementById("submitModeRange");
@@ -639,6 +649,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (nickname) {
       nicknameInput.value = nickname;
     }
+    // Update agent mode description with current nickname
+    updateAgentModeDescription(nickname);
   });
 
   // Auto Read Aloud (ChatGPT) toggle
@@ -673,6 +685,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       // Notify content script of the change
       message({ nickname });
+      // Update agent mode description
+      updateAgentModeDescription(nickname);
     } else {
       // If the input is empty, remove the nickname
       chrome.storage.local.remove("nickname", function() {
@@ -680,6 +694,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       // Notify content script of the removal
       message({ nickname: null });
+      // Update agent mode description with default
+      updateAgentModeDescription(null);
     }
   });
 
