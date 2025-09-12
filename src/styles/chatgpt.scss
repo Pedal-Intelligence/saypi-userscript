@@ -130,7 +130,7 @@ body.chatgpt {
         background-color: var(--theme-user-msg-bg, var(--gray-50, rgba(0,0,0,0.03)));
         border: 1px solid var(--gray-100, rgba(0, 0, 0, 0.1));
         border-radius: 16px;
-        padding: 10px 14px 11px 40px; /* room for icon; +1px to avoid visual clipping */
+        padding: 10px 14px 11px 38px; /* slightly tighter left padding */
         min-height: 38px;
         /* Override ChatGPT's `w-full` so the bubble looks like a compact pill */
         width: auto;
@@ -163,7 +163,7 @@ body.chatgpt {
 
       .thinking-icon-container {
         position: absolute;
-        left: 12px;
+        left: 10px; /* nudge icon slightly inward */
         top: 50%;
         transform: translateY(-50%);
         z-index: 1;
@@ -201,7 +201,12 @@ body.chatgpt {
         backdrop-filter: saturate(110%) brightness(105%);
         color: var(--theme-user-msg-text, #ededed);
         /* Slightly stronger label for readability on dark */
-        &::before { color: currentColor; opacity: 0.9; }
+        &::before {
+          color: currentColor;
+          opacity: 0.9;
+          /* Subtle shadow to lift label on saturated dark accents */
+          text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+        }
       }
       .thinking-icon-container svg.thinking-icon { opacity: 0.92; }
       &:hover, &:active { .content { background-color: color-mix(in srgb, var(--theme-user-msg-bg, #ffffff) 88%, #fff 12%); } }
@@ -216,7 +221,7 @@ body.chatgpt {
         border-color: color-mix(in srgb, var(--theme-user-msg-bg, #000000) 8%, #000 12%);
         box-shadow: 0 1px 0 rgba(0,0,0,0.06);
         color: var(--theme-user-msg-text, #1f1f1f);
-        &::before { color: currentColor; opacity: 0.8; }
+        &::before { color: currentColor; opacity: 0.76; }
       }
     }
   }
@@ -234,5 +239,12 @@ body.chatgpt {
       stroke: currentColor !important;
     }
     .steer-icon-container svg.steer-icon { opacity: 0.88; }
+  }
+
+  /* Keyboard focus affordance on the bubble */
+  .assistant-message.maintenance-message.silenced .content:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 32%, transparent);
+    transition: box-shadow 120ms ease;
   }
 }
