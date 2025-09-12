@@ -239,6 +239,27 @@ body.chatgpt {
       stroke: currentColor !important;
     }
     .steer-icon-container svg.steer-icon { opacity: 0.88; }
+
+    /* Instruction panel inside the user's bubble */
+    .instruction-block {
+      font-style: italic;
+      color: currentColor;
+      line-height: 1.45;
+      font-size: 0.95em;
+      padding: 12px 14px;
+      margin: 8px 0 10px 0;
+      border-radius: 10px;
+      /* The panel adapts to theme by deriving from text color */
+      background-color: color-mix(in srgb, currentColor 12%, transparent);
+      border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+      box-shadow: 0 1px 0 color-mix(in srgb, currentColor 10%, transparent) inset;
+    }
+    /* Slightly stronger overlay on dark background bubbles */
+    html.dark & .instruction-block {
+      background-color: color-mix(in srgb, currentColor 18%, transparent);
+      border-color: color-mix(in srgb, currentColor 32%, transparent);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.25) inset;
+    }
   }
 
   /* Keyboard focus affordance on the bubble */
