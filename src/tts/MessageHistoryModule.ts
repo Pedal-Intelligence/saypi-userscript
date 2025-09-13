@@ -83,11 +83,13 @@ export class MessageHistoryModule {
    * @param message The assistant response to mark
    */
   public async markAsMaintenanceMessage(message: AssistantResponse): Promise<void> {
+    console.debug("Marking message as maintenance message", message);
     const hash = await message.stableHash();
     await this.saveMessageState(hash, {
       isMaintenanceMessage: true,
       hash
     });
+    console.debug("Marked message as maintenance message", message);
   }
 
   /**

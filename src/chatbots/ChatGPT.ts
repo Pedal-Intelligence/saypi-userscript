@@ -348,13 +348,17 @@ class ChatGPTResponse extends AssistantResponse {
     super(element, includeInitialText);
   }
 
+  // Use ChatGPT's bubble presentation instead of generic pill
+  protected useMaintenancePill(): boolean { return false; }
+
   get contentSelector(): string {
+    // Keep in sync with chatgpt/MessageSelectors.getAssistantContentSelector
     return ".markdown, .prose, [data-message-id]";
   }
 
   createTextStream(content: HTMLElement, options?: InputStreamOptions): ElementTextStream {
-    // TODO: Phase 3 - implement streaming parser similar to PiTextStream/ClaudeTextBlockCapture
-    // For Phase 1, we just need basic response detection using a simple text block capture
+    // For now, capture a single final block of text when the response
+    // finishes streaming (detected by appearance of the action bar).
     return new ChatGPTTextBlockCapture(content, options);
   }
 
@@ -1250,34 +1254,127 @@ class ChatGPTMessageControls extends MessageControls {
  * This is similar to ClaudeTextBlockCapture but adapted for ChatGPT's DOM structure.
  */
 class ChatGPTTextBlockCapture extends ElementTextStream {
-  handleMutationEvent(mutation: MutationRecord): void {
-    // For Phase 1, simple capture - no sophisticated streaming needed
-    // TODO: Phase 3 - implement proper streaming with first-token detection
-    this.emitCurrentText();
-  }
+  private turnContainer: HTMLElement | null = null;
+  private barObserver: MutationObserver | null = null;
+  private streamingStarted = false;
+  private firstTokenEmitted = false;
 
   constructor(element: HTMLElement, options?: InputStreamOptions) {
     super(element, options);
-  }
+    // Find the assistant turn container that owns this content
+    this.turnContainer = this.findTurnContainer(element);
 
-  private emitCurrentText(): void {
-    const text = this.element.textContent || "";
-    if (text.trim()) {
-      this.next({
-        text: text,
-        changed: true,
-        changedFrom: null
-      });
+    // If the action bar is already present, emit immediately
+    if (this.actionBarPresent()) {
+      this.emitFinalAndClose();
+    } else {
+      // Otherwise, watch for the action bar to appear as the signal that
+      // streaming has finished.
+      this.registerActionBarObserver();
     }
   }
 
-  protected registerObserver(): void {
-    this.observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        this.handleMutationEvent(mutation);
-      });
-    });
+  // Minimal, robust signal for ChatGPT: the action bar appears only once
+  // the message has finished streaming.
+  private actionBarPresent(): boolean {
+    const scope = this.turnContainer || this.element.parentElement || this.element;
+    if (!scope) return false;
+    const sel = [
+      '.message-action-bar',
+      'button[data-testid="copy-turn-action-button"]',
+      'button[data-testid="voice-play-turn-action-button"]',
+      'button[aria-haspopup="menu"]',
+      'button[aria-label*="Copy" i]',
+      'button[title*="Copy" i]'
+    ].join(', ');
+    return !!scope.querySelector(sel);
+  }
 
+  private findTurnContainer(start: HTMLElement): HTMLElement | null {
+    return (
+      start.closest('article[data-turn="assistant"]') as HTMLElement | null ||
+      start.closest('[data-message-author-role="assistant"]') as HTMLElement | null ||
+      start.closest('.assistant-message') as HTMLElement | null ||
+      start.parentElement
+    );
+  }
+
+  private emitFinalAndClose(): void {
+    if (this.closed()) return;
+    
+    // Prevent multiple calls or post-disconnect emissions
+    if (!this.barObserver) return;
+    
+    const text = (this.element.textContent || "").trimEnd();
+    if (text) {
+      // Emit the whole response as one block
+      this.next(new AddedText(text));
+    }
+    this.complete({ type: "eod", time: Date.now() });
+    this.disconnectBarObserver();
+  }
+
+  private registerActionBarObserver(): void {
+    if (!this.turnContainer) return;
+    // Initial quick check in case it raced in
+    if (this.actionBarPresent()) {
+      this.emitFinalAndClose();
+      return;
+    }
+
+    this.barObserver = new MutationObserver(() => {
+      if (this.closed()) {
+        this.disconnectBarObserver();
+        return;
+      }
+      if (this.actionBarPresent()) {
+        this.emitFinalAndClose();
+      }
+    });
+    this.barObserver.observe(this.turnContainer, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    });
+  }
+
+  private disconnectBarObserver(): void {
+    try {
+      this.barObserver?.disconnect();
+    } catch {}
+    this.barObserver = null;
+  }
+
+  // Override disconnect to ensure barObserver is also cleaned up
+  override disconnect(): void {
+    this.disconnectBarObserver();
+    super.disconnect();
+  }
+
+  // While streaming, we only use mutations to detect the first token arrival
+  // for telemetry. We intentionally do not emit partial text.
+  handleMutationEvent(_mutation: MutationRecord): void {
+    if (this.closed()) return;
+    if (!this.streamingStarted) {
+      const txt = (this.element.textContent || '').trim();
+      if (txt) {
+        this.streamingStarted = true;
+        if (!this.firstTokenEmitted) {
+          try {
+            EventBus.emit("saypi:llm:first-token", { text: txt, time: Date.now() });
+          } catch {}
+          this.firstTokenEmitted = true;
+        }
+      }
+    }
+    // Completion is driven by action bar appearance only.
+  }
+
+  protected registerObserver(): void {
+    // Observe content for text mutations (to mark first‑token only)
+    this.observer = new MutationObserver((mutations) => {
+      for (const m of mutations) this.handleMutationEvent(m);
+    });
     this.observer.observe(this.element, {
       childList: true,
       subtree: true,

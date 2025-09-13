@@ -122,6 +122,11 @@ abstract class AssistantResponse {
   ): ElementTextStream;
   abstract decorateControls(): MessageControls;
 
+  // Host-specific hook: whether to render collapsed maintenance as a pill
+  // Defaults to true for generic hosts (Pi, Claude). ChatGPT can override
+  // via subclass to return false and use its bubble-specific CSS instead.
+  protected useMaintenancePill(): boolean { return true; }
+
   constructor(element: HTMLElement, includeInitialText = true) {
     this._element = element;
     this.includeInitialText = includeInitialText;
@@ -394,8 +399,10 @@ abstract class AssistantResponse {
         // Create a label that includes both icon and text
         const brainIcon = IconModule.brain ? IconModule.brain.cloneNode(true) as SVGElement : null;
         
-        // Set the label with the icon marker that will be replaced with actual SVG in CSS
-        contentElement.dataset.messageLabel = `${randomLabel} (${chrome.i18n.getMessage("clickToExpand")})`;
+        // Store label + hint parts separately for styling/animations
+        contentElement.dataset.messageLabel = `${randomLabel}`;
+        contentElement.dataset.expandText = chrome.i18n.getMessage("clickToExpand");
+        contentElement.dataset.collapseText = chrome.i18n.getMessage("clickToCollapse");
         
         // If we have a brain icon from IconModule, add it to the content element
         if (brainIcon) {
@@ -407,9 +414,44 @@ abstract class AssistantResponse {
           if (!iconContainer) {
             iconContainer = document.createElement("div");
             iconContainer.className = "thinking-icon-container";
-            // Add the icon to the new container
+          }
+          
+          // Always append the brain icon to the container (whether new or existing)
+          if (!iconContainer.querySelector(".thinking-icon")) {
             iconContainer.appendChild(brainIcon);
-            contentElement.insertBefore(iconContainer, contentElement.firstChild);
+          }
+
+          if (this.useMaintenancePill()) {
+            // Visible label span so we can align icon + label inline
+            let labelSpan = contentElement.querySelector('.maintenance-label') as HTMLElement | null;
+            if (!labelSpan) {
+              labelSpan = document.createElement('span');
+              labelSpan.className = 'maintenance-label';
+              labelSpan.textContent = randomLabel;
+            }
+
+            // Ensure we have a pill wrapper similar to user instructions
+            let pill = contentElement.querySelector('.instruction-block') as HTMLElement | null;
+            if (!pill) {
+              pill = document.createElement('div');
+              pill.className = 'instruction-block maintenance-pill';
+              // Carry hint text so CSS can read from the pill itself
+              const expand = contentElement.dataset.expandText || chrome.i18n.getMessage("clickToExpand");
+              const collapse = contentElement.dataset.collapseText || chrome.i18n.getMessage("clickToCollapse");
+              pill.setAttribute('data-expand-text', expand);
+              pill.setAttribute('data-collapse-text', collapse);
+              // Insert pill as the first child
+              contentElement.insertBefore(pill, contentElement.firstChild);
+            }
+
+            // Move icon + label into the pill wrapper
+            if (iconContainer.parentElement !== pill) pill.appendChild(iconContainer);
+            if (labelSpan.parentElement !== pill) pill.appendChild(labelSpan);
+          } else {
+            // ChatGPT bubble style: keep icon inside content (not in pill)
+            if (iconContainer.parentElement !== contentElement) {
+              contentElement.insertBefore(iconContainer, contentElement.firstChild);
+            }
           }
         }
       }
@@ -2037,20 +2079,32 @@ class UserMessage {
       ];
       const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
       
-      // Create a wrapper for the instruction block - keep the HTML as is for proper rendering
-      const instructionHTML = instructionMatch[1];
+      // Create a wrapper for the instruction block; trim whitespace to avoid
+      // spurious leading blank lines from template formatting/newlines.
+      const instructionHTML = (instructionMatch[1] || "").replace(/^\s+|\s+$/g, "");
       
-      // Replace the instruction block with our custom elements while preserving other content
+      // Replace the instruction block with our custom elements while preserving other content.
+      // Place the label and icon INSIDE the instruction panel so the grouping
+      // is visually and semantically clear. Also wrap the body to allow
+      // collapsing just the content while keeping the label visible.
       const newHTML = isEscaped ? 
         html.replace(
           escapedRegex,
-          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
-           <div class="instruction-block">${instructionHTML}</div>`
+          `<div class="instruction-block">
+             <div class="instruction-label" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}">
+               <span class="instruction-title">${randomLabel}</span>
+             </div>
+             <div class="instruction-content">${instructionHTML}</div>
+           </div>`
         ) :
         html.replace(
           unescapedRegex,
-          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
-           <div class="instruction-block">${instructionHTML}</div>`
+          `<div class="instruction-block">
+             <div class="instruction-label" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}">
+               <span class="instruction-title">${randomLabel}</span>
+             </div>
+             <div class="instruction-content">${instructionHTML}</div>
+           </div>`
         );
       
       content.innerHTML = newHTML;
@@ -2068,8 +2122,8 @@ class UserMessage {
         // Add the icon to the container
         iconContainer.appendChild(steerIcon);
         
-        // Insert the container before the instruction label
-        const instructionLabel = content.querySelector('.instruction-label');
+        // Insert the container before the instruction text within the label (inside the panel)
+        const instructionLabel = content.querySelector('.instruction-block .instruction-label');
         if (instructionLabel) {
           instructionLabel.insertBefore(iconContainer, instructionLabel.firstChild);
         }

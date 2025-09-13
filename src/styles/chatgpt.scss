@@ -106,4 +106,188 @@ body.chatgpt {
     transform-origin: var(--radix-popper-transform-origin, 50% 0%);
     pointer-events: none !important; /* allow reading/clicks behind the menu */
   }
+
+  /* Maintenance message polish for ChatGPT
+     ChatGPT centers message content inside a max‑width column; the outer
+     article spans full width. Style the inner `.content` block so the
+     collapsed bubble appears centered (matching Pi/Claude behavior). */
+  .assistant-message.maintenance-message {
+    .content { position: relative; }
+
+    &.silenced {
+      /* Keep the outer row transparent; style the bubble on the content */
+      background: transparent;
+      border: 0;
+      opacity: 0.88;
+      cursor: pointer;
+      /* Cancel generic clipping from base styles and let bubble size itself */
+      max-height: none;
+      overflow: visible;
+      transition: opacity 0.2s ease-out, transform 0.12s ease-out;
+
+      .content {
+        /* Prefer Say, Pi theme variables when present */
+        background-color: var(--theme-user-msg-bg, var(--gray-50, rgba(0,0,0,0.03)));
+        border: 1px solid var(--gray-100, rgba(0, 0, 0, 0.1));
+        border-radius: 16px;
+        padding: 10px 14px 11px 38px; /* slightly tighter left padding */
+        min-height: 38px;
+        /* Override ChatGPT's `w-full` so the bubble looks like a compact pill */
+        width: auto;
+        max-width: min(68ch, 92%);
+        display: inline-block;
+        align-self: flex-start; /* assistant turns are left aligned */
+        margin-right: auto !important;
+        margin-left: 0 !important;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        transition: background-color 120ms ease, transform 120ms ease;
+        color: var(--theme-user-msg-text, inherit);
+
+        &::before {
+          content: attr(data-message-label);
+          display: block;
+          padding: 0 0 4px 0;
+          font-style: italic;
+          font-weight: 500;
+          font-size: 0.93em;
+          color: currentColor;
+          /* Improve contrast while still softer than body text */
+          opacity: 0.86;
+          line-height: 1.25;
+          letter-spacing: 0.005em;
+        }
+        &::after {
+          content: " (" attr(data-expand-text) ")";
+          font-size: 0.85em;
+          margin-left: 6px;
+          opacity: 0;
+          transition: opacity 180ms ease;
+          color: currentColor;
+        }
+        > *:not(.thinking-icon-container) { display: none; }
+      }
+
+      .thinking-icon-container {
+        position: absolute;
+        left: 10px; /* nudge icon slightly inward */
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+        display: block; /* override generic hidden state */
+        svg.thinking-icon { width: 20px; height: 20px; display: block; }
+        /* Force monochrome themeing for embedded SVGs */
+        svg.thinking-icon, svg.thinking-icon * {
+          stroke: currentColor !important;
+          fill: none !important;
+        }
+        svg.thinking-icon { opacity: 0.85; }
+      }
+
+      .message-action-bar, .message-hover-menu { display: none; }
+
+      &:hover, &:active {
+        .content {
+          background-color: color-mix(in srgb, var(--theme-user-msg-bg, rgba(0,0,0,0.03)) 92%, #fff 8%);
+          transform: translateY(-0.5px) scale(0.995);
+        }
+        .content::after { opacity: 0.6; }
+      }
+    }
+
+    /* Expanded state keeps ChatGPT defaults; just smooth opacity */
+    &:not(.silenced) { transition: opacity 0.2s ease; }
+  }
+
+  /* Dark theme tweaks */
+  html.dark & {
+    .assistant-message.maintenance-message.silenced {
+      .content {
+        /* Theme by class to avoid brittle host tokens */
+        background-color: var(--theme-user-msg-bg, rgba(255, 255, 255, 0.14));
+        border-color: color-mix(in srgb, var(--theme-user-msg-bg, #ffffff) 35%, #000 65%);
+        box-shadow: 0 1px 0 rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
+        backdrop-filter: saturate(110%) brightness(105%);
+        color: var(--theme-user-msg-text, #ededed);
+        /* Slightly stronger label for readability on dark */
+        &::before {
+          color: currentColor;
+          opacity: 0.9;
+          /* Subtle shadow to lift label on saturated dark accents */
+          text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+        }
+      }
+      .thinking-icon-container svg.thinking-icon { opacity: 0.92; }
+      &:hover, &:active { .content { background-color: color-mix(in srgb, var(--theme-user-msg-bg, #ffffff) 88%, #fff 12%); } }
+    }
+  }
+
+  /* Explicit light theme overrides for clarity */
+  html:not(.dark) & {
+    .assistant-message.maintenance-message.silenced {
+      .content {
+        background-color: var(--theme-user-msg-bg, rgba(0,0,0,0.045));
+        border-color: color-mix(in srgb, var(--theme-user-msg-bg, #000000) 8%, #000 12%);
+        box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+        color: var(--theme-user-msg-text, #1f1f1f);
+        &::before { color: currentColor; opacity: 0.76; }
+      }
+    }
+  }
+
+  /* User steer (instructions) — theme icons/labels to match host text */
+  .user-prompt.with-instructions {
+    .instruction-label {
+      color: var(--theme-user-msg-text, inherit);
+      font-style: italic;
+      opacity: 0.86;
+    }
+    .steer-icon-container svg.steer-icon,
+    .steer-icon-container svg.steer-icon * {
+      fill: none !important; /* prevent wheel from appearing solid */
+      stroke: currentColor !important;
+    }
+    .steer-icon-container svg.steer-icon { opacity: 0.88; }
+
+    /* Instruction panel inside the user's bubble */
+    .instruction-block {
+      position: relative;
+      font-style: italic;
+      color: currentColor;
+      line-height: 1.45;
+      font-size: 0.95em;
+      padding: 12px 14px;
+      margin: 8px 0 10px 0;
+      border-radius: 10px;
+      /* The panel adapts to theme by deriving from text color */
+      background-color: color-mix(in srgb, currentColor 12%, transparent);
+      border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+      box-shadow: 0 1px 0 color-mix(in srgb, currentColor 10%, transparent) inset;
+    }
+
+    /* Label and icon inside the panel */
+    .instruction-block .instruction-label { margin: 0 0 6px 0; padding: 0; opacity: 0.86; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .instruction-block .instruction-title { font-style: italic; }
+    /* Inherit shared inline hint + hover behavior; no new-line override here */
+    .instruction-block .steer-icon-container { position: static; display: flex; align-items: center; justify-content: center; }
+    .instruction-block .steer-icon-container svg.steer-icon { width: 18px; height: 18px; }
+
+    /* Collapsed state inherits compact pill from global styles */
+    &.collapsed .instruction-block .instruction-content { display: none; }
+
+    /* Slightly stronger overlay on dark background bubbles */
+    html.dark & .instruction-block {
+      background-color: color-mix(in srgb, currentColor 18%, transparent);
+      border-color: color-mix(in srgb, currentColor 32%, transparent);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.25) inset;
+    }
+  }
+
+  /* Keyboard focus affordance on the bubble */
+  .assistant-message.maintenance-message.silenced .content:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 32%, transparent);
+    transition: box-shadow 120ms ease;
+  }
 }
