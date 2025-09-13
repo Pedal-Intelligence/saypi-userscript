@@ -479,7 +479,12 @@ class CallButton {
         });
 
         // Add CSS classes for theming
-        const circlePath = svgElement.querySelector('path.circle, path[data-original-fill="#418a2f"], path[data-original-fill="#4e84be"], path[data-original-fill="#776d6d"]');
+        let circlePath = svgElement.querySelector('path.circle, path#background, path[data-original-fill="#418a2f"], path[data-original-fill="#4e84be"], path[data-original-fill="#776d6d"]');
+        if (!circlePath) {
+            // Prefer a non-white-filled path as the background shape
+            circlePath = svgElement.querySelector('path[data-original-fill]:not([data-original-fill="#ffffff"])')
+                || svgElement.querySelector('path');
+        }
         if (circlePath) {
             circlePath.classList.add('saypi-call-bg');
         }
