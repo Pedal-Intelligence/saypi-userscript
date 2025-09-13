@@ -467,6 +467,16 @@ class CallButton {
             return;
         }
 
+        // Only apply theming to the call.svg (inactive/idle) icon
+        // Check for the specific structure of call.svg: path.circle with #418a2f and path.phone-receiver with #ffffff
+        const circlePath = svgElement.querySelector('path.circle[fill="#418a2f"]');
+        const phoneReceiverPath = svgElement.querySelector('path.phone-receiver[fill="#ffffff"]');
+        
+        if (!circlePath || !phoneReceiverPath) {
+            // This is not the call.svg icon, return early (no-op)
+            return;
+        }
+
         // Remove inline fill attributes to allow CSS control
         const paths = svgElement.querySelectorAll('path');
         paths.forEach(path => {
@@ -478,31 +488,12 @@ class CallButton {
             }
         });
 
-        // Add CSS classes for theming
-        let circlePath = svgElement.querySelector('path.circle, path#background, path[data-original-fill="#418a2f"], path[data-original-fill="#4e84be"], path[data-original-fill="#776d6d"]');
-        if (!circlePath) {
-            // Prefer a non-white-filled path as the background shape
-            circlePath = svgElement.querySelector('path[data-original-fill]:not([data-original-fill="#ffffff"])')
-                || svgElement.querySelector('path');
-        }
-        if (circlePath) {
-            circlePath.classList.add('saypi-call-bg');
-        }
+        // Add CSS classes for theming - only for call.svg structure
+        circlePath.classList.add('saypi-call-bg');
+        phoneReceiverPath.classList.add('saypi-call-icon');
 
-        const iconPaths = svgElement.querySelectorAll('path.phone-receiver, path[data-original-fill="#ffffff"]');
-        iconPaths.forEach(path => {
-            path.classList.add('saypi-call-icon');
-        });
-
-        // Ensure previous state classes are cleared before assigning a new one
+        // Clear any previous state classes since this is the inactive state
         button.classList.remove('call-starting', 'call-hangup');
-
-        // Add state-specific classes based on original background color
-        if (svgElement.querySelector('path[data-original-fill="#4e84be"]')) {
-            button.classList.add('call-starting');
-        } else if (svgElement.querySelector('path[data-original-fill="#776d6d"]')) {
-            button.classList.add('call-hangup');
-        }
     }
 
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
@@ -522,8 +513,7 @@ class CallButton {
             return;
         }
 
-        // 2.1. Apply ChatGPT theming if this is a ChatGPT call button
-        this.applyChatGPTTheming(newSvgElement, callButton);
+        // ChatGPT theming is now applied only for the inactive call state in callInactive()
 
         // 3. Original background is NOT removed here anymore. It will be handled by updateButtonSegments.
 
@@ -604,6 +594,16 @@ class CallButton {
                 this.sayPiActor.send({ type: "saypi:call" }),
                 false
         );
+        
+        // Apply ChatGPT theming specifically for the inactive call.svg icon
+        const callButton = button || this.element;
+        if (callButton) {
+            const svgElement = callButton.querySelector('svg');
+            if (svgElement) {
+                this.applyChatGPTTheming(svgElement, callButton);
+            }
+        }
+        
         // Glow animation logic is now primarily handled by the state machine subscription
     }
 
