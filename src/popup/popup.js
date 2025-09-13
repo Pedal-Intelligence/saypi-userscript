@@ -137,6 +137,9 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Initialize slider input handlers for the 3-way selector
         initializeSubmitModeSlider();
+        
+        // Initialize the submit mode state from storage (only for agent mode users)
+        initializeSubmitModeFromStorage();
       } else {
         // User is NOT entitled to agent mode - hide the 3-way slider
         if (submitModeSelector) {
@@ -219,45 +222,51 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Load the saved submit mode when the popup opens
-  getStoredValue("submitMode", null).then((submitMode) => {
-    if (submitMode === null) {
-      // No submitMode found - check for old schema and migrate
-      getStoredValue("autoSubmit", true).then((autoSubmit) => {
-        // Default to 'auto' if autoSubmit is true, 'off' if false
-        const migratedMode = autoSubmit ? "auto" : "off";
-        
-        // Save the new preference
-        chrome.storage.local.set({ 
-          submitMode: migratedMode,
-          // Keep autoSubmit for backward compatibility
-          autoSubmit: autoSubmit
-        }, function () {
-          console.log("Migrated autoSubmit preference to submitMode: " + migratedMode);
-        });
+  /**
+   * Initialize submit mode state from storage
+   * This should only be called for users with agent mode entitlement
+   */
+  function initializeSubmitModeFromStorage() {
+    // Load the saved submit mode when the popup opens
+    getStoredValue("submitMode", null).then((submitMode) => {
+      if (submitMode === null) {
+        // No submitMode found - check for old schema and migrate
+        getStoredValue("autoSubmit", true).then((autoSubmit) => {
+          // Default to 'auto' if autoSubmit is true, 'off' if false
+          const migratedMode = autoSubmit ? "auto" : "off";
+          
+          // Save the new preference
+          chrome.storage.local.set({ 
+            submitMode: migratedMode,
+            // Keep autoSubmit for backward compatibility
+            autoSubmit: autoSubmit
+          }, function () {
+            console.log("Migrated autoSubmit preference to submitMode: " + migratedMode);
+          });
 
-        // Update the UI
+          // Update the UI
+          var selectedValue = Object.keys(submitModeIcons).find(
+            (key) => submitModeIcons[key] === migratedMode
+          );
+          submitModeSlider.value = selectedValue;
+          const messageKey = "submit_mode_" + migratedMode;
+          submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
+          setActiveSubmitModeIcon(migratedMode);
+          showSubmitModeDescription(migratedMode);
+        });
+      } else {
+        // Use existing submitMode
         var selectedValue = Object.keys(submitModeIcons).find(
-          (key) => submitModeIcons[key] === migratedMode
+          (key) => submitModeIcons[key] === submitMode
         );
         submitModeSlider.value = selectedValue;
-        const messageKey = "submit_mode_" + migratedMode;
+        const messageKey = "submit_mode_" + submitMode;
         submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
-        setActiveSubmitModeIcon(migratedMode);
-        showSubmitModeDescription(migratedMode);
-      });
-    } else {
-      // Use existing submitMode
-      var selectedValue = Object.keys(submitModeIcons).find(
-        (key) => submitModeIcons[key] === submitMode
-      );
-      submitModeSlider.value = selectedValue;
-      const messageKey = "submit_mode_" + submitMode;
-      submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
-      setActiveSubmitModeIcon(submitMode);
-      showSubmitModeDescription(submitMode);
-    }
-  });
+        setActiveSubmitModeIcon(submitMode);
+        showSubmitModeDescription(submitMode);
+      }
+    });
+  }
 
   // Update the current slider value (each time you drag the slider handle)
   if (slider) {
