@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Call Button Theme Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 20px;
+            background: #f7f7f8;
+        }
+        
+        .dark body {
+            background: #212121;
+            color: #ffffff;
+        }
+
+        /* Simulate ChatGPT's theme variables */
+        :root {
+            --theme-user-msg-bg: #d1ecf1; /* Light blue accent */
+            --theme-user-msg-text: #0c5460;
+        }
+        
+        .dark {
+            --theme-user-msg-bg: #2c5aa0; /* Dark blue accent */
+            --theme-user-msg-text: #ffffff;
+        }
+        
+        /* ChatGPT theme-aware call button colors */
+        #saypi-callButton.chatgpt-call-button {
+            --call-button-bg: var(--theme-user-msg-bg, #418a2f);
+            --call-button-bg-starting: #4e84be;
+            --call-button-bg-hangup: #776d6d;
+            --call-button-icon: #ffffff;
+            
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: none;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        #saypi-callButton.chatgpt-call-button svg .saypi-call-bg {
+            fill: var(--call-button-bg);
+        }
+        
+        #saypi-callButton.chatgpt-call-button svg .saypi-call-icon {
+            fill: var(--call-button-icon);
+        }
+        
+        #saypi-callButton.chatgpt-call-button.call-starting svg .saypi-call-bg {
+            fill: var(--call-button-bg-starting);
+        }
+        
+        #saypi-callButton.chatgpt-call-button.call-hangup svg .saypi-call-bg {
+            fill: var(--call-button-bg-hangup);
+        }
+
+        html:not(.dark) & #saypi-callButton.chatgpt-call-button {
+            --call-button-icon: #ffffff;
+            --call-button-bg: color-mix(in srgb, var(--theme-user-msg-bg, #418a2f) 85%, #000000 15%);
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .dark .test-section {
+            background: #333;
+            border-color: #555;
+        }
+        
+        .theme-controls {
+            margin: 20px 0;
+        }
+        
+        .theme-controls button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>ChatGPT Call Button Theme Test</h1>
+    
+    <div class="theme-controls">
+        <button onclick="setTheme('light')">Light Theme</button>
+        <button onclick="setTheme('dark')">Dark Theme</button>
+        <button onclick="setAccent('blue')">Blue Accent</button>
+        <button onclick="setAccent('green')">Green Accent</button>
+        <button onclick="setAccent('purple')">Purple Accent</button>
+        <button onclick="setAccent('red')">Red Accent</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Call Button States</h2>
+        <div class="button-container">
+            <div>
+                <h3>Normal</h3>
+                <button id="saypi-callButton" class="chatgpt-call-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" width="24" height="24">
+                        <path class="saypi-call-bg" d="M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375" />
+                        <path class="saypi-call-icon" d="M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div>
+                <h3>Starting</h3>
+                <button id="saypi-callButton2" class="chatgpt-call-button call-starting">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" width="24" height="24">
+                        <path class="saypi-call-bg" d="M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375" />
+                        <path class="saypi-call-icon" d="M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div>
+                <h3>Hangup</h3>
+                <button id="saypi-callButton3" class="chatgpt-call-button call-hangup">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="24" height="24">
+                        <path class="saypi-call-bg" d="M 63.75 31.875 C 63.75 49.29395 49.29395 63.75 31.875 63.75 C 14.45605 63.75 0 49.29395 0 31.875 C 0 14.45605 14.45605 0 31.875 0 C 49.29395 0 63.75 14.45605 63.75 31.875" />
+                        <path class="saypi-call-icon" d="M 12.727539 34.74707 C 12.728027 34.747314 13.897949 37.758789 15.219788 38.542328 C 16.077148 39.048828 16.793945 38.776855 17.71875 38.340332 C 19.519531 37.490723 21.362305 36.74707 23.290039 36.246094 C 24.087891 36.012695 24.193359 35.574219 24.022461 35.060547 C 23.783203 34.224121 23.540039 33.388672 23.292969 32.553711 C 23.146484 32.042969 23.460938 31.490234 24.179688 31.196289 C 26.69043 30.344238 29.179688 30.243164 31.669922 30.230469 C 31.779297 30.230469 32.053711 30.230469 32.163086 30.230469 C 34.65332 30.243164 37.142578 30.344238 39.65332 31.196289 C 40.37207 31.490234 40.686523 32.042969 40.540039 32.553711 C 40.292969 33.388672 40.049805 34.224121 39.810547 35.060547 C 39.639648 35.574219 39.745117 36.012695 40.542969 36.246094 C 43.470703 36.74707 45.313477 37.490723 47.114258 38.340332 C 47.976562 38.776855 48.693359 39.048828 49.550781 38.542328 C 50.872559 37.758789 52.04248 34.747314 52.042969 34.74707 C 52.222656 32.560547 51.503906 29.84375 48.347656 28.462891 C 43.330078 26.236328 37.943359 25.053711 32.178711 25.016602 C 32.063477 25.016602 31.697266 25.016602 31.571289 25.016602 C 25.806641 25.053711 20.419922 26.236328 15.402344 28.462891 C 12.246094 29.84375 11.527344 32.560547 11.707031 34.74707" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        function setAccent(color) {
+            const root = document.documentElement;
+            const isDark = root.classList.contains('dark');
+            
+            const colors = {
+                blue: {
+                    light: { bg: '#d1ecf1', text: '#0c5460' },
+                    dark: { bg: '#2c5aa0', text: '#ffffff' }
+                },
+                green: {
+                    light: { bg: '#d4edda', text: '#155724' },
+                    dark: { bg: '#28a745', text: '#ffffff' }
+                },
+                purple: {
+                    light: { bg: '#e2d9f7', text: '#5a2d91' },
+                    dark: { bg: '#6f42c1', text: '#ffffff' }
+                },
+                red: {
+                    light: { bg: '#f8d7da', text: '#721c24' },
+                    dark: { bg: '#dc3545', text: '#ffffff' }
+                }
+            };
+            
+            const theme = isDark ? colors[color].dark : colors[color].light;
+            root.style.setProperty('--theme-user-msg-bg', theme.bg);
+            root.style.setProperty('--theme-user-msg-text', theme.text);
+        }
+        
+        // Initialize with blue theme
+        setAccent('blue');
+    </script>
+</body>
+</html>

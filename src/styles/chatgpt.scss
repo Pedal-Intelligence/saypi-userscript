@@ -56,6 +56,46 @@ body.chatgpt {
     }
   }
 
+  /* ChatGPT theme-aware call button colors using accent theme */
+  #saypi-callButton.chatgpt-call-button {
+    /* Set custom properties for SVG colors based on ChatGPT's accent theme */
+    --call-button-bg: var(--theme-user-msg-bg, #418a2f);
+    --call-button-bg-starting: #4e84be; /* Keep blue for starting state */
+    --call-button-bg-hangup: #776d6d; /* Keep gray for hangup state */
+    --call-button-icon: #ffffff; /* Always white icon for good contrast */
+    
+    /* Apply colors to SVG paths via CSS classes */
+    svg .saypi-call-bg {
+      fill: var(--call-button-bg);
+    }
+    
+    svg .saypi-call-icon {
+      fill: var(--call-button-icon);
+    }
+    
+    /* Different colors for different states */
+    &.call-starting svg .saypi-call-bg {
+      fill: var(--call-button-bg-starting);
+    }
+    
+    &.call-hangup svg .saypi-call-bg {
+      fill: var(--call-button-bg-hangup);
+    }
+  }
+
+  /* Dark theme adjustments for better contrast */
+  html.dark & #saypi-callButton.chatgpt-call-button {
+    --call-button-icon: #ffffff; /* Always white icon on dark theme */
+  }
+
+  /* Light theme adjustments */
+  html:not(.dark) & #saypi-callButton.chatgpt-call-button {
+    /* Ensure good contrast on light backgrounds */
+    --call-button-icon: #ffffff;
+    /* For very light accent colors, darken the background slightly */
+    --call-button-bg: color-mix(in srgb, var(--theme-user-msg-bg, #418a2f) 85%, #000000 15%);
+  }
+
   /* Portal tooltip element appended to body to avoid overflow clipping */
   .saypi-tooltip {
     position: fixed;
