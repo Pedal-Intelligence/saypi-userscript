@@ -461,6 +461,42 @@ class CallButton {
         return baseLabel;
     }
 
+    private applyChatGPTTheming(svgElement: SVGElement, button: HTMLButtonElement): void {
+        // Only apply ChatGPT theming if this button has the chatgpt class
+        if (!button.classList.contains('chatgpt-call-button')) {
+            return;
+        }
+
+        // Remove inline fill attributes to allow CSS control
+        const paths = svgElement.querySelectorAll('path');
+        paths.forEach(path => {
+            // Store original fill as a data attribute for reference
+            const originalFill = path.getAttribute('fill');
+            if (originalFill) {
+                path.setAttribute('data-original-fill', originalFill);
+                path.removeAttribute('fill');
+            }
+        });
+
+        // Add CSS classes for theming
+        const circlePath = svgElement.querySelector('path.circle, path[data-original-fill="#418a2f"], path[data-original-fill="#4e84be"], path[data-original-fill="#776d6d"]');
+        if (circlePath) {
+            circlePath.classList.add('saypi-call-bg');
+        }
+
+        const iconPaths = svgElement.querySelectorAll('path.phone-receiver, path[data-original-fill="#ffffff"]');
+        iconPaths.forEach(path => {
+            path.classList.add('saypi-call-icon');
+        });
+
+        // Add state-specific classes based on original background color
+        if (svgElement.querySelector('path[data-original-fill="#4e84be"]')) {
+            button.classList.add('call-starting');
+        } else if (svgElement.querySelector('path[data-original-fill="#776d6d"]')) {
+            button.classList.add('call-hangup');
+        }
+    }
+
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
         const callButton = button || this.element;
         if (!callButton) return;
@@ -477,6 +513,9 @@ class CallButton {
             callButton.textContent = label; // Fallback: just show the label as text
             return;
         }
+
+        // 2.1. Apply ChatGPT theming if this is a ChatGPT call button
+        this.applyChatGPTTheming(newSvgElement, callButton);
 
         // 3. Original background is NOT removed here anymore. It will be handled by updateButtonSegments.
 
