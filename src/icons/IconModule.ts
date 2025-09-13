@@ -5,6 +5,9 @@ import rectanglesDarkModeSVG from "./rectangles-moonlight.svg";
 import stopwatchSVG from "./stopwatch.svg";
 import brainSVG from "./brain.svg";
 import steerSVG from "./steer.svg";
+// Lucide originals for consistency with rest of UI
+import lucideBrainSVG from "./lucide-brain.svg";
+import lucideShipWheelSVG from "./lucide-ship-wheel.svg";
 import bubbleBwSVG from "./bubble-bw.svg";
 import { createSVGElement } from "../dom/DOMModule";
 
@@ -66,10 +69,11 @@ export class IconModule {
   static get brain(): SVGElement {
     if (!this._brain) {
       try {
-        this._brain = createSVGElement(brainSVG);
+        // Prefer Lucide original
+        this._brain = createSVGElement(lucideBrainSVG);
       } catch (e) {
-        console.warn('Failed to load brain icon', e);
-        this._brain = this.createEmptySVG();
+        try { this._brain = createSVGElement(brainSVG); }
+        catch (e2) { console.warn('Failed to load brain icon', e, e2); this._brain = this.createEmptySVG(); }
       }
     }
     return this._brain;
@@ -78,10 +82,10 @@ export class IconModule {
   static get steer(): SVGElement {
     if (!this._steer) {
       try {
-        this._steer = createSVGElement(steerSVG);
+        this._steer = createSVGElement(lucideShipWheelSVG);
       } catch (e) {
-        console.warn('Failed to load steer icon', e);
-        this._steer = this.createEmptySVG();
+        try { this._steer = createSVGElement(steerSVG); }
+        catch (e2) { console.warn('Failed to load steer icon', e, e2); this._steer = this.createEmptySVG(); }
       }
     }
     return this._steer;
@@ -141,4 +145,5 @@ export class IconModule {
       return IconModule.createEmptySVG();
     }
   }
+
 }

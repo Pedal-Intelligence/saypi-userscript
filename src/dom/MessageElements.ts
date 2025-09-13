@@ -2037,20 +2037,32 @@ class UserMessage {
       ];
       const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
       
-      // Create a wrapper for the instruction block - keep the HTML as is for proper rendering
-      const instructionHTML = instructionMatch[1];
+      // Create a wrapper for the instruction block; trim whitespace to avoid
+      // spurious leading blank lines from template formatting/newlines.
+      const instructionHTML = (instructionMatch[1] || "").replace(/^\s+|\s+$/g, "");
       
-      // Replace the instruction block with our custom elements while preserving other content
+      // Replace the instruction block with our custom elements while preserving other content.
+      // Place the label and icon INSIDE the instruction panel so the grouping
+      // is visually and semantically clear. Also wrap the body to allow
+      // collapsing just the content while keeping the label visible.
       const newHTML = isEscaped ? 
         html.replace(
           escapedRegex,
-          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
-           <div class="instruction-block">${instructionHTML}</div>`
+          `<div class="instruction-block">
+             <div class="instruction-label" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}">
+               <span class="instruction-title">${randomLabel}</span>
+             </div>
+             <div class="instruction-content">${instructionHTML}</div>
+           </div>`
         ) :
         html.replace(
           unescapedRegex,
-          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
-           <div class="instruction-block">${instructionHTML}</div>`
+          `<div class="instruction-block">
+             <div class="instruction-label" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}">
+               <span class="instruction-title">${randomLabel}</span>
+             </div>
+             <div class="instruction-content">${instructionHTML}</div>
+           </div>`
         );
       
       content.innerHTML = newHTML;
@@ -2068,8 +2080,8 @@ class UserMessage {
         // Add the icon to the container
         iconContainer.appendChild(steerIcon);
         
-        // Insert the container before the instruction label
-        const instructionLabel = content.querySelector('.instruction-label');
+        // Insert the container before the instruction text within the label (inside the panel)
+        const instructionLabel = content.querySelector('.instruction-block .instruction-label');
         if (instructionLabel) {
           instructionLabel.insertBefore(iconContainer, instructionLabel.firstChild);
         }

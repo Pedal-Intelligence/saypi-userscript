@@ -171,7 +171,7 @@ body.chatgpt {
         /* Force monochrome themeing for embedded SVGs */
         svg.thinking-icon, svg.thinking-icon * {
           stroke: currentColor !important;
-          fill: currentColor !important;
+          fill: none !important;
         }
         svg.thinking-icon { opacity: 0.85; }
       }
@@ -235,13 +235,14 @@ body.chatgpt {
     }
     .steer-icon-container svg.steer-icon,
     .steer-icon-container svg.steer-icon * {
-      fill: currentColor !important;
+      fill: none !important; /* prevent wheel from appearing solid */
       stroke: currentColor !important;
     }
     .steer-icon-container svg.steer-icon { opacity: 0.88; }
 
     /* Instruction panel inside the user's bubble */
     .instruction-block {
+      position: relative;
       font-style: italic;
       color: currentColor;
       line-height: 1.45;
@@ -254,6 +255,18 @@ body.chatgpt {
       border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
       box-shadow: 0 1px 0 color-mix(in srgb, currentColor 10%, transparent) inset;
     }
+
+    /* Label and icon inside the panel */
+    .instruction-block .instruction-label { margin: 0 0 6px 0; padding: 0; opacity: 0.86; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .instruction-block .instruction-title { font-style: italic; }
+    .instruction-block .instruction-label:after { content: " (" attr(data-expand-text) ")"; font-size: 0.85em; opacity: 0.8; flex-basis: 100%; padding-left: 26px; }
+    &:not(.collapsed) .instruction-block .instruction-label:after { content: " (" attr(data-collapse-text) ")"; }
+    .instruction-block .steer-icon-container { position: static; display: flex; align-items: center; justify-content: center; }
+    .instruction-block .steer-icon-container svg.steer-icon { width: 18px; height: 18px; }
+
+    /* Collapsed state inherits compact pill from global styles */
+    &.collapsed .instruction-block .instruction-content { display: none; }
+
     /* Slightly stronger overlay on dark background bubbles */
     html.dark & .instruction-block {
       background-color: color-mix(in srgb, currentColor 18%, transparent);
