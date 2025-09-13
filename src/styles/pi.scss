@@ -12,6 +12,12 @@ html body.pi {
     /* Expanded panel keeps a slightly softer radius on Pi */
     &:not(.collapsed) .instruction-block {
       border-radius: 12px;           /* keep Pi’s radius, rely on shared grid */
+      /* Match discover-card bg + chrome for consistency with collapsed */
+      background-color: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow:
+        0 2px 10px rgba(13, 60, 38, 0.06),
+        0 1px 0 rgba(255, 255, 255, 0.65) inset;
     }
 
     /* Collapsed pill: render as its own line above the text, with Pi-like rounding */
