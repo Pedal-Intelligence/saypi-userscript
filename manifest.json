@@ -31,7 +31,6 @@
     },
     {
       "matches": [
-        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -96,7 +95,6 @@
         "public/permissions/*.css"
       ],
       "matches": [
-        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]
