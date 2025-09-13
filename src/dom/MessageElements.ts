@@ -394,8 +394,10 @@ abstract class AssistantResponse {
         // Create a label that includes both icon and text
         const brainIcon = IconModule.brain ? IconModule.brain.cloneNode(true) as SVGElement : null;
         
-        // Set the label with the icon marker that will be replaced with actual SVG in CSS
-        contentElement.dataset.messageLabel = `${randomLabel} (${chrome.i18n.getMessage("clickToExpand")})`;
+        // Store label + hint parts separately for styling/animations
+        contentElement.dataset.messageLabel = `${randomLabel}`;
+        contentElement.dataset.expandText = chrome.i18n.getMessage("clickToExpand");
+        contentElement.dataset.collapseText = chrome.i18n.getMessage("clickToCollapse");
         
         // If we have a brain icon from IconModule, add it to the content element
         if (brainIcon) {
@@ -407,10 +409,34 @@ abstract class AssistantResponse {
           if (!iconContainer) {
             iconContainer = document.createElement("div");
             iconContainer.className = "thinking-icon-container";
-            // Add the icon to the new container
             iconContainer.appendChild(brainIcon);
-            contentElement.insertBefore(iconContainer, contentElement.firstChild);
           }
+
+          // Visible label span so we can align icon + label inline in generic hosts
+          let labelSpan = contentElement.querySelector('.maintenance-label') as HTMLElement | null;
+          if (!labelSpan) {
+            labelSpan = document.createElement('span');
+            labelSpan.className = 'maintenance-label';
+            labelSpan.textContent = randomLabel;
+          }
+
+          // Ensure we have a pill wrapper similar to user instructions
+          let pill = contentElement.querySelector('.instruction-block') as HTMLElement | null;
+          if (!pill) {
+            pill = document.createElement('div');
+            pill.className = 'instruction-block maintenance-pill';
+            // Carry hint text so CSS can read from the pill itself
+            const expand = contentElement.dataset.expandText || chrome.i18n.getMessage("clickToExpand");
+            const collapse = contentElement.dataset.collapseText || chrome.i18n.getMessage("clickToCollapse");
+            pill.setAttribute('data-expand-text', expand);
+            pill.setAttribute('data-collapse-text', collapse);
+            // Insert pill as the first child
+            contentElement.insertBefore(pill, contentElement.firstChild);
+          }
+
+          // Move icon + label into the pill wrapper
+          if (iconContainer.parentElement !== pill) pill.appendChild(iconContainer);
+          if (labelSpan.parentElement !== pill) pill.appendChild(labelSpan);
         }
       }
       

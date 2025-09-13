@@ -422,62 +422,9 @@
 */
 
 .assistant-message.maintenance-message {
-  .content {
-    font-style: italic;
-    font-size: 0.9em;
-    color: #666;
-    position: relative;
-  }
-
-  &.silenced {
-    opacity: 0.7;
-    cursor: pointer;
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-    border-radius: 8px;
-    position: relative;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05); /* Subtle highlight for iOS tap */
-    
-    /* Add a minimum touch target size - 44px is Apple's recommendation */
-    min-height: 38px;
-    
-    /* Visual feedback on hover/active state */
-    &:hover, &:active {
-      opacity: 0.9;
-      background-color: rgba(245, 245, 245, 0.8);
-    }
-
-    .content {
-      &:before {
-        content: attr(data-message-label);
-        display: block;
-        padding: 4px 0;
-      }
-      > *:not(.thinking-icon-container) {
-        display: none;
-      }
-    }
-
-    .thinking-icon-container {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 1;
-      
-      svg.thinking-icon {
-        display: block; /* Ensure SVG is visible */
-      }
-    }
-
-    .message-action-bar, .message-hover-menu {
-      display: none;
-    }
-  }
-  
-  /* Smooth transition when expanded */
-  &:not(.silenced) {
-    transition: opacity 0.2s ease;
-  }
+  .content { font-style: italic; font-size: 0.9em; color: #666; position: relative; }
+  &.silenced { cursor: pointer; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
+  &:not(.silenced) { transition: opacity 0.2s ease; }
 }
 
 // Style for user prompts with maintenance instructions
@@ -491,7 +438,9 @@
     // Instruction panel (host-agnostic)
     .instruction-block {
       position: relative;
-      display: block;
+      display: grid;                 /* grid keeps height snug in all states */
+      grid-auto-rows: min-content;
+      row-gap: 6px;                  /* spacing between header and body */
       text-align: left;
       color: currentColor;
       font-style: italic;
@@ -516,21 +465,24 @@
     // Label and expand/collapse hint
     .instruction-block .instruction-label {
       text-align: left;
-      margin: 0 0 6px 0;
+      margin: 0;
       padding: 0;
       opacity: 0.86;
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap; /* allows hint to flow under text */
     }
     .instruction-block .instruction-title { font-style: italic; }
+    /* Inline hint, shown only on hover/focus to reduce noise */
     .instruction-block .instruction-label:after {
       content: " (" attr(data-expand-text) ")";
-      font-size: 0.85em; opacity: 0.8;
-      flex-basis: 100%; /* new line */
-      padding-left: 26px; /* indent under text, clearing icon */
+      font-size: 0.85em;
+      margin-left: 6px;
+      opacity: 0;                      /* hidden by default */
+      transition: opacity 180ms ease;  /* slightly slower fade-in */
     }
+    .instruction-block:hover .instruction-label:after,
+    .instruction-block:focus-within .instruction-label:after { opacity: 0.7; }
     &:not(.collapsed) .instruction-block .instruction-label:after {
       content: " (" attr(data-collapse-text) ")";
     }
@@ -554,9 +506,9 @@
 
     /* Collapsed presentation: compact pill, inline with message flow */
     &.collapsed .instruction-block {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      display: grid;                  /* keep pill height snug everywhere */
+      grid-auto-rows: min-content;
+      align-content: center;
       padding: 6px 10px;
       margin: 4px 0 6px 0;
       border-radius: 9999px;
@@ -565,11 +517,14 @@
       background-color: color-mix(in srgb, currentColor 8%, transparent);
       border-color: color-mix(in srgb, currentColor 18%, transparent);
       box-shadow: none;
-      vertical-align: baseline; /* align with following text line height */
-      margin-right: 8px; /* breathing room before user text */
+      vertical-align: baseline;
+      margin-right: 0;                /* avoid inline look by default */
+      width: fit-content;
     }
     &.collapsed .instruction-block .instruction-label { margin: 0; opacity: 0.82; display: flex; align-items: center; gap: 8px; }
-    &.collapsed .instruction-block .instruction-label:after { opacity: 0.7; padding-left: 0; flex-basis: auto; }
+    &.collapsed .instruction-block .instruction-label:after { opacity: 0; margin-left: 6px; }
+    &.collapsed .instruction-block:hover .instruction-label:after,
+    &.collapsed .instruction-block:focus-within .instruction-label:after { opacity: 0.6; }
     &.collapsed .instruction-block .steer-icon-container { position: static; }
     &.collapsed .instruction-block .steer-icon-container svg.steer-icon { width: 16px; height: 16px; stroke-width: 1.75; }
   }
@@ -585,54 +540,49 @@
   }
   
   &.silenced {
-    max-height: 40px;
-    overflow: hidden;
+    /* Unified collapsed pill across hosts; hosts may override colors */
+    max-height: none;
+    overflow: visible;
     border-radius: 8px;
     margin-bottom: 8px;
     cursor: pointer;
-    transition: max-height 0.3s ease-out, opacity 0.3s ease;
-    background-color: rgba(245, 245, 245, 0.5);
+    transition: opacity 0.2s ease;
+    background-color: transparent;
     
     // Show the thinking icon only when silenced/collapsed
-    .thinking-icon-container {
-      position: absolute;
-      left: 6px;
-      top: 4px;
-      width: 22px;
-      height: 22px;
-      display: flex;
+    /* Icon styling will live inside the pill */
+    .thinking-icon-container { display: none; }
+    
+    .content { opacity: 0.78; position: relative; }
+    /* Only show the pill wrapper while collapsed; hide other content */
+    .content > :not(.instruction-block) { display: none; }
+
+    /* Pill wrapper (shares language with user instruction-block) */
+    .instruction-block {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      z-index: 1;
-      
-      svg.thinking-icon {
-        width: 20px;
-        height: 20px;
-        stroke: #666;
-        opacity: 0.8;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      line-height: 1.2;
+      width: fit-content;
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      .maintenance-label { font-size: 0.9em; font-style: italic; color: currentColor; }
+      .thinking-icon-container { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; }
+      .thinking-icon-container svg.thinking-icon { width: 18px; height: 18px; stroke: currentColor; opacity: 0.85; }
+      /* Hover-revealed hint */
+      &::after {
+        content: " (" attr(data-expand-text) ")";
+        font-size: 0.85em;
+        margin-left: 6px;
+        opacity: 0;
+        transition: opacity 180ms ease;
+        color: currentColor;
       }
     }
     
-    .content {
-      opacity: 0.7;
-      position: relative;
-      
-      &::before {
-        content: attr(data-message-label);
-        display: block;
-        font-size: 0.9em;
-        font-style: italic;
-        color: #666;
-        margin-left: 34px;
-      }
-    }
-    
-    &:hover {
-      background-color: rgba(245, 245, 245, 0.8);
-      .content {
-        opacity: 0.9;
-      }
-    }
+    &:hover { .content { opacity: 0.9; } .instruction-block::after { opacity: 0.6; } }
     
     .message-action-bar, .message-hover-menu {
       display: none;

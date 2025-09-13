@@ -158,6 +158,14 @@ body.chatgpt {
           line-height: 1.25;
           letter-spacing: 0.005em;
         }
+        &::after {
+          content: " (" attr(data-expand-text) ")";
+          font-size: 0.85em;
+          margin-left: 6px;
+          opacity: 0;
+          transition: opacity 180ms ease;
+          color: currentColor;
+        }
         > *:not(.thinking-icon-container) { display: none; }
       }
 
@@ -183,6 +191,7 @@ body.chatgpt {
           background-color: color-mix(in srgb, var(--theme-user-msg-bg, rgba(0,0,0,0.03)) 92%, #fff 8%);
           transform: translateY(-0.5px) scale(0.995);
         }
+        .content::after { opacity: 0.6; }
       }
     }
 
@@ -259,8 +268,7 @@ body.chatgpt {
     /* Label and icon inside the panel */
     .instruction-block .instruction-label { margin: 0 0 6px 0; padding: 0; opacity: 0.86; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .instruction-block .instruction-title { font-style: italic; }
-    .instruction-block .instruction-label:after { content: " (" attr(data-expand-text) ")"; font-size: 0.85em; opacity: 0.8; flex-basis: 100%; padding-left: 26px; }
-    &:not(.collapsed) .instruction-block .instruction-label:after { content: " (" attr(data-collapse-text) ")"; }
+    /* Inherit shared inline hint + hover behavior; no new-line override here */
     .instruction-block .steer-icon-container { position: static; display: flex; align-items: center; justify-content: center; }
     .instruction-block .steer-icon-container svg.steer-icon { width: 18px; height: 18px; }
 
