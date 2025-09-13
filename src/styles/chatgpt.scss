@@ -175,6 +175,7 @@ body.chatgpt {
         top: 50%;
         transform: translateY(-50%);
         z-index: 1;
+        display: block; /* override generic hidden state */
         svg.thinking-icon { width: 20px; height: 20px; display: block; }
         /* Force monochrome themeing for embedded SVGs */
         svg.thinking-icon, svg.thinking-icon * {

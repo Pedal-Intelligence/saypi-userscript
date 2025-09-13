@@ -348,6 +348,9 @@ class ChatGPTResponse extends AssistantResponse {
     super(element, includeInitialText);
   }
 
+  // Use ChatGPT's bubble presentation instead of generic pill
+  protected useMaintenancePill(): boolean { return false; }
+
   get contentSelector(): string {
     // Keep in sync with chatgpt/MessageSelectors.getAssistantContentSelector
     return ".markdown, .prose, [data-message-id]";
