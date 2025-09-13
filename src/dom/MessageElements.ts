@@ -414,6 +414,10 @@ abstract class AssistantResponse {
           if (!iconContainer) {
             iconContainer = document.createElement("div");
             iconContainer.className = "thinking-icon-container";
+          }
+          
+          // Always append the brain icon to the container (whether new or existing)
+          if (!iconContainer.querySelector(".thinking-icon")) {
             iconContainer.appendChild(brainIcon);
           }
 

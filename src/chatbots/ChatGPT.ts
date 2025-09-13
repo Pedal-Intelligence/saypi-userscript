@@ -1301,6 +1301,10 @@ class ChatGPTTextBlockCapture extends ElementTextStream {
 
   private emitFinalAndClose(): void {
     if (this.closed()) return;
+    
+    // Prevent multiple calls or post-disconnect emissions
+    if (!this.barObserver) return;
+    
     const text = (this.element.textContent || "").trimEnd();
     if (text) {
       // Emit the whole response as one block
@@ -1339,6 +1343,12 @@ class ChatGPTTextBlockCapture extends ElementTextStream {
       this.barObserver?.disconnect();
     } catch {}
     this.barObserver = null;
+  }
+
+  // Override disconnect to ensure barObserver is also cleaned up
+  override disconnect(): void {
+    this.disconnectBarObserver();
+    super.disconnect();
   }
 
   // While streaming, we only use mutations to detect the first token arrival
