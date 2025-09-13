@@ -258,7 +258,7 @@ class CallButton {
         if (totalSegments === 0) {
             // No segments to draw, ensure original background is visible
             if (originalBackground) {
-                originalBackground.setAttribute('fill-opacity', '0.8'); // Assuming 0.8 is the default
+                originalBackground.setAttribute('fill-opacity', '1');
                 // Or use originalBackground.style.display = 'block'; if it was hidden by display:none
             }
             return; // Exit early
@@ -488,6 +488,9 @@ class CallButton {
         iconPaths.forEach(path => {
             path.classList.add('saypi-call-icon');
         });
+
+        // Ensure previous state classes are cleared before assigning a new one
+        button.classList.remove('call-starting', 'call-hangup');
 
         // Add state-specific classes based on original background color
         if (svgElement.querySelector('path[data-original-fill="#4e84be"]')) {

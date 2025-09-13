@@ -67,10 +67,11 @@ body.chatgpt {
     /* Apply colors to SVG paths via CSS classes */
     svg .saypi-call-bg {
       fill: var(--call-button-bg);
+      fill-opacity: 1;
     }
     
     svg .saypi-call-icon {
-      fill: var(--call-button-icon);
+      fill: currentColor;
     }
     
     /* Different colors for different states */
@@ -81,6 +82,11 @@ body.chatgpt {
     &.call-hangup svg .saypi-call-bg {
       fill: var(--call-button-bg-hangup);
     }
+  }
+
+  /* Match native secondary button hover: slightly reduce circle opacity */
+  @media (hover: hover) {
+    #saypi-callButton.chatgpt-call-button:hover svg .saypi-call-bg { fill-opacity: 0.8; }
   }
 
   /* Dark theme adjustments for better contrast */
