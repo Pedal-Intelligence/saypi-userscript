@@ -798,6 +798,28 @@
     "description": "Description for the manual submission mode.",
     "message": "Envíe solo cuando presione el botón"
   },
+  "agentModeNoticeMessage": {
+    "message": "$chatbot$ está escuchando en {agentModeLink}, y responderá solo cuando sea necesario. Puedes cambiar este comportamiento en {settingsLink}.",
+    "description": "Informational message explaining agent mode behavior to users.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "agentMode": {
+    "message": "modo agente",
+    "description": "Text for the agent mode link."
+  },
+  "settings": {
+    "message": "configuración",
+    "description": "Text for the settings link."
+  },
+  "dismissNotice": {
+    "message": "Descartar",
+    "description": "Aria label for the dismiss notice button."
+  },
   "tabAIChat": {
     "description": "Etiqueta de pestaña para la sección de configuración de chat de IA.",
     "message": "Chat de IA"

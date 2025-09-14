@@ -8,10 +8,12 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 import { logger } from "../LoggingModule";
+import { AgentModeNoticeModule } from "../ui/AgentModeNoticeModule";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
   voiceMenuUiMgr: VoiceMenuUIManager;
+  agentNoticeModule: AgentModeNoticeModule;
   private domObserver: MutationObserver | null = null;
   private isObservingDom: boolean = false;
   private domMutationCallback = (mutations: MutationRecord[]) => {
@@ -91,6 +93,7 @@ export class DOMObserver {
       this.chatbot,
       UserPreferenceModule.getInstance()
     );
+    this.agentNoticeModule = AgentModeNoticeModule.getInstance();
     this.monitorForRouteChanges();
   }
 
@@ -229,6 +232,11 @@ export class DOMObserver {
         buttonModule.createCallButton(controlsContainer, insertionPosition);
       }
     }
+    
+    // Trigger agent mode notice if needed (async call, no need to await)
+    this.agentNoticeModule.showNoticeIfNeeded().catch(error => {
+      console.debug('Failed to show agent notice:', error);
+    });
   }
 
   /**

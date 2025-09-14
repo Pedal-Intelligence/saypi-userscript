@@ -535,6 +535,28 @@
     "message": "Only submit when you press the button",
     "description": "Description for the manual submission mode."
   },
+  "agentModeNoticeMessage": {
+    "message": "$chatbot$ is listening in {agentModeLink}, and will respond only when needed. You can change this behaviour in {settingsLink}.",
+    "description": "Informational message explaining agent mode behavior to users.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "agentMode": {
+    "message": "agent mode",
+    "description": "Text for the agent mode link."
+  },
+  "settings": {
+    "message": "settings",
+    "description": "Text for the settings link."
+  },
+  "dismissNotice": {
+    "message": "Dismiss",
+    "description": "Aria label for the dismiss notice button."
+  },
   "nicknameLabel": {
     "message": "Assistant nickname",
     "description": "Label for the input field to set a custom nickname for the AI assistant."

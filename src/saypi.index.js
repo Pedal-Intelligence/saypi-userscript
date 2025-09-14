@@ -12,6 +12,7 @@ import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
+import "./styles/agent-notice.scss";
 
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
