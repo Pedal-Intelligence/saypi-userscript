@@ -128,6 +128,15 @@ class CallButton {
         // don't reset currentSeqNum, as it's used to track the current transcription sequence number and continues to increment in TranscriptionModule.js
         this.currentSegment = null;
         this.updateButtonSegments();
+        
+        // Extra safeguard: ensure background is restored when segments are reset
+        if (this.element) {
+            const svgElement = this.element.querySelector('svg');
+            if (svgElement) {
+                const originalBackground = svgElement.querySelector('path.background');
+                this.ensureBackgroundVisible(originalBackground);
+            }
+        }
     }
 
     handleUserSpeaking() {
@@ -214,6 +223,22 @@ class CallButton {
          }
      }
 
+    // --- Helper Methods ---
+    private ensureBackgroundVisible(originalBackground: Element | null): void {
+        if (!originalBackground) return;
+        
+        // Aggressively restore background visibility as the default state
+        // Remove any inline style overrides that might hide the background
+        (originalBackground as SVGElement).style.removeProperty('fill-opacity');
+        (originalBackground as SVGElement).style.removeProperty('fill');
+        
+        // Ensure the attribute is set to full opacity
+        originalBackground.setAttribute('fill-opacity', '1');
+        
+        // Remove any hidden attributes that might interfere
+        originalBackground.removeAttribute('style');
+    }
+
     // --- SVG Drawing ---
      updateButtonSegments() {
         if (!this.element) return;
@@ -228,7 +253,7 @@ class CallButton {
         }
 
         // Get the original background element
-        const originalBackground = svg.querySelector('path#background') || svg.querySelector('path:first-of-type');
+        const originalBackground = svg.querySelector('path.background') || svg.querySelector('path:first-of-type');
 
         if (!segmentsGroup) {
             segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -255,19 +280,18 @@ class CallButton {
 
         const totalSegments = allSegmentsData.length;
 
+        // Always ensure background is visible by default, then hide only if needed
+        this.ensureBackgroundVisible(originalBackground);
+        
         if (totalSegments === 0) {
-            // No segments to draw, ensure original background is visible
-            if (originalBackground) {
-                originalBackground.setAttribute('fill-opacity', '0.8'); // Assuming 0.8 is the default
-                // Or use originalBackground.style.display = 'block'; if it was hidden by display:none
-            }
+            // No segments to draw, background should already be visible
             return; // Exit early
         }
 
         // If we have segments, hide the original background
+        // Use fill-opacity to hide while preserving the fill color
         if (originalBackground) {
-            originalBackground.setAttribute('fill-opacity', '0');
-            // Or use originalBackground.style.display = 'none';
+            (originalBackground as SVGElement).style.fillOpacity = '0';
         }
 
         const viewBox = svg.getAttribute('viewBox')?.split(' ').map(Number);
@@ -461,6 +485,47 @@ class CallButton {
         return baseLabel;
     }
 
+    private applyChatGPTTheming(svgElement: SVGElement, button: HTMLButtonElement): void {
+        // Only apply ChatGPT theming if this button has the chatgpt class
+        if (!button.classList.contains('chatgpt-call-button')) {
+            return;
+        }
+
+        // Both call.svg and hangup.svg now use standardized class names
+        const backgroundPath = svgElement.querySelector('path.background');
+        const phoneReceiverPath = svgElement.querySelector('path.phone-receiver');
+        
+        if (!backgroundPath || !phoneReceiverPath) {
+            // This SVG doesn't have the expected phone icon structure, return early (no-op)
+            return;
+        }
+
+        // Determine which icon this is based on the fill color
+        const backgroundFill = backgroundPath.getAttribute('fill');
+        const isHangupIcon = backgroundFill === '#776d6d';
+
+        // Remove inline fill attributes to allow CSS control
+        const paths = svgElement.querySelectorAll('path');
+        paths.forEach(path => {
+            // Store original fill as a data attribute for reference
+            const originalFill = path.getAttribute('fill');
+            if (originalFill) {
+                path.setAttribute('data-original-fill', originalFill);
+                path.removeAttribute('fill');
+            }
+        });
+
+        // Add CSS classes for theming
+        backgroundPath.classList.add('saypi-call-bg');
+        phoneReceiverPath.classList.add('saypi-call-icon');
+
+        // Clear previous state classes and set appropriate class
+        button.classList.remove('call-starting', 'call-hangup');
+        if (isHangupIcon) {
+            button.classList.add('call-hangup');
+        }
+    }
+
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
         const callButton = button || this.element;
         if (!callButton) return;
@@ -477,6 +542,8 @@ class CallButton {
             callButton.textContent = label; // Fallback: just show the label as text
             return;
         }
+
+        // ChatGPT theming is now applied only for the inactive call state in callInactive()
 
         // 3. Original background is NOT removed here anymore. It will be handled by updateButtonSegments.
 
@@ -528,6 +595,19 @@ class CallButton {
              this.sayPiActor.send({ type: "saypi:hangup" }),
              true
         );
+        
+        // Apply ChatGPT theming specifically for the active hangup.svg icon
+        const callButton = button || this.element;
+        if (callButton) {
+            const svgElement = callButton.querySelector('svg');
+            if (svgElement) {
+                this.applyChatGPTTheming(svgElement, callButton);
+                // Ensure background is visible after theming
+                const originalBackground = svgElement.querySelector('path.background');
+                this.ensureBackgroundVisible(originalBackground);
+            }
+        }
+        
          // AnimationModule.startAnimation("glow"); // Ensure glow is on -- Handled by subscription
     }
 
@@ -557,6 +637,19 @@ class CallButton {
                 this.sayPiActor.send({ type: "saypi:call" }),
                 false
         );
+        
+        // Apply ChatGPT theming specifically for the inactive call.svg icon
+        const callButton = button || this.element;
+        if (callButton) {
+            const svgElement = callButton.querySelector('svg');
+            if (svgElement) {
+                this.applyChatGPTTheming(svgElement, callButton);
+                // Ensure background is visible after theming
+                const originalBackground = svgElement.querySelector('path.background');
+                this.ensureBackgroundVisible(originalBackground);
+            }
+        }
+        
         // Glow animation logic is now primarily handled by the state machine subscription
     }
 

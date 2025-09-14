@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     zoomAndPan="magnify" viewBox="0 0 768 767.999994"
     preserveAspectRatio="xMidYMid meet" version="1.0">
-    <path class="circle" fill="#418a2f"
+    <path class="background" fill="#418a2f"
         d="M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 "
         fill-opacity="1" fill-rule="nonzero" />
     <path class="phone-receiver" fill="#ffffff"
