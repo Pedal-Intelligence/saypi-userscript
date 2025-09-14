@@ -259,15 +259,18 @@ class CallButton {
             // No segments to draw, ensure original background is visible
             if (originalBackground) {
                 originalBackground.setAttribute('fill-opacity', '1');
-                // Or use originalBackground.style.display = 'block'; if it was hidden by display:none
+                // Clear any inline style overrides to let CSS theming work
+                (originalBackground as SVGElement).style.fill = '';
+                (originalBackground as SVGElement).style.fillOpacity = '';
             }
             return; // Exit early
         }
 
         // If we have segments, hide the original background
+        // Use inline style to override CSS theming
         if (originalBackground) {
-            originalBackground.setAttribute('fill-opacity', '0');
-            // Or use originalBackground.style.display = 'none';
+            (originalBackground as SVGElement).style.fill = 'transparent';
+            (originalBackground as SVGElement).style.fillOpacity = '0';
         }
 
         const viewBox = svg.getAttribute('viewBox')?.split(' ').map(Number);
