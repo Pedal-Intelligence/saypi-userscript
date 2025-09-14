@@ -128,6 +128,15 @@ class CallButton {
         // don't reset currentSeqNum, as it's used to track the current transcription sequence number and continues to increment in TranscriptionModule.js
         this.currentSegment = null;
         this.updateButtonSegments();
+        
+        // Extra safeguard: ensure background is restored when segments are reset
+        if (this.element) {
+            const svgElement = this.element.querySelector('svg');
+            if (svgElement) {
+                const originalBackground = svgElement.querySelector('path.background');
+                this.ensureBackgroundVisible(originalBackground);
+            }
+        }
     }
 
     handleUserSpeaking() {
@@ -214,6 +223,22 @@ class CallButton {
          }
      }
 
+    // --- Helper Methods ---
+    private ensureBackgroundVisible(originalBackground: Element | null): void {
+        if (!originalBackground) return;
+        
+        // Aggressively restore background visibility as the default state
+        // Remove any inline style overrides that might hide the background
+        (originalBackground as SVGElement).style.removeProperty('fill-opacity');
+        (originalBackground as SVGElement).style.removeProperty('fill');
+        
+        // Ensure the attribute is set to full opacity
+        originalBackground.setAttribute('fill-opacity', '1');
+        
+        // Remove any hidden attributes that might interfere
+        originalBackground.removeAttribute('style');
+    }
+
     // --- SVG Drawing ---
      updateButtonSegments() {
         if (!this.element) return;
@@ -255,14 +280,11 @@ class CallButton {
 
         const totalSegments = allSegmentsData.length;
 
+        // Always ensure background is visible by default, then hide only if needed
+        this.ensureBackgroundVisible(originalBackground);
+        
         if (totalSegments === 0) {
-            // No segments to draw, ensure original background is visible
-            if (originalBackground) {
-                // Remove any inline style overrides to let CSS theming work
-                (originalBackground as SVGElement).style.removeProperty('fill-opacity');
-                // Ensure the attribute is set to full opacity
-                originalBackground.setAttribute('fill-opacity', '1');
-            }
+            // No segments to draw, background should already be visible
             return; // Exit early
         }
 
@@ -580,6 +602,9 @@ class CallButton {
             const svgElement = callButton.querySelector('svg');
             if (svgElement) {
                 this.applyChatGPTTheming(svgElement, callButton);
+                // Ensure background is visible after theming
+                const originalBackground = svgElement.querySelector('path.background');
+                this.ensureBackgroundVisible(originalBackground);
             }
         }
         
@@ -619,6 +644,9 @@ class CallButton {
             const svgElement = callButton.querySelector('svg');
             if (svgElement) {
                 this.applyChatGPTTheming(svgElement, callButton);
+                // Ensure background is visible after theming
+                const originalBackground = svgElement.querySelector('path.background');
+                this.ensureBackgroundVisible(originalBackground);
             }
         }
         
