@@ -49,7 +49,7 @@ vi.mock('../../src/LoggingModule', () => ({
 vi.mock('../../src/ui/AgentModeNoticeModule', () => ({
   AgentModeNoticeModule: {
     getInstance: vi.fn(() => ({
-      showNoticeIfNeeded: vi.fn(),
+      showNoticeIfNeeded: vi.fn().mockResolvedValue(undefined),
     })),
   },
 }));
@@ -100,11 +100,11 @@ describe('AgentModeNotice Bootstrap Integration', () => {
     // Clear mocks
     vi.clearAllMocks();
     
-    // Get the mocked agent notice module
-    mockAgentNotice = vi.mocked(AgentModeNoticeModule.getInstance());
-    
     // Create DOM observer
     domObserver = new DOMObserver(mockChatbot as any);
+    
+    // Get the actual mocked agent notice module from the observer
+    mockAgentNotice = domObserver.agentNoticeModule as any;
   });
 
   it('should integrate AgentModeNoticeModule in constructor', () => {
@@ -134,7 +134,7 @@ describe('AgentModeNotice Bootstrap Integration', () => {
     domObserver.decoratePrompt(prompt);
     
     // Verify that agent notice was triggered
-    expect(mockAgentNotice.showNoticeIfNeeded).toHaveBeenCalledWith(mockChatbot);
+    expect(mockAgentNotice.showNoticeIfNeeded).toHaveBeenCalled();
     
     // Verify other decorations happened
     expect(prompt.id).toBe('saypi-prompt');
@@ -154,7 +154,7 @@ describe('AgentModeNotice Bootstrap Integration', () => {
     }).not.toThrow();
     
     // Should still trigger agent notice
-    expect(mockAgentNotice.showNoticeIfNeeded).toHaveBeenCalledWith(mockChatbot);
+    expect(mockAgentNotice.showNoticeIfNeeded).toHaveBeenCalled();
   });
 
   it('should handle ChatGPT-specific cleanup correctly', () => {
@@ -191,6 +191,6 @@ describe('AgentModeNotice Bootstrap Integration', () => {
     
     // Should still add standard classes and trigger notice
     expect(promptContainer.classList.contains('saypi-prompt-container')).toBe(true);
-    expect(mockAgentNotice.showNoticeIfNeeded).toHaveBeenCalled();
+    expect((chatgptObserver.agentNoticeModule as any).showNoticeIfNeeded).toHaveBeenCalled();
   });
 });

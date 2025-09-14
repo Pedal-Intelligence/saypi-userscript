@@ -160,7 +160,9 @@ export class AgentModeNoticeModule {
     const textContainer = document.createElement("div");
     textContainer.className = "saypi-agent-notice-text";
 
-    const rawMessage = getMessage("agentModeNoticeMessage", [chatbotName]);
+    // Escape HTML in chatbot name to prevent injection attacks
+    const escapedChatbotName = this.escapeHtml(chatbotName);
+    const rawMessage = getMessage("agentModeNoticeMessage", [escapedChatbotName]);
     textContainer.innerHTML = this.formatNoticeMessage(rawMessage);
 
     content.appendChild(textContainer);
@@ -181,6 +183,12 @@ export class AgentModeNoticeModule {
 
     // Show with animation
     setTimeout(() => notice.classList.add("visible"), 50);
+  }
+
+  private escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   private formatNoticeMessage(message: string): string {

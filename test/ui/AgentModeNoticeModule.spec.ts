@@ -41,10 +41,22 @@ vi.mock('../../src/popup/popupopener', () => ({
 
 vi.mock('../../src/icons/IconModule', () => ({
   IconModule: {
-    createIcon: vi.fn(() => {
-      const icon = document.createElement('div');
-      icon.className = 'mock-icon';
-      return icon;
+    bot: {
+      cloneNode: vi.fn(() => {
+        const icon = document.createElement('div');
+        icon.className = 'mock-icon';
+        return icon;
+      }),
+    },
+  },
+}));
+
+vi.mock('../../src/chatbots/ChatbotService', () => ({
+  ChatbotService: {
+    getChatbot: vi.fn().mockResolvedValue({
+      getID: () => 'pi',
+      getName: () => 'Pi',
+      getNickname: vi.fn().mockResolvedValue('Pi'),
     }),
   },
 }));
@@ -59,7 +71,16 @@ const localStorageMock = (() => {
     clear: () => { store = {}; }
   };
 })();
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+Object.defineProperty(window, 'localStorage', { 
+  value: localStorageMock, 
+  writable: true,
+  configurable: true
+});
+Object.defineProperty(global, 'localStorage', { 
+  value: localStorageMock, 
+  writable: true,
+  configurable: true
+});
 
 // Mock window.location
 vi.stubGlobal('location', { hostname: 'pi.ai' });
@@ -77,9 +98,12 @@ describe('AgentModeNoticeModule', () => {
     // Reset all mocks
     vi.clearAllMocks();
     
-    // Create fresh instance
+    // Reset singleton instance to ensure clean state
     (AgentModeNoticeModule as any).instance = null;
     noticeModule = AgentModeNoticeModule.getInstance();
+    
+    // Ensure the instance starts with clean dismissed state
+    noticeModule.resetDismissedState();
   });
 
   afterEach(() => {
@@ -98,9 +122,7 @@ describe('AgentModeNoticeModule', () => {
 
   describe('showNoticeIfNeeded', () => {
     it('should not show notice when agent mode is not active', () => {
-      const mockChatbot = { getID: () => 'pi', getName: () => 'Pi' };
-      
-      noticeModule.showNoticeIfNeeded(mockChatbot as any);
+      noticeModule.showNoticeIfNeeded();
       
       const notices = document.querySelectorAll('.saypi-agent-notice');
       expect(notices).toHaveLength(0);
@@ -110,8 +132,6 @@ describe('AgentModeNoticeModule', () => {
       // Mock agent mode as active
       mockGetCachedDiscretionaryMode.mockReturnValue(true);
       
-      const mockChatbot = { getID: () => 'pi', getName: () => 'Pi' };
-      
       // Mark as dismissed
       noticeModule.resetDismissedState();
       localStorageMock.setItem('saypi-agent-notice-dismissed', JSON.stringify({ pi: true }));
@@ -120,7 +140,7 @@ describe('AgentModeNoticeModule', () => {
       (AgentModeNoticeModule as any).instance = null;
       noticeModule = AgentModeNoticeModule.getInstance();
       
-      noticeModule.showNoticeIfNeeded(mockChatbot as any);
+      noticeModule.showNoticeIfNeeded();
       
       const notices = document.querySelectorAll('.saypi-agent-notice');
       expect(notices).toHaveLength(0);
@@ -135,9 +155,7 @@ describe('AgentModeNoticeModule', () => {
       chatAncestor.id = 'saypi-chat-ancestor';
       document.body.appendChild(chatAncestor);
       
-      const mockChatbot = { getID: () => 'pi', getName: () => 'Pi' };
-      
-      noticeModule.showNoticeIfNeeded(mockChatbot as any);
+      noticeModule.showNoticeIfNeeded();
       
       // Give time for async operations
       return new Promise<void>((resolve) => {
@@ -191,9 +209,7 @@ describe('AgentModeNoticeModule', () => {
       chatAncestor.id = 'saypi-chat-ancestor';
       document.body.appendChild(chatAncestor);
       
-      const mockChatbot = { getID: () => 'pi', getName: () => 'Pi' };
-      
-      noticeModule.showNoticeIfNeeded(mockChatbot as any);
+      noticeModule.showNoticeIfNeeded();
       
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -215,40 +231,10 @@ describe('AgentModeNoticeModule', () => {
     });
   });
 
-  describe('detectChatbotFromURL', () => {
-    it('should detect Pi from URL', () => {
-      vi.stubGlobal('location', { hostname: 'pi.ai' });
-      
-      const chatbotId = (noticeModule as any).detectChatbotFromURL();
-      expect(chatbotId).toBe('pi');
-    });
-
-    it('should detect ChatGPT from URL', () => {
-      vi.stubGlobal('location', { hostname: 'chatgpt.com' });
-      
-      const chatbotId = (noticeModule as any).detectChatbotFromURL();
-      expect(chatbotId).toBe('chatgpt');
-    });
-
-    it('should detect Claude from URL', () => {
-      vi.stubGlobal('location', { hostname: 'claude.ai' });
-      
-      const chatbotId = (noticeModule as any).detectChatbotFromURL();
-      expect(chatbotId).toBe('claude');
-    });
-
-    it('should return unknown for unrecognized URLs', () => {
-      vi.stubGlobal('location', { hostname: 'example.com' });
-      
-      const chatbotId = (noticeModule as any).detectChatbotFromURL();
-      expect(chatbotId).toBe('unknown');
-    });
-  });
-
   describe('message formatting', () => {
     it('should format message with links correctly', () => {
       const rawMessage = 'Pi is listening in {agentModeLink}, and will respond only when needed. You can change this behaviour in {settingsLink}.';
-      const formatted = (noticeModule as any).formatNoticeMessage(rawMessage, 'Pi');
+      const formatted = (noticeModule as any).formatNoticeMessage(rawMessage);
       
       expect(formatted).toContain('<a href="https://www.saypi.ai/agents"');
       expect(formatted).toContain('target="_blank"');
@@ -263,6 +249,9 @@ describe('AgentModeNoticeModule', () => {
     it('should reset dismissed state for specific chatbot', () => {
       localStorageMock.setItem('saypi-agent-notice-dismissed', JSON.stringify({ pi: true, claude: true }));
       
+      // Reload the dismissed state to pick up the localStorage data
+      (noticeModule as any).loadDismissedState();
+      
       noticeModule.resetDismissedState('pi');
       
       const dismissedState = localStorageMock.getItem('saypi-agent-notice-dismissed');
@@ -273,6 +262,9 @@ describe('AgentModeNoticeModule', () => {
 
     it('should reset all dismissed state when no chatbot specified', () => {
       localStorageMock.setItem('saypi-agent-notice-dismissed', JSON.stringify({ pi: true, claude: true }));
+      
+      // Reload the dismissed state to pick up the localStorage data
+      (noticeModule as any).loadDismissedState();
       
       noticeModule.resetDismissedState();
       
