@@ -8,6 +8,7 @@ import steerSVG from "./steer.svg";
 // Lucide originals for consistency with rest of UI
 import lucideBrainSVG from "./lucide-brain.svg";
 import lucideShipWheelSVG from "./lucide-ship-wheel.svg";
+import lucideBotSVG from "./lucide-bot.svg";
 import bubbleBwSVG from "./bubble-bw.svg";
 import { createSVGElement } from "../dom/DOMModule";
 
@@ -18,6 +19,7 @@ export class IconModule {
   private static _stopwatch: SVGElement | null = null;
   private static _brain: SVGElement | null = null;
   private static _steer: SVGElement | null = null;
+  private static _bot: SVGElement | null = null;
   private static _bubbleBw: SVGElement | null = null;
   
   // Create an empty SVG element to use as fallback
@@ -89,6 +91,18 @@ export class IconModule {
       }
     }
     return this._steer;
+  }
+  
+  static get bot(): SVGElement {
+    if (!this._bot) {
+      try {
+        this._bot = createSVGElement(lucideBotSVG);
+      } catch (e) {
+        console.warn('Failed to load bot icon', e);
+        this._bot = this.createEmptySVG();
+      }
+    }
+    return this._bot;
   }
   
   static get bubbleBw(): SVGElement {

@@ -1264,6 +1264,18 @@ class ChatGPTTextBlockCapture extends ElementTextStream {
     // Find the assistant turn container that owns this content
     this.turnContainer = this.findTurnContainer(element);
 
+    // Check if text has already been captured for this turn
+    if (this.turnContainer?.getAttribute('data-saypi-text-captured') === 'true') {
+      console.debug(`[ChatGPTTextBlockCapture] Text already captured for this turn, completing immediately`);
+      // Get the text and complete immediately
+      const text = (this.turnContainer.textContent || "").trimEnd();
+      if (text) {
+        this.next(new AddedText(text));
+      }
+      this.complete({ type: "eod", time: Date.now() });
+      return;
+    }
+
     // If the action bar is already present, emit immediately
     if (this.actionBarPresent()) {
       this.emitFinalAndClose();
@@ -1305,13 +1317,61 @@ class ChatGPTTextBlockCapture extends ElementTextStream {
     // Prevent multiple calls or post-disconnect emissions
     if (!this.barObserver) return;
     
-    const text = (this.element.textContent || "").trimEnd();
+    let text = "";
+    
+    // Strategy 1: Try original element first
+    if (this.element.isConnected && document.contains(this.element)) {
+      text = (this.element.textContent || "").trimEnd();
+      console.debug(`[ChatGPTTextBlockCapture] Got text from original element: ${text.length} chars`);
+    }
+    
+    // Strategy 2: Try turnContainer if original element failed
+    if (!text && this.turnContainer && document.contains(this.turnContainer)) {
+      text = (this.turnContainer.textContent || "").trimEnd();
+      console.debug(`[ChatGPTTextBlockCapture] Got text from turnContainer: ${text.length} chars`);
+    }
+    
+    // Strategy 3: Search for replacement element by data attributes
+    if (!text && this.turnContainer) {
+      const testId = this.turnContainer.getAttribute('data-testid');
+      const turnAttr = this.turnContainer.getAttribute('data-turn');
+      
+      let replacement = null;
+      
+      // Try to find by exact data-testid first
+      if (testId) {
+        replacement = document.querySelector(`[data-testid="${testId}"]`);
+        console.debug(`[ChatGPTTextBlockCapture] Searching for replacement by data-testid="${testId}"`);
+      }
+      
+      // Fallback to data-turn attribute
+      if (!replacement && turnAttr) {
+        replacement = document.querySelector(`article[data-turn="${turnAttr}"]`);
+        console.debug(`[ChatGPTTextBlockCapture] Searching for replacement by data-turn="${turnAttr}"`);
+      }
+      
+      if (replacement && replacement !== this.turnContainer) {
+        text = (replacement.textContent || "").trimEnd();
+        console.debug(`[ChatGPTTextBlockCapture] Got text from replacement element: ${text.length} chars`);
+      }
+    }
+    
     if (text) {
       // Emit the whole response as one block
       this.next(new AddedText(text));
+      console.debug(`[ChatGPTTextBlockCapture] Successfully captured text: "${text.substring(0, 50)}..."`);
+    } else {
+      console.warn(`[ChatGPTTextBlockCapture] Failed to capture any text content`);
     }
+    
     this.complete({ type: "eod", time: Date.now() });
     this.disconnectBarObserver();
+    
+    // Add a marker to prevent duplicate processing
+    if (this.turnContainer) {
+      this.turnContainer.setAttribute('data-saypi-text-captured', 'true');
+      console.debug(`[ChatGPTTextBlockCapture] Marked turn container as text-captured`);
+    }
   }
 
   private registerActionBarObserver(): void {

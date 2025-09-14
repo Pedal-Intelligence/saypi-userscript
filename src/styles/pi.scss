@@ -73,4 +73,18 @@ html body.pi {
         0 1px 0 rgba(255, 255, 255, 0.7) inset;
     }
   }
+
+  /* Agent notice width to match Pi's prompt composer */
+  .saypi-agent-notice {
+    max-width: 750px;  /* Desktop width matching prompt composer */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Mobile responsive width for smaller devices */
+  @media (max-width: 768px) {
+    .saypi-agent-notice {
+      max-width: 350px;  /* Mobile width matching prompt composer */
+    }
+  }
 }
