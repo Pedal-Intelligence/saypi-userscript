@@ -467,13 +467,32 @@ class CallButton {
             return;
         }
 
-        // Only apply theming to the call.svg (inactive/idle) icon
-        // Check for the specific structure of call.svg: path.circle with #418a2f and path.phone-receiver with #ffffff
-        const circlePath = svgElement.querySelector('path.circle[fill="#418a2f"]');
-        const phoneReceiverPath = svgElement.querySelector('path.phone-receiver[fill="#ffffff"]');
+        // Support both call.svg (inactive) and hangup.svg (active) icons
+        // Check for call.svg structure: path.circle with #418a2f and path.phone-receiver with #ffffff
+        const callCirclePath = svgElement.querySelector('path.circle[fill="#418a2f"]');
+        const callPhoneReceiverPath = svgElement.querySelector('path.phone-receiver[fill="#ffffff"]');
         
-        if (!circlePath || !phoneReceiverPath) {
-            // This is not the call.svg icon, return early (no-op)
+        // Check for hangup.svg structure: path#background with #776d6d and path#receiver with #ffffff
+        const hangupBackgroundPath = svgElement.querySelector('path#background[fill="#776d6d"]');
+        const hangupReceiverPath = svgElement.querySelector('path#receiver[fill="#ffffff"]');
+        
+        let backgroundPath: Element | null = null;
+        let iconPath: Element | null = null;
+        let isCallIcon = false;
+        let isHangupIcon = false;
+        
+        if (callCirclePath && callPhoneReceiverPath) {
+            // This is call.svg (inactive state)
+            backgroundPath = callCirclePath;
+            iconPath = callPhoneReceiverPath;
+            isCallIcon = true;
+        } else if (hangupBackgroundPath && hangupReceiverPath) {
+            // This is hangup.svg (active state)
+            backgroundPath = hangupBackgroundPath;
+            iconPath = hangupReceiverPath;
+            isHangupIcon = true;
+        } else {
+            // This is neither call.svg nor hangup.svg, return early (no-op)
             return;
         }
 
@@ -488,12 +507,16 @@ class CallButton {
             }
         });
 
-        // Add CSS classes for theming - only for call.svg structure
-        circlePath.classList.add('saypi-call-bg');
-        phoneReceiverPath.classList.add('saypi-call-icon');
+        // Add CSS classes for theming
+        backgroundPath.classList.add('saypi-call-bg');
+        iconPath.classList.add('saypi-call-icon');
 
-        // Clear any previous state classes since this is the inactive state
+        // Clear previous state classes and set appropriate class
         button.classList.remove('call-starting', 'call-hangup');
+        if (isHangupIcon) {
+            button.classList.add('call-hangup');
+        }
+        // Note: call-starting class would be set elsewhere for call-starting.svg if needed
     }
 
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
@@ -565,6 +588,16 @@ class CallButton {
              this.sayPiActor.send({ type: "saypi:hangup" }),
              true
         );
+        
+        // Apply ChatGPT theming specifically for the active hangup.svg icon
+        const callButton = button || this.element;
+        if (callButton) {
+            const svgElement = callButton.querySelector('svg');
+            if (svgElement) {
+                this.applyChatGPTTheming(svgElement, callButton);
+            }
+        }
+        
          // AnimationModule.startAnimation("glow"); // Ensure glow is on -- Handled by subscription
     }
 
