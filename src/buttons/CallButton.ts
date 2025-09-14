@@ -228,7 +228,7 @@ class CallButton {
         }
 
         // Get the original background element
-        const originalBackground = svg.querySelector('path#background') || svg.querySelector('path:first-of-type');
+        const originalBackground = svg.querySelector('path.background') || svg.querySelector('path:first-of-type');
 
         if (!segmentsGroup) {
             segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -467,34 +467,18 @@ class CallButton {
             return;
         }
 
-        // Support both call.svg (inactive) and hangup.svg (active) icons
-        // Check for call.svg structure: path.circle with #418a2f and path.phone-receiver with #ffffff
-        const callCirclePath = svgElement.querySelector('path.circle[fill="#418a2f"]');
-        const callPhoneReceiverPath = svgElement.querySelector('path.phone-receiver[fill="#ffffff"]');
+        // Both call.svg and hangup.svg now use standardized class names
+        const backgroundPath = svgElement.querySelector('path.background');
+        const phoneReceiverPath = svgElement.querySelector('path.phone-receiver');
         
-        // Check for hangup.svg structure: path#background with #776d6d and path#receiver with #ffffff
-        const hangupBackgroundPath = svgElement.querySelector('path#background[fill="#776d6d"]');
-        const hangupReceiverPath = svgElement.querySelector('path#receiver[fill="#ffffff"]');
-        
-        let backgroundPath: Element | null = null;
-        let iconPath: Element | null = null;
-        let isCallIcon = false;
-        let isHangupIcon = false;
-        
-        if (callCirclePath && callPhoneReceiverPath) {
-            // This is call.svg (inactive state)
-            backgroundPath = callCirclePath;
-            iconPath = callPhoneReceiverPath;
-            isCallIcon = true;
-        } else if (hangupBackgroundPath && hangupReceiverPath) {
-            // This is hangup.svg (active state)
-            backgroundPath = hangupBackgroundPath;
-            iconPath = hangupReceiverPath;
-            isHangupIcon = true;
-        } else {
-            // This is neither call.svg nor hangup.svg, return early (no-op)
+        if (!backgroundPath || !phoneReceiverPath) {
+            // This SVG doesn't have the expected phone icon structure, return early (no-op)
             return;
         }
+
+        // Determine which icon this is based on the fill color
+        const backgroundFill = backgroundPath.getAttribute('fill');
+        const isHangupIcon = backgroundFill === '#776d6d';
 
         // Remove inline fill attributes to allow CSS control
         const paths = svgElement.querySelectorAll('path');
@@ -509,14 +493,13 @@ class CallButton {
 
         // Add CSS classes for theming
         backgroundPath.classList.add('saypi-call-bg');
-        iconPath.classList.add('saypi-call-icon');
+        phoneReceiverPath.classList.add('saypi-call-icon');
 
         // Clear previous state classes and set appropriate class
         button.classList.remove('call-starting', 'call-hangup');
         if (isHangupIcon) {
             button.classList.add('call-hangup');
         }
-        // Note: call-starting class would be set elsewhere for call-starting.svg if needed
     }
 
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
