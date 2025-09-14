@@ -258,18 +258,17 @@ class CallButton {
         if (totalSegments === 0) {
             // No segments to draw, ensure original background is visible
             if (originalBackground) {
+                // Remove any inline style overrides to let CSS theming work
+                (originalBackground as SVGElement).style.removeProperty('fill-opacity');
+                // Ensure the attribute is set to full opacity
                 originalBackground.setAttribute('fill-opacity', '1');
-                // Clear any inline style overrides to let CSS theming work
-                (originalBackground as SVGElement).style.fill = '';
-                (originalBackground as SVGElement).style.fillOpacity = '';
             }
             return; // Exit early
         }
 
         // If we have segments, hide the original background
-        // Use inline style to override CSS theming
+        // Use fill-opacity to hide while preserving the fill color
         if (originalBackground) {
-            (originalBackground as SVGElement).style.fill = 'transparent';
             (originalBackground as SVGElement).style.fillOpacity = '0';
         }
 
