@@ -61,7 +61,7 @@ body.chatgpt {
     /* Set custom properties for SVG colors based on ChatGPT's accent theme */
     --call-button-bg: var(--theme-secondary-btn-bg, var(--theme-user-msg-bg, #418a2f));
     --call-button-bg-starting: #4e84be; /* Keep blue for starting state */
-    --call-button-bg-hangup: #776d6d; /* Keep gray for hangup state */
+    --call-button-bg-hangup: var(--theme-secondary-btn-bg, var(--theme-user-msg-bg, #776d6d)); /* Use accent color when available, fall back to gray */
     --call-button-icon: #ffffff; /* Always white icon for good contrast */
     
     /* Apply colors to SVG paths via CSS classes */
@@ -100,6 +100,7 @@ body.chatgpt {
     --call-button-icon: #ffffff;
     /* For very light accent colors, darken the background slightly */
     --call-button-bg: color-mix(in srgb, var(--theme-secondary-btn-bg, var(--theme-user-msg-bg, #418a2f)) 85%, #000000 15%);
+    --call-button-bg-hangup: color-mix(in srgb, var(--theme-secondary-btn-bg, var(--theme-user-msg-bg, #776d6d)) 85%, #000000 15%);
   }
 
   /* Portal tooltip element appended to body to avoid overflow clipping */
