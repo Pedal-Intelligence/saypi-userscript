@@ -381,11 +381,30 @@ class ChatGPTUserMessage extends UserMessage {
 class ChatGPTMessageControls extends MessageControls {
   constructor(message: AssistantResponse, ttsControls: TTSControlsModule) {
     super(message, ttsControls);
+    
+    // Listen for TTS skip events
+    EventBus.on('saypi:tts:skipCurrent', () => {
+      const messageId = message.element.getAttribute('data-testid');
+      logger.debug('[ChatGPTMessageControls] saypi:tts:skipCurrent event received on message', messageId);
+      if (message.isLastMessage()) {
+        // set [data-skip-tts="true"] on the message
+        logger.debug('[ChatGPTMessageControls] Setting [data-skip-tts="true"] on message', messageId);
+        message.element.setAttribute('data-skip-tts', 'true');
+      }
+    });
+    
     // Phase 2: auto-activate ChatGPT's native Read Aloud when it appears
     this.autoClickNativeReadAloudWhenAvailable();
     // Resilient attach: poll briefly for the native action bar and attach
     // our controls even if the initial mutation timing was missed.
     this.scheduleLazyAttach();
+  }
+
+  private skipReadAloud(): boolean {
+    const messageId = this.message.element.getAttribute('data-testid');
+    const skipTTS = this.message.element.getAttribute('data-skip-tts');
+    logger.debug('[ChatGPTMessageControls] skipReadAloud: ', messageId, skipTTS);
+    return skipTTS === 'true';
   }
 
   protected getExtraControlClasses(): string[] {
@@ -573,6 +592,7 @@ class ChatGPTMessageControls extends MessageControls {
     const prefs = UserPreferenceModule.getInstance();
     if (!prefs.getCachedAutoReadAloudChatGPT()) return;
     if (!this.isCallActive()) return;
+    if (this.skipReadAloud()) { logger.debug('[ChatGPT] Skipping read aloud for maintenance message (late check)'); return};
     // Idempotent: un-shield any previously shielded menus before proceeding
     try { this.sweepShieldAttributes(null); } catch {}
 
@@ -621,6 +641,11 @@ class ChatGPTMessageControls extends MessageControls {
               menuEl.setAttribute('data-saypi-shielded', 'true');
             }
           } catch {}
+          // Check for maintenance message as late as possible, right before activating
+          if (this.isMaintenanceMessage()) {
+            logger.debug("[ChatGPT] Skipping dropdown read aloud for maintenance message (late check)");
+            return;
+          }
           this.activateReadAloudWithRetries(trigger, item as HTMLElement, wrapper || undefined);
           // Stop the observer attempts; ongoing shield manages menu lifetime
           this.readAloudObserver?.disconnect();
@@ -884,9 +909,17 @@ class ChatGPTMessageControls extends MessageControls {
   }
 
   /**
+   * Check if the current message is a maintenance message that should skip read aloud
+   */
+  private isMaintenanceMessage(): boolean {
+    return this.message.element.classList.contains('maintenance-message');
+  }
+
+  /**
    * Auto-click ChatGPT's native Read Aloud for the most recent, newly
    * generated assistant response. Avoids older messages by only triggering
    * when the button is created after our controls are initialized.
+   * Skips read aloud for maintenance messages that would be muted anyway.
    */
   private autoClickNativeReadAloudWhenAvailable(): void {
     // If the button already exists, it's likely an older message: don't autoplay
@@ -914,7 +947,14 @@ class ChatGPTMessageControls extends MessageControls {
       (btn as any)._saypiClicked = true;
       try {
         // Click on a microtask to allow any handlers to attach first
-        setTimeout(() => btn.click(), 0);
+        setTimeout(() => {
+          // Check for maintenance message as late as possible, right before clicking
+          if (this.isMaintenanceMessage()) {
+            logger.debug("[ChatGPT] Skipping read aloud for maintenance message (late check)");
+            return;
+          }
+          btn.click();
+        }, 0);
       } catch (e) {
         console.warn('Say, Pi auto read‑aloud click failed:', e);
       } finally {
