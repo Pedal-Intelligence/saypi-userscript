@@ -247,11 +247,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     name.classList.add("flex-1", "text-sm", "font-normal", "text-text-300");
     name.innerText = voice ? voice.name : getMessage("voiceOff");
     nameContainer.appendChild(name);
-    content.appendChild(nameContainer);
 
-    // Meta row (flag/accent / gender / price) – only shown when helpful
-    const meta = document.createElement("div");
-    meta.classList.add("flex", "items-center", "gap-2", "text-text-500", "text-xs", "pr-4");
+    // Chips inline to the right of the name to save vertical space
+    const chips = document.createElement("div");
+    chips.classList.add("flex", "items-center", "gap-2", "text-text-500", "text-xs", "pr-4");
     if (voice) {
       // Accent chip: show only the flag (no BCP tag text). If missing/invalid, omit entirely.
       const accentLocale = this.getVoiceLocale(voice);
@@ -263,7 +262,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         flagImg.alt = accentLocale;
         flagImg.src = this.getFlagUrlForLocale(accentLocale);
         accentChip.appendChild(flagImg);
-        meta.appendChild(accentChip);
+        chips.appendChild(accentChip);
       }
       // Gender short tag
       if (this.showGender && voice.gender) {
@@ -273,7 +272,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         const icon = gender.startsWith("M") ? marsSvgContent : gender.startsWith("F") ? venusSvgContent : "";
         if (icon) {
           addSvgToButton(genderChip, icon, "w-3", "h-3");
-          meta.appendChild(genderChip);
+          chips.appendChild(genderChip);
         }
       }
       // Price, if there are variations
@@ -281,12 +280,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         const priceChip = document.createElement("span");
         priceChip.classList.add("inline-flex", "items-center", "opacity-80");
         priceChip.textContent = this.formatPrice(voice);
-        meta.appendChild(priceChip);
+        chips.appendChild(priceChip);
       }
     }
-    if (meta.childElementCount > 0) {
-      content.appendChild(meta);
+    if (chips.childElementCount > 0) {
+      nameContainer.appendChild(chips);
     }
+
+    content.appendChild(nameContainer);
 
     const description = document.createElement("div");
     description.classList.add("text-text-500", "pr-4", "text-xs", "overflow-hidden", "text-ellipsis", "max-w-[340px]");
@@ -317,6 +318,15 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.appendChild(checkmarkContainer);
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice, item));
+    
+    // Subtle divider under each item (removed for the last item later)
+    const divider = document.createElement('div');
+    divider.classList.add('saypi-voice-divider');
+    divider.style.height = '1px';
+    divider.style.marginTop = '6px';
+    divider.style.backgroundColor = 'rgba(0,0,0,0.06)';
+    item.appendChild(divider);
+
     return item;
   }
 
@@ -613,6 +623,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.menuContent.appendChild(menuItem);
     });
 
+    // Add subtle separators for easier scanning
+    this.applyItemSeparators();
+
     // If we found a selected voice from the button, update the menu items to show selection
     if (currentSelectedVoice) {
       this.updateSelectedVoice(currentSelectedVoice);
@@ -624,6 +637,21 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     }
 
     return !noVoicesAvailable;
+  }
+
+  // Add a faint bottom divider to each menu item except the last one
+  private applyItemSeparators(): void {
+    const items = Array.from(this.menuContent.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const lastIndex = items.length - 1;
+    items.forEach((el, idx) => {
+      const divider = el.querySelector('.saypi-voice-divider') as HTMLElement | null;
+      if (!divider) return;
+      if (idx === lastIndex) {
+        divider.remove();
+      } else {
+        // keep divider
+      }
+    });
   }
 
   private initializeVoiceSelector(chatbot: Chatbot): void {
