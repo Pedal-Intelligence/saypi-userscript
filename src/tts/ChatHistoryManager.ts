@@ -161,6 +161,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       childList: true,
       subtree: true,
       attributes: true,
+      attributeOldValue: true, // Enable tracking of old attribute values for debugging
     });
     this.observers.push(newMessagesObserver);
     return newMessagesObserver;
