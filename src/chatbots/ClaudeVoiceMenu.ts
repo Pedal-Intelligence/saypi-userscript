@@ -9,10 +9,18 @@ import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { getJwtManagerSync } from "../JwtManager";
+import { getResourceUrl } from "../ResourceModule";
+import globeSvgContent from "../icons/lucide-globe.svg";
+import marsSvgContent from "../icons/lucide-mars.svg";
+import venusSvgContent from "../icons/lucide-venus.svg";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
   private menuContent: HTMLDivElement;
+  // Heuristics to avoid clutter – computed per dataset in populateVoices
+  private showAccent: boolean = false;
+  private showGender: boolean = false;
+  private showPrice: boolean = false;
 
   constructor(
     chatbot: Chatbot,
@@ -241,12 +249,51 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     nameContainer.appendChild(name);
     content.appendChild(nameContainer);
 
+    // Meta row (flag/accent / gender / price) – only shown when helpful
+    const meta = document.createElement("div");
+    meta.classList.add("flex", "items-center", "gap-2", "text-text-500", "text-xs", "pr-4");
+    if (voice) {
+      // Accent chip: show only the flag (no BCP tag text). If missing/invalid, omit entirely.
+      const accentLocale = this.getVoiceLocale(voice);
+      if (this.showAccent && accentLocale) {
+        const accentChip = document.createElement("span");
+        accentChip.classList.add("inline-flex", "items-center", "gap-1");
+        const flagImg = document.createElement("img");
+        flagImg.classList.add("w-3", "h-3", "rounded-sm");
+        flagImg.alt = accentLocale;
+        flagImg.src = this.getFlagUrlForLocale(accentLocale);
+        accentChip.appendChild(flagImg);
+        meta.appendChild(accentChip);
+      }
+      // Gender short tag
+      if (this.showGender && voice.gender) {
+        const gender = String(voice.gender).trim().toUpperCase();
+        const genderChip = document.createElement("span");
+        genderChip.classList.add("inline-flex", "items-center");
+        const icon = gender.startsWith("M") ? marsSvgContent : gender.startsWith("F") ? venusSvgContent : "";
+        if (icon) {
+          addSvgToButton(genderChip, icon, "w-3", "h-3");
+          meta.appendChild(genderChip);
+        }
+      }
+      // Price, if there are variations
+      if (this.showPrice) {
+        const priceChip = document.createElement("span");
+        priceChip.classList.add("inline-flex", "items-center", "opacity-80");
+        priceChip.textContent = this.formatPrice(voice);
+        meta.appendChild(priceChip);
+      }
+    }
+    if (meta.childElementCount > 0) {
+      content.appendChild(meta);
+    }
+
     const description = document.createElement("div");
-    description.classList.add("text-text-500", "pr-4", "text-xs");
-    
+    description.classList.add("text-text-500", "pr-4", "text-xs", "overflow-hidden", "text-ellipsis", "max-w-[340px]");
     // Determine the appropriate description text
     if (voice) {
-      description.innerText = getMessage("ttsVoice");
+      const desc = voice.description || "";
+      description.innerText = desc || getMessage("ttsVoice");
     } else {
       if (isSignInPrompt) {
         description.innerText = getMessage("signInForTTS");
@@ -260,7 +307,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         description.innerText = getMessage("disableTTS");
       }
     }
-    
     content.appendChild(description);
 
     item.appendChild(content);
@@ -272,6 +318,49 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice, item));
     return item;
+  }
+
+  // Short dollar display; fall back to credits if USD missing
+  private formatPrice(voice: SpeechSynthesisVoiceRemote): string {
+    const usd = voice.price_per_thousand_chars_in_usd ?? voice.price;
+    if (typeof usd === "number" && !isNaN(usd) && usd > 0) {
+      // Keep it compact: $0.3/1k
+      const rounded = Math.round(usd * 100) / 100;
+      return `$${rounded}/1k`;
+    }
+    const credits = voice.price_per_thousand_chars_in_credits;
+    if (typeof credits === "number" && credits > 0) {
+      return `${Math.round(credits)}/1k cr`;
+    }
+    return getMessage("free") || "Free";
+  }
+
+  // If accent looks like a BCP‑47 tag (e.g., en-US), treat it as the accent locale
+  private getVoiceLocale(voice: SpeechSynthesisVoiceRemote): string | undefined {
+    const tag = voice.accent;
+    if (!tag) return undefined;
+    const trimmed = String(tag).trim();
+    const bcp47 = /^[a-zA-Z]{2,3}(-[A-Za-z0-9]{2,8})+$/; // require at least one hyphen
+    return bcp47.test(trimmed) ? trimmed : undefined;
+  }
+
+  // Map BCP‑47 region subtag to a flag asset path. Fallback to global flag.
+  private getFlagUrlForLocale(locale: string): string {
+    try {
+      const parts = locale.split('-');
+      const region = parts.find(p => /^[A-Z]{2}$/.test(p));
+      const code = region ? region.toLowerCase() : 'global';
+
+      // Prefer extension-packaged flags under src/ (MV3). These are exposed via web_accessible_resources.
+      const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
+      if (isExtension) {
+        return chrome.runtime.getURL(`src/icons/flags/${code}.svg`);
+      }
+      // Non-extension environments (tests) fall back to a generic resolver
+      return getResourceUrl(`icons/flags/${code}.svg`);
+    } catch (_) {
+      return getResourceUrl('icons/flags/global.svg');
+    }
   }
 
   private positionMenuAboveButton(): void {
@@ -464,6 +553,23 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   override populateVoices(voices: SpeechSynthesisVoiceRemote[], voiceSelector: HTMLElement): boolean {
+    // Compute heuristics to decide what to show across this dataset
+    try {
+      const accents = new Set(
+        voices
+          .map(v => this.getVoiceLocale(v) || v.accent)
+          .filter(Boolean)
+      );
+      const genders = new Set(voices.map(v => (v.gender || '').toString().toUpperCase()).filter(Boolean));
+      const prices = new Set(voices.map(v => v.price_per_thousand_chars_in_usd ?? v.price).filter((p): p is number => typeof p === 'number'));
+      this.showAccent = accents.size > 1; // only show if helpful to differentiate
+      this.showGender = genders.size > 1; // only show if varies
+      this.showPrice = prices.size > 1;   // show only when price differs
+    } catch (_) {
+      // Fail safe: don't show extra metadata if anything goes wrong
+      this.showAccent = this.showGender = this.showPrice = false;
+    }
+
     // Get the currently selected voice before recreating the menu
     let currentSelectedVoice: SpeechSynthesisVoiceRemote | null = null;
     
