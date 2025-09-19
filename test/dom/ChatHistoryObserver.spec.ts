@@ -15,7 +15,8 @@ import {
   SpeechUtterance,
 } from "../../src/tts/SpeechModel";
 import { BillingModule } from "../../src/billing/BillingModule";
-import { PiAIChatbot, PiResponse } from "../../src/chatbots/Pi";
+import { PiAIChatbot } from "../../src/chatbots/Pi";
+import { PiResponse } from "../../src/chatbots/pi/PiResponse";
 import { setupTestDOM } from "../utils/dom";
 
 vi.mock("../tts/InputStream");
