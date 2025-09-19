@@ -15,9 +15,9 @@ vi.mock("../dom/MessageElements", () => {
   return { AssistantResponse, MessageControls };
 });
 
-// We'll import Claude lazily **after** registering our mocks so that the mocked version is used.
+// We'll import Claude response utils lazily after mocks.
 async function importClaude() {
-  const module = await import("../../src/chatbots/Claude");
+  const module = await import("../../src/chatbots/claude/ClaudeResponse");
   return module;
 }
 

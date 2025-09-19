@@ -1,13 +1,6 @@
-import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
+import { AssistantResponse, UserMessage } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
-import EventBus from "../events/EventBus";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import {
-  AddedText,
-  ChangedText,
-  ElementTextStream,
-  InputStreamOptions,
-} from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
@@ -16,43 +9,7 @@ import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
 import { openSettings } from "../popup/popupopener";
 import getMessage from "../i18n";
 import { IconModule } from "../icons/IconModule";
-
-// Export a reusable text extractor so all Claude entry points share filters
-export function extractClaudeReadableText(node: Node): string {
-  const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors", "code-block__code"]);
-  const BLOCKED_CLASS_COMBINATIONS = [
-    ["ease-out", "border-border-300"], // tool use sections
-  ];
-  const SKIPPED_ELEMENTS = new Set(["pre"]);
-
-  if (node.nodeType === Node.ELEMENT_NODE) {
-    const el = node as HTMLElement;
-    if (SKIPPED_ELEMENTS.has(el.tagName.toLowerCase())) {
-      return "";
-    }
-    const hasBlockedCombination = BLOCKED_CLASS_COMBINATIONS.some((combination) =>
-      combination.every((cls) => el.classList.contains(cls))
-    );
-    if (hasBlockedCombination) {
-      return "";
-    }
-    for (const cls of el.classList) {
-      if (BLOCKED_CLASSES.has(cls)) {
-        return "";
-      }
-    }
-  }
-
-  if (node.nodeType === Node.TEXT_NODE) {
-    return node.textContent ?? "";
-  }
-
-  let text = "";
-  node.childNodes.forEach((child) => {
-    text += extractClaudeReadableText(child);
-  });
-  return text;
-}
+import { ClaudeResponse } from "./claude/ClaudeResponse";
 
 class ClaudeChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
@@ -257,152 +214,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 }
 
-class ClaudeResponse extends AssistantResponse {
-  constructor(element: HTMLElement, includeInitialText?: boolean) {
-    super(element, includeInitialText);
-  }
-
-  get contentSelector(): string {
-    return "div[class*='font-claude-response']";
-  }
-
-  createTextStream(
-    content: HTMLElement,
-    options: InputStreamOptions
-  ): ElementTextStream {
-    return new ClaudeTextStream(content, options);
-  }
-
-  decorateControls(): MessageControls {
-    return new ClaudeMessageControls(this, this.ttsControlsModule);
-  }
-
-  // Ensure non-streaming reads (e.g., voice intro) match streaming filters
-  protected override extractReadableText(content: HTMLElement): string {
-    return extractClaudeReadableText(content).trimEnd();
-  }
-}
-
-class ClaudeMessageControls extends MessageControls {
-  constructor(message: AssistantResponse, ttsControls: TTSControlsModule) {
-    super(message, ttsControls);
-  }
-
-  protected getExtraControlClasses(): string[] {
-    return ["text-sm"];
-  }
-
-  getActionBarSelector(): string {
-    return "div.flex.items-stretch";
-  }
-}
-
-/**
- * A ClaudeTextBlockCapture is a simplified ElementTextStream that captures Claude's response
- * as a single block of text, rather than as individual paragraphs or list items.
- * This approach is slower than the ClaudeTextStream, but is more reliable and straightforward.
- */
-class ClaudeTextBlockCapture extends ElementTextStream {
-  handleMutationEvent(mutation: MutationRecord): void {
-    // no-op
-  }
-  constructor(
-    element: HTMLElement,
-    options: InputStreamOptions = { includeInitialText: false }
-  ) {
-    super(element, options);
-
-    const messageElement = element.parentElement;
-    console.debug("ClaudeTextBlockCapture constructor", messageElement);
-    if (this.isClaudeTextStream(messageElement)) {
-      const claudeMessage = messageElement as HTMLElement;
-
-      // check if Claude is already streaming text by the time we start observing it
-      const isAlreadyStreaming = this.dataIsStreaming(claudeMessage);
-      if (isAlreadyStreaming) {
-        const initialText = this.getNestedText(element).trimEnd();
-        EventBus.emit("saypi:llm:first-token", {text: initialText, time: Date.now()});
-        this.handleTextAddition(initialText);
-      }
-
-      // now, continue observing for more streaming text, including completion
-      let wasStreaming = isAlreadyStreaming;
-      const messageObserver = new MutationObserver((mutations) => {
-        const streamingInProgress = this.dataIsStreaming(claudeMessage);
-        const streamingStarted = !wasStreaming && streamingInProgress;
-        const streamingStopped = wasStreaming && !streamingInProgress;
-        const streamingText = this.getNestedText(element).trimEnd(); // trim any trailing newline character from the text
-        if (streamingStarted) {
-          // fire a new event to indicate that the streaming has started - this should not be necessary when streaming all data with subject.next(), but it's here since we only stream all data when the message is complete
-          EventBus.emit("saypi:llm:first-token", {text: streamingText, time: Date.now()});
-          this.handleTextAddition(streamingText);
-        } else if (streamingStopped) {
-          this.handleTextAddition(streamingText, true);
-          this.subject.complete();
-        } else if (streamingInProgress) {
-          this.handleTextAddition(streamingText);
-        }
-        wasStreaming = streamingInProgress;
-      });
-      messageObserver.observe(claudeMessage, {
-        childList: false,
-        subtree: false,
-        characterData: false,
-        attributes: true, // we only need to observe the `data-is-streaming` attribute changing from true to false to detect completion
-      });
-    }
-  }
-
-  /**
-   * Recursively gather text from the supplied DOM node while **excluding** any text that is
-   * contained within elements we do **not** want to read aloud (for example, Claude's
-   * tool-call UI such as Gmail search or Web search results).  These elements are currently
-   * identified by the Tailwind utility class `transition-all` but the logic is deliberately
-   * written so it can be extended with additional blocked class names in the future.
-   *
-   * The algorithm traverses the DOM tree depth-first, concatenating the textual content of
-   * text nodes and allowed element nodes, while *skipping* any branch whose root element
-   * matches one of the blocked classes.  This ensures that neither the container element
-   * nor any of its descendants contribute text to the final result.
-   */
-  getNestedText(node: Node): string {
-    return extractClaudeReadableText(node);
-  }
-
-  dataIsStreaming(element: HTMLElement | null): boolean {
-    return element !== null && element.hasAttribute("data-is-streaming") && element.getAttribute("data-is-streaming") === "true";
-  }
-
-  override closed(): boolean {
-    return super.closed() || !this.dataIsStreaming(this.element);
-  }
-
-  isClaudeTextStream(element: HTMLElement | null): boolean {
-    return element !== null && element.hasAttribute("data-is-streaming");
-  }
-
-  handleTextAddition(allText: string, isFinal: boolean = false): void {
-    if (isFinal) {
-      this.subject.next(new AddedText(allText));
-    }
-  }
-}
-
-class ClaudeTextStream extends ClaudeTextBlockCapture {
-  private _textProcessedSoFar: string = "";
-  constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
-    super(element, options);
-  }
-
-  override handleTextAddition(allText: string, isFinal: boolean = false): void {
-    const unseenText = allText.replace(this._textProcessedSoFar, "");
-    if (!unseenText) { return; } // some chunks may be empty, in which case we don't need to process them
-
-    this.subject.next(new AddedText(unseenText));
-    this._textProcessedSoFar = allText;
-  }
-
-}
+// Claude response parsing moved to ./claude/ClaudeResponse.ts
 
 function findAndDecorateCustomPlaceholderElement(
   prompt: HTMLElement
@@ -805,4 +617,4 @@ class PlaceholderManager {
   }
 }
 
-export { ClaudeChatbot, ClaudePrompt, ClaudeTextStream };
+export { ClaudeChatbot, ClaudePrompt };
