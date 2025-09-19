@@ -246,10 +246,20 @@ abstract class AssistantResponse {
     const contentNode = this._element.querySelector(".content");
     if (contentNode) {
       const content = contentNode as HTMLElement;
-      const textContent = content.innerText || content.textContent || "";
+      const textContent = this.extractReadableText(content);
       return textContent.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
     }
     return "";
+  }
+
+  /**
+   * Chatbot-specific hook to extract readable text from a message content node.
+   * Subclasses can override to apply per-host filtering (e.g., skip tool UI or code blocks).
+   * The default implementation returns the visible text.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected extractReadableText(content: HTMLElement): string {
+    return content.innerText || content.textContent || "";
   }
 
   /**

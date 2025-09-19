@@ -41,3 +41,10 @@
 - `.roo/` and `.roomodes` — Roo agent rules and mode definitions (boomerang/architect/debug/test). Use for delegation and task orchestration.
 - `.taskmasterconfig` — Task Master model and defaults. Pairs with rules above for planning/expansion.
 - Precedence: follow this `AGENTS.md` and build scripts first; treat the agent-specific files as complementary guidance.
+
+## Responding to Code Reviews
+- When asked to reply to PR/code review comments, respond to every comment.
+- Evaluate feedback critically; don’t assume the reviewer is always correct.
+- If the issue is valid and warranted, address it with focused changes (code/tests/docs) and note the fix in your reply.
+- If no change is needed, explain why succinctly (reasoning, tradeoffs, or prior context) and acknowledge the reviewer.
+- Keep replies respectful, specific, and action‑oriented; link to files/lines (e.g., `src/file.ts:42`) when helpful.

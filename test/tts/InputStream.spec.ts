@@ -6,7 +6,7 @@ import {
   TextContent,
   getNestedText,
 } from "../../src/tts/InputStream";
-import { PiTextStream } from "../../src/chatbots/Pi";
+import { PiTextStream } from "../../src/chatbots/pi/PiResponse";
 
 // Mock the UserPreferenceModule to prevent external API calls
 vi.mock("../../src/prefs/PreferenceModule", () => {
@@ -180,4 +180,3 @@ test(
   },
   timeoutCalc(2)
 );
-
