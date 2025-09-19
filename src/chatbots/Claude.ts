@@ -274,7 +274,17 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     console.debug("ClaudeTextBlockCapture constructor", messageElement);
     if (this.isClaudeTextStream(messageElement)) {
       const claudeMessage = messageElement as HTMLElement;
-      let wasStreaming = false;
+
+      // check if Claude is already streaming text by the time we start observing it
+      const isAlreadyStreaming = this.dataIsStreaming(claudeMessage);
+      if (isAlreadyStreaming) {
+        const initialText = this.getNestedText(element).trimEnd();
+        EventBus.emit("saypi:llm:first-token", {text: initialText, time: Date.now()});
+        this.handleTextAddition(initialText);
+      }
+
+      // now, continue observing for more streaming text, including completion
+      let wasStreaming = isAlreadyStreaming;
       const messageObserver = new MutationObserver((mutations) => {
         const streamingInProgress = this.dataIsStreaming(claudeMessage);
         const streamingStarted = !wasStreaming && streamingInProgress;
@@ -296,7 +306,7 @@ class ClaudeTextBlockCapture extends ElementTextStream {
         childList: false,
         subtree: false,
         characterData: false,
-        attributes: true,
+        attributes: true, // we only need to observe the `data-is-streaming` attribute changing from true to false to detect completion
       });
     }
   }
