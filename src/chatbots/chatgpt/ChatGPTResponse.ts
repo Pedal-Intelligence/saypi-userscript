@@ -515,7 +515,6 @@ export class ChatGPTTextBlockCapture extends ElementTextStream {
 
   private emitFinalAndClose(): void {
     if (this.closed()) return;
-    if (!this.barObserver) return;
 
     let text = "";
     if (this.element.isConnected && document.contains(this.element)) {
