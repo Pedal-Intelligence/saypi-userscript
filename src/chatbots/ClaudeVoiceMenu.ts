@@ -322,9 +322,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Subtle divider under each item (removed for the last item later)
     const divider = document.createElement('div');
     divider.classList.add('saypi-voice-divider');
-    divider.style.height = '1px';
-    divider.style.marginTop = '6px';
-    divider.style.backgroundColor = 'rgba(0,0,0,0.06)';
     item.appendChild(divider);
 
     return item;
@@ -648,8 +645,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       if (!divider) return;
       if (idx === lastIndex) {
         divider.remove();
-      } else {
-        // keep divider
       }
     });
   }
@@ -684,6 +679,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.element.dataset.voiceSelectorInitialized = "true";
     });
     console.log("[status] Voice selector initialized");
+
   }
 
   getPositionFromEnd(): number {
