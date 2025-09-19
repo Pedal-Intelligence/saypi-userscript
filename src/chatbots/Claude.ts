@@ -17,6 +17,43 @@ import { openSettings } from "../popup/popupopener";
 import getMessage from "../i18n";
 import { IconModule } from "../icons/IconModule";
 
+// Export a reusable text extractor so all Claude entry points share filters
+export function extractClaudeReadableText(node: Node): string {
+  const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors", "code-block__code"]);
+  const BLOCKED_CLASS_COMBINATIONS = [
+    ["ease-out", "border-border-300"], // tool use sections
+  ];
+  const SKIPPED_ELEMENTS = new Set(["pre"]);
+
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    const el = node as HTMLElement;
+    if (SKIPPED_ELEMENTS.has(el.tagName.toLowerCase())) {
+      return "";
+    }
+    const hasBlockedCombination = BLOCKED_CLASS_COMBINATIONS.some((combination) =>
+      combination.every((cls) => el.classList.contains(cls))
+    );
+    if (hasBlockedCombination) {
+      return "";
+    }
+    for (const cls of el.classList) {
+      if (BLOCKED_CLASSES.has(cls)) {
+        return "";
+      }
+    }
+  }
+
+  if (node.nodeType === Node.TEXT_NODE) {
+    return node.textContent ?? "";
+  }
+
+  let text = "";
+  node.childNodes.forEach((child) => {
+    text += extractClaudeReadableText(child);
+  });
+  return text;
+}
+
 class ClaudeChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
 
@@ -239,6 +276,11 @@ class ClaudeResponse extends AssistantResponse {
   decorateControls(): MessageControls {
     return new ClaudeMessageControls(this, this.ttsControlsModule);
   }
+
+  // Ensure non-streaming reads (e.g., voice intro) match streaming filters
+  protected override extractReadableText(content: HTMLElement): string {
+    return extractClaudeReadableText(content).trimEnd();
+  }
 }
 
 class ClaudeMessageControls extends MessageControls {
@@ -324,50 +366,7 @@ class ClaudeTextBlockCapture extends ElementTextStream {
    * nor any of its descendants contribute text to the final result.
    */
   getNestedText(node: Node): string {
-    // Any element bearing one of these classes – or a descendant of such an element – should
-    // be ignored for the purposes of TTS.  Currently only `transition-all` is required, but
-    // the Set makes it trivial to extend.
-    const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors", "code-block__code"]);
-    const BLOCKED_CLASS_COMBINATIONS = [
-      ["ease-out", "border-border-300"], // tool use sections
-    ];
-    const SKIPPED_ELEMENTS = new Set(["pre"]); // code blocks and other pre-formatted text are skipped
-
-    // If the current node is an Element, check whether it should be skipped.
-    if (node.nodeType === Node.ELEMENT_NODE) {
-      const el = node as HTMLElement;
-
-      if (SKIPPED_ELEMENTS.has(el.tagName.toLowerCase())) {
-        return "";
-      }
-
-      // Skip any element bearing a blocked class combination.
-      const hasBlockedCombination = BLOCKED_CLASS_COMBINATIONS.some(combination =>
-        combination.every(cls => el.classList.contains(cls))
-      );
-      if (hasBlockedCombination) {
-        return ""; // Skip this entire subtree.
-      }
-
-      // Skip any element bearing a blocked class.
-      for (const cls of el.classList) {
-        if (BLOCKED_CLASSES.has(cls)) {
-          return ""; // Skip this entire subtree.
-        }
-      }
-    }
-
-    // If the node is a Text node, simply return its data.
-    if (node.nodeType === Node.TEXT_NODE) {
-      return node.textContent ?? "";
-    }
-
-    // Otherwise, recursively concatenate the text of child nodes.
-    let text = "";
-    node.childNodes.forEach((child) => {
-      text += this.getNestedText(child);
-    });
-    return text;
+    return extractClaudeReadableText(node);
   }
 
   dataIsStreaming(element: HTMLElement | null): boolean {
