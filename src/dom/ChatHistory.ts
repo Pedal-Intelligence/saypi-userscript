@@ -132,6 +132,9 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   protected ttsControlsModule: TTSControlsModule;
   protected haltOnFirst: boolean = false; // stop searching after the first chat message is found
   protected messageHistory = MessageHistoryModule.getInstance();
+
+
+
   constructor(
     chatHistoryElement: HTMLElement,
     selector: string,
@@ -207,6 +210,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         mutation.target instanceof Element
       ) {
         const mutatedElement = mutation.target as Element;
+
         this.findAndDecorateAssistantResponses(mutatedElement);
         this.findAndDecorateUserPrompts(mutatedElement);
       }

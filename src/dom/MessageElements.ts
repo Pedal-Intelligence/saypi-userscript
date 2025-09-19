@@ -137,6 +137,32 @@ abstract class AssistantResponse {
     // Store this listener if not already tracked elsewhere
   }
 
+  /**
+   * Safely add a CSS class only if it's not already present
+   * This prevents redundant DOM mutations that can cause infinite loops
+   */
+  private safeAddClass(className: string): void {
+    if (!this._element.classList.contains(className)) {
+      this._element.classList.add(className);
+    }
+  }
+
+  /**
+   * Safely remove a CSS class only if it's currently present
+   * This prevents redundant DOM mutations that can cause infinite loops
+   */
+  private safeRemoveClass(className: string): void {
+    if (this._element.classList.contains(className)) {
+      this._element.classList.remove(className);
+    }
+  }
+
+  private safeSetDataAttribute(key: string, value: string): void {
+    if (this._element.dataset[key] !== value) {
+      this._element.dataset[key] = value;
+    }
+  }
+
   private handleUtteranceFailed = (utterance: FailedSpeechUtterance) => {
     if (utterance.id === this.utteranceId) {
       this.decorateFailedSpeech(true);
@@ -287,12 +313,12 @@ abstract class AssistantResponse {
     if (utterance instanceof SpeechPlaceholder) {
       return;
     }
-    
+
     // Update the utteranceId in the dataset with the real utterance ID
-    this._element.dataset.utteranceId = utterance.id;
+    this.safeSetDataAttribute('utteranceId', utterance.id);
     
     // Add speech-enabled class to the message element
-    this._element.classList.add("speech-enabled");
+    this.safeAddClass("speech-enabled");
 
     // listen for utterance failure
     EventBus.on("saypi:billing:utteranceFailed", (utterance: FailedSpeechUtterance) => {
@@ -307,7 +333,7 @@ abstract class AssistantResponse {
   }
 
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
-    this._element.classList.add("speech-incomplete");
+    this.safeAddClass("speech-incomplete");
 
     // if already has a regenerate button, remove it
     const existingRegenButton = this._element.querySelector(
@@ -359,7 +385,7 @@ abstract class AssistantResponse {
           const speech = new AssistantSpeech(utterance, charge);
           speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
           regenButton.remove();
-          this._element.classList.remove("speech-incomplete");
+          this.safeRemoveClass("speech-incomplete");
         });
     });
   }
@@ -379,7 +405,8 @@ abstract class AssistantResponse {
       if (element.classList.contains("maintenance-message")) {
         return;
       }
-      element.classList.add("maintenance-message", "silenced");
+      this.safeAddClass("maintenance-message");
+      this.safeAddClass("silenced");
       
       // Generate a friendly label from a set of options
       const friendlyLabels = [
@@ -503,11 +530,37 @@ abstract class MessageControls {
   ) {
     this.actionBar = this.messageControlsElement = null; // will be initialized in decorateControls()
     this.decorateControls(message);
-    
+
     if (this.message.isLastMessage()) {
       // Listen for telemetry updates
       EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
       this.eventListeners.push({ event: "telemetry:updated", listener: this.handleTelemetryUpdate });
+    }
+  }
+
+  /**
+   * Safely add a CSS class to the message element only if it's not already present
+   * This prevents redundant DOM mutations that can cause infinite loops
+   */
+  protected safeAddClass(className: string): void {
+    if (!this.message.element.classList.contains(className)) {
+      this.message.element.classList.add(className);
+    }
+  }
+
+  /**
+   * Safely remove a CSS class from the message element only if it's currently present
+   * This prevents redundant DOM mutations that can cause infinite loops
+   */
+  protected safeRemoveClass(className: string): void {
+    if (this.message.element.classList.contains(className)) {
+      this.message.element.classList.remove(className);
+    }
+  }
+
+  protected safeSetDataAttribute(key: string, value: string): void {
+    if (this.message.element.dataset[key] !== value) {
+      this.message.element.dataset[key] = value;
     }
   }
 
@@ -588,10 +641,10 @@ abstract class MessageControls {
     }
     
     // Update the utteranceId in the dataset with the real utterance ID
-    this.message.element.dataset.utteranceId = utterance.id;
+    this.safeSetDataAttribute('utteranceId', utterance.id);
     
     // Add speech-enabled class to the message element
-    this.message.element.classList.add("speech-enabled");
+    this.safeAddClass("speech-enabled");
   }
 
   private watchForPopupMenu(
@@ -625,7 +678,7 @@ abstract class MessageControls {
   }
 
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
-    this.message.element.classList.add("speech-incomplete");
+    this.safeAddClass("speech-incomplete");
 
     const price = await UserPreferenceModule.getInstance()
       .getVoice()
@@ -669,7 +722,7 @@ abstract class MessageControls {
           const speech = new AssistantSpeech(utterance, charge);
           speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
           regenButton.remove();
-          this.message.element.classList.remove("speech-incomplete");
+          this.safeRemoveClass("speech-incomplete");
         });
     });
   }
@@ -1888,7 +1941,7 @@ abstract class MessageControls {
    * @param replace Whether to replace existing controls
    */
   decorateFailedSpeech(replace: boolean = false): void {
-    this.message.element.classList.add("speech-failed");
+    this.safeAddClass("speech-failed");
     
     const ttsControlsElement = this.message.element.querySelector(
       ".saypi-tts-controls"

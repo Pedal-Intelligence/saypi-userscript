@@ -346,16 +346,10 @@ export abstract class VoiceSelector {
   }
 }
 
-function innerContent(svgContent: string): string {
+function parseSvgRoot(svgContent: string): SVGSVGElement {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(svgContent, "image/svg+xml");
-  return svgDoc.documentElement.innerHTML;
-}
-
-function viewbox(svgContent: string): string {
-  const parser = new DOMParser();
-  const svgDoc = parser.parseFromString(svgContent, "image/svg+xml");
-  return svgDoc.documentElement.getAttribute("viewBox") || "0 0 256 256";
+  return svgDoc.documentElement as unknown as SVGSVGElement;
 }
 
 export function addSvgToButton(
@@ -363,10 +357,36 @@ export function addSvgToButton(
   svgContent: string,
   ...classNames: string[]
 ): void {
+  const sourceRoot = parseSvgRoot(svgContent);
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  button.appendChild(svg);
-  svg.innerHTML = innerContent(svgContent);
-  svg.setAttribute("viewBox", viewbox(svgContent));
+  // Move children from the source SVG into the new SVG to preserve attributes
+  const children = Array.from(sourceRoot.childNodes);
+  children.forEach((child) => svg.appendChild(child.cloneNode(true)));
+
+  // Copy relevant attributes from the source root
+  const attrs = [
+    "viewBox",
+    "fill",
+    "stroke",
+    "stroke-width",
+    "stroke-linecap",
+    "stroke-linejoin",
+  ];
+  attrs.forEach((attr) => {
+    const value = sourceRoot.getAttribute(attr);
+    if (value) svg.setAttribute(attr, value);
+  });
+
+  // If neither fill nor stroke were specified, default to currentColor fill
+  if (!svg.getAttribute("fill") && !svg.getAttribute("stroke")) {
+    svg.setAttribute("fill", "currentColor");
+  }
+
+  // Provide a sensible default viewBox for minimalist icons
+  if (!svg.getAttribute("viewBox")) {
+    svg.setAttribute("viewBox", "0 0 24 24");
+  }
+
   classNames.forEach((className) => svg.classList.add(className));
-  svg.setAttribute("fill", "currentColor");
+  button.appendChild(svg);
 }

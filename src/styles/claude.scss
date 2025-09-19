@@ -173,7 +173,9 @@ html body.claude #claude-voice-selector {
     z-index: 1000 !important;
     display: none; /* Hide by default, will be shown via JS */
     border-radius: 8px !important;
-    background-color: #fff !important;
+    /* Use Claude's design tokens so theme switching (light/dark) Just Works */
+    background-color: hsl(var(--bg-000) / 1) !important;
+    border: 1px solid hsl(var(--border-300) / 1) !important;
     
     /* Ensure menu items are styled nicely */
     [role="menuitem"] {
@@ -185,6 +187,18 @@ html body.claude #claude-voice-selector {
       display: block !important; /* Ensure display:block works when set via JS */
     }
   }
+
+  /* Voice menu item divider — theme aware via Claude tokens */
+  .saypi-voice-divider {
+    height: 1px;
+    margin-top: 6px;
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* Dark theme overrides for the divider using html[data-mode='dark'] */
+html[data-mode='dark'] body.claude #claude-voice-selector .saypi-voice-divider {
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* General mobile styling for Claude chatbot */
@@ -223,10 +237,11 @@ html.mobile-device body.claude {
     margin: 0 2px !important;
     
     .voice-menu-content {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important; /* Subtle; acceptable across themes */
+      border: 1px solid hsl(var(--border-300) / 1) !important;
       border-radius: 8px !important;
       overflow: hidden !important;
+      background-color: hsl(var(--bg-000) / 1) !important;
     }
   }
 }

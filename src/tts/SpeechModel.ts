@@ -255,6 +255,10 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   price_per_thousand_chars_in_usd: number; // price in USD per 1k characters
   price_per_thousand_chars_in_credits: number; // price in credits per 1k characters
   powered_by: string;
+  // Optional metadata for richer voice menus (may be omitted by server)
+  gender?: string;        // e.g., "F", "M" (or descriptive string)
+  accent?: string;        // e.g., "American", "British"
+  description?: string;   // short human-friendly description
 }
 
 interface MatchableVoice {

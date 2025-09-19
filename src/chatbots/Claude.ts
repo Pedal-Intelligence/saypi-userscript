@@ -159,7 +159,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getAssistantResponseSelector(): string {
-    return 'div[data-is-streaming]:has(div[class*="font-claude-message"])';
+    return 'div[data-is-streaming]:has(> div[class*="font-claude-response"])';
   }
 
   getUserPromptSelector(): string {
@@ -171,7 +171,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getAssistantResponseContentSelector(): string {
-    return "div[class*='font-claude-message']";
+    return "div[class*='font-claude-response']";
   }
 
   getAssistantResponse(
@@ -226,7 +226,7 @@ class ClaudeResponse extends AssistantResponse {
   }
 
   get contentSelector(): string {
-    return "div[class*='font-claude-message']";
+    return "div[class*='font-claude-response']";
   }
 
   createTextStream(
@@ -271,6 +271,7 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     super(element, options);
 
     const messageElement = element.parentElement;
+    console.debug("ClaudeTextBlockCapture constructor", messageElement);
     if (this.isClaudeTextStream(messageElement)) {
       const claudeMessage = messageElement as HTMLElement;
       let wasStreaming = false;
@@ -317,6 +318,9 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     // be ignored for the purposes of TTS.  Currently only `transition-all` is required, but
     // the Set makes it trivial to extend.
     const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors", "code-block__code"]);
+    const BLOCKED_CLASS_COMBINATIONS = [
+      ["ease-out", "border-border-300"], // tool use sections
+    ];
     const SKIPPED_ELEMENTS = new Set(["pre"]); // code blocks and other pre-formatted text are skipped
 
     // If the current node is an Element, check whether it should be skipped.
@@ -325,6 +329,14 @@ class ClaudeTextBlockCapture extends ElementTextStream {
 
       if (SKIPPED_ELEMENTS.has(el.tagName.toLowerCase())) {
         return "";
+      }
+
+      // Skip any element bearing a blocked class combination.
+      const hasBlockedCombination = BLOCKED_CLASS_COMBINATIONS.some(combination =>
+        combination.every(cls => el.classList.contains(cls))
+      );
+      if (hasBlockedCombination) {
+        return ""; // Skip this entire subtree.
       }
 
       // Skip any element bearing a blocked class.
