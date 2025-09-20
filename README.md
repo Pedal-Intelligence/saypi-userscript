@@ -50,6 +50,8 @@ We are not accepting external contributions to the codebase at this time. Please
 
 The working `.env` (development) and `.env.production` (build) files are ignored by Git. Copy the templates, keep them up to date with new variables, and avoid committing local secrets.
 
+- Run `npm run validate:env` to verify your environment files. This check runs automatically before `npm run dev` and `npm run build` and will explain how to fix any missing or malformed values.
+
 ## For Mozilla Reviewers
 
 This extension uses webpack to bundle JavaScript files. Here's what you need to know:

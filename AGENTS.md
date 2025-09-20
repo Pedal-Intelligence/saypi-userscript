@@ -12,6 +12,7 @@
 - `npm run build` — Production build (validates i18n, copies ONNX/VAD assets).
 - `npm test` — Runs Jest and Vitest. Use `npm run test:vitest:watch` for watch mode.
 - `npm run build:firefox` — Build + package for Firefox. Utilities: `npm run copy-onnx`, `npm run translate`, `npm run translate:check`.
+- `npm run validate:env` — Check `.env` and `.env.production` for required values (runs automatically before dev/build).
 
 ## Coding Style & Naming Conventions
 - TypeScript preferred; ES modules only. Strict TS per `tsconfig.json`.

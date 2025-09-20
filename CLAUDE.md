@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run test:vitest:watch` - Run Vitest in watch mode
 - `npm run copy-onnx` - Copy ONNX model files from dependencies
 - `npm run start` - Start development server
+- `npm run validate:env` - Validate local `.env` files (runs automatically before dev/build)
 
 ### Environment Setup
 - Requires Node.js >=22.0.0 and npm >=10.0.0
