@@ -92,3 +92,52 @@ test("getNestedText skips text inside <pre> code blocks", async () => {
   expect(collapsed).toBe("Start End");
   expect(collapsed.includes("console.log")).toBe(false);
 }); 
+
+test("handleTextAddition emits only the new suffix when Claude streams cumulative text", async () => {
+  const { ClaudeTextStream } = await importClaude();
+  const { AddedText } = await import("../../src/tts/InputStream");
+
+  const streamingElement = document.createElement("div");
+  const stream = new ClaudeTextStream(streamingElement, { includeInitialText: false });
+
+  const nextSpy = vi.spyOn((stream as any).subject, "next");
+
+  const firstChunk = "H\u200B"; // mimic an invisible char often emitted by Claude's UI
+  stream.handleTextAddition(firstChunk);
+  stream.handleTextAddition("Hey! What's on your mind today?");
+
+  expect(nextSpy).toHaveBeenCalledTimes(2);
+  expect(nextSpy.mock.calls[0][0]).toBeInstanceOf(AddedText);
+  expect(nextSpy.mock.calls[0][0].text).toBe(firstChunk);
+
+  expect(nextSpy.mock.calls[1][0]).toBeInstanceOf(AddedText);
+  expect(nextSpy.mock.calls[1][0].text).toBe("ey! What's on your mind today?");
+});
+
+test("it preserves the first streamed chunk when constructor emits before subclass init", async () => {
+  const { ClaudeTextStream } = await importClaude();
+  const { AddedText } = await import("../../src/tts/InputStream");
+
+  const message = document.createElement("div");
+  message.setAttribute("data-is-streaming", "true");
+
+  const content = document.createElement("div");
+  content.textContent = "Both";
+
+  message.appendChild(content);
+
+  const stream = new ClaudeTextStream(content, { includeInitialText: false });
+
+  expect((stream as any)._textProcessedSoFar).toBe("Both");
+
+  const nextSpy = vi.spyOn((stream as any).subject, "next");
+
+  const cumulativeChunk =
+    'Both sound compelling! "The Veil" with Elisabeth Moss is a solid espionage thriller.';
+  stream.handleTextAddition(cumulativeChunk);
+
+  expect(nextSpy).toHaveBeenCalledTimes(1);
+  expect(nextSpy.mock.calls[0][0]).toBeInstanceOf(AddedText);
+  expect(nextSpy.mock.calls[0][0].text.startsWith(" sound compelling"))
+    .toBe(true);
+});

@@ -167,15 +167,16 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
 }
 
 export class ClaudeTextStream extends ClaudeTextBlockCapture {
-  private _textProcessedSoFar: string = "";
+  private _textProcessedSoFar!: string;
 
   constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
+    this._textProcessedSoFar ??= "";
     console.log(`[ClaudeTextStream] initialized on element: '${element.id}'`);
   }
   override handleTextAddition(allText: string, _isFinal: boolean = false): void {
     console.log(`[ClaudeTextStream] [handleTextAddition] [${this._numAdditions}] raw text: '${allText}'`);
-    const unseenText = allText.replace(this._textProcessedSoFar, "");
+    const unseenText = this.computeUnseenText(allText);
     console.log(`[ClaudeTextStream] [handleTextAddition] [${this._numAdditions}] unseen text: '${unseenText}'`);
     this._numAdditions++;
 
@@ -185,5 +186,28 @@ export class ClaudeTextStream extends ClaudeTextBlockCapture {
     this.subject.next(new AddedText(unseenText));
     this._textProcessedSoFar = allText;
   }
-}
 
+  private computeUnseenText(allText: string): string {
+    if (!this._textProcessedSoFar) {
+      return allText;
+    }
+
+    const indexOfPrevious = allText.indexOf(this._textProcessedSoFar);
+    if (indexOfPrevious !== -1) {
+      const prefix = allText.slice(0, indexOfPrevious);
+      const suffix = allText.slice(indexOfPrevious + this._textProcessedSoFar.length);
+      return prefix + suffix;
+    }
+
+    let commonPrefixLength = 0;
+    const maxComparableLength = Math.min(this._textProcessedSoFar.length, allText.length);
+    while (
+      commonPrefixLength < maxComparableLength &&
+      this._textProcessedSoFar.charAt(commonPrefixLength) === allText.charAt(commonPrefixLength)
+    ) {
+      commonPrefixLength++;
+    }
+
+    return allText.slice(commonPrefixLength);
+  }
+}
