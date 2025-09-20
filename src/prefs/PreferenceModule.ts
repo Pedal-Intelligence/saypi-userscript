@@ -88,17 +88,16 @@ class UserPreferenceModule {
     // Prepare items to migrate
     const toMigrate: Record<string, any> = {};
     for (const key of LOCAL_STORAGE_KEYS) {
+      if (key === "voiceId" || key === VOICE_PREFERENCES_KEY) {
+        continue;
+      }
       if (syncData[key] !== undefined && localData[key] === undefined) {
         toMigrate[key] = syncData[key];
       }
     }
 
-    const existingVoicePreferences = (localData[VOICE_PREFERENCES_KEY] as VoicePreferenceMap | undefined) ??
-      (syncData[VOICE_PREFERENCES_KEY] as VoicePreferenceMap | undefined);
-    const legacyVoiceId = (localData.voiceId ?? syncData.voiceId) as string | undefined;
-    if ((!existingVoicePreferences || Object.keys(existingVoicePreferences).length === 0) && legacyVoiceId) {
-      const chatbotId = ChatbotIdentifier.getAppId();
-      toMigrate[VOICE_PREFERENCES_KEY] = { [chatbotId]: legacyVoiceId } satisfies VoicePreferenceMap;
+    if (localData[VOICE_PREFERENCES_KEY] === undefined) {
+      toMigrate[VOICE_PREFERENCES_KEY] = {} satisfies VoicePreferenceMap;
     }
 
     const shouldRemoveLegacyVoiceId = syncData.voiceId !== undefined || localData.voiceId !== undefined;
