@@ -30,7 +30,7 @@
 - PRs: clear description, linked issues, screenshots/GIFs for UI, passing tests, and updated docs/i18n when applicable.
 
 ## Security & Configuration Tips
-- Never commit secrets. Configure `.env` / `.env.production` (e.g., `API_SERVER_URL`, `AUTH_SERVER_URL`).
+- Never commit secrets. Create local `.env` / `.env.production` from the templates (`.env.example`, `.env.production.example`) and fill in values such as `API_SERVER_URL`, `AUTH_SERVER_URL`.
 - `webpack` generates `src/popup/popup-config.js` from env — don’t edit it manually.
 - For HTTPS dev, set `CERT_DIR` with `localhost.pem` and `localhost-key.pem`.
 

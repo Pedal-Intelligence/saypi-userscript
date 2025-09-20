@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Environment Setup
 - Requires Node.js >=22.0.0 and npm >=10.0.0
-- Copy `.env.example` to `.env.production` with required environment variables for production builds
+- Copy `.env.example` to `.env` for development and `.env.production.example` to `.env.production` for builds, updating values as needed
 - Firefox builds require `jq` utility
 - Extension uses ESM modules with TypeScript transpilation
 
