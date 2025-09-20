@@ -89,6 +89,7 @@ export class ClaudeMessageControls extends MessageControls {
  */
 export class ClaudeTextBlockCapture extends ElementTextStream {
   protected _numAdditions: number = 0;
+  protected _textProcessedSoFar: string = "";
 
   handleMutationEvent(_mutation: MutationRecord): void {
     // no-op for block capture
@@ -160,6 +161,7 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
   }
 
   handleTextAddition(allText: string, isFinal: boolean = false): void {
+    this._textProcessedSoFar = allText;
     if (isFinal) {
       this.subject.next(new AddedText(allText));
     }
@@ -167,11 +169,8 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
 }
 
 export class ClaudeTextStream extends ClaudeTextBlockCapture {
-  private _textProcessedSoFar!: string;
-
   constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
-    this._textProcessedSoFar ??= "";
     console.log(`[ClaudeTextStream] initialized on element: '${element.id}'`);
   }
   override handleTextAddition(allText: string, _isFinal: boolean = false): void {
