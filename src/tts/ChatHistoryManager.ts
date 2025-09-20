@@ -308,7 +308,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
           }
         } catch (e) {
           // message not found - non-fatal error
-          console.debug(
+          logger.debug(
             `Could not find message for utterance ${charge.utteranceId}. Won't be able to decorate with charge.`
           );
         }
