@@ -16,6 +16,8 @@ doc/data/*
 doc/store/*
 .env
 .env.*
+!.env.example
+!.env.production.example
 
 # Added by Claude Task Master
 # Logs

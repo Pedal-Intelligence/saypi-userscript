@@ -30,7 +30,12 @@ We are not accepting external contributions to the codebase at this time. Please
 
 1. Unzip or clone the source code into a directory of your choosing
 2. Open a terminal and navigate to that directory
-3. Copy `.env.example` to `.env.production` and update the values as needed
+3. Configure environment variables by copying the provided templates:
+   ```bash
+   cp .env.example .env
+   cp .env.production.example .env.production
+   ```
+   Update the copied files with values appropriate for your environment.
 4. Install dependencies:
    ```bash
    npm install
@@ -41,19 +46,24 @@ We are not accepting external contributions to the codebase at this time. Please
    ```
 6. The generated add-on package will be located in the 'dist' directory
 
+#### Environment files
+
+The working `.env` (development) and `.env.production` (build) files are ignored by Git. Copy the templates, keep them up to date with new variables, and avoid committing local secrets.
+
 ## For Mozilla Reviewers
 
 This extension uses webpack to bundle JavaScript files. Here's what you need to know:
 
 - **Build Environment**: The build process is compatible with Node v22 LTS and npm v10 as used in Mozilla's review environment
-- **Required Configuration**: The build process requires environment variables defined in `.env.production` (see `.env.example` for required variables)
+- **Required Configuration**: The build process reads environment variables from `.env.production` (copy the template from `.env.production.example`; see `.env.example` for development defaults)
 - **Build Steps**:
   ```bash
   # Install dependencies
   npm install
   
-  # Create .env.production with the required variables
-  cp .env.example .env.production
+  # Create env files from templates and update values as needed
+  cp .env.example .env
+  cp .env.production.example .env.production
   
   # Build the extension
   npm run build
