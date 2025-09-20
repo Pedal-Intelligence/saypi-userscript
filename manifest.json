@@ -13,8 +13,8 @@
     "downloads"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
-    "https://www.saypi.ai/*"
+    "https://localhost:5001/*",
+    "http://localhost:3000/*"
   ],
   "content_scripts": [
     {
