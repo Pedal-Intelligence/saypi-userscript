@@ -157,6 +157,10 @@ vi.mock("../src/icons/rectangles-moonlight.svg", () => ({
   default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/></svg>'
 }));
 
+vi.mock("../src/icons/exit.svg", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm9 4-1.41 1.41L14.17 10H8v4h6.17l-1.58 1.59L14 17l4-4-4-4z"/></svg>'
+}));
+
 vi.mock("../src/icons/stopwatch.svg", () => ({
   default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 2c5.519 0 10 4.481 10 10s-4.481 10-10 10-10-4.481-10-10 4.481-10 10-10zm1 5v5h4v2h-6v-7h2z"/></svg>'
 }));
