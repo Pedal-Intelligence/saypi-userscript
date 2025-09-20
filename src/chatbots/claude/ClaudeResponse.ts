@@ -88,6 +88,8 @@ export class ClaudeMessageControls extends MessageControls {
  * This approach is slower than the ClaudeTextStream, but is more reliable and straightforward.
  */
 export class ClaudeTextBlockCapture extends ElementTextStream {
+  protected _numAdditions: number = 0;
+
   handleMutationEvent(_mutation: MutationRecord): void {
     // no-op for block capture
   }
@@ -166,12 +168,17 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
 
 export class ClaudeTextStream extends ClaudeTextBlockCapture {
   private _textProcessedSoFar: string = "";
+
   constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
+    console.log(`[ClaudeTextStream] initialized on element: '${element.id}'`);
   }
-
   override handleTextAddition(allText: string, _isFinal: boolean = false): void {
+    console.log(`[ClaudeTextStream] [handleTextAddition] [${this._numAdditions}] raw text: '${allText}'`);
     const unseenText = allText.replace(this._textProcessedSoFar, "");
+    console.log(`[ClaudeTextStream] [handleTextAddition] [${this._numAdditions}] unseen text: '${unseenText}'`);
+    this._numAdditions++;
+
     if (!unseenText) {
       return; // some chunks may be empty
     }
