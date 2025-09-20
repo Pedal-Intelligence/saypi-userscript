@@ -1,9 +1,14 @@
-import { SpeechSynthesisModule, TextErrorEvent } from "./SpeechSynthesisModule";
+import {
+  SpeechSynthesisModule,
+  TextCompletedEvent,
+  TextErrorEvent,
+} from "./SpeechSynthesisModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { MessageHistoryModule } from "./MessageHistoryModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import EventBus from "../events/EventBus";
+import { AssistantResponse } from "../dom/MessageElements";
 import {
   AssistantSpeech,
   ChatHistoryAdditionsObserver,
@@ -19,6 +24,7 @@ import { SpeechUtterance } from "./SpeechModel";
 import { logger } from "../LoggingModule";
 import { findRootAncestor } from "../dom/DOMModule";
 import { UtteranceCharge } from "../billing/BillingModule";
+import { md5 } from "js-md5";
 
 export class ChatHistorySpeechManager implements ResourceReleasable {
   private userPreferences = UserPreferenceModule.getInstance();
@@ -32,6 +38,17 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private observers: Observer[] = [];
 
   private newMessageObserver: ChatHistoryAdditionsObserver | null = null;
+  private static pendingSpeeches: Map<
+    string,
+    {
+      message: AssistantResponse;
+      speech: AssistantSpeech;
+      manager: ChatHistorySpeechManager;
+    }
+  > = new Map();
+  private static completionListenerRegistered = false;
+  private static readonly MD5_OF_NOTHING = "d41d8cd98f00b204e9800998ecf8427e";
+  private static readonly MD5_OF_SPACE = "7215ee9c7d9dc229d2921a40e899ec5f";
 
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(chatHistory: HTMLElement): void {
@@ -60,9 +77,6 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     }
   }
 
-  md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
-  md5OfSpace = "7215ee9c7d9dc229d2921a40e899ec5f";
-
   /**
    * Find the message in the chat history that corresponds to the given utterance,
    * and associate the utterance with that message in the speech history.
@@ -85,29 +99,73 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       const assistantMessage =
         this.chatbot.getAssistantResponse(lastAssistantMessage);
       assistantMessage.decorateSpeech(utterance);
-      // ensure the AssistantResponse object has finished mutating before generating its hash
-      assistantMessage.stableHash().then((hash) => {
-        // debug: verify the hashes have converged
-        if (hash !== assistantMessage.hash) {
-          console.error(`Hash mismatch: ${hash} vs ${assistantMessage.hash}`);
-          if (hash === this.md5OfNothing) {
-            console.error(
-              "Hash is md5 of nothing - stable text failed to resolve."
-            );
-          } else if (hash === this.md5OfSpace) {
-            console.error("Hash is md5 of ' ' - text stream may be empty.");
-          }
-          assistantMessage.stableText().then((stableText) => {
-            logger.debug(`Stable text: "${stableText}"`);
-            logger.debug(`Assistant text: "${assistantMessage.text}"`);
-          });
-          return;
-        }
-        logger.debug(
-          `Saving speech for ${assistantMessage.toString()} with hash: ${hash}`
+      const existingPending = ChatHistorySpeechManager.pendingSpeeches.get(
+        utterance.id
+      );
+      if (existingPending) {
+        logger.warn(
+          `Replacing pending speech association for utterance ${utterance.id}`
         );
-        SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
+      }
+      ChatHistorySpeechManager.pendingSpeeches.set(utterance.id, {
+        message: assistantMessage,
+        speech,
+        manager: this,
       });
+    }
+  }
+
+  private static handleSpeechCompletion(event: TextCompletedEvent): void {
+    const pending = ChatHistorySpeechManager.pendingSpeeches.get(
+      event.utterance.id
+    );
+    if (!pending) {
+      return;
+    }
+
+    ChatHistorySpeechManager.pendingSpeeches.delete(event.utterance.id);
+
+    const { message: assistantMessage, speech, manager } = pending;
+    const completedHash = md5(event.text);
+    const messageHash = assistantMessage.hash;
+    if (completedHash !== messageHash) {
+      console.error(`Hash mismatch: ${completedHash} vs ${assistantMessage.hash}`);
+      if (completedHash === ChatHistorySpeechManager.MD5_OF_NOTHING) {
+        console.error(
+          "Hash is md5 of nothing - stable text failed to resolve."
+        );
+      } else if (completedHash === ChatHistorySpeechManager.MD5_OF_SPACE) {
+        console.error("Hash is md5 of ' ' - text stream may be empty.");
+      }
+      logger.debug(`Completed text: "${event.text}"`);
+      logger.debug(`Assistant text: "${assistantMessage.text}"`);
+      return;
+    }
+
+    logger.debug(
+      `Saving speech for ${assistantMessage.toString()} with hash: ${completedHash}`
+    );
+    manager.speechHistory.addSpeechToHistory(completedHash, speech);
+  }
+
+  private static registerSpeechCompletionListener(): void {
+    if (ChatHistorySpeechManager.completionListenerRegistered) {
+      return;
+    }
+    EventBus.on(
+      "saypi:tts:text:completed",
+      ChatHistorySpeechManager.handleSpeechCompletion
+    );
+    ChatHistorySpeechManager.completionListenerRegistered = true;
+  }
+
+  private static clearPendingForManager(
+    manager: ChatHistorySpeechManager
+  ): void {
+    for (const [utteranceId, pending] of ChatHistorySpeechManager.pendingSpeeches) {
+      if (pending.manager === manager) {
+        ChatHistorySpeechManager.pendingSpeeches.delete(utteranceId);
+      }
     }
   }
 
@@ -181,6 +239,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
 
     EventBus.on("saypi:tts:replaying", replayingListener);
     EventBus.on("saypi:tts:speechStreamStarted", speechStreamStartedListener);
+    ChatHistorySpeechManager.registerSpeechCompletionListener();
 
     this.eventListeners.push({ event: "saypi:tts:replaying", listener: replayingListener });
     this.eventListeners.push({ event: "saypi:tts:speechStreamStarted", listener: speechStreamStartedListener });
@@ -200,13 +259,15 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
         `Speech error for utterance: ${event.utterance.id}`,
         event.error
       );
-      if (event.utterance?.id) {
+      const utteranceId = event.utterance?.id;
+      if (utteranceId) {
+        ChatHistorySpeechManager.pendingSpeeches.delete(utteranceId);
         // find the message in the chat history that corresponds to the given utterance
         // and mark it as having an error
         try {
           const message = getAssistantMessageByUtteranceId(
             this.chatbot,
-            event.utterance.id
+            utteranceId
           );
           if (message) {
             message.decoratedContent().then((content) => {
@@ -217,7 +278,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
         } catch (e) {
           // message not found - non-fatal error
           logger.debug(
-            `Could not find message for utterance ${event.utterance.id}. Won't be able to decorate with speech error.`
+            `Could not find message for utterance ${utteranceId}. Won't be able to decorate with speech error.`
           );
         }
       }
@@ -295,6 +356,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       EventBus.off(event, listener);
     });
     this.eventListeners = [];
+
+    ChatHistorySpeechManager.clearPendingForManager(this);
 
     this.observers.forEach((observer) => {
       observer.disconnect();
