@@ -171,12 +171,9 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
 export class ClaudeTextStream extends ClaudeTextBlockCapture {
   constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
-    console.log(`[ClaudeTextStream] initialized on element: '${element.id}'`);
   }
   override handleTextAddition(allText: string, _isFinal: boolean = false): void {
-    console.log(`[ClaudeTextStream] [handleTextAddition] [${this._numAdditions}] raw text: '${allText}'`);
     const unseenText = this.computeUnseenText(allText);
-    console.log(`[ClaudeTextStream] [handleTextAddition] [${this._numAdditions}] unseen text: '${unseenText}'`);
     this._numAdditions++;
 
     if (!unseenText) {
