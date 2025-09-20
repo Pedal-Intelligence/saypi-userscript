@@ -98,25 +98,54 @@ class SpeechSynthesisModule {
     });
   }
 
-  private voicesCache: SpeechSynthesisVoiceRemote[] = [];
-  private voicesLoading: Promise<void> | null = null;
+  private voicesCache: Map<string, SpeechSynthesisVoiceRemote[]> = new Map();
+  private voicesLoading: Map<string, Promise<void>> = new Map();
 
-  async getVoices(chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote[]> {
-    if (this.voicesCache.length > 0) {
-      return this.voicesCache;
+  private resolveChatbotKey(chatbot?: Chatbot | string, override?: string): string {
+    if (override) {
+      return override;
     }
-    if (!this.voicesLoading) {
-      this.voicesLoading = this.ttsService.getVoices(chatbot).then((voices) => {
-        this.voicesCache = voices;
-        this.voicesLoading = null;
-      });
+    if (typeof chatbot === "string") {
+      return chatbot;
     }
-    await this.voicesLoading;
-    return this.voicesCache;
+    if (chatbot) {
+      return chatbot.getID();
+    }
+    return ChatbotIdentifier.getAppId();
   }
 
-  async getVoiceById(id: string, chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote> {
-    const voices = await this.getVoices(chatbot); // populate cache
+  async getVoices(
+    chatbot?: Chatbot | string,
+    chatbotIdOverride?: string
+  ): Promise<SpeechSynthesisVoiceRemote[]> {
+    const key = this.resolveChatbotKey(chatbot, chatbotIdOverride);
+    const cached = this.voicesCache.get(key);
+    if (cached && cached.length > 0) {
+      return cached;
+    }
+    if (!this.voicesLoading.has(key)) {
+      const loadPromise = this.ttsService
+        .getVoices(typeof chatbot === "string" ? undefined : chatbot, key)
+        .then((voices) => {
+          this.voicesCache.set(key, voices);
+          this.voicesLoading.delete(key);
+        })
+        .catch((error) => {
+          this.voicesLoading.delete(key);
+          throw error;
+        });
+      this.voicesLoading.set(key, loadPromise);
+    }
+    await this.voicesLoading.get(key);
+    return this.voicesCache.get(key) ?? [];
+  }
+
+  async getVoiceById(
+    id: string,
+    chatbot?: Chatbot | string,
+    chatbotIdOverride?: string
+  ): Promise<SpeechSynthesisVoiceRemote> {
+    const voices = await this.getVoices(chatbot, chatbotIdOverride); // populate cache
 
     const foundVoice = voices.find((voice) => voice.id === id);
     if (!foundVoice) {
@@ -145,8 +174,9 @@ class SpeechSynthesisModule {
    * Visible only for testing
    * @param voices
    */
-  _cacheVoices(voices: SpeechSynthesisVoiceRemote[]) {
-    this.voicesCache = voices;
+  _cacheVoices(voices: SpeechSynthesisVoiceRemote[], chatbotId?: string) {
+    const key = chatbotId ?? ChatbotIdentifier.getAppId();
+    this.voicesCache.set(key, voices);
   }
 
   async createSpeech(
@@ -156,7 +186,7 @@ class SpeechSynthesisModule {
     chatbot?: Chatbot
   ): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await this.userPreferences.getVoice();
+      await this.userPreferences.getVoice(chatbot);
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
@@ -192,7 +222,7 @@ class SpeechSynthesisModule {
 
   async createSpeechStream(chatbot?: Chatbot): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await this.userPreferences.getVoice();
+      await this.userPreferences.getVoice(chatbot);
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
@@ -262,21 +292,20 @@ class SpeechSynthesisModule {
    * Get the active audio provider based on user preferences
    * @returns {Promise<AudioProvider>}
    */
-  async getActiveAudioProvider(): Promise<AudioProvider> {
-    // For dictation mode (non-chatbot sites), return None provider to prevent audio interference
-    if (ChatbotIdentifier.isInDictationMode()) {
+  async getActiveAudioProvider(chatbot?: Chatbot | string): Promise<AudioProvider> {
+    const chatbotId = this.resolveChatbotKey(chatbot);
+
+    if (chatbotId === "web") {
       return audioProviders.None;
     }
-    
-    const userHasSavedAVoicePreference = await this.userPreferences.hasVoice();
-    // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
-    const voice = await this.userPreferences.getVoice();
-    const voicePreferenceIsAvailable = userHasSavedAVoicePreference && voice !== null;
-    if (voicePreferenceIsAvailable) {
-      return audioProviders.retreiveProviderByVoice(voice!); // voice is not null if customVoiceIsSelected is true
+
+    const hasVoice = await this.userPreferences.hasVoice(chatbot ?? chatbotId);
+    const voice = await this.userPreferences.getVoice(chatbot ?? chatbotId);
+    if (hasVoice && voice) {
+      return audioProviders.retreiveProviderByVoice(voice);
     }
-    // Use centralized default provider logic instead of hardcoded Pi fallback
-    return audioProviders.getDefault();
+
+    return audioProviders.getDefaultForChatbot(chatbotId);
   }
 
   private isStreamOpen(utteranceId: string): boolean {

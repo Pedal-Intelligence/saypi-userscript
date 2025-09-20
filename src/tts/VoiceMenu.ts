@@ -59,7 +59,7 @@ export abstract class VoiceSelector {
     );
     builtInPiVoiceButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        this.userPreferences.unsetVoice().then(() => {
+        this.userPreferences.unsetVoice(this.chatbot).then(() => {
           if (this.selectedVoiceButton) {
             this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
           }
@@ -164,7 +164,7 @@ export abstract class VoiceSelector {
       button.classList.add(...combinedClasses);
       button.innerText = voice.name;
       button.addEventListener("click", () => {
-        this.userPreferences.setVoice(voice).then(() => {
+        this.userPreferences.setVoice(voice, this.chatbot).then(() => {
           console.log(`Selected voice: ${voice.name}`);
           defaultVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
@@ -219,7 +219,7 @@ export abstract class VoiceSelector {
       flair.title = getMessage("enhancedVoice", ["Say, Pi"]);
       button.appendChild(flair);
       button.addEventListener("click", () => {
-        this.userPreferences.setVoice(voice).then(() => {
+        this.userPreferences.setVoice(voice, this.chatbot).then(() => {
           console.log(`Selected voice: ${voice.name}`);
           customVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
@@ -295,7 +295,7 @@ export abstract class VoiceSelector {
   handleButtonAddition(button: HTMLButtonElement): void {
     // a voice button was added to the menu that is not a custom voice button
     // if a voice is selected, mark the button as selected
-    this.userPreferences.getVoice().then((voice) => {
+    this.userPreferences.getVoice(this.chatbot).then((voice) => {
       const customVoiceIsSelected = voice !== null;
       if (customVoiceIsSelected) {
         if (this.isBuiltInVoiceButton(button)) {

@@ -45,8 +45,11 @@ export class TextToSpeechService {
     return response.json();
   }
 
-  public async getVoices(chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote[]> {
-    const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
+  public async getVoices(
+    chatbot?: Chatbot,
+    chatbotIdOverride?: string
+  ): Promise<SpeechSynthesisVoiceRemote[]> {
+    const appId = chatbotIdOverride ?? (chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId());
     const endpoint = `${this.serviceUrl}/voices?app=${appId}`;
     const response = await callApi(endpoint);
     if (response.status === 401) {

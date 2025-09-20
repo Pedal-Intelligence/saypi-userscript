@@ -86,9 +86,8 @@ const audioProviders = {
     return audioProviders.retrieveProviderByEngine(voice.powered_by);
   },
   
-  // Get the default audio provider based on the current chatbot
-  getDefault: (): AudioProvider => {
-    const chatbotId = ChatbotIdentifier.identifyChatbot();
+  // Get the default audio provider based on a chatbot id
+  getDefaultForChatbot: (chatbotId: string): AudioProvider => {
     switch (chatbotId) {
       case "pi":
         return audioProviders.Pi;
@@ -102,6 +101,11 @@ const audioProviders = {
       default:
         return audioProviders.None; // Safe fallback - no interference
     }
+  },
+  // Get the default audio provider based on the current chatbot
+  getDefault: (): AudioProvider => {
+    const chatbotId = ChatbotIdentifier.identifyChatbot();
+    return audioProviders.getDefaultForChatbot(chatbotId);
   }
 };
 

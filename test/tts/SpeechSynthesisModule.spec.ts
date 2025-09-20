@@ -1,8 +1,8 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
+import type { Mock } from "vitest";
 import { SpeechSynthesisModule } from "../../src/tts/SpeechSynthesisModule";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
-import { JSDOM } from "jsdom";
 import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { BillingModule } from "../../src/billing/BillingModule";
@@ -28,8 +28,8 @@ describe("SpeechSynthesisModule", () => {
     }));
 
     textToSpeechServiceMock = {
-      getVoiceById: vi.fn(),
-      getVoices: vi.fn(),
+      getVoiceById: vi.fn(() => Promise.resolve(mockVoices[0])),
+      getVoices: vi.fn(() => Promise.resolve(mockVoices)),
       createSpeech: vi.fn(),
       addTextToSpeechStream: vi.fn(),
     } as unknown as TextToSpeechService;
@@ -43,9 +43,9 @@ describe("SpeechSynthesisModule", () => {
     const preferredVoiceMock = mockVoices[0];
 
     userPreferenceModuleMock = {
-      hasVoice: vi.fn().mockReturnValue(true),
-      getVoice: vi.fn().mockReturnValue(preferredVoiceMock),
-      getLanguage: vi.fn().mockReturnValue("en-US"),
+      hasVoice: vi.fn().mockResolvedValue(true),
+      getVoice: vi.fn().mockResolvedValue(preferredVoiceMock),
+      getLanguage: vi.fn().mockResolvedValue("en-US"),
     } as unknown as UserPreferenceModule;
 
     billingModuleMock = {
@@ -61,9 +61,8 @@ describe("SpeechSynthesisModule", () => {
   });
 
   afterEach(() => {
-    //vi.resetAllMocks();
     vi.unstubAllEnvs();
-    //vi.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should create an instance of SpeechSynthesisModule", () => {
@@ -77,9 +76,9 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("should get voices from the cache if available", async () => {
-    speechSynthesisModule._cacheVoices(mockVoices);
+    speechSynthesisModule._cacheVoices(mockVoices, "claude");
 
-    const actualVoices = await speechSynthesisModule.getVoices();
+    const actualVoices = await speechSynthesisModule.getVoices(undefined, "claude");
 
     expect(actualVoices).toEqual(mockVoices);
     expect(textToSpeechServiceMock.getVoices).not.toHaveBeenCalled();
@@ -90,19 +89,26 @@ describe("SpeechSynthesisModule", () => {
       Promise.resolve(mockVoices)
     );
 
-    const voices = await speechSynthesisModule.getVoices();
+    const voices = await speechSynthesisModule.getVoices(undefined, "claude");
 
     expect(voices).toEqual(mockVoices);
 
     // Assert that the spy was called
-    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalled();
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledWith(
+      undefined,
+      "claude"
+    );
   });
 
   it("should get voice by ID from the cache if available", async () => {
     const mockVoice = mockVoices[0];
-    speechSynthesisModule._cacheVoices([mockVoice]);
+    speechSynthesisModule._cacheVoices([mockVoice], "claude");
 
-    const voice = await speechSynthesisModule.getVoiceById(mockVoice.id);
+    const voice = await speechSynthesisModule.getVoiceById(
+      mockVoice.id,
+      undefined,
+      "claude"
+    );
 
     expect(voice).toEqual(mockVoice);
     expect(textToSpeechServiceMock.getVoiceById).not.toHaveBeenCalled();
@@ -122,9 +128,91 @@ describe("SpeechSynthesisModule", () => {
       Promise.resolve(mockUtterance)
     );
 
-    const utterance = await speechSynthesisModule.createSpeechStream();
+    const utterance = await speechSynthesisModule.createSpeechStream({
+      getID: () => "claude",
+    } as any);
 
     expect(utterance).toEqual(mockUtterance);
     expect(audioStreamManagerMock.createStream).toHaveBeenCalled();
+  });
+
+  it("keeps native audio for chatbots without a Say Pi voice selection", async () => {
+    const preferredVoice = mockVoices[0];
+    (userPreferenceModuleMock.hasVoice as Mock).mockImplementation(
+      async (chatbotArg?: any) => {
+        const id = typeof chatbotArg === "string" ? chatbotArg : chatbotArg?.getID?.();
+        return id === "claude";
+      }
+    );
+    (userPreferenceModuleMock.getVoice as Mock).mockImplementation(
+      async (chatbotArg?: any) => {
+        const id = typeof chatbotArg === "string" ? chatbotArg : chatbotArg?.getID?.();
+        return id === "claude" ? preferredVoice : null;
+      }
+    );
+
+    const claudeChatbot = { getID: () => "claude" } as any;
+    const chatgptChatbot = { getID: () => "chatgpt" } as any;
+
+    const claudeProvider = await speechSynthesisModule.getActiveAudioProvider(
+      claudeChatbot
+    );
+    const chatgptProvider = await speechSynthesisModule.getActiveAudioProvider(
+      chatgptChatbot
+    );
+
+    expect(claudeProvider).toEqual(audioProviders.SayPi);
+    expect(chatgptProvider).toEqual(
+      audioProviders.getDefaultForChatbot("chatgpt")
+    );
+  });
+
+  it("uses per-chatbot Say Pi voices without affecting other chatbots", async () => {
+    const claudeVoice = { ...mockVoices[0] };
+    const chatgptVoice = { ...mockVoices[0], id: "other", name: "Other Voice" };
+
+    (userPreferenceModuleMock.hasVoice as Mock).mockImplementation(
+      async (chatbotArg?: any) => {
+        const id = typeof chatbotArg === "string" ? chatbotArg : chatbotArg?.getID?.();
+        return id === "claude" || id === "chatgpt";
+      }
+    );
+    (userPreferenceModuleMock.getVoice as Mock).mockImplementation(
+      async (chatbotArg?: any) => {
+        const id = typeof chatbotArg === "string" ? chatbotArg : chatbotArg?.getID?.();
+        if (id === "chatgpt") {
+          return chatgptVoice;
+        }
+        return claudeVoice;
+      }
+    );
+
+    const claudeChatbot = { getID: () => "claude" } as any;
+    const chatgptChatbot = { getID: () => "chatgpt" } as any;
+
+    const claudeProvider = await speechSynthesisModule.getActiveAudioProvider(
+      claudeChatbot
+    );
+    const chatgptProvider = await speechSynthesisModule.getActiveAudioProvider(
+      chatgptChatbot
+    );
+
+    expect(claudeProvider).toEqual(audioProviders.SayPi);
+    expect(chatgptProvider).toEqual(audioProviders.SayPi);
+  });
+
+  it("falls back to native providers when no Say Pi voices are selected", async () => {
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(false);
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+
+    const chatgptChatbot = { getID: () => "chatgpt" } as any;
+
+    const provider = await speechSynthesisModule.getActiveAudioProvider(
+      chatgptChatbot
+    );
+
+    expect(provider).toEqual(
+      audioProviders.getDefaultForChatbot("chatgpt")
+    );
   });
 });
