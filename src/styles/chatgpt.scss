@@ -1,4 +1,12 @@
 /* ChatGPT host-specific UI polish */
+html.immersive-view body.chatgpt #saypi-exit-button {
+  display: inline-flex !important;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2147483647;
+}
+
 body.chatgpt {
   /* Hide control panel buttons that aren't needed until Phase 3/4 */
   .immersive-mode-button,
