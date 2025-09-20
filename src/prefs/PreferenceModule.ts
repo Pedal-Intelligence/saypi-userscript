@@ -11,9 +11,11 @@ import {
 import { isFirefox, isSafari } from "../UserAgentModule";
 import { getJwtManager, getJwtManagerSync } from "../JwtManager";
 import { Chatbot } from "../chatbots/Chatbot";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
+type VoicePreferenceMap = Record<string, string>;
 
 // Define an interface for the structure you expect to receive from storage.sync.get OR storage.local.get
 interface StorageResult {
@@ -22,6 +24,7 @@ interface StorageResult {
   autoSubmit?: boolean;
   language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
   voiceId?: string; // prefered speech synthesis voice (remains in sync)
+  voicePreferences?: VoicePreferenceMap;
   theme?: string; // 'light' or 'dark' (remains in sync)
   shareData?: boolean; // has the user consented to data sharing? (remains in sync)
   discretionaryMode?: boolean; // new beta feature for discretionary responses
@@ -39,10 +42,12 @@ export const FEATURE_CODES = {
 };
 
 // List of keys that are managed by chrome.storage.local after migration
+const VOICE_PREFERENCES_KEY = "voicePreferences";
+
 const LOCAL_STORAGE_KEYS = [
   "prefer", "language", "discretionaryMode", "nickname",
-  "autoSubmit", "allowInterruptions", "soundEffects", "theme", 
-  "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords",
+  "autoSubmit", "allowInterruptions", "soundEffects", "theme",
+  "shareData", "voiceId", VOICE_PREFERENCES_KEY, "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords",
   "autoReadAloudChatGPT"
 ];
 
@@ -87,6 +92,16 @@ class UserPreferenceModule {
         toMigrate[key] = syncData[key];
       }
     }
+
+    const existingVoicePreferences = (localData[VOICE_PREFERENCES_KEY] as VoicePreferenceMap | undefined) ??
+      (syncData[VOICE_PREFERENCES_KEY] as VoicePreferenceMap | undefined);
+    const legacyVoiceId = (localData.voiceId ?? syncData.voiceId) as string | undefined;
+    if ((!existingVoicePreferences || Object.keys(existingVoicePreferences).length === 0) && legacyVoiceId) {
+      const chatbotId = ChatbotIdentifier.getAppId();
+      toMigrate[VOICE_PREFERENCES_KEY] = { [chatbotId]: legacyVoiceId } satisfies VoicePreferenceMap;
+    }
+
+    const shouldRemoveLegacyVoiceId = syncData.voiceId !== undefined || localData.voiceId !== undefined;
     // Perform migration if needed
     if (Object.keys(toMigrate).length > 0) {
       await new Promise<void>((resolve, reject) => {
@@ -97,6 +112,16 @@ class UserPreferenceModule {
           } else {
             resolve();
           }
+        });
+      });
+    }
+    if (shouldRemoveLegacyVoiceId) {
+      await new Promise<void>((resolve) => {
+        chrome.storage.local.remove("voiceId", () => {
+          if (chrome.runtime && chrome.runtime.lastError) {
+            console.warn('Error removing legacy voiceId preference:', chrome.runtime.lastError);
+          }
+          resolve();
         });
       });
     }
@@ -142,9 +167,13 @@ class UserPreferenceModule {
       this.cache.setCachedValue("shareData", value);
       EventBus.emit("userPreferenceChanged", { shareData: value });
     });
-    this.getStoredValue("voiceId", null, 'local').then((value) => {
-      this.cache.setCachedValue("voiceId", value);
-      EventBus.emit("userPreferenceChanged", { voiceId: value });
+    this.loadVoicePreferencesIntoCache().then((preferences) => {
+      const chatbotId = ChatbotIdentifier.getAppId();
+      const activeVoiceId = preferences[chatbotId] ?? null;
+      EventBus.emit("userPreferenceChanged", {
+        voiceId: activeVoiceId ?? null,
+        voicePreferences: preferences,
+      });
     });
     this.getStoredValue("enableTTS", true, 'local').then((value) => {
       this.cache.setCachedValue("enableTTS", value);
@@ -191,6 +220,73 @@ class UserPreferenceModule {
     });
   }
 
+  private sanitizeVoicePreferences(preferences?: VoicePreferenceMap): VoicePreferenceMap {
+    const sanitized: VoicePreferenceMap = {};
+    if (!preferences) {
+      return sanitized;
+    }
+    for (const [chatbotId, voiceId] of Object.entries(preferences)) {
+      if (typeof voiceId === "string" && voiceId.trim().length > 0) {
+        sanitized[chatbotId] = voiceId;
+      }
+    }
+    return sanitized;
+  }
+
+  private async loadVoicePreferencesIntoCache(): Promise<VoicePreferenceMap> {
+    const stored = await this.getStoredValue(VOICE_PREFERENCES_KEY, {}, 'local') as VoicePreferenceMap | undefined;
+    const sanitized = this.sanitizeVoicePreferences(stored);
+    this.cache.setCachedValue(VOICE_PREFERENCES_KEY, sanitized);
+    return { ...sanitized };
+  }
+
+  private async getVoicePreferences(): Promise<VoicePreferenceMap> {
+    const cached = this.cache.getCachedValue(VOICE_PREFERENCES_KEY, null) as VoicePreferenceMap | null;
+    if (cached) {
+      return { ...cached };
+    }
+    return await this.loadVoicePreferencesIntoCache();
+  }
+
+  private async persistVoicePreferences(preferences: VoicePreferenceMap): Promise<void> {
+    const sanitized = this.sanitizeVoicePreferences(preferences);
+    this.cache.setCachedValue(VOICE_PREFERENCES_KEY, sanitized);
+    await this.setStoredValue(VOICE_PREFERENCES_KEY, sanitized, 'local');
+  }
+
+  private resolveChatbotId(chatbot?: Chatbot | string): string {
+    if (typeof chatbot === "string") {
+      return chatbot;
+    }
+    if (chatbot) {
+      return chatbot.getID();
+    }
+    return ChatbotIdentifier.getAppId();
+  }
+
+  private async resolveVoiceById(
+    voiceId: string,
+    chatbotId: string
+  ): Promise<SpeechSynthesisVoiceRemote | null> {
+    if (PiAIVoice.isPiVoiceId(voiceId)) {
+      return PiAIVoice.fromVoiceId(voiceId);
+    }
+    const apiServerUrl = config.apiServerUrl;
+    if (!apiServerUrl) {
+      return null;
+    }
+    try {
+      const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
+      return await tts.getVoiceById(voiceId, undefined, chatbotId);
+    } catch (error) {
+      console.info(
+        `Voice with ID ${voiceId} could not be resolved for ${chatbotId}.`,
+        error
+      );
+      return null;
+    }
+  }
+
   /**
    * Register message listeners for changes in user preferences (autoSubmit, allowInterruptions, etc.) by popup or options page
    */
@@ -226,16 +322,31 @@ class UserPreferenceModule {
           EventBus.emit("userPreferenceChanged", { shareData: request.shareData });
         }
         if ("voiceId" in request) {
-            this.cache.setCachedValue("voiceId", request.voiceId);
-            if (request.voiceId === null) {
-                actions.push(this.unsetVoice()); // unsetVoice now handles local storage
-            } else {
-                // Assuming request.voiceId is the ID, and setVoice needs a full object
-                // This part is tricky as setVoice expects a SpeechSynthesisVoiceRemote object.
-                // For now, we'll just store the ID. getVoice will need to resolve it.
-                actions.push(this.setStoredValue("voiceId", request.voiceId, 'local'));
-                EventBus.emit("userPreferenceChanged", { voiceId: request.voiceId });
-            }
+          const chatbotId = this.resolveChatbotId();
+          if (request.voiceId === null) {
+            actions.push(this.unsetVoice(chatbotId));
+          } else {
+            const voiceId = request.voiceId as string;
+            const applyVoice = this.resolveVoiceById(voiceId, chatbotId).then(async (voice) => {
+              if (voice) {
+                await this.setVoice(voice, chatbotId);
+              } else {
+                const preferences = await this.getVoicePreferences();
+                const updatedPreferences: VoicePreferenceMap = {
+                  ...preferences,
+                  [chatbotId]: voiceId,
+                };
+                await this.persistVoicePreferences(updatedPreferences);
+                EventBus.emit("userPreferenceChanged", {
+                  voiceId,
+                  voice: null,
+                  voicePreferences: updatedPreferences,
+                  voiceChatbotId: chatbotId,
+                });
+              }
+            });
+            actions.push(applyVoice);
+          }
         }
         if ("enableTTS" in request) {
           this.cache.setCachedValue("enableTTS", request.enableTTS);
@@ -339,9 +450,14 @@ class UserPreferenceModule {
                     this.cache.setCachedValue("shareData", newValue);
                     eventData = { shareData: newValue }; 
                     break;
-                  case "voiceId": 
-                    this.cache.setCachedValue("voiceId", newValue);
-                    eventData = { voiceId: newValue }; 
+                  case VOICE_PREFERENCES_KEY:
+                    const sanitized = this.sanitizeVoicePreferences(newValue as VoicePreferenceMap);
+                    this.cache.setCachedValue(VOICE_PREFERENCES_KEY, sanitized);
+                    eventData = {
+                      voicePreferences: sanitized,
+                      voiceId: sanitized[this.resolveChatbotId()] ?? null,
+                      voiceChatbotId: this.resolveChatbotId(),
+                    };
                     break;
                   case "enableTTS": 
                     this.cache.setCachedValue("enableTTS", newValue);
@@ -673,71 +789,96 @@ class UserPreferenceModule {
     return this.setStoredValue("shareData", enabled, 'local'); // Changed to 'local'
   }
   
-  // Voice ID (now also local, was sync)
-  public async hasVoice(): Promise<boolean> {
-    const voiceId = await this.getStoredValue("voiceId", null, 'local'); // Changed to 'local'
-    return !!voiceId;
+  // Voice preferences scoped per chatbot
+  public async hasVoice(chatbot?: Chatbot | string): Promise<boolean> {
+    const chatbotId = this.resolveChatbotId(chatbot);
+    const preferences = await this.getVoicePreferences();
+    const voiceId = preferences[chatbotId];
+    return typeof voiceId === "string" && voiceId.trim().length > 0;
   }
 
-  public async getVoice(chatbot?: Chatbot): Promise<VoicePreference> {
+  public async getVoice(chatbot?: Chatbot | string): Promise<VoicePreference> {
+    const preferences = await this.getVoicePreferences();
+    const chatbotId = this.resolveChatbotId(chatbot);
+    const voiceIdToFetch = preferences[chatbotId] ?? null;
+
+    if (!voiceIdToFetch) {
+      return null;
+    }
+
+    if (PiAIVoice.isPiVoiceId(voiceIdToFetch)) {
+      return PiAIVoice.fromVoiceId(voiceIdToFetch);
+    }
+
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
     }
-    const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
-    // Check cache first
-    const cachedVoiceId = this.cache.getCachedValue("voiceId", null) as string | null;
-    let voiceIdToFetch = cachedVoiceId;
 
-    if (voiceIdToFetch === null) {
-      voiceIdToFetch = await this.getStoredValue("voiceId", null, 'local') as string | null; // Changed to 'local'
-      if (voiceIdToFetch !== null) {
-        this.cache.setCachedValue("voiceId", voiceIdToFetch);
-      }
+    const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
+    const chatbotInstance = typeof chatbot === "string" ? undefined : chatbot;
+    try {
+      return await tts.getVoiceById(voiceIdToFetch, chatbotInstance, chatbotId);
+    } catch (error: any) {
+      console.info(`Voice with ID ${voiceIdToFetch} not found for ${chatbotId}. Clearing stored voice preference.`);
+      const updatedPreferences = { ...preferences };
+      delete updatedPreferences[chatbotId];
+      await this.persistVoicePreferences(updatedPreferences);
+      return null;
     }
-    
-    if (voiceIdToFetch) {
-      if (PiAIVoice.isPiVoiceId(voiceIdToFetch)) {
-        return PiAIVoice.fromVoiceId(voiceIdToFetch);
-      }
-      try {
-        return await tts.getVoiceById(voiceIdToFetch, chatbot);
-      } catch (error: any) {
-        console.info(`Voice with ID ${voiceIdToFetch} not found for ${chatbot?.getName() || "current chatbot"}. Clearing stored voiceId.`);
-        // If voice not found, clear the invalid ID from storage and cache
-        await this.setStoredValue("voiceId", null, 'local');
-        this.cache.setCachedValue("voiceId", null);
-        return null;
-      }
-    }
-    return null;
   }
 
-  public setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+  public async setVoice(voice: SpeechSynthesisVoiceRemote, chatbot?: Chatbot | string): Promise<void> {
     const provider = audioProviders.retrieveProviderByEngine(voice.powered_by);
-    this.cache.setCachedValue("voiceId", voice.id);
+    const chatbotId = this.resolveChatbotId(chatbot);
+    const preferences = await this.getVoicePreferences();
+    const updatedPreferences: VoicePreferenceMap = {
+      ...preferences,
+      [chatbotId]: voice.id,
+    };
+
+    await this.persistVoicePreferences(updatedPreferences);
     EventBus.emit("userPreferenceChanged", {
       voiceId: voice.id,
-      voice: voice,
+      voice,
       audioProvider: provider,
+      voicePreferences: updatedPreferences,
+      voiceChatbotId: chatbotId,
     });
-    return this.setStoredValue("voiceId", voice.id, 'local').then(() => { // Changed to 'local'
-        const audioControls = new AudioControlsModule();
-        audioControls.notifyAudioVoiceSelection(voice);
-    });
+
+    const audioControls = new AudioControlsModule();
+    audioControls.notifyAudioVoiceSelection(voice);
   }
 
-  public unsetVoice(): Promise<void> {
-    this.cache.setCachedValue("voiceId", null);
+  public async unsetVoice(chatbot?: Chatbot | string): Promise<void> {
+    const chatbotId = this.resolveChatbotId(chatbot);
+    const preferences = await this.getVoicePreferences();
+    if (!(chatbotId in preferences)) {
+      EventBus.emit("userPreferenceChanged", {
+        voiceId: null,
+        voice: null,
+        audioProvider: audioProviders.getDefaultForChatbot(chatbotId),
+        voicePreferences: preferences,
+        voiceChatbotId: chatbotId,
+      });
+      const audioControls = new AudioControlsModule();
+      audioControls.notifyAudioVoiceDeselection();
+      return;
+    }
+
+    const updatedPreferences = { ...preferences };
+    delete updatedPreferences[chatbotId];
+    await this.persistVoicePreferences(updatedPreferences);
     EventBus.emit("userPreferenceChanged", {
       voiceId: null,
       voice: null,
-      audioProvider: audioProviders.Pi,
+      audioProvider: audioProviders.getDefaultForChatbot(chatbotId),
+      voicePreferences: updatedPreferences,
+      voiceChatbotId: chatbotId,
     });
-    return this.setStoredValue("voiceId", null, 'local').then(() => { // Changed to 'local'
-        const audioControls = new AudioControlsModule();
-        audioControls.notifyAudioVoiceDeselection();
-    });
+
+    const audioControls = new AudioControlsModule();
+    audioControls.notifyAudioVoiceDeselection();
   }
   
   // Allow Interruptions (now local, was sync)

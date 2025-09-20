@@ -16,12 +16,12 @@ export class UserPreferenceModuleMock {
   public setTheme = vi.fn(() => Promise.resolve());
   public getDataSharing = vi.fn(() => Promise.resolve(false));
   public getPrefersImmersiveView = vi.fn(() => Promise.resolve(false));
-  public hasVoice = vi.fn(() => Promise.resolve(true));
-  public getVoice = vi.fn(() =>
+  public hasVoice = vi.fn((..._args: any[]) => Promise.resolve(true));
+  public getVoice = vi.fn((..._args: any[]) =>
     Promise.resolve(mockVoices[0] as SpeechSynthesisVoiceRemote)
   );
-  public setVoice = vi.fn(() => Promise.resolve());
-  public unsetVoice = vi.fn(() => Promise.resolve());
+  public setVoice = vi.fn((..._args: any[]) => Promise.resolve());
+  public unsetVoice = vi.fn((..._args: any[]) => Promise.resolve());
 
   private getStoredValue(key: string, defaultValue: any): Promise<any> {
     return new Promise((resolve) => {

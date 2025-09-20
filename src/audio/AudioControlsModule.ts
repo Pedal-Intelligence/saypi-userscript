@@ -68,6 +68,6 @@ export default class AudioControlsModule {
   notifyAudioVoiceDeselection(): void {
     logger.debug("Using default voice for speech");
     EventBus.emit("audio:changeVoice", { voice: null });
-    this.notifyAudioProviderSelection(audioProviders.Pi);
+    this.notifyAudioProviderSelection(audioProviders.getDefault());
   }
 }

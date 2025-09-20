@@ -454,7 +454,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     }
     
     if (voice) {
-      this.userPreferences.setVoice(voice).then(() => {
+      this.userPreferences.setVoice(voice, this.chatbot).then(() => {
         console.log(`Selected voice: ${voice.name}`);
         this.updateSelectedVoice(voice);
         // only introduce the voice if there are other voices available (one of which is "Voice off")
@@ -463,7 +463,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         }
       });
     } else {
-      this.userPreferences.unsetVoice().then(() => {
+      this.userPreferences.unsetVoice(this.chatbot).then(() => {
         console.log("Voice disabled");
         this.updateSelectedVoice(null);
       });
