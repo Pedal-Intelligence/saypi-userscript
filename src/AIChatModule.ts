@@ -28,7 +28,7 @@ export class AIChatModule {
   }
 
   public async initialize(): Promise<void> {
-    logger.info("Initializing chat mode");
+    logger.debug("Initializing chat mode");
     
     const chatbot = await ChatbotService.getChatbot();
 

@@ -1,4 +1,5 @@
 import type { Chatbot } from "../chatbots/Chatbot";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { getClientId } from "./ClientIdManager";
 import { getExtensionVersion } from "./VersionManager";
 
@@ -30,12 +31,7 @@ export async function buildUsageMetadata(chatbot?: Chatbot): Promise<UsageMetada
   }
 
   try {
-    let bot = chatbot;
-    if (!bot) {
-      const { ChatbotService } = await import("../chatbots/ChatbotService");
-      bot = await ChatbotService.getChatbot();
-    }
-    const appId = bot?.getID?.();
+    const appId = chatbot?.getID?.() ?? ChatbotIdentifier.getAppId();
     if (appId) result.app = String(appId).toLowerCase();
   } catch (e) {
     console.warn("[UsageMetadata] Failed to resolve app id", e);
@@ -52,5 +48,3 @@ export async function buildUsageMetadata(chatbot?: Chatbot): Promise<UsageMetada
 
   return result;
 }
-
-
