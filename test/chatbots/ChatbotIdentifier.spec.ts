@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
 
 test("identifies claude.ai and its sub-domains as 'claude'", () => {
@@ -22,4 +22,24 @@ test("returns 'web' for unrelated domains that include pi or claude as substring
   cases.forEach((hostname) => {
     expect(ChatbotIdentifier.identifyChatbot(hostname)).toBe("web");
   });
-}); 
+});
+
+test("returns undefined when running without window or global location", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue(null);
+
+  expect(ChatbotIdentifier.identifyChatbot()).toBeUndefined();
+
+  locationSpy.mockRestore();
+});
+
+test("uses global location when window is unavailable", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "chat.openai.com" } as unknown as Location);
+
+  expect(ChatbotIdentifier.identifyChatbot()).toBe("chatgpt");
+
+  locationSpy.mockRestore();
+});

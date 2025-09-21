@@ -1,4 +1,5 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
+import type { SpyInstance } from "vitest";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { mockVoices } from "../data/Voices";
 import { audioProviders } from "../../src/tts/SpeechModel";
@@ -18,10 +19,11 @@ vi.mock("../../src/usage/VersionManager");
 describe("TextToSpeechService", () => {
   let textToSpeechService: TextToSpeechService;
   const mockVoice = mockVoices[0];
+  let getAppIdSpy: SpyInstance;
 
   beforeEach(async () => {
     // Ensure ChatbotIdentifier returns 'pi' for these tests regardless of host
-    vi.spyOn(ChatbotIdentifier, "getAppId").mockReturnValue("pi");
+    getAppIdSpy = vi.spyOn(ChatbotIdentifier, "getAppId").mockReturnValue("pi");
     
     // Mock the usage analytics functions
     const { getClientId } = await import("../../src/usage/ClientIdManager");
@@ -47,6 +49,18 @@ describe("TextToSpeechService", () => {
     const voices = await textToSpeechService.getVoices();
 
     expect(ApiClient.callApi).toHaveBeenCalledWith("http://example.com/voices?app=pi");
+    expect(voices).toEqual(mockVoices);
+  });
+
+  it("omits app query parameter when no app id is available", async () => {
+    const mockResponse = new Response(JSON.stringify(mockVoices), { status: 200 });
+    (ApiClient.callApi as any).mockResolvedValue(mockResponse);
+
+    getAppIdSpy.mockReturnValueOnce(undefined as any);
+
+    const voices = await textToSpeechService.getVoices();
+
+    expect(ApiClient.callApi).toHaveBeenCalledWith("http://example.com/voices");
     expect(voices).toEqual(mockVoices);
   });
 
@@ -103,6 +117,43 @@ describe("TextToSpeechService", () => {
     
     expect(call[1].method).toBe("POST");
     expect(call[1].headers).toEqual({ "Content-Type": "application/json" });
+    expect(actualSpeech).toEqual(expectedSpeech);
+  });
+
+  it("omits app metadata when app id cannot be resolved", async () => {
+    const expectedSpeech = {
+      id: "uuid",
+      lang: "en-US",
+      voice: mockVoice,
+      uri: `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`,
+      provider: audioProviders.SayPi,
+    };
+    const mockResponse = new Response(JSON.stringify(expectedSpeech), { status: 200 });
+    (ApiClient.callApi as any).mockResolvedValue(mockResponse);
+
+    getAppIdSpy.mockReturnValueOnce(undefined as any).mockReturnValueOnce(undefined as any);
+
+    const actualSpeech = await textToSpeechService.createSpeech(
+      "uuid",
+      "Hello",
+      mockVoice,
+      "en-US",
+      false
+    );
+
+    const call = (ApiClient.callApi as any).mock.calls[0];
+    expect(call[0]).toBe(`http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`);
+
+    const requestBody = JSON.parse(call[1].body);
+    expect(requestBody).toEqual({
+      voice: mockVoice.id,
+      text: "Hello",
+      lang: "en-US",
+      sequenceNumber: 0,
+      clientId: "test-client-id-12345",
+      version: "1.0.0-test",
+    });
+
     expect(actualSpeech).toEqual(expectedSpeech);
   });
 

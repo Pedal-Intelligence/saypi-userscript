@@ -21,6 +21,8 @@ import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
+const UNKNOWN_CHATBOT_CACHE_KEY = "__unknown__";
+
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
@@ -101,7 +103,7 @@ class SpeechSynthesisModule {
   private voicesCache: Map<string, SpeechSynthesisVoiceRemote[]> = new Map();
   private voicesLoading: Map<string, Promise<void>> = new Map();
 
-  private resolveChatbotKey(chatbot?: Chatbot | string, override?: string): string {
+  private resolveChatbotKey(chatbot?: Chatbot | string, override?: string): string | undefined {
     if (override) {
       return override;
     }
@@ -118,26 +120,27 @@ class SpeechSynthesisModule {
     chatbot?: Chatbot | string,
     chatbotIdOverride?: string
   ): Promise<SpeechSynthesisVoiceRemote[]> {
-    const key = this.resolveChatbotKey(chatbot, chatbotIdOverride);
-    const cached = this.voicesCache.get(key);
+    const appId = this.resolveChatbotKey(chatbot, chatbotIdOverride);
+    const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
+    const cached = this.voicesCache.get(cacheKey);
     if (cached && cached.length > 0) {
       return cached;
     }
-    if (!this.voicesLoading.has(key)) {
+    if (!this.voicesLoading.has(cacheKey)) {
       const loadPromise = this.ttsService
-        .getVoices(typeof chatbot === "string" ? undefined : chatbot, key)
+        .getVoices(typeof chatbot === "string" ? undefined : chatbot, appId)
         .then((voices) => {
-          this.voicesCache.set(key, voices);
-          this.voicesLoading.delete(key);
+          this.voicesCache.set(cacheKey, voices);
+          this.voicesLoading.delete(cacheKey);
         })
         .catch((error) => {
-          this.voicesLoading.delete(key);
+          this.voicesLoading.delete(cacheKey);
           throw error;
         });
-      this.voicesLoading.set(key, loadPromise);
+      this.voicesLoading.set(cacheKey, loadPromise);
     }
-    await this.voicesLoading.get(key);
-    return this.voicesCache.get(key) ?? [];
+    await this.voicesLoading.get(cacheKey);
+    return this.voicesCache.get(cacheKey) ?? [];
   }
 
   async getVoiceById(
@@ -175,8 +178,9 @@ class SpeechSynthesisModule {
    * @param voices
    */
   _cacheVoices(voices: SpeechSynthesisVoiceRemote[], chatbotId?: string) {
-    const key = chatbotId ?? ChatbotIdentifier.getAppId();
-    this.voicesCache.set(key, voices);
+    const appId = chatbotId ?? ChatbotIdentifier.getAppId();
+    const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
+    this.voicesCache.set(cacheKey, voices);
   }
 
   async createSpeech(
@@ -294,6 +298,10 @@ class SpeechSynthesisModule {
    */
   async getActiveAudioProvider(chatbot?: Chatbot | string): Promise<AudioProvider> {
     const chatbotId = this.resolveChatbotKey(chatbot);
+
+    if (!chatbotId) {
+      return audioProviders.None;
+    }
 
     if (chatbotId === "web") {
       return audioProviders.None;

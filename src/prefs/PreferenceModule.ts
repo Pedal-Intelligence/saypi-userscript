@@ -168,7 +168,7 @@ class UserPreferenceModule {
     });
     this.loadVoicePreferencesIntoCache().then((preferences) => {
       const chatbotId = ChatbotIdentifier.getAppId();
-      const activeVoiceId = preferences[chatbotId] ?? null;
+      const activeVoiceId = chatbotId ? preferences[chatbotId] ?? null : null;
       EventBus.emit("userPreferenceChanged", {
         voiceId: activeVoiceId ?? null,
         voicePreferences: preferences,
@@ -253,7 +253,7 @@ class UserPreferenceModule {
     await this.setStoredValue(VOICE_PREFERENCES_KEY, sanitized, 'local');
   }
 
-  private resolveChatbotId(chatbot?: Chatbot | string): string {
+  private resolveChatbotId(chatbot?: Chatbot | string): string | undefined {
     if (typeof chatbot === "string") {
       return chatbot;
     }
@@ -322,7 +322,9 @@ class UserPreferenceModule {
         }
         if ("voiceId" in request) {
           const chatbotId = this.resolveChatbotId();
-          if (request.voiceId === null) {
+          if (!chatbotId) {
+            console.warn("[PreferenceModule] Unable to resolve chatbot id when applying voice preference.");
+          } else if (request.voiceId === null) {
             actions.push(this.unsetVoice(chatbotId));
           } else {
             const voiceId = request.voiceId as string;
@@ -452,10 +454,11 @@ class UserPreferenceModule {
                   case VOICE_PREFERENCES_KEY:
                     const sanitized = this.sanitizeVoicePreferences(newValue as VoicePreferenceMap);
                     this.cache.setCachedValue(VOICE_PREFERENCES_KEY, sanitized);
+                    const voiceChatbotId = this.resolveChatbotId();
                     eventData = {
                       voicePreferences: sanitized,
-                      voiceId: sanitized[this.resolveChatbotId()] ?? null,
-                      voiceChatbotId: this.resolveChatbotId(),
+                      voiceId: voiceChatbotId ? sanitized[voiceChatbotId] ?? null : null,
+                      voiceChatbotId: voiceChatbotId ?? null,
                     };
                     break;
                   case "enableTTS": 
@@ -791,14 +794,20 @@ class UserPreferenceModule {
   // Voice preferences scoped per chatbot
   public async hasVoice(chatbot?: Chatbot | string): Promise<boolean> {
     const chatbotId = this.resolveChatbotId(chatbot);
+    if (!chatbotId) {
+      return false;
+    }
     const preferences = await this.getVoicePreferences();
     const voiceId = preferences[chatbotId];
     return typeof voiceId === "string" && voiceId.trim().length > 0;
   }
 
   public async getVoice(chatbot?: Chatbot | string): Promise<VoicePreference> {
-    const preferences = await this.getVoicePreferences();
     const chatbotId = this.resolveChatbotId(chatbot);
+    if (!chatbotId) {
+      return null;
+    }
+    const preferences = await this.getVoicePreferences();
     const voiceIdToFetch = preferences[chatbotId] ?? null;
 
     if (!voiceIdToFetch) {
@@ -830,6 +839,10 @@ class UserPreferenceModule {
   public async setVoice(voice: SpeechSynthesisVoiceRemote, chatbot?: Chatbot | string): Promise<void> {
     const provider = audioProviders.retrieveProviderByEngine(voice.powered_by);
     const chatbotId = this.resolveChatbotId(chatbot);
+    if (!chatbotId) {
+      console.warn("[PreferenceModule] Unable to resolve chatbot id when setting voice preference.");
+      return;
+    }
     const preferences = await this.getVoicePreferences();
     const updatedPreferences: VoicePreferenceMap = {
       ...preferences,
@@ -851,6 +864,9 @@ class UserPreferenceModule {
 
   public async unsetVoice(chatbot?: Chatbot | string): Promise<void> {
     const chatbotId = this.resolveChatbotId(chatbot);
+    if (!chatbotId) {
+      return;
+    }
     const preferences = await this.getVoicePreferences();
     if (!(chatbotId in preferences)) {
       EventBus.emit("userPreferenceChanged", {

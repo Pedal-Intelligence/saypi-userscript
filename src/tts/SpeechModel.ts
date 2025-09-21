@@ -87,7 +87,7 @@ const audioProviders = {
   },
   
   // Get the default audio provider based on a chatbot id
-  getDefaultForChatbot: (chatbotId: string): AudioProvider => {
+  getDefaultForChatbot: (chatbotId?: string): AudioProvider => {
     switch (chatbotId) {
       case "pi":
         return audioProviders.Pi;

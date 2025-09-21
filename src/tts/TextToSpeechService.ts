@@ -50,8 +50,11 @@ export class TextToSpeechService {
     chatbotIdOverride?: string
   ): Promise<SpeechSynthesisVoiceRemote[]> {
     const appId = chatbotIdOverride ?? (chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId());
-    const endpoint = `${this.serviceUrl}/voices?app=${appId}`;
-    const response = await callApi(endpoint);
+    const endpoint = new URL(`${this.serviceUrl}/voices`);
+    if (appId) {
+      endpoint.searchParams.set("app", appId.toLowerCase());
+    }
+    const response = await callApi(endpoint.toString());
     if (response.status === 401) {
       // treat unauthenticated the same as "no voices"
       return [];
@@ -107,7 +110,9 @@ export class TextToSpeechService {
     params.set("voice_id", voice_id);
     params.set("lang", lang);
     // Always lowercase app id in query param as well
-    params.set("app", String(appId).toLowerCase());
+    if (appId) {
+      params.set("app", appId.toLowerCase());
+    }
     let uri = stream
       ? `${baseUri}/stream?${params.toString()}`
       : `${baseUri}?${params.toString()}`;

@@ -31,6 +31,8 @@ export class ChatbotService {
     // Use the identifier directly for adding CSS classes
     // This avoids instantiating a full chatbot object just for the class name
     const chatbotType = ChatbotIdentifier.identifyChatbot();
-    document.body.classList.add(chatbotType);
+    if (chatbotType) {
+      document.body.classList.add(chatbotType);
+    }
   }
 }
