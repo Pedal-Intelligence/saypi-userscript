@@ -237,6 +237,14 @@ abstract class AssistantResponse {
     return lastMessage === this._element;
   }
 
+  static normalizeTextForHash(text: string): string {
+    if (!text) {
+      return "";
+    }
+    const unixNewlines = text.replace(/\r\n/g, "\n");
+    return unixNewlines.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
+  }
+
   /**
    * Get the text content of the chat message,
    * as it is at the time of calling this method, which may not be completely loaded if the response is still streaming
@@ -247,7 +255,7 @@ abstract class AssistantResponse {
     if (contentNode) {
       const content = contentNode as HTMLElement;
       const textContent = this.extractReadableText(content);
-      return textContent.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
+      return AssistantResponse.normalizeTextForHash(textContent);
     }
     return "";
   }

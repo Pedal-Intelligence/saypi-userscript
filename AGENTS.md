@@ -44,7 +44,7 @@
 - Precedence: follow this `AGENTS.md` and build scripts first; treat the agent-specific files as complementary guidance.
 
 ## Responding to Code Reviews
-- When asked to reply to PR/code review comments, respond to every comment.
+- When asked to reply to PR/code review comments, respond to every open/unresolved comment.
 - Evaluate feedback critically; don’t assume the reviewer is always correct.
 - If the issue is valid and warranted, address it with focused changes (code/tests/docs) and note the fix in your reply.
 - If no change is needed, explain why succinctly (reasoning, tradeoffs, or prior context) and acknowledge the reviewer.

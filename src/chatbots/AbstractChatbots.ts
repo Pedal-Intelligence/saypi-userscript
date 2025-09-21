@@ -104,9 +104,6 @@ export abstract class AbstractChatbot implements Chatbot {
     setDraft(transcript: string): void {
       this.preferences.getAutoSubmit().then((autoSubmit) => {
         if (autoSubmit) {
-          console.debug(
-            `Setting placeholder text of ${transcript.length} characters`
-          );
           this.setPlaceholderText(`${transcript}`);
         } else {
           this.setPlaceholderText("");

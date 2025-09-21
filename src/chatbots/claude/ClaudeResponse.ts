@@ -88,6 +88,9 @@ export class ClaudeMessageControls extends MessageControls {
  * This approach is slower than the ClaudeTextStream, but is more reliable and straightforward.
  */
 export class ClaudeTextBlockCapture extends ElementTextStream {
+  protected _numAdditions: number = 0;
+  protected _textProcessedSoFar: string = "";
+
   handleMutationEvent(_mutation: MutationRecord): void {
     // no-op for block capture
   }
@@ -158,6 +161,7 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
   }
 
   handleTextAddition(allText: string, isFinal: boolean = false): void {
+    this._textProcessedSoFar = allText;
     if (isFinal) {
       this.subject.next(new AddedText(allText));
     }
@@ -165,18 +169,41 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
 }
 
 export class ClaudeTextStream extends ClaudeTextBlockCapture {
-  private _textProcessedSoFar: string = "";
   constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
   }
-
   override handleTextAddition(allText: string, _isFinal: boolean = false): void {
-    const unseenText = allText.replace(this._textProcessedSoFar, "");
+    const unseenText = this.computeUnseenText(allText);
+    this._numAdditions++;
+
     if (!unseenText) {
       return; // some chunks may be empty
     }
     this.subject.next(new AddedText(unseenText));
     this._textProcessedSoFar = allText;
   }
-}
 
+  private computeUnseenText(allText: string): string {
+    if (!this._textProcessedSoFar) {
+      return allText;
+    }
+
+    const indexOfPrevious = allText.indexOf(this._textProcessedSoFar);
+    if (indexOfPrevious !== -1) {
+      const prefix = allText.slice(0, indexOfPrevious);
+      const suffix = allText.slice(indexOfPrevious + this._textProcessedSoFar.length);
+      return prefix + suffix;
+    }
+
+    let commonPrefixLength = 0;
+    const maxComparableLength = Math.min(this._textProcessedSoFar.length, allText.length);
+    while (
+      commonPrefixLength < maxComparableLength &&
+      this._textProcessedSoFar.charAt(commonPrefixLength) === allText.charAt(commonPrefixLength)
+    ) {
+      commonPrefixLength++;
+    }
+
+    return allText.slice(commonPrefixLength);
+  }
+}
