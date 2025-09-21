@@ -134,7 +134,7 @@ class ButtonModule {
     if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();
     } else {
-      console.log("Autosubmit is off");
+      console.debug("Autosubmit is off");
     }
   }
 

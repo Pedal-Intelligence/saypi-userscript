@@ -129,7 +129,7 @@ export class SpeechHistoryModule {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
       delete speechHistory[hash];
       await this.setStorageData({ speechHistory });
-      console.log(`Removed utterance with hash ${hash} from speech history.`);
+      console.debug(`Removed utterance with hash ${hash} from speech history.`);
     } catch (error) {
       console.error(`Error removing speech from history: ${error}`);
     }
@@ -139,7 +139,7 @@ export class SpeechHistoryModule {
     try {
       await this.setStorageData({ speechHistory: {} });
       await this.setStorageData({ chargeHistory: {} });
-      console.log("Cleared all speech history.");
+      console.debug("Cleared all speech history.");
     } catch (error) {
       console.error(`Error clearing speech history: ${error}`);
     }
@@ -158,7 +158,7 @@ export class SpeechHistoryModule {
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
       chargeHistory[hash] = charge;
       await this.setStorageData({ chargeHistory: chargeHistory });
-      console.log(`Saved charge to history with hash ${hash}.`);
+      console.debug(`Saved charge to history with hash ${hash}.`);
     } catch (error) {
       console.error(`Error saving charge to history: ${error}`);
     }
