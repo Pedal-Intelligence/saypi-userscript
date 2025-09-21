@@ -13,6 +13,7 @@ import { getResourceUrl } from "../ResourceModule";
 import globeSvgContent from "../icons/lucide-globe.svg";
 import marsSvgContent from "../icons/lucide-mars.svg";
 import venusSvgContent from "../icons/lucide-venus.svg";
+import { logger } from "../LoggingModule";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
@@ -652,12 +653,12 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   private initializeVoiceSelector(chatbot: Chatbot): void {
     // Prevent double initialization
     if (this.element.dataset.voiceSelectorInitialized === "true") {
-      console.log("[status] Voice selector already initialized, skipping");
+      logger.debug("[status] Voice selector already initialized, skipping");
       return;
     }
 
     const speechSynthesis = SpeechSynthesisModule.getInstance();
-    console.log("[status] Initializing voice selector");
+    logger.debug("[status] Initializing voice selector");
     speechSynthesis.getVoices(chatbot).then((voices) => {
       this.populateVoices(voices, this.element);
 
@@ -678,7 +679,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       // Mark as initialized
       this.element.dataset.voiceSelectorInitialized = "true";
     });
-    console.log("[status] Voice selector initialized");
+    logger.debug("[status] Voice selector initialized");
 
   }
 
