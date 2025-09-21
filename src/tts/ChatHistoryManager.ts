@@ -126,7 +126,10 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     ChatHistorySpeechManager.pendingSpeeches.delete(event.utterance.id);
 
     const { message: assistantMessage, speech, manager } = pending;
-    const completedHash = md5(event.text);
+    const normalizedCompletedText = AssistantResponse.normalizeTextForHash(
+      event.text
+    );
+    const completedHash = md5(normalizedCompletedText);
     const messageHash = assistantMessage.hash;
     if (completedHash !== messageHash) {
       console.error(`Hash mismatch: ${completedHash} vs ${assistantMessage.hash}`);
@@ -138,6 +141,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
         console.error("Hash is md5 of ' ' - text stream may be empty.");
       }
       logger.debug(`Completed text: "${event.text}"`);
+      logger.debug(`Normalized completed text: "${normalizedCompletedText}"`);
       logger.debug(`Assistant text: "${assistantMessage.text}"`);
       return;
     }

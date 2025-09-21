@@ -18,6 +18,7 @@ import { BillingModule } from "../../src/billing/BillingModule";
 import { PiAIChatbot } from "../../src/chatbots/Pi";
 import { PiResponse } from "../../src/chatbots/pi/PiResponse";
 import { setupTestDOM } from "../utils/dom";
+import { md5 } from "js-md5";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -311,6 +312,20 @@ describe("ChatHistoryMessageObserver", () => {
           AssistantResponse.PARAGRAPH_SEPARATOR
         )
       );
+    });
+
+    it("should compute identical hashes for newline-equivalent text", () => {
+      const paragraphs = [
+        "It sounds like you just had one of those moments where a familiar word suddenly catches your attention and you wonder about its origins!",
+        "The Thunderbird car name is probably the most common way people encounter the term today."
+      ];
+      const chatMessageElement = createAssistantMessage(paragraphs);
+      const message = new PiResponse(chatMessageElement);
+
+      const streamedText = paragraphs.join("\n");
+      const normalized = AssistantResponse.normalizeTextForHash(streamedText);
+
+      expect(md5(normalized)).toBe(message.hash);
     });
 
     it(
