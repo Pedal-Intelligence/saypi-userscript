@@ -95,7 +95,66 @@ export class ChatGPTMessageControls extends MessageControls {
   private getActionMenuTriggers(): HTMLButtonElement[] {
     const scope = (this.findActionBar() || this.message.element) as Element;
     if (!scope) return [];
-    return Array.from(scope.querySelectorAll('button[aria-haspopup="menu"]')) as HTMLButtonElement[];
+    const all = Array.from(scope.querySelectorAll('button[aria-haspopup="menu"]')) as HTMLButtonElement[];
+    if (!all.length) return [];
+
+    const ordered = all.filter(btn => this.isOverflowMenuTrigger(btn));
+    const secondary = all.filter(btn => !this.isOverflowMenuTrigger(btn) && !this.isContextualRetryTrigger(btn));
+
+    return [...ordered, ...secondary];
+  }
+
+  private getTriggerAccessibleName(trigger: HTMLElement): string {
+    const aria = trigger.getAttribute('aria-label');
+    if (aria) {
+      return aria.toLowerCase();
+    }
+    const labelledBy = trigger.getAttribute('aria-labelledby');
+    if (labelledBy) {
+      const labelEl = document.getElementById(labelledBy);
+      const labelText = labelEl?.textContent?.trim();
+      if (labelText) {
+        return labelText.toLowerCase();
+      }
+    }
+    const title = trigger.getAttribute('title');
+    if (title) {
+      return title.toLowerCase();
+    }
+    const text = (trigger.textContent || '').trim();
+    return text.toLowerCase();
+  }
+
+  private isOverflowMenuTrigger(trigger: HTMLButtonElement): boolean {
+    if (trigger.dataset?.testid === 'turn-more-menu' || trigger.dataset?.testid === 'more-actions-trigger') {
+      return true;
+    }
+    const name = this.getTriggerAccessibleName(trigger);
+    if (!name) return false;
+    if (name.includes('more actions') || name.includes('more options') || name.includes('more menu')) {
+      return true;
+    }
+    if (name === 'more' || name === 'menu' || name.includes('overflow')) {
+      return true;
+    }
+    return false;
+  }
+
+  private isContextualRetryTrigger(trigger: HTMLButtonElement): boolean {
+    const name = this.getTriggerAccessibleName(trigger);
+    if (!name) return false;
+    const banned = [
+      'try again',
+      'regenerate',
+      'retry response',
+      'modify response',
+      'edit response',
+      'ask to change response',
+    ];
+    if (name.includes('switch') && name.includes('model')) {
+      return true;
+    }
+    return banned.some(term => name.includes(term));
   }
 
   private getMoreActionsButton(): HTMLButtonElement | null {
@@ -215,8 +274,12 @@ export class ChatGPTMessageControls extends MessageControls {
     if (!triggers.length) return;
 
     const tryTrigger = (index: number) => {
-      if (index < 0) return;
+      if (index >= triggers.length) return;
       const trigger = triggers[index];
+      if (this.isContextualRetryTrigger(trigger)) {
+        tryTrigger(index + 1);
+        return;
+      }
       if (!this.isMenuOpen(trigger) && !(trigger as any)._saypiMenuOpened) {
         (trigger as any)._saypiMenuOpened = true;
         try { this.synthesizeUserClick(trigger); } catch {}
@@ -255,14 +318,14 @@ export class ChatGPTMessageControls extends MessageControls {
 
         if (++attempts < maxAttempts) {
           setTimeout(tick, 25);
-        } else if (index - 1 >= 0) {
-          tryTrigger(index - 1);
+        } else {
+          tryTrigger(index + 1);
         }
       };
       tick();
     };
 
-    tryTrigger(triggers.length - 1);
+    tryTrigger(0);
   }
 
   private findReadAloudMenuItemNear(trigger: HTMLElement): HTMLElement | null {

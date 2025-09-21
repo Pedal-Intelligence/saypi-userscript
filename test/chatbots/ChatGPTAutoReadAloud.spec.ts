@@ -215,6 +215,65 @@ describe('ChatGPT auto Read Aloud', () => {
     expect(document.activeElement === menuItem).toBe(true);
   });
 
+  it('ignores contextual retry / switch model trigger when opening overflow menu', async () => {
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true);
+
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+
+    const switchModel = document.createElement('button');
+    switchModel.setAttribute('type', 'button');
+    switchModel.setAttribute('aria-haspopup', 'menu');
+    switchModel.setAttribute('aria-expanded', 'false');
+    switchModel.setAttribute('aria-label', 'Switch model');
+    actionBar.appendChild(switchModel);
+    const switchClickSpy = vi.spyOn(switchModel, 'click').mockImplementation(() => {
+      switchModel.setAttribute('aria-expanded', 'true');
+      switchModel.setAttribute('data-state', 'open');
+    });
+
+    const overflow = document.createElement('button');
+    overflow.setAttribute('type', 'button');
+    overflow.setAttribute('aria-haspopup', 'menu');
+    overflow.setAttribute('aria-expanded', 'false');
+    overflow.setAttribute('aria-label', 'More actions');
+    actionBar.appendChild(overflow);
+
+    const menu = document.createElement('div');
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('data-state', 'open');
+    const readAloud = document.createElement('button');
+    readAloud.setAttribute('data-testid', 'voice-play-turn-action-button');
+    const readAloudClickSpy = vi.spyOn(readAloud, 'click');
+    menu.appendChild(readAloud);
+
+    const overflowClickSpy = vi.spyOn(overflow, 'click').mockImplementation(() => {
+      overflow.setAttribute('aria-expanded', 'true');
+      overflow.setAttribute('data-state', 'open');
+      if (!menu.parentElement) {
+        document.body.appendChild(menu);
+      }
+    });
+
+    await new Promise((r) => setTimeout(r, 600));
+
+    expect(readAloudClickSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(overflowClickSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(switchClickSpy).not.toHaveBeenCalled();
+  });
+
   it.skip('cleans up/shuts down prior shielded menu when a newer message starts playback', async () => {
     const list = document.createElement('div');
     list.className = 'present-messages';
