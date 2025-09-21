@@ -166,10 +166,15 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private static clearPendingForManager(
     manager: ChatHistorySpeechManager
   ): void {
+    const utteranceIdsToDelete: string[] = [];
     for (const [utteranceId, pending] of ChatHistorySpeechManager.pendingSpeeches) {
       if (pending.manager === manager) {
-        ChatHistorySpeechManager.pendingSpeeches.delete(utteranceId);
+        utteranceIdsToDelete.push(utteranceId);
       }
+    }
+
+    for (const utteranceId of utteranceIdsToDelete) {
+      ChatHistorySpeechManager.pendingSpeeches.delete(utteranceId);
     }
   }
 
