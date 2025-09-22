@@ -53,8 +53,10 @@ export class ChatGPTMessageControls extends MessageControls {
   private skipReadAloud(): boolean {
     const messageId = this.message.element.getAttribute('data-testid');
     const skipTTS = this.message.element.getAttribute('data-skip-tts');
-    logger.debug('[ChatGPTMessageControls] skipReadAloud: ', messageId, skipTTS);
-    return skipTTS === 'true';
+    const alreadyReadAloud = this.message.element.getAttribute('data-saypi-read-aloud-clicked');
+    const result = skipTTS === 'true' || alreadyReadAloud === 'true';
+    logger.debug('[ChatGPTMessageControls] skipReadAloud: ', messageId, result);
+    return result;
   }
 
   protected getExtraControlClasses(): string[] { return ["chatgpt-controls"]; }
@@ -216,17 +218,20 @@ export class ChatGPTMessageControls extends MessageControls {
     }
 
     this.readAloudObserver = new MutationObserver(() => {
-      const btn = this.getReadAloudButton();
-      if (!btn) {
-        this.tryOpenMoreActionsAndClickReadAloud();
-        return;
-      }
+      // short-circuit if button doesn't need to be clicked
       if (!this.message.isLastMessage()) return;
       const prefs = UserPreferenceModule.getInstance();
       const enabled = prefs.getCachedAutoReadAloudChatGPT();
       if (!enabled) return;
       if (!this.isCallActive()) return;
-      if ((btn as any)._saypiClicked) return;
+      if (this.skipReadAloud()) return;
+      const btn = this.getReadAloudButton();
+      if ((btn && (btn as any)._saypiClicked)) return;
+      // button does need to be clicked, so open more actions and click read aloud
+      if (!btn) {
+        this.tryOpenMoreActionsAndClickReadAloud();
+        return;
+      }
       (btn as any)._saypiClicked = true;
       try {
         setTimeout(() => {
@@ -278,14 +283,30 @@ export class ChatGPTMessageControls extends MessageControls {
 
       let attempts = 0;
       const maxAttempts = 10; // per trigger
+      const attemptInterval = 25;
+      const menuRenderDelay = 75;
+      let awaitingInitialRender = true;
       const tick = () => {
         const openMenu = document.querySelector('[data-radix-menu-content][data-state="open"], [data-radix-dropdown-menu-content][data-state="open"], [role="menu"][data-state="open"]');
         if (!openMenu && !this.isMenuOpen(trigger) && attempts === 0) {
           try { this.synthesizeUserClick(trigger); } catch {}
         }
 
+        if (awaitingInitialRender) {
+          awaitingInitialRender = false;
+          setTimeout(tick, menuRenderDelay);
+          return;
+        }
+
         const candidate = this.findReadAloudMenuItemNear(trigger);
         if (candidate) {
+          const itemEl = candidate as HTMLElement;
+          // Identify the current menu element for selective cleanup
+          const currentMenu = (itemEl.closest('[role="menu"]') as HTMLElement | null) || null;
+          if (this.shouldSkipReadAloudMenuActivation(itemEl)) {
+            this.clearShieldFromOtherMenus(currentMenu);
+            return;
+          }
           // Shield and activate in-place to preserve focus on the menu item
           try {
             const wrapper = this.getOpenMenuWrapperFor(candidate as HTMLElement) || this.getClosestOpenMenuWrapperTo(trigger);
@@ -294,21 +315,14 @@ export class ChatGPTMessageControls extends MessageControls {
             }
           } catch {}
           // Focus and click the item in-place
-          const itemEl = candidate as HTMLElement;
-          // Identify the current menu element for selective cleanup
-          const currentMenu = (itemEl.closest('[role="menu"]') as HTMLElement | null) || null;
-          try { itemEl.focus?.(); } catch {}
-          try { itemEl.click?.(); } catch {}
+          this.clickAndRecordReadAloudButton(itemEl);
           // Ensure only the current menu remains shielded
-          try {
-            const menus = Array.from(document.querySelectorAll<HTMLElement>('[role="menu"][data-saypi-shielded="true"]'));
-            menus.forEach(m => { if (!currentMenu || m !== currentMenu) { try { m.removeAttribute('data-saypi-shielded'); } catch {} } });
-          } catch {}
+          this.clearShieldFromOtherMenus(currentMenu);
           return; // success
         }
 
         if (++attempts < maxAttempts) {
-          setTimeout(tick, 25);
+          setTimeout(tick, attemptInterval);
         } else {
           tryTrigger(index + 1);
         }
@@ -338,6 +352,47 @@ export class ChatGPTMessageControls extends MessageControls {
       return 0;
     });
     return candidates[0] || null;
+  }
+
+  private shouldSkipReadAloudMenuActivation(item: HTMLElement | null): boolean {
+    if (!item) return false;
+    if (item.getAttribute('data-saypi-read-aloud-clicked') === 'true') {
+      return true;
+    }
+    const ariaLabel = item.getAttribute('aria-label');
+    if (!ariaLabel) {
+      return false;
+    }
+    const normalized = ariaLabel.trim().toLowerCase();
+    if (!normalized) {
+      return false;
+    }
+    if (normalized === 'loading' || normalized.includes('loading')) {
+      return true;
+    }
+    if (normalized === 'stop' || normalized.includes('stop')) {
+      return true;
+    }
+    return false;
+  }
+
+  private clickAndRecordReadAloudButton(readAloudButton: HTMLElement): void {
+    try { readAloudButton.focus?.(); } catch {}
+    try { readAloudButton.setAttribute('data-saypi-read-aloud-clicked', 'true'); } catch {}
+    try { (readAloudButton as any)._saypiClicked = true; } catch {}
+    try { this.message.element.setAttribute('data-saypi-read-aloud-clicked', 'true'); } catch {}
+    try { readAloudButton.click?.(); } catch {}
+  }
+
+  private clearShieldFromOtherMenus(currentMenu: HTMLElement | null): void {
+    try {
+      const menus = Array.from(document.querySelectorAll<HTMLElement>('[role="menu"][data-saypi-shielded="true"]'));
+      menus.forEach(m => {
+        if (!currentMenu || m !== currentMenu) {
+          try { m.removeAttribute('data-saypi-shielded'); } catch {}
+        }
+      });
+    } catch {}
   }
 
   private relocateMenuItemToActionBarAndClick(item: HTMLElement, trigger: HTMLElement): void {
