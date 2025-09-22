@@ -80,7 +80,7 @@ export class ChatGPTMessageControls extends MessageControls {
   }
 
   getCopyButton(): HTMLButtonElement | null {
-    return this.message.element.querySelector('button[aria-label*="Copy"], button[title*="Copy"]') as HTMLButtonElement;
+    return this.message.element.querySelector('button[data-testid="copy-turn-action-button"], button[aria-label*="Copy"], button[title*="Copy"]') as HTMLButtonElement;
   }
 
   private getActionMenuTriggers(): HTMLButtonElement[] {
