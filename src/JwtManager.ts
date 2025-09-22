@@ -266,32 +266,40 @@ export class JwtManager {
       let respStatusText = '';
       let respBody: any = null;
 
-      if (
-        typeof window !== 'undefined' &&
-        typeof chrome !== 'undefined' &&
-        typeof (chrome as any).runtime !== 'undefined' &&
-        typeof (chrome as any).runtime.sendMessage === 'function' &&
-        shouldRouteViaBackground(refreshUrl)
-      ) {
-        const serialized = await serializeApiRequest(
-          refreshUrl,
-          { ...(requestOptions as any), responseType: 'json' as const }
-        );
-        const bg = await new Promise<any>((resolve, reject) => {
-          chrome.runtime.sendMessage({ type: 'API_REQUEST', ...serialized }, (response) => {
-            if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
-            resolve(response);
+      const shouldProxy = this.shouldUseBackgroundProxy(refreshUrl);
+      let proxyHandled = false;
+
+      if (shouldProxy) {
+        try {
+          const serialized = await serializeApiRequest(
+            refreshUrl,
+            { ...(requestOptions as any), responseType: 'json' as const }
+          );
+          const bg = await new Promise<any>((resolve, reject) => {
+            chrome.runtime.sendMessage({ type: 'API_REQUEST', ...serialized }, (response) => {
+              if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
+              resolve(response);
+            });
           });
-        });
-        if (!bg?.success) {
-          throw new Error(bg?.error || 'Background API request failed');
+          if (!bg?.success) {
+            throw new Error(bg?.error || 'Background API request failed');
+          }
+          const data = bg.response;
+          respOk = !!data.ok;
+          respStatus = data.status;
+          respStatusText = data.statusText;
+          respBody = data.body;
+          proxyHandled = true;
+        } catch (proxyError) {
+          if (this.isMissingProxyReceiverError(proxyError)) {
+            logger.warn('Background proxy unavailable in this context, falling back to direct fetch');
+          } else {
+            throw proxyError;
+          }
         }
-        const data = bg.response;
-        respOk = !!data.ok;
-        respStatus = data.status;
-        respStatusText = data.statusText;
-        respBody = data.body;
-      } else {
+      }
+
+      if (!proxyHandled) {
         const response = await fetch(refreshUrl, requestOptions);
         respOk = response.ok;
         respStatus = response.status;
@@ -577,6 +585,53 @@ export class JwtManager {
       return false;
     }
     return claims.features.includes(featureCode);
+  }
+
+  /**
+   * Determines if API requests should be proxied through the background worker
+   */
+  private shouldUseBackgroundProxy(url: string): boolean {
+    if (!shouldRouteViaBackground(url)) {
+      return false;
+    }
+    if (this.isServiceWorkerContext()) {
+      return false;
+    }
+    return (
+      typeof chrome !== 'undefined' &&
+      typeof (chrome as any).runtime !== 'undefined' &&
+      typeof (chrome as any).runtime.sendMessage === 'function'
+    );
+  }
+
+  /**
+   * Detects whether we're running in the extension's background service worker
+   */
+  private isServiceWorkerContext(): boolean {
+    if (typeof self === 'undefined') {
+      return false;
+    }
+
+    const globalSelf = self as any;
+
+    return (
+      typeof globalSelf === 'object' &&
+      typeof globalSelf.skipWaiting === 'function' &&
+      typeof globalSelf.clients === 'object'
+    );
+  }
+
+  private isMissingProxyReceiverError(error: unknown): boolean {
+    if (typeof error !== 'object' || error === null) {
+      return false;
+    }
+
+    const message = (error as any).message;
+    if (typeof message !== 'string') {
+      return false;
+    }
+
+    return message.includes('Receiving end does not exist') || message.includes('Could not establish connection');
   }
 }
 

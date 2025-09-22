@@ -1,9 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { JwtManager } from '../src/JwtManager';
-import { config } from '../src/ConfigModule';
+import * as ApiRequestSerializer from '../src/utils/ApiRequestSerializer';
 
 describe('JwtManager', () => {
   let jwtManager: JwtManager;
+  let shouldRouteSpy: ReturnType<typeof vi.spyOn>;
+  let serializeRequestSpy: ReturnType<typeof vi.spyOn>;
   
   beforeEach(() => {
     // Mock chrome API
@@ -19,7 +21,8 @@ describe('JwtManager', () => {
         get: vi.fn().mockImplementation(() => Promise.resolve(null))
       },
       runtime: {
-        getURL: vi.fn().mockReturnValue('chrome-extension://id')
+        getURL: vi.fn().mockReturnValue('chrome-extension://id'),
+        sendMessage: vi.fn()
       }
     } as any;
 
@@ -41,6 +44,9 @@ describe('JwtManager', () => {
 
     // Reset timer mocks
     vi.useFakeTimers();
+
+    shouldRouteSpy = vi.spyOn(ApiRequestSerializer, 'shouldRouteViaBackground').mockReturnValue(false);
+    serializeRequestSpy = vi.spyOn(ApiRequestSerializer, 'serializeApiRequest').mockImplementation(async (url, options: RequestInit = {}) => ({ url, options } as any));
     
     jwtManager = new JwtManager();
   });
@@ -48,7 +54,8 @@ describe('JwtManager', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.clearAllTimers();
-    vi.resetModules();
+    shouldRouteSpy.mockRestore();
+    serializeRequestSpy.mockRestore();
   });
 
   describe('parseDuration', () => {
@@ -129,6 +136,55 @@ describe('JwtManager', () => {
 
       // Verify API call was made despite valid token
       expect(fetch).toHaveBeenCalled();
+    });
+
+    it('falls back to direct fetch in service worker context (Firefox background)', async () => {
+      const hadSelf = typeof globalThis.self !== 'undefined';
+      if (!hadSelf) {
+        Object.defineProperty(globalThis, 'self', {
+          configurable: true,
+          value: globalThis
+        });
+      }
+
+      const globalScope: any = (globalThis as any).self;
+      const originalSkipWaiting = globalScope.skipWaiting;
+      const originalClients = globalScope.clients;
+
+      (fetch as any).mockClear();
+      (chrome.runtime.sendMessage as any).mockClear();
+
+      globalScope.skipWaiting = vi.fn();
+      globalScope.clients = {};
+      shouldRouteSpy.mockReturnValue(true);
+
+      try {
+        await jwtManager.refresh(true);
+
+        expect(chrome.runtime.sendMessage).not.toHaveBeenCalled();
+        expect(fetch).toHaveBeenCalledWith(
+          expect.stringContaining('/api/auth/refresh'),
+          expect.objectContaining({ method: 'POST' })
+        );
+      } finally {
+        if (originalSkipWaiting === undefined) {
+          delete globalScope.skipWaiting;
+        } else {
+          globalScope.skipWaiting = originalSkipWaiting;
+        }
+
+        if (originalClients === undefined) {
+          delete globalScope.clients;
+        } else {
+          globalScope.clients = originalClients;
+        }
+
+        shouldRouteSpy.mockReturnValue(false);
+
+        if (!hadSelf) {
+          delete (globalThis as any).self;
+        }
+      }
     });
   });
 
