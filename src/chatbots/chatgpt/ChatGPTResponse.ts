@@ -65,16 +65,7 @@ export class ChatGPTMessageControls extends MessageControls {
       'div:has(> button[data-testid="copy-turn-action-button"])',
       'div:has(> button[aria-label*="Copy" i])',
       'div:has(> button[title*="Copy" i])',
-      'div:has(> button[aria-haspopup="menu"])',
-      'button[data-testid="voice-play-turn-action-button"]',
-      'button[data-testid="copy-turn-action-button"]',
-      'button[aria-label*="Copy" i]',
-      'button[title*="Copy" i]',
-      'button[aria-haspopup="menu"]',
-      'button[aria-label*="Replay" i]',
-      'button[title*="Replay" i]',
-      'div.flex.items-center.justify-end',
-      '.message-controls'
+      'div:has(> button[aria-haspopup="menu"]):not(.ms-4)',
     ].join(', ');
   }
 
