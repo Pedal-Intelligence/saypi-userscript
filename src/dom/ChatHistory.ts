@@ -563,6 +563,8 @@ class ChatHistoryNewMessageObserver
       await this.speechSynthesis.createSpeechStreamOrPlaceholder(provider);
     message.decorateSpeech(utterance);
 
+    const chatbotName = this.chatbot.getName();
+
     const messageContent = await message.decoratedContent();
     let startTime = 0;
     this.observeChatMessageElement(
@@ -575,7 +577,7 @@ class ChatHistoryNewMessageObserver
         };
         EventBus.emit("saypi:piWriting", writingEvent);
         startTime = Date.now();
-        logger.debug("Pi started writing at", startTime);
+        logger.debug(`${chatbotName} started writing at`, startTime);
       },
       (text) => {
         EventBus.emit("saypi:piStoppedWriting", {
@@ -583,7 +585,7 @@ class ChatHistoryNewMessageObserver
           text,
         });
         const endTime = Date.now();
-        logger.debug("Pi stopped writing at", endTime, "after", endTime - startTime, "ms");
+        logger.debug(`${chatbotName} stopped writing at`, endTime, "after", endTime - startTime, "ms");
       },
       (lateChange) => {
         message.decorateIncompleteSpeech(true);

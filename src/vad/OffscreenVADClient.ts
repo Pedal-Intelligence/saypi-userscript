@@ -1,8 +1,8 @@
-import EventBus from '../events/EventBus';
 import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
 import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
+import { sanitizeMessageForLogs } from '../offscreen/media_coordinator';
 
 logger.debug("[SayPi OffscreenVADClient] Client loaded.");
 
@@ -42,7 +42,8 @@ export class OffscreenVADClient implements VADClientInterface {
       
       if(message.type !== "VAD_FRAME_PROCESSED") {
         // frame processed messages are too chatty, so we don't log them
-        logger.debug("[SayPi OffscreenVADClient] Received message from background:", message);
+        const sanitizedMessage = sanitizeMessageForLogs(message);
+        logger.debug("[SayPi OffscreenVADClient] Received message from background:", sanitizedMessage);
       }
       if (message.origin !== "offscreen-document") {
         // console.warn("[SayPi OffscreenVADClient] Ignoring message not from offscreen document via background:", message);
