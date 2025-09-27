@@ -43,6 +43,8 @@
 # • Bash 4+ (standard on macOS/Linux)
 # • translate-cli on your $PATH  ➜  `go install github.com/quailyquaily/translate-cli@latest`
 # • A valid translate-cli config at ~/.config/translate-cli/config.yaml
+# • Node.js (optional). When available, the script pre-scans locales to skip
+#   already-complete translations and report how many strings need work.
 #
 ###############################################################################
 
@@ -150,6 +152,87 @@ for dir in "$LOCALES_DIR"/*/ ; do
     cp "$dir/messages.json" "$TARGETS_DIR/$bcp47.json"
   fi
 done
+
+# --- detect missing translations -------------------------------------------
+NEED_TRANSLATION=()
+declare -A LOCALE_MISSING=()
+TOTAL_MISSING_STRINGS=0
+
+if command -v node >/dev/null 2>&1; then
+  LOCALE_STATUS_FILE="$TMP_DIR/locale-status.tsv"
+  if node - <<'NODE' "$SRC_DIR/en.json" "$TARGETS_DIR" >"$LOCALE_STATUS_FILE"; then
+const fs = require('fs');
+const path = require('path');
+
+const [,, srcPath, targetsDir] = process.argv;
+
+const englishRaw = fs.readFileSync(srcPath, 'utf8');
+const english = JSON.parse(englishRaw);
+const englishKeys = Object.keys(english);
+
+const files = fs.readdirSync(targetsDir).filter((file) => file.endsWith('.json')).sort();
+
+for (const file of files) {
+  const locale = file.replace(/\.json$/, '');
+  const targetPath = path.join(targetsDir, file);
+  const data = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
+
+  let missing = 0;
+
+  for (const key of englishKeys) {
+    const targetEntry = data[key];
+
+    if (!targetEntry || typeof targetEntry.message !== 'string' || targetEntry.message.trim() === '') {
+      missing += 1;
+    }
+  }
+
+  process.stdout.write(`${locale}\t${missing}\n`);
+}
+NODE
+    while IFS=$'\t' read -r locale missing; do
+      [[ -n "$locale" ]] || continue
+      if [[ -z "$missing" ]]; then
+        continue
+      fi
+
+      if (( missing == 0 )); then
+        # Drop locales that don't need work so translate-cli can skip them.
+        rm -f "$TARGETS_DIR/$locale.json"
+      else
+        NEED_TRANSLATION+=("$locale")
+        LOCALE_MISSING["$locale"]=$missing
+        (( TOTAL_MISSING_STRINGS += missing ))
+      fi
+    done <"$LOCALE_STATUS_FILE"
+
+    if ((${#NEED_TRANSLATION[@]} == 0)); then
+      echo "✓ All target locales already contain every key from 'en'. Nothing to translate."
+      exit 0
+    fi
+
+    echo "➤ Locales requiring updates:"
+    for locale in "${NEED_TRANSLATION[@]}"; do
+      printf '   • %s — %d missing string(s)\n' "$locale" "${LOCALE_MISSING[$locale]}"
+    done
+    printf '➤ %d string(s) need translation across %d locale(s).\n' \
+      "$TOTAL_MISSING_STRINGS" "${#NEED_TRANSLATION[@]}"
+  else
+    echo "⚠️  Unable to analyze existing translations; continuing without skipping locales." >&2
+  fi
+else
+  echo "⚠️  Node.js not found; skipping pre-translation scan for missing strings." >&2
+fi
+
+# Ensure we still have targets left for translate-cli after optional pruning.
+shopt -s nullglob
+TARGET_FILES=("$TARGETS_DIR"/*.json)
+shopt -u nullglob
+
+if ((${#TARGET_FILES[@]} == 0)); then
+  echo "✓ No locale files queued for translation."
+  exit 0
+fi
 
 # --- translate ---------------------------------------------------------------
 echo "➤ Running translate-cli …"
