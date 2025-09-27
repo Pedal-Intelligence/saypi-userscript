@@ -282,6 +282,62 @@
     "message": "System Issue Alert",
     "description": "Message to display when the application is experiencing issues."
   },
+  "applicationStatusOperational": {
+    "message": "Everything's humming, and $appName$ is fully operational.",
+    "description": "Status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusDegraded": {
+    "message": "Heads up: $appName$ is feeling a little slow, and we're on it.",
+    "description": "Status message shown when the service is degraded.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "message": "Some $appName$ flavors are offline right now, and we'll keep you posted.",
+    "description": "Status message shown when there is a partial outage.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "message": "Uh oh, $appName$ is taking an unexpected break. Fix is underway.",
+    "description": "Status message shown when there is a full outage.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "message": "Status started",
+    "description": "Label displayed before the timestamp describing when the current status began."
+  },
+  "applicationStatusNoIncidents": {
+    "message": "No active incidents right now, just smooth sailing.",
+    "description": "Fallback message when no incident details are available."
+  },
+  "applicationStatusComponentsHeading": {
+    "message": "What's cooking",
+    "description": "Heading label for the list of individual component statuses."
+  },
+  "applicationStatusVisitLink": {
+    "message": "See live updates on status.saypi.ai",
+    "description": "Link text directing the user to the Better Stack status page."
+  },
   "recommendedActions": {
     "message": "In the meantime, we recommend:",
     "description": "Message preceding a list of recommended actions the user may take to remediate a known issue."

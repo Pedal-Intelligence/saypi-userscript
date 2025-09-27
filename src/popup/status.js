@@ -1,17 +1,271 @@
+const STATUS_ENDPOINT_PATH = "/status.json";
+const DEFAULT_STATUS_ENDPOINT = `https://api.saypi.ai${STATUS_ENDPOINT_PATH}`;
+const STATUS_POLL_INTERVAL_MS = 60000;
+const STATUS_PAGE_URL = "https://status.saypi.ai";
+
 const unknown = {
   status_code: "unknown",
-  message: chrome.i18n.getMessage("applicationStatusUnknown"),
+  message:
+    chrome.i18n.getMessage("applicationStatusUnknown") ||
+    "Application status unknown",
 };
+
+const INCIDENT_SEVERITY_ORDER = ["minor", "major", "critical"];
+
+let statusPollTimer = null;
+let currentFetchAbortController = null;
+
+function getMessageOrDefault(key, fallback) {
+  const localized = chrome.i18n.getMessage(key);
+  return localized || fallback;
+}
+
+function normalizeBaseUrl(baseUrl) {
+  if (!baseUrl) return "";
+  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+}
+
+function buildStatusEndpoint() {
+  const base = normalizeBaseUrl(config?.apiBaseUrl || "");
+  if (!base) return DEFAULT_STATUS_ENDPOINT;
+  return `${base}${STATUS_ENDPOINT_PATH}`;
+}
+
+function formatIncidentStatus(status) {
+  if (!status) return "";
+  return status
+    .split("_")
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+}
+
+function formatTimestamp(isoString) {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+  return date.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function getOverallMessage(overall, hasIncidents) {
+  const appName = chrome.i18n.getMessage("appName") || "Say, Pi";
+  const placeholders = [appName];
+  switch (overall) {
+    case "operational":
+      return getMessageOrDefault(
+        "applicationStatusOperational",
+        "All systems are operational."
+      ).replace("$1", appName);
+    case "degraded":
+      return getMessageOrDefault(
+        "applicationStatusDegraded",
+        hasIncidents
+          ? "We are investigating a service degradation."
+          : "Service performance is currently degraded."
+      ).replace("$1", appName);
+    case "partial_outage":
+      return getMessageOrDefault(
+        "applicationStatusPartialOutage",
+        "Some Say, Pi features are temporarily unavailable."
+      ).replace("$1", appName);
+    case "outage":
+      return getMessageOrDefault(
+        "applicationStatusOutage",
+        "Say, Pi is currently experiencing an outage."
+      ).replace("$1", appName);
+    default:
+      return unknown.message;
+  }
+}
+
+function highestSeverity(incidents, fallbackSeverity = "minor") {
+  if (!Array.isArray(incidents) || incidents.length === 0) {
+    return fallbackSeverity;
+  }
+
+  return incidents.reduce((highest, incident) => {
+    const severity = incident?.severity;
+    if (!severity) return highest;
+    const currentIndex = INCIDENT_SEVERITY_ORDER.indexOf(highest);
+    const candidateIndex = INCIDENT_SEVERITY_ORDER.indexOf(severity);
+    if (candidateIndex === -1) return highest;
+    if (currentIndex === -1 || candidateIndex > currentIndex) {
+      return severity;
+    }
+    return highest;
+  }, fallbackSeverity);
+}
+
+function mapStatusResponse(payload) {
+  if (!payload || !payload.overall) {
+    return unknown;
+  }
+
+  const incidents = Array.isArray(payload.incidents) ? payload.incidents : [];
+  const components = Array.isArray(payload.components) ? payload.components : [];
+  const hasIncidents = incidents.length > 0;
+
+  const severityByOverall = {
+    degraded: "minor",
+    partial_outage: "major",
+    outage: "critical",
+  };
+
+  const statusCode =
+    payload.overall === "operational" && !hasIncidents ? "normal" : "issue";
+  const severity =
+    statusCode === "issue"
+      ? highestSeverity(incidents, severityByOverall[payload.overall] || "minor")
+      : null;
+
+  return {
+    status_code: statusCode,
+    message: getOverallMessage(payload.overall, hasIncidents),
+    severity,
+    since: payload.since,
+    incidents,
+    components,
+    overall: payload.overall,
+  };
+}
+
+function resetIssueDetails() {
+  const applicationStatusDetail = document.querySelector(
+    "#application-status-detail"
+  );
+  if (!applicationStatusDetail) return;
+  applicationStatusDetail.classList.add("hidden");
+  applicationStatusDetail.classList.add("issue");
+  applicationStatusDetail.textContent = "";
+}
+
+function renderIssueDetails(status) {
+  const applicationStatusDetail = document.querySelector(
+    "#application-status-detail"
+  );
+  if (!applicationStatusDetail) return;
+
+  applicationStatusDetail.textContent = "";
+  applicationStatusDetail.classList.add("issue");
+  if (!applicationStatusDetail.classList.contains("hidden")) {
+    applicationStatusDetail.classList.add("hidden");
+  }
+
+  const summaryIssueMessage = getMessageOrDefault(
+    "applicationStatusIssue",
+    "System Issue Alert"
+  );
+
+  const detailHeader = document.createElement("h2");
+  detailHeader.className = status.severity || "minor";
+  detailHeader.textContent = summaryIssueMessage;
+  applicationStatusDetail.appendChild(detailHeader);
+
+  const messagePara = document.createElement("p");
+  messagePara.className = "message";
+  messagePara.textContent = status.message;
+  applicationStatusDetail.appendChild(messagePara);
+
+  if (status.since) {
+    const sincePara = document.createElement("p");
+    sincePara.className = "details";
+    const sinceLabel = getMessageOrDefault(
+      "applicationStatusSinceLabel",
+      "Current status since"
+    );
+    sincePara.textContent = `${sinceLabel} ${formatTimestamp(status.since)}`;
+    applicationStatusDetail.appendChild(sincePara);
+  }
+
+  if (status.incidents && status.incidents.length > 0) {
+    const incidentsList = document.createElement("ul");
+    status.incidents.forEach((incident) => {
+      const item = document.createElement("li");
+
+      const title = document.createElement("strong");
+      title.textContent = incident.title || "Active incident";
+      item.appendChild(title);
+
+      const meta = document.createElement("div");
+      meta.className = "incident-meta";
+      const statusText = formatIncidentStatus(incident.status);
+      const lastUpdated = formatTimestamp(incident.updated_at || incident.started_at);
+      meta.textContent = lastUpdated
+        ? `${statusText} • Updated ${lastUpdated}`
+        : statusText;
+      item.appendChild(meta);
+
+      incidentsList.appendChild(item);
+    });
+    applicationStatusDetail.appendChild(incidentsList);
+  } else {
+    const noIncidentsPara = document.createElement("p");
+    noIncidentsPara.className = "details";
+    noIncidentsPara.textContent = getMessageOrDefault(
+      "applicationStatusNoIncidents",
+      "We're monitoring system availability and will share updates soon."
+    );
+    applicationStatusDetail.appendChild(noIncidentsPara);
+  }
+
+  if (status.components && status.components.length > 0) {
+    const componentsHeading = document.createElement("h3");
+    componentsHeading.textContent = getMessageOrDefault(
+      "applicationStatusComponentsHeading",
+      "Component status"
+    );
+    applicationStatusDetail.appendChild(componentsHeading);
+
+    const componentsList = document.createElement("ul");
+    status.components.forEach((component) => {
+      const item = document.createElement("li");
+      item.textContent = `${component.name}: ${formatIncidentStatus(
+        component.status
+      )}`;
+      componentsList.appendChild(item);
+    });
+    applicationStatusDetail.appendChild(componentsList);
+  }
+
+  const linkPara = document.createElement("p");
+  linkPara.className = "details";
+  const statusLink = document.createElement("a");
+  statusLink.href = STATUS_PAGE_URL;
+  statusLink.target = "_blank";
+  statusLink.rel = "noopener noreferrer";
+  statusLink.textContent = getMessageOrDefault(
+    "applicationStatusVisitLink",
+    "View full status at status.saypi.ai"
+  );
+  linkPara.appendChild(statusLink);
+  applicationStatusDetail.appendChild(linkPara);
+
+  const dismissButton = document.createElement("button");
+  dismissButton.id = "dismiss-alert";
+  dismissButton.className = "button dismiss";
+  dismissButton.textContent = getMessageOrDefault(
+    "dismissAlert",
+    "Dismiss"
+  );
+  applicationStatusDetail.appendChild(dismissButton);
+}
 
 function updateStatus(status) {
   const statusContainer = document.querySelector(".status");
-  statusContainer.className = `status ${status.status_code}`;
+  if (!statusContainer) return;
 
-  // Clear previous content
-  statusContainer.textContent = '';
+  statusContainer.className = `status ${status.status_code}`;
+  statusContainer.textContent = "";
 
   if (status.status_code === "normal" || status.status_code === "unknown") {
-    // Card layout with text left and Lucide icon right
+    resetIssueDetails();
+
     const card = document.createElement("div");
     card.className = `status-card ${status.status_code}`;
 
@@ -22,24 +276,25 @@ function updateStatus(status) {
     const iconWrap = document.createElement("span");
     iconWrap.className = "status-icon icon-circle";
     const icon = document.createElement("i");
-    icon.setAttribute("data-lucide", status.status_code === 'normal' ? 'check-circle' : 'help-circle');
+    icon.setAttribute(
+      "data-lucide",
+      status.status_code === "normal" ? "check-circle" : "help-circle"
+    );
     iconWrap.appendChild(icon);
 
     card.appendChild(text);
     card.appendChild(iconWrap);
     statusContainer.appendChild(card);
 
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      window.lucide.createIcons({ nameAttr: 'data-lucide' });
+    if (window.lucide && typeof window.lucide.createIcons === "function") {
+      window.lucide.createIcons({ nameAttr: "data-lucide" });
     }
   } else if (status.status_code === "issue") {
-    const summaryIssueMessage = chrome.i18n.getMessage(
-      "applicationStatusIssue"
+    const summaryIssueMessage = getMessageOrDefault(
+      "applicationStatusIssue",
+      "System Issue Alert"
     );
-    const recommendedActionsMessage =
-      chrome.i18n.getMessage("recommendedActions");
 
-    // Summary card (clickable) with icon on the right
     const card = document.createElement("button");
     card.type = "button";
     card.id = "issue-summary";
@@ -52,82 +307,39 @@ function updateStatus(status) {
     const iconWrap = document.createElement("span");
     iconWrap.className = "status-icon icon-circle";
     const icon = document.createElement("i");
-    icon.setAttribute("data-lucide", 'alert-triangle');
+    icon.setAttribute("data-lucide", "alert-triangle");
     iconWrap.appendChild(icon);
 
     card.appendChild(text);
     card.appendChild(iconWrap);
     statusContainer.appendChild(card);
 
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      window.lucide.createIcons({ nameAttr: 'data-lucide' });
+    renderIssueDetails(status);
+
+    if (window.lucide && typeof window.lucide.createIcons === "function") {
+      window.lucide.createIcons({ nameAttr: "data-lucide" });
     }
-    
-    // Create detail elements for application status detail
-    const applicationStatusDetail = document.querySelector(
-      "#application-status-detail"
-    );
-    // Clear previous content
-    applicationStatusDetail.textContent = '';
-    
-    const detailHeader = document.createElement("h2");
-    detailHeader.className = status.severity;
-    detailHeader.textContent = summaryIssueMessage;
-    applicationStatusDetail.appendChild(detailHeader);
-    
-    const messagePara = document.createElement("p");
-    messagePara.className = "message";
-    messagePara.textContent = status.message;
-    applicationStatusDetail.appendChild(messagePara);
-    
-    if (status.details) {
-      const detailsPara = document.createElement("p");
-      detailsPara.className = "details";
-      detailsPara.textContent = status.details;
-      applicationStatusDetail.appendChild(detailsPara);
-    }
-    
-    if (status.recommended_actions) {
-      const recommendedActionsPara = document.createElement("p");
-      recommendedActionsPara.className = "recommended-actions";
-      const strongElement = document.createElement("strong");
-      strongElement.textContent = recommendedActionsMessage;
-      recommendedActionsPara.appendChild(strongElement);
-      applicationStatusDetail.appendChild(recommendedActionsPara);
-      
-      const actionsList = document.createElement("ul");
-      status.recommended_actions.forEach(action => {
-        const listItem = document.createElement("li");
-        listItem.textContent = action.description;
-        actionsList.appendChild(listItem);
-      });
-      applicationStatusDetail.appendChild(actionsList);
-    }
-    
-    if (status.version) {
-      const versionPara = document.createElement("p");
-      versionPara.className = "version";
-      versionPara.textContent = status.version.message;
-      applicationStatusDetail.appendChild(versionPara);
-    }
-    
-    const dismissButton = document.createElement("button");
-    dismissButton.id = "dismiss-alert";
-    dismissButton.className = "button dismiss";
-    dismissButton.textContent = chrome.i18n.getMessage("dismissAlert");
-    applicationStatusDetail.appendChild(dismissButton);
+
+    showIssueDetailsListener();
+    hideIssueDetailsListener();
   }
 }
 
 function showIssueDetails(applicationStatusDetail) {
+  if (!applicationStatusDetail) return;
   applicationStatusDetail.classList.remove("hidden");
-  // hide the other sections
   const preferencesSection = document.getElementById("preferences");
-  preferencesSection.classList.add("hidden");
+  if (preferencesSection) {
+    preferencesSection.classList.add("hidden");
+  }
   const statusSection = document.getElementById("application-status");
-  statusSection.classList.add("hidden");
+  if (statusSection) {
+    statusSection.classList.add("hidden");
+  }
   const preReleaseSection = document.querySelector(".pre-release");
-  preReleaseSection.classList.add("hidden");
+  if (preReleaseSection) {
+    preReleaseSection.classList.add("hidden");
+  }
 }
 
 function showIssueDetailsListener() {
@@ -136,7 +348,7 @@ function showIssueDetailsListener() {
     "#application-status-detail"
   );
 
-  if (issueSummary) {
+  if (issueSummary && applicationStatusDetail) {
     issueSummary.addEventListener("click", () => {
       showIssueDetails(applicationStatusDetail);
     });
@@ -144,14 +356,20 @@ function showIssueDetailsListener() {
 }
 
 function hideIssueDetails(applicationStatusDetail) {
+  if (!applicationStatusDetail) return;
   applicationStatusDetail.classList.add("hidden");
-  // show the other sections
   const preferencesSection = document.getElementById("preferences");
-  preferencesSection.classList.remove("hidden");
+  if (preferencesSection) {
+    preferencesSection.classList.remove("hidden");
+  }
   const statusSection = document.getElementById("application-status");
-  statusSection.classList.remove("hidden");
+  if (statusSection) {
+    statusSection.classList.remove("hidden");
+  }
   const preReleaseSection = document.querySelector(".pre-release");
-  preReleaseSection.classList.remove("hidden");
+  if (preReleaseSection) {
+    preReleaseSection.classList.remove("hidden");
+  }
 }
 
 function hideIssueDetailsListener() {
@@ -160,29 +378,104 @@ function hideIssueDetailsListener() {
     "#application-status-detail"
   );
 
-  if (dismissAlertButton) {
+  if (dismissAlertButton && applicationStatusDetail) {
     dismissAlertButton.addEventListener("click", () => {
       hideIssueDetails(applicationStatusDetail);
     });
   }
 }
 
+async function fetchStatusOnce() {
+  const endpoint = buildStatusEndpoint();
+  if (!endpoint) {
+    updateStatus(unknown);
+    return;
+  }
 
-function getStatus() {
-  // config.apiBaseUrl is defined in src/popup/popup-config.js
-  const statusEndpoint = `${config.apiBaseUrl}/status`;
-  fetch(statusEndpoint)
-    .then((response) => response.json())
-    .then((data) => {
-      updateStatus(data);
-      showIssueDetailsListener();
-      hideIssueDetailsListener();
-    })
-    .catch((error) => {
-      // Handle any errors
-      console.error("Error:", error);
-      updateStatus(unknown);
+  if (currentFetchAbortController) {
+    currentFetchAbortController.abort();
+  }
+
+  const abortController = new AbortController();
+  currentFetchAbortController = abortController;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+      cache: "no-cache",
+      signal: abortController.signal,
     });
+
+    if (!response.ok) {
+      throw new Error(`Status request failed with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const mapped = mapStatusResponse(payload);
+    updateStatus(mapped);
+  } catch (error) {
+    console.error("Status fetch failed", error);
+    updateStatus(unknown);
+  } finally {
+    if (currentFetchAbortController === abortController) {
+      currentFetchAbortController = null;
+    }
+  }
 }
 
-getStatus();
+function startStatusPolling() {
+  if (statusPollTimer) {
+    return;
+  }
+
+  fetchStatusOnce();
+  statusPollTimer = setInterval(() => {
+    // Avoid overlapping fetches if a prior request is still in-flight.
+    if (currentFetchAbortController) {
+      return;
+    }
+    fetchStatusOnce();
+  }, STATUS_POLL_INTERVAL_MS);
+}
+
+function stopStatusPolling() {
+  if (statusPollTimer) {
+    clearInterval(statusPollTimer);
+    statusPollTimer = null;
+  }
+  if (currentFetchAbortController) {
+    currentFetchAbortController.abort();
+    currentFetchAbortController = null;
+  }
+}
+
+function isAboutTabVisible() {
+  const aboutPanel = document.getElementById("tab-about");
+  return aboutPanel ? !aboutPanel.classList.contains("hidden") : false;
+}
+
+function setupStatusPolling() {
+  const aboutPanel = document.getElementById("tab-about");
+  if (!aboutPanel) {
+    return;
+  }
+
+  const observer = new MutationObserver(() => {
+    if (isAboutTabVisible()) {
+      startStatusPolling();
+    } else {
+      stopStatusPolling();
+    }
+  });
+
+  observer.observe(aboutPanel, { attributes: true, attributeFilter: ["class"] });
+
+  if (isAboutTabVisible()) {
+    startStatusPolling();
+  }
+}
+
+setupStatusPolling();
