@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Dodajte kredite"
   },
+  "agentMode": {
+    "description": "Tekst za poveznicu načina rada agenta.",
+    "message": "način rada agenta"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informativna poruka koja korisnicima objašnjava ponašanje načina rada agenta.",
+    "message": "$chatbot$ prati u {agentModeLink} i odgovara samo kada je potrebno. Ovo ponašanje možeš promijeniti u {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Prekidljiv"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Naslov za popis statusa pojedinih komponenti.",
+    "message": "Što se kuha"
+  },
+  "applicationStatusDegraded": {
+    "description": "Poruka o statusu prikazana kada je usluga oslabila.",
+    "message": "Upozorenje: $appName$ radi malo sporije, radimo na tome.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Recimo, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Upozorenje o problemu s sustavom"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Zamjenska poruka kada detalji o incidentima nisu dostupni.",
+    "message": "Trenutno nema aktivnih incidenata, sve ide glatko."
+  },
+  "applicationStatusOperational": {
+    "description": "Poruka o statusu prikazana kada usluga radi normalno.",
+    "message": "Sve radi bez poteškoća, $appName$ je potpuno operativan.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Recimo, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Poruka o statusu prikazana pri potpunom prekidu usluge.",
+    "message": "Ups, $appName$ trenutno ne radi. Radimo na otklanjanju problema.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Recimo, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Poruka o statusu prikazana pri djelomičnom prekidu usluge.",
+    "message": "Neki dijelovi $appName$ trenutno nisu dostupni, obavještavat ćemo te o napretku.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Recimo, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Oznaka prikazana prije vremenske oznake koja opisuje početak trenutnog statusa.",
+    "message": "Status počeo"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status aplikacije nepoznat"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Tekst poveznice koja vodi korisnika na status stranicu Better Stack-a.",
+    "message": "Pogledaj najnovije informacije na status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria oznaka za ikonu načina točne transkripcije.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Odbaci"
+  },
+  "dismissNotice": {
+    "description": "Aria oznaka za gumb za odbacivanje obavijesti.",
+    "message": "Zatvori"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Naslov odjeljka za opće postavke.",
     "message": "Općenito"
+  },
+  "settings": {
+    "description": "Tekst za poveznicu postavki.",
+    "message": "postavke"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

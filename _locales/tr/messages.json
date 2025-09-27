@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Kredi ekle"
   },
+  "agentMode": {
+    "description": "Temsilci modu bağlantısı için metin.",
+    "message": "temsilci modu"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Temsilci modu davranışını kullanıcılara açıklayan bilgilendirici mesaj.",
+    "message": "$chatbot$, {agentModeLink} modundayken dinliyor ve sadece gerektiğinde yanıt verecek. Bu davranışı {settingsLink} üzerinden değiştirilebilir.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Kesilebilir"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Bireysel bileşen durumlarının listesi için başlık etiketi.",
+    "message": "Durum güncellemeleri"
+  },
+  "applicationStatusDegraded": {
+    "description": "Hizmet yavaşladığında gösterilen durum mesajı.",
+    "message": "Dikkat: $appName$ biraz yavaş çalışıyor, sorunu çözüyoruz.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Sistem Sorunu Uyarısı"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Herhangi bir olay detayı olmadığında gösterilen geri dönüş mesajı.",
+    "message": "Şu anda aktif bir sorun yok, her şey yolunda."
+  },
+  "applicationStatusOperational": {
+    "description": "Hizmet çalışır durumdayken gösterilen durum mesajı.",
+    "message": "Her şey yolunda, $appName$ tamamen operasyonel.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Tam kesinti yaşandığında gösterilen durum mesajı.",
+    "message": "Uh oh, $appName$ beklenmedik bir ara veriyor. Çözüm üzerinde çalışıyoruz.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Kısmi kesinti olduğunda gösterilen durum mesajı.",
+    "message": "Bazı $appName$ servisleri şu anda çevrimdışı, gelişmeleri paylaşacağız.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Mevcut durumun başladığı zamanı belirten etiket.",
+    "message": "Durum başladı"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Uygulama durumu bilinmiyor"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Kullanıcıyı Better Stack durum sayfasına yönlendiren bağlantı metni.",
+    "message": "Durum güncellemelerini status.saypi.ai adresinden izle"
   },
   "ariaLabelAccurate": {
     "description": "Doğru transkription modu simgesi için Aria etiketi.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Reddet"
+  },
+  "dismissNotice": {
+    "description": "Bildirim kapatma butonunun Aria etiketi.",
+    "message": "Kapat"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Genel ayarlar için bölüm başlığı.",
     "message": "Genel"
+  },
+  "settings": {
+    "description": "Ayarlar bağlantısı için metin.",
+    "message": "ayarlar"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

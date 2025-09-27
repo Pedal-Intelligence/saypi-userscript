@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Добавете кредити"
   },
+  "agentMode": {
+    "description": "Текст за връзката към агентски режим.",
+    "message": "агентски режим"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Информационно съобщение, което обяснява поведението на агентския режим на потребителите.",
+    "message": "$chatbot$ слуша в {agentModeLink} и ще отговаря само когато е необходимо. Можеш да промениш това поведение в {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Пи"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Прекъсваем"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Заглавен надпис за списъка с индивидуални статуси на компоненти.",
+    "message": "Какво се случва"
+  },
+  "applicationStatusDegraded": {
+    "description": "Съобщение за статус, показвано когато услугата е влошена.",
+    "message": "Внимание: $appName$ работи по-бавно от обичайното, вече се работи по проблема.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Кажи, Пи"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Системно предупреждение за проблем"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Съобщение за липса на налични подробности за инциденти.",
+    "message": "Няма активни инциденти в момента, всичко върви гладко."
+  },
+  "applicationStatusOperational": {
+    "description": "Съобщение за статус, показвано когато услугата работи нормално.",
+    "message": "Всичко работи перфектно и $appName$ функционира нормално.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Кажи, Пи"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Съобщение за статус, показвано при пълна прекъснатост.",
+    "message": "Опа, $appName$ има неочаквана пауза. Работим по възстановяването.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Кажи, Пи"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Съобщение за статус, показвано при частична прекъснатост.",
+    "message": "Някои функции на $appName$ не са на линия в момента, следи за обновления.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Кажи, Пи"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Етикет, показван преди времеви печат, описващ кога е започнал текущия статус.",
+    "message": "Статус от"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Статусът на приложението е неизвестен"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Текст на линк, който насочва потребителя към страницата за статус на Better Stack.",
+    "message": "Виж актуализации на живо на status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Ариа етикет за иконата на режима за точна транскрипция.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Отменям"
+  },
+  "dismissNotice": {
+    "description": "Aria етикет за бутона за отхвърляне на известието.",
+    "message": "Игнорирай"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Заглавие на секцията за общи настройки.",
     "message": "Общи"
+  },
+  "settings": {
+    "description": "Текст за връзката към настройките.",
+    "message": "настройки"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "வரவுகளைச் சேர்க்கவும்"
   },
+  "agentMode": {
+    "description": "முகவர் முறைக்கான இணைப்பு உரை.",
+    "message": "முகவர் முறை"
+  },
+  "agentModeNoticeMessage": {
+    "description": "பயனர்களுக்கு முகவர் முறையின் செயல்பாட்டைப் விவரிக்கும் தகவல் செய்தி.",
+    "message": "$chatbot$ {agentModeLink} இல் கேட்டு, தேவையானதுக்கு மட்டுமே பதிலளிக்கும். இந்த நடத்தை {settingsLink} இல் மாற்றலாம்.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "பை"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "தடுப்பு வேண்டிய"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "தனிப்பட்ட கூறுகளின் நிலை பட்டியலுக்கான தலைப்பு லேபிள்.",
+    "message": "என்ன நடக்கிறது"
+  },
+  "applicationStatusDegraded": {
+    "description": "சேவை குறைந்த நிலையை காட்டும் நிலை செய்தி.",
+    "message": "கவனிக்கை: $appName$ சில நெருக்கத்தில் உள்ளது, அதை சரி செய்ய பரிசோதனை செய்கிறோம்.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "சேய், பை"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "அமைப்பு பிரச்சினை எச்சரிக்கை"
   },
+  "applicationStatusNoIncidents": {
+    "description": "சம்பவ விவரங்கள் கிடைக்காத போது காட்டப்படும் மாற்று செய்தி.",
+    "message": "தற்போது செயலில் உள்ள எதுவும் இல்லை, எல்லா செயல்களும் ஒழுங்காக செல்கின்றன."
+  },
+  "applicationStatusOperational": {
+    "description": "சேவை இயங்குபாட்டில் இருப்பதை காட்டும் நிலை செய்தி.",
+    "message": "எல்லாம் நன்றாக இயங்குகிறது, $appName$ முழுமையாக செயல்பாட்டில் உள்ளது.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "சேய், பை"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "முழு சேவை நிறுத்தம் ஏற்பட்ட போது காட்டப்படும் நிலை செய்தி.",
+    "message": "ஓஃஹ், $appName$ எதிர்பாராமல் நிறுத்தம் ஏற்பட்டுள்ளது. சரிசெய்தல் நடைபெற்று வருகிறது.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "சேய், பை"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "பிரதி சேவை நிறுத்தம் ஏற்பட்ட போது காட்டப்படும் நிலை செய்தி.",
+    "message": "சில $appName$ அம்சங்கள் தற்போது செயலிழந்துள்ளன, அண்மையான தகவல்களை அளித்துக் கொண்டிருப்போம்.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "சேய், பை"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "தற்போதைய நிலை எப்போது ஆரம்பமானது என்பதை விவரிக்கும் நேர அட்டை முன்னரே காட்டப்படும் லேபிள்.",
+    "message": "நிலை தொடங்கியது"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "பயன்பாட்டு நிலை தெரியாது"
+  },
+  "applicationStatusVisitLink": {
+    "description": "பயனரை Better Stack நிலை பக்கத்திற்கு வழிநடத்தும் இணைப்பு உரை.",
+    "message": "status.saypi.ai ல் நேரடி புதுப்பிப்புகளை காண்க"
   },
   "ariaLabelAccurate": {
     "description": " சரியான தமிழ் உரை மாற்ற முறை சின்னத்திற்கான அரியா லேபல்.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "நிராகரி"
+  },
+  "dismissNotice": {
+    "description": "அறிவிப்பு திருத்துவதற்கான சுட்டி (aria) லேபிள்.",
+    "message": "மறுக்கவும்"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "பொதுவான அமைப்புக்கு முக்கியப்பங்கை.",
     "message": "பொது"
+  },
+  "settings": {
+    "description": "அமைப்புகளை மாற்றும் இணைப்பு உரை.",
+    "message": "அமைப்புகள்"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

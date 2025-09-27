@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Magdagdag ng mga kredito"
   },
+  "agentMode": {
+    "description": "Teksto para sa link ng mode ng ahente.",
+    "message": "mode ng ahente"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Imformatibong mensahe na nagpapaliwanag sa kilos ng mode ng ahente sa mga gumagamit.",
+    "message": "Nakikinig si $chatbot$ sa {agentModeLink}, at sasagot lang kapag kinakailangan. Maaari mong baguhin ang ugaling ito sa {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Mapuputol"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Pamagat para sa listahan ng indibidwal na kalagayan ng mga bahagi.",
+    "message": "Ano'ng Balita"
+  },
+  "applicationStatusDegraded": {
+    "description": "Mensahe ng kalagayan kapag ang serbisyo ay bumaba ang kalidad.",
+    "message": "Babala: Medyo mabagal ang takbo ng $appName$, at inaayos na namin ito.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Abiso sa Isyu ng Sistema"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Pangkaraniwang mensahe kapag walang detalye ng insidente.",
+    "message": "Walang aktibong insidente ngayon, maayos ang lahat."
+  },
+  "applicationStatusOperational": {
+    "description": "Mensahe ng kalagayan kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Maayos ang takbo, at ganap na operasyonal ang $appName$.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Mensahe ng kalagayan kapag may buong outage.",
+    "message": "Naku, nag-pause bigla ang $appName$. Kasalukuyang inaayos.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Mensahe ng kalagayan kapag may partial outage.",
+    "message": "May ilang bahagi ng $appName$ na hindi magagamit ngayon, ipapaalam namin sa iyo ang mga pagbabago.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Label na ipinapakita bago ang oras kung kailan nagsimula ang kasalukuyang kalagayan.",
+    "message": "Nagsimulang status"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Hindi alam ang katayuan ng aplikasyon"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Teksto ng link na nagtuturo sa gumagamit sa pahina ng status ng Better Stack.",
+    "message": "Tingnan ang mga live update sa status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria label para sa ikon ng tumpak na transcription mode.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Iwaksi"
+  },
+  "dismissNotice": {
+    "description": "Aria label para sa button ng pagtanggi ng paalala.",
+    "message": "Isara"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Pamagat ng seksyon para sa mga pangkalahatang setting.",
     "message": "Pangkalahatan"
+  },
+  "settings": {
+    "description": "Teksto para sa link ng mga setting.",
+    "message": "mga setting"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

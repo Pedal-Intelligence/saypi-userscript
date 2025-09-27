@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Tambahkan kredit"
   },
+  "agentMode": {
+    "description": "Teks untuk tautan mode agen.",
+    "message": "mode agen"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Pesan informasi yang menjelaskan perilaku mode agen kepada pengguna.",
+    "message": "$chatbot$ sedang mendengarkan dalam {agentModeLink}, dan akan merespons hanya saat diperlukan. Perilaku ini dapat diubah di {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Dapat diinterupsi"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Judul untuk daftar status komponen individual.",
+    "message": "Apa kabar"
+  },
+  "applicationStatusDegraded": {
+    "description": "Pesan status yang ditampilkan saat layanan mengalami penurunan kualitas.",
+    "message": "Peringatan: $appName$ sedang agak lambat, dan kami sedang menanganinya.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Peringatan Masalah Sistem"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Pesan cadangan ketika tidak ada detail insiden yang tersedia.",
+    "message": "Tidak ada insiden aktif saat ini, semuanya berjalan lancar."
+  },
+  "applicationStatusOperational": {
+    "description": "Pesan status yang ditampilkan saat layanan beroperasi normal.",
+    "message": "Semua berjalan lancar, dan $appName$ beroperasi penuh.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Pesan status yang ditampilkan saat terjadi pemadaman penuh.",
+    "message": "Uh oh, $appName$ sedang mengalami gangguan tak terduga. Perbaikan sedang dilakukan.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Pesan status yang ditampilkan saat terjadi pemadaman sebagian.",
+    "message": "Beberapa bagian dari $appName$ sedang offline saat ini, dan kami akan terus memberi info terbaru.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Label yang ditampilkan sebelum cap waktu yang menunjukkan kapan status saat ini dimulai.",
+    "message": "Status dimulai"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status permohonan tidak diketahui"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Teks tautan yang mengarahkan pengguna ke halaman status Better Stack.",
+    "message": "Lihat pembaruan langsung di status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Label aria untuk ikon mode transkripsi akurat.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Membubarkan"
+  },
+  "dismissNotice": {
+    "description": "Label aria untuk tombol menutup pemberitahuan.",
+    "message": "Tutup"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Judul bagian untuk pengaturan umum.",
     "message": "Umum"
+  },
+  "settings": {
+    "description": "Teks untuk tautan pengaturan.",
+    "message": "pengaturan"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

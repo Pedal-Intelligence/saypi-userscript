@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Hitelek hozzáadása"
   },
+  "agentMode": {
+    "description": "Szöveg az ügynök mód hivatkozáshoz.",
+    "message": "ügynök mód"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Tájékoztató üzenet, amely elmagyarázza az ügynök mód működését a felhasználóknak.",
+    "message": "$chatbot$ a(z) {agentModeLink} alatt figyel, és csak szükség esetén válaszol. Ezt a viselkedést a(z) {settingsLink} menüben lehet módosítani.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Megszakítható"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Az egyes komponensek állapotainak listájához tartozó címsor.",
+    "message": "Mi történik éppen"
+  },
+  "applicationStatusDegraded": {
+    "description": "Állapotüzenet a szolgáltatás lelassulásakor.",
+    "message": "Figyelmeztetés: a(z) $appName$ kissé lassú, dolgozunk rajta.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Rendszerhiba figyelmeztetés"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Vészhelyzet hiányában megjelenő üzenet.",
+    "message": "Nincs aktív esemény, minden simán megy."
+  },
+  "applicationStatusOperational": {
+    "description": "Állapotüzenet a szolgáltatás zavartalan működése esetén.",
+    "message": "Minden rendben, a(z) $appName$ teljesen működőképes.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Állapotüzenet teljes kiesés esetén.",
+    "message": "Hoppá, a(z) $appName$ váratlanul szünetel. Javítás folyamatban.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Állapotüzenet részleges kiesés esetén.",
+    "message": "A(z) $appName$ egyes funkciói jelenleg nem elérhetők, folyamatosan tájékoztatunk.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Címke, amely az aktuális állapot kezdetének időpontja előtt jelenik meg.",
+    "message": "Állapot kezdete"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Alkalmazás állapota ismeretlen"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Hivatkozás szövege, amely a Better Stack állapotoldalára irányít.",
+    "message": "Friss állapotok megtekintése a status.saypi.ai oldalon"
   },
   "ariaLabelAccurate": {
     "description": "Aria címke az pontos átirat mód ikonhoz.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Elutasít"
+  },
+  "dismissNotice": {
+    "description": "Aria címke az értesítés elutasítására szolgáló gombhoz.",
+    "message": "Elutasítás"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Szekció címe az általános beállításokhoz.",
     "message": "Általános"
+  },
+  "settings": {
+    "description": "Szöveg a beállítások hivatkozáshoz.",
+    "message": "beállítások"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

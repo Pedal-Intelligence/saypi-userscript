@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Προσθέστε πιστώσεις"
   },
+  "agentMode": {
+    "description": "Κείμενο για το σύνδεσμο λειτουργίας πράκτορα.",
+    "message": "λειτουργία πράκτορα"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Πληροφοριακό μήνυμα που εξηγεί τη συμπεριφορά της λειτουργίας πράκτορα στους χρήστες.",
+    "message": "$chatbot$ ακούει στο {agentModeLink} και θα απαντά μόνο όταν χρειάζεται. Μπορείς να αλλάξεις αυτή τη συμπεριφορά στα {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Διακόπτομενη"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Ετικέτα επικεφαλίδας για τη λίστα επιμέρους καταστάσεων των στοιχείων.",
+    "message": "Τι συμβαίνει"
+  },
+  "applicationStatusDegraded": {
+    "description": "Μήνυμα κατάστασης όταν η υπηρεσία είναι υποβαθμισμένη.",
+    "message": "Προσοχή: το $appName$ λειτουργεί πιο αργά από το κανονικό και το εξετάζουμε.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Συναγερμός Προβλήματος Συστήματος"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Μήνυμα εφεδρείας όταν δεν υπάρχουν λεπτομέρειες για περιστατικά.",
+    "message": "Δεν υπάρχουν ενεργά περιστατικά αυτή τη στιγμή, όλα λειτουργούν ομαλά."
+  },
+  "applicationStatusOperational": {
+    "description": "Μήνυμα κατάστασης όταν η υπηρεσία λειτουργεί κανονικά.",
+    "message": "Όλα λειτουργούν ρολόι και το $appName$ είναι πλήρως ενεργό.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Μήνυμα κατάστασης όταν υπάρχει πλήρης διακοπή λειτουργίας.",
+    "message": "Ουπς, το $appName$ έχει μια απρόβλεπτη διακοπή. Η επιδιόρθωση είναι σε εξέλιξη.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Μήνυμα κατάστασης όταν υπάρχει μερική διακοπή λειτουργίας.",
+    "message": "Κάποιες λειτουργίες του $appName$ είναι εκτός λειτουργίας αυτή τη στιγμή. Θα σε ενημερώνουμε.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Ετικέτα που εμφανίζεται πριν από το χρονικό σημείο έναρξης της τρέχουσας κατάστασης.",
+    "message": "Η κατάσταση ξεκίνησε"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Άγνωστη κατάσταση εφαρμογής"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Κείμενο συνδέσμου που οδηγεί τον χρήστη στη σελίδα κατάστασης Better Stack.",
+    "message": "Δες ζωντανές ενημερώσεις στο status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Ετικέτα Aria για το εικονίδιο της ακριβούς μεταγραφής.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Απορρίπτω"
+  },
+  "dismissNotice": {
+    "description": "Ετικέτα Aria για το κουμπί απόρριψης της γνωστοποίησης.",
+    "message": "Απόρριψη"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Τίτλος ενότητας για τις γενικές ρυθμίσεις.",
     "message": "Γενικά"
+  },
+  "settings": {
+    "description": "Κείμενο για το σύνδεσμο ρυθμίσεων.",
+    "message": "ρυθμίσεις"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

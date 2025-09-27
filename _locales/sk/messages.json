@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Pridať kredity"
   },
+  "agentMode": {
+    "description": "Text pre odkaz do režimu agenta.",
+    "message": "režim agenta"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informačná správa vysvetľujúca používateľom správanie režimu agenta.",
+    "message": "$chatbot$ počúva v {agentModeLink} a odpovie iba podľa potreby. Toto správanie môžeš zmeniť v {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Prerušiteľný"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Nadpis pre zoznam stavov jednotlivých komponentov.",
+    "message": "Čo sa varí"
+  },
+  "applicationStatusDegraded": {
+    "description": "Správa o stave zobrazená pri degradovanom stave služby.",
+    "message": "Pozor: $appName$ je momentálne trochu pomalý, pracujeme na tom.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Upozornenie na problém so systémom"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Záložná správa, keď nie sú dostupné žiadne informácie o incidente.",
+    "message": "Momentálne žiadne aktívne incidenty, všetko ide hladko."
+  },
+  "applicationStatusOperational": {
+    "description": "Správa o stave zobrazená, keď služba funguje bez porúch.",
+    "message": "Všetko beží hladko a $appName$ je plne funkčný.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Správa o stave zobrazená pri úplnom výpadku služby.",
+    "message": "Uh, $appName$ si dal nečakanú prestávku. Oprava je v riešení.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Správa o stave zobrazená pri čiastočnom výpadku.",
+    "message": "Niektoré funkcie $appName$ sú momentálne nedostupné, budeme ťa informovať.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Štítok zobrazovaný pred časovou značkou, od kedy aktuálny stav trvá.",
+    "message": "Stav od"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stav aplikácie neznámy"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Text odkazu smerujúceho používateľa na stránku statusu Better Stack.",
+    "message": "Pozri živé aktualizácie na status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria označenie pre ikonu presného transkripčného režimu.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Zamietnuť"
+  },
+  "dismissNotice": {
+    "description": "Aria označenie pre tlačidlo na zatvorenie oznámenia.",
+    "message": "Zatvoriť"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Názov sekcie pre všeobecné nastavenia.",
     "message": "Všeobecné"
+  },
+  "settings": {
+    "description": "Text pre odkaz nastavení.",
+    "message": "nastavenia"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

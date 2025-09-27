@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Adăugați credite"
   },
+  "agentMode": {
+    "description": "Text pentru linkul modului agent.",
+    "message": "mod agent"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Mesaj informativ care explică comportamentul modului agent utilizatorilor.",
+    "message": "$chatbot$ ascultă în {agentModeLink} și va răspunde doar când este necesar. Poți modifica acest comportament în {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Întreruptibil"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Etichetă pentru lista stărilor individuale ale componentelor.",
+    "message": "Ce se întâmplă"
+  },
+  "applicationStatusDegraded": {
+    "description": "Mesaj de stare afișat când serviciul este degradat.",
+    "message": "Atenție: $appName$ funcționează puțin mai lent, lucrăm la remediere.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Alertă privind problema sistemului"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Mesaj implicit când nu sunt disponibile detalii despre incidente.",
+    "message": "Nicio problemă activă momentan, totul funcționează lin."
+  },
+  "applicationStatusOperational": {
+    "description": "Mesaj de stare afișat când serviciul este operațional.",
+    "message": "Totul merge bine, $appName$ este complet operațional.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Mesaj de stare afișat în cazul unei întreruperi totale.",
+    "message": "Oops, $appName$ este într-o pauză neașteptată. Reparăm situația.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Mesaj de stare afișat în cazul unei întreruperi parțiale.",
+    "message": "Unele funcționalități $appName$ sunt offline momentan. Te vom ține la curent.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Etichetă afișată înaintea marcajului temporal ce indică începutul stării curente.",
+    "message": "Stare începută"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Starea aplicației necunoscută"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Textul linkului ce direcționează utilizatorul către pagina de status Better Stack.",
+    "message": "Vezi actualizările live pe status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Eticheta aria pentru pictograma modului de transcriere precis.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Renunță"
+  },
+  "dismissNotice": {
+    "description": "Etichetă aria pentru butonul de închidere a notificării.",
+    "message": "Închide"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Titlul secțiunii pentru setările generale.",
     "message": "General"
+  },
+  "settings": {
+    "description": "Text pentru linkul setărilor.",
+    "message": "setări"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

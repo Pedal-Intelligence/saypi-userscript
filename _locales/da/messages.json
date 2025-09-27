@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Tilføj kreditter"
   },
+  "agentMode": {
+    "description": "Tekst til agenttilstandslinket.",
+    "message": "agenttilstand"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informationsbesked, der forklarer agenttilstandens funktion til brugere.",
+    "message": "$chatbot$ lytter i {agentModeLink} og svarer kun, når det er nødvendigt. Denne adfærd kan ændres i {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Afbrydelig"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Overskriftsmærke for listen over individuelle komponenters status.",
+    "message": "Hvad sker der"
+  },
+  "applicationStatusDegraded": {
+    "description": "Statusbesked vist, når servicen er nedsat.",
+    "message": "Bemærk: $appName$ kører lidt langsomt lige nu, og vi arbejder på det.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sig Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Systemproblem Alarm"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Standardbesked, når der ikke findes detaljer om hændelser.",
+    "message": "Ingen aktive hændelser lige nu, bare rolig drift."
+  },
+  "applicationStatusOperational": {
+    "description": "Statusbesked vist, når servicen fungerer normalt.",
+    "message": "Alt kører på skinner, og $appName$ er fuldt operationel.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sig Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Statusbesked vist ved total nedbrud.",
+    "message": "Øv, $appName$ har en uventet pause. Vi arbejder på at løse det.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sig Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Statusbesked vist ved delvist nedbrud.",
+    "message": "Nogle dele af $appName$ er offline lige nu, og vi holder dig opdateret.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sig Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Etiket vist før tidsstemplet, der angiver, hvornår den aktuelle status startede.",
+    "message": "Status startede"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Ansøgningsstatus ukendt"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Linktekst, der leder brugeren til Better Stack status-siden.",
+    "message": "Se live opdateringer på status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria label for ikonet til den nøjagtige transskriptionsmode.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Afskedige"
+  },
+  "dismissNotice": {
+    "description": "Aria-etiket til knappen for at afvise beskeden.",
+    "message": "Luk"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Afsnitoverskrift for generelle indstillinger.",
     "message": "Generelt"
+  },
+  "settings": {
+    "description": "Tekst til linket til indstillinger.",
+    "message": "indstillinger"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

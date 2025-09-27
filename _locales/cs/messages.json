@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Přidejte kredity"
   },
+  "agentMode": {
+    "description": "Text pro odkaz do režimu agenta.",
+    "message": "režim agenta"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informační zpráva vysvětlující uživatelům chování režimu agenta.",
+    "message": "$chatbot$ naslouchá v {agentModeLink} a bude reagovat pouze v případě potřeby. Toto chování lze změnit v {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Přerušitelný"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Nadpis pro seznam stavů jednotlivých komponent.",
+    "message": "Co se děje"
+  },
+  "applicationStatusDegraded": {
+    "description": "Zpráva o stavu, když je služba zhoršená.",
+    "message": "Pozor: $appName$ je momentálně trochu pomalejší, ale pracujeme na tom.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Třeba Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Upozornění na problém systému"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Zpráva, která se zobrazí, pokud nejsou k dispozici žádné informace o incidentech.",
+    "message": "Právě nejsou žádné aktivní incidenty, vše běží hladce."
+  },
+  "applicationStatusOperational": {
+    "description": "Zpráva o stavu, když služba funguje normálně.",
+    "message": "Všechno běží bez problémů a $appName$ je plně funkční.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Třeba Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Zpráva o stavu při úplném výpadku.",
+    "message": "Jejda, $appName$ má nečekanou přestávku. Oprava probíhá.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Třeba Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Zpráva o stavu při částečném výpadku.",
+    "message": "Některé části $appName$ jsou momentálně nedostupné, budeme vás průběžně informovat.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Třeba Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Popisek zobrazený před časovou známkou, kdy aktuální stav začal.",
+    "message": "Stav začal"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stav aplikace neznámý"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Text odkazu vedoucího na stránku stavů Better Stack.",
+    "message": "Sleduj aktuální stav na status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria štítek pro ikonu přesného přepisu.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Propustit"
+  },
+  "dismissNotice": {
+    "description": "Aria značení tlačítka pro zavření oznámení.",
+    "message": "Zavřít"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Nadpis sekce pro obecná nastavení.",
     "message": "Obecné"
+  },
+  "settings": {
+    "description": "Text pro odkaz nastavení.",
+    "message": "nastavení"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "إضافة ائتمانات"
   },
+  "agentMode": {
+    "description": "نص رابط وضع الوكيل.",
+    "message": "وضع الوكيل"
+  },
+  "agentModeNoticeMessage": {
+    "description": "رسالة إعلامية تشرح سلوك وضع الوكيل للمستخدمين.",
+    "message": "$chatbot$ يستمع في {agentModeLink}، وسيستجيب فقط عند الحاجة. يمكن تعديل هذا السلوك في {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "باي"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "قابل للمقاطعة"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "عنوان لقائمة حالة المكونات الفردية.",
+    "message": "ما الجديد"
+  },
+  "applicationStatusDegraded": {
+    "description": "رسالة الحالة عند تدهور الخدمة.",
+    "message": "تنبيه: $appName$ يعاني من بطء بسيط، ونحن نعمل على ذلك.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "سي، باي"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "تنبيه على مشكلة في النظام"
   },
+  "applicationStatusNoIncidents": {
+    "description": "رسالة بديلة عند عدم وجود تفاصيل حوادث.",
+    "message": "لا توجد حوادث نشطة حالياً، كل شيء يسير بسلاسة."
+  },
+  "applicationStatusOperational": {
+    "description": "رسالة الحالة عند عمل الخدمة بشكل طبيعي.",
+    "message": "كل شيء يعمل بسلاسة، و$appName$ يعمل بكامل طاقته.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "سي، باي"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "رسالة الحالة عند حدوث انقطاع كامل.",
+    "message": "عذراً، $appName$ يتوقف الآن بشكل غير متوقع. جاري الإصلاح.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "سي، باي"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "رسالة الحالة عند حدوث انقطاع جزئي.",
+    "message": "بعض خدمات $appName$ غير متصلة حالياً، وسنُبقِيك على اطلاع.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "سي، باي"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "العنوان المعروض قبل الطابع الزمني الذي يصف بداية الحالة الحالية.",
+    "message": "بدأت الحالة"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "حالة التطبيق غير معروفة"
+  },
+  "applicationStatusVisitLink": {
+    "description": "نص الرابط لتوجيه المستخدم إلى صفحة حالة Better Stack.",
+    "message": "شاهد التحديثات المباشرة على status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "تسمية آريا لأيقونة وضع النسخ الدقيق.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "رفض"
+  },
+  "dismissNotice": {
+    "description": "وصف aria لزر إغلاق الإشعار.",
+    "message": "إغلاق"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "عنوان القسم للإعدادات العامة.",
     "message": "عام"
+  },
+  "settings": {
+    "description": "نص رابط الإعدادات.",
+    "message": "الإعدادات"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "クレジットを追加します"
   },
+  "agentMode": {
+    "description": "エージェントモードのリンクテキスト。",
+    "message": "エージェントモード"
+  },
+  "agentModeNoticeMessage": {
+    "description": "ユーザーにエージェントモードの動作を説明する案内メッセージ。",
+    "message": "$chatbot$は{agentModeLink}で待機中で、必要がある場合のみ応答します。動作は{settingsLink}から変更可能です。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "中断可能な"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "各コンポーネントの状態一覧の見出しラベル。",
+    "message": "現在の状況"
+  },
+  "applicationStatusDegraded": {
+    "description": "サービスが低下している際に表示するステータスメッセージ。",
+    "message": "注意：$appName$の動作がやや遅くなっています。対応中です。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "システム問題警告"
   },
+  "applicationStatusNoIncidents": {
+    "description": "インシデント情報がない場合の代替メッセージ。",
+    "message": "現在、異常はありません。順調に稼働しています。"
+  },
+  "applicationStatusOperational": {
+    "description": "サービスが正常稼働している際のステータスメッセージ。",
+    "message": "すべて順調に稼働しており、$appName$は正常です。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "完全なサービス停止時に表示されるステータスメッセージ。",
+    "message": "申し訳ありません、$appName$は現在停止しています。復旧作業中です。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "一部サービス停止時に表示するステータスメッセージ。",
+    "message": "$appName$の一部機能が現在利用できません。状況は随時お知らせします。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "現在の状態が開始した日時を示すラベル。",
+    "message": "状態開始日時"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "アプリケーションのステータスが不明"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Better Stackのステータスページへのリンクテキスト。",
+    "message": "status.saypi.aiで最新情報を見る"
   },
   "ariaLabelAccurate": {
     "description": "正確な字幕モードのアイコンに関するAriaラベル。",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "解散"
+  },
+  "dismissNotice": {
+    "description": "通知を閉じるボタンのAriaラベル。",
+    "message": "閉じる"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "一般設定のセクション見出し。",
     "message": "一般"
+  },
+  "settings": {
+    "description": "設定リンクのテキスト。",
+    "message": "設定"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

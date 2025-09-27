@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Thêm tín dụng"
   },
+  "agentMode": {
+    "description": "Văn bản cho liên kết chế độ đại lý.",
+    "message": "chế độ đại lý"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Tin nhắn cung cấp thông tin giải thích về cách hoạt động của chế độ đại lý cho người dùng.",
+    "message": "$chatbot$ đang nghe trong {agentModeLink}, và chỉ phản hồi khi cần thiết. Có thể thay đổi hành vi này trong {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Có thể gián đoạn"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Tiêu đề cho danh sách trạng thái của các thành phần riêng biệt.",
+    "message": "Có gì mới"
+  },
+  "applicationStatusDegraded": {
+    "description": "Tin nhắn trạng thái khi dịch vụ bị suy giảm.",
+    "message": "Chú ý: $appName$ đang chạy chậm hơn một chút, và chúng tôi đang xử lý.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Cảnh báo vấn đề hệ thống"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Tin nhắn thay thế khi không có chi tiết sự cố nào.",
+    "message": "Hiện không có sự cố nào, mọi thứ đều suôn sẻ."
+  },
+  "applicationStatusOperational": {
+    "description": "Tin nhắn trạng thái khi dịch vụ hoạt động bình thường.",
+    "message": "Mọi thứ đang hoạt động tốt, $appName$ đang vận hành ổn định.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Tin nhắn trạng thái khi dịch vụ bị gián đoạn hoàn toàn.",
+    "message": "Ôi không, $appName$ đang tạm ngừng hoạt động bất ngờ. Đang khắc phục.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Tin nhắn trạng thái khi có sự gián đoạn một phần.",
+    "message": "Một số chức năng của $appName$ hiện không hoạt động, chúng tôi sẽ cập nhật kịp thời.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Nhãn hiển thị trước dấu thời gian mô tả khi trạng thái hiện tại bắt đầu.",
+    "message": "Trạng thái bắt đầu từ"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Trạng thái ứng dụng không rõ"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Văn bản liên kết dẫn người dùng đến trang trạng thái Better Stack.",
+    "message": "Xem cập nhật trực tiếp tại status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Nhãn Aria cho biểu tượng chế độ phiên âm chính xác.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Đuổi đi"
+  },
+  "dismissNotice": {
+    "description": "Nhãn aria cho nút đóng thông báo.",
+    "message": "Đóng"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Tiêu đề phần cho cài đặt chung.",
     "message": "Chung"
+  },
+  "settings": {
+    "description": "Văn bản cho liên kết cài đặt.",
+    "message": "cài đặt"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

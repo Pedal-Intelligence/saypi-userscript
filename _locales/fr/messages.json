@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Ajouter des crédits"
   },
+  "agentMode": {
+    "description": "Text for the agent mode link.",
+    "message": "mode agent"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informational message explaining agent mode behavior to users.",
+    "message": "$chatbot$ écoute en {agentModeLink}, et ne répondra qu'en cas de besoin. Vous pouvez changer ce comportement dans les {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Interruptible"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Libellé d'en-tête pour la liste des statuts des différents composants.",
+    "message": "Quoi de neuf"
+  },
+  "applicationStatusDegraded": {
+    "description": "Message de statut affiché lorsque le service est dégradé.",
+    "message": "Attention : $appName$ est un peu lent en ce moment, on s'en occupe.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Par exemple, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Alerte de problème système"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Message de secours lorsque aucun détail d'incident n'est disponible.",
+    "message": "Aucun incident actif pour le moment, tout roule."
+  },
+  "applicationStatusOperational": {
+    "description": "Message de statut affiché lorsque le service fonctionne normalement.",
+    "message": "Tout fonctionne parfaitement, $appName$ est pleinement opérationnel.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Par exemple, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Message de statut affiché lors d'une panne totale.",
+    "message": "Oups, $appName$ fait une pause inattendue. La réparation est en cours.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Par exemple, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Message de statut affiché lors d'une panne partielle.",
+    "message": "Certaines fonctionnalités de $appName$ sont hors ligne pour l'instant, on vous tient informés.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Par exemple, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Libellé affiché avant l'horodatage indiquant le début du statut actuel.",
+    "message": "Statut commencé"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Statut de l'application inconnu"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Texte du lien dirigeant vers la page de statut de Better Stack.",
+    "message": "Voir les mises à jour en direct sur status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Étiquette Aria pour l'icône du mode de transcription précise.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Rejeter"
+  },
+  "dismissNotice": {
+    "description": "Aria label for the dismiss notice button.",
+    "message": "Fermer"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -673,6 +747,10 @@
     "description": "Titre de section pour les paramètres généraux.",
     "message": "Général"
   },
+  "settings": {
+    "description": "Text for the settings link.",
+    "message": "paramètres"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Partager les analyses"
@@ -797,28 +875,6 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Soumettez uniquement lorsque vous appuyez sur le bouton"
-  },
-  "agentModeNoticeMessage": {
-    "message": "$chatbot$ écoute en {agentModeLink}, et ne répondra qu'en cas de besoin. Vous pouvez changer ce comportement dans les {settingsLink}.",
-    "description": "Informational message explaining agent mode behavior to users.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "agentMode": {
-    "message": "mode agent",
-    "description": "Text for the agent mode link."
-  },
-  "settings": {
-    "message": "paramètres",
-    "description": "Text for the settings link."
-  },
-  "dismissNotice": {
-    "message": "Fermer",
-    "description": "Aria label for the dismiss notice button."
   },
   "tabAIChat": {
     "description": "Étiquette d'onglet pour la section des paramètres de chat IA.",

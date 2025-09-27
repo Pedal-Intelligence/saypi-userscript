@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Lisätä hyvityksiä"
   },
+  "agentMode": {
+    "description": "Teksti agenttitilan linkille.",
+    "message": "agenttitila"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Tietoisku, joka selittää agenttitilan käyttäytymistä käyttäjille.",
+    "message": "$chatbot$ kuuntelee {agentModeLink}-tilassa ja vastaa vain tarvittaessa. Voit muuttaa tätä asetuksista {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Keskeytettävissä"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Otsikkotunniste yksittäisten komponenttien tilojen listalle.",
+    "message": "Mitä tapahtuu"
+  },
+  "applicationStatusDegraded": {
+    "description": "Tilan ilmoitus, kun palvelu on heikentynyt.",
+    "message": "Huomio: $appName$ toimii hitaammin, ja korjaamme asiaa.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Järjestelmäongelman hälytys"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Varaustila ilmoitus, kun vikatietoja ei ole saatavilla.",
+    "message": "Ei aktiivisia häiriöitä, kaikki sujuu hyvin."
+  },
+  "applicationStatusOperational": {
+    "description": "Tilan ilmoitus, kun palvelu toimii normaalisti.",
+    "message": "Kaikki toimii moitteettomasti, ja $appName$ on täysin käytettävissä.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Tilan ilmoitus, kun palvelu on kokonaan poissa käytöstä.",
+    "message": "Hups, $appName$ on yllättävästi poissa käytöstä. Korjaus on käynnissä.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Tilan ilmoitus, kun palvelussa on osittainen häiriö.",
+    "message": "Jotkut $appName$-palvelun osat ovat nyt poissa käytöstä, päivitämme tilanteen pian.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Tunniste, joka näytetään kellonajan edellä ja kertoo, milloin nykyinen tila alkoi.",
+    "message": "Tila alkoi"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Sovelluksen tila tuntematon"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Linkkiteksi, joka ohjaa käyttäjän Better Stackin tilasivulle.",
+    "message": "Katso reaaliaikaiset päivitykset osoitteessa status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria-tunniste tarkan kirjoitusmoodin kuvakkeelle.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Hylkää"
+  },
+  "dismissNotice": {
+    "description": "Aria-kuvailu ilmoituksen suljnnappulalle.",
+    "message": "Sulje"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Osion otsikko yleisille asetuksille.",
     "message": "Yleiset"
+  },
+  "settings": {
+    "description": "Teksti asetusten linkille.",
+    "message": "asetukset"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

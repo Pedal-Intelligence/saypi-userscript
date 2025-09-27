@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Dodaj kredyty"
   },
+  "agentMode": {
+    "description": "Tekst do odnośnika trybu agenta.",
+    "message": "tryb agenta"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informacyjna wiadomość wyjaśniająca użytkownikom zachowanie trybu agenta.",
+    "message": "$chatbot$ słucha w {agentModeLink} i odpowiada tylko wtedy, gdy jest to konieczne. Można to zmienić w {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Przerywalne"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Nagłówek listy statusów poszczególnych komponentów.",
+    "message": "Co się dzieje"
+  },
+  "applicationStatusDegraded": {
+    "description": "Komunikat statusu wyświetlany, gdy usługa działa w ograniczonym zakresie.",
+    "message": "Uwaga: $appName$ działa trochę wolniej, pracujemy nad tym.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Na przykład, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Powiadomienie o problemie z systemem"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Komunikat zastępczy, gdy brak informacji o incydentach.",
+    "message": "Na razie brak aktywnych incydentów, wszystko działa płynnie."
+  },
+  "applicationStatusOperational": {
+    "description": "Komunikat statusu wyświetlany, gdy usługa działa poprawnie.",
+    "message": "Wszystko działa bez zarzutu, $appName$ jest w pełni operacyjny.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Na przykład, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Komunikat statusu wyświetlany w przypadku całkowitej awarii.",
+    "message": "Ups, $appName$ ma nieoczekiwaną przerwę. Naprawa jest w toku.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Na przykład, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Komunikat statusu wyświetlany przy częściowej awarii.",
+    "message": "Część funkcji $appName$ jest obecnie niedostępna, będziemy informować na bieżąco.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Na przykład, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Etykieta wyświetlana przed znacznikiem czasu rozpoczęcia aktualnego statusu.",
+    "message": "Status od"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stan aplikacji nieznany"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Tekst odnośnika kierującego do strony statusu Better Stack.",
+    "message": "Zobacz aktualizacje na żywo na status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Etykieta aria dla ikony trybu dokładnej transkrypcji.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Odrzucać"
+  },
+  "dismissNotice": {
+    "description": "Etykieta Aria dla przycisku zamknięcia powiadomienia.",
+    "message": "Zamknij"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Nagłówek sekcji ustawień ogólnych.",
     "message": "Ogólne"
+  },
+  "settings": {
+    "description": "Tekst do odnośnika ustawień.",
+    "message": "ustawienia"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

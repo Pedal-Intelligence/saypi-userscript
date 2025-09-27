@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Credits toevoegen"
   },
+  "agentMode": {
+    "description": "Tekst voor de agentmodus-link.",
+    "message": "agentmodus"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informatief bericht om gebruikers uit te leggen hoe de agentmodus werkt.",
+    "message": "$chatbot$ luistert mee in {agentModeLink} en reageert alleen wanneer dat nodig is. Dit gedrag kan worden aangepast in {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Onderbreekbaar"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Koptekst voor de lijst met individuele componentstatussen.",
+    "message": "Wat is er aan de hand"
+  },
+  "applicationStatusDegraded": {
+    "description": "Bericht dat wordt weergegeven wanneer de dienst vertraagd is.",
+    "message": "Let op: $appName$ werkt momenteel wat trager, we zijn ermee bezig.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Systeemprobleem Waarschuwing"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Bericht wanneer er geen incidentdetails beschikbaar zijn.",
+    "message": "Momenteel geen actieve incidenten, alles verloopt soepel."
+  },
+  "applicationStatusOperational": {
+    "description": "Bericht dat wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "Alles loopt soepel en $appName$ is volledig operationeel.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Bericht dat wordt weergegeven bij een volledige storing.",
+    "message": "Oeps, $appName$ is onverwacht offline. We zijn bezig met een oplossing.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Bericht dat wordt weergegeven bij een gedeeltelijke storing.",
+    "message": "Sommige functies van $appName$ zijn momenteel offline, we houden je op de hoogte.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Label dat wordt weergegeven vóór de tijdsaanduiding wanneer de huidige status begon.",
+    "message": "Status gestart"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status van de applicatie onbekend"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Linktekst die de gebruiker naar de Better Stack-statuspagina leidt.",
+    "message": "Bekijk live updates op status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria-label voor het icoon van de nauwkeurige transcriptiemodus.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Afwijzen"
+  },
+  "dismissNotice": {
+    "description": "Aria-label voor de knop om het bericht te sluiten.",
+    "message": "Sluiten"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Sectiekop voor algemene instellingen.",
     "message": "Algemeen"
+  },
+  "settings": {
+    "description": "Tekst voor de instellingen-link.",
+    "message": "instellingen"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "添加积分"
   },
+  "agentMode": {
+    "description": "代理模式链接文本。",
+    "message": "代理模式"
+  },
+  "agentModeNoticeMessage": {
+    "description": "向用户说明代理模式行为的信息提示。",
+    "message": "$chatbot$ 正在{agentModeLink}中监听，仅在必要时回应。可在{settingsLink}中更改此设置。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "可中断的"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "各组件状态列表的标题标签。",
+    "message": "当前状况"
+  },
+  "applicationStatusDegraded": {
+    "description": "服务性能下降时显示的状态信息。",
+    "message": "提示：$appName$ 运行速度稍慢，正在处理中。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "系统问题警报"
   },
+  "applicationStatusNoIncidents": {
+    "description": "当没有事件详情时的默认提示信息。",
+    "message": "当前无活跃事件，一切顺利。"
+  },
+  "applicationStatusOperational": {
+    "description": "服务正常运行时显示的状态信息。",
+    "message": "一切正常，$appName$ 正全力运行中。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "服务全部中断时显示的状态信息。",
+    "message": "哎呀，$appName$ 遇到意外中断，正在修复中。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "部分中断时显示的状态信息。",
+    "message": "部分$appName$ 功能暂时无法使用，后续会及时通知。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "显示当前状态开始时间的标签。",
+    "message": "状态开始时间"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "应用程序状态未知"
+  },
+  "applicationStatusVisitLink": {
+    "description": "引导用户访问 Better Stack 状态页面的链接文本。",
+    "message": "查看 status.saypi.ai 的实时状态更新"
   },
   "ariaLabelAccurate": {
     "description": "准确转录模式图标的 Aria 标签。",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "解雇"
+  },
+  "dismissNotice": {
+    "description": "关闭通知按钮的无障碍标签。",
+    "message": "关闭"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "常规设置的部分标题。",
     "message": "常规"
+  },
+  "settings": {
+    "description": "设置链接文本。",
+    "message": "设置"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

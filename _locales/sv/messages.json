@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Lägg till krediter"
   },
+  "agentMode": {
+    "description": "Text för agentlägeslänken.",
+    "message": "agentläge"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Informationsmeddelande som förklarar agentlägets beteende för användare.",
+    "message": "$chatbot$ lyssnar i {agentModeLink} och svarar endast vid behov. Detta kan ändras i {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Avbrytbar"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Rubriktikett för listan över individuella komponentstatusar.",
+    "message": "Vad händer"
+  },
+  "applicationStatusDegraded": {
+    "description": "Statusmeddelande som visas när tjänsten är nedsatt.",
+    "message": "Observera: $appName$ går lite långsamt just nu, och vi jobbar på det.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Systemfelvarning"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Fallback-meddelande när inga incidentdetaljer finns tillgängliga.",
+    "message": "Inga aktiva incidenter just nu, allt flyter på."
+  },
+  "applicationStatusOperational": {
+    "description": "Statusmeddelande som visas när tjänsten fungerar som den ska.",
+    "message": "Allt rullar på och $appName$ är fullt fungerande.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Statusmeddelande som visas vid totalt avbrott.",
+    "message": "Oj då, $appName$ tar en oväntad paus. Åtgärd pågår.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Statusmeddelande som visas vid delvis avbrott.",
+    "message": "Vissa delar av $appName$ är offline just nu, vi håller dig uppdaterad.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Etikett som visas före tidsstämpeln som anger när nuvarande status började.",
+    "message": "Status startade"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Ansökningsstatus okänd"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Länktext som leder användaren till Better Stack status-sidan.",
+    "message": "Se liveuppdateringar på status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Aria etikett för ikonen för noggrann transkriptionsläge.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Avfärda"
+  },
+  "dismissNotice": {
+    "description": "Aria-label för knappen för att stänga meddelandet.",
+    "message": "Stäng"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Avsnittsrubrik för allmänna inställningar.",
     "message": "Allmänt"
+  },
+  "settings": {
+    "description": "Text för inställningslänken.",
+    "message": "inställningar"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

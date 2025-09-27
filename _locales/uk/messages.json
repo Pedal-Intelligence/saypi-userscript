@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Додати кредити"
   },
+  "agentMode": {
+    "description": "Текст для посилання режиму агента.",
+    "message": "режим агента"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Інформаційне повідомлення, що пояснює користувачам поведінку режиму агента.",
+    "message": "$chatbot$ слухає у {agentModeLink} і відповідатиме лише за потреби. Цю поведінку можна змінити в {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Переривний"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Заголовок для списку статусів окремих компонентів.",
+    "message": "Що відбувається"
+  },
+  "applicationStatusDegraded": {
+    "description": "Повідомлення про статус, коли сервіс працює з перебоями.",
+    "message": "Увага: $appName$ трохи повільнішає, ми працюємо над цим.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Сповіщення про проблему в системі"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Повідомлення за замовчуванням, коли відсутні дані про інциденти.",
+    "message": "Активних інцидентів зараз немає, все працює гладко."
+  },
+  "applicationStatusOperational": {
+    "description": "Повідомлення про статус, коли сервіс працює без збоїв.",
+    "message": "Все працює бездоганно, і $appName$ функціонує повністю.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Повідомлення про статус під час повного збою.",
+    "message": "Ой, $appName$ несподівано зупинився. Відновлення вже в роботі.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Повідомлення про статус під час часткового збою.",
+    "message": "Деякі служби $appName$ зараз недоступні, триматимемо в курсі.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Напис, що показує час початку поточного статусу.",
+    "message": "Статус почався"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Статус додатку невідомий"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Текст посилання, що веде користувача на сторінку статусу Better Stack.",
+    "message": "Дивитись оновлення на status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Арія-мітка для іконки режиму точного транскрибування.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Звільнити"
+  },
+  "dismissNotice": {
+    "description": "Aria-мітка для кнопки закриття повідомлення.",
+    "message": "Закрити"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Заголовок розділу для загальних налаштувань.",
     "message": "Загальні"
+  },
+  "settings": {
+    "description": "Текст для посилання налаштувань.",
+    "message": "налаштування"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

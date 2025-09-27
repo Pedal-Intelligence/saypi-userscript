@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "क्रेडिट जोड़ें"
   },
+  "agentMode": {
+    "description": "एजेंट मोड लिंक के लिए पाठ।",
+    "message": "एजेंट मोड"
+  },
+  "agentModeNoticeMessage": {
+    "description": "उपयोगकर्ताओं को एजेंट मोड के व्यवहार के बारे में सूचित करने वाला संदेश।",
+    "message": "$chatbot$ {agentModeLink} में सुन रहा है, और केवल आवश्यक होने पर प्रतिक्रिया देगा। यह व्यवहार {settingsLink} में बदला जा सकता है।",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "पाइ"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "विच्छेदनीय"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "विभिन्न घटकों की स्थिति की सूची के लिए शीर्षक लेबल।",
+    "message": "समीक्षा में क्या चल रहा है"
+  },
+  "applicationStatusDegraded": {
+    "description": "सेवा धीमी होने पर दिखाया जाने वाला स्थिति संदेश।",
+    "message": "सूचना: $appName$ थोड़ा धीमा चल रहा है, हम इस पर काम कर रहे हैं।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "से, पाइ"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "सिस्टम समस्या चेतावनी"
   },
+  "applicationStatusNoIncidents": {
+    "description": "जब कोई घटना विवरण उपलब्ध न हो तो दिखाया जाने वाला संदेश।",
+    "message": "अभी कोई सक्रिय समस्या नहीं है, सब कुछ सुचारू है।"
+  },
+  "applicationStatusOperational": {
+    "description": "सेवा सामान्य रूप से चल रही हो तो दिखाया जाने वाला स्थिति संदेश।",
+    "message": "सब कुछ ठीक से चल रहा है, और $appName$ पूरी तरह से सक्रिय है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "से, पाइ"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "पूर्ण बंदी की स्थिति में दिखाया जाने वाला संदेश।",
+    "message": "ओहो, $appName$ असमय रुका हुआ है। मरम्मत जारी है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "से, पाइ"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "आंशिक बंदी की स्थिति में दिखाया जाने वाला संदेश।",
+    "message": "कुछ $appName$ विकल्प अभी ऑफलाइन हैं, और हम आपको अपडेट करते रहेंगे।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "से, पाइ"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "वर्तमान स्थिति कब से शुरू हुई है, इसे दर्शाने वाला लेबल।",
+    "message": "स्थिति शुरू हुई"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "आवेदन की स्थिति अज्ञात"
+  },
+  "applicationStatusVisitLink": {
+    "description": "उपयोगकर्ता को Better Stack स्थिति पृष्ठ पर निर्देशित करने वाला लिंक टेक्स्ट।",
+    "message": "status.saypi.ai पर लाइव अपडेट देखें"
   },
   "ariaLabelAccurate": {
     "description": "सटीक शब्दांकन मोड आइकन के लिए आरिया लेबल।",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "खारिज करें"
+  },
+  "dismissNotice": {
+    "description": "नोटिस बंद करने के बटन का Aria लेबल।",
+    "message": "बंद करें"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "सामान्य सेटिंग्स के लिए अनुभाग शीर्षक।",
     "message": "सामान्य"
+  },
+  "settings": {
+    "description": "सेटिंग्स लिंक के लिए पाठ।",
+    "message": "सेटिंग्स"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

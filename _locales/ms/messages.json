@@ -11,6 +11,20 @@
     "description": "Text for link to add more voice credits",
     "message": "Tambah kredit"
   },
+  "agentMode": {
+    "description": "Teks untuk pautan mod agen.",
+    "message": "mod agen"
+  },
+  "agentModeNoticeMessage": {
+    "description": "Mesej maklumat yang menerangkan kelakuan mod agen kepada pengguna.",
+    "message": "$chatbot$ sedang mendengar di {agentModeLink}, dan hanya akan respons apabila perlu. Boleh ubah kelakuan ini di {settingsLink}.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "allowInterruptions": {
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Boleh diganggu"
@@ -23,13 +37,69 @@
     "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusComponentsHeading": {
+    "description": "Label tajuk untuk senarai status komponen individu.",
+    "message": "Apa yang sedang berlaku"
+  },
+  "applicationStatusDegraded": {
+    "description": "Mesej status dipaparkan apabila perkhidmatan merosot.",
+    "message": "Berhati-hati: $appName$ sedikit perlahan, kami sedang mengatasinya.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "applicationStatusIssue": {
     "description": "Message to display when the application is experiencing issues.",
     "message": "Amaran Isu Sistem"
   },
+  "applicationStatusNoIncidents": {
+    "description": "Mesej gantian apabila tiada maklumat insiden tersedia.",
+    "message": "Tiada insiden aktif sekarang, semuanya lancar sahaja."
+  },
+  "applicationStatusOperational": {
+    "description": "Mesej status dipaparkan apabila perkhidmatan beroperasi.",
+    "message": "Segala-galanya berjalan lancar, dan $appName$ beroperasi sepenuhnya.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOutage": {
+    "description": "Mesej status dipaparkan apabila berlaku gangguan penuh.",
+    "message": "Alamak, $appName$ sedang berehat secara tidak dijangka. Pembaikan sedang dilakukan.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusPartialOutage": {
+    "description": "Mesej status dipaparkan apabila terdapat gangguan separa.",
+    "message": "Beberapa fungsi $appName$ sedang tidak beroperasi sekarang, dan kami akan kemas kini anda.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusSinceLabel": {
+    "description": "Label yang dipaparkan sebelum cap masa menerangkan bila status semasa bermula.",
+    "message": "Status bermula"
+  },
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status permohonan tidak diketahui"
+  },
+  "applicationStatusVisitLink": {
+    "description": "Teks pautan yang mengarahkan pengguna ke halaman status Better Stack.",
+    "message": "Lihat kemas kini langsung di status.saypi.ai"
   },
   "ariaLabelAccurate": {
     "description": "Label aria untuk ikon mod transkripsi tepat.",
@@ -318,6 +388,10 @@
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Buang"
+  },
+  "dismissNotice": {
+    "description": "Label Aria untuk butang tutup notis.",
+    "message": "Tutup"
   },
   "enableTTS": {
     "description": "Label for the checkbox to enable/disable text-to-speech.",
@@ -672,6 +746,10 @@
   "sectionHeadingGeneral": {
     "description": "Tajuk seksyen untuk tetapan umum.",
     "message": "Umum"
+  },
+  "settings": {
+    "description": "Teks untuk pautan tetapan.",
+    "message": "tetapan"
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
