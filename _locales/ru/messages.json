@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Сообщение о статусе при нормальной работе сервиса.",
-    "message": "Всё работает исправно, $appName$ функционирует в полном объёме.",
+    "message": "Все работает как часы.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Альтернативное сообщение о статусе при исправной работе сервиса.",
+    "message": "Все системы в порядке! $appName$ работает на полную мощность.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Например, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Альтернативное сообщение о статусе при исправной работе сервиса.",
+    "message": "Все гладко — $appName$ готов к работе!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Например, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Альтернативное сообщение о статусе при исправной работе сервиса.",
+    "message": "$appName$ в отличном состоянии и готов помочь.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Например, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Альтернативное сообщение о статусе при исправной работе сервиса.",
+    "message": "Все отлично. $appName$ работает на полной скорости.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Например, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Альтернативное сообщение о статусе при исправной работе сервиса.",
+    "message": "Полный зелёный свет! $appName$ готов к работе.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Например, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Альтернативное сообщение о статусе при исправной работе сервиса.",
+    "message": "$appName$ в добром здравии и готов к действиям.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Например, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Статус приложения неизвестен"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Текст ссылки для просмотра подробной информации о статусе на странице статуса.",
+    "message": "Посмотреть детали"
   },
   "applicationStatusVisitLink": {
     "description": "Текст ссылки, ведущей на страницу статуса Better Stack.",

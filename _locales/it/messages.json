@@ -61,7 +61,67 @@
   },
   "applicationStatusOperational": {
     "description": "Messaggio di stato mostrato quando il servizio è operativo.",
-    "message": "Tutto funziona alla perfezione, $appName$ è completamente operativo.",
+    "message": "Tutto procede a meraviglia.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ad esempio, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Messaggio di stato alternativo mostrato quando il servizio è operativo.",
+    "message": "Tutti i sistemi sono operativi! $appName$ sta funzionando alla grande.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ad esempio, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Messaggio di stato alternativo mostrato quando il servizio è operativo.",
+    "message": "Navigazione tranquilla - $appName$ è pronto a partire!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ad esempio, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Messaggio di stato alternativo mostrato quando il servizio è operativo.",
+    "message": "$appName$ si sente alla grande ed è pronto ad aiutare.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ad esempio, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Messaggio di stato alternativo mostrato quando il servizio è operativo.",
+    "message": "Tutto procede a gonfie vele. $appName$ funziona a pieno regime.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ad esempio, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Messaggio di stato alternativo mostrato quando il servizio è operativo.",
+    "message": "Tutto verde! $appName$ è pronto all’uso.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ad esempio, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Messaggio di stato alternativo mostrato quando il servizio è operativo.",
+    "message": "$appName$ è in forma, sano e pronto all’azione.",
     "placeholders": {
       "appName": {
         "content": "$1",
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stato della domanda sconosciuto"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Testo del link per visualizzare informazioni dettagliate sullo stato nella pagina di stato.",
+    "message": "Visualizza dettagli"
   },
   "applicationStatusVisitLink": {
     "description": "Testo del link che indirizza l’utente alla pagina di stato di Better Stack.",

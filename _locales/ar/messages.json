@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "رسالة الحالة عند عمل الخدمة بشكل طبيعي.",
-    "message": "كل شيء يعمل بسلاسة، و$appName$ يعمل بكامل طاقته.",
+    "message": "كل شيء يسير بسلاسة.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "سي، باي"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "رسالة حالة بديلة تُعرض عندما تكون الخدمة تعمل.",
+    "message": "جميع الأنظمة تعمل! $appName$ في أفضل حال.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "مثلاً، Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "رسالة حالة بديلة تُعرض عندما تكون الخدمة تعمل.",
+    "message": "الأمور تسير بسلاسة - $appName$ جاهز للعمل!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "مثلاً، Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "رسالة حالة بديلة تُعرض عندما تكون الخدمة تعمل.",
+    "message": "$appName$ في حالة ممتازة وجاهز للمساعدة.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "مثلاً، Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "رسالة حالة بديلة تُعرض عندما تكون الخدمة تعمل.",
+    "message": "كل شيء على ما يرام. $appName$ يعمل بأقصى سرعة.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "مثلاً، Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "رسالة حالة بديلة تُعرض عندما تكون الخدمة تعمل.",
+    "message": "كل المؤشرات خضراء! $appName$ جاهز للانطلاق.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "مثلاً، Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "رسالة حالة بديلة تُعرض عندما تكون الخدمة تعمل.",
+    "message": "$appName$ بصحة جيدة وسعيد ومستعد للعمل.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "مثلاً، Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "حالة التطبيق غير معروفة"
+  },
+  "applicationStatusViewDetails": {
+    "description": "نص الرابط لعرض معلومات الحالة التفصيلية على صفحة الحالة.",
+    "message": "عرض التفاصيل"
   },
   "applicationStatusVisitLink": {
     "description": "نص الرابط لتوجيه المستخدم إلى صفحة حالة Better Stack.",

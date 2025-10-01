@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Mesaj de stare afișat când serviciul este operațional.",
-    "message": "Totul merge bine, $appName$ este complet operațional.",
+    "message": "Totul funcționează impecabil.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Mesaj alternativ afișat atunci când serviciul este operațional.",
+    "message": "Totul merge perfect! $appName$ funcționează la capacitate maximă.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De exemplu, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Mesaj alternativ afișat atunci când serviciul este operațional.",
+    "message": "Totul decurge lin – $appName$ este pregătit de acțiune!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De exemplu, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Mesaj alternativ afișat atunci când serviciul este operațional.",
+    "message": "$appName$ se simte excelent și este gata să ajute.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De exemplu, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Mesaj alternativ afișat atunci când serviciul este operațional.",
+    "message": "Totul merge strună. $appName$ funcționează în viteză maximă.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De exemplu, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Mesaj alternativ afișat atunci când serviciul este operațional.",
+    "message": "Totul este în regulă! $appName$ este gata de plecare.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De exemplu, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Mesaj alternativ afișat atunci când serviciul este operațional.",
+    "message": "$appName$ este sănătos, în formă și pregătit de acțiune.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De exemplu, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Starea aplicației necunoscută"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Textul linkului pentru a vizualiza informații detaliate despre starea serviciului pe pagina de status.",
+    "message": "Vezi detalii"
   },
   "applicationStatusVisitLink": {
     "description": "Textul linkului ce direcționează utilizatorul către pagina de status Better Stack.",

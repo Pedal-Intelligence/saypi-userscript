@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Tin nhắn trạng thái khi dịch vụ hoạt động bình thường.",
-    "message": "Mọi thứ đang hoạt động tốt, $appName$ đang vận hành ổn định.",
+    "message": "Mọi thứ đang hoạt động suôn sẻ.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Tin nhắn trạng thái thay thế khi dịch vụ đang hoạt động.",
+    "message": "Mọi hệ thống đều sẵn sàng! $appName$ đang vận hành trơn tru.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ví dụ: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Tin nhắn trạng thái thay thế khi dịch vụ đang hoạt động.",
+    "message": "Mọi thứ êm xuôi - $appName$ đã sẵn sàng hoạt động!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ví dụ: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Tin nhắn trạng thái thay thế khi dịch vụ đang hoạt động.",
+    "message": "$appName$ cảm thấy tuyệt vời và sẵn sàng hỗ trợ.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ví dụ: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Tin nhắn trạng thái thay thế khi dịch vụ đang hoạt động.",
+    "message": "Mọi thứ thật tuyệt vời. $appName$ đang vận hành hết công suất.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ví dụ: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Tin nhắn trạng thái thay thế khi dịch vụ đang hoạt động.",
+    "message": "Mọi thứ đều xanh! $appName$ đã sẵn sàng hoạt động.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ví dụ: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Tin nhắn trạng thái thay thế khi dịch vụ đang hoạt động.",
+    "message": "$appName$ khỏe mạnh, sẵn sàng hành động.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Ví dụ: Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Trạng thái ứng dụng không rõ"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Liên kết để xem thông tin trạng thái chi tiết trên trang trạng thái.",
+    "message": "Xem chi tiết"
   },
   "applicationStatusVisitLink": {
     "description": "Văn bản liên kết dẫn người dùng đến trang trạng thái Better Stack.",

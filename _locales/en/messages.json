@@ -283,8 +283,68 @@
     "description": "Message to display when the application is experiencing issues."
   },
   "applicationStatusOperational": {
-    "message": "Everything's humming, and $appName$ is fully operational.",
+    "message": "Everything's humming along nicely.",
     "description": "Status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "message": "All systems go! $appName$ is firing on all cylinders.",
+    "description": "Alternative status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "message": "Smooth sailing - $appName$ is ready to roll!",
+    "description": "Alternative status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "message": "$appName$ is feeling fantastic and ready to help.",
+    "description": "Alternative status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "message": "Everything's peachy. $appName$ is operating at full speed.",
+    "description": "Alternative status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "message": "Green across the board! $appName$ is good to go.",
+    "description": "Alternative status message shown when the service is operational.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "message": "$appName$ is happy, healthy, and ready for action.",
+    "description": "Alternative status message shown when the service is operational.",
     "placeholders": {
       "appName": {
         "content": "$1",
@@ -333,6 +393,10 @@
   "applicationStatusComponentsHeading": {
     "message": "What's cooking",
     "description": "Heading label for the list of individual component statuses."
+  },
+  "applicationStatusViewDetails": {
+    "message": "View details",
+    "description": "Link text for viewing detailed status information on the status page."
   },
   "applicationStatusVisitLink": {
     "message": "See live updates on status.saypi.ai",

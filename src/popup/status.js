@@ -53,15 +53,36 @@ function formatTimestamp(isoString) {
   });
 }
 
+function getRandomOperationalMessage() {
+  const appName = chrome.i18n.getMessage("appName") || "Say, Pi";
+
+  // Array of message keys for operational status variations
+  const messageKeys = [
+    "applicationStatusOperational",
+    "applicationStatusOperational_alt1",
+    "applicationStatusOperational_alt2",
+    "applicationStatusOperational_alt3",
+    "applicationStatusOperational_alt4",
+    "applicationStatusOperational_alt5",
+    "applicationStatusOperational_alt6"
+  ];
+
+  // Randomly select a message key
+  const randomKey = messageKeys[Math.floor(Math.random() * messageKeys.length)];
+
+  // Get the message with placeholder substitution
+  const message = chrome.i18n.getMessage(randomKey, [appName]);
+
+  // Fallback if message is not found
+  return message || `All systems are operational for ${appName}.`;
+}
+
 function getOverallMessage(overall, hasIncidents) {
   const appName = chrome.i18n.getMessage("appName") || "Say, Pi";
   const placeholders = [appName];
   switch (overall) {
     case "operational":
-      return getMessageOrDefault(
-        "applicationStatusOperational",
-        "All systems are operational."
-      ).replace("$1", appName);
+      return getRandomOperationalMessage();
     case "degraded":
       return getMessageOrDefault(
         "applicationStatusDegraded",
@@ -271,7 +292,25 @@ function updateStatus(status) {
 
     const text = document.createElement("div");
     text.className = "status-text";
-    text.textContent = status.message;
+
+    const messageParagraph = document.createElement("p");
+    messageParagraph.className = "status-message";
+    messageParagraph.textContent = status.message;
+    text.appendChild(messageParagraph);
+
+    // Add status page link for operational status
+    if (status.status_code === "normal") {
+      const linkText = document.createElement("a");
+      linkText.href = STATUS_PAGE_URL;
+      linkText.target = "_blank";
+      linkText.rel = "noopener noreferrer";
+      linkText.className = "status-link";
+      linkText.textContent = getMessageOrDefault(
+        "applicationStatusViewDetails",
+        "View details"
+      );
+      text.appendChild(linkText);
+    }
 
     const iconWrap = document.createElement("span");
     iconWrap.className = "status-icon icon-circle";

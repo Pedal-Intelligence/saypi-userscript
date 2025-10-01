@@ -61,7 +61,67 @@
   },
   "applicationStatusOperational": {
     "description": "Mensahe ng kalagayan kapag ang serbisyo ay gumagana nang maayos.",
-    "message": "Maayos ang takbo, at ganap na operasyonal ang $appName$.",
+    "message": "Maayos ang lahat.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternatibong mensahe ng status kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Handang-handa na! $appName$ ay nasa pinakamataas na antas.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternatibong mensahe ng status kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Walang sabit – handa nang tumakbo ang $appName$!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternatibong mensahe ng status kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Masigla at handang tumulong ang $appName$.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternatibong mensahe ng status kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Ayos na ayos. $appName$ ay tumatakbo nang buong bilis.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternatibong mensahe ng status kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Lahat ay berde! Handa na ang $appName$.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Halimbawa, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternatibong mensahe ng status kapag ang serbisyo ay gumagana nang maayos.",
+    "message": "Masaya, malusog, at handang kumilos ang $appName$.",
     "placeholders": {
       "appName": {
         "content": "$1",
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Hindi alam ang katayuan ng aplikasyon"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Teksto ng link para tingnan ang detalyadong impormasyon ng status sa pahina ng status.",
+    "message": "Tingnan ang detalye"
   },
   "applicationStatusVisitLink": {
     "description": "Teksto ng link na nagtuturo sa gumagamit sa pahina ng status ng Better Stack.",

@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "서비스가 정상 작동 중일 때 표시되는 상태 메시지입니다.",
-    "message": "모든 것이 원활하게 진행 중이며 $appName$가 완전히 정상 운영 중입니다.",
+    "message": "모든 것이 순조롭게 진행되고 있습니다.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "서비스가 정상 운영 중일 때 표시되는 대체 상태 메시지입니다.",
+    "message": "모든 시스템 정상 작동 중! $appName$가 완벽하게 가동 중입니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "예: 파이"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "서비스가 정상 운영 중일 때 표시되는 대체 상태 메시지입니다.",
+    "message": "문제없음 - $appName$가 언제든 준비되어 있습니다!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "예: 파이"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "서비스가 정상 운영 중일 때 표시되는 대체 상태 메시지입니다.",
+    "message": "$appName$가 매우 건강하고 도움을 줄 준비가 되어 있습니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "예: 파이"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "서비스가 정상 운영 중일 때 표시되는 대체 상태 메시지입니다.",
+    "message": "모든 것이 완벽합니다. $appName$가 전속력으로 작동 중입니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "예: 파이"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "서비스가 정상 운영 중일 때 표시되는 대체 상태 메시지입니다.",
+    "message": "모든 항목 이상 무! $appName$가 즉시 사용 가능합니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "예: 파이"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "서비스가 정상 운영 중일 때 표시되는 대체 상태 메시지입니다.",
+    "message": "$appName$가 건강하고 활기차며 즉시 작동할 준비가 되어 있습니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "예: 파이"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "응용 프로그램 상태를 알 수 없음"
+  },
+  "applicationStatusViewDetails": {
+    "description": "상태 페이지에서 세부 상태 정보를 볼 수 있는 링크 텍스트입니다.",
+    "message": "자세히 보기"
   },
   "applicationStatusVisitLink": {
     "description": "사용자를 Better Stack 상태 페이지로 안내하는 링크 텍스트입니다.",

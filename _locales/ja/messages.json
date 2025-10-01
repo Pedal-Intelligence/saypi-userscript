@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "サービスが正常稼働している際のステータスメッセージ。",
-    "message": "すべて順調に稼働しており、$appName$は正常です。",
+    "message": "すべて順調に動いています。",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "サービスが正常に稼働しているときに表示される代替ステータスメッセージです。",
+    "message": "すべて順調！$appName$は絶好調です。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例：Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "サービスが正常に稼働しているときに表示される代替ステータスメッセージです。",
+    "message": "順風満帆です。$appName$が準備万端です！",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例：Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "サービスが正常に稼働しているときに表示される代替ステータスメッセージです。",
+    "message": "$appName$は絶好調で、いつでもお手伝いできます。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例：Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "サービスが正常に稼働しているときに表示される代替ステータスメッセージです。",
+    "message": "すべて順調です。$appName$はフルスピードで稼働中です。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例：Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "サービスが正常に稼働しているときに表示される代替ステータスメッセージです。",
+    "message": "順調そのもの！$appName$は問題なく稼働しています。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例：Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "サービスが正常に稼働しているときに表示される代替ステータスメッセージです。",
+    "message": "$appName$は良好な状態で、いつでも対応可能です。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例：Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "アプリケーションのステータスが不明"
+  },
+  "applicationStatusViewDetails": {
+    "description": "ステータスページで詳細情報を見るためのリンクテキストです。",
+    "message": "詳細を見る"
   },
   "applicationStatusVisitLink": {
     "description": "Better Stackのステータスページへのリンクテキスト。",

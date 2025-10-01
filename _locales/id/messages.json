@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Pesan status yang ditampilkan saat layanan beroperasi normal.",
-    "message": "Semua berjalan lancar, dan $appName$ beroperasi penuh.",
+    "message": "Semua berjalan lancar.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Pesan status alternatif yang ditampilkan saat layanan berjalan.",
+    "message": "Semua sistem berfungsi! $appName$ bekerja dengan maksimal.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Misalnya, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Pesan status alternatif yang ditampilkan saat layanan berjalan.",
+    "message": "Semua lancar - $appName$ siap digunakan!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Misalnya, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Pesan status alternatif yang ditampilkan saat layanan berjalan.",
+    "message": "$appName$ dalam kondisi prima dan siap membantu.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Misalnya, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Pesan status alternatif yang ditampilkan saat layanan berjalan.",
+    "message": "Semua berjalan mulus. $appName$ beroperasi dengan kecepatan penuh.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Misalnya, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Pesan status alternatif yang ditampilkan saat layanan berjalan.",
+    "message": "Lancar semua! $appName$ siap dijalankan.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Misalnya, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Pesan status alternatif yang ditampilkan saat layanan berjalan.",
+    "message": "$appName$ dalam kondisi sehat, bahagia, dan siap beraksi.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Misalnya, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status permohonan tidak diketahui"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Teks tautan untuk melihat informasi status secara rinci di halaman status.",
+    "message": "Lihat detail"
   },
   "applicationStatusVisitLink": {
     "description": "Teks tautan yang mengarahkan pengguna ke halaman status Better Stack.",

@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "சேவை இயங்குபாட்டில் இருப்பதை காட்டும் நிலை செய்தி.",
-    "message": "எல்லாம் நன்றாக இயங்குகிறது, $appName$ முழுமையாக செயல்பாட்டில் உள்ளது.",
+    "message": "எல்லாமே சீராக செயல்பட்டு வருகிறது.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "சேய், பை"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "சேவை இயக்கத்தில் இருக்கும் போது காண்பிக்கும் மாற்று நிலை செய்தி.",
+    "message": "அனைத்து அமைப்புகளும் செயலிழையாமல் இயங்குகின்றன! $appName$ முழு சக்தியுடன் வேலை செய்கிறது.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "எ.கா, பை"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "சேவை இயக்கத்தில் இருக்கும் போது காண்பிக்கும் மாற்று நிலை செய்தி.",
+    "message": "சேவை சீராக உள்ளது - $appName$ பயன்படுத்த தயாராக உள்ளது!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "எ.கா, பை"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "சேவை இயக்கத்தில் இருக்கும் போது காண்பிக்கும் மாற்று நிலை செய்தி.",
+    "message": "$appName$ நன்றாக செயல்படுகிறது மற்றும் உதவ தயாராக உள்ளது.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "எ.கா, பை"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "சேவை இயக்கத்தில் இருக்கும் போது காண்பிக்கும் மாற்று நிலை செய்தி.",
+    "message": "எல்லாம் சிறப்பாக உள்ளது. $appName$ முழு வேகத்தில் இயங்குகிறது.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "எ.கா, பை"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "சேவை இயக்கத்தில் இருக்கும் போது காண்பிக்கும் மாற்று நிலை செய்தி.",
+    "message": "அனைத்து பகுதியும் சிகப்பு இல்லை! $appName$ பயன்படுத்த தயார்.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "எ.கா, பை"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "சேவை இயக்கத்தில் இருக்கும் போது காண்பிக்கும் மாற்று நிலை செய்தி.",
+    "message": "$appName$ மகிழ்ச்சியுடன், ஆரோக்கியத்துடன் செயலில் உள்ளது.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "எ.கா, பை"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "பயன்பாட்டு நிலை தெரியாது"
+  },
+  "applicationStatusViewDetails": {
+    "description": "நிலைப் பக்கம் ஒன்றிர் கூடுதல் நிலைத் தகவல்களைப் பார்க்க கூடிய இணைப்பு உரை.",
+    "message": "விவரங்களைப் பார்க்கவும்"
   },
   "applicationStatusVisitLink": {
     "description": "பயனரை Better Stack நிலை பக்கத்திற்கு வழிநடத்தும் இணைப்பு உரை.",

@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Hizmet çalışır durumdayken gösterilen durum mesajı.",
-    "message": "Her şey yolunda, $appName$ tamamen operasyonel.",
+    "message": "Her şey yolunda gidiyor.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Servis çalışır durumdayken gösterilen alternatif durum mesajı.",
+    "message": "Tüm sistemler hazır! $appName$ tam kapasite çalışıyor.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Örneğin, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Servis çalışır durumdayken gösterilen alternatif durum mesajı.",
+    "message": "Sorunsuz ilerliyor - $appName$ harekete hazır!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Örneğin, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Servis çalışır durumdayken gösterilen alternatif durum mesajı.",
+    "message": "$appName$ harika durumda ve yardım için hazır.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Örneğin, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Servis çalışır durumdayken gösterilen alternatif durum mesajı.",
+    "message": "Her şey mükemmel. $appName$ tam hızda çalışıyor.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Örneğin, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Servis çalışır durumdayken gösterilen alternatif durum mesajı.",
+    "message": "Her şey yeşil ışıkta! $appName$ hazır.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Örneğin, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Servis çalışır durumdayken gösterilen alternatif durum mesajı.",
+    "message": "$appName$ sağlıklı, mutlu ve faaliyete hazır.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Örneğin, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Uygulama durumu bilinmiyor"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Durum sayfasında detaylı durum bilgisini görüntülemek için bağlantı metni.",
+    "message": "Detayları görüntüle"
   },
   "applicationStatusVisitLink": {
     "description": "Kullanıcıyı Better Stack durum sayfasına yönlendiren bağlantı metni.",

@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Tilan ilmoitus, kun palvelu toimii normaalisti.",
-    "message": "Kaikki toimii moitteettomasti, ja $appName$ on täysin käytettävissä.",
+    "message": "Kaikki sujuu mutkattomasti.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Vaihtoehtoinen tilaviestinäytös, kun palvelu on toiminnassa.",
+    "message": "Kaikki toimii täydellä teholla! $appName$ on täydessä vauhdissa.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Esim. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Vaihtoehtoinen tilaviestinäytös, kun palvelu on toiminnassa.",
+    "message": "Sujuvaa menoa – $appName$ on valmiina käyntiin!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Esim. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Vaihtoehtoinen tilaviestinäytös, kun palvelu on toiminnassa.",
+    "message": "$appName$ voi loistavasti ja on valmis auttamaan.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Esim. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Vaihtoehtoinen tilaviestinäytös, kun palvelu on toiminnassa.",
+    "message": "Kaikki on mallillaan. $appName$ toimii täydellä teholla.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Esim. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Vaihtoehtoinen tilaviestinäytös, kun palvelu on toiminnassa.",
+    "message": "Kaikki vihreänä! $appName$ on valmiina lähtöön.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Esim. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Vaihtoehtoinen tilaviestinäytös, kun palvelu on toiminnassa.",
+    "message": "$appName$ on tyytyväinen, vireä ja valmiina toimintaan.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Esim. Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Sovelluksen tila tuntematon"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Linkkiteksti, jolla pääsee katsomaan yksityiskohtaisia tilatietoja tilasivulla.",
+    "message": "Näytä tiedot"
   },
   "applicationStatusVisitLink": {
     "description": "Linkkiteksi, joka ohjaa käyttäjän Better Stackin tilasivulle.",

@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Съобщение за статус, показвано когато услугата работи нормално.",
-    "message": "Всичко работи перфектно и $appName$ функционира нормално.",
+    "message": "Всичко върви прекрасно.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Кажи, Пи"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Алтернативно съобщение за състоянието, показвано когато услугата работи.",
+    "message": "Всичко е наред! $appName$ работи на пълни обороти.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Да кажем, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Алтернативно съобщение за състоянието, показвано когато услугата работи.",
+    "message": "Гладко плаване - $appName$ е готов за действие!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Да кажем, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Алтернативно съобщение за състоянието, показвано когато услугата работи.",
+    "message": "$appName$ е в страхотна форма и готов да помогне.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Да кажем, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Алтернативно съобщение за състоянието, показвано когато услугата работи.",
+    "message": "Всичко е наред. $appName$ работи на пълна скорост.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Да кажем, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Алтернативно съобщение за състоянието, показвано когато услугата работи.",
+    "message": "Всичко е зелено! $appName$ е готов за стартиране.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Да кажем, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Алтернативно съобщение за състоянието, показвано когато услугата работи.",
+    "message": "$appName$ е здрав, щастлив и готов за действие.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Да кажем, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Статусът на приложението е неизвестен"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Текст на линк за преглед на подробна информация за статуса на страницата със статусите.",
+    "message": "Виж подробности"
   },
   "applicationStatusVisitLink": {
     "description": "Текст на линк, който насочва потребителя към страницата за статус на Better Stack.",

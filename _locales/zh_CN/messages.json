@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "服务正常运行时显示的状态信息。",
-    "message": "一切正常，$appName$ 正全力运行中。",
+    "message": "一切运行顺利。",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "服务正常运行时显示的替代状态信息。",
+    "message": "一切就绪！$appName$ 正全面运行。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例如，Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "服务正常运行时显示的替代状态信息。",
+    "message": "一帆风顺——$appName$ 准备就绪！",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例如，Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "服务正常运行时显示的替代状态信息。",
+    "message": "$appName$ 状态极佳，随时准备提供帮助。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例如，Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "服务正常运行时显示的替代状态信息。",
+    "message": "一切顺利。$appName$ 正以全速运转。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例如，Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "服务正常运行时显示的替代状态信息。",
+    "message": "完全正常！$appName$ 准备就绪。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例如，Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "服务正常运行时显示的替代状态信息。",
+    "message": "$appName$ 状态良好，随时待命。",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "例如，Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "应用程序状态未知"
+  },
+  "applicationStatusViewDetails": {
+    "description": "查看状态页面详细状态信息的链接文本。",
+    "message": "查看详情"
   },
   "applicationStatusVisitLink": {
     "description": "引导用户访问 Better Stack 状态页面的链接文本。",

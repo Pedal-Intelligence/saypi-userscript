@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Správa o stave zobrazená, keď služba funguje bez porúch.",
-    "message": "Všetko beží hladko a $appName$ je plne funkčný.",
+    "message": "Všetko chodí ako na oleji.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Napríklad Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternatívna správa o stave, ktorá sa zobrazuje, keď je služba v prevádzke.",
+    "message": "Všetko beží naplno! $appName$ ide na plné obrátky.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternatívna správa o stave, ktorá sa zobrazuje, keď je služba v prevádzke.",
+    "message": "Bez problémov – $appName$ je pripravený na štart!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternatívna správa o stave, ktorá sa zobrazuje, keď je služba v prevádzke.",
+    "message": "$appName$ funguje skvele a je pripravený pomôcť.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternatívna správa o stave, ktorá sa zobrazuje, keď je služba v prevádzke.",
+    "message": "Všetko je v poriadku. $appName$ beží na plný výkon.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternatívna správa o stave, ktorá sa zobrazuje, keď je služba v prevádzke.",
+    "message": "Všetko zelené! $appName$ je pripravený na použitie.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternatívna správa o stave, ktorá sa zobrazuje, keď je služba v prevádzke.",
+    "message": "$appName$ je v dobrej kondícii, zdravý a pripravený do akcie.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Napríklad, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stav aplikácie neznámy"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Text odkazu pre zobrazenie detailných informácií o stave na stránke so stavom služby.",
+    "message": "Zobraziť detaily"
   },
   "applicationStatusVisitLink": {
     "description": "Text odkazu smerujúceho používateľa na stránku statusu Better Stack.",

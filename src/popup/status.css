@@ -40,6 +40,19 @@ section#application-status {
     border: 1px solid #e5e7eb;
 }
 .status-card .status-text { color: #0f172a; font-weight: 600; }
+.status-card .status-message { margin: 0; padding: 0; }
+.status-card .status-link {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #715fd1;
+    text-decoration: none;
+}
+.status-card .status-link:hover {
+    text-decoration: underline;
+}
+
 .status-card.normal .status-icon { background:#dcfce7; color:#15803d; }
 .status-card.unknown .status-icon { background:#ede9fe; color:#6d28d9; }
 .status-card.issue.minor .status-icon { background:#fef9c3; color:#a16207; }

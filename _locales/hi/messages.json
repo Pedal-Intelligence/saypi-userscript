@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "सेवा सामान्य रूप से चल रही हो तो दिखाया जाने वाला स्थिति संदेश।",
-    "message": "सब कुछ ठीक से चल रहा है, और $appName$ पूरी तरह से सक्रिय है।",
+    "message": "सब कुछ ठीक-ठाक चल रहा है।",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "से, पाइ"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "सेवा चालू होने पर दिखाई जाने वाली वैकल्पिक स्थिति संदेश।",
+    "message": "सभी सिस्टम तैयार हैं! $appName$ पूरी ताकत से काम कर रहा है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "उदाहरण के लिए, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "सेवा चालू होने पर दिखाई जाने वाली वैकल्पिक स्थिति संदेश।",
+    "message": "सब कुछ आराम से चल रहा है - $appName$ शुरू होने को तैयार है!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "उदाहरण के लिए, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "सेवा चालू होने पर दिखाई जाने वाली वैकल्पिक स्थिति संदेश।",
+    "message": "$appName$ बिल्कुल ठीक महसूस कर रहा है और सहायता के लिए तैयार है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "उदाहरण के लिए, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "सेवा चालू होने पर दिखाई जाने वाली वैकल्पिक स्थिति संदेश।",
+    "message": "सब कुछ बढ़िया है। $appName$ पूरी गति से काम कर रहा है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "उदाहरण के लिए, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "सेवा चालू होने पर दिखाई जाने वाली वैकल्पिक स्थिति संदेश।",
+    "message": "सब तरफ हरी बत्ती! $appName$ उपयोग के लिए तैयार है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "उदाहरण के लिए, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "सेवा चालू होने पर दिखाई जाने वाली वैकल्पिक स्थिति संदेश।",
+    "message": "$appName$ स्वस्थ और सक्रिय है, कार्रवाई के लिए तैयार है।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "उदाहरण के लिए, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "आवेदन की स्थिति अज्ञात"
+  },
+  "applicationStatusViewDetails": {
+    "description": "स्थिति पृष्ठ पर विस्तृत स्थिति जानकारी देखने के लिए लिंक का पाठ।",
+    "message": "विस्तृत जानकारी देखें"
   },
   "applicationStatusVisitLink": {
     "description": "उपयोगकर्ता को Better Stack स्थिति पृष्ठ पर निर्देशित करने वाला लिंक टेक्स्ट।",

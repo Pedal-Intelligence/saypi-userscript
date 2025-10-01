@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Μήνυμα κατάστασης όταν η υπηρεσία λειτουργεί κανονικά.",
-    "message": "Όλα λειτουργούν ρολόι και το $appName$ είναι πλήρως ενεργό.",
+    "message": "Όλα λειτουργούν ομαλά.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Εναλλακτικό μήνυμα κατάστασης που εμφανίζεται όταν η υπηρεσία λειτουργεί.",
+    "message": "Όλα πάνε καλά! Το $appName$ λειτουργεί στο μέγιστο.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Π.χ., Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Εναλλακτικό μήνυμα κατάστασης που εμφανίζεται όταν η υπηρεσία λειτουργεί.",
+    "message": "Ομαλή λειτουργία - το $appName$ είναι έτοιμο για δράση!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Π.χ., Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Εναλλακτικό μήνυμα κατάστασης που εμφανίζεται όταν η υπηρεσία λειτουργεί.",
+    "message": "Το $appName$ αισθάνεται υπέροχα και είναι έτοιμο να βοηθήσει.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Π.χ., Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Εναλλακτικό μήνυμα κατάστασης που εμφανίζεται όταν η υπηρεσία λειτουργεί.",
+    "message": "Όλα είναι τέλεια. Το $appName$ λειτουργεί στην πλήρη ταχύτητα.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Π.χ., Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Εναλλακτικό μήνυμα κατάστασης που εμφανίζεται όταν η υπηρεσία λειτουργεί.",
+    "message": "Όλα πράσινα! Το $appName$ είναι έτοιμο.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Π.χ., Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Εναλλακτικό μήνυμα κατάστασης που εμφανίζεται όταν η υπηρεσία λειτουργεί.",
+    "message": "Το $appName$ είναι υγιές, ευτυχισμένο και έτοιμο για δράση.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Π.χ., Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Άγνωστη κατάσταση εφαρμογής"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Κείμενο συνδέσμου για την προβολή λεπτομερειών κατάστασης στη σελίδα κατάστασης.",
+    "message": "Προβολή λεπτομερειών"
   },
   "applicationStatusVisitLink": {
     "description": "Κείμενο συνδέσμου που οδηγεί τον χρήστη στη σελίδα κατάστασης Better Stack.",

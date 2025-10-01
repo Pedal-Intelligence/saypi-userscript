@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Állapotüzenet a szolgáltatás zavartalan működése esetén.",
-    "message": "Minden rendben, a(z) $appName$ teljesen működőképes.",
+    "message": "Minden zökkenőmentesen működik.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternatív állapotüzenet, amikor a szolgáltatás működik.",
+    "message": "Minden rendben! A $appName$ teljes gőzzel működik.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Például: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternatív állapotüzenet, amikor a szolgáltatás működik.",
+    "message": "Zökkenőmentes működés – a $appName$ készen áll a használatra!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Például: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternatív állapotüzenet, amikor a szolgáltatás működik.",
+    "message": "A $appName$ remekül érzi magát és készen áll a segítségnyújtásra.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Például: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternatív állapotüzenet, amikor a szolgáltatás működik.",
+    "message": "Minden szuper. A $appName$ teljes sebességgel üzemel.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Például: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternatív állapotüzenet, amikor a szolgáltatás működik.",
+    "message": "Zöld minden téren! A $appName$ használatra kész.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Például: Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternatív állapotüzenet, amikor a szolgáltatás működik.",
+    "message": "A $appName$ boldog, egészséges és készen áll a működésre.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Például: Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Alkalmazás állapota ismeretlen"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Link szöveg a részletes állapotinformáció megtekintésére az állapotoldalon.",
+    "message": "Részletek megtekintése"
   },
   "applicationStatusVisitLink": {
     "description": "Hivatkozás szövege, amely a Better Stack állapotoldalára irányít.",

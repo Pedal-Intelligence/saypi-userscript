@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Statusbesked vist, når servicen fungerer normalt.",
-    "message": "Alt kører på skinner, og $appName$ er fuldt operationel.",
+    "message": "Alt kører på skinner.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Sig Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternativ statusbesked vist, når tjenesten er i drift.",
+    "message": "Alt er klar! $appName$ kører for fuld kraft.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "For eksempel Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternativ statusbesked vist, når tjenesten er i drift.",
+    "message": "Glidende sejlads – $appName$ er klar til at rulle!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "For eksempel Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternativ statusbesked vist, når tjenesten er i drift.",
+    "message": "$appName$ har det fantastisk og står klar til at hjælpe.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "For eksempel Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternativ statusbesked vist, når tjenesten er i drift.",
+    "message": "Alt er i skønneste orden. $appName$ kører på fuld hastighed.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "For eksempel Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternativ statusbesked vist, når tjenesten er i drift.",
+    "message": "Alt er grønt over hele linjen! $appName$ er klar til brug.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "For eksempel Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternativ statusbesked vist, når tjenesten er i drift.",
+    "message": "$appName$ er glad, sund og klar til handling.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "For eksempel Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Ansøgningsstatus ukendt"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Linktekst til visning af detaljeret statusinformation på status-siden.",
+    "message": "Se detaljer"
   },
   "applicationStatusVisitLink": {
     "description": "Linktekst, der leder brugeren til Better Stack status-siden.",

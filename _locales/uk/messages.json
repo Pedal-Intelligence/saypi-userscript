@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Повідомлення про статус, коли сервіс працює без збоїв.",
-    "message": "Все працює бездоганно, і $appName$ функціонує повністю.",
+    "message": "Все працює без збоїв.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Альтернативне повідомлення про статус, яке відображається, коли сервіс працює.",
+    "message": "Всі системи в дії! $appName$ працює на повну потужність.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Наприклад, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Альтернативне повідомлення про статус, яке відображається, коли сервіс працює.",
+    "message": "Все гладко – $appName$ готовий до роботи!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Наприклад, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Альтернативне повідомлення про статус, яке відображається, коли сервіс працює.",
+    "message": "$appName$ почувається відмінно і готовий допомагати.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Наприклад, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Альтернативне повідомлення про статус, яке відображається, коли сервіс працює.",
+    "message": "Все чудово. $appName$ працює на повній швидкості.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Наприклад, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Альтернативне повідомлення про статус, яке відображається, коли сервіс працює.",
+    "message": "Все зелене! $appName$ готовий до запуску.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Наприклад, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Альтернативне повідомлення про статус, яке відображається, коли сервіс працює.",
+    "message": "$appName$ у гарному стані та готовий до дії.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Наприклад, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Статус додатку невідомий"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Текст посилання для перегляду детальної інформації про статус на сторінці статусу.",
+    "message": "Переглянути деталі"
   },
   "applicationStatusVisitLink": {
     "description": "Текст посилання, що веде користувача на сторінку статусу Better Stack.",

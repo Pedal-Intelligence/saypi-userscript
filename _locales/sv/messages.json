@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Statusmeddelande som visas när tjänsten fungerar som den ska.",
-    "message": "Allt rullar på och $appName$ är fullt fungerande.",
+    "message": "Allt fungerar som det ska.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Say, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternativ statusmeddelande som visas när tjänsten är i drift.",
+    "message": "Alla system är igång! $appName$ fungerar på full kapacitet.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Till exempel, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternativ statusmeddelande som visas när tjänsten är i drift.",
+    "message": "Smidigt löper allt – $appName$ är redo att köra!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Till exempel, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternativ statusmeddelande som visas när tjänsten är i drift.",
+    "message": "$appName$ mår utmärkt och är redo att hjälpa till.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Till exempel, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternativ statusmeddelande som visas när tjänsten är i drift.",
+    "message": "Allt är toppen. $appName$ körs för fullt.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Till exempel, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternativ statusmeddelande som visas när tjänsten är i drift.",
+    "message": "Allt grönt! $appName$ är redo att användas.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Till exempel, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternativ statusmeddelande som visas när tjänsten är i drift.",
+    "message": "$appName$ är glad, frisk och redo för insats.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Till exempel, Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Ansökningsstatus okänd"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Länktext för att visa detaljerad statusinformation på status-sidan.",
+    "message": "Visa detaljer"
   },
   "applicationStatusVisitLink": {
     "description": "Länktext som leder användaren till Better Stack status-sidan.",

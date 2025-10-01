@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Komunikat statusu wyświetlany, gdy usługa działa poprawnie.",
-    "message": "Wszystko działa bez zarzutu, $appName$ jest w pełni operacyjny.",
+    "message": "Wszystko działa bez zarzutu.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Na przykład, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternatywna wiadomość o stanie wyświetlana, gdy usługa działa poprawnie.",
+    "message": "Wszystko działa! $appName$ pracuje bez zarzutu.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Np. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternatywna wiadomość o stanie wyświetlana, gdy usługa działa poprawnie.",
+    "message": "Spokojna żegluga — $appName$ jest gotowy do działania!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Np. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternatywna wiadomość o stanie wyświetlana, gdy usługa działa poprawnie.",
+    "message": "$appName$ czuje się świetnie i jest gotowy do pomocy.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Np. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternatywna wiadomość o stanie wyświetlana, gdy usługa działa poprawnie.",
+    "message": "Wszystko gra. $appName$ działa pełną parą.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Np. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternatywna wiadomość o stanie wyświetlana, gdy usługa działa poprawnie.",
+    "message": "Zielone światło! $appName$ jest gotowy do działania.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Np. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternatywna wiadomość o stanie wyświetlana, gdy usługa działa poprawnie.",
+    "message": "$appName$ jest zdrowy, pełen energii i gotowy do akcji.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Np. Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stan aplikacji nieznany"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Tekst linku do wyświetlania szczegółowych informacji o stanie na stronie statusu.",
+    "message": "Zobacz szczegóły"
   },
   "applicationStatusVisitLink": {
     "description": "Tekst odnośnika kierującego do strony statusu Better Stack.",

@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Bericht dat wordt weergegeven wanneer de dienst operationeel is.",
-    "message": "Alles loopt soepel en $appName$ is volledig operationeel.",
+    "message": "Alles loopt soepel.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Bijvoorbeeld, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternatieve statusmelding die wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "Alles functioneert perfect! $appName$ draait op volle toeren.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternatieve statusmelding die wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "Alles verloopt vlekkeloos - $appName$ staat klaar!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternatieve statusmelding die wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "$appName$ voelt zich fantastisch en staat klaar om te helpen.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternatieve statusmelding die wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "Alles is helemaal in orde. $appName$ werkt op volle snelheid.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternatieve statusmelding die wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "Groen licht overal! $appName$ is klaar voor gebruik.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternatieve statusmelding die wordt weergegeven wanneer de dienst operationeel is.",
+    "message": "$appName$ is gezond, blij en klaar voor actie.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Bijvoorbeeld Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status van de applicatie onbekend"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Linktekst voor het bekijken van gedetailleerde statusinformatie op de statuspagina.",
+    "message": "Bekijk details"
   },
   "applicationStatusVisitLink": {
     "description": "Linktekst die de gebruiker naar de Better Stack-statuspagina leidt.",

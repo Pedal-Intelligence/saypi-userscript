@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "Poruka o statusu prikazana kada usluga radi normalno.",
-    "message": "Sve radi bez poteškoća, $appName$ je potpuno operativan.",
+    "message": "Sve radi besprijekorno.",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "Recimo, Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "Alternativna poruka statusa koja se prikazuje kada je usluga u funkciji.",
+    "message": "Sve ide glatko! $appName$ radi punom parom.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Npr. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "Alternativna poruka statusa koja se prikazuje kada je usluga u funkciji.",
+    "message": "Idemo glatko - $appName$ je spreman za rad!",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Npr. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "Alternativna poruka statusa koja se prikazuje kada je usluga u funkciji.",
+    "message": "$appName$ se osjeća odlično i spreman je pomoći.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Npr. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "Alternativna poruka statusa koja se prikazuje kada je usluga u funkciji.",
+    "message": "Sve je savršeno. $appName$ radi punom brzinom.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Npr. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "Alternativna poruka statusa koja se prikazuje kada je usluga u funkciji.",
+    "message": "Sve je zeleno! $appName$ je spreman za pokret.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Npr. Pi"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "Alternativna poruka statusa koja se prikazuje kada je usluga u funkciji.",
+    "message": "$appName$ je sretan, zdrav i spreman za akciju.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Npr. Pi"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status aplikacije nepoznat"
+  },
+  "applicationStatusViewDetails": {
+    "description": "Tekst poveznice za pregled detaljnih informacija o statusu na stranici statusa.",
+    "message": "Pogledaj detalje"
   },
   "applicationStatusVisitLink": {
     "description": "Tekst poveznice koja vodi korisnika na status stranicu Better Stack-a.",

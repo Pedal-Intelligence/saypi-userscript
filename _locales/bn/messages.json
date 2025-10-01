@@ -61,11 +61,71 @@
   },
   "applicationStatusOperational": {
     "description": "সেবা সঠিকভাবে কার্যরত থাকলে প্রদর্শিত স্থিতি বার্তা।",
-    "message": "সবকিছু চলমান, $appName$ সম্পূর্ণ কার্যকর।",
+    "message": "সবকিছু সুন্দরভাবে চলছে।",
     "placeholders": {
       "appName": {
         "content": "$1",
         "example": "সেই, পাই"
+      }
+    }
+  },
+  "applicationStatusOperational_alt1": {
+    "description": "সেবা সচল থাকাকালীন প্রদর্শিত বিকল্প স্থিতি বার্তা।",
+    "message": "সব সিস্টেম সচল! $appName$ সম্পূর্ণ কার্যক্ষম।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "উদাহরণস্বরূপ, পাই"
+      }
+    }
+  },
+  "applicationStatusOperational_alt2": {
+    "description": "সেবা সচল থাকাকালীন প্রদর্শিত বিকল্প স্থিতি বার্তা।",
+    "message": "সবকিছু সহজে চলছে - $appName$ প্রস্তুত! ",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "উদাহরণস্বরূপ, পাই"
+      }
+    }
+  },
+  "applicationStatusOperational_alt3": {
+    "description": "সেবা সচল থাকাকালীন প্রদর্শিত বিকল্প স্থিতি বার্তা।",
+    "message": "$appName$ চমৎকার অবস্থায় এবং সাহায্যের জন্য প্রস্তুত।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "উদাহরণস্বরূপ, পাই"
+      }
+    }
+  },
+  "applicationStatusOperational_alt4": {
+    "description": "সেবা সচল থাকাকালীন প্রদর্শিত বিকল্প স্থিতি বার্তা।",
+    "message": "সবকিছু চমত্কার। $appName$ পূর্ণ গতিতে কাজ করছে।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "উদাহরণস্বরূপ, পাই"
+      }
+    }
+  },
+  "applicationStatusOperational_alt5": {
+    "description": "সেবা সচল থাকাকালীন প্রদর্শিত বিকল্প স্থিতি বার্তা।",
+    "message": "সবুজ আলো! $appName$ যেকোনো কাজে প্রস্তুত।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "উদাহরণস্বরূপ, পাই"
+      }
+    }
+  },
+  "applicationStatusOperational_alt6": {
+    "description": "সেবা সচল থাকাকালীন প্রদর্শিত বিকল্প স্থিতি বার্তা।",
+    "message": "$appName$ সুস্থ ও সজীব, কাজের জন্য প্রস্তুত।",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "উদাহরণস্বরূপ, পাই"
       }
     }
   },
@@ -96,6 +156,10 @@
   "applicationStatusUnknown": {
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "অ্যাপ্লিকেশনের স্থিতি অজানা"
+  },
+  "applicationStatusViewDetails": {
+    "description": "স্থিতি পৃষ্ঠায় বিস্তারিত অবস্থা দেখার জন্য লিঙ্কের টেক্সট।",
+    "message": "বিস্তারিত দেখুন"
   },
   "applicationStatusVisitLink": {
     "description": "ব্যবহারকারীকে Better Stack স্ট্যাটাস পৃষ্ঠায় নিয়ে যাওয়ার জন্য লিঙ্কের টেক্সট।",
