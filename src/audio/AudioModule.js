@@ -13,6 +13,8 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 
+const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
+
 export default class AudioModule {
   constructor() {
     if (AudioModule.instance) {
@@ -621,31 +623,92 @@ export default class AudioModule {
       // Fallback to in-page audio
       audioElement.src = url;
       if (play) {
-        audioElement
-          .play()
-          .then(() => {
-            logger.debug(`Playing audio from ${audioElement.currentSrc}`);
-          })
-          .catch((error) => {
-            logger.error(
-              `Error playing audio from ${audioElement.currentSrc}`,
-              error
-            );
-          });
+        try {
+          await this.playWhenBuffered(audioElement);
+          logger.debug(`Playing audio from ${audioElement.currentSrc}`);
+        } catch (error) {
+          logger.error(
+            `Error playing audio from ${audioElement.currentSrc}`,
+            error
+          );
+        }
       } else {
-        audioElement
-          .load()
-          .then(() => {
-            logger.debug(`Loaded audio from ${audioElement.currentSrc}`);
-          })
-          .catch((error) => {
-            logger.error(
-              `Error loading audio from ${audioElement.currentSrc}`,
-              error
-            );
-          });
+        try {
+          audioElement.load();
+          logger.debug(`Loaded audio from ${audioElement.currentSrc}`);
+        } catch (error) {
+          logger.error(
+            `Error loading audio from ${audioElement.currentSrc}`,
+            error
+          );
+        }
       }
     }
+  }
+
+  playWhenBuffered(audioElement) {
+    return new Promise((resolve, reject) => {
+      let playbackStarted = false;
+      let timeoutId = null;
+      const cleanup = () => {
+        audioElement.removeEventListener("canplaythrough", onCanPlayThrough);
+        audioElement.removeEventListener("error", onError);
+        if (timeoutId !== null) {
+          clearTimeout(timeoutId);
+        }
+      };
+
+      const startPlayback = () => {
+        if (playbackStarted) {
+          return;
+        }
+        playbackStarted = true;
+        cleanup();
+        try {
+          const playResult = audioElement.play();
+          if (playResult && typeof playResult.then === "function") {
+            playResult.then(resolve).catch((error) => {
+              reject(error);
+            });
+          } else {
+            resolve();
+          }
+        } catch (error) {
+          reject(error);
+        }
+      };
+
+      const onCanPlayThrough = () => {
+        startPlayback();
+      };
+
+      const onError = (event) => {
+        cleanup();
+        reject(event?.error || audioElement.error || event);
+      };
+
+      audioElement.addEventListener("canplaythrough", onCanPlayThrough);
+      audioElement.addEventListener("error", onError);
+
+      timeoutId = setTimeout(() => {
+        startPlayback();
+      }, INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS);
+
+      if (
+        typeof HTMLMediaElement !== "undefined" &&
+        audioElement.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA
+      ) {
+        startPlayback();
+        return;
+      }
+
+      try {
+        audioElement.load();
+      } catch (error) {
+        cleanup();
+        reject(error);
+      }
+    });
   }
 
   /**
