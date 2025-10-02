@@ -1,4 +1,5 @@
 import { TextToSpeechService } from "./TextToSpeechService";
+import { TextChunkDeduplicator } from "./TextChunkDeduplicator";
 
 type FlushEvent = "eos" | "timeout" | "close";
 
@@ -22,6 +23,7 @@ export class InputBuffer {
   private streamTimeout?: ReturnType<typeof setTimeout>;
   private isClosed: boolean = false;
   private pendingFlushes: Set<Promise<void>> = new Set();
+  private readonly deduplicator = new TextChunkDeduplicator();
   private readonly BUFFER_TIMEOUT_MS: number;
   private readonly ttsService: TextToSpeechService;
   private readonly uuid: string;
@@ -65,10 +67,33 @@ export class InputBuffer {
     // noisy log messages
     //console.debug(`[InputBuffer] adding text to buffer: "${text}"`);
 
-    this.buffer += text;
+    const dedupeResult = this.deduplicator.deduplicate(text, this.buffer);
+    let textToAppend = text;
+
+    if (dedupeResult) {
+      if (dedupeResult.consumedEntireChunk) {
+        console.debug("[TTS Dedup] Full overlap detected; preserving chunk to avoid data loss", {
+          chunkLength: text.length,
+          removedTextPreview: dedupeResult.removedText.slice(0, 30),
+        });
+      } else {
+        console.debug("[TTS Dedup] Overlap detected", {
+          overlapLength: dedupeResult.overlapLength,
+          removedTextPreview: dedupeResult.removedText.slice(0, 30),
+          novelTextPreview: dedupeResult.novelText.slice(0, 30),
+        });
+        if (/(\r|\n|\t)/u.test(dedupeResult.leadingWhitespace)) {
+          textToAppend = dedupeResult.leadingWhitespace + dedupeResult.novelText;
+        } else {
+          textToAppend = dedupeResult.novelText;
+        }
+      }
+    }
+
+    this.buffer += textToAppend;
     this.resetBufferTimeout();
 
-    if (text === this.END_OF_SPEECH_MARKER) {
+    if (textToAppend === this.END_OF_SPEECH_MARKER && text === this.END_OF_SPEECH_MARKER) {
       void this.closeBuffer();
     } else {
       this.checkAndFlushPartialBuffer();
@@ -127,8 +152,9 @@ export class InputBuffer {
     if (this.buffer.length > 0) {
       this.bufferTimeout = setTimeout(() => {
           if (this.buffer.length > 0) { // Double check buffer has content before flushing on timeout
-              console.debug(`[InputBuffer] flushing buffer due to timeout: "${this.buffer}"`);
-              this.enqueueFlush(this.buffer, "timeout");
+              const textToFlush = this.buffer;
+              console.debug(`[InputBuffer] flushing buffer due to timeout: "${textToFlush}"`);
+              this.enqueueFlush(textToFlush, "timeout");
               this.buffer = "";
           } else {
               console.debug(`[InputBuffer] timeout occurred but buffer is empty.`);
@@ -150,6 +176,7 @@ export class InputBuffer {
   }
 
   private enqueueFlush(textToFlush: string, event: FlushEvent): void {
+    this.deduplicator.registerProcessedText(textToFlush);
     const flushPromise = this.flushBuffer(textToFlush, event);
     this.pendingFlushes.add(flushPromise);
     flushPromise.finally(() => this.pendingFlushes.delete(flushPromise));
@@ -204,6 +231,7 @@ export class InputBuffer {
       setTimeout(async () => {
         await this.waitForPendingFlushes();
         // Flush any remaining text before closing
+        this.deduplicator.registerProcessedText(this.buffer);
         await this.flushBuffer(this.buffer, "close");
         this.buffer = ""; // Ensure buffer is empty after closing
         console.debug(`Buffer closed for UUID: ${this.uuid}`);
