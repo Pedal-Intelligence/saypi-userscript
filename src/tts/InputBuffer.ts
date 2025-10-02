@@ -165,7 +165,14 @@ export class InputBuffer {
     // this.buffer = ""; // Old logic: always cleared the whole buffer
 
     try {
-      await this.ttsService.addTextToSpeechStream(this.uuid, textToFlush);
+      const isFinalChunk = event === "close";
+      if (isFinalChunk) {
+        await this.ttsService.addTextToSpeechStream(this.uuid, textToFlush, {
+          isFinalChunk,
+        });
+      } else {
+        await this.ttsService.addTextToSpeechStream(this.uuid, textToFlush);
+      }
       console.debug(
         `Buffer flushed on ${event} for UUID: ${this.uuid}: "${textToFlush}"`
       );

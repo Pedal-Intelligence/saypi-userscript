@@ -93,7 +93,9 @@ describe('InputBuffer', () => {
 
     expect(inputBuffer.hasEnded()).toBe(true);
     await vi.runAllTicks();
-    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, '');
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, '', {
+      isFinalChunk: true,
+    });
   });
 
   it('should flush only up to the last sentence break and keep the rest', async () => {
