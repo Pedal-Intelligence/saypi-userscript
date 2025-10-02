@@ -223,4 +223,44 @@ export class TextToSpeechService {
       delete this.sequenceNumbers[uuid];
     }
   }
+
+  public async sendKeepAlive(uuid: string): Promise<boolean> {
+    if (!uuid || isPlaceholderUtterance(uuid) || uuid.startsWith("failed-")) {
+      return false;
+    }
+
+    const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
+    try {
+      const response = await callApi(uri, {
+        method: "PUT",
+        body: JSON.stringify({ keepAlive: true }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 401) {
+        console.error(`[TTS KeepAlive] Unauthorized for stream ${uuid}`);
+        return false;
+      }
+
+      if (response.status === 429) {
+        console.warn(`[TTS KeepAlive] Rate limited for stream ${uuid}`);
+        return false;
+      }
+
+      if (!response.ok) {
+        console.error(
+          `[TTS KeepAlive] Failed with status ${response.status} for stream ${uuid}`
+        );
+        return false;
+      }
+
+      console.debug(`[TTS KeepAlive] Sent keep-alive for stream ${uuid}`);
+      return true;
+    } catch (error) {
+      console.error(`[TTS KeepAlive] Network error for stream ${uuid}`, error);
+      return false;
+    }
+  }
 }

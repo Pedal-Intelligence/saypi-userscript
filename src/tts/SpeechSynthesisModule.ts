@@ -371,6 +371,18 @@ class SpeechSynthesisModule {
     EventBus.on("saypi:tts:text:completed", (text: TextCompletedEvent) => {
       this.endSpeechStreamIfOpen(text.utterance);
     });
+    EventBus.on(
+      "saypi:tts:tool-use:start",
+      (event: ToolUseKeepAliveEvent) => {
+        this.audioStreamManager.startKeepAlive(event.utterance.id, event.toolName);
+      }
+    );
+    EventBus.on(
+      "saypi:tts:tool-use:end",
+      (event: ToolUseKeepAliveEvent) => {
+        this.audioStreamManager.stopKeepAlive(event.utterance.id);
+      }
+    );
   }
 }
 
@@ -390,6 +402,12 @@ type TextCompletedEvent = {
 type TextErrorEvent = {
   error: any;
   utterance: SpeechUtterance;
+};
+
+type ToolUseKeepAliveEvent = {
+  utterance: SpeechUtterance;
+  toolName?: string;
+  element?: Element | null;
 };
 
 export {
