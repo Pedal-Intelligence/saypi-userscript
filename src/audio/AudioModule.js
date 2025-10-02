@@ -33,6 +33,8 @@ export default class AudioModule {
     // Only initialize audio output machine for chatbot sites that need TTS
     this.audioOutputActor = null;
     this.needsAudioOutput = ChatbotIdentifier.isInChatMode();
+
+    this.pendingPlaybackController = null;
     
     if (this.needsAudioOutput) {
       // Dynamically import and initialize audio output machine only when needed
@@ -570,6 +572,7 @@ export default class AudioModule {
     });
     EventBus.on("audio:output:pause", async (e) => {
       logger.debug("[AudioModule] [audio:output:pause] Pausing audio");
+      this.cancelPendingPlayback();
       // pause both offscreen and onscreen audio
       if (this.useOffscreenAudio) {
         await this.offscreenBridge.pauseAudio();
@@ -592,6 +595,7 @@ export default class AudioModule {
   }
 
   stopOnscreenAudio() {
+    this.cancelPendingPlayback();
     this.audioElement.pause();
 
     // Skip to the end to simulate the completion of the audio, preventing it from being resumed
@@ -613,7 +617,9 @@ export default class AudioModule {
     if (url) {
       // Store the last URL for potential cache busting on reload
       this.lastAudioUrl = url;
-      
+
+      this.cancelPendingPlayback();
+
       if (this.useOffscreenAudio) {
         // Use offscreen bridge - now with loadAudio instead of playAudio
         await this.offscreenBridge.loadAudio(url, play);
@@ -623,10 +629,26 @@ export default class AudioModule {
       // Fallback to in-page audio
       audioElement.src = url;
       if (play) {
+        const playbackController = new AbortController();
+        this.pendingPlaybackController = playbackController;
         try {
-          await this.playWhenBuffered(audioElement);
+          await this.playWhenBuffered(audioElement, {
+            signal: playbackController.signal,
+          });
+          if (this.pendingPlaybackController === playbackController) {
+            this.pendingPlaybackController = null;
+          }
           logger.debug(`Playing audio from ${audioElement.currentSrc}`);
         } catch (error) {
+          if (this.pendingPlaybackController === playbackController) {
+            this.pendingPlaybackController = null;
+          }
+          if (error?.name === "AbortError") {
+            logger.debug(
+              `Playback aborted before start for ${audioElement.currentSrc}`
+            );
+            return;
+          }
           logger.error(
             `Error playing audio from ${audioElement.currentSrc}`,
             error
@@ -646,20 +668,41 @@ export default class AudioModule {
     }
   }
 
-  playWhenBuffered(audioElement) {
+  playWhenBuffered(audioElement, { signal } = {}) {
     return new Promise((resolve, reject) => {
       let playbackStarted = false;
       let timeoutId = null;
+      const createAbortError = () => {
+        if (typeof DOMException === "function") {
+          return new DOMException(
+            "Playback start was aborted before buffering completed.",
+            "AbortError"
+          );
+        }
+        const abortError = new Error(
+          "Playback start was aborted before buffering completed."
+        );
+        abortError.name = "AbortError";
+        return abortError;
+      };
       const cleanup = () => {
         audioElement.removeEventListener("canplaythrough", onCanPlayThrough);
         audioElement.removeEventListener("error", onError);
         if (timeoutId !== null) {
           clearTimeout(timeoutId);
         }
+        if (signal) {
+          signal.removeEventListener("abort", onAbort);
+        }
       };
 
       const startPlayback = () => {
         if (playbackStarted) {
+          return;
+        }
+        if (signal?.aborted) {
+          cleanup();
+          reject(createAbortError());
           return;
         }
         playbackStarted = true;
@@ -687,8 +730,20 @@ export default class AudioModule {
         reject(event?.error || audioElement.error || event);
       };
 
+      function onAbort() {
+        cleanup();
+        reject(createAbortError());
+      }
+
       audioElement.addEventListener("canplaythrough", onCanPlayThrough);
       audioElement.addEventListener("error", onError);
+      if (signal) {
+        if (signal.aborted) {
+          onAbort();
+          return;
+        }
+        signal.addEventListener("abort", onAbort, { once: true });
+      }
 
       timeoutId = setTimeout(() => {
         startPlayback();
@@ -709,6 +764,13 @@ export default class AudioModule {
         reject(error);
       }
     });
+  }
+
+  cancelPendingPlayback() {
+    if (this.pendingPlaybackController) {
+      this.pendingPlaybackController.abort();
+      this.pendingPlaybackController = null;
+    }
   }
 
   /**
