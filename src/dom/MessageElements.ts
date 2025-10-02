@@ -106,6 +106,39 @@ class PopupMenu {
 }
 
 abstract class AssistantResponse {
+  private static utteranceRegistry: Map<string, AssistantResponse> = new Map();
+  private static failureListenerRegistered = false;
+
+  private static ensureFailureListener(): void {
+    if (!AssistantResponse.failureListenerRegistered) {
+      EventBus.on(
+        "saypi:billing:utteranceFailed",
+        AssistantResponse.handleGlobalUtteranceFailed
+      );
+      AssistantResponse.failureListenerRegistered = true;
+    }
+  }
+
+  private static handleGlobalUtteranceFailed(
+    utterance: FailedSpeechUtterance
+  ): void {
+    const response = AssistantResponse.utteranceRegistry.get(utterance.id);
+    if (response) {
+      response.handleUtteranceFailed(utterance);
+    }
+  }
+
+  private static registerUtterance(
+    utteranceId: string,
+    response: AssistantResponse
+  ): void {
+    AssistantResponse.utteranceRegistry.set(utteranceId, response);
+  }
+
+  private static unregisterUtterance(utteranceId: string): void {
+    AssistantResponse.utteranceRegistry.delete(utteranceId);
+  }
+
   private _element: HTMLElement;
   private stable: boolean = false;
   // visible for testing
@@ -133,8 +166,7 @@ abstract class AssistantResponse {
     this.ttsControlsModule = TTSControlsModule.getInstance();
     this.decorate();
     this.messageControls = this.decorateControls();
-    EventBus.on("saypi:billing:utteranceFailed", this.handleUtteranceFailed);
-    // Store this listener if not already tracked elsewhere
+    AssistantResponse.ensureFailureListener();
   }
 
   /**
@@ -163,9 +195,16 @@ abstract class AssistantResponse {
     }
   }
 
+  private safeRemoveDataAttribute(key: string): void {
+    if (this._element.dataset[key] !== undefined) {
+      delete this._element.dataset[key];
+    }
+  }
+
   private handleUtteranceFailed = (utterance: FailedSpeechUtterance) => {
     if (utterance.id === this.utteranceId) {
       this.decorateFailedSpeech(true);
+      AssistantResponse.unregisterUtterance(utterance.id);
     }
   };
 
@@ -328,22 +367,23 @@ abstract class AssistantResponse {
    * @param utterance
    */
   async decorateSpeech(utterance: SpeechUtterance): Promise<void> {
+    const previousUtteranceId = this.utteranceId;
+    if (previousUtteranceId) {
+      AssistantResponse.unregisterUtterance(previousUtteranceId);
+    }
+
     if (utterance instanceof SpeechPlaceholder) {
+      this.safeRemoveClass("speech-enabled");
+      this.safeRemoveDataAttribute("utteranceId");
       return;
     }
 
     // Update the utteranceId in the dataset with the real utterance ID
-    this.safeSetDataAttribute('utteranceId', utterance.id);
-    
+    this.safeSetDataAttribute("utteranceId", utterance.id);
+    AssistantResponse.registerUtterance(utterance.id, this);
+
     // Add speech-enabled class to the message element
     this.safeAddClass("speech-enabled");
-
-    // listen for utterance failure
-    EventBus.on("saypi:billing:utteranceFailed", (utterance: FailedSpeechUtterance) => {
-      if (utterance.id === this.utteranceId) {
-        this.decorateFailedSpeech(true);
-      }
-    });
   }
 
   decorateFailedSpeech(replace: boolean = false): void {
@@ -529,8 +569,12 @@ abstract class AssistantResponse {
       this.textStream.disconnect(); // Assuming disconnect is the cleanup method
       this.textStream = null;
     }
-    EventBus.off("saypi:billing:utteranceFailed", this.handleUtteranceFailed);
-    // Add any other specific listener removal for AssistantResponse here
+    const currentUtteranceId = this.utteranceId;
+    if (currentUtteranceId) {
+      AssistantResponse.unregisterUtterance(currentUtteranceId);
+    }
+    this.safeRemoveDataAttribute("utteranceId");
+    this.safeRemoveClass("speech-enabled");
   }
 }
 
