@@ -86,12 +86,13 @@ describe('InputBuffer', () => {
     expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'Hello world');
   });
 
-  it('should close buffer on endInput', () => {
+  it('should close buffer on endInput', async () => {
     inputBuffer.endInput();
     const closeAfterMs = 100;
     vi.advanceTimersByTime(closeAfterMs);
 
     expect(inputBuffer.hasEnded()).toBe(true);
+    await vi.runAllTicks();
     expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, '');
   });
 

@@ -21,6 +21,7 @@ export class InputBuffer {
   private bufferTimeout?: ReturnType<typeof setTimeout>;
   private streamTimeout?: ReturnType<typeof setTimeout>;
   private isClosed: boolean = false;
+  private pendingFlushes: Set<Promise<void>> = new Set();
   private readonly BUFFER_TIMEOUT_MS: number;
   private readonly ttsService: TextToSpeechService;
   private readonly uuid: string;
@@ -68,7 +69,7 @@ export class InputBuffer {
     this.resetBufferTimeout();
 
     if (text === this.END_OF_SPEECH_MARKER) {
-      this.closeBuffer();
+      void this.closeBuffer();
     } else {
       this.checkAndFlushPartialBuffer();
     }
@@ -98,7 +99,7 @@ export class InputBuffer {
             // Case 1: Buffer ends with a break character. Flush the whole buffer.
             const textToFlush = this.buffer;
             console.debug(`[InputBuffer] flushing buffer due to end-text break: "${textToFlush}"`);
-            this.flushBuffer(textToFlush, "eos");
+            this.enqueueFlush(textToFlush, "eos");
             this.buffer = "";
             // Clear potential timeout explicitly as buffer is empty
             if (this.bufferTimeout) {
@@ -110,7 +111,7 @@ export class InputBuffer {
             const textToFlush = this.buffer.substring(0, lastBreakIndex + 1);
             const remainingText = this.buffer.substring(lastBreakIndex + 1);
             console.debug(`[InputBuffer] flushing buffer due to mid-text break: "${textToFlush}"`);
-            this.flushBuffer(textToFlush, "eos");
+            this.enqueueFlush(textToFlush, "eos");
             this.buffer = remainingText;
             // Timeout reset is handled in addText after this function returns, based on the updated buffer
         }
@@ -127,7 +128,7 @@ export class InputBuffer {
       this.bufferTimeout = setTimeout(() => {
           if (this.buffer.length > 0) { // Double check buffer has content before flushing on timeout
               console.debug(`[InputBuffer] flushing buffer due to timeout: "${this.buffer}"`);
-              this.flushBuffer(this.buffer, "timeout");
+              this.enqueueFlush(this.buffer, "timeout");
               this.buffer = "";
           } else {
               console.debug(`[InputBuffer] timeout occurred but buffer is empty.`);
@@ -144,8 +145,14 @@ export class InputBuffer {
    */
   private setStreamTimeout(closeAfterMs: number): void {
     this.streamTimeout = setTimeout(() => {
-      this.closeBuffer();
+      void this.closeBuffer();
     }, closeAfterMs);
+  }
+
+  private enqueueFlush(textToFlush: string, event: FlushEvent): void {
+    const flushPromise = this.flushBuffer(textToFlush, event);
+    this.pendingFlushes.add(flushPromise);
+    flushPromise.finally(() => this.pendingFlushes.delete(flushPromise));
   }
 
   private async flushBuffer(textToFlush: string, event: FlushEvent): Promise<void> {
@@ -188,6 +195,7 @@ export class InputBuffer {
     // Add a small delay to ensure prior flushes reach the server
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
+        await this.waitForPendingFlushes();
         // Flush any remaining text before closing
         await this.flushBuffer(this.buffer, "close");
         this.buffer = ""; // Ensure buffer is empty after closing
@@ -195,6 +203,14 @@ export class InputBuffer {
         resolve();
       }, 75);
     });
+  }
+
+  private async waitForPendingFlushes(): Promise<void> {
+    if (this.pendingFlushes.size === 0) {
+      return;
+    }
+    const pending = Array.from(this.pendingFlushes);
+    await Promise.allSettled(pending);
   }
 
   endInput(): void {

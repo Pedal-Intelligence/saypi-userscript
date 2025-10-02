@@ -169,13 +169,32 @@ export class TextToSpeechService {
     const sequenceNumber = this.sequenceNumbers[uuid]++;
     const data: TTSStreamRequestData = { text: text, sequenceNumber: sequenceNumber };
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
-    const response = await callApi(uri, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const startTime = typeof performance !== "undefined" ? performance.now() : Date.now();
+    console.debug(
+      `[TTS Stream] Sending chunk seq=${sequenceNumber} uuid=${uuid} length=${text.length}`
+    );
+
+    let response: Response;
+    try {
+      response = await callApi(uri, {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error(
+        `[TTS Stream] Network error while sending chunk seq=${sequenceNumber} uuid=${uuid}`,
+        error
+      );
+      throw error;
+    }
+
+    const duration = (typeof performance !== "undefined" ? performance.now() : Date.now()) - startTime;
+    console.debug(
+      `[TTS Stream] Chunk seq=${sequenceNumber} uuid=${uuid} completed with status ${response.status} in ${duration.toFixed(0)}ms`
+    );
 
     if (response.status === 429) {
       // "expected failure" → return object, not exception
@@ -185,6 +204,9 @@ export class TextToSpeechService {
       return;
     }
     if (![200, 201].includes(response.status)) {
+      console.error(
+        `[TTS Stream] Unexpected status ${response.status} while sending chunk seq=${sequenceNumber} uuid=${uuid}`
+      );
       throw new Error("Failed to add text to speech stream");
     }
   }
