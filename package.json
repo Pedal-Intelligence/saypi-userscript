@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "type": "module",
   "engines": {
     "node": ">=22.0.0",

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
@@ -13,8 +13,8 @@
     "downloads"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
-    "https://www.saypi.ai/*"
+    "https://127.0.0.1:5001/*",
+    "http://localhost:3000/*"
   ],
   "content_scripts": [
     {
@@ -31,6 +31,7 @@
     },
     {
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -95,6 +96,7 @@
         "public/permissions/*.css"
       ],
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]
