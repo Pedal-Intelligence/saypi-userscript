@@ -9,6 +9,7 @@
   "scripts": {
     "copy-onnx": "node copy-onnx-files.js",
     "validate:env": "node scripts/validate-env.js",
+    "switch": "node scripts/switch-env.js",
     "predev": "node scripts/validate-env.js --file .env --env development && node scripts/update-manifest.js",
     "dev": "webpack --mode development --watch",
     "prebuild": "node scripts/validate-env.js --file .env.production --env production && NODE_ENV=production node scripts/update-manifest.js && node i18n-validate.cjs && npm run copy-onnx",

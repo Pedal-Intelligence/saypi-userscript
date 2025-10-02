@@ -52,6 +52,28 @@ The working `.env` (development) and `.env.production` (build) files are ignored
 
 - Run `npm run validate:env` to verify your environment files. This check runs automatically before `npm run dev` and `npm run build` and will explain how to fix any missing or malformed values.
 
+#### Quick Environment Switching
+
+For developers who frequently switch between local and remote server configurations, use the environment switcher:
+
+```bash
+# Toggle between local and remote (smartest option!)
+npm run switch
+
+# Switch to specific configuration
+npm run switch local   # localhost:3000, 127.0.0.1:5001
+npm run switch remote  # saypi.ai, api.saypi.ai
+
+# Check current configuration
+npm run switch status
+
+# Show help
+npm run switch help
+npm run switch -- -h
+```
+
+The toggle feature automatically switches to whichever environment you're not currently using, making it incredibly fast to switch back and forth. This eliminates the need to manually edit `.env` files when switching between development environments.
+
 ## For Mozilla Reviewers
 
 This extension uses webpack to bundle JavaScript files. Here's what you need to know:
