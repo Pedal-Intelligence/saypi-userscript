@@ -143,4 +143,42 @@ describe('InputBuffer', () => {
     expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'This part stays');
     expect(inputBuffer.getPendingText()).toBe('');
   });
+
+  it('deduplicates overlap against previously flushed text', () => {
+    inputBuffer.addText('The answer is clear.');
+
+    expect(ttsService.addTextToSpeechStream).toHaveBeenNthCalledWith(1, uuid, 'The answer is clear.');
+
+    inputBuffer.addText('The answer is clear. We need to act.');
+
+    expect(ttsService.addTextToSpeechStream).toHaveBeenNthCalledWith(2, uuid, ' We need to act.');
+  });
+
+  it('deduplicates overlap against pending buffer content', () => {
+    inputBuffer.addText("But maybe that's");
+
+    expect(inputBuffer.getPendingText()).toBe("But maybe that's");
+
+    inputBuffer.addText(" But maybe that's the point.");
+
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, "But maybe that's the point.");
+  });
+
+  it('preserves intentional repetitions when the chunk adds no new content', () => {
+    inputBuffer.addText('Mary had a little lamb,');
+    inputBuffer.addText(' little lamb,');
+
+    expect(inputBuffer.getPendingText()).toBe('Mary had a little lamb, little lamb,');
+  });
+
+  it('retains structural whitespace during deduplication', () => {
+    inputBuffer.addText('Hello world');
+    vi.advanceTimersByTime(flushAfterMs);
+    expect(ttsService.addTextToSpeechStream).toHaveBeenLastCalledWith(uuid, 'Hello world');
+
+    inputBuffer.addText('\nHello world again');
+
+    expect(ttsService.addTextToSpeechStream).toHaveBeenNthCalledWith(2, uuid, '\n');
+    expect(inputBuffer.getPendingText()).toBe(' again');
+  });
 });
