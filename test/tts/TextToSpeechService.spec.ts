@@ -170,6 +170,37 @@ describe("TextToSpeechService", () => {
     expect(call[1].headers).toEqual({ "Content-Type": "application/json" });
   });
 
+  it("includes totalChunks when sending the final stream chunk", async () => {
+    const mockResponse = new Response(null, { status: 200 });
+    (ApiClient.callApi as any).mockResolvedValue(mockResponse);
+
+    await textToSpeechService.addTextToSpeechStream("uuid", "Hello");
+    await textToSpeechService.addTextToSpeechStream(
+      "uuid",
+      "",
+      {
+        isFinalChunk: true,
+      }
+    );
+
+    const calls = (ApiClient.callApi as any).mock.calls;
+    expect(JSON.parse(calls[1][1].body)).toEqual({
+      text: "",
+      sequenceNumber: 2,
+      totalChunks: 2,
+    });
+
+    (ApiClient.callApi as any).mockClear();
+    (ApiClient.callApi as any).mockResolvedValue(mockResponse);
+
+    await textToSpeechService.addTextToSpeechStream("uuid", "Restarted");
+    const nextCall = (ApiClient.callApi as any).mock.calls[0];
+    expect(JSON.parse(nextCall[1].body)).toEqual({
+      text: "Restarted",
+      sequenceNumber: 1,
+    });
+  });
+
   it("should throw error when voice request fails", async () => {
     const mockResponse = new Response(null, { status: 404 });
     (ApiClient.callApi as any).mockResolvedValue(mockResponse);

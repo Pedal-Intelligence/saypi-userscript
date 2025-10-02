@@ -32,6 +32,11 @@ interface TTSRequestData {
 interface TTSStreamRequestData {
   text: string;
   sequenceNumber: number;
+  totalChunks?: number;
+}
+
+interface TTSStreamOptions {
+  isFinalChunk?: boolean;
 }
 
 export class TextToSpeechService {
@@ -144,7 +149,8 @@ export class TextToSpeechService {
 
   public async addTextToSpeechStream(
     uuid: string,
-    text: string
+    text: string,
+    options: TTSStreamOptions = {}
   ): Promise<void> {
     if (isPlaceholderUtterance(uuid)) {
       console.info(
@@ -168,6 +174,9 @@ export class TextToSpeechService {
     }
     const sequenceNumber = this.sequenceNumbers[uuid]++;
     const data: TTSStreamRequestData = { text: text, sequenceNumber: sequenceNumber };
+    if (options.isFinalChunk) {
+      data.totalChunks = sequenceNumber;
+    }
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
     const startTime = typeof performance !== "undefined" ? performance.now() : Date.now();
     console.debug(
@@ -208,6 +217,10 @@ export class TextToSpeechService {
         `[TTS Stream] Unexpected status ${response.status} while sending chunk seq=${sequenceNumber} uuid=${uuid}`
       );
       throw new Error("Failed to add text to speech stream");
+    }
+
+    if (options.isFinalChunk) {
+      delete this.sequenceNumbers[uuid];
     }
   }
 }
