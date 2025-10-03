@@ -81,7 +81,7 @@ class OffscreenManager {
       });
 
       await this.creating;
-      logger.info("[OffscreenManager] Offscreen document ready for media pipeline.", {
+      logger.debug("[OffscreenManager] Offscreen document ready for media pipeline.", {
         timestamp: Date.now()
       });
     } catch (error) {
@@ -114,7 +114,7 @@ class OffscreenManager {
       await chrome.offscreen.closeDocument();
       this.portMap.clear(); // Clear ports as the document is gone
       this.pendingAudioMessages.clear();
-      logger.info("[OffscreenManager] Offscreen document closed.");
+      logger.debug("[OffscreenManager] Offscreen document closed.");
     } catch (error) {
       logger.warn("[OffscreenManager] Error closing offscreen document:", error);
       // Clear ports anyway since the document might be gone
@@ -182,15 +182,6 @@ class OffscreenManager {
         });
       }
 
-      logger.debug("[OffscreenManager] Raw outbound message to offscreen", {
-        messageType: messageWithTabId?.type,
-        resolvedTabId,
-        sourceTabId: messageWithTabId?.sourceTabId,
-        targetTabId,
-        origin: messageWithTabId?.origin,
-        rawMessage: messageWithTabId,
-      });
-
       // If the message has 'source' but not 'origin', map it correctly for the offscreen document
       if (message.source === "content-script") {
         messageWithTabId.source = message.source;
@@ -198,7 +189,7 @@ class OffscreenManager {
 
       // Add specific logging for audio messages
       if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
-        logger.info(`[OffscreenManager] Forwarding audio message to offscreen: ${message.type}`, {
+        logger.debug(`[OffscreenManager] Forwarding audio message to offscreen: ${message.type}`, {
           tabId: targetTabId,
           url: message.url,
           messageId: message.messageId,
@@ -307,7 +298,7 @@ class OffscreenManager {
 
     this.portMap.set(tabId, port);
     const connectedTabs = Array.from(this.portMap.keys());
-    logger.info(`[OffscreenManager] Registered ${port.name} connection from tab ${tabId} to broker audio/video via offscreen.`, {
+    logger.debug(`[OffscreenManager] Registered ${port.name} connection from tab ${tabId} to broker audio/video via offscreen.`, {
       tabName: tabTitle,
       connectedTabs,
       pendingAudio: this.pendingAudioMessages.size
@@ -342,13 +333,13 @@ class OffscreenManager {
 
     port.onDisconnect.addListener(() => {
       const remainingTabs = Array.from(this.portMap.keys()).filter(id => id !== tabId);
-      logger.info(`[OffscreenManager] Content script connection from tab ${tabId} disconnected; evaluating teardown.`, {
+      logger.debug(`[OffscreenManager] Content script connection from tab ${tabId} disconnected; evaluating teardown.`, {
         tabName: tabTitle,
         remainingTabs
       });
       this.portMap.delete(tabId);
       if (this.portMap.size === 0) {
-        logger.info("[OffscreenManager] All media bridges disconnected; tearing down offscreen document.");
+        logger.debug("[OffscreenManager] All media bridges disconnected; tearing down offscreen document.");
         this.closeOffscreenDocument();
       }
     });

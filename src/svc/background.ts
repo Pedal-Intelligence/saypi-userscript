@@ -177,7 +177,7 @@ function markAudioBridgeReady(tabId: number, frameId?: number) {
     state.frameId = frameId;
   }
 
-  logger.info(`[Background] Audio bridge reported ready for tab ${tabId}`, {
+  logger.debug(`[Background] Audio bridge reported ready for tab ${tabId}`, {
     queuedMessages: state.queue.length,
     wasReady,
     frameId: state.frameId,
@@ -765,18 +765,6 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
 
 // Handle popup opening AND messages from Offscreen Document AND Error Reports AND Mic Permissions
 chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
-  logger.debug(
-    `[Background] onMessage raw payload ${message?.type ?? 'unknown'}`,
-    {
-      rawMessage: message,
-      sender: {
-        tabId: sender?.tab?.id,
-        frameId: typeof sender?.frameId === 'number' ? sender.frameId : undefined,
-        url: sender?.url,
-        origin: sender?.origin,
-      }
-    }
-  );
   // Sanitize the message for logging
   const sanitizedMessage = sanitizeMessageForLogs(message);
   logger.debug(`[Background] onMessage received ${sanitizedMessage.type} from ${sender.tab?.title || sender.url}`);

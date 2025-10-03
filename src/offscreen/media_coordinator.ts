@@ -192,17 +192,6 @@ export function setupMessageListener() {
   ]);
   
   chrome.runtime.onMessage.addListener((message, sender, chromeSendResponse) => {
-    if (message.type !== "VAD_FRAME_PROCESSED") {
-      logger.debug("[SayPi Media Coordinator] Raw message before sanitization", {
-        rawMessage: message,
-        sender: {
-          tabId: sender?.tab?.id,
-          frameId: typeof sender?.frameId === 'number' ? sender.frameId : undefined,
-          url: sender?.url,
-          origin: (sender as any)?.origin,
-        }
-      });
-    }
     // Log all incoming messages for debugging
     if (message.type && typeof message.type === 'string') {
       logger.debug(`[SayPi Media Coordinator] Received message`, {
