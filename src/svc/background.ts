@@ -67,6 +67,7 @@ interface QueuedAudioMessage {
 interface AudioBridgeState {
   ready: boolean;
   queue: QueuedAudioMessage[];
+  frameId?: number;
 }
 
 const pendingAudioDispatches: Map<string, PendingAudioDispatch> = new Map();
@@ -167,14 +168,20 @@ function deliverAudioMessageToContent(
   sendAudioMessageToContent(tabId, message, audioContext);
 }
 
-function markAudioBridgeReady(tabId: number) {
+function markAudioBridgeReady(tabId: number, frameId?: number) {
   const state = getAudioBridgeState(tabId);
   const wasReady = state.ready;
   state.ready = true;
 
+  if (typeof frameId === 'number') {
+    state.frameId = frameId;
+  }
+
   logger.info(`[Background] Audio bridge reported ready for tab ${tabId}`, {
     queuedMessages: state.queue.length,
-    wasReady
+    wasReady,
+    frameId: state.frameId,
+    reportedFrameId: frameId
   });
 
   flushQueuedAudioMessages(tabId);
@@ -186,7 +193,8 @@ function sendAudioMessageToContent(
   audioContext: ReturnType<typeof buildAudioContextForLog>
 ) {
   try {
-    chrome.tabs.sendMessage(tabId, message, () => {
+    const state = getAudioBridgeState(tabId);
+    const callback = () => {
       const lastError = chrome.runtime.lastError;
       if (lastError) {
         const errMsg = lastError.message || "Unknown runtime error";
@@ -194,9 +202,11 @@ function sendAudioMessageToContent(
           errMsg.includes("message port closed") ||
           errMsg.includes("The message port closed before a response was received");
         if (isBridgeMissing) {
-          const state = getAudioBridgeState(tabId);
           state.ready = false;
-          logger.warn(`[Background] Audio bridge unavailable; queuing message ${message.type} for tab ${tabId}`, audioContext);
+          logger.warn(`[Background] Audio bridge unavailable; queuing message ${message.type} for tab ${tabId}`, {
+            ...audioContext,
+            error: errMsg
+          });
           queueAudioMessage(tabId, message, audioContext, { front: true });
         } else {
           logger.error(`[Background] Error forwarding audio message: ${errMsg}`, audioContext);
@@ -204,7 +214,13 @@ function sendAudioMessageToContent(
       } else {
         logger.debug(`[Background] Successfully forwarded audio message to tab ${tabId}`, audioContext);
       }
-    });
+    };
+
+    if (state.frameId !== undefined) {
+      chrome.tabs.sendMessage(tabId, message, { frameId: state.frameId }, callback);
+    } else {
+      chrome.tabs.sendMessage(tabId, message, callback);
+    }
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`[Background] Exception forwarding audio message: ${errorMessage}`, audioContext);
@@ -741,7 +757,8 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   if (message?.type === "AUDIO_BRIDGE_READY") {
     const tabId = sender?.tab?.id ?? message?.tabId ?? message?.sourceTabId;
     if (typeof tabId === "number") {
-      markAudioBridgeReady(tabId);
+      const frameId = typeof sender?.frameId === 'number' ? sender.frameId : undefined;
+      markAudioBridgeReady(tabId, frameId);
       sendResponse?.({ status: "bridge_acknowledged" });
     } else {
       logger.warn('[Background] Received AUDIO_BRIDGE_READY without tab context');
