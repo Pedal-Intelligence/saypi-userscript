@@ -249,6 +249,15 @@ export function deserializeApiRequest(
  * to bypass CSP restrictions.
  */
 export function shouldRouteViaBackground(url: string): boolean {
+  // If we're running inside the background service worker already, skip proxying
+  if (typeof globalThis !== 'undefined') {
+    const globalAny = globalThis as any;
+    const isServiceWorkerScope = Boolean(globalAny && globalAny.registration && globalAny.clients);
+    if (isServiceWorkerScope) {
+      return false;
+    }
+  }
+
   try {
     const hostname = new URL(url).hostname;
     const allowed = getAllowedSayPiHosts();

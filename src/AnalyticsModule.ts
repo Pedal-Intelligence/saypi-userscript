@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 
 class AnalyticsService {
@@ -71,9 +72,36 @@ class AnalyticsService {
 
     const url = `${this.endpoint}?measurement_id=${this.measurementId}&api_secret=${this.apiKey}`;
     try {
-      const response = await axios.post(url, payload, { headers });
+      await axios.post(url, payload, { headers });
     } catch (error) {
-      console.error("Error sending event:", error);
+      if (axios.isAxiosError(error)) {
+        const blockedByClient = typeof error.message === "string" && error.message.includes("ERR_BLOCKED_BY_CLIENT");
+        if (error.code === "ERR_NETWORK" || blockedByClient) {
+          logger.debug("[AnalyticsService] Analytics request blocked or unreachable", {
+            eventName,
+            code: error.code,
+            message: error.message
+          });
+          return;
+        }
+
+        const status = error.response?.status;
+        if (status && status >= 500) {
+          logger.warn("[AnalyticsService] Server error while sending analytics event", {
+            eventName,
+            status,
+            message: error.message
+          });
+        } else {
+          logger.info("[AnalyticsService] Non-fatal analytics error", {
+            eventName,
+            status,
+            message: error.message
+          });
+        }
+      } else {
+        logger.error("[AnalyticsService] Unexpected error sending event", error);
+      }
     }
   }
 }

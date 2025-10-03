@@ -27,14 +27,21 @@ interface TranscriptionResponse {
  * @param thresholdWarn - Threshold in ms for a warning log.
  * @param thresholdError - Threshold in ms for an error log.
  */
-function logStepDuration(stepName: string, startTime: number, thresholdWarn: number = 200, thresholdError: number = 500): void {
+function logStepDuration(
+  stepName: string,
+  startTime: number,
+  thresholdWarn: number = 200,
+  thresholdError: number = 500,
+  context: Record<string, unknown> = {}
+): void {
   const duration = Date.now() - startTime;
+  const logContext = { ...context, durationMs: duration };
   if (duration > thresholdError) {
-    logger.error(`[TranscriptionModule] Critical duration for ${stepName}: ${duration}ms`);
+    logger.error(`[TranscriptionModule] Critical duration for ${stepName}`, logContext);
   } else if (duration > thresholdWarn) {
-    logger.warn(`[TranscriptionModule] High duration for ${stepName}: ${duration}ms`);
+    logger.warn(`[TranscriptionModule] High duration for ${stepName}`, logContext);
   } else if (duration > 50) { // Log elevated durations as info
-    logger.info(`[TranscriptionModule] Elevated duration for ${stepName}: ${duration}ms`);
+    logger.info(`[TranscriptionModule] Elevated duration for ${stepName}`, logContext);
   }
 }
 
@@ -44,25 +51,35 @@ function logStepDuration(stepName: string, startTime: number, thresholdWarn: num
  * @param clientTimestamp - When the client received the data 
  * @param transcriptionTimestamp - When transcription processing began
  */
-function logTranscriptionDelay(captureTimestamp: number, clientTimestamp: number | null, transcriptionTimestamp: number): void {
+function logTranscriptionDelay(
+  captureTimestamp: number,
+  clientTimestamp: number | null,
+  transcriptionTimestamp: number,
+  context: Record<string, unknown> = {}
+): void {
   const captureToTranscriptionDelay = transcriptionTimestamp - captureTimestamp;
   const clientToTranscriptionDelay = clientTimestamp ? 
     transcriptionTimestamp - clientTimestamp : null;
+  const logContext = {
+    ...context,
+    captureToTranscriptionDelayMs: captureToTranscriptionDelay,
+    clientToTranscriptionDelayMs: clientToTranscriptionDelay
+  };
   
   if (captureToTranscriptionDelay > 1000) {
     logger.error(
-      `[TranscriptionModule] Critical delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
-      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+      `[TranscriptionModule] Critical delay from audio capture to transcription start`,
+      logContext
     );
   } else if (captureToTranscriptionDelay > 500) {
     logger.warn(
-      `[TranscriptionModule] High delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
-      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+      `[TranscriptionModule] High delay from audio capture to transcription start`,
+      logContext
     );
   } else if (captureToTranscriptionDelay > 300) {
     logger.info(
-      `[TranscriptionModule] Elevated delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
-      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+      `[TranscriptionModule] Elevated delay from audio capture to transcription start`,
+      logContext
     );
   }
 }
@@ -73,24 +90,34 @@ function logTranscriptionDelay(captureTimestamp: number, clientTimestamp: number
  * @param transcriptionTimestamp - When transcription processing began
  * @param apiRequestTimestamp - When the API request was initiated
  */
-function logApiRequestDelay(captureTimestamp: number, transcriptionTimestamp: number, apiRequestTimestamp: number): void {
+function logApiRequestDelay(
+  captureTimestamp: number,
+  transcriptionTimestamp: number,
+  apiRequestTimestamp: number,
+  context: Record<string, unknown> = {}
+): void {
   const captureToApiDelay = apiRequestTimestamp - captureTimestamp;
   const transcriptionToApiDelay = apiRequestTimestamp - transcriptionTimestamp;
+  const logContext = {
+    ...context,
+    captureToApiDelayMs: captureToApiDelay,
+    transcriptionToApiDelayMs: transcriptionToApiDelay
+  };
   
   if (captureToApiDelay > 1000) {
     logger.error(
-      `[TranscriptionModule] Critical API request delay: ${captureToApiDelay}ms from capture to API request. ` +
-      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+      `[TranscriptionModule] Critical API request delay detected`,
+      logContext
     );
   } else if (captureToApiDelay > 500) {
     logger.warn(
-      `[TranscriptionModule] High API request delay: ${captureToApiDelay}ms from capture to API request. ` +
-      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+      `[TranscriptionModule] High API request delay detected`,
+      logContext
     );
   } else if (captureToApiDelay > 300) {
     logger.info(
-      `[TranscriptionModule] Elevated API request delay: ${captureToApiDelay}ms from capture to API request. ` +
-      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+      `[TranscriptionModule] Elevated API request delay detected`,
+      logContext
     );
   }
 }
@@ -187,13 +214,21 @@ export async function uploadAudioWithRetry(
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
   const transcriptionStartTimestamp = Date.now();
+  const estimatedSequenceNumber = sequenceNum + 1;
   
   // Log timing information if timestamps are available
   if (captureTimestamp) {
     logTranscriptionDelay(
       captureTimestamp, 
       clientReceiveTimestamp || null, 
-      transcriptionStartTimestamp
+      transcriptionStartTimestamp,
+      {
+        audioDurationMs: audioDurationMillis,
+        audioBytes: audioBlob.size,
+        sequenceNumber: estimatedSequenceNumber,
+        inputType,
+        inputLabel
+      }
     );
   }
 
@@ -274,6 +309,7 @@ async function uploadAudio(
   inputLabel?: string
 ): Promise<void> {
   try {
+    const resolvedSequenceNumber = sequenceNumber ?? (sequenceNum + 1);
     const messages = Object.entries(precedingTranscripts).map(
       ([seq, content]) => {
         return {
@@ -286,7 +322,11 @@ async function uploadAudio(
 
     let stepStartTime = Date.now();
     const chatbot = await ChatbotService.getChatbot();
-    logStepDuration("ChatbotService.getChatbot (uploadAudio)", stepStartTime);
+    logStepDuration("ChatbotService.getChatbot (uploadAudio)", stepStartTime, 200, 500, {
+      sequenceNumber: resolvedSequenceNumber,
+      inputType,
+      inputLabel
+    });
 
     stepStartTime = Date.now();
     const formData = await constructTranscriptionFormData(
@@ -295,11 +335,18 @@ async function uploadAudio(
       messages,
       sessionId,
       chatbot,
-      sequenceNumber,
+      resolvedSequenceNumber,
       inputType,
       inputLabel
     );
-    logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
+    logStepDuration("constructTranscriptionFormData (total)", stepStartTime, 200, 500, {
+      audioDurationMs: audioDurationMillis,
+      audioBytes: audioBlob.size,
+      sequenceNumber: resolvedSequenceNumber,
+      inputType,
+      inputLabel,
+      precedingTranscriptCount: messages.length
+    });
     
     // Gather usage metadata once to build URL params safely
     const usageMeta = await buildUsageMetadata(chatbot);
@@ -313,12 +360,19 @@ async function uploadAudio(
     
     // Additional timing information for API request
     if (captureTimestamp && transcriptionStartTimestamp) {
-      logApiRequestDelay(captureTimestamp, transcriptionStartTimestamp, startTime);
+      logApiRequestDelay(captureTimestamp, transcriptionStartTimestamp, startTime, {
+        audioDurationMs: audioDurationMillis,
+        audioBytes: audioBlob.size,
+        sequenceNumber: resolvedSequenceNumber,
+        inputType,
+        inputLabel,
+        precedingTranscriptCount: messages.length
+      });
     }
     
     // Emit transcription started event for telemetry tracking
     EventBus.emit("saypi:transcribing", {
-      sequenceNumber: sequenceNum,
+      sequenceNumber: resolvedSequenceNumber,
       timestamp: startTime,
       captureTimestamp: captureTimestamp,
       clientReceiveTimestamp: transcriptionStartTimestamp,
