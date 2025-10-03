@@ -222,18 +222,25 @@ class OffscreenManager {
             origin: messageWithTabId.origin,
           });
 
-          const result = chrome.runtime.sendMessage(messageWithTabId, () => {
+          chrome.runtime.sendMessage(messageWithTabId, () => {
             const lastError = chrome.runtime.lastError;
             if (lastError) {
-              reject(new Error(lastError.message || 'Unknown runtime error'));
+              const errMsg = lastError.message || 'Unknown runtime error';
+              const isNoResponse = errMsg.includes('The message port closed before a response was received');
+              if (isNoResponse) {
+                logger.debug('[OffscreenManager] Message delivered without explicit response', {
+                  messageType: messageWithTabId.type,
+                  tabId: messageWithTabId.tabId,
+                  messageId: messageWithTabId.messageId,
+                });
+                resolve();
+                return;
+              }
+              reject(new Error(errMsg));
               return;
             }
             resolve();
           });
-
-          if (result && typeof result.then === 'function') {
-            result.then(() => resolve()).catch(reject);
-          }
         } catch (error) {
           reject(error);
         }
