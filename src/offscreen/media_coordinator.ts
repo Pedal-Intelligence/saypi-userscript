@@ -192,6 +192,17 @@ export function setupMessageListener() {
   ]);
   
   chrome.runtime.onMessage.addListener((message, sender, chromeSendResponse) => {
+    if (message.type !== "VAD_FRAME_PROCESSED") {
+      logger.debug("[SayPi Media Coordinator] Raw message before sanitization", {
+        rawMessage: message,
+        sender: {
+          tabId: sender?.tab?.id,
+          frameId: typeof sender?.frameId === 'number' ? sender.frameId : undefined,
+          url: sender?.url,
+          origin: (sender as any)?.origin,
+        }
+      });
+    }
     // Log all incoming messages for debugging
     if (message.type && typeof message.type === 'string') {
       logger.debug(`[SayPi Media Coordinator] Received message`, {
@@ -204,6 +215,7 @@ export function setupMessageListener() {
     }
 
     const origin = message.origin || message.source;
+    const proxiedByBackground = message.proxiedByBackground === true;
     if (origin && !trustedOrigins.has(origin)) {
       logger.warn(`[SayPi Media Coordinator] Skipping message due to untrusted origin/source`, {
         origin: message.origin,
@@ -222,13 +234,22 @@ export function setupMessageListener() {
     // Use either sourceTabId or tabId (they should be the same - from the content script)
     const { type } = message;
     const sourceTabId = message.sourceTabId ?? message.tabId ?? message.targetTabId;
-    
+
     if (sourceTabId === undefined && !tabOptionalMessageTypes.has(type)) {
-      logger.error(`[SayPi Media Coordinator] Message has no valid tab ID`, {
-        type: message.type,
-        origin: message.origin,
-        source: message.source
-      });
+      if (proxiedByBackground) {
+        logger.error(`[SayPi Media Coordinator] Proxied message missing tab context`, {
+          type: message.type,
+          origin: message.origin,
+          source: message.source,
+          messageId: message.messageId
+        });
+      } else {
+        logger.debug(`[SayPi Media Coordinator] Ignoring direct message without tab context`, {
+          type: message.type,
+          origin: message.origin,
+          source: message.source
+        });
+      }
       return;
     }
 

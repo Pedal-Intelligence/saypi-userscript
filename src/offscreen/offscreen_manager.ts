@@ -1,13 +1,24 @@
+import { logger } from "../LoggingModule.js";
+
 export const OFFSCREEN_DOCUMENT_PATH = "src/offscreen/media_offscreen.html";
 
 class OffscreenManager {
   private creating?: Promise<void>;
   private portMap: Map<number, chrome.runtime.Port> = new Map(); // tabId to Port
+  private lastOffscreenExistsLog = 0;
+  private readonly offscreenExistsThrottleMs = 30000;
+  private lastVadEventByTab: Map<number, { type: string; loggedAt: number }> = new Map();
+  private pendingAudioMessages: Map<string, {
+    type: string;
+    tabId?: number;
+    url?: string;
+    dispatchedAt: number;
+  }> = new Map();
 
   async hasDocument(): Promise<boolean> {
     // Check if chrome.offscreen exists first
     if (!chrome.offscreen) {
-      console.debug("chrome.offscreen API not available in this browser");
+      logger.debug("[OffscreenManager] chrome.offscreen API not available in this browser");
       return false;
     }
     
@@ -15,7 +26,7 @@ class OffscreenManager {
       try {
         return await chrome.offscreen.hasDocument();
       } catch (error) {
-        console.warn("Error calling chrome.offscreen.hasDocument:", error);
+        logger.warn("[OffscreenManager] Error calling chrome.offscreen.hasDocument:", error);
         return false;
       }
     }
@@ -25,7 +36,7 @@ class OffscreenManager {
     // and seeing if it fails, or maintaining an internal state variable.
     // For now, we'll rely on our internal state tracking if the API isn't there.
     // This part might need refinement based on testing.
-    console.warn("chrome.offscreen.hasDocument API not available. Relying on internal state.");
+    logger.debug("[OffscreenManager] chrome.offscreen.hasDocument API not available. Relying on internal state.");
     // A simple internal check if we've attempted creation.
     // This doesn't confirm the document *still* exists if closed externally.
     return !!this.creating; // A proxy for "attempted to create"
@@ -39,7 +50,14 @@ class OffscreenManager {
     
     // Check if the document already exists.
     if (await this.hasDocument()) {
-      console.log("Offscreen document already exists.");
+      const now = Date.now();
+      if (now - this.lastOffscreenExistsLog > this.offscreenExistsThrottleMs) {
+        logger.debug("[OffscreenManager] Reusing existing offscreen document for media coordination.", {
+          connectedTabs: Array.from(this.portMap.keys()),
+          pendingAudio: this.pendingAudioMessages.size
+        });
+        this.lastOffscreenExistsLog = now;
+      }
       return;
     }
 
@@ -48,7 +66,12 @@ class OffscreenManager {
       return;
     }
 
-    console.log("Creating offscreen document...");
+    const tabCount = this.portMap.size;
+    logger.info("[OffscreenManager] Creating offscreen document to host VAD/TTS pipeline despite page CSP.", {
+      reason: tabCount === 0 ? "no existing sandbox" : `servicing ${tabCount} connected tab(s)`,
+      pendingAudio: this.pendingAudioMessages.size,
+      connectedTabs: Array.from(this.portMap.keys())
+    });
     
     try {
       this.creating = chrome.offscreen.createDocument({
@@ -58,9 +81,11 @@ class OffscreenManager {
       });
 
       await this.creating;
-      console.log("Offscreen document created successfully.");
+      logger.info("[OffscreenManager] Offscreen document ready for media pipeline.", {
+        timestamp: Date.now()
+      });
     } catch (error) {
-      console.error("Error creating offscreen document:", error);
+      logger.error("[OffscreenManager] Error creating offscreen document:", error);
       throw error; // Re-throw to be caught by callers
     } finally {
       this.creating = undefined;
@@ -70,27 +95,62 @@ class OffscreenManager {
   public async closeOffscreenDocument(): Promise<void> {
     // Check if chrome.offscreen is available
     if (!chrome.offscreen) {
-      console.debug("chrome.offscreen API not available - cannot close offscreen document");
+      logger.debug("[OffscreenManager] chrome.offscreen API not available - cannot close offscreen document");
       return;
     }
     
     if (!(await this.hasDocument())) {
-      console.log("No offscreen document to close or hasDocument API not available to confirm.");
+      logger.debug("[OffscreenManager] No offscreen document to close or hasDocument API not available to confirm.");
       // If hasDocument isn't available, we might still try to close if we think one exists
       // For now, if hasDocument says no, we assume no.
       return;
     }
-    console.log("Closing offscreen document...");
+    logger.info("[OffscreenManager] Closing offscreen document because no media clients remain.", {
+      connectedTabs: Array.from(this.portMap.keys()),
+      pendingAudio: this.pendingAudioMessages.size
+    });
     
     try {
       await chrome.offscreen.closeDocument();
       this.portMap.clear(); // Clear ports as the document is gone
-      console.log("Offscreen document closed.");
+      this.pendingAudioMessages.clear();
+      logger.info("[OffscreenManager] Offscreen document closed.");
     } catch (error) {
-      console.warn("Error closing offscreen document:", error);
+      logger.warn("[OffscreenManager] Error closing offscreen document:", error);
       // Clear ports anyway since the document might be gone
       this.portMap.clear();
+      this.pendingAudioMessages.clear();
     }
+  }
+
+  private trackAudioDispatch(message: any, targetTabId?: number) {
+    const messageId = message?.messageId;
+    if (!messageId || typeof messageId !== "string") {
+      return;
+    }
+    this.pendingAudioMessages.set(messageId, {
+      type: message?.type,
+      tabId: targetTabId,
+      url: message?.url,
+      dispatchedAt: Date.now()
+    });
+  }
+
+  public resolveAudioDispatch(messageId?: string): {
+    type: string;
+    tabId?: number;
+    url?: string;
+    dispatchedAt: number;
+  } | undefined {
+    if (!messageId) {
+      return undefined;
+    }
+    const detail = this.pendingAudioMessages.get(messageId);
+    if (detail) {
+      this.pendingAudioMessages.delete(messageId);
+      return detail;
+    }
+    return undefined;
   }
 
   public async sendMessageToOffscreenDocument(message: any, targetTabId?: number): Promise<void> {
@@ -103,23 +163,48 @@ class OffscreenManager {
       await this.setupOffscreenDocument(); // Ensure document exists
       
       // Create the message with correct properties
+      const resolvedTabId = targetTabId ?? message?.sourceTabId ?? message?.tabId;
       const messageWithTabId = { 
         ...message,
-        tabId: targetTabId
+        tabId: resolvedTabId,
+        sourceTabId: message?.sourceTabId ?? resolvedTabId,
+        proxiedByBackground: true,
+        origin: 'background',
+        originalOrigin: message?.origin ?? message?.source
       };
-      
-      // If the message has 'source' but not 'origin', map it correctly for the offscreen document
-      if (message.source === "content-script" && !message.origin) {
-        messageWithTabId.origin = "content-script";
+      if (typeof resolvedTabId !== 'number') {
+        logger.warn("[OffscreenManager] Forwarding message without resolved tab id", {
+          messageType: message?.type,
+          targetTabId,
+          messageSourceTabId: message?.sourceTabId,
+          messageTabId: message?.tabId,
+          rawMessage: message,
+        });
       }
-      
+
+      logger.debug("[OffscreenManager] Raw outbound message to offscreen", {
+        messageType: messageWithTabId?.type,
+        resolvedTabId,
+        sourceTabId: messageWithTabId?.sourceTabId,
+        targetTabId,
+        origin: messageWithTabId?.origin,
+        rawMessage: messageWithTabId,
+      });
+
+      // If the message has 'source' but not 'origin', map it correctly for the offscreen document
+      if (message.source === "content-script") {
+        messageWithTabId.source = message.source;
+      }
+
       // Add specific logging for audio messages
       if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
-        console.log(`[OffscreenManager] 📢 Forwarding audio message to offscreen: ${message.type}`, {
+        logger.info(`[OffscreenManager] Forwarding audio message to offscreen: ${message.type}`, {
           tabId: targetTabId,
           url: message.url,
-          timestamp: Date.now()
+          messageId: message.messageId,
+          pendingAudioBeforeSend: this.pendingAudioMessages.size
         });
+        this.trackAudioDispatch(message, targetTabId);
       }
       
       // Create a timeout promise to ensure we don't hang if message delivery fails
@@ -131,9 +216,24 @@ class OffscreenManager {
       // Promise for the actual message sending
       const sendPromise = new Promise<void>((resolve, reject) => {
         try {
-          console.debug(`[OffscreenManager] forwarding message to offscreen: ${messageWithTabId.type}`);
-          chrome.runtime.sendMessage(messageWithTabId);
-          resolve();
+          logger.debug(`[OffscreenManager] Forwarding message to offscreen: ${messageWithTabId.type}`, {
+            tabId: messageWithTabId.tabId,
+            sourceTabId: messageWithTabId.sourceTabId,
+            origin: messageWithTabId.origin,
+          });
+
+          const result = chrome.runtime.sendMessage(messageWithTabId, () => {
+            const lastError = chrome.runtime.lastError;
+            if (lastError) {
+              reject(new Error(lastError.message || 'Unknown runtime error'));
+              return;
+            }
+            resolve();
+          });
+
+          if (result && typeof result.then === 'function') {
+            result.then(() => resolve()).catch(reject);
+          }
         } catch (error) {
           reject(error);
         }
@@ -143,14 +243,29 @@ class OffscreenManager {
       await Promise.race([sendPromise, timeoutPromise]);
     } catch (error: any) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`[OffscreenManager] Error sending message to offscreen document: ${errorMessage}`, {
+      const expectedDisconnect = errorMessage.includes('Receiving end does not exist') ||
+        errorMessage.includes('Could not establish connection');
+
+      const logPayload = {
         messageType: message?.type,
         targetTabId,
-        timestamp: Date.now()
-      });
+        timestamp: Date.now(),
+        hasPort: targetTabId ? this.portMap.has(targetTabId) : this.portMap.size > 0,
+        trackedTabs: Array.from(this.portMap.keys()),
+        pendingAudioCount: this.pendingAudioMessages.size
+      };
+
+      if (expectedDisconnect) {
+        logger.debug('[OffscreenManager] Offscreen document disconnected before message delivery', {
+          ...logPayload,
+          error: errorMessage
+        });
+      } else {
+        logger.error(`[OffscreenManager] Error sending message to offscreen document: ${errorMessage}`, logPayload);
+      }
       
-      // If this is an audio message, we should notify the content script about the failure
-      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_') && targetTabId) {
+      // If this is an audio message, notify content scripts unless the disconnect was expected
+      if (!expectedDisconnect && message.type && typeof message.type === 'string' && message.type.includes('AUDIO_') && targetTabId) {
         this.notifyMessageFailure(message.type, targetTabId, errorMessage);
       }
     }
@@ -177,25 +292,31 @@ class OffscreenManager {
       return;
     }
     const tabId = port.sender?.tab?.id;
+    const tabTitle = port.sender?.tab?.title;
     if (!tabId) {
       console.error("Port connection from content script without tab ID.", port);
       return;
     }
 
-    console.log(`Registered ${port.name} connection from tab ${tabId}`);
     this.portMap.set(tabId, port);
+    const connectedTabs = Array.from(this.portMap.keys());
+    logger.info(`[OffscreenManager] Registered ${port.name} connection from tab ${tabId} to broker audio/video via offscreen.`, {
+      tabName: tabTitle,
+      connectedTabs,
+      pendingAudio: this.pendingAudioMessages.size
+    });
 
     port.onMessage.addListener(async (message) => {
       // Add specific logging for audio messages
       if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
-        console.log(`[OffscreenManager] 🎧 Port received audio message: ${message.type}`, {
+        logger.debug(`[OffscreenManager] Port received audio message: ${message.type}`, {
           tabId,
           url: message.url,
           timestamp: Date.now()
         });
       }
       
-      console.debug(`Background received message from content script (tab ${tabId}):`, message);
+      logger.debug(`[OffscreenManager] Background received message from content script (tab ${tabId}):`, message);
       // Ensure offscreen document is ready before forwarding certain messages
       if (
         message.type === "VAD_START_REQUEST" || 
@@ -213,10 +334,14 @@ class OffscreenManager {
     });
 
     port.onDisconnect.addListener(() => {
-      console.log(`Content script connection from tab ${tabId} disconnected.`);
+      const remainingTabs = Array.from(this.portMap.keys()).filter(id => id !== tabId);
+      logger.info(`[OffscreenManager] Content script connection from tab ${tabId} disconnected; evaluating teardown.`, {
+        tabName: tabTitle,
+        remainingTabs
+      });
       this.portMap.delete(tabId);
       if (this.portMap.size === 0) {
-        console.log("All content script connections closed. Closing offscreen document.");
+        logger.info("[OffscreenManager] All media bridges disconnected; tearing down offscreen document.");
         this.closeOffscreenDocument();
       }
     });
@@ -225,10 +350,25 @@ class OffscreenManager {
   public forwardMessageToContentScript(tabId: number, message: any): void {
     const port = this.portMap.get(tabId);
     if (port) {
-      console.debug(`[OffscreenManager] forwarding message to content script (tab ${tabId}): ${message.type}`);
+      if (typeof message?.type === "string" && message.type.startsWith("VAD_SPEECH_")) {
+        const now = Date.now();
+        const last = this.lastVadEventByTab.get(tabId);
+        if (last && last.type === message.type && now - last.loggedAt < 4000) {
+          port.postMessage(message);
+          return;
+        }
+        this.lastVadEventByTab.set(tabId, { type: message.type, loggedAt: now });
+        logger.debug(`[OffscreenManager] Forwarding VAD message to content script (tab ${tabId}): ${message.type}`, {
+          duration: message?.duration,
+          confidence: message?.confidence,
+          frameCount: message?.frameCount
+        });
+      } else {
+        logger.debug(`[OffscreenManager] Forwarding message to content script (tab ${tabId}): ${message.type}`);
+      }
       port.postMessage(message);
     } else {
-      console.warn(`No active port found for tab ${tabId} to forward message: ${message.type}`);
+      logger.warn(`[OffscreenManager] No active port found for tab ${tabId} to forward message: ${message.type}`);
     }
   }
 }
