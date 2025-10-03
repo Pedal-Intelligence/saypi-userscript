@@ -1,57 +1,72 @@
 #!/usr/bin/env python3
-"""Prune unused initializers from ONNX models.
-
-This focuses on the Silero VAD models bundled with the extension. It removes
-initializers that are never referenced by any node input, graph output, or
-value info entry, matching the behaviour ONNX Runtime reports at load time.
-"""
+"""Prune unused initializers from ONNX models, including nested subgraphs."""
 
 import argparse
 import pathlib
-from typing import Set
+from typing import Iterable, Set
 
 import onnx
 
 
-def collect_used_names(graph: onnx.GraphProto) -> Set[str]:
+def _gather_used_names(graph: onnx.GraphProto) -> Set[str]:
+  """Return the set of tensor names referenced within a graph."""
+
   used: Set[str] = set()
 
+  def _add_all(names: Iterable[str]) -> None:
+    for name in names:
+      if name:
+        used.add(name)
+
   for node in graph.node:
-    used.update(node.input)
+    _add_all(node.input)
+    _add_all(node.output)
 
-  for output in graph.output:
-    used.add(output.name)
+  _add_all(t.name for t in graph.output)
+  _add_all(t.name for t in graph.value_info)
+  _add_all(t.name for t in graph.input)
 
-  for value_info in graph.value_info:
-    used.add(value_info.name)
+  return used
 
-  return {name for name in used if name}
+
+def _prune_graph(graph: onnx.GraphProto) -> int:
+  """Prune unused initializers from a graph and any nested subgraphs."""
+
+  removed = 0
+  used_names = _gather_used_names(graph)
+
+  retained = [init for init in graph.initializer if not init.name or init.name in used_names]
+  removed += len(graph.initializer) - len(retained)
+  graph.ClearField("initializer")
+  graph.initializer.extend(retained)
+
+  if graph.sparse_initializer:
+    retained_sparse = [init for init in graph.sparse_initializer if not init.name or init.name in used_names]
+    removed += len(graph.sparse_initializer) - len(retained_sparse)
+    graph.ClearField("sparse_initializer")
+    graph.sparse_initializer.extend(retained_sparse)
+
+  for node in graph.node:
+    for attr in node.attribute:
+      if attr.type == onnx.AttributeProto.GRAPH and attr.g:
+        removed += _prune_graph(attr.g)
+      elif attr.type == onnx.AttributeProto.GRAPHS:
+        for subgraph in attr.graphs:
+          removed += _prune_graph(subgraph)
+
+  return removed
 
 
 def prune_model(input_path: pathlib.Path, output_path: pathlib.Path) -> None:
   model = onnx.load_model(str(input_path))
-  graph = model.graph
-
-  used_names = collect_used_names(graph)
-
-  retained_initializers = [init for init in graph.initializer if init.name in used_names]
-  removed_count = len(graph.initializer) - len(retained_initializers)
-
-  if removed_count == 0:
-    onnx.save_model(model, str(output_path))
-    print("No unused initializers found; model unchanged.")
-    return
-
-  graph.ClearField("initializer")
-  graph.initializer.extend(retained_initializers)
-
-  if graph.sparse_initializer:
-    retained_sparse = [init for init in graph.sparse_initializer if init.name in used_names]
-    graph.ClearField("sparse_initializer")
-    graph.sparse_initializer.extend(retained_sparse)
+  total_removed = _prune_graph(model.graph)
 
   onnx.save_model(model, str(output_path))
-  print(f"Removed {removed_count} unused initializers.")
+
+  if total_removed == 0:
+    print("No unused initializers found; model unchanged.")
+  else:
+    print(f"Removed {total_removed} unused initializer(s).")
 
 
 def main() -> None:

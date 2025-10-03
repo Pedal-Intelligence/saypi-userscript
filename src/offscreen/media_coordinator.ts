@@ -1,6 +1,12 @@
 import { logger } from "../LoggingModule.js";
 
-logger.log("[SayPi Media Coordinator] Script loaded.");
+const mediaCoordinatorGlobal = window as any;
+if (!mediaCoordinatorGlobal.__saypiMediaCoordinatorLogged) {
+  logger.log("[SayPi Media Coordinator] Script loaded.");
+  mediaCoordinatorGlobal.__saypiMediaCoordinatorLogged = true;
+} else {
+  logger.debug("[SayPi Media Coordinator] Script already loaded; reusing existing state.");
+}
 
 // Helper function to sanitize messages for logging by removing/truncating large data
 export function sanitizeMessageForLogs(message: any): any {
@@ -142,22 +148,34 @@ export function unregisterMessageHandler(messageType: string) {
 }
 
 // Send response back to content script
-export function sendResponse(type: string, payload: any, targetTabId: number) {
+export function sendResponse(
+  type: string,
+  payload: any,
+  targetTabId: number,
+  requestMessageId?: string
+) {
   chrome.runtime.sendMessage({
     type: `OFFSCREEN_${type}_RESPONSE`,
     payload,
     targetTabId,
     origin: "offscreen-document",
+    requestMessageId,
   });
 }
 
 // Send error response back to content script
-export function sendError(type: string, error: any, targetTabId: number) {
+export function sendError(
+  type: string,
+  error: any,
+  targetTabId: number,
+  requestMessageId?: string
+) {
   chrome.runtime.sendMessage({
     type: `OFFSCREEN_${type}_ERROR`,
     payload: { success: false, error: error.message || "Unhandled error" },
     targetTabId,
     origin: "offscreen-document",
+    requestMessageId,
   });
 }
 
@@ -167,11 +185,17 @@ export function setupMessageListener() {
     logger.debug("[SayPi Media Coordinator] Message listener already setup, skipping");
     return;
   }
+  const trustedOrigins = new Set(["content-script", "background", "offscreen-document"]);
+  const tabOptionalMessageTypes = new Set([
+    "API_REQUEST",
+    "OFFSCREEN_AUTO_SHUTDOWN",
+  ]);
   
   chrome.runtime.onMessage.addListener((message, sender, chromeSendResponse) => {
     // Log all incoming messages for debugging
     if (message.type && typeof message.type === 'string') {
-      console.log(`[SayPi Media Coordinator] 📥 Received message: ${message.type}`, {
+      logger.debug(`[SayPi Media Coordinator] Received message`, {
+        type: message.type,
         origin: message.origin,
         source: message.source,
         sourceTabId: message.sourceTabId,
@@ -179,15 +203,12 @@ export function setupMessageListener() {
       });
     }
 
-    // Check if this is a message we should process
-    if ((message.origin !== "content-script" && message.source !== "content-script") || 
-        (message.sourceTabId === undefined && message.tabId === undefined)) {
-      console.warn(`[SayPi Media Coordinator] ⚠️ Skipping message due to invalid origin/source or missing tabId:`, {
+    const origin = message.origin || message.source;
+    if (origin && !trustedOrigins.has(origin)) {
+      logger.warn(`[SayPi Media Coordinator] Skipping message due to untrusted origin/source`, {
         origin: message.origin,
         source: message.source,
-        type: message.type,
-        hasSourceTabId: message.sourceTabId !== undefined,
-        hasTabId: message.tabId !== undefined
+        type: message.type
       });
       return;
     }
@@ -200,10 +221,10 @@ export function setupMessageListener() {
     
     // Use either sourceTabId or tabId (they should be the same - from the content script)
     const { type } = message;
-    const sourceTabId = message.sourceTabId || message.tabId;
+    const sourceTabId = message.sourceTabId ?? message.tabId ?? message.targetTabId;
     
-    if (!sourceTabId) {
-      console.error(`[SayPi Media Coordinator] ❌ Message has no valid tab ID:`, {
+    if (sourceTabId === undefined && !tabOptionalMessageTypes.has(type)) {
+      logger.error(`[SayPi Media Coordinator] Message has no valid tab ID`, {
         type: message.type,
         origin: message.origin,
         source: message.source
@@ -211,37 +232,49 @@ export function setupMessageListener() {
       return;
     }
 
+    if (sourceTabId === undefined && tabOptionalMessageTypes.has(type)) {
+      logger.debug(`[SayPi Media Coordinator] Processing ${type} message without tab context`, {
+        origin: message.origin,
+        source: message.source
+      });
+    }
+
     // Find and execute the appropriate handler
     const handler = state.messageHandlers.get(type);
     if (!handler) {
+      if (tabOptionalMessageTypes.has(type)) {
+        logger.debug(`[SayPi Media Coordinator] No handler registered for optional message type ${type}; skipping.`);
+        return false;
+      }
       logger.warn(`[SayPi Media Coordinator] Unknown message type received: ${type} (available handlers: ${Array.from(state.messageHandlers.keys()).join(', ')})`);
-      sendResponse(type, { success: false, error: "Unknown message type" }, sourceTabId);
+      if (sourceTabId !== undefined) {
+        sendResponse(type, { success: false, error: "Unknown message type" }, sourceTabId);
+      }
       return false;
     }
 
     try {
-      const result = handler(message, sourceTabId);
+      const result = handler(message, sourceTabId as number);
       
       // Handle async responses
       if (result && typeof result.then === 'function') {
         result
-          .then((response: any) => sendResponse(type, response, sourceTabId))
+          .then((response: any) => sendResponse(type, response, sourceTabId, message.messageId))
           .catch((error: any) => {
             logger.reportError(error, { function: 'Message Handler', messageType: type, tabId: sourceTabId }, "Error processing request");
-            sendError(type, error, sourceTabId);
+            sendError(type, error, sourceTabId, message.messageId);
           });
-        return true; // Indicate async response
+        return false;
       }
       
       // Handle sync responses
       if (result !== undefined) {
-        sendResponse(type, result, sourceTabId);
+        sendResponse(type, result, sourceTabId, message.messageId);
       }
-      
       return false;
     } catch (error: any) {
       logger.reportError(error, { function: 'Message Handler', messageType: type, tabId: sourceTabId }, "Error executing message handler");
-      sendError(type, error, sourceTabId);
+      sendError(type, error, sourceTabId, message.messageId);
       return false;
     }
   });
