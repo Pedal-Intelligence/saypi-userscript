@@ -5,6 +5,7 @@ import {
   UtteranceFactory,
 } from "../tts/SpeechModel";
 import { UtteranceCharge } from "../billing/BillingModule";
+import { logger } from "../LoggingModule.js";
 
 export class SpeechRecord implements StreamedSpeech {
   constructor(
@@ -15,6 +16,8 @@ export class SpeechRecord implements StreamedSpeech {
 }
 export class SpeechHistoryModule {
   private static instance: SpeechHistoryModule;
+  private seenSpeechLookups: Set<string> = new Set();
+  private seenChargeLookups: Set<string> = new Set();
 
   private constructor() {}
 
@@ -61,20 +64,19 @@ export class SpeechHistoryModule {
       if (!utterance && !isPlaceholderUtterance(speech.utterance)) {
         speechHistory[hash] = speech.utterance;
         await this.setStorageData({ speechHistory: speechHistory });
-        console.debug(
-          `Saved speech with hash ${hash} to history.`,
-          speech.utterance.toString()
-        );
+        logger.debug(`[SpeechHistory] Saved speech to history`, {
+          hash,
+          voice: speech.utterance.voice?.name
+        });
       }
       if (speech.charge) {
         await this.addChargeToHistory(hash, speech.charge);
-        console.debug(
-          `Saved charge with hash ${hash} to history.`,
-          speech.charge.cost
-        );
+        logger.debug(`[SpeechHistory] Saved charge with hash ${hash} to history.`, {
+          cost: speech.charge.cost
+        });
       }
     } catch (error) {
-      console.error(`Error adding speech to history: ${error}`);
+      logger.error("[SpeechHistory] Error adding speech to history", error);
     }
     return new SpeechRecord(hash, speech.utterance, speech.charge);
   }
@@ -92,23 +94,26 @@ export class SpeechHistoryModule {
       const utteranceObj = speechHistory[hash] || null;
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
       if (utteranceObj && !isPlaceholderUtterance(utteranceObj)) {
-        console.debug(
-          `Found utterance with hash ${hash} in speech history.`,
-          utteranceObj
-        );
+        if (!this.seenSpeechLookups.has(hash)) {
+          logger.debug(`[SpeechHistory] Cache hit for utterance`, { hash });
+          this.seenSpeechLookups.add(hash);
+        }
 
         // Use the factory to create an instance of the appropriate class
         const utterance = UtteranceFactory.createUtterance(utteranceObj);
 
         const charge = chargeHistory[hash]; // the charge is optional for a speech record
         if (charge) {
-          console.debug(`Found charge with hash ${hash} in charge history.`);
+          if (!this.seenChargeLookups.has(hash)) {
+            logger.debug(`[SpeechHistory] Cache hit for charge`, { hash });
+            this.seenChargeLookups.add(hash);
+          }
           return new SpeechRecord(hash, utterance, charge);
         }
         return new SpeechRecord(hash, utterance);
       }
     } catch (error) {
-      console.error(`Error getting speech from history: ${error}`);
+      logger.error("[SpeechHistory] Error getting speech from history", error);
     }
     return null;
   }
@@ -119,7 +124,7 @@ export class SpeechHistoryModule {
     try {
       return (await this.getStorageData("speechHistory")) || {};
     } catch (error) {
-      console.error(`Error getting all speech history: ${error}`);
+      logger.error("[SpeechHistory] Error getting all speech history", error);
       return {};
     }
   }
@@ -129,9 +134,11 @@ export class SpeechHistoryModule {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
       delete speechHistory[hash];
       await this.setStorageData({ speechHistory });
-      console.debug(`Removed utterance with hash ${hash} from speech history.`);
+      this.seenSpeechLookups.delete(hash);
+      this.seenChargeLookups.delete(hash);
+      logger.debug(`[SpeechHistory] Removed utterance from history`, { hash });
     } catch (error) {
-      console.error(`Error removing speech from history: ${error}`);
+      logger.error("[SpeechHistory] Error removing speech from history", error);
     }
   }
 
@@ -139,9 +146,11 @@ export class SpeechHistoryModule {
     try {
       await this.setStorageData({ speechHistory: {} });
       await this.setStorageData({ chargeHistory: {} });
-      console.debug("Cleared all speech history.");
+      this.seenSpeechLookups.clear();
+      this.seenChargeLookups.clear();
+      logger.debug("[SpeechHistory] Cleared all speech history entries");
     } catch (error) {
-      console.error(`Error clearing speech history: ${error}`);
+      logger.error("[SpeechHistory] Error clearing speech history", error);
     }
   }
 
@@ -158,9 +167,9 @@ export class SpeechHistoryModule {
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
       chargeHistory[hash] = charge;
       await this.setStorageData({ chargeHistory: chargeHistory });
-      console.debug(`Saved charge to history with hash ${hash}.`);
+      logger.debug(`[SpeechHistory] Saved charge to history`, { hash });
     } catch (error) {
-      console.error(`Error saving charge to history: ${error}`);
+      logger.error("[SpeechHistory] Error saving charge to history", error);
     }
     return charge;
   }
