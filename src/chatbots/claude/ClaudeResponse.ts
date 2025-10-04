@@ -232,11 +232,10 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
       this.activeToolElement = nextElement;
       this.seenToolElements.add(nextElement);
       const label = this.extractToolLabel(nextElement);
-      logger.debug(
-        "Detected Claude tool use start",
-        label ?? "(unknown tool)",
-        nextElement
-      );
+      logger.debug("Detected Claude tool use start", {
+        label: label ?? "(unknown tool)",
+        element: nextElement,
+      });
       this.toolUseSubject.next({
         state: "start",
         label,
@@ -254,7 +253,9 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
       : undefined;
     this.toolUseActive = false;
     this.activeToolElement = null;
-    logger.debug("Detected Claude tool use end", activeLabel ?? "(unknown tool)");
+    logger.debug("Detected Claude tool use end", {
+      label: activeLabel ?? "(unknown tool)",
+    });
     this.toolUseSubject.next({ state: "stop" });
   }
 

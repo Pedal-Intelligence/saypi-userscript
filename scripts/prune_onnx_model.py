@@ -35,12 +35,15 @@ def _prune_graph(graph: onnx.GraphProto) -> int:
   removed = 0
   used_names = _gather_used_names(graph)
 
+  # Retain initializers without names; ONNX allows nameless entries that cannot be
+  # referenced elsewhere, so we conservatively keep them to avoid corrupting the model.
   retained = [init for init in graph.initializer if not init.name or init.name in used_names]
   removed += len(graph.initializer) - len(retained)
   graph.ClearField("initializer")
   graph.initializer.extend(retained)
 
   if graph.sparse_initializer:
+    # Same reasoning applies for sparse initializers – preserve nameless entries.
     retained_sparse = [init for init in graph.sparse_initializer if not init.name or init.name in used_names]
     removed += len(graph.sparse_initializer) - len(retained_sparse)
     graph.ClearField("sparse_initializer")

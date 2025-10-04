@@ -5,21 +5,24 @@ import { debounce } from "lodash";
 import { incrementUsage, decrementUsage, resetUsageCounter, registerMessageHandler } from "./media_coordinator";
 import { VAD_CONFIGS, VADPreset } from "../vad/VADConfigs";
 
-const vadGlobal = window as any;
-if (!vadGlobal.__saypiOrtLogConfigured) {
+const globalScope = globalThis as Record<PropertyKey, unknown>;
+const ORT_LOG_CONFIGURED = Symbol.for("saypi.vad.ortLogConfigured");
+const HANDLER_LOADED = Symbol.for("saypi.vad.handlerLoaded");
+
+if (!globalScope[ORT_LOG_CONFIGURED]) {
   try {
     ort.env.logLevel = 'error';
-    vadGlobal.__saypiOrtLogConfigured = true;
+    globalScope[ORT_LOG_CONFIGURED] = true;
   } catch (error) {
     logger.warn("[SayPi VAD Handler] Failed to configure ONNX runtime log level", error);
   }
 }
 
-if (vadGlobal.__saypiVadHandlerLoaded) {
+if (globalScope[HANDLER_LOADED]) {
   logger.debug("[SayPi VAD Handler] Script already loaded; reusing singletons.");
 } else {
   logger.log("[SayPi VAD Handler] Script loaded.");
-  vadGlobal.__saypiVadHandlerLoaded = true;
+  globalScope[HANDLER_LOADED] = true;
 }
 
 /**

@@ -113,6 +113,10 @@ export class AudioStreamManager {
   }
 
   isOpen(uuid: string): boolean {
+    if (!this.openStreams.has(uuid)) {
+      return false;
+    }
+
     const buffer = this.inputBuffers[uuid];
     if (!buffer) {
       // Stream has been created but hasn't buffered any text yet.

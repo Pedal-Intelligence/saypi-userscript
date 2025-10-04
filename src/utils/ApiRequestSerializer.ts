@@ -250,12 +250,8 @@ export function deserializeApiRequest(
  */
 export function shouldRouteViaBackground(url: string): boolean {
   // If we're running inside the background service worker already, skip proxying
-  if (typeof globalThis !== 'undefined') {
-    const globalAny = globalThis as any;
-    const isServiceWorkerScope = Boolean(globalAny && globalAny.registration && globalAny.clients);
-    if (isServiceWorkerScope) {
-      return false;
-    }
+  if (isServiceWorkerContext(globalThis)) {
+    return false;
   }
 
   try {
@@ -265,6 +261,31 @@ export function shouldRouteViaBackground(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+function isServiceWorkerContext(candidate: unknown): candidate is ServiceWorkerGlobalScope {
+  if (typeof candidate !== "object" || candidate === null) {
+    return false;
+  }
+
+  const scoped = candidate as Partial<ServiceWorkerGlobalScope>;
+
+  const hasWorkerGlobals =
+    "clients" in scoped &&
+    "registration" in scoped &&
+    typeof scoped.clients !== "undefined" &&
+    typeof scoped.registration !== "undefined";
+
+  if (!hasWorkerGlobals) {
+    return false;
+  }
+
+  if (typeof WorkerGlobalScope !== "undefined") {
+    return candidate instanceof WorkerGlobalScope;
+  }
+
+  // In environments where WorkerGlobalScope isn't defined, fall back to the property check.
+  return true;
 }
 
 function getAllowedSayPiHosts(): Set<string> {
