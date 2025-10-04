@@ -263,28 +263,27 @@ export function shouldRouteViaBackground(url: string): boolean {
   }
 }
 
-function isServiceWorkerContext(candidate: unknown): candidate is ServiceWorkerGlobalScope {
+function isServiceWorkerContext(candidate: unknown): boolean {
   if (typeof candidate !== "object" || candidate === null) {
     return false;
   }
 
-  const scoped = candidate as Partial<ServiceWorkerGlobalScope>;
+  const scoped = candidate as Record<PropertyKey, unknown>;
 
-  const hasWorkerGlobals =
-    "clients" in scoped &&
-    "registration" in scoped &&
-    typeof scoped.clients !== "undefined" &&
-    typeof scoped.registration !== "undefined";
+  const hasClients = Object.prototype.hasOwnProperty.call(scoped, "clients");
+  const hasRegistration = Object.prototype.hasOwnProperty.call(scoped, "registration");
 
-  if (!hasWorkerGlobals) {
+  if (!hasClients || !hasRegistration) {
     return false;
   }
 
-  if (typeof WorkerGlobalScope !== "undefined") {
-    return candidate instanceof WorkerGlobalScope;
+  const constructorName = (scoped as { constructor?: { name?: string } }).constructor?.name;
+  if (constructorName) {
+    return constructorName === "ServiceWorkerGlobalScope";
   }
 
-  // In environments where WorkerGlobalScope isn't defined, fall back to the property check.
+  // Fallback: presence of the service worker globals is a strong hint even if the
+  // constructor name is unavailable (e.g., in unit tests).
   return true;
 }
 

@@ -8,6 +8,7 @@ import { VAD_CONFIGS, VADPreset } from "../vad/VADConfigs";
 const globalScope = globalThis as Record<PropertyKey, unknown>;
 const ORT_LOG_CONFIGURED = Symbol.for("saypi.vad.ortLogConfigured");
 const HANDLER_LOADED = Symbol.for("saypi.vad.handlerLoaded");
+const HANDLERS_REGISTERED = Symbol.for("saypi.vad.handlersRegistered");
 
 if (!globalScope[ORT_LOG_CONFIGURED]) {
   try {
@@ -323,7 +324,7 @@ function destroyVAD() {
 }
 
 function registerVadHandlersOnce() {
-  if (vadGlobal.__saypiVadHandlersRegistered) {
+  if (globalScope[HANDLERS_REGISTERED]) {
     logger.debug("[SayPi VAD Handler] Handlers already registered; skipping duplicate setup.");
     return;
   }
@@ -344,7 +345,7 @@ function registerVadHandlersOnce() {
     return destroyVAD();
   });
 
-  vadGlobal.__saypiVadHandlersRegistered = true;
+  globalScope[HANDLERS_REGISTERED] = true;
   logger.log("[SayPi VAD Handler] Message handlers registered.");
 }
 
