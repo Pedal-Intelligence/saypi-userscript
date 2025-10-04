@@ -217,6 +217,35 @@ test("emits Claude tool-use start and stop events as DOM nodes stream", async ()
   message.remove();
 });
 
+test("does not re-start tool use after completion when element remains", async () => {
+  const { ClaudeTextStream } = await importClaude();
+
+  const { content, message } = buildClaudeMessageSkeleton();
+  const stream = new ClaudeTextStream(content, { includeInitialText: false });
+
+  const events: ToolUseEvent[] = [];
+  const subscription = stream.getToolUseStream().subscribe((event) => events.push(event));
+
+  const toolContainer = buildClaudeToolContainer("Searching the web");
+  content.appendChild(toolContainer);
+  await flushMutations();
+
+  expect(events).toHaveLength(1);
+  expect(events[0].state).toBe("start");
+
+  (stream as any).updateToolUseState(null);
+  expect(events).toHaveLength(2);
+  expect(events[1].state).toBe("stop");
+
+  (stream as any).refreshToolUseStateFromDom();
+  await flushMutations();
+
+  expect(events).toHaveLength(2);
+
+  subscription.unsubscribe();
+  message.remove();
+});
+
 test("keeps tool-use active while tool content updates and stops when removed", async () => {
   const { ClaudeTextStream } = await importClaude();
 

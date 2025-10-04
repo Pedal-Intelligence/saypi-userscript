@@ -147,13 +147,21 @@ html body.claude {
         background-color: rgba(0, 0, 0, 0.05);
       }
     }
-    
+
     /* Position menu content relative to the top of the button */
     .voice-menu-content {
       bottom: 100%; /* Position above the button */
       left: 0;
       min-width: 100%;
     }
+  }
+
+  .saypi-tool-in-use {
+    outline: 3px solid #f97316;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18), 0 12px 24px rgba(249, 115, 22, 0.25);
+    border-radius: 12px;
+    transition: outline-offset 0.12s ease, box-shadow 0.12s ease;
   }
 }
 

@@ -62,7 +62,7 @@ export interface ToolUseEvent {
 export abstract class ElementTextStream {
   protected subject: Subject<TextContent>;
   private lateChangeSubject = new Subject<LateChangeEvent>();
-  protected toolUseSubject = new Subject<ToolUseEvent>();
+  protected toolUseSubject: ReplaySubject<ToolUseEvent> = new ReplaySubject(1);
   protected observer!: MutationObserver;
   protected timeout: ReturnType<typeof setTimeout> | undefined = undefined;
   protected emittedValues: TextContent[] = [];

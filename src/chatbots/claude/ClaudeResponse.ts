@@ -2,6 +2,7 @@ import { AssistantResponse, MessageControls } from "../../dom/MessageElements";
 import EventBus from "../../events/EventBus";
 import { AddedText, ElementTextStream, InputStreamOptions } from "../../tts/InputStream";
 import { TTSControlsModule } from "../../tts/TTSControlsModule";
+import { logger } from "../../LoggingModule";
 
 /**
  * Claude-specific utilities and classes for extracting readable text and
@@ -93,6 +94,7 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
   private toolUseRoot: HTMLElement | null = null;
   private toolUseActive = false;
   private activeToolElement: HTMLElement | null = null;
+  private seenToolElements = new WeakSet<HTMLElement>();
   private static readonly TOOL_CONTAINER_REQUIRED_CLASSES = [
     "rounded-lg",
     "border-0.5",
@@ -222,9 +224,19 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
         return;
       }
 
+      if (this.seenToolElements.has(nextElement)) {
+        return;
+      }
+
       this.toolUseActive = true;
       this.activeToolElement = nextElement;
+      this.seenToolElements.add(nextElement);
       const label = this.extractToolLabel(nextElement);
+      logger.debug(
+        "Detected Claude tool use start",
+        label ?? "(unknown tool)",
+        nextElement
+      );
       this.toolUseSubject.next({
         state: "start",
         label,
@@ -237,8 +249,12 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
       return;
     }
 
+    const activeLabel = this.activeToolElement
+      ? this.extractToolLabel(this.activeToolElement)
+      : undefined;
     this.toolUseActive = false;
     this.activeToolElement = null;
+    logger.debug("Detected Claude tool use end", activeLabel ?? "(unknown tool)");
     this.toolUseSubject.next({ state: "stop" });
   }
 
