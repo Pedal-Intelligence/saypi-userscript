@@ -6,8 +6,8 @@ import { audioProviders } from "../../src/tts/SpeechModel";
 import * as ApiClient from "../../src/ApiClient";
 import { Chatbot } from "../../src/chatbots/Chatbot";
 import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
-
-const KEEP_ALIVE_RATE_WINDOW_MS = 12000;
+import { KEEP_ALIVE_RATE_WINDOW_MS } from "../../src/tts/KeepAliveSettings";
+import { KeepAliveRateLimiter } from "../../src/tts/KeepAliveRateLimiter";
 
 // Mock the callApi function
 vi.mock("../../src/ApiClient", () => ({
@@ -207,20 +207,25 @@ describe("TextToSpeechService", () => {
     const mockResponse = new Response(null, { status: 200 });
     const callApiMock = ApiClient.callApi as any;
     callApiMock.mockResolvedValue(mockResponse);
-    callApiMock.mockClear();
-
-    vi.useFakeTimers();
-    vi.setSystemTime(0);
 
     const warnSpy = vi
       .spyOn(console, "warn")
       .mockImplementation(() => undefined);
 
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+
+    textToSpeechService = new TextToSpeechService("http://example.com");
+    (textToSpeechService as any).keepAliveRateLimiter = new KeepAliveRateLimiter({
+      warn: warnSpy,
+      now: () => Date.now(),
+    });
+
     try {
       const first = await textToSpeechService.sendKeepAlive("uuid-1");
-      vi.advanceTimersByTime(1);
+      vi.setSystemTime(1);
       const second = await textToSpeechService.sendKeepAlive("uuid-2");
-      vi.advanceTimersByTime(1);
+      vi.setSystemTime(2);
       const third = await textToSpeechService.sendKeepAlive("uuid-3");
 
       expect(first).toBe(true);
@@ -228,7 +233,7 @@ describe("TextToSpeechService", () => {
       expect(third).toBe(false);
       expect(callApiMock).toHaveBeenCalledTimes(2);
 
-      vi.advanceTimersByTime(KEEP_ALIVE_RATE_WINDOW_MS + 1);
+      vi.setSystemTime(KEEP_ALIVE_RATE_WINDOW_MS + 5);
       const fourth = await textToSpeechService.sendKeepAlive("uuid-4");
       expect(fourth).toBe(true);
       expect(callApiMock).toHaveBeenCalledTimes(3);

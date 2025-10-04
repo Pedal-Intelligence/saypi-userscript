@@ -3,28 +3,29 @@ import { InputBuffer } from "./InputBuffer";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 import { Chatbot } from "../chatbots/Chatbot";
 import { logger } from "../LoggingModule.js";
+import { StreamKeepAliveController } from "./StreamKeepAliveController";
 
 const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 20s)
 const BUFFER_TIMEOUT_MS = 1500; // flush buffers after inactivity
 const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
-const KEEP_ALIVE_INTERVAL_MS = 12000;
-const MAX_KEEP_ALIVES_PER_TOOL_USE = 10;
 const INACTIVITY_CHECK_INTERVAL_MS = 5000;
 const INACTIVITY_THRESHOLD_MS = 10000;
 const INACTIVITY_MAX_MS = 60000;
 
 export class AudioStreamManager {
   private inputBuffers: { [uuid: string]: InputBuffer } = {};
-  private keepAliveTimers: Map<string, ReturnType<typeof setInterval>> = new Map();
-  private activeKeepAlive: Set<string> = new Set();
   private inactivityTimers: Map<string, ReturnType<typeof setInterval>> = new Map();
   private lastActivity: Map<string, number> = new Map();
   private openStreams: Set<string> = new Set();
-  private lastKeepAliveSent: Map<string, number> = new Map();
-  private keepAliveCounts: Map<string, number> = new Map();
-  private globalKeepAliveEvents: number[] = [];
+  private keepAliveController: StreamKeepAliveController;
 
-  constructor(private ttsService: TextToSpeechService) {}
+  constructor(private ttsService: TextToSpeechService) {
+    this.keepAliveController = new StreamKeepAliveController({
+      sendKeepAlive: (uuid: string) => this.ttsService.sendKeepAlive(uuid),
+      warn: logger.warn.bind(logger),
+      debug: logger.debug.bind(logger),
+    });
+  }
 
   async createStream(
     uuid: string,
@@ -96,7 +97,6 @@ export class AudioStreamManager {
     this.stopInactivityMonitor(uuid);
     this.getInputBuffer(uuid).endInput();
     this.openStreams.delete(uuid);
-    this.lastKeepAliveSent.delete(uuid);
   }
 
   getPendingText(uuid: string): string {
@@ -133,6 +133,11 @@ export class AudioStreamManager {
     return this.inputBuffers[uuid] || this.createInputBuffer(uuid);
   }
 
+  /* visible for testing */
+  hasActiveKeepAlive(uuid: string): boolean {
+    return this.keepAliveController.isActive(uuid);
+  }
+
   hasInputBuffer(uuid: string): boolean {
     return !!this.inputBuffers[uuid];
   }
@@ -145,128 +150,17 @@ export class AudioStreamManager {
       return;
     }
 
-    if (!this.activeKeepAlive.has(uuid) && this.activeKeepAlive.size > 0) {
-      const existing = Array.from(this.activeKeepAlive).join(", ");
-      logger.warn(
-        `[TTS KeepAlive] Another keep-alive is active (${existing}); stopping it before starting ${uuid}`
-      );
-      for (const activeUuid of Array.from(this.activeKeepAlive)) {
-        this.stopKeepAlive(activeUuid);
-      }
-    }
-
     if (this.hasInputBuffer(uuid) && !this.isOpen(uuid)) {
       logger.debug(
         `[TTS KeepAlive] Ignoring keep-alive start for closed stream ${uuid}`
       );
       return;
     }
-
-    if (this.activeKeepAlive.has(uuid)) {
-      return;
-    }
-
-    this.activeKeepAlive.add(uuid);
-    this.keepAliveCounts.set(uuid, 0);
-
-    const sendKeepAlive = (fromTimer: boolean) => {
-      this.sendKeepAliveWithGuards(uuid, fromTimer);
-    };
-
-    logger.debug(
-      `[TTS KeepAlive] Starting keep-alive for ${uuid}${toolName ? ` (${toolName})` : ""}`
-    );
-    sendKeepAlive(false);
-
-    const timer = setInterval(() => {
-      sendKeepAlive(true);
-    }, KEEP_ALIVE_INTERVAL_MS);
-    this.keepAliveTimers.set(uuid, timer);
+    this.keepAliveController.start(uuid, toolName);
   }
 
   stopKeepAlive(uuid: string): void {
-    const timer = this.keepAliveTimers.get(uuid);
-    if (timer) {
-      clearInterval(timer);
-      this.keepAliveTimers.delete(uuid);
-    }
-    if (this.activeKeepAlive.delete(uuid)) {
-      logger.debug(`[TTS KeepAlive] Stopped keep-alive for ${uuid}`);
-    }
-    this.lastKeepAliveSent.delete(uuid);
-    this.keepAliveCounts.delete(uuid);
-  }
-
-  private sendKeepAliveWithGuards(uuid: string, fromTimer: boolean): void {
-    if (!this.activeKeepAlive.has(uuid)) {
-      logger.warn(
-        `[TTS KeepAlive] Ignoring keep-alive send for inactive stream ${uuid}`
-      );
-      return;
-    }
-
-    const now = Date.now();
-    const lastSent = this.lastKeepAliveSent.get(uuid);
-    const minimumInterval = KEEP_ALIVE_INTERVAL_MS * 0.8;
-
-    if (lastSent && now - lastSent < minimumInterval) {
-      logger.warn(
-        `[TTS KeepAlive] Detected rapid keep-alive cadence for ${uuid} (Δ=${now - lastSent}ms); halting keep-alive.`
-      );
-      this.stopKeepAlive(uuid);
-      return;
-    }
-
-    const keepAliveCount = this.keepAliveCounts.get(uuid) ?? 0;
-    if (keepAliveCount >= MAX_KEEP_ALIVES_PER_TOOL_USE) {
-      logger.warn(
-        `[TTS KeepAlive] Keep-alive limit (${MAX_KEEP_ALIVES_PER_TOOL_USE}) reached for ${uuid}; halting keep-alive.`
-      );
-      this.stopKeepAlive(uuid);
-      return;
-    }
-
-    if (!this.shouldAllowGlobalKeepAlive(now, uuid)) {
-      return;
-    }
-
-    this.keepAliveCounts.set(uuid, keepAliveCount + 1);
-    this.lastKeepAliveSent.set(uuid, now);
-    this.globalKeepAliveEvents.push(now);
-
-    void this.ttsService.sendKeepAlive(uuid).then((success) => {
-      if (!success && fromTimer) {
-        logger.warn(
-          `[TTS KeepAlive] Upstream keep-alive call failed for ${uuid}; stopping timer.`
-        );
-        this.stopKeepAlive(uuid);
-      }
-    });
-  }
-
-  private shouldAllowGlobalKeepAlive(now: number, uuid: string): boolean {
-    this.pruneGlobalKeepAliveEvents(now);
-
-    if (this.globalKeepAliveEvents.length >= 1) {
-      const lastGlobalSend =
-        this.globalKeepAliveEvents[this.globalKeepAliveEvents.length - 1];
-      const delta = now - lastGlobalSend;
-      logger.warn(
-        `[TTS KeepAlive] Global keep-alive rate exceeded by ${uuid} (Δ=${delta}ms); halting active timers.`
-      );
-      for (const activeUuid of Array.from(this.activeKeepAlive)) {
-        this.stopKeepAlive(activeUuid);
-      }
-      return false;
-    }
-
-    return true;
-  }
-
-  private pruneGlobalKeepAliveEvents(now: number): void {
-    this.globalKeepAliveEvents = this.globalKeepAliveEvents.filter(
-      (timestamp) => now - timestamp < KEEP_ALIVE_INTERVAL_MS
-    );
+    this.keepAliveController.stop(uuid);
   }
 
   private touchActivity(uuid: string): void {
@@ -288,7 +182,7 @@ export class AudioStreamManager {
       if (
         inactiveDuration >= INACTIVITY_THRESHOLD_MS &&
         inactiveDuration <= INACTIVITY_MAX_MS &&
-        !this.activeKeepAlive.has(uuid)
+        !this.keepAliveController.isActive(uuid)
       ) {
         void this.ttsService.sendKeepAlive(uuid);
       }

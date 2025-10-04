@@ -8,11 +8,10 @@ import {
   SpeechUtterance,
 } from "../../src/tts/SpeechModel";
 import { Chatbot } from "../../src/chatbots/Chatbot";
+import { KEEP_ALIVE_INTERVAL_MS } from "../../src/tts/KeepAliveSettings";
 
 vi.mock("../../src/tts/TextToSpeechService");
 vi.useFakeTimers();
-
-const KEEP_ALIVE_INTERVAL_MS = 12000;
 
 describe(
   "AudioStreamManager",
@@ -139,8 +138,6 @@ describe(
 
       await audioStreamManager.createStream(uuid, mockVoice, "en-US");
 
-      const stopSpy = vi.spyOn(audioStreamManager as any, "stopKeepAlive");
-
       audioStreamManager.startKeepAlive(uuid);
 
       expect(sendKeepAliveMock).toHaveBeenCalledTimes(1);
@@ -154,9 +151,7 @@ describe(
       vi.advanceTimersByTime(KEEP_ALIVE_INTERVAL_MS);
 
       expect(sendKeepAliveMock).toHaveBeenCalledTimes(10);
-      expect(stopSpy).toHaveBeenCalledWith(uuid);
-
-      stopSpy.mockRestore();
+      expect(audioStreamManager.hasActiveKeepAlive(uuid)).toBe(false);
     });
 
     it("halts new keep-alive when global rate limit engaged", async () => {
@@ -170,20 +165,15 @@ describe(
       await audioStreamManager.createStream(uuid1, mockVoice, "en-US");
       await audioStreamManager.createStream(uuid2, mockVoice, "en-US");
 
-      const stopSpy = vi.spyOn(audioStreamManager as any, "stopKeepAlive");
-
       audioStreamManager.startKeepAlive(uuid1);
       expect(sendKeepAliveMock).toHaveBeenCalledTimes(1);
 
       audioStreamManager.stopKeepAlive(uuid1);
-      stopSpy.mockClear();
 
       audioStreamManager.startKeepAlive(uuid2);
 
       expect(sendKeepAliveMock).toHaveBeenCalledTimes(1);
-      expect(stopSpy).toHaveBeenCalledWith(uuid2);
-
-      stopSpy.mockRestore();
+      expect(audioStreamManager.hasActiveKeepAlive(uuid2)).toBe(false);
     });
   },
   { timeout: 10000 }
