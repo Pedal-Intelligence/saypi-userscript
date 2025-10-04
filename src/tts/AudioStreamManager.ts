@@ -8,6 +8,7 @@ const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 2
 const BUFFER_TIMEOUT_MS = 1500; // flush buffers after inactivity
 const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
 const KEEP_ALIVE_INTERVAL_MS = 12000;
+const MAX_KEEP_ALIVES_PER_TOOL_USE = 10;
 const INACTIVITY_CHECK_INTERVAL_MS = 5000;
 const INACTIVITY_THRESHOLD_MS = 10000;
 const INACTIVITY_MAX_MS = 60000;
@@ -20,6 +21,8 @@ export class AudioStreamManager {
   private lastActivity: Map<string, number> = new Map();
   private openStreams: Set<string> = new Set();
   private lastKeepAliveSent: Map<string, number> = new Map();
+  private keepAliveCounts: Map<string, number> = new Map();
+  private globalKeepAliveEvents: number[] = [];
 
   constructor(private ttsService: TextToSpeechService) {}
 
@@ -164,6 +167,7 @@ export class AudioStreamManager {
     }
 
     this.activeKeepAlive.add(uuid);
+    this.keepAliveCounts.set(uuid, 0);
 
     const sendKeepAlive = (fromTimer: boolean) => {
       this.sendKeepAliveWithGuards(uuid, fromTimer);
@@ -190,9 +194,17 @@ export class AudioStreamManager {
       logger.debug(`[TTS KeepAlive] Stopped keep-alive for ${uuid}`);
     }
     this.lastKeepAliveSent.delete(uuid);
+    this.keepAliveCounts.delete(uuid);
   }
 
   private sendKeepAliveWithGuards(uuid: string, fromTimer: boolean): void {
+    if (!this.activeKeepAlive.has(uuid)) {
+      logger.warn(
+        `[TTS KeepAlive] Ignoring keep-alive send for inactive stream ${uuid}`
+      );
+      return;
+    }
+
     const now = Date.now();
     const lastSent = this.lastKeepAliveSent.get(uuid);
     const minimumInterval = KEEP_ALIVE_INTERVAL_MS * 0.8;
@@ -205,7 +217,22 @@ export class AudioStreamManager {
       return;
     }
 
+    const keepAliveCount = this.keepAliveCounts.get(uuid) ?? 0;
+    if (keepAliveCount >= MAX_KEEP_ALIVES_PER_TOOL_USE) {
+      logger.warn(
+        `[TTS KeepAlive] Keep-alive limit (${MAX_KEEP_ALIVES_PER_TOOL_USE}) reached for ${uuid}; halting keep-alive.`
+      );
+      this.stopKeepAlive(uuid);
+      return;
+    }
+
+    if (!this.shouldAllowGlobalKeepAlive(now, uuid)) {
+      return;
+    }
+
+    this.keepAliveCounts.set(uuid, keepAliveCount + 1);
     this.lastKeepAliveSent.set(uuid, now);
+    this.globalKeepAliveEvents.push(now);
 
     void this.ttsService.sendKeepAlive(uuid).then((success) => {
       if (!success && fromTimer) {
@@ -215,6 +242,31 @@ export class AudioStreamManager {
         this.stopKeepAlive(uuid);
       }
     });
+  }
+
+  private shouldAllowGlobalKeepAlive(now: number, uuid: string): boolean {
+    this.pruneGlobalKeepAliveEvents(now);
+
+    if (this.globalKeepAliveEvents.length >= 1) {
+      const lastGlobalSend =
+        this.globalKeepAliveEvents[this.globalKeepAliveEvents.length - 1];
+      const delta = now - lastGlobalSend;
+      logger.warn(
+        `[TTS KeepAlive] Global keep-alive rate exceeded by ${uuid} (Δ=${delta}ms); halting active timers.`
+      );
+      for (const activeUuid of Array.from(this.activeKeepAlive)) {
+        this.stopKeepAlive(activeUuid);
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  private pruneGlobalKeepAliveEvents(now: number): void {
+    this.globalKeepAliveEvents = this.globalKeepAliveEvents.filter(
+      (timestamp) => now - timestamp < KEEP_ALIVE_INTERVAL_MS
+    );
   }
 
   private touchActivity(uuid: string): void {

@@ -7,6 +7,8 @@ import * as ApiClient from "../../src/ApiClient";
 import { Chatbot } from "../../src/chatbots/Chatbot";
 import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
 
+const KEEP_ALIVE_RATE_WINDOW_MS = 12000;
+
 // Mock the callApi function
 vi.mock("../../src/ApiClient", () => ({
   callApi: vi.fn(),
@@ -199,6 +201,46 @@ describe("TextToSpeechService", () => {
       text: "Restarted",
       sequenceNumber: 1,
     });
+  });
+
+  it("throttles keep-alive requests across streams", async () => {
+    const mockResponse = new Response(null, { status: 200 });
+    const callApiMock = ApiClient.callApi as any;
+    callApiMock.mockResolvedValue(mockResponse);
+    callApiMock.mockClear();
+
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+
+    const warnSpy = vi
+      .spyOn(console, "warn")
+      .mockImplementation(() => undefined);
+
+    try {
+      const first = await textToSpeechService.sendKeepAlive("uuid-1");
+      vi.advanceTimersByTime(1);
+      const second = await textToSpeechService.sendKeepAlive("uuid-2");
+      vi.advanceTimersByTime(1);
+      const third = await textToSpeechService.sendKeepAlive("uuid-3");
+
+      expect(first).toBe(true);
+      expect(second).toBe(true);
+      expect(third).toBe(false);
+      expect(callApiMock).toHaveBeenCalledTimes(2);
+
+      vi.advanceTimersByTime(KEEP_ALIVE_RATE_WINDOW_MS + 1);
+      const fourth = await textToSpeechService.sendKeepAlive("uuid-4");
+      expect(fourth).toBe(true);
+      expect(callApiMock).toHaveBeenCalledTimes(3);
+      expect(warnSpy).toHaveBeenCalledTimes(2);
+      expect(warnSpy.mock.calls[0]?.[0]).toContain(
+        "Global rate guard activated"
+      );
+      expect(warnSpy.mock.calls[1]?.[0]).toContain("Suppressed 1 keep-alives");
+    } finally {
+      warnSpy.mockRestore();
+      vi.useRealTimers();
+    }
   });
 
   it("should throw error when voice request fails", async () => {

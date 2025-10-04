@@ -12,6 +12,9 @@ import { FailedSpeechUtterance } from "./FailedSpeechUtterance";
 import { SpeechFailureReason } from "./SpeechFailureReason";
 import { buildUsageMetadata } from "../usage/UsageMetadata";
 
+const KEEP_ALIVE_RATE_WINDOW_MS = 12000;
+const MAX_KEEP_ALIVES_PER_RATE_WINDOW = 2;
+
 /**
  * Interface for TTS request data sent to the /speak/{uuid} endpoint
  */
@@ -41,6 +44,10 @@ interface TTSStreamOptions {
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
+  private keepAliveTimestamps: number[] = [];
+  private keepAliveSuppressedCount = 0;
+  private keepAliveSuppressionStart: number | null = null;
+  private keepAliveSuppressionLastLog: number | null = null;
 
   public async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
     const response = await callApi(`${this.serviceUrl}/voices/${id}`);
@@ -229,6 +236,14 @@ export class TextToSpeechService {
       return false;
     }
 
+    const now = Date.now();
+    if (this.isKeepAliveRateLimited(now)) {
+      this.recordSuppressedKeepAlive(now, uuid);
+      return false;
+    }
+    this.flushSuppressedKeepAlives(now, uuid);
+    this.keepAliveTimestamps.push(now);
+
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
     try {
       const response = await callApi(uri, {
@@ -262,5 +277,57 @@ export class TextToSpeechService {
       console.error(`[TTS KeepAlive] Network error for stream ${uuid}`, error);
       return false;
     }
+  }
+
+  private isKeepAliveRateLimited(now: number): boolean {
+    this.keepAliveTimestamps = this.keepAliveTimestamps.filter(
+      (timestamp) => now - timestamp < KEEP_ALIVE_RATE_WINDOW_MS
+    );
+
+    return this.keepAliveTimestamps.length >= MAX_KEEP_ALIVES_PER_RATE_WINDOW;
+  }
+
+  private recordSuppressedKeepAlive(now: number, uuid: string): void {
+    if (this.keepAliveSuppressionStart === null) {
+      this.keepAliveSuppressionStart = now;
+      this.keepAliveSuppressedCount = 0;
+      this.keepAliveSuppressionLastLog = null;
+    }
+
+    this.keepAliveSuppressedCount += 1;
+
+    if (this.keepAliveSuppressionLastLog === null) {
+      console.warn(
+        `[TTS KeepAlive] Global rate guard activated; suppressing keep-alives (first uuid=${uuid}).`
+      );
+      this.keepAliveSuppressionLastLog = now;
+      return;
+    }
+
+    if (now - this.keepAliveSuppressionLastLog >= KEEP_ALIVE_RATE_WINDOW_MS) {
+      const duration = now - (this.keepAliveSuppressionStart ?? now);
+      console.warn(
+        `[TTS KeepAlive] Still suppressing keep-alives; ${this.keepAliveSuppressedCount} blocked over ${duration}ms (latest uuid=${uuid}).`
+      );
+      this.keepAliveSuppressionLastLog = now;
+    }
+  }
+
+  private flushSuppressedKeepAlives(now: number, resumedUuid: string): void {
+    if (
+      this.keepAliveSuppressionStart === null ||
+      this.keepAliveSuppressedCount === 0
+    ) {
+      return;
+    }
+
+    const duration = now - this.keepAliveSuppressionStart;
+    console.warn(
+      `[TTS KeepAlive] Suppressed ${this.keepAliveSuppressedCount} keep-alives over ${duration}ms before resuming (uuid=${resumedUuid}).`
+    );
+
+    this.keepAliveSuppressedCount = 0;
+    this.keepAliveSuppressionStart = null;
+    this.keepAliveSuppressionLastLog = null;
   }
 }

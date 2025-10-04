@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
+import { describe, it, beforeEach, afterEach, expect, vi, type Mock } from "vitest";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import {} from "../../src/tts/SpeechSynthesisModule";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
@@ -11,6 +11,8 @@ import { Chatbot } from "../../src/chatbots/Chatbot";
 
 vi.mock("../../src/tts/TextToSpeechService");
 vi.useFakeTimers();
+
+const KEEP_ALIVE_INTERVAL_MS = 12000;
 
 describe(
   "AudioStreamManager",
@@ -34,6 +36,7 @@ describe(
       textToSpeechService = {
         createSpeech: vi.fn(),
         addTextToSpeechStream: vi.fn().mockResolvedValue(undefined),
+        sendKeepAlive: vi.fn().mockResolvedValue(true),
       } as unknown as TextToSpeechService;
       const mockUtterance: SpeechUtterance = {
         id: "uuid",
@@ -127,6 +130,60 @@ describe(
       await audioStreamManager.createStream(uuid, mockVoice, "en-US");
       await audioStreamManager.endStream(uuid);
       expect(audioStreamManager.getInputBuffer(uuid)?.hasEnded()).toBeTruthy();
+    });
+
+    it("stops keep-alive after reaching per-tool limit", async () => {
+      const uuid = "uuid-keep-alive-limit";
+      const sendKeepAliveMock =
+        textToSpeechService.sendKeepAlive as unknown as Mock;
+
+      await audioStreamManager.createStream(uuid, mockVoice, "en-US");
+
+      const stopSpy = vi.spyOn(audioStreamManager as any, "stopKeepAlive");
+
+      audioStreamManager.startKeepAlive(uuid);
+
+      expect(sendKeepAliveMock).toHaveBeenCalledTimes(1);
+
+      for (let i = 0; i < 9; i++) {
+        vi.advanceTimersByTime(KEEP_ALIVE_INTERVAL_MS);
+      }
+
+      expect(sendKeepAliveMock).toHaveBeenCalledTimes(10);
+
+      vi.advanceTimersByTime(KEEP_ALIVE_INTERVAL_MS);
+
+      expect(sendKeepAliveMock).toHaveBeenCalledTimes(10);
+      expect(stopSpy).toHaveBeenCalledWith(uuid);
+
+      stopSpy.mockRestore();
+    });
+
+    it("halts new keep-alive when global rate limit engaged", async () => {
+      const uuid1 = "uuid-global-1";
+      const uuid2 = "uuid-global-2";
+      const sendKeepAliveMock =
+        textToSpeechService.sendKeepAlive as unknown as Mock;
+
+      vi.setSystemTime(new Date(0));
+
+      await audioStreamManager.createStream(uuid1, mockVoice, "en-US");
+      await audioStreamManager.createStream(uuid2, mockVoice, "en-US");
+
+      const stopSpy = vi.spyOn(audioStreamManager as any, "stopKeepAlive");
+
+      audioStreamManager.startKeepAlive(uuid1);
+      expect(sendKeepAliveMock).toHaveBeenCalledTimes(1);
+
+      audioStreamManager.stopKeepAlive(uuid1);
+      stopSpy.mockClear();
+
+      audioStreamManager.startKeepAlive(uuid2);
+
+      expect(sendKeepAliveMock).toHaveBeenCalledTimes(1);
+      expect(stopSpy).toHaveBeenCalledWith(uuid2);
+
+      stopSpy.mockRestore();
     });
   },
   { timeout: 10000 }
