@@ -59,6 +59,10 @@ class Logger {
     this.debugMode = enabled;
   }
 
+  isDebugEnabled() {
+    return this.debugMode;
+  }
+
   _buildKey(level, args) {
     const first = args && args.length ? args[0] : '';
     const base = typeof first === 'string' ? first : JSON.stringify(first);

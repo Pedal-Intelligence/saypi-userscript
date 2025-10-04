@@ -249,6 +249,11 @@ export function deserializeApiRequest(
  * to bypass CSP restrictions.
  */
 export function shouldRouteViaBackground(url: string): boolean {
+  // If we're running inside the background service worker already, skip proxying
+  if (isServiceWorkerContext(globalThis)) {
+    return false;
+  }
+
   try {
     const hostname = new URL(url).hostname;
     const allowed = getAllowedSayPiHosts();
@@ -256,6 +261,30 @@ export function shouldRouteViaBackground(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+function isServiceWorkerContext(candidate: unknown): boolean {
+  if (typeof candidate !== "object" || candidate === null) {
+    return false;
+  }
+
+  const scoped = candidate as Record<PropertyKey, unknown>;
+
+  const hasClients = Object.prototype.hasOwnProperty.call(scoped, "clients");
+  const hasRegistration = Object.prototype.hasOwnProperty.call(scoped, "registration");
+
+  if (!hasClients || !hasRegistration) {
+    return false;
+  }
+
+  const constructorName = (scoped as { constructor?: { name?: string } }).constructor?.name;
+  if (constructorName) {
+    return constructorName === "ServiceWorkerGlobalScope";
+  }
+
+  // Fallback: presence of the service worker globals is a strong hint even if the
+  // constructor name is unavailable (e.g., in unit tests).
+  return true;
 }
 
 function getAllowedSayPiHosts(): Set<string> {

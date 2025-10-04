@@ -2,6 +2,7 @@ import { AssistantResponse, MessageControls } from "../../dom/MessageElements";
 import EventBus from "../../events/EventBus";
 import { AddedText, ElementTextStream, InputStreamOptions } from "../../tts/InputStream";
 import { TTSControlsModule } from "../../tts/TTSControlsModule";
+import { logger } from "../../LoggingModule";
 
 /**
  * Claude-specific utilities and classes for extracting readable text and
@@ -90,9 +91,55 @@ export class ClaudeMessageControls extends MessageControls {
 export class ClaudeTextBlockCapture extends ElementTextStream {
   protected _numAdditions: number = 0;
   protected _textProcessedSoFar: string = "";
+  private toolUseRoot: HTMLElement | null = null;
+  private toolUseActive = false;
+  private activeToolElement: HTMLElement | null = null;
+  private seenToolElements = new WeakSet<HTMLElement>();
+  private static readonly TOOL_CONTAINER_REQUIRED_CLASSES = [
+    "rounded-lg",
+    "border-0.5",
+    "flex",
+    "flex-col",
+  ];
+  private static readonly TOOL_CONTAINER_RECOMMENDED_CLASSES = [
+    "border-border-300",
+    "my-3",
+  ];
+  private static readonly TOOL_HEADER_CLASS_TOKEN = "group/row";
 
-  handleMutationEvent(_mutation: MutationRecord): void {
-    // no-op for block capture
+  handleMutationEvent(mutation: MutationRecord): void {
+    if (mutation.type === "childList") {
+      if (mutation.addedNodes.length > 0) {
+        const { toolElement, sawRelevantNode } = this.findToolContainerFromAddedNodes(
+          mutation.addedNodes as NodeListOf<Node>
+        );
+        if (toolElement) {
+          this.updateToolUseState(toolElement);
+        } else if (sawRelevantNode) {
+          this.updateToolUseState(null);
+        }
+      }
+
+      if (mutation.removedNodes.length > 0) {
+        this.handleRemovedNodes(mutation.removedNodes as NodeListOf<Node>);
+      }
+      return;
+    }
+
+    if (mutation.type === "characterData") {
+      const target = mutation.target;
+      const possibleElement =
+        target instanceof HTMLElement ? target : target.parentElement;
+      if (!possibleElement) {
+        return;
+      }
+      const container = this.findAncestorToolContainer(possibleElement);
+      if (container) {
+        this.updateToolUseState(container);
+      } else if (this.toolUseActive) {
+        this.updateToolUseState(null);
+      }
+    }
   }
 
   constructor(
@@ -104,6 +151,7 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
     const messageElement = element.parentElement;
     if (this.isClaudeTextStream(messageElement)) {
       const claudeMessage = messageElement as HTMLElement;
+      this.toolUseRoot = claudeMessage;
 
       // check if Claude is already streaming text by the time we start observing it
       const isAlreadyStreaming = this.dataIsStreaming(claudeMessage);
@@ -130,6 +178,7 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
           this.handleTextAddition(streamingText);
         }
         wasStreaming = streamingInProgress;
+        this.refreshToolUseStateFromDom();
       });
       messageObserver.observe(claudeMessage, {
         childList: false,
@@ -138,6 +187,8 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
         attributes: true, // watch data-is-streaming
       });
     }
+
+    this.refreshToolUseStateFromDom();
   }
 
   getNestedText(node: Node): string {
@@ -165,6 +216,208 @@ export class ClaudeTextBlockCapture extends ElementTextStream {
     if (isFinal) {
       this.subject.next(new AddedText(allText));
     }
+  }
+
+  private updateToolUseState(nextElement: HTMLElement | null): void {
+    if (nextElement) {
+      if (this.toolUseActive && this.activeToolElement === nextElement) {
+        return;
+      }
+
+      if (this.seenToolElements.has(nextElement)) {
+        return;
+      }
+
+      this.toolUseActive = true;
+      this.activeToolElement = nextElement;
+      this.seenToolElements.add(nextElement);
+      const label = this.extractToolLabel(nextElement);
+      logger.debug("Detected Claude tool use start", {
+        label: label ?? "(unknown tool)",
+        element: nextElement,
+      });
+      this.toolUseSubject.next({
+        state: "start",
+        label,
+        element: nextElement,
+      });
+      return;
+    }
+
+    if (!this.toolUseActive) {
+      return;
+    }
+
+    const activeLabel = this.activeToolElement
+      ? this.extractToolLabel(this.activeToolElement)
+      : undefined;
+    this.toolUseActive = false;
+    this.activeToolElement = null;
+    logger.debug("Detected Claude tool use end", {
+      label: activeLabel ?? "(unknown tool)",
+    });
+    this.toolUseSubject.next({ state: "stop" });
+  }
+
+  private handleRemovedNodes(removed: NodeListOf<Node>): void {
+    if (!this.toolUseActive || !this.activeToolElement) {
+      return;
+    }
+    for (const node of Array.from(removed)) {
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        continue;
+      }
+      const element = node as HTMLElement;
+      if (element === this.activeToolElement || element.contains(this.activeToolElement)) {
+        this.updateToolUseState(null);
+        return;
+      }
+    }
+  }
+
+  private findToolContainerFromAddedNodes(nodes: NodeListOf<Node>): {
+    toolElement: HTMLElement | null;
+    sawRelevantNode: boolean;
+  } {
+    const observedRoot = this.getObservedRoot();
+    const addedNodes = Array.from(nodes);
+    let sawRelevantNode = false;
+
+    for (let i = addedNodes.length - 1; i >= 0; i--) {
+      const node = addedNodes[i];
+      const element = this.getElementFromNode(node);
+      if (!element) {
+        continue;
+      }
+
+      if (!observedRoot.contains(element)) {
+        continue;
+      }
+
+      sawRelevantNode = true;
+      const toolContainer = this.findAncestorToolContainer(element);
+      if (toolContainer) {
+        return { toolElement: toolContainer, sawRelevantNode: true };
+      }
+    }
+
+    return { toolElement: null, sawRelevantNode };
+  }
+
+  private getElementFromNode(node: Node): HTMLElement | null {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      return node as HTMLElement;
+    }
+    if (node.nodeType === Node.TEXT_NODE) {
+      return (node as Text).parentElement;
+    }
+    return null;
+  }
+
+  private findAncestorToolContainer(start: HTMLElement | null): HTMLElement | null {
+    const observedRoot = this.getObservedRoot();
+    let current: HTMLElement | null = start;
+
+    while (current && observedRoot.contains(current)) {
+      if (this.isToolUseContainer(current)) {
+        return current;
+      }
+      current = current.parentElement;
+    }
+
+    return null;
+  }
+
+  private getObservedRoot(): HTMLElement {
+    return this.toolUseRoot ?? this.element;
+  }
+
+  private refreshToolUseStateFromDom(): void {
+    const observedRoot = this.getObservedRoot();
+    const candidates = Array.from(observedRoot.querySelectorAll("div"));
+    let lastTool: HTMLElement | null = null;
+
+    for (const candidate of candidates) {
+      if (!(candidate instanceof HTMLElement)) {
+        continue;
+      }
+      if (!this.isToolUseContainer(candidate)) {
+        continue;
+      }
+      lastTool = candidate;
+    }
+
+    if (lastTool) {
+      this.updateToolUseState(lastTool);
+    } else if (this.toolUseActive) {
+      this.updateToolUseState(null);
+    }
+  }
+
+  private isToolUseContainer(element: HTMLElement): boolean {
+    const classList = element.classList;
+    const hasRequiredClasses = ClaudeTextBlockCapture.TOOL_CONTAINER_REQUIRED_CLASSES.every((cls) =>
+      classList.contains(cls)
+    );
+
+    if (!hasRequiredClasses) {
+      return false;
+    }
+
+    const hasRecommendedClasses = ClaudeTextBlockCapture.TOOL_CONTAINER_RECOMMENDED_CLASSES.every((cls) =>
+      classList.contains(cls)
+    );
+
+    if (!hasRecommendedClasses) {
+      return false;
+    }
+
+    const headerButton = this.findHeaderButton(element);
+
+    if (!headerButton) {
+      return false;
+    }
+
+    const headerClass = headerButton.getAttribute("class") ?? "";
+    if (!headerClass.includes(ClaudeTextBlockCapture.TOOL_HEADER_CLASS_TOKEN)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private extractToolLabel(element: HTMLElement): string | undefined {
+    const ariaLabel = element.getAttribute("aria-label");
+    if (ariaLabel && ariaLabel.trim().length > 0) {
+      return ariaLabel.trim();
+    }
+
+    const headerButton = this.findHeaderButton(element);
+
+    const textSource = headerButton ?? element;
+    const textContent = textSource.textContent?.trim();
+    if (!textContent) {
+      return undefined;
+    }
+
+    const normalized = textContent.replace(/\s+/g, " ").trim();
+    if (normalized.length === 0) {
+      return undefined;
+    }
+
+    return normalized.length > 120 ? `${normalized.slice(0, 117)}...` : normalized;
+  }
+
+  private findHeaderButton(element: HTMLElement): HTMLElement | null {
+    for (const child of Array.from(element.children)) {
+      if (!(child instanceof HTMLElement)) {
+        continue;
+      }
+      if (child.tagName === "BUTTON") {
+        return child;
+      }
+    }
+    return null;
   }
 }
 

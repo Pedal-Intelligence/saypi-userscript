@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saypi-userscript-tooling"
+version = "0.0.0"
+description = "Auxiliary Python tooling for the Say, Pi browser extension build pipeline"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "onnxruntime==1.17.3",
+  "onnx==1.19.0",
+  "numpy<2.0"
+]
+
+[tool.setuptools]
+packages = []

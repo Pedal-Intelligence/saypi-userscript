@@ -62,3 +62,7 @@ doc/editors/chatgpt/*.html
 
 # Test files
 test-csp-bypass.html
+
+# Python virtual environments
+.venv/
+*.egg-info/

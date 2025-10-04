@@ -1,7 +1,13 @@
 import { logger } from "../LoggingModule.js";
 import { incrementUsage, decrementUsage, registerMessageHandler } from "./media_coordinator";
 
-logger.log("[SayPi Audio Handler] Script loaded.");
+const audioHandlerGlobal = window as any;
+if (!audioHandlerGlobal.__saypiAudioHandlerLoaded) {
+  logger.log("[SayPi Audio Handler] Script loaded.");
+  audioHandlerGlobal.__saypiAudioHandlerLoaded = true;
+} else {
+  logger.debug("[SayPi Audio Handler] Script already loaded; skipping duplicate initialization logs.");
+}
 
 let audioElement: HTMLAudioElement | null = null;
 let currentAudioTabId: number | null = null;
@@ -377,54 +383,59 @@ function detectAllAudioSources() {
 }
 
 // Register audio message handlers with the coordinator
-registerMessageHandler("AUDIO_LOAD_REQUEST", (message, sourceTabId) => {
-  if (message.url) {
-    logger.debug(`[SayPi Audio Handler] Processing AUDIO_LOAD_REQUEST with URL: ${message.url}`);
-    const autoPlay = message.autoPlay !== false; // Default to true if not specified
-    return loadAudio(message.url, sourceTabId, autoPlay);
-  } else {
-    logger.warn(`[SayPi Audio Handler] Missing URL in AUDIO_LOAD_REQUEST`);
-    return { success: false, error: "No URL provided for loading audio" };
-  }
-});
+if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
+  registerMessageHandler("AUDIO_LOAD_REQUEST", (message, sourceTabId) => {
+    if (message.url) {
+      logger.debug(`[SayPi Audio Handler] Processing AUDIO_LOAD_REQUEST with URL: ${message.url}`);
+      const autoPlay = message.autoPlay !== false; // Default to true if not specified
+      return loadAudio(message.url, sourceTabId, autoPlay);
+    } else {
+      logger.warn(`[SayPi Audio Handler] Missing URL in AUDIO_LOAD_REQUEST`);
+      return { success: false, error: "No URL provided for loading audio" };
+    }
+  });
 
-registerMessageHandler("AUDIO_PLAY_REQUEST", (message, sourceTabId) => {
-  if (message.url) {
-    // Legacy support - if URL is provided, call loadAudio
-    logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST with URL: ${message.url}`);
-    return loadAudio(message.url, sourceTabId, true);
-  } else {
-    // Standard usage - no URL means play current audio
-    logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST (resume playback)`);
-    return playAudio();
-  }
-});
+  registerMessageHandler("AUDIO_PLAY_REQUEST", (message, sourceTabId) => {
+    if (message.url) {
+      // Legacy support - if URL is provided, call loadAudio
+      logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST with URL: ${message.url}`);
+      return loadAudio(message.url, sourceTabId, true);
+    } else {
+      // Standard usage - no URL means play current audio
+      logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST (resume playback)`);
+      return playAudio();
+    }
+  });
 
-registerMessageHandler("AUDIO_PAUSE_REQUEST", (message, sourceTabId) => {
-  const result = pauseAudio();
-  if (result.success) {
-    logger.debug(`[SayPi Audio Handler] AUDIO_PAUSE_REQUEST successful at ${new Date().toISOString()}`);
-  } else {
-    logger.error(`[SayPi Audio Handler] AUDIO_PAUSE_REQUEST failed: ${result.error}`);
-  }
-  return result;
-});
+  registerMessageHandler("AUDIO_PAUSE_REQUEST", (message, sourceTabId) => {
+    const result = pauseAudio();
+    if (result.success) {
+      logger.debug(`[SayPi Audio Handler] AUDIO_PAUSE_REQUEST successful at ${new Date().toISOString()}`);
+    } else {
+      logger.error(`[SayPi Audio Handler] AUDIO_PAUSE_REQUEST failed: ${result.error}`);
+    }
+    return result;
+  });
 
-registerMessageHandler("AUDIO_RESUME_REQUEST", (message, sourceTabId) => {
-  const result = playAudio();
-  if (result.success) {
-    logger.debug(`[SayPi Audio Handler] AUDIO_RESUME_REQUEST successful at ${new Date().toISOString()}`);
-  } else {
-    logger.error(`[SayPi Audio Handler] AUDIO_RESUME_REQUEST failed: ${result.error}`);
-  }
-  return result;
-});
+  registerMessageHandler("AUDIO_RESUME_REQUEST", (message, sourceTabId) => {
+    const result = playAudio();
+    if (result.success) {
+      logger.debug(`[SayPi Audio Handler] AUDIO_RESUME_REQUEST successful at ${new Date().toISOString()}`);
+    } else {
+      logger.error(`[SayPi Audio Handler] AUDIO_RESUME_REQUEST failed: ${result.error}`);
+    }
+    return result;
+  });
 
-registerMessageHandler("AUDIO_STOP_REQUEST", (message, sourceTabId) => {
-  return stopAudio();
-});
+  registerMessageHandler("AUDIO_STOP_REQUEST", (message, sourceTabId) => {
+    return stopAudio();
+  });
 
-// Initialize audio on load
-initializeAudio();
+  // Initialize audio on load
+  initializeAudio();
 
-logger.log("[SayPi Audio Handler] Message handlers registered."); 
+  logger.log("[SayPi Audio Handler] Message handlers registered.");
+  audioHandlerGlobal.__saypiAudioHandlerRegistered = true;
+} else {
+  logger.debug("[SayPi Audio Handler] Message handlers already registered; skipping duplicate setup.");
+}

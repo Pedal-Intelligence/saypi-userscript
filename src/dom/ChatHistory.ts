@@ -2,6 +2,7 @@ import {
   ElementTextStream,
   LateChangeEvent,
   TextContent,
+  ToolUseEvent,
 } from "../tts/InputStream";
 import {
   SpeechSynthesisModule,
@@ -26,6 +27,7 @@ import { AssistantWritingEvent } from "./MessageEvents";
 import { Chatbot } from "../chatbots/Chatbot";
 import { findRootAncestor } from "./DOMModule";
 import { MessageState, MessageHistoryModule } from "../tts/MessageHistoryModule";
+import { Subscription } from "rxjs";
 interface ResourceReleasable {
   teardown(): void;
 }
@@ -602,10 +604,15 @@ class ChatHistoryNewMessageObserver
 
   public disconnect(): void {
     super.disconnect();
+    this.toolUseSubscription?.unsubscribe();
+    this.toolUseSubscription = null;
+    this.clearToolUseIndicator();
     this.teardown();
   }
 
   private textStream: ElementTextStream | null = null;
+  private toolUseSubscription: Subscription | null = null;
+  private activeToolIndicatorElement: HTMLElement | null = null;
 
   observeChatMessageElement(
     message: AssistantResponse,
@@ -619,6 +626,9 @@ class ChatHistoryNewMessageObserver
     if (this.textStream) {
       this.textStream.disconnect();
     }
+    this.toolUseSubscription?.unsubscribe();
+    this.toolUseSubscription = null;
+    this.clearToolUseIndicator();
 
     // Start observing the new element
     this.textStream = message.createTextStream(messageContent);
@@ -626,6 +636,24 @@ class ChatHistoryNewMessageObserver
     let firstChunkTime: number | null = null;
     let lastChunkTime: number | null = null;
     let fullText = ""; // Variable to accumulate the text
+
+    this.toolUseSubscription = this.textStream
+      .getToolUseStream()
+      .subscribe((toolEvent: ToolUseEvent) => {
+        const payload = {
+          utterance,
+          toolName: toolEvent.label,
+          element: toolEvent.element,
+        };
+
+        if (toolEvent.state === "start") {
+          this.showToolUseIndicator(toolEvent.element ?? null);
+          EventBus.emit("saypi:tts:tool-use:start", payload);
+        } else {
+          EventBus.emit("saypi:tts:tool-use:end", payload);
+          this.clearToolUseIndicator();
+        }
+      });
 
     this.textStream.getStream().subscribe(
       (text: TextContent) => {
@@ -686,6 +714,8 @@ class ChatHistoryNewMessageObserver
           utterance: utterance,
         };
         EventBus.emit("saypi:tts:text:completed", textCompletedEvent);
+        EventBus.emit("saypi:tts:tool-use:end", { utterance });
+        this.clearToolUseIndicator();
         if (onEnd) {
           onEnd(fullText); // Pass the full text to the onEnd callback
         }
@@ -704,6 +734,38 @@ class ChatHistoryNewMessageObserver
         onError(lateChange);
       }
     });
+  }
+
+  private showToolUseIndicator(element: Element | null): void {
+    if (!(element instanceof HTMLElement)) {
+      this.clearToolUseIndicator();
+      return;
+    }
+
+    if (typeof logger.isDebugEnabled === "function" && !logger.isDebugEnabled()) {
+      this.clearToolUseIndicator();
+      return;
+    }
+
+    if (
+      this.activeToolIndicatorElement &&
+      this.activeToolIndicatorElement !== element
+    ) {
+      this.clearToolUseIndicator();
+    }
+
+    this.activeToolIndicatorElement = element;
+    element.classList.add("saypi-tool-in-use");
+    element.setAttribute("data-saypi-tool-active", "true");
+  }
+
+  private clearToolUseIndicator(): void {
+    if (!this.activeToolIndicatorElement) {
+      return;
+    }
+    this.activeToolIndicatorElement.classList.remove("saypi-tool-in-use");
+    this.activeToolIndicatorElement.removeAttribute("data-saypi-tool-active");
+    this.activeToolIndicatorElement = null;
   }
 
   async streamState(message: AssistantResponse): Promise<MessageState | null> {

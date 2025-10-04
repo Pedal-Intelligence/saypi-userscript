@@ -21,6 +21,7 @@ We are not accepting external contributions to the codebase at this time. Please
 - Node.js (compatible with v22 LTS or later)
 - npm v10 or later
 - bash shell (Linux/Mac) or Git Bash (Windows)
+- Python 3.11.12 (same version used by [`saypi-api`](../saypi-api/))
 - `jq` - Required for building Firefox extensions
   - Ubuntu/Debian: `sudo apt-get install jq`
   - macOS: `brew install jq`
@@ -73,6 +74,22 @@ npm run switch -- -h
 ```
 
 The toggle feature automatically switches to whichever environment you're not currently using, making it incredibly fast to switch back and forth. This eliminates the need to manually edit `.env` files when switching between development environments.
+
+### Python tooling for ONNX pruning
+
+We prune the bundled Silero ONNX models during `npm run build` via a lightweight Python helper built on `onnxruntime` and `onnx`. Set up a local Python environment once per machine:
+
+```bash
+# Optional but recommended: install Python 3.11.12 via pyenv (matches saypi-api)
+pyenv install 3.11.12
+
+# Create/refresh the local virtual environment and install tooling deps
+npm run setup:python
+```
+
+The helper script creates `.venv/` in the project root (ignored by Git) and installs the dependencies listed in `pyproject.toml`—currently `onnxruntime==1.17.3`, `onnx==1.19.0`, and `numpy<2`. Activate it manually with `source .venv/bin/activate` if you need to run the optimizer yourself.
+
+`npm run copy-onnx` (and therefore the default build pipeline) automatically invokes `npm run prune-onnx`. If the Python toolchain is missing, the command exits with an actionable error—re-run `npm run setup:python` after installing Python 3.11 to resolve it.
 
 ## For Mozilla Reviewers
 

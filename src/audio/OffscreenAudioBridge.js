@@ -21,9 +21,12 @@ export default class OffscreenAudioBridge {
     this.offscreenSupported = null; // Will be set after checking via background
     this.deferredEvents = []; // Store events that arrive before initialization
     this.activeMessageIds = new Set(); // Track in-flight messages
+    this.bridgeReadyNotified = false;
     
     // Set up message listener
     chrome.runtime.onMessage.addListener(this._handleMessageFromBackground.bind(this));
+
+    queueMicrotask(() => this._notifyBackgroundReady());
     
     OffscreenAudioBridge.instance = this;
   }
@@ -104,6 +107,31 @@ export default class OffscreenAudioBridge {
     // Process any deferred events
     this._processDeferredEvents();
     return true;
+  }
+
+  _notifyBackgroundReady() {
+    if (this.bridgeReadyNotified) {
+      return;
+    }
+    try {
+      chrome.runtime.sendMessage({ type: "AUDIO_BRIDGE_READY" }, () => {
+        const lastError = chrome.runtime.lastError;
+        if (lastError) {
+          logger.warn("[OffscreenAudioBridge] Failed to notify background of readiness", lastError);
+          // Retry after a short delay to handle transient service worker startup delays
+          setTimeout(() => {
+            this.bridgeReadyNotified = false;
+            this._notifyBackgroundReady();
+          }, 250);
+          return;
+        }
+
+        this.bridgeReadyNotified = true;
+        logger.debug("[OffscreenAudioBridge] Notified background that audio bridge is ready");
+      });
+    } catch (error) {
+      logger.warn("[OffscreenAudioBridge] Failed to notify background of readiness", error);
+    }
   }
 
   /**

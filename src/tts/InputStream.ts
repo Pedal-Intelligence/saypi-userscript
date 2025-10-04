@@ -53,9 +53,16 @@ export type Completion = {
   time: number;
 };
 
+export interface ToolUseEvent {
+  state: "start" | "stop";
+  label?: string;
+  element?: Element | null;
+}
+
 export abstract class ElementTextStream {
   protected subject: Subject<TextContent>;
   private lateChangeSubject = new Subject<LateChangeEvent>();
+  protected toolUseSubject: ReplaySubject<ToolUseEvent> = new ReplaySubject(1);
   protected observer!: MutationObserver;
   protected timeout: ReturnType<typeof setTimeout> | undefined = undefined;
   protected emittedValues: TextContent[] = [];
@@ -211,12 +218,17 @@ export abstract class ElementTextStream {
     return this.lateChangeSubject.asObservable();
   }
 
+  getToolUseStream(): Observable<ToolUseEvent> {
+    return this.toolUseSubject.asObservable();
+  }
+
   disconnect(): void {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
     this.observer.disconnect();
     this.lateChangeSubject.complete();
+    this.toolUseSubject.complete();
   }
 
   // For testing purposes

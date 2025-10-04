@@ -51,6 +51,197 @@ const jwtManager = getJwtManagerSync();
 // Track dictation state across tabs
 const dictationStates = new Map<number, boolean>(); // tabId -> isDictationActive
 
+interface PendingAudioDispatch {
+  type: string;
+  tabId: number;
+  url?: string;
+  dispatchedAt: number;
+}
+
+interface QueuedAudioMessage {
+  message: any;
+  context: ReturnType<typeof buildAudioContextForLog>;
+  key?: string;
+}
+
+interface AudioBridgeState {
+  ready: boolean;
+  queue: QueuedAudioMessage[];
+  frameId?: number;
+}
+
+const pendingAudioDispatches: Map<string, PendingAudioDispatch> = new Map();
+const AUDIO_BRIDGE_QUEUE_LIMIT = 25;
+const audioBridgeStates: Map<number, AudioBridgeState> = new Map();
+
+function buildAudioContextForLog(message: any, fallback?: PendingAudioDispatch) {
+  const payload = message?.payload || {};
+  const requestId = message?.requestMessageId || message?.messageId;
+  const meta = fallback || (requestId ? pendingAudioDispatches.get(requestId) : undefined);
+  return {
+    requestId,
+    requestType: meta?.type || message?.type,
+    targetTabId: message?.targetTabId,
+    url: meta?.url || message?.url,
+    dispatchedAt: meta?.dispatchedAt,
+    latencyMs: meta ? Date.now() - meta.dispatchedAt : undefined,
+    payloadSuccess: payload.success,
+    payloadError: payload.error
+  };
+}
+
+function getAudioBridgeState(tabId: number): AudioBridgeState {
+  let state = audioBridgeStates.get(tabId);
+  if (!state) {
+    state = { ready: false, queue: [] };
+    audioBridgeStates.set(tabId, state);
+  }
+  return state;
+}
+
+function queueAudioMessage(
+  tabId: number,
+  message: any,
+  context: ReturnType<typeof buildAudioContextForLog>,
+  { front = false }: { front?: boolean } = {}
+) {
+  const state = getAudioBridgeState(tabId);
+  const key = message?.requestMessageId || message?.messageId;
+
+  if (key) {
+    const existingIndex = state.queue.findIndex(entry => entry.key === key);
+    if (existingIndex !== -1) {
+      state.queue.splice(existingIndex, 1);
+    }
+  }
+
+  const entry: QueuedAudioMessage = { message, context, key };
+
+  if (front) {
+    state.queue.unshift(entry);
+  } else {
+    state.queue.push(entry);
+  }
+
+  if (state.queue.length > AUDIO_BRIDGE_QUEUE_LIMIT) {
+    const dropped = state.queue.pop();
+    if (dropped) {
+      logger.warn(`[Background] Dropping oldest queued audio message for tab ${tabId} after exceeding queue limit`, {
+        requestType: dropped.message?.type,
+        targetTabId: tabId
+      });
+    }
+  }
+
+  logger.debug(`[Background] Queued audio message ${message?.type} for tab ${tabId} awaiting bridge readiness`, {
+    ...context,
+    queuedCount: state.queue.length
+  });
+}
+
+function flushQueuedAudioMessages(tabId: number) {
+  const state = audioBridgeStates.get(tabId);
+  if (!state || state.queue.length === 0) {
+    return;
+  }
+
+  const queued = [...state.queue];
+  state.queue = [];
+
+  logger.debug(`[Background] Flushing ${queued.length} queued audio message(s) for tab ${tabId}`);
+  for (const entry of queued) {
+    sendAudioMessageToContent(tabId, entry.message, entry.context);
+  }
+}
+
+function deliverAudioMessageToContent(
+  tabId: number,
+  message: any,
+  audioContext: ReturnType<typeof buildAudioContextForLog>
+) {
+  const state = getAudioBridgeState(tabId);
+  if (!state.ready) {
+    queueAudioMessage(tabId, message, audioContext);
+    return;
+  }
+
+  sendAudioMessageToContent(tabId, message, audioContext);
+}
+
+function markAudioBridgeReady(tabId: number, frameId?: number) {
+  const state = getAudioBridgeState(tabId);
+  const wasReady = state.ready;
+  state.ready = true;
+
+  if (typeof frameId === 'number') {
+    state.frameId = frameId;
+  }
+
+  logger.debug(`[Background] Audio bridge reported ready for tab ${tabId}`, {
+    queuedMessages: state.queue.length,
+    wasReady,
+    frameId: state.frameId,
+    reportedFrameId: frameId
+  });
+
+  flushQueuedAudioMessages(tabId);
+}
+
+function sendAudioMessageToContent(
+  tabId: number,
+  message: any,
+  audioContext: ReturnType<typeof buildAudioContextForLog>
+) {
+  try {
+    const state = getAudioBridgeState(tabId);
+    logger.debug('[Background] Dispatching audio message to content script', {
+      tabId,
+      frameId: state.frameId,
+      requestType: message?.type,
+      requestId: message?.requestMessageId || message?.messageId,
+      queuedBeforeSend: state.queue.length,
+    });
+    const callback = () => {
+      const lastError = chrome.runtime.lastError;
+      if (lastError) {
+        const errMsg = lastError.message || "Unknown runtime error";
+        const isNoResponse = errMsg.includes("The message port closed before a response was received");
+        const isBridgeMissing = !isNoResponse && (
+          errMsg.includes("Receiving end does not exist") ||
+          errMsg.includes("No tab with id") ||
+          errMsg.includes("No frame with id")
+        );
+        if (isBridgeMissing) {
+          state.ready = false;
+          logger.warn(`[Background] Audio bridge unavailable; queuing message ${message.type} for tab ${tabId}`, {
+            ...audioContext,
+            error: errMsg
+          });
+          queueAudioMessage(tabId, message, audioContext, { front: true });
+        } else if (isNoResponse) {
+          logger.debug(`[Background] Audio message ${message.type} delivered without explicit response`, {
+            ...audioContext,
+            error: errMsg
+          });
+        } else {
+          logger.error(`[Background] Error forwarding audio message: ${errMsg}`, audioContext);
+        }
+      } else {
+        logger.debug(`[Background] Successfully forwarded audio message to tab ${tabId}`, audioContext);
+      }
+    };
+
+    if (state.frameId !== undefined) {
+      chrome.tabs.sendMessage(tabId, message, { frameId: state.frameId }, callback);
+    } else {
+      chrome.tabs.sendMessage(tabId, message, callback);
+    }
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`[Background] Exception forwarding audio message: ${errorMessage}`, audioContext);
+  }
+}
+
 // Function to update context menu title based on dictation state
 function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
   dictationStates.set(tabId, isDictationActive);
@@ -578,6 +769,24 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   const sanitizedMessage = sanitizeMessageForLogs(message);
   logger.debug(`[Background] onMessage received ${sanitizedMessage.type} from ${sender.tab?.title || sender.url}`);
 
+  if (message?.type === "AUDIO_BRIDGE_READY") {
+    const tabId = sender?.tab?.id ?? message?.tabId ?? message?.sourceTabId;
+    if (typeof tabId === "number") {
+      const frameId = typeof sender?.frameId === 'number' ? sender.frameId : undefined;
+      logger.debug('[Background] AUDIO_BRIDGE_READY handshake context', {
+        tabId,
+        frameId,
+        messageFrameId: message?.frameId,
+        senderFrameId: typeof sender?.frameId === 'number' ? sender.frameId : undefined,
+      });
+      markAudioBridgeReady(tabId, frameId);
+      sendResponse?.({ status: "bridge_acknowledged" });
+    } else {
+      logger.warn('[Background] Received AUDIO_BRIDGE_READY without tab context');
+    }
+    return false;
+  }
+
   // --- START: Microphone Permission Handling ---
   if (message.type === 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION' && message.requestId) {
     // Ensure the sender is from the extension itself (e.g., AudioInputMachine)
@@ -591,7 +800,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
       logger.warn("[Background] CHECK_AND_REQUEST_MICROPHONE_PERMISSION from unexpected sender:", sender);
       sendResponse({ status: 'error_before_prompt', error: 'Unauthorized sender for permission check' });
     }
-    return true; // Indicate that the response will be sent asynchronously.
+    return false;
   }
   // --- END: Microphone Permission Handling ---
 
@@ -638,7 +847,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
       logger.error("[Background] Error checking offscreen support:", error);
       sendResponse({ supported: false, error: error.message });
     }
-    return true; // Indicate that we're handling the response asynchronously
+    return false;
   }
   // --- END: Offscreen API Support Check ---
 
@@ -654,23 +863,53 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
     // --- START: Direct Audio Message Handling ---
     // If this is a direct message from the content script (not from offscreen)
     if (sender.tab && message.source === "content-script") {
-      logger.debug(`[Background] Forwarding direct audio message to offscreen document: ${message.type}`);
-      
-      // Forward the message to the offscreen document
-      offscreenManager.sendMessageToOffscreenDocument({
+      const messageId = typeof message.messageId === 'string'
+        ? message.messageId
+        : `audio-${sender.tab.id}-${Date.now()}`;
+
+      const messageForOffscreen = {
         ...message,
+        messageId,
         sourceTabId: sender.tab.id,  // Ensure sourceTabId is explicit
         tabId: sender.tab.id         // Also set tabId for compatibility
-      }, sender.tab.id);
+      };
+
+      logger.debug(`[Background] Forwarding direct audio message to offscreen document: ${messageForOffscreen.type}`, {
+        messageId,
+        tabId: sender.tab.id,
+        url: messageForOffscreen.url
+      });
+
+      pendingAudioDispatches.set(messageId, {
+        type: messageForOffscreen.type,
+        tabId: sender.tab.id,
+        url: messageForOffscreen.url,
+        dispatchedAt: Date.now()
+      });
+
+      offscreenManager
+        .sendMessageToOffscreenDocument(messageForOffscreen, sender.tab.id)
+        .catch((error: unknown) => {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          const context = buildAudioContextForLog({
+            messageId,
+            type: messageForOffscreen.type,
+            url: messageForOffscreen.url,
+            targetTabId: sender.tab?.id
+          });
+          pendingAudioDispatches.delete(messageId);
+          offscreenManager.resolveAudioDispatch(messageId);
+          logger.error(`[Background] Failed to forward audio message to offscreen: ${errorMessage}`, context);
+        });
       
       // Acknowledge receipt of the message
       sendResponse({ 
         status: "audio_message_forwarded", 
-        messageId: message.messageId,
+        messageId,
         timestamp: Date.now()
       });
       
-      return true; // We've handled this message
+      return false;
     }
     // --- END: Direct Audio Message Handling ---
   }
@@ -722,19 +961,27 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
       // Route audio messages via chrome.tabs.sendMessage to OffscreenAudioBridge
       if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
         logger.debug(`[Background] Routing audio message via tabs.sendMessage: ${message.type}`);
-        try {
-          chrome.tabs.sendMessage(message.targetTabId, message, (response: any) => {
-            const lastError = chrome.runtime.lastError;
-            if (lastError) {
-              logger.error(`[Background] Error forwarding audio message: ${lastError.message}`);
-            } else {
-              logger.debug(`[Background] Successfully forwarded audio message to tab ${message.targetTabId}`);
-            }
-          });
-        } catch (error: unknown) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          logger.error(`[Background] Exception forwarding audio message: ${errorMessage}`);
+
+        let dispatchMeta: PendingAudioDispatch | undefined;
+        if (typeof message.requestMessageId === 'string') {
+          dispatchMeta = pendingAudioDispatches.get(message.requestMessageId);
+          if (dispatchMeta) {
+            pendingAudioDispatches.delete(message.requestMessageId);
+          }
+          const resolved = offscreenManager.resolveAudioDispatch(message.requestMessageId);
+          if (!dispatchMeta && resolved) {
+            dispatchMeta = resolved as PendingAudioDispatch;
+          }
         }
+
+        const audioContext = buildAudioContextForLog(message, dispatchMeta);
+        if (message.payload?.error) {
+          logger.warn(`[Background] Offscreen audio response indicates failure: ${message.type}`, audioContext);
+        } else if (message.type.startsWith("OFFSCREEN_AUDIO_")) {
+          logger.info(`[Background] Offscreen audio response received: ${message.type}`, audioContext);
+        }
+
+        deliverAudioMessageToContent(message.targetTabId, message, audioContext);
         return; // Stop processing - message handled via tabs.sendMessage
       }
       
@@ -800,7 +1047,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
         sendResponse({ claims: null });
       }
     })();
-    return true; // Indicate we'll respond asynchronously
+    return true; // Async sendResponse executes inside IIFE
   } else if (message.type === 'CHECK_FEATURE_ENTITLEMENT') {
     // Check if user is entitled to a specific feature
     (async () => {
@@ -812,7 +1059,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
         sendResponse({ hasEntitlement: false });
       }
     })();
-    return true; // Indicate we'll respond asynchronously
+    return true; // Async sendResponse executes inside IIFE
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
     // Handle login redirect request - async handler
     (async () => {
@@ -870,7 +1117,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
         sendResponse({ authenticated: false });
       }
     })();
-    return true; // indicates we will send a response asynchronously
+    return true; // Async sendResponse executes inside IIFE
   } else if (message.type === 'SIGN_OUT') {
     // Handle sign out request - make this block async
     (async () => {
@@ -894,7 +1141,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
         sendResponse({ success: false });
       }
     })();
-    return true; // Now this handler is async, so return true
+    return true; // Async sendResponse executes inside IIFE
   } else if (message.type === 'GET_AUTH_STATUS') {
     // New handler for direct auth status requests from content scripts
     try {
@@ -920,22 +1167,15 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   // --- START: API Request Proxy Handler ---
   if (message.type === 'API_REQUEST') {
     handleApiRequest(message, sendResponse);
-    return true; // Async response
+    return true; // Async sendResponse executed in handleApiRequest
   }
   // --- END: API Request Proxy Handler ---
+
   
   // Return true if we're handling the response asynchronously for other message types
   // This ensures that the sendResponse function remains valid for async operations
   // like REDIRECT_TO_LOGIN, GET_JWT_CLAIMS, etc.
-  const asyncMessageTypes: string[] = [
-    'GET_JWT_CLAIMS',
-    'CHECK_FEATURE_ENTITLEMENT',
-    'REDIRECT_TO_LOGIN',
-    'API_REQUEST',
-  ];
-  if (asyncMessageTypes.indexOf(message.type) !== -1) {
-    return true;
-  }
+  // Default: do not keep the channel open unless a handler above already returned true
   
   // If no specific handler matched or it was synchronous and didn't return true,
   // we don't need to keep the message channel open.
@@ -949,6 +1189,9 @@ chrome.tabs.onRemoved.addListener((tabId: any) => {
   if (dictationStates.has(tabId)) {
     dictationStates.delete(tabId);
     logger.debug(`[Background] Cleaned up dictation state for closed tab ${tabId}`);
+  }
+  if (audioBridgeStates.delete(tabId)) {
+    logger.debug(`[Background] Cleared audio bridge state for closed tab ${tabId}`);
   }
 });
 

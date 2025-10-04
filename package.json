@@ -8,6 +8,9 @@
   },
   "scripts": {
     "copy-onnx": "node copy-onnx-files.js",
+    "postcopy-onnx": "npm run prune-onnx",
+    "prune-onnx": "node scripts/prune-onnx.js",
+    "setup:python": "bash scripts/setup-python-env.sh",
     "validate:env": "node scripts/validate-env.js",
     "switch": "node scripts/switch-env.js",
     "predev": "node scripts/validate-env.js --file .env --env development && node scripts/update-manifest.js",
