@@ -81,6 +81,39 @@ export function likelySupportsOffscreen(): boolean {
   return true;
 }
 
+/**
+ * Check if current browser/chatbot combination has known TTS compatibility issues
+ * @param chatbotType - The chatbot identifier (e.g., 'claude', 'pi', 'chatgpt')
+ * @returns Object with incompatibility info, or null if no issues
+ */
+export function getTTSCompatibilityIssue(chatbotType: string): {
+  hasIssue: boolean;
+  browserName: string;
+  reason: string;
+} | null {
+  const browserInfo = getBrowserInfo();
+
+  // Sites with restrictive CSP that block TTS on non-offscreen browsers
+  // Pi.ai has permissive CSP, so it works on all browsers
+  const restrictiveSites = ['claude', 'chatgpt'];
+
+  if (!restrictiveSites.includes(chatbotType)) {
+    return null;
+  }
+
+  // Any browser without offscreen support on CSP-restrictive sites will fail TTS
+  // (but VAD/STT continues to work)
+  if (!browserInfo.supportsOffscreen) {
+    return {
+      hasIssue: true,
+      browserName: browserInfo.name + (browserInfo.isMobile ? ' Mobile' : ''),
+      reason: 'no-offscreen-csp-blocked'
+    };
+  }
+
+  return null;
+}
+
 export function addUserAgentFlags(): void {
   const isFirefoxAndroid: boolean =
     /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);

@@ -6,7 +6,7 @@ import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
-import { isSafari } from "../UserAgentModule.ts";
+import { isSafari, getTTSCompatibilityIssue } from "../UserAgentModule.ts";
 // SlowResponseHandler and adapter are imported dynamically for Pi.ai only
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
@@ -125,12 +125,31 @@ export default class AudioModule {
     try {
       // Initialize offscreen bridge and check if supported
       this.useOffscreenAudio = await this.offscreenBridge.isSupported();
-      
+
       logger.debug(`[AudioModule] Using offscreen audio: ${this.useOffscreenAudio}`);
-      
+
+      // Check for TTS compatibility issues (Firefox/Safari/mobile on Claude/ChatGPT)
+      const chatbotType = ChatbotIdentifier.identifyChatbot();
+      const ttsIssue = getTTSCompatibilityIssue(chatbotType);
+
+      if (ttsIssue?.hasIssue) {
+        const chatbotName = chatbotType === 'claude' ? 'Claude' :
+                            chatbotType === 'chatgpt' ? 'ChatGPT' :
+                            chatbotType === 'pi' ? 'Pi' : chatbotType;
+
+        logger.warn(`[AudioModule] TTS unavailable: ${ttsIssue.reason} on ${ttsIssue.browserName} + ${chatbotName}`);
+
+        // Emit event for user notification (handled by ChatHistoryManager)
+        EventBus.emit('tts:unavailable', {
+          browserName: ttsIssue.browserName,
+          chatbotName,
+          reason: ttsIssue.reason
+        });
+      }
+
       // even if we're not using offscreen audio, set up the in-page audio element
       this.initialiseOnscreenAudio();
-      
+
       this.listenForAudioElementSwap();
 
       if (this.useOffscreenAudio)  {

@@ -25,6 +25,8 @@ import { logger } from "../LoggingModule";
 import { findRootAncestor } from "../dom/DOMModule";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { md5 } from "js-md5";
+import { TextualNotificationsModule } from "../NotificationsModule";
+import getMessage from "../i18n";
 
 export class ChatHistorySpeechManager implements ResourceReleasable {
   private userPreferences = UserPreferenceModule.getInstance();
@@ -387,6 +389,34 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.registerMessageErrorListeners();
     this.registerMessageChargeListeners();
     this.registerMessageHideListeners();
+    this.registerTTSUnavailabilityListener();
+  }
+
+  /**
+   * Listen for TTS unavailability events and show user-friendly notification
+   * This happens when browser doesn't support offscreen and site has restrictive CSP
+   */
+  private registerTTSUnavailabilityListener(): void {
+    const ttsUnavailableListener = (detail: { browserName: string; chatbotName: string; reason: string }) => {
+      logger.debug(`[ChatHistoryManager] TTS unavailable notification triggered`, detail);
+
+      const message = getMessage('ttsUnavailableBrowserChatbot', [
+        detail.browserName,
+        detail.chatbotName
+      ]);
+
+      // Use TextualNotificationsModule with extended timeout (30 seconds)
+      // User can dismiss by clicking the notification
+      const notifications = new TextualNotificationsModule();
+      notifications.showNotification(message, 'info', 30);
+    };
+
+    EventBus.on('tts:unavailable', ttsUnavailableListener);
+
+    this.eventListeners.push({
+      event: 'tts:unavailable',
+      listener: ttsUnavailableListener,
+    });
   }
 
   findAudioControls(searchRoot: Element): Observation {

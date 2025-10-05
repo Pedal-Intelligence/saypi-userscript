@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Hlas nie je k dispozícii. \nVyskúšajte Chrome alebo Firefox na pracovnej ploche."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Pozor! Prehrávanie reči ešte nie je k dispozícii na $browserName$ s $chatbotName$. Dobrá správa? Hlasový vstup funguje skvelé! Pre TTS vyskúšajte Chrome alebo Edge na pracovnej ploche.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS nie je k dispozícii na $browserName$ + $chatbotName$. Hlasový vstup funguje! Vyskúšajte Chrome na pracovnej ploche pre TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Rozumiem",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Hlasové funkcie nemusia byť plne podporované v mobilných prehliadačoch s $chatbotName$. \nSkúste pre najlepší zážitok použiť prehliadač stolových počítačov.",

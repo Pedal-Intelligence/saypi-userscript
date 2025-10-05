@@ -26,6 +26,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Extension Type
 This is a Chrome/Firefox extension (manifest v3) that enhances voice interactions with AI chatbots (Pi.ai and Claude.ai).
 
+### Browser Compatibility
+
+For detailed browser and feature compatibility across different chatbot sites, see [Browser Compatibility Matrix](doc/BROWSER_COMPATIBILITY.md).
+
+**Quick Summary:**
+- **TTS (Text-to-Speech)**: Requires Chrome/Edge desktop on CSP-restrictive sites (Claude.ai, ChatGPT). Works on all browsers with Pi.ai.
+- **VAD/STT (Voice Input)**: Works on most modern browsers (with known Kiwi + Claude issues)
+- **Full features**: Chrome/Edge desktop across all sites
+
+**Common scenarios:**
+- Firefox/Safari on Claude.ai → Voice input ✅, TTS ❌ (CSP blocks audio)
+- Mobile browsers on Claude.ai → Voice input ✅, TTS ❌ (no offscreen API)
+- Chrome/Edge desktop → Everything works ✅
+
 ### Key Components
 
 #### Entry Points

@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Η φωνή δεν είναι διαθέσιμη. \nΔοκιμάστε το Chrome ή τον Firefox στην επιφάνεια εργασίας."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Προσοχή! Η αναπαραγωγή ομιλίας δεν είναι ακόμη διαθέσιμη στο $browserName$ με το $chatbotName$. Τα καλά νέα; Η φωνητική είσοδος λειτουργεί τέλεια! Για TTS, δοκιμάστε το Chrome ή το Edge στην επιφάνεια εργασίας.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS μη διαθέσιμο στο $browserName$ + $chatbotName$. Η φωνητική είσοδος λειτουργεί! Δοκιμάστε το Chrome desktop για TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Το κατάλαβα",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Τα χαρακτηριστικά φωνής ενδέχεται να μην υποστηρίζονται πλήρως σε προγράμματα περιήγησης για κινητά με $chatbotName$. \nΔοκιμάστε να χρησιμοποιήσετε ένα πρόγραμμα περιήγησης επιφάνειας εργασίας για την καλύτερη εμπειρία.",

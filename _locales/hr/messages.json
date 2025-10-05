@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Glas nije dostupan. \nIsprobajte Chrome ili Firefox na radnoj površini."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Pozor! Reprodukcija govora još nije dostupna na $browserName$ s $chatbotName$. Dobre vijesti? Glasovni unos radi odlično! Za TTS, isprobajte Chrome ili Edge na radnoj površini.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS nije dostupan na $browserName$ + $chatbotName$. Glasovni unos radi! Isprobajte Chrome radnu površinu za TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Razumijem",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Glasovne značajke možda nisu u potpunosti podržane na mobilnim preglednicima s $chatbotName$. \nPokušajte koristiti preglednik za radnu površinu za najbolje iskustvo.",

@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Голос недоступний. \nСпробуйте Chrome або Firefox на робочому столі."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Увага! Відтворення мовлення ще не доступне в $browserName$ з $chatbotName$. Хороша новина? Голосовий ввід працює чудово! Для TTS спробуйте Chrome або Edge на робочому столі.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS недоступний у $browserName$ + $chatbotName$. Голосовий ввід працює! Спробуйте Chrome на робочому столі для TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Зрозуміло",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Голосові функції можуть не повністю підтримуватися в мобільних браузерах з $chatbotName$. \nБудь ласка, спробуйте використовувати браузер для робочого столу для найкращого досвіду.",

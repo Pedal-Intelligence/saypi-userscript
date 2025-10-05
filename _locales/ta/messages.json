@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "குரல் கிடைக்கவில்லை. \nடெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸை முயற்சிக்கவும்."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "கவனிக்கவும்! $browserName$ இல் $chatbotName$ உடன் பேச்சு பிளேபேக் இன்னும் கிடைக்கவில்லை. நல்ல செய்தி? குரல் உள்ளீடு நன்றாக வேலை செய்கிறது! TTS க்கு, டெஸ்க்டாப்பில் Chrome அல்லது Edge ஐ முயற்சிக்கவும்.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$ இல் TTS கிடைக்கவில்லை. குரல் உள்ளீடு வேலை செய்கிறது! TTS க்கு Chrome டெஸ்க்டாப்பை முயற்சிக்கவும்.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "புரிந்தது",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "மொபைல் உலாவிகளில் $ சாட்போட்நேம் with உடன் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படாமல் போகலாம். \nசிறந்த அனுபவத்திற்கு டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்.",

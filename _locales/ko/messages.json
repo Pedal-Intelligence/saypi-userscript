@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "음성을 사용할 수 없습니다. \n데스크탑에서 Chrome 또는 Firefox를 사용해보십시오."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "주목하세요! $browserName$에서 $chatbotName$과 함께 음성 재생은 아직 사용할 수 없습니다. 좋은 소식? 음성 입력은 훌륭하게 작동합니다! TTS의 경우 데스크탑에서 Chrome 또는 Edge를 사용해보세요.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$에서 TTS를 사용할 수 없습니다. 음성 입력은 작동합니다! TTS의 경우 Chrome 데스크탑을 사용해보세요.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "알겠습니다",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "$chatbotName$가있는 모바일 브라우저에서 음성 기능이 완전히 지원되지 않을 수 있습니다. \n최상의 경험을 위해 데스크탑 브라우저를 사용해보십시오.",

@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Giọng nói không có sẵn. \nHãy thử Chrome hoặc Firefox trên máy tính để bàn."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Lưu ý! Phát lại giọng nói chưa khả dụng trên $browserName$ với $chatbotName$. Tin tốt? Đầu vào bằng giọng nói hoạt động tuyệt vời! Đối với TTS, hãy thử Chrome hoặc Edge trên máy tính để bàn.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS không khả dụng trên $browserName$ + $chatbotName$. Đầu vào bằng giọng nói hoạt động! Hãy thử Chrome trên máy tính để bàn cho TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Hiểu rồi",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Các tính năng bằng giọng nói có thể không được hỗ trợ đầy đủ trên các trình duyệt di động với $chatbotName$. \nVui lòng thử sử dụng trình duyệt máy tính để bàn để có trải nghiệm tốt nhất.",

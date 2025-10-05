@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Röst inte tillgänglig. \nProva Chrome eller Firefox på skrivbordet."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Observera! Taluppspelning är inte tillgänglig på $browserName$ med $chatbotName$ ännu. De goda nyheterna? Röstinmatning fungerar utmärkt! För TTS, prova Chrome eller Edge på skrivbordet.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS inte tillgänglig på $browserName$ + $chatbotName$. Röstinmatning fungerar! Prova Chrome skrivbord för TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Jag förstår",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Röstfunktioner kanske inte stöds fullt ut i mobila webbläsare med $chatbotName$. \nFörsök använda en skrivbordswebbläsare för bästa upplevelse.",

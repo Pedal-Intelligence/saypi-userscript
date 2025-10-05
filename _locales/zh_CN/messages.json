@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "声音不可用。\n在桌面上尝试Chrome或Firefox。"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "注意！在$browserName$上使用$chatbotName$时，语音播放尚不可用。好消息？语音输入运行良好！对于TTS，请在桌面上尝试Chrome或Edge。",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$上TTS不可用。语音输入有效！尝试Chrome桌面版以使用TTS。",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "明白了",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "使用$chatbotName$的移动浏览器可能无法完全支持语音功能。\n请尝试使用桌面浏览器以获得最佳体验。",

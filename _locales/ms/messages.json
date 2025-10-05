@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Suara tidak tersedia. \nCuba Chrome atau Firefox di desktop."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Perhatian! Mainbalik pertuturan belum tersedia di $browserName$ dengan $chatbotName$ lagi. Berita baik? Input suara berfungsi dengan baik! Untuk TTS, cuba Chrome atau Edge di desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS tidak tersedia di $browserName$ + $chatbotName$. Input suara berfungsi! Cuba Chrome desktop untuk TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Faham",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Ciri -ciri suara mungkin tidak disokong sepenuhnya pada pelayar mudah alih dengan $chatbotName$. \nCuba gunakan penyemak imbas desktop untuk pengalaman terbaik.",
