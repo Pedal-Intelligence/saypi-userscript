@@ -23,6 +23,7 @@ import { AIChatModule } from "./AIChatModule.ts";
 
 // Conditional style imports
 import "./styles/claude.scss"; // scoped by chatbot flags, i.e. <body class="claude">
+import "./styles/claude-mobile.scss"; // scoped by html.mobile-device body.claude
 import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 
 (async function () {
