@@ -574,7 +574,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   private cleanupExistingElements(voiceSelector: HTMLElement): void {
     // Remove any existing buttons and menus to prevent duplicates
-    
+
     // 1. Clean up our tracked elements if they exist
     if (this.menuButton) {
       if (this.menuButton.parentElement) {
@@ -582,12 +582,27 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       }
       this.menuButton = document.createElement("button"); // Reset to placeholder
     }
-    
+
     if (this.menuContent) {
+      // Menu could be in voiceSelector OR document.body (if currently open)
+      // Check both locations to prevent orphaned elements
       if (this.menuContent.parentElement) {
         this.menuContent.parentElement.removeChild(this.menuContent);
       }
+
+      // Also check for menu in document.body in case it wasn't tracked
+      const menuInBody = document.body.querySelector('.voice-menu-content');
+      if (menuInBody && menuInBody !== this.menuContent) {
+        menuInBody.parentElement?.removeChild(menuInBody);
+      }
+
       this.menuContent = document.createElement("div"); // Reset to placeholder
+    }
+
+    // Clean up backdrop if present (mobile modal)
+    const backdrop = document.getElementById("saypi-voice-menu-backdrop");
+    if (backdrop) {
+      backdrop.parentElement?.removeChild(backdrop);
     }
     
     // 2. Find and remove any orphaned voice selector buttons/menus by class/attribute
