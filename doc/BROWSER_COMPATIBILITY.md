@@ -126,6 +126,50 @@ Voice Activity Detection (VAD) and Speech-to-Text work across more browsers beca
 
 ---
 
+## User Notification Flow
+
+### When and How Compatibility Notifications Appear
+
+The TTS unavailability notification is shown **once per page load** when specific conditions are met:
+
+**Trigger Conditions:**
+1. ✅ User visits a **CSP-restrictive site** (Claude.ai or ChatGPT)
+2. ✅ Using a **browser without offscreen support** (Firefox, Safari, or mobile browsers)
+
+**Timing:** The notification appears **immediately** during extension initialization:
+```
+Page Load → Extension Init → AudioModule.start() → showTTSUnavailableNotification()
+                                    ↓
+                            (≈50-100ms after page load)
+```
+
+**Visual Appearance:**
+- **Icon**: ℹ️ "info" icon
+- **Duration**: 30 seconds auto-dismiss
+- **Dismissal**: Click anywhere on notification to dismiss immediately
+- **Position**: Standard notification area (top-right or as defined by CSS)
+
+**Example Message** (Firefox Mobile + Claude.ai):
+```
+┌─────────────────────────────────────────────────────┐
+│ ℹ️  Heads up! Speech playback isn't available on   │
+│    Firefox Mobile with Claude yet. The good news?  │
+│    Voice input works great! For TTS, try Chrome    │
+│    or Edge on desktop.                              │
+└─────────────────────────────────────────────────────┘
+    (Click to dismiss or auto-dismiss in 30s)
+```
+
+**Code Flow:**
+1. **[AudioModule.js:131-144](../src/audio/AudioModule.js#L131-L144)** - Detection during `start()`
+2. **[AudioModule.js:253-265](../src/audio/AudioModule.js#L253-L265)** - Direct notification display
+3. **[UserAgentModule.ts:89-115](../src/UserAgentModule.ts#L89-115)** - Browser/site compatibility check
+
+**Key Design Decision:**
+The notification is shown **directly by AudioModule**, not via EventBus, to avoid race conditions. This ensures the warning appears immediately when the extension loads, regardless of when chat history loads.
+
+---
+
 ## User Recommendations by Scenario
 
 ### Scenario 1: Firefox/Safari User on Claude.ai or ChatGPT

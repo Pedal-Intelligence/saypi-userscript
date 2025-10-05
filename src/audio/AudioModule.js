@@ -12,6 +12,8 @@ import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
+import { TextualNotificationsModule } from "../NotificationsModule.ts";
+import getMessage from "../i18n.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
 
@@ -139,12 +141,8 @@ export default class AudioModule {
 
         logger.warn(`[AudioModule] TTS unavailable: ${ttsIssue.reason} on ${ttsIssue.browserName} + ${chatbotName}`);
 
-        // Emit event for user notification (handled by ChatHistoryManager)
-        EventBus.emit('tts:unavailable', {
-          browserName: ttsIssue.browserName,
-          chatbotName,
-          reason: ttsIssue.reason
-        });
+        // Show user notification immediately (don't rely on EventBus race condition)
+        this.showTTSUnavailableNotification(ttsIssue.browserName, chatbotName);
       }
 
       // even if we're not using offscreen audio, set up the in-page audio element
@@ -245,6 +243,26 @@ export default class AudioModule {
   }
 
   stop() {}
+
+  /**
+   * Show user-friendly TTS unavailability notification
+   * Called directly from start() to avoid race condition with ChatHistoryManager
+   * @param {string} browserName - e.g. "Firefox Mobile", "Safari"
+   * @param {string} chatbotName - e.g. "Claude", "ChatGPT"
+   */
+  showTTSUnavailableNotification(browserName, chatbotName) {
+    logger.debug(`[AudioModule] Showing TTS unavailable notification for ${browserName} + ${chatbotName}`);
+
+    const message = getMessage('ttsUnavailableBrowserChatbot', [
+      browserName,
+      chatbotName
+    ]);
+
+    // Use TextualNotificationsModule with extended timeout (30 seconds)
+    // User can dismiss by clicking the notification
+    const notifications = new TextualNotificationsModule();
+    notifications.showNotification(message, 'info', 30);
+  }
 
   initializeVoiceConverter() {
     const prefs = UserPreferenceModule.getInstance();
