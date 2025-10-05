@@ -161,12 +161,36 @@ Page Load → Extension Init → AudioModule.start() → showTTSUnavailableNotif
 ```
 
 **Code Flow:**
-1. **[AudioModule.js:131-144](../src/audio/AudioModule.js#L131-L144)** - Detection during `start()`
-2. **[AudioModule.js:253-265](../src/audio/AudioModule.js#L253-L265)** - Direct notification display
-3. **[UserAgentModule.ts:89-115](../src/UserAgentModule.ts#L89-115)** - Browser/site compatibility check
+1. **[saypi.index.js:42-45](../src/saypi.index.js#L42-L45)** - Initialize CompatibilityNotificationUI early
+2. **[AudioModule.js:132-136](../src/audio/AudioModule.js#L132-L136)** - Check TTS compatibility during `start()`
+3. **[BrowserCompatibilityModule.ts:50-81](../src/compat/BrowserCompatibilityModule.ts#L50-L81)** - Detect issues, emit events
+4. **[CompatibilityNotificationUI.ts:43-51](../src/compat/CompatibilityNotificationUI.ts#L43-L51)** - Listen for events, show notifications
+5. **[UserAgentModule.ts:89-115](../src/UserAgentModule.ts#L89-115)** - Browser/site compatibility check logic
 
-**Key Design Decision:**
-The notification is shown **directly by AudioModule**, not via EventBus, to avoid race conditions. This ensures the warning appears immediately when the extension loads, regardless of when chat history loads.
+**Architecture:**
+```
+┌─────────────────────────────────────────┐
+│   BrowserCompatibilityModule            │
+│   - Centralized compatibility checks     │
+│   - Emits compatibility:issue events     │
+│   - No UI concerns                       │
+└─────────────────────────────────────────┘
+                    │
+                    │ emits events
+                    ↓
+┌─────────────────────────────────────────┐
+│   CompatibilityNotificationUI            │
+│   - Listens for compatibility events     │
+│   - Shows user-friendly notifications    │
+│   - Manages notification lifecycle       │
+└─────────────────────────────────────────┘
+```
+
+**Key Design Decisions:**
+1. **Separation of Concerns**: Compatibility detection (BrowserCompatibilityModule) is decoupled from UI (CompatibilityNotificationUI)
+2. **Event-Driven**: Modules communicate via EventBus for loose coupling
+3. **Early Initialization**: CompatibilityNotificationUI initialized before AudioModule to avoid race conditions
+4. **Single Responsibility**: AudioModule focuses on audio, not browser detection or UI notifications
 
 ---
 

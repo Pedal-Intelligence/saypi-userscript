@@ -6,14 +6,13 @@ import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
-import { isSafari, getTTSCompatibilityIssue } from "../UserAgentModule.ts";
+import { isSafari } from "../UserAgentModule.ts";
 // SlowResponseHandler and adapter are imported dynamically for Pi.ai only
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
-import { TextualNotificationsModule } from "../NotificationsModule.ts";
-import getMessage from "../i18n.ts";
+import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
 
@@ -131,19 +130,10 @@ export default class AudioModule {
       logger.debug(`[AudioModule] Using offscreen audio: ${this.useOffscreenAudio}`);
 
       // Check for TTS compatibility issues (Firefox/Safari/mobile on Claude/ChatGPT)
-      const chatbotType = ChatbotIdentifier.identifyChatbot();
-      const ttsIssue = getTTSCompatibilityIssue(chatbotType);
-
-      if (ttsIssue?.hasIssue) {
-        const chatbotName = chatbotType === 'claude' ? 'Claude' :
-                            chatbotType === 'chatgpt' ? 'ChatGPT' :
-                            chatbotType === 'pi' ? 'Pi' : chatbotType;
-
-        logger.warn(`[AudioModule] TTS unavailable: ${ttsIssue.reason} on ${ttsIssue.browserName} + ${chatbotName}`);
-
-        // Show user notification immediately (don't rely on EventBus race condition)
-        this.showTTSUnavailableNotification(ttsIssue.browserName, chatbotName);
-      }
+      // BrowserCompatibilityModule will emit events if issues detected
+      // CompatibilityNotificationUI (initialized separately) will handle showing notifications
+      const compatModule = BrowserCompatibilityModule.getInstance();
+      compatModule.checkTTSCompatibility();
 
       // even if we're not using offscreen audio, set up the in-page audio element
       this.initialiseOnscreenAudio();
@@ -243,26 +233,6 @@ export default class AudioModule {
   }
 
   stop() {}
-
-  /**
-   * Show user-friendly TTS unavailability notification
-   * Called directly from start() to avoid race condition with ChatHistoryManager
-   * @param {string} browserName - e.g. "Firefox Mobile", "Safari"
-   * @param {string} chatbotName - e.g. "Claude", "ChatGPT"
-   */
-  showTTSUnavailableNotification(browserName, chatbotName) {
-    logger.debug(`[AudioModule] Showing TTS unavailable notification for ${browserName} + ${chatbotName}`);
-
-    const message = getMessage('ttsUnavailableBrowserChatbot', [
-      browserName,
-      chatbotName
-    ]);
-
-    // Use TextualNotificationsModule with extended timeout (30 seconds)
-    // User can dismiss by clicking the notification
-    const notifications = new TextualNotificationsModule();
-    notifications.showNotification(message, 'info', 30);
-  }
 
   initializeVoiceConverter() {
     const prefs = UserPreferenceModule.getInstance();

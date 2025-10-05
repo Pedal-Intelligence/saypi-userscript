@@ -38,7 +38,12 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 
   // Initialize common modules needed by both modes
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
-  
+
+  // Initialize compatibility notification UI early to catch all compatibility events
+  logger.debug("Initializing compatibility notification UI");
+  const { CompatibilityNotificationUI } = await import(/* webpackMode: "eager" */ "./compat/CompatibilityNotificationUI.ts");
+  CompatibilityNotificationUI.getInstance().initialize();
+
   // Initialize telemetry module
   logger.debug("Initializing telemetry module");
   telemetryModule; // This will invoke the getInstance() singleton which sets up event listeners
@@ -91,7 +96,7 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
     });
   }
 
-  // Initialize chat mode for chatbot sites (claude.ai, pi.ai)
+  // Initialize chat mode for chatbot sites (claude.ai, pi.ai, chatgpt.com)
   async function initializeChatMode() {
     const aiChatModule = AIChatModule.getInstance();
     await aiChatModule.initialize();
