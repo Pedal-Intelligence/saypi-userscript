@@ -93,9 +93,11 @@ export function getTTSCompatibilityIssue(chatbotType: string): {
 } | null {
   const browserInfo = getBrowserInfo();
 
-  // Sites with restrictive CSP that block TTS on non-offscreen browsers
-  // Pi.ai has permissive CSP, so it works on all browsers
-  const restrictiveSites = ['claude', 'chatgpt'];
+  // Sites with restrictive CSP that block TTS on non-offscreen browsers:
+  // - Claude.ai: Restrictive CSP blocks api.saypi.ai
+  // - ChatGPT: Has native "Read Aloud" feature (works on all browsers) - NOT restrictive
+  // - Pi.ai: Permissive CSP, works on all browsers
+  const restrictiveSites = ['claude'];
 
   if (!restrictiveSites.includes(chatbotType)) {
     return null;

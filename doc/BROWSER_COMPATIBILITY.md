@@ -9,8 +9,8 @@ This document provides a comprehensive overview of Say, Pi extension compatibili
 - **Edge Desktop** (v116+) - All features on all sites
 
 ### ⚠️ Partially Supported
-- **Firefox Desktop/Mobile** - VAD/STT works, TTS blocked on Claude.ai & ChatGPT
-- **Safari Desktop/Mobile** - VAD/STT works, TTS blocked on Claude.ai & ChatGPT
+- **Firefox Desktop/Mobile** - VAD/STT works, TTS blocked on Claude.ai only
+- **Safari Desktop/Mobile** - VAD/STT works, TTS blocked on Claude.ai only
 - **Mobile Chromium (Kiwi, etc.)** - Limited support, site-dependent issues
 
 ### ❌ Known Issues
@@ -24,12 +24,12 @@ This document provides a comprehensive overview of Say, Pi extension compatibili
 |---------|-----------|---------------|-------------|-----------|---------------|-------------|-------|
 | **Chrome Desktop** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Full support via offscreen |
 | **Edge Desktop** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Full support via offscreen |
-| **Firefox Desktop** | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | No offscreen API, CSP blocks TTS |
-| **Firefox Mobile** | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | No offscreen API, CSP blocks TTS |
-| **Safari Desktop** | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | No offscreen API, CSP blocks TTS |
-| **Safari Mobile** | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | No offscreen API, CSP blocks TTS |
-| **Mobile Chrome** | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | No offscreen on mobile |
-| **Kiwi Browser** | ✅ | ❌ | ❌ | ✅ | ❌ | ❓ | WASM issues + no offscreen |
+| **Firefox Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Firefox Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Safari Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Safari Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Mobile Chrome** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Kiwi Browser** | ✅ | ❌ | ✅ | ✅ | ❌ | ❓ | ChatGPT uses native Read Aloud |
 
 **Legend:**
 - ✅ Works fully
@@ -76,11 +76,12 @@ media-src 'self' blob: data: https://cdn.jsdelivr.net
 ```
 → Blocks api.saypi.ai ❌
 
-**ChatGPT** (Restrictive):
+**ChatGPT** (Native Read Aloud):
 ```
-media-src 'self' blob: data:
+Uses ChatGPT's built-in "Read Aloud" feature
 ```
-→ Blocks api.saypi.ai ❌
+→ Works on all browsers without external API calls ✅
+→ See: https://www.saypi.ai/chatgpt
 
 **Fallback Strategy:**
 - Browsers without offscreen fall back to in-page `<audio>` element
@@ -133,8 +134,10 @@ Voice Activity Detection (VAD) and Speech-to-Text work across more browsers beca
 The TTS unavailability notification is shown **once per page load** when specific conditions are met:
 
 **Trigger Conditions:**
-1. ✅ User visits a **CSP-restrictive site** (Claude.ai or ChatGPT)
+1. ✅ User visits a **CSP-restrictive site** (Claude.ai)
 2. ✅ Using a **browser without offscreen support** (Firefox, Safari, or mobile browsers)
+
+**Note:** ChatGPT never triggers this notification because it uses native Read Aloud TTS that works on all browsers.
 
 **Timing:** The notification appears **immediately** during extension initialization:
 ```
@@ -196,21 +199,21 @@ Page Load → Extension Init → AudioModule.start() → showTTSUnavailableNotif
 
 ## User Recommendations by Scenario
 
-### Scenario 1: Firefox/Safari User on Claude.ai or ChatGPT
+### Scenario 1: Firefox/Safari User on Claude.ai
 **Symptoms:** Voice input works, but no speech playback
 
 **Recommendation:**
-> "Heads up! Speech playback isn't available on [Browser] with [Chatbot] yet. The good news? Voice input works great! For TTS, try Chrome or Edge on desktop."
+> "Heads up! Speech playback isn't available on [Browser] with Claude yet. The good news? Voice input works great! For TTS, try Chrome or Edge on desktop."
 
 **Why:** Browser lacks offscreen API, host page CSP blocks in-page audio from api.saypi.ai
 
 **Workaround:** Use Chrome or Edge on desktop for full features
 
-### Scenario 2: Mobile User (Any Browser) on Claude.ai or ChatGPT
+### Scenario 2: Mobile User (Any Browser) on Claude.ai
 **Symptoms:** Voice input works, but no speech playback
 
 **Recommendation:**
-> "Speech playback isn't supported on mobile browsers with [Chatbot] yet. Voice input works! For TTS, try Chrome or Edge on desktop."
+> "Speech playback isn't supported on mobile browsers with Claude yet. Voice input works! For TTS, try Chrome or Edge on desktop."
 
 **Why:** Mobile browsers don't support offscreen API, CSP blocks fallback
 
@@ -226,7 +229,18 @@ Page Load → Extension Init → AudioModule.start() → showTTSUnavailableNotif
 
 **Workaround:** Use Chrome/Edge on desktop or different mobile browser
 
-### Scenario 4: Any Browser on Pi.ai
+### Scenario 4: Any Browser on ChatGPT
+**Symptoms:** Should work fully
+
+**Status:** ✅ ChatGPT uses native "Read Aloud" TTS that works on all browsers (Firefox, Safari, mobile Chrome, Kiwi, etc.)
+
+**How it works:** Extension leverages ChatGPT's built-in Read Aloud feature, avoiding CSP restrictions entirely
+
+**Reference:** https://www.saypi.ai/chatgpt
+
+**Note:** No external API calls needed, no offscreen API required
+
+### Scenario 5: Any Browser on Pi.ai
 **Symptoms:** Should work fully
 
 **Status:** ✅ Pi.ai has permissive CSP allowing TTS on all browsers
@@ -331,13 +345,15 @@ The extension follows a **progressive enhancement** philosophy:
 
 ### ChatGPT Compatibility Status
 
-**Current:** Untested, likely same CSP restrictions as Claude.ai
+**Current:** ✅ Fully compatible across all browsers
 
-**To verify:**
-1. Test Chrome desktop (should work with offscreen)
-2. Test Firefox/Safari desktop (likely CSP blocked)
-3. Document ChatGPT's CSP policy
-4. Update compatibility matrix
+**Implementation:** Uses ChatGPT's native "Read Aloud" feature
+- No external API calls to api.saypi.ai
+- No CSP restrictions
+- Works on Firefox, Safari, mobile browsers, etc.
+- No offscreen API required
+
+**Reference:** https://www.saypi.ai/chatgpt
 
 ---
 
@@ -352,6 +368,16 @@ The extension follows a **progressive enhancement** philosophy:
 
 ## Changelog
 
+### 2025-10-05
+- Updated ChatGPT TTS compatibility to reflect native "Read Aloud" support
+- Changed all ChatGPT TTS entries from ❌ to ✅ across all browsers
+- Updated CSP section to note ChatGPT uses native Read Aloud (no external API)
+- Updated notification trigger conditions to exclude ChatGPT
+- Reorganized user scenarios to reflect ChatGPT compatibility
+- Added Scenario 4 for ChatGPT (works on all browsers)
+- Renumbered Pi.ai to Scenario 5
+- Updated ChatGPT Compatibility Status section
+
 ### 2025-01-05
 - Initial compatibility matrix created
 - Documented offscreen API requirements
@@ -362,5 +388,5 @@ The extension follows a **progressive enhancement** philosophy:
 ---
 
 **Maintained by:** Say, Pi Team
-**Last Updated:** 2025-01-05
-**Version:** 1.0.0
+**Last Updated:** 2025-10-05
+**Version:** 1.1.0

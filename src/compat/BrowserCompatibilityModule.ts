@@ -45,6 +45,9 @@ export class BrowserCompatibilityModule {
    * Check TTS compatibility for current browser/chatbot combination
    * Emits 'compatibility:tts:issue' event if incompatibility detected
    *
+   * Note: ChatGPT is excluded from checks as it has native "Read Aloud" TTS
+   * that works on all browsers without requiring our streaming API.
+   *
    * @returns CompatibilityIssue if there's a problem, null otherwise
    */
   public checkTTSCompatibility(): CompatibilityIssue | null {
@@ -53,6 +56,13 @@ export class BrowserCompatibilityModule {
     // Handle case where chatbot type is undefined
     if (!chatbotType) {
       logger.debug("[BrowserCompatibilityModule] No chatbot type detected, skipping TTS check");
+      return null;
+    }
+
+    // ChatGPT has native "Read Aloud" feature that works on all browsers
+    // See: https://www.saypi.ai/chatgpt
+    if (chatbotType === 'chatgpt') {
+      logger.debug("[BrowserCompatibilityModule] ChatGPT uses native Read Aloud, skipping TTS check");
       return null;
     }
 
