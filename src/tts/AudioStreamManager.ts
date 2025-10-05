@@ -8,14 +8,9 @@ import { StreamKeepAliveController } from "./StreamKeepAliveController";
 const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 20s)
 const BUFFER_TIMEOUT_MS = 1500; // flush buffers after inactivity
 const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
-const INACTIVITY_CHECK_INTERVAL_MS = 5000;
-const INACTIVITY_THRESHOLD_MS = 10000;
-const INACTIVITY_MAX_MS = 60000;
 
 export class AudioStreamManager {
   private inputBuffers: { [uuid: string]: InputBuffer } = {};
-  private inactivityTimers: Map<string, ReturnType<typeof setInterval>> = new Map();
-  private lastActivity: Map<string, number> = new Map();
   private openStreams: Set<string> = new Set();
   private keepAliveController: StreamKeepAliveController;
 
@@ -43,8 +38,6 @@ export class AudioStreamManager {
     );
 
     this.openStreams.add(uuid);
-    this.touchActivity(uuid);
-    this.ensureInactivityMonitor(uuid);
     this.stopKeepAlive(uuid); // ensure previous state reset if reused
 
     return utterance;
@@ -57,7 +50,6 @@ export class AudioStreamManager {
       BUFFER_TIMEOUT_MS,
       STREAM_TIMEOUT_MS
     );
-    this.ensureInactivityMonitor(uuid);
     return this.inputBuffers[uuid];
   }
 
@@ -66,7 +58,6 @@ export class AudioStreamManager {
       this.createInputBuffer(uuid);
     }
     this.stopKeepAlive(uuid);
-    this.touchActivity(uuid);
     this.getInputBuffer(uuid).addText(text);
   }
 
@@ -78,7 +69,6 @@ export class AudioStreamManager {
     if (this.inputBuffers[uuid]) {
       const buffer = this.inputBuffers[uuid];
       this.stopKeepAlive(uuid);
-      this.touchActivity(uuid);
       if (buffer.isPending(from)) {
         buffer.replaceText(from, to);
         return true;
@@ -94,7 +84,6 @@ export class AudioStreamManager {
 
   async endStream(uuid: string): Promise<void> {
     this.stopKeepAlive(uuid);
-    this.stopInactivityMonitor(uuid);
     this.getInputBuffer(uuid).endInput();
     this.openStreams.delete(uuid);
   }
@@ -163,40 +152,4 @@ export class AudioStreamManager {
     this.keepAliveController.stop(uuid);
   }
 
-  private touchActivity(uuid: string): void {
-    this.lastActivity.set(uuid, Date.now());
-  }
-
-  private ensureInactivityMonitor(uuid: string): void {
-    if (this.inactivityTimers.has(uuid)) {
-      return;
-    }
-
-    const timer = setInterval(() => {
-      const lastActivity = this.lastActivity.get(uuid);
-      if (!lastActivity) {
-        return;
-      }
-
-      const inactiveDuration = Date.now() - lastActivity;
-      if (
-        inactiveDuration >= INACTIVITY_THRESHOLD_MS &&
-        inactiveDuration <= INACTIVITY_MAX_MS &&
-        !this.keepAliveController.isActive(uuid)
-      ) {
-        void this.ttsService.sendKeepAlive(uuid);
-      }
-    }, INACTIVITY_CHECK_INTERVAL_MS);
-
-    this.inactivityTimers.set(uuid, timer);
-  }
-
-  private stopInactivityMonitor(uuid: string): void {
-    const timer = this.inactivityTimers.get(uuid);
-    if (timer) {
-      clearInterval(timer);
-      this.inactivityTimers.delete(uuid);
-    }
-    this.lastActivity.delete(uuid);
-  }
 }

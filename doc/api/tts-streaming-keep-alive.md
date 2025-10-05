@@ -75,13 +75,11 @@ The TTS streaming API now supports **keep-alive requests** that:
 
 ### When to Send Keep-Alive
 
-**Primary trigger: LLM tool use detection**
+**Trigger exclusively on LLM tool-use detection.**
 
-Send keep-alive when your client detects that the LLM is using a tool and not generating speech-worthy tokens.
+Send a keep-alive only when your client receives an explicit signal that the LLM has started using a tool and is expected to pause token generation temporarily.
 
-**Detection strategies:**
-
-#### Strategy 1: Explicit Tool Use Detection (Recommended)
+#### Strategy: Explicit Tool Use Detection
 
 ```typescript
 class LLMStreamHandler {
@@ -143,33 +141,6 @@ class LLMStreamHandler {
 }
 ```
 
-#### Strategy 2: Inactivity Detection (Fallback)
-
-If your LLM stream doesn't expose tool-use events:
-
-```typescript
-class TTSStreamManager {
-  private lastChunkTime: number = 0;
-  private inactivityCheckInterval: NodeJS.Timeout | null = null;
-
-  sendTextChunk(text: string) {
-    this.lastChunkTime = Date.now();
-    // ... send to TTS API
-  }
-
-  startInactivityMonitoring() {
-    this.inactivityCheckInterval = setInterval(() => {
-      const inactiveDuration = Date.now() - this.lastChunkTime;
-
-      // If >10 seconds since last chunk, send keep-alive
-      if (inactiveDuration > 10000 && inactiveDuration < 60000) {
-        this.sendKeepAlive();
-      }
-    }, 5000); // Check every 5 seconds
-  }
-}
-```
-
 ---
 
 ## Recommended Keep-Alive Frequency
@@ -180,6 +151,12 @@ class TTSStreamManager {
 - Server timeout is 20 seconds
 - 10-15s interval provides safety margin
 - Avoids excessive API calls
+
+### Why we avoid inactivity-driven keep-alive
+
+- Inactivity can signal failure modes (cancellation, timeouts, missed end-of-stream) that should not be masked by automatic keep-alives.
+- Tool-use signals provide the positive confirmation that a pause is expected and safe to bridge.
+- The client implementation (`AudioStreamManager`) no longer performs inactivity monitoring; only tool-use events in `SpeechSynthesisModule` can start timers.
 
 **Example timing:**
 ```
