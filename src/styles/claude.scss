@@ -119,6 +119,29 @@ html body.claude {
       width: auto;
       transform-origin: bottom left; /* Change origin for animation */
       animation: menuFadeIn 0.1s ease-out;
+      overflow-y: auto; /* Ensure menu is scrollable */
+      overflow-x: hidden;
+
+      /* Smooth scrolling */
+      scroll-behavior: smooth;
+
+      /* Custom scrollbar styling to match Claude's theme */
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: hsl(var(--border-300) / 0.5);
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--border-300) / 0.7);
+      }
     }
 
     @keyframes menuFadeIn {
@@ -132,6 +155,7 @@ html body.claude {
       }
     }
   }
+
 
   /* Ensure claude-voice-selector has similar styling to model selector */
   #claude-voice-selector {
@@ -168,12 +192,12 @@ html body.claude {
 /* Fix voice menu display for both mobile and desktop */
 html body.claude #claude-voice-selector {
   margin: 0 4px !important;
-  
+
   /* Button styling for both mobile and desktop */
   button {
     position: relative !important;
   }
-  
+
   /* Make the dropdown menu display properly */
   .voice-menu-content {
     width: auto !important;
@@ -184,15 +208,41 @@ html body.claude #claude-voice-selector {
     /* Use Claude's design tokens so theme switching (light/dark) Just Works */
     background-color: hsl(var(--bg-000) / 1) !important;
     border: 1px solid hsl(var(--border-300) / 1) !important;
-    
+    overflow-y: auto !important; /* Ensure scrollability */
+    overflow-x: hidden !important;
+
     /* Ensure menu items are styled nicely */
     [role="menuitem"] {
       width: 100% !important;
       box-sizing: border-box !important;
     }
-    
+
     &[style*="display: block"] {
       display: block !important; /* Ensure display:block works when set via JS */
+    }
+
+    /* Mobile modal must be visible and properly positioned */
+    &.voice-menu-mobile-modal {
+      display: block !important;
+    }
+
+    /* Custom scrollbar for desktop */
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 4px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: hsl(var(--border-300) / 0.4);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: hsl(var(--border-300) / 0.6);
     }
   }
 
@@ -209,191 +259,4 @@ html[data-mode='dark'] body.claude #claude-voice-selector .saypi-voice-divider {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-/* General mobile styling for Claude chatbot */
-html.mobile-device body.claude {
-  /* Make the call button appropriate size for mobile interfaces */
-  #saypi-callButton {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    margin: 0 4px !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-    z-index: 5 !important;
-  }
-  
-  /* Make all controls in the prompt bar more compact */
-  .saypi-audio-controls {
-    gap: 6px !important;
-    padding: 0 2px !important;
-    
-    /* Ensure consistent button sizing */
-    button {
-      min-height: 32px !important;
-      min-width: 32px !important;
-    }
-  }
-  
-  /* Give more breathing room to the prompt element on mobile */
-  .saypi-prompt-container {
-    .flex.flex-col.gap-3\.5 {
-      gap: 8px !important;
-    }
-  }
-  
-  /* Improve spacing around voice menus */
-  [id$="-voice-selector"] {
-    margin: 0 2px !important;
-    
-    .voice-menu-content {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important; /* Subtle; acceptable across themes */
-      border: 1px solid hsl(var(--border-300) / 1) !important;
-      border-radius: 8px !important;
-      overflow: hidden !important;
-      background-color: hsl(var(--bg-000) / 1) !important;
-    }
-  }
-}
 
-/* Portrait orientation - extra compact for Claude chatbot */
-@media (max-width: 480px) {
-  html.mobile-device body.claude {
-    /* Make controls layout more compact */
-    #saypi-prompt-controls-container {
-      flex-wrap: nowrap !important;
-      justify-content: space-between !important;
-    }
-    
-    /* Remove any extra padding/margins from buttons */
-    .saypi-audio-controls button {
-      padding: 0 !important;
-    }
-    
-    /* Ensure input tools take minimum space */
-    #input-tools-menu-trigger, 
-    #input-plus-menu-trigger {
-      min-width: 26px !important;
-      width: 26px !important;
-      height: 26px !important;
-      padding: 0 !important;
-    }
-  }
-}
-
-/* Landscape orientation - more breathing room for Claude chatbot */
-@media (min-width: 481px) and (max-height: 480px) {
-  html.mobile-device body.claude {
-    /* Allow more horizontal space in landscape */
-    .saypi-audio-controls {
-      gap: 6px !important;
-    }
-  }
-}
-
-/* Mobile specific selectors - should come AFTER general selectors */
-html.mobile-device body.claude {
-  /* Ensure the model selector doesn't take up too much room */
-  [data-testid="model-selector-dropdown"] {
-    padding: 0 !important;
-    
-    /* Keep the Claude logo but reduce the space */
-    .claude-logo-model-selector {
-      margin-right: 4px !important;
-    }
-    
-    /* Reduce text size of model name */
-    .whitespace-nowrap {
-      font-size: 12px !important;
-    }
-  }
-  
-  /* Simplify Claude's voice selector on mobile */
-  #claude-voice-selector {
-    button {
-      /* Make the button more compact for mobile */
-      padding: 4px !important;
-      margin-left: 0 !important;
-      min-width: 32px !important;
-      width: 32px !important;
-      height: 32px !important;
-      border-radius: 6px !important;
-      justify-content: center !important;
-      align-items: center !important;
-      display: flex !important;
-      background-color: transparent !important;
-      transition: all 0.2s ease !important;
-      border: 1px solid rgba(0, 0, 0, 0.1) !important;
-      
-      /* Inactive state - when voice is disabled */
-      &[data-voice-active="false"] {
-        .voiced-by {
-          opacity: 0.7 !important;
-        }
-      }
-      
-      /* Match hover style with other Claude buttons */
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.05) !important;
-        border-color: rgba(0, 0, 0, 0.15) !important;
-      }
-      
-      /* Active button state */
-      &[aria-expanded="true"] {
-        background-color: rgba(0, 0, 0, 0.05) !important;
-        border-color: rgba(0, 0, 0, 0.15) !important;
-      }
-      
-      /* Hide text and chevron on mobile */
-      .voice-name, .chevron {
-        display: none !important;
-      }
-      
-      /* Only show simple icon */
-      .voiced-by {
-        margin: 0 !important;
-      }
-    }
-  }
-}
-
-/* Portrait orientation - extra compact for Claude */
-@media (max-width: 480px) {
-  html.mobile-device body.claude {
-    /* Further simplify the model selector on very small screens */
-    [data-testid="model-selector-dropdown"] {
-      .font-tiempos {
-        .whitespace-nowrap {
-          max-width: 70px !important;
-          overflow: hidden !important;
-          text-overflow: ellipsis !important;
-        }
-      }
-      
-      /* Further reduce padding */
-      padding: 0 !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-    }
-  }
-}
-
-/* Landscape orientation - more breathing room for Claude */
-@media (min-width: 481px) and (max-height: 480px) {
-  html.mobile-device body.claude {
-    /* Add back the voice name in landscape as there's more horizontal space */
-    #claude-voice-selector button {
-      width: auto !important;
-      
-      .voice-name {
-        display: inline !important;
-        max-width: 70px !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-      }
-      
-      .chevron {
-        display: inline !important;
-        margin-left: 2px !important;
-      }
-    }
-  }
-}

@@ -1,0 +1,137 @@
+/**
+ * Mobile-specific styles for Claude.ai voice menu
+ *
+ * Applied when: html.mobile-device body.claude
+ *
+ * Features:
+ * - Full-screen centered modal for voice selection
+ * - Semi-transparent backdrop with tap-to-dismiss
+ * - Touch-optimized menu items (48px min height)
+ * - Compact voice selector button (icon only)
+ * - Responsive adjustments for landscape/portrait orientations
+ */
+
+html.mobile-device body.claude {
+  /* Voice menu mobile modal - full-screen centered overlay */
+  .voice-menu-content.voice-menu-mobile-modal {
+    display: block !important;
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    height: auto !important;
+    max-height: 80vh !important;
+    width: 90vw !important;
+    max-width: 400px !important;
+    min-width: unset !important;
+    z-index: 10001 !important;
+    animation: modalSlideIn 0.3s ease-out !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    cursor: default !important;
+    border-radius: 12px !important;
+
+    /* Touch-friendly scrolling */
+    -webkit-overflow-scrolling: touch;
+
+    /* Larger touch targets for mobile */
+    [role="menuitem"] {
+      min-height: 48px !important;
+      padding: 12px 8px !important;
+    }
+  }
+
+  /* Modal backdrop */
+  .voice-menu-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    animation: backdropFadeIn 0.2s ease-out;
+    cursor: pointer;
+  }
+
+  @keyframes backdropFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -45%) scale(0.95) !important;
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) !important;
+    }
+  }
+
+  /* Compact voice selector button on mobile */
+  #claude-voice-selector button {
+    padding: 4px !important;
+    margin-left: 0 !important;
+    min-width: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 6px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    display: flex !important;
+    background-color: transparent !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+
+    /* Inactive state */
+    &[data-voice-active="false"] {
+      .voiced-by {
+        opacity: 0.7 !important;
+      }
+    }
+
+    /* Hover/active states */
+    &:hover, &[aria-expanded="true"] {
+      background-color: rgba(0, 0, 0, 0.05) !important;
+      border-color: rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Hide text and chevron on mobile - icon only */
+    .voice-name, .chevron {
+      display: none !important;
+    }
+
+    .voiced-by {
+      margin: 0 !important;
+    }
+  }
+}
+
+/* Landscape orientation - show voice name if space available */
+@media (min-width: 481px) and (max-height: 480px) {
+  html.mobile-device body.claude #claude-voice-selector button {
+    width: auto !important;
+
+    .voice-name {
+      display: inline !important;
+      max-width: 70px !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .chevron {
+      display: inline !important;
+      margin-left: 2px !important;
+    }
+  }
+}

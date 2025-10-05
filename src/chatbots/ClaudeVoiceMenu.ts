@@ -371,57 +371,146 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     }
   }
 
+  /**
+   * Positions and displays the voice menu.
+   * Strategy: Always append menu to document.body to escape parent container constraints,
+   * then position based on device type (mobile modal vs desktop dropdown).
+   */
   private positionMenuAboveButton(): void {
-    const buttonRect = this.menuButton.getBoundingClientRect();
-    const isMobile = document.documentElement.classList.contains('mobile-device');
-    
-    // First make sure the menu is visible with correct dimensions
+    // Move menu to body FIRST to escape parent constraints (both mobile and desktop)
+    if (this.menuContent.parentElement !== document.body) {
+      document.body.appendChild(this.menuContent);
+    }
+
+    // Make menu visible with correct dimensions
     this.menuContent.style.display = "block";
-    
+
     // Wait for the browser to calculate dimensions
     setTimeout(() => {
-      // Use fixed positioning with transform to match Claude's native UI pattern
-      this.menuContent.style.position = "fixed";
-      
-      // Calculate menu dimensions
-      const menuWidth = this.menuContent.offsetWidth || 200;
-      const menuHeight = this.menuContent.offsetHeight || 200;
-      
-      // Calculate the X position (left edge of button)
-      let leftPosition = buttonRect.left;
-      
-      // On mobile, ensure the menu doesn't go off-screen to the right
+      // Use CSS class to determine mobile vs desktop
+      const isMobile = document.documentElement.classList.contains('mobile-device');
+
       if (isMobile) {
-        const windowWidth = window.innerWidth;
-        
-        // Adjust position to keep menu visible
-        if (leftPosition + menuWidth > windowWidth - 10) {
-          leftPosition = Math.max(10, windowWidth - menuWidth - 10);
-        }
+        // Mobile: Use full-screen modal approach
+        this.positionMenuAsMobileModal();
+      } else {
+        // Desktop: Smart positioning with space calculation
+        this.positionMenuForDesktop();
       }
-      
-      // Calculate the Y position
-      // Position the menu above the button with adequate spacing
-      // Add some space between button and menu
-      const paddingY = 8;
-      let topPosition = buttonRect.top - paddingY;
-      
-      // Ensure the menu doesn't go off the top of the screen
-      if (topPosition < 10) {
-        // Position below the button instead
-        topPosition = buttonRect.bottom + 8;
-      }
-      
-      // Ensure the menu doesn't go off the bottom of the screen
-      if (topPosition + menuHeight > window.innerHeight - 10) {
-        // Position above the button if it would go off the bottom
-        topPosition = Math.max(10, topPosition);
-      }
-      
-      // Apply transform to position the menu precisely
-      this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
-      this.menuContent.style.zIndex = "1000";
     }, 0);
+  }
+
+  /**
+   * Positions the voice menu as a centered mobile modal.
+   * CSS handles positioning via .voice-menu-mobile-modal class.
+   */
+  private positionMenuAsMobileModal(): void {
+    // Add mobile modal class - CSS handles all positioning
+    this.menuContent.classList.add("voice-menu-mobile-modal");
+
+    // Show backdrop for mobile modal
+    this.showBackdrop();
+  }
+
+  /**
+   * Creates and displays the backdrop overlay for mobile modal.
+   */
+  private showBackdrop(): void {
+    let backdrop = document.getElementById("saypi-voice-menu-backdrop");
+    if (!backdrop) {
+      backdrop = document.createElement("div");
+      backdrop.id = "saypi-voice-menu-backdrop";
+      backdrop.classList.add("voice-menu-backdrop");
+      backdrop.addEventListener("click", (e) => {
+        if (e.target === backdrop) {
+          this.toggleMenu();
+        }
+      }, true);
+      document.body.appendChild(backdrop);
+    }
+    backdrop.style.display = "block";
+  }
+
+  /**
+   * Hides the backdrop overlay.
+   */
+  private hideBackdrop(): void {
+    const backdrop = document.getElementById("saypi-voice-menu-backdrop");
+    if (backdrop) {
+      backdrop.style.display = "none";
+    }
+  }
+
+  /**
+   * Positions the voice menu as a smart dropdown on desktop.
+   * Calculates optimal position (above/below button) based on available viewport space.
+   * Ensures menu is always fully visible and scrollable within viewport bounds.
+   */
+  private positionMenuForDesktop(): void {
+    // Remove mobile-specific classes if present
+    this.menuContent.classList.remove("voice-menu-mobile-modal");
+
+    // Use fixed positioning
+    this.menuContent.style.position = "fixed";
+
+    // Get button position (menu is already in body, so this is current)
+    const buttonRect = this.menuButton.getBoundingClientRect();
+
+    // Calculate menu dimensions
+    const menuWidth = this.menuContent.offsetWidth || 200;
+    const menuHeight = this.menuContent.offsetHeight || 280;
+
+    // Calculate available space above and below the button
+    const spaceAbove = buttonRect.top;
+    const spaceBelow = window.innerHeight - buttonRect.bottom;
+
+    // Determine optimal position based on available space
+    const padding = 8;
+    const minSpace = 50; // Minimum space needed to show menu
+
+    let topPosition: number;
+    let maxHeight: number;
+
+    // Prefer positioning below if there's more space there, or if space above is insufficient
+    if (spaceBelow > spaceAbove || spaceAbove < minSpace) {
+      // Position below the button
+      topPosition = buttonRect.bottom + padding;
+      // Use generous space - allow up to 600px or available space, whichever is smaller
+      maxHeight = Math.min(600, spaceBelow - padding * 2);
+    } else {
+      // Position above the button
+      // Use generous space - allow up to 600px or available space, whichever is smaller
+      maxHeight = Math.min(600, spaceAbove - padding * 2);
+      topPosition = buttonRect.top - padding - Math.min(menuHeight, maxHeight);
+    }
+
+    // Ensure we don't go off the top of the screen
+    if (topPosition < padding) {
+      topPosition = padding;
+      maxHeight = Math.min(600, window.innerHeight - padding * 2);
+    }
+
+    // Ensure we don't go off the bottom of the screen
+    if (topPosition + maxHeight > window.innerHeight - padding) {
+      maxHeight = window.innerHeight - topPosition - padding;
+    }
+
+    // Calculate the X position (left edge of button)
+    let leftPosition = buttonRect.left;
+
+    // Ensure the menu doesn't go off-screen to the right
+    const windowWidth = window.innerWidth;
+    if (leftPosition + menuWidth > windowWidth - padding) {
+      leftPosition = Math.max(padding, windowWidth - menuWidth - padding);
+    }
+
+    // Apply positioning using left/top (not transform for fixed position)
+    this.menuContent.style.left = `${leftPosition}px`;
+    this.menuContent.style.top = `${topPosition}px`;
+    this.menuContent.style.transform = "none";
+    this.menuContent.style.maxHeight = `${maxHeight}px`;
+    this.menuContent.style.overflowY = "auto";
+    this.menuContent.style.zIndex = "1000";
   }
 
   private toggleMenu(): void {
@@ -437,8 +526,19 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         this.menuButton.setAttribute("aria-expanded", "true");
       });
     } else {
-      // Hide the menu
+      // Close the menu
       this.menuContent.style.display = "none";
+
+      // Remove mobile modal class if present
+      this.menuContent.classList.remove("voice-menu-mobile-modal");
+
+      // Move menu back to original parent (both desktop and mobile append to body when open)
+      if (this.menuContent.parentElement === document.body && this.element) {
+        this.element.appendChild(this.menuContent);
+      }
+
+      // Hide backdrop (used by mobile)
+      this.hideBackdrop();
     }
   }
 
