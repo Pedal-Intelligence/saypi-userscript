@@ -14,7 +14,7 @@ This document provides a comprehensive overview of Say, Pi extension compatibili
 - **Mobile Chromium (Kiwi, etc.)** - Limited support, site-dependent issues
 
 ### ❌ Known Issues
-- **Kiwi Browser + Claude.ai** - Both VAD and TTS unavailable
+- **Kiwi Browser + Claude.ai** - Complete voice incompatibility (both VAD and TTS fail; VAD notice shown)
 
 ---
 
@@ -29,7 +29,7 @@ This document provides a comprehensive overview of Say, Pi extension compatibili
 | **Safari Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
 | **Safari Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
 | **Mobile Chrome** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
-| **Kiwi Browser** | ✅ | ❌ | ✅ | ✅ | ❌ | ❓ | ChatGPT uses native Read Aloud |
+| **Kiwi Browser** | ✅ | ❌ | ✅ | ✅ | ❌ | ❓ | Total voice incompatibility on Claude - VAD notice shown |
 
 **Legend:**
 - ✅ Works fully
@@ -124,6 +124,33 @@ Voice Activity Detection (VAD) and Speech-to-Text work across more browsers beca
 - Offscreen VAD: [`vad_handler.ts`](../src/offscreen/vad_handler.ts)
 - Onscreen fallback: [`OnscreenVADClient.ts`](../src/vad/OnscreenVADClient.ts)
 - Detection: [`OffscreenVADClient.ts`](../src/vad/OffscreenVADClient.ts)
+
+### Special Case: Kiwi Browser + Claude.ai (Dual Incompatibility)
+
+Kiwi Browser on Claude.ai has the unique distinction of having **both VAD and TTS failures**:
+
+**VAD/STT Incompatibility:**
+- WASM/ONNX Runtime fails with "no available backend found" error
+- Voice input completely unavailable
+- Shows user notice: "Voice is not supported on this mobile browser with Claude"
+
+**TTS Incompatibility:**
+- No offscreen API support (mobile browser limitation)
+- CSP blocks in-page audio fallback (Claude.ai's restrictive `media-src`)
+- Speech playback completely unavailable
+
+**Notice Strategy:**
+- Only the VAD incompatibility notice is shown to users
+- TTS compatibility notice is intentionally suppressed
+- Rationale: Showing both notices would be redundant when the VAD notice already communicates complete voice incompatibility
+
+**Code Flow:**
+1. [`BrowserCompatibilityModule.ts`](../src/compat/BrowserCompatibilityModule.ts) detects Mobile Chromium + Claude combination
+2. VAD failure triggers "Voice is not supported on this mobile browser with Claude" notice
+3. TTS failure is detected but notice suppressed (VAD notice already covers it)
+4. User sees single, clear message about voice being unsupported
+
+This is the only browser/site combination with complete voice feature failure.
 
 ---
 
@@ -223,11 +250,17 @@ Page Load → Extension Init → AudioModule.start() → showTTSUnavailableNotif
 **Symptoms:** Neither voice input nor speech playback work
 
 **Recommendation:**
-> "We're sorry, but Kiwi Browser doesn't fully support voice features with Claude. Please try using a desktop browser like Chrome or Edge."
+> "Voice is not supported on this mobile browser with Claude"
 
-**Why:** WASM backend issues block VAD, no offscreen blocks TTS
+**Why:** DUAL incompatibility:
+- **VAD/STT fails:** WASM/ONNX Runtime compatibility issues ("no available backend found" error)
+- **TTS fails:** No offscreen API support + CSP blocks in-page audio fallback
+
+**Note:** The TTS compatibility notice is intentionally suppressed because the existing VAD notice already covers the complete voice incompatibility. Showing both would be redundant.
 
 **Workaround:** Use Chrome/Edge on desktop or different mobile browser
+
+**Code reference:** [`BrowserCompatibilityModule.ts`](../src/compat/BrowserCompatibilityModule.ts) - Mobile Chromium + Claude detection
 
 ### Scenario 4: Any Browser on ChatGPT
 **Symptoms:** Should work fully
@@ -368,7 +401,15 @@ The extension follows a **progressive enhancement** philosophy:
 
 ## Changelog
 
-### 2025-10-05
+### 2025-10-05 (Second Update)
+- Clarified Kiwi Browser + Claude.ai has BOTH VAD and TTS incompatibility
+- Updated compatibility matrix notes for Kiwi Browser row
+- Enhanced Scenario 3 with dual incompatibility explanation
+- Added "Special Case: Kiwi Browser + Claude.ai (Dual Incompatibility)" section
+- Documented TTS notice suppression strategy (VAD notice already covers complete incompatibility)
+- Added code reference to BrowserCompatibilityModule.ts
+
+### 2025-10-05 (First Update)
 - Updated ChatGPT TTS compatibility to reflect native "Read Aloud" support
 - Changed all ChatGPT TTS entries from ❌ to ✅ across all browsers
 - Updated CSP section to note ChatGPT uses native Read Aloud (no external API)
@@ -389,4 +430,4 @@ The extension follows a **progressive enhancement** philosophy:
 
 **Maintained by:** Say, Pi Team
 **Last Updated:** 2025-10-05
-**Version:** 1.1.0
+**Version:** 1.2.0

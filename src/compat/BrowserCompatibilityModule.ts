@@ -48,6 +48,9 @@ export class BrowserCompatibilityModule {
    * Note: ChatGPT is excluded from checks as it has native "Read Aloud" TTS
    * that works on all browsers without requiring our streaming API.
    *
+   * Note: Kiwi Browser + Claude.ai already shows VAD incompatibility notice
+   * ("Voice is not supported on this mobile browser") so TTS notice is redundant.
+   *
    * @returns CompatibilityIssue if there's a problem, null otherwise
    */
   public checkTTSCompatibility(): CompatibilityIssue | null {
@@ -63,6 +66,15 @@ export class BrowserCompatibilityModule {
     // See: https://www.saypi.ai/chatgpt
     if (chatbotType === 'chatgpt') {
       logger.debug("[BrowserCompatibilityModule] ChatGPT uses native Read Aloud, skipping TTS check");
+      return null;
+    }
+
+    // Kiwi Browser + Claude.ai already shows VAD incompatibility notice
+    // Both VAD and TTS fail, but VAD notice covers it ("Voice is not supported")
+    // Don't show redundant TTS notice
+    const browserInfo = getBrowserInfo();
+    if (browserInfo.name === 'Mobile Chromium' && chatbotType === 'claude') {
+      logger.debug("[BrowserCompatibilityModule] Kiwi+Claude shows VAD notice, skipping redundant TTS notice");
       return null;
     }
 
