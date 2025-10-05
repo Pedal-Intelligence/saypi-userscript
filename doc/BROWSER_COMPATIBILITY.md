@@ -26,9 +26,8 @@ This document provides a comprehensive overview of Say, Pi extension compatibili
 | **Edge Desktop** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Full support via offscreen |
 | **Firefox Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
 | **Firefox Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
-| **Safari Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
-| **Safari Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
-| **Mobile Chrome** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Safari Desktop** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Unsupported |
+| **Safari Mobile** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | Old version of Say, Pi (v1.5.9) |
 | **Kiwi Browser** | ✅ | ❌ | ✅ | ✅ | ❌ | ❓ | Total voice incompatibility on Claude - VAD notice shown |
 
 **Legend:**
@@ -430,4 +429,4 @@ The extension follows a **progressive enhancement** philosophy:
 
 **Maintained by:** Say, Pi Team
 **Last Updated:** 2025-10-05
-**Version:** 1.2.0
+**Version:** 1.10.4
