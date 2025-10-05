@@ -1217,6 +1217,38 @@
     "message": "Voice not available. Try Chrome or Firefox on desktop.",
     "description": "Short generic error message for notifications when voice features are not supported."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Heads up! Speech playback isn't available on $browserName$ with $chatbotName$ yet. The good news? Voice input works great! For TTS, try Chrome or Edge on desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS unavailable on $browserName$ + $chatbotName$. Voice input works! Try Chrome desktop for TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Got it",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "contextMenuStartDictation": {
     "message": "Start dictation with $appName$",
     "description": "Context menu item text to start dictation on an input field.",

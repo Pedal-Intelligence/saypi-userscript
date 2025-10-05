@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "A hang nem érhető el. \nPróbálja ki a Chrome -t vagy a Firefoxot az asztalon."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Figyelem! A beszéd lejátszás még nem elérhető a $browserName$ böngészőben a $chatbotName$ használatával. A jó hír? A hangbemenet remekül működik! A TTS-hez próbálja ki a Chrome-ot vagy az Edge-et asztali gépen.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "A TTS nem érhető el a $browserName$ + $chatbotName$ esetén. A hangbemenet működik! Próbálja ki a Chrome asztali verziót a TTS-hez.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Értem",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Lehet, hogy a hangjellemzőket nem lehet teljes mértékben támogatni a mobil böngészőknél, a $chatbotName$ -mal. \nKérjük, próbálja meg használni az asztali böngészőt a legjobb élmény érdekében.",

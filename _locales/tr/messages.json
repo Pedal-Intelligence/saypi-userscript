@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Ses mevcut değil. \nMasaüstünde Chrome veya Firefox'u deneyin."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Dikkat! $browserName$ tarayıcısında $chatbotName$ ile konuşma oynatma henüz kullanılamıyor. İyi haber? Sesli giriş harika çalışıyor! TTS için masaüstünde Chrome veya Edge'i deneyin.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$ üzerinde TTS kullanılamıyor. Sesli giriş çalışıyor! TTS için Chrome masaüstünü deneyin.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Anladım",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Ses özellikleri $chatbotName$ ile mobil tarayıcılarda tam olarak desteklenmeyebilir. \nEn iyi deneyim için lütfen bir masaüstü tarayıcı kullanmayı deneyin.",

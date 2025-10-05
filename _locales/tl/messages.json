@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Hindi magagamit ang boses. \nSubukan ang Chrome o Firefox sa desktop."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Paalala! Ang speech playback ay hindi pa available sa $browserName$ gamit ang $chatbotName$. Ang magandang balita? Gumagana nang napakahusay ang voice input! Para sa TTS, subukan ang Chrome o Edge sa desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "Hindi available ang TTS sa $browserName$ + $chatbotName$. Gumagana ang voice input! Subukan ang Chrome desktop para sa TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Naintindihan ko",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Ang mga tampok ng boses ay maaaring hindi ganap na suportado sa mga mobile browser na may $chatbotName$. \nMangyaring subukang gumamit ng isang desktop browser para sa pinakamahusay na karanasan.",

@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Voz não disponível. \nExperimente o Chrome ou o Firefox na área de trabalho."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Atenção! A reprodução de fala ainda não está disponível no $browserName$ com $chatbotName$. A boa notícia? A entrada de voz funciona muito bem! Para TTS, experimente o Chrome ou Edge na área de trabalho.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS indisponível no $browserName$ + $chatbotName$. A entrada de voz funciona! Experimente o Chrome na área de trabalho para TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Entendi",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Os recursos de voz não podem ser totalmente suportados em navegadores móveis com $chatbotName$. \nTente usar um navegador de desktop para obter a melhor experiência.",

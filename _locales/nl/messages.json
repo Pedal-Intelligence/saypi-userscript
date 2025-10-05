@@ -1246,6 +1246,38 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Stem niet beschikbaar. \nProbeer Chrome of Firefox op desktop."
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Let op! Spraakweergave is nog niet beschikbaar op $browserName$ met $chatbotName$. Het goede nieuws? Spraakinvoer werkt geweldig! Probeer Chrome of Edge op desktop voor TTS.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS niet beschikbaar op $browserName$ + $chatbotName$. Spraakinvoer werkt! Probeer Chrome desktop voor TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Begrepen",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
     "message": "Spraakfuncties worden mogelijk niet volledig ondersteund op mobiele browsers met $chatbotName$. \nProbeer een desktopbrowser te gebruiken voor de beste ervaring.",

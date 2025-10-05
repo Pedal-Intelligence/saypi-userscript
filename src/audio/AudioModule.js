@@ -12,6 +12,7 @@ import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
+import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
 
@@ -125,12 +126,18 @@ export default class AudioModule {
     try {
       // Initialize offscreen bridge and check if supported
       this.useOffscreenAudio = await this.offscreenBridge.isSupported();
-      
+
       logger.debug(`[AudioModule] Using offscreen audio: ${this.useOffscreenAudio}`);
-      
+
+      // Check for TTS compatibility issues (Firefox/Safari/mobile on Claude/ChatGPT)
+      // BrowserCompatibilityModule will emit events if issues detected
+      // CompatibilityNotificationUI (initialized separately) will handle showing notifications
+      const compatModule = BrowserCompatibilityModule.getInstance();
+      compatModule.checkTTSCompatibility();
+
       // even if we're not using offscreen audio, set up the in-page audio element
       this.initialiseOnscreenAudio();
-      
+
       this.listenForAudioElementSwap();
 
       if (this.useOffscreenAudio)  {
