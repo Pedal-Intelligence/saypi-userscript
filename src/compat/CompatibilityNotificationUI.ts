@@ -12,6 +12,7 @@ import EventBus from "../events/EventBus";
 import { TextualNotificationsModule } from "../NotificationsModule";
 import getMessage from "../i18n";
 import { logger } from "../LoggingModule";
+import { IconModule } from "../icons/IconModule";
 import type { CompatibilityIssue } from "./BrowserCompatibilityModule";
 
 /**
@@ -76,7 +77,7 @@ export class CompatibilityNotificationUI {
   }
 
   /**
-   * Show TTS unavailability notification
+   * Show TTS unavailability notification with Lucide info icon
    */
   private showTTSUnavailableNotification(issue: CompatibilityIssue): void {
     const message = getMessage('ttsUnavailableBrowserChatbot', [
@@ -84,12 +85,82 @@ export class CompatibilityNotificationUI {
       issue.chatbotName
     ]);
 
-    // Show notification with 30-second timeout
-    // User can also dismiss by clicking
-    this.notifications.showNotification(message, 'info', 30);
+    // Use custom notification with embedded IconModule icon
+    this.showNotificationWithIcon(message, IconModule.info, 30);
 
     logger.debug(
       `[CompatibilityNotificationUI] Showed TTS unavailable notification for ${issue.browserName} + ${issue.chatbotName}`
     );
+  }
+
+  /**
+   * Show notification with embedded SVG icon from IconModule
+   * @param message - Notification message text
+   * @param icon - SVG element from IconModule
+   * @param seconds - Auto-dismiss timeout in seconds
+   */
+  private showNotificationWithIcon(message: string, icon: SVGElement, seconds: number): void {
+    // Initialize notification element
+    const notificationElement = this.getOrCreateNotificationElement();
+
+    // Clear previous notification
+    this.hideNotification(notificationElement);
+
+    // Show new notification
+    notificationElement.classList.add('active');
+
+    // Clone and add icon
+    const iconClone = icon.cloneNode(true) as SVGElement;
+    iconClone.classList.add('icon');
+    notificationElement.appendChild(iconClone);
+
+    // Add message content
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('content');
+
+    const messageSpan = document.createElement('span');
+    messageSpan.classList.add('message');
+    messageSpan.textContent = message;
+    contentDiv.appendChild(messageSpan);
+
+    notificationElement.appendChild(contentDiv);
+
+    // Auto-dismiss after timeout
+    setTimeout(() => {
+      this.hideNotification(notificationElement);
+    }, seconds * 1000);
+  }
+
+  /**
+   * Get or create the notification DOM element
+   */
+  private getOrCreateNotificationElement(): HTMLElement {
+    let element = document.getElementById('saypi-notification') as HTMLElement | null;
+
+    if (!element || !document.body.contains(element)) {
+      element = document.createElement('p');
+      element.id = 'saypi-notification';
+      element.classList.add('text-notification');
+      document.body.appendChild(element);
+
+      // Hide notification when clicked
+      element.addEventListener('click', () => {
+        this.hideNotification(element!);
+      });
+    }
+
+    return element;
+  }
+
+  /**
+   * Hide notification and clear content
+   */
+  private hideNotification(element: HTMLElement): void {
+    element.classList.remove('active');
+
+    // Remove all child elements
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
   }
 }

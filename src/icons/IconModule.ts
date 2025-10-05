@@ -9,6 +9,7 @@ import steerSVG from "./steer.svg";
 import lucideBrainSVG from "./lucide-brain.svg";
 import lucideShipWheelSVG from "./lucide-ship-wheel.svg";
 import lucideBotSVG from "./lucide-bot.svg";
+import lucideInfoSVG from "./lucide-info.svg";
 import bubbleBwSVG from "./bubble-bw.svg";
 import { createSVGElement } from "../dom/DOMModule";
 
@@ -20,8 +21,9 @@ export class IconModule {
   private static _brain: SVGElement | null = null;
   private static _steer: SVGElement | null = null;
   private static _bot: SVGElement | null = null;
+  private static _info: SVGElement | null = null;
   private static _bubbleBw: SVGElement | null = null;
-  
+
   // Create an empty SVG element to use as fallback
   private static createEmptySVG(): SVGElement {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -104,7 +106,19 @@ export class IconModule {
     }
     return this._bot;
   }
-  
+
+  static get info(): SVGElement {
+    if (!this._info) {
+      try {
+        this._info = createSVGElement(lucideInfoSVG);
+      } catch (e) {
+        console.warn('Failed to load info icon', e);
+        this._info = this.createEmptySVG();
+      }
+    }
+    return this._info;
+  }
+
   static get bubbleBw(): SVGElement {
     if (!this._bubbleBw) {
       try {
