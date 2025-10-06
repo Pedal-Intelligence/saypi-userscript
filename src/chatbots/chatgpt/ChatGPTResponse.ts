@@ -23,6 +23,24 @@ export class ChatGPTResponse extends AssistantResponse {
   decorateControls(): MessageControls {
     return new ChatGPTMessageControls(this, this.ttsControlsModule);
   }
+
+  override get messageId(): string {
+    if (this._messageId) {
+      return this._messageId;
+    }
+
+    const turnId = this.element.getAttribute("data-turn-id")?.trim();
+    if (turnId) {
+      this._messageId = turnId;
+      if (this.element.dataset.saypiMessageId !== turnId) {
+        this.element.dataset.saypiMessageId = turnId;
+      }
+      return this._messageId;
+    }
+
+    logger.warn("[ChatGPTResponse] Missing data-turn-id on assistant message", this.element);
+    return super.messageId;
+  }
 }
 
 export class ChatGPTMessageControls extends MessageControls {

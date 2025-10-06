@@ -561,8 +561,11 @@ class ChatHistoryNewMessageObserver
       });
     }
 
-    const utterance =
-      await this.speechSynthesis.createSpeechStreamOrPlaceholder(provider);
+    const utterance = await this.speechSynthesis.createSpeechStreamOrPlaceholder(
+      provider,
+      this.chatbot,
+      message.messageId
+    );
     message.decorateSpeech(utterance);
 
     const chatbotName = this.chatbot.getName();

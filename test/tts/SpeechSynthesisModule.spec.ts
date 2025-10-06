@@ -38,6 +38,7 @@ describe("SpeechSynthesisModule", () => {
       createStream: vi.fn(),
       addSpeechToStream: vi.fn(),
       endStream: vi.fn(),
+      isOpen: vi.fn().mockReturnValue(false),
     } as unknown as AudioStreamManager;
 
     const preferredVoiceMock = mockVoices[0];
@@ -134,6 +135,28 @@ describe("SpeechSynthesisModule", () => {
 
     expect(utterance).toEqual(mockUtterance);
     expect(audioStreamManagerMock.createStream).toHaveBeenCalled();
+  });
+
+  it("reuses an open stream when the same messageId is provided", async () => {
+    const mockVoice = mockVoices[0];
+    const mockUtterance = {
+      id: "uuid",
+      text: "Hello again",
+      lang: "en-US",
+      voice: mockVoice,
+      uri: "https://api.saypi.ai/speak/uuid",
+      provider: audioProviders.SayPi,
+    };
+
+    (audioStreamManagerMock.createStream as Mock).mockResolvedValue(mockUtterance);
+    (audioStreamManagerMock.isOpen as Mock).mockReturnValue(true);
+
+    const chatbot = { getID: () => "claude" } as any;
+    const first = await speechSynthesisModule.createSpeechStream(chatbot, "message-123");
+    const second = await speechSynthesisModule.createSpeechStream(chatbot, "message-123");
+
+    expect(first).toBe(second);
+    expect(audioStreamManagerMock.createStream).toHaveBeenCalledTimes(1);
   });
 
   it("keeps native audio for chatbots without a Say Pi voice selection", async () => {

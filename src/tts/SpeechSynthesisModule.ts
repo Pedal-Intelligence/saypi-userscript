@@ -73,6 +73,8 @@ class SpeechSynthesisModule {
   private ttsService: TextToSpeechService;
   private audioStreamManager: AudioStreamManager;
   private userPreferences: UserPreferenceModule;
+  private activeStreamsByMessageId: Map<string, SpeechUtterance> = new Map();
+  private messageIdByUtteranceId: Map<string, string> = new Map();
 
   /**
    * This class uses the singleton pattern to ensure that only one instance is created.
@@ -207,7 +209,8 @@ class SpeechSynthesisModule {
   }
 
   async createSpeechPlaceholder(
-    provider: AudioProvider
+    provider: AudioProvider,
+    _messageId?: string
   ): Promise<SpeechUtterance> {
     const preferedLang = await this.userPreferences.getLanguage();
     return new SpeechPlaceholder(preferedLang, provider);
@@ -215,16 +218,31 @@ class SpeechSynthesisModule {
 
   async createSpeechStreamOrPlaceholder(
     provider: AudioProvider,
-    chatbot?: Chatbot
+    chatbot?: Chatbot,
+    messageId?: string
   ): Promise<SpeechUtterance> {
     if (provider === audioProviders.SayPi) {
-      return this.createSpeechStream(chatbot);
+      return this.createSpeechStream(chatbot, messageId);
     } else {
-      return this.createSpeechPlaceholder(provider);
+      return this.createSpeechPlaceholder(provider, messageId);
     }
   }
 
-  async createSpeechStream(chatbot?: Chatbot): Promise<SpeechUtterance> {
+  async createSpeechStream(
+    chatbot?: Chatbot,
+    messageId?: string
+  ): Promise<SpeechUtterance> {
+    if (messageId) {
+      const existing = this.activeStreamsByMessageId.get(messageId);
+      if (existing) {
+        if (this.audioStreamManager.isOpen(existing.id)) {
+          return existing;
+        }
+        this.activeStreamsByMessageId.delete(messageId);
+        this.messageIdByUtteranceId.delete(existing.id);
+      }
+    }
+
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice(chatbot);
     if (!preferedVoice) {
@@ -232,12 +250,17 @@ class SpeechSynthesisModule {
     }
     const preferedLang = await this.userPreferences.getLanguage();
     const uuid = generateUUID();
-    const utterance = this.audioStreamManager.createStream(
+    const utterance = await this.audioStreamManager.createStream(
       uuid,
       preferedVoice,
       preferedLang,
       chatbot
     );
+
+    if (messageId) {
+      this.activeStreamsByMessageId.set(messageId, utterance);
+      this.messageIdByUtteranceId.set(utterance.id, messageId);
+    }
 
     return utterance;
   }
@@ -255,6 +278,11 @@ class SpeechSynthesisModule {
   }
 
   async endSpeechStream(utterance: SpeechUtterance): Promise<void> {
+    const messageId = this.messageIdByUtteranceId.get(utterance.id);
+    if (messageId) {
+      this.activeStreamsByMessageId.delete(messageId);
+      this.messageIdByUtteranceId.delete(utterance.id);
+    }
     await this.audioStreamManager.endStream(utterance.id);
     // doesn't capture all stream ended cases (see audioStreamManager.endStream for more), but good enough for now
     EventBus.emit("saypi:tts:speechStreamEnded", utterance);
