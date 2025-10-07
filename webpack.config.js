@@ -3,6 +3,7 @@ import path from "path";
 import webpack from "webpack";
 import dotenv from "dotenv";
 import CopyPlugin from "copy-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -103,19 +104,24 @@ const config = {
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
+          use: [
+            // Extract CSS to separate file in production, inline in development
+            isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+            "css-loader"
+          ],
         },
         {
           test: /\.scss$/,
           use: [
-            "style-loader",
+            // Extract CSS to separate file in production, inline in development
+            isProduction ? MiniCssExtractPlugin.loader : "style-loader",
             {
               loader: "css-loader",
-              options: { sourceMap: true },
+              options: { sourceMap: !isProduction },
             },
             {
               loader: "sass-loader",
-              options: { sourceMap: true },
+              options: { sourceMap: !isProduction },
             },
           ],
         },
@@ -134,9 +140,13 @@ const config = {
       extensions: [".tsx", ".ts", ".js"],
     },
     optimization: {
-      minimize: false, // Prevents minification in production mode
+      // Enable minification for production builds to reduce bundle size
+      // This is critical for meeting Firefox AMO's 5MB file size limit
+      // Webpack uses terser-webpack-plugin by default when minimize is true
+      minimize: isProduction,
       splitChunks: {
-        // Disable code splitting to ensure all code is included in the main bundle
+        // Keep async chunks only for now (conservative approach)
+        // Future optimization: enable 'all' for better code splitting
         chunks: 'async',
         cacheGroups: {
           defaultVendors: false,
@@ -152,6 +162,13 @@ const config = {
         entryOnly: true,
       }),
       new webpack.DefinePlugin(envKeys), // Inject environment variables
+      // Extract CSS to separate files in production mode
+      // This reduces the main JS bundle size significantly
+      ...(isProduction ? [
+        new MiniCssExtractPlugin({
+          filename: "[name].css",
+        })
+      ] : []),
       new CopyPlugin({
         patterns: [
           {

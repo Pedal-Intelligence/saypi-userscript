@@ -2,7 +2,7 @@ import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
-import { debounce } from "lodash";
+import { debounce } from "../utils/debounce";
 import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
 import { getBrowserInfo } from '../UserAgentModule';
 import { ChatbotIdentifier } from '../chatbots/ChatbotIdentifier';

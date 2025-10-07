@@ -1,7 +1,7 @@
 import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import * as ort from "onnxruntime-web";
 import { logger } from "../LoggingModule.js";
-import { debounce } from "lodash";
+import { debounce } from "../utils/debounce";
 import { incrementUsage, decrementUsage, resetUsageCounter, registerMessageHandler } from "./media_coordinator";
 import { VAD_CONFIGS, VADPreset } from "../vad/VADConfigs";
 

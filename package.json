@@ -69,12 +69,12 @@
     "http-proxy-middleware": "^2.0.6",
     "js-md5": "^0.8.3",
     "lodash": "^4.17.21",
+    "lucide": "^0.536.0",
     "onnxruntime-web": "1.14.0",
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",
     "wasm-feature-detect": "^1.8.0",
-    "xstate": "^4.38.2",
-    "lucide": "^0.536.0"
+    "xstate": "^4.38.2"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
@@ -99,6 +99,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
     "jsdom": "^24.0.0",
+    "mini-css-extract-plugin": "^2.9.4",
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "raw-loader": "^4.0.2",

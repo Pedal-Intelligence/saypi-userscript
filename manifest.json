@@ -25,12 +25,16 @@
         "https://chat.com/*",
         "https://chat.openai.com/*"
       ],
+      "css": [
+        "public/main.css"
+      ],
       "js": [
         "public/saypi.user.js"
       ]
     },
     {
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -40,6 +44,9 @@
         "https://chatgpt.com/*",
         "https://chat.com/*",
         "https://chat.openai.com/*"
+      ],
+      "css": [
+        "public/main.css"
       ],
       "js": [
         "public/saypi.user.js"
@@ -95,6 +102,7 @@
         "public/permissions/*.css"
       ],
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]
