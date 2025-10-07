@@ -194,12 +194,6 @@ describe("SpeechSynthesisModule", () => {
     const claudeVoice = { ...mockVoices[0] };
     const chatgptVoice = { ...mockVoices[0], id: "other", name: "Other Voice" };
 
-    (userPreferenceModuleMock.hasVoice as Mock).mockImplementation(
-      async (chatbotArg?: any) => {
-        const id = typeof chatbotArg === "string" ? chatbotArg : chatbotArg?.getID?.();
-        return id === "claude" || id === "chatgpt";
-      }
-    );
     (userPreferenceModuleMock.getVoice as Mock).mockImplementation(
       async (chatbotArg?: any) => {
         const id = typeof chatbotArg === "string" ? chatbotArg : chatbotArg?.getID?.();
@@ -224,8 +218,19 @@ describe("SpeechSynthesisModule", () => {
     expect(chatgptProvider).toEqual(audioProviders.SayPi);
   });
 
+  it("disables Say Pi provider when no voice preference is set for Claude", async () => {
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+
+    const claudeChatbot = { getID: () => "claude" } as any;
+
+    const provider = await speechSynthesisModule.getActiveAudioProvider(
+      claudeChatbot
+    );
+
+    expect(provider).toBe(audioProviders.None);
+  });
+
   it("falls back to native providers when no Say Pi voices are selected", async () => {
-    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(false);
     (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
 
     const chatgptChatbot = { getID: () => "chatgpt" } as any;

@@ -335,13 +335,18 @@ class SpeechSynthesisModule {
       return audioProviders.None;
     }
 
-    const hasVoice = await this.userPreferences.hasVoice(chatbot ?? chatbotId);
-    const voice = await this.userPreferences.getVoice(chatbot ?? chatbotId);
-    if (hasVoice && voice) {
+    const preferenceScope = chatbot ?? chatbotId;
+    const voice = await this.userPreferences.getVoice(preferenceScope);
+    if (voice) {
       return audioProviders.retreiveProviderByVoice(voice);
     }
 
-    return audioProviders.getDefaultForChatbot(chatbotId);
+    const defaultProvider = audioProviders.getDefaultForChatbot(chatbotId);
+    if (defaultProvider === audioProviders.SayPi) {
+      return audioProviders.None;
+    }
+
+    return defaultProvider;
   }
 
   private isStreamOpen(utteranceId: string): boolean {

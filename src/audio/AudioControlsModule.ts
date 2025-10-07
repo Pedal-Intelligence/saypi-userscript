@@ -10,6 +10,7 @@ import {
   SpeechSynthesisVoiceRemote,
   VoiceFactory,
 } from "../tts/SpeechModel";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
 export default class AudioControlsModule {
   activateAudioInput(enable: boolean): void {
@@ -68,6 +69,14 @@ export default class AudioControlsModule {
   notifyAudioVoiceDeselection(): void {
     logger.debug("Using default voice for speech");
     EventBus.emit("audio:changeVoice", { voice: null });
-    this.notifyAudioProviderSelection(audioProviders.getDefault());
+    const chatbotId = ChatbotIdentifier.identifyChatbot();
+    const defaultProvider = chatbotId
+      ? audioProviders.getDefaultForChatbot(chatbotId)
+      : audioProviders.getDefault();
+    const provider =
+      defaultProvider === audioProviders.SayPi
+        ? audioProviders.None
+        : defaultProvider;
+    this.notifyAudioProviderSelection(provider);
   }
 }
