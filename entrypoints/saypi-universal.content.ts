@@ -1,4 +1,5 @@
 import { defineContentScript } from "wxt/utils/define-content-script";
+import "../src/saypi.index.js";
 
 const CHATBOT_MATCHES = [
   "https://pi.ai/*",
@@ -18,6 +19,6 @@ export default defineContentScript({
   excludeMatches: CHATBOT_MATCHES,
   runAt: "document_idle",
   async main() {
-    await import("../src/saypi.index.js");
+    // Script side effects are executed via the top-level import above.
   },
 });

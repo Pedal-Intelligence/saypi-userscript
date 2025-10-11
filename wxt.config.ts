@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { extname } from "node:path";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "wxt";
 
@@ -7,6 +7,10 @@ const COMMONJS_CHUNK_PATTERN = "chunks/chunk-[hash].js";
 const COMMONJS_HELPER_REGEX = /^_commonjsHelpers\.([^.]+)\.js(\.map)?$/;
 const COMMONJS_HELPER_PREFIX = "chunks/commonjs-";
 const TEXT_EXTENSIONS = new Set([".js", ".mjs", ".css", ".html", ".json", ".map"]);
+const ICON_SIZES = ["16", "32", "48", "128"] as const;
+const ICON_FILE_NAMES = new Map(
+  ICON_SIZES.map((size) => [size, `bubble-${size}px.png`]),
+);
 
 const replaceAllMappings = (input: string, mappings: Map<string, string>) => {
   let result = input;
@@ -134,6 +138,64 @@ const renamePublicCommonjsAssets = (files: Array<Record<string, any>>) => {
 
 };
 
+const LOCALES_DIR = fileURLToPath(new URL("./_locales", import.meta.url));
+
+const addLocalePublicAssets = (files: Array<Record<string, any>>) => {
+  try {
+    const stats = statSync(LOCALES_DIR);
+    if (!stats.isDirectory()) {
+      return;
+    }
+  } catch {
+    return;
+  }
+
+  const stack: Array<{ absolute: string; relative: string }> = [{ absolute: LOCALES_DIR, relative: "" }];
+
+  while (stack.length) {
+    const current = stack.pop();
+    if (!current) continue;
+
+    const entries = readdirSync(current.absolute, { withFileTypes: true });
+    for (const entry of entries) {
+      const absolutePath = join(current.absolute, entry.name);
+      const relativePath = current.relative ? `${current.relative}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) {
+        stack.push({ absolute: absolutePath, relative: relativePath });
+      } else if (entry.isFile()) {
+        files.push({
+          relativeDest: `_locales/${relativePath}`,
+          absoluteSrc: absolutePath,
+        });
+      }
+    }
+  }
+};
+
+const addIconPublicAssets = (files: Array<Record<string, any>>) => {
+  for (const [size, fileName] of ICON_FILE_NAMES) {
+    const relativeDest = `icons/${fileName}`;
+    if (files.some((file) => file.relativeDest === relativeDest)) {
+      continue;
+    }
+
+    const absolutePath = fileURLToPath(new URL(`./src/icons/${fileName}`, import.meta.url));
+    try {
+      const stats = statSync(absolutePath);
+      if (!stats.isFile()) {
+        continue;
+      }
+    } catch {
+      continue;
+    }
+
+    files.push({
+      relativeDest,
+      absoluteSrc: absolutePath,
+    });
+  }
+};
+
 const applyChunkFilePattern = (config: { build?: Record<string, any>; plugins?: any[] }) => {
   config.build ??= {};
   const buildConfig = config.build as Record<string, any>;
@@ -210,6 +272,8 @@ export default defineConfig((env) => {
         applyChunkFilePattern(config);
       },
       "build:publicAssets": (_wxt: any, files: any[]) => {
+        addLocalePublicAssets(files);
+        addIconPublicAssets(files);
         renamePublicCommonjsAssets(files);
       },
     },
@@ -235,10 +299,10 @@ export default defineConfig((env) => {
         extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
       },
       icons: {
-        "16": "src/icons/bubble-16px.png",
-        "32": "src/icons/bubble-32px.png",
-        "48": "src/icons/bubble-48px.png",
-        "128": "src/icons/bubble-128px.png",
+        "16": "icons/bubble-16px.png",
+        "32": "icons/bubble-32px.png",
+        "48": "icons/bubble-48px.png",
+        "128": "icons/bubble-128px.png",
       },
       web_accessible_resources: [
         {
