@@ -10,7 +10,6 @@ import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
@@ -21,7 +20,7 @@ import StateMachineService from "./StateMachineService.js";
 class ButtonModule {
   /**
    * Initializes the button module with dependencies
-   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
+   * @param {import("./chatbots/Chatbot.ts").Chatbot} chatbot - The chatbot instance (dependency injection)
    */
   constructor(chatbot) {
     this.icons = new IconModule();
@@ -327,14 +326,6 @@ class ButtonModule {
   }
 }
 
-let instance = null;
+const instance = new ButtonModule(ChatbotService.getChatbotSync());
 
-async function initializeModule() {
-  if (!instance) {
-    const chatbot = await ChatbotService.getChatbot();
-    instance = new ButtonModule(chatbot);
-  }
-  return instance;
-}
-
-export const buttonModule = await initializeModule();
+export const buttonModule = instance;

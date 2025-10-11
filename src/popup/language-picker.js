@@ -1,5 +1,6 @@
-// utility functions
-if (!Util) function Util() {}
+const globalWindow = window;
+const Util = globalWindow.Util || {};
+globalWindow.Util = Util;
 
 Util.addClass = function (el, className) {
   var classList = className.split(" ");

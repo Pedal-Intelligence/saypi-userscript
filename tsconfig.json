@@ -1,17 +1,15 @@
 {
+  "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "strictNullChecks": true,
-    "outDir": "./public",
-    "target": "ES6",
-    "module": "ESNext", // Changed to ESNext for ES modules
-    "moduleResolution": "node",
-    "sourceMap": true,
     "allowJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "types": ["node", "chrome", "firefox-webext-browser"]
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/*.d.ts"]
+  "include": [
+    "src/**/*",
+    "entrypoints/**/*",
+    "test/**/*",
+    "scripts/**/*",
+    "wxt.config.ts"
+  ],
+  "exclude": ["public", "dist"]
 }

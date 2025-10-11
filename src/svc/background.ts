@@ -4,7 +4,7 @@ import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRe
 declare const chrome: any;
 function openSettingsWindow() {
   try {
-    const popupURL = chrome.runtime.getURL('src/popup/popup.html');
+    const popupURL = chrome.runtime.getURL('popup/index.html');
     // Decide initial height based on whether we need to show consent overlay
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
     chrome.storage.local.get('shareData', (result: any) => {
@@ -40,7 +40,7 @@ import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscree
 import { logger } from "../LoggingModule.js";
 import getMessage from "../i18n";
 
-const PERMISSIONS_PROMPT_PATH_HTML = 'public/permissions/permissions-prompt.html';
+const PERMISSIONS_PROMPT_PATH_HTML = 'permissions/index.html';
 
 // Get the JWT manager instance at startup
 const jwtManager = getJwtManagerSync();

@@ -1,6 +1,6 @@
 import { logger } from "../LoggingModule.js";
 
-export const OFFSCREEN_DOCUMENT_PATH = "src/offscreen/media_offscreen.html";
+export const OFFSCREEN_DOCUMENT_PATH = "offscreen/index.html";
 
 class OffscreenManager {
   private creating?: Promise<void>;

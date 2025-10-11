@@ -9,7 +9,7 @@ export function openSettings(): void {
     if (result && typeof result.then === 'function') {
       result.catch(() => {
         try {
-          const url = chrome.runtime.getURL('src/popup/popup.html');
+          const url = chrome.runtime.getURL('popup/index.html');
           window.open(url, '_blank');
         } catch (e) {
           // ignore
@@ -19,7 +19,7 @@ export function openSettings(): void {
   } catch (e) {
     // Fallback: open the settings page directly in a new tab
     try {
-      const url = chrome.runtime.getURL('src/popup/popup.html');
+      const url = chrome.runtime.getURL('popup/index.html');
       window.open(url, '_blank');
     } catch (e2) {
       // ignore

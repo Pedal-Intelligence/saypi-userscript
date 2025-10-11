@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="extensionPopupTitle">Say, Pi Settings</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        flex-wrap: wrap;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .user-preference-item,
+      .usage-charges-item {
+        display: block;
+        align-items: center;
+        width: 100%;
+        max-width: 504px;
+        padding: 0.5rem 1rem;
+        align-content: space-between;
+      }
+      .control {
+        margin-left: auto;
+      }
+      .description {
+        font-size: 0.875rem;
+        color: #4a5568;
+        margin-top: 0.25rem;
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center">
+    <header class="settings-header">
+      <div id="profile" class="profile-banner">
+        <div class="flex items-center w-full">
+          <a
+            href="https://www.saypi.ai"
+            id="saypi-logo-link"
+            data-i18n-attr="title:dashboardLinkTitle"
+            title="Open Say, Pi Dashboard"
+            target="_blank"
+          >
+            <img class="logo mr-2" data-icon="bubble-green.svg" alt="Say, Pi" />
+          </a>
+          <div class="flex items-center flex-grow">
+            <span class="label-text hidden" data-i18n="profile">Profile</span>
+            <span
+              id="profile-status"
+              class="ml-2 text-sm text-gray-600"
+              data-i18n="notSignedIn"
+              >Not signed in</span
+            >
+            <span id="profile-name" class="ml-2 text-normal hidden"></span>
+            <span class="header-divider" aria-hidden="true"></span>
+            <span
+              id="unauthenticated-message"
+              class="unauthenticated-inline hidden"
+              data-i18n="quotaUnauthenticatedMessage"
+              >Log in to access voice generation and other premium features</span
+            >
+          </div>
+          <button
+            id="auth-button"
+            class="control px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            data-i18n="signIn"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="settings-container">
+      <nav class="sidebar">
+        <button class="tab-button active" data-tab="general" data-i18n="tabGeneral">
+          General
+        </button>
+        <button class="tab-button" data-tab="chat" data-i18n="tabAIChat">AI Chat</button>
+        <button class="tab-button" data-tab="dictation" data-i18n="tabDictation">
+          Dictation
+        </button>
+        <button class="tab-button" data-tab="about" data-i18n="tabAbout">About</button>
+      </nav>
+      <main class="content">
+        <section id="tab-general" class="tab-panel">
+          <h2 class="panel-heading" data-i18n="sectionHeadingGeneral">General</h2>
+          <div class="user-preference-item w-full max-w-lg" id="sounds-effects-preference">
+            <label class="wraper" for="sound-effects">
+              <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="sound-effects" name="soundEffects" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+
+          <div
+            class="user-preference-item w-full max-w-lg"
+            id="analytics-consent-preference-item"
+          >
+            <label class="wraper" for="share-data">
+              <span class="label-text" data-i18n="shareAnalytics">Share analytics</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="share-data" name="shareAnalytics" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+
+          <section id="premium-status">
+            <div class="quota-progress tts">
+              <div class="progress-label">
+                <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation</span>
+                <span class="value" style="display: none">
+                  <span id="tts-quota-remaining-value" class="quota-remaining-value">0</span>
+                  <span data-i18n="ttsQuotaCharacters">characters</span>
+                </span>
+              </div>
+              <div class="progress-bar">
+                <div class="share used"></div>
+                <div class="share remaining"></div>
+              </div>
+              <div
+                class="text-xs text-gray-500 text-right mt-1 quota-percentage"
+                aria-hidden="true"
+              ></div>
+              <div id="tts-quota-state" class="text-xs text-gray-500 mt-2"></div>
+            </div>
+            <div class="quota-progress stt">
+              <div class="progress-label">
+                <span class="label" data-i18n="sttQuotaRemaining">Dictation Time</span>
+                <span class="value" style="display: none">
+                  <span id="stt-quota-remaining-value" class="quota-remaining-value">0</span>
+                  <span data-i18n="sttQuotaMinutes">minutes</span>
+                </span>
+              </div>
+              <div class="progress-bar">
+                <div class="share used"></div>
+                <div class="share remaining"></div>
+              </div>
+              <div
+                class="text-xs text-gray-500 text-right mt-1 quota-percentage"
+                aria-hidden="true"
+              ></div>
+              <div id="stt-quota-state" class="text-xs text-gray-500 mt-2"></div>
+            </div>
+            <div class="quota-progress agent hidden">
+              <div class="progress-label">
+                <span class="label" data-i18n="agentQuotaRemaining"
+                  >Agent Mode Actions Remaining</span
+                >
+                <span class="value" style="display: none">
+                  <span id="agent-quota-remaining-value" class="quota-remaining-value">0</span>
+                </span>
+              </div>
+              <div class="progress-bar">
+                <div class="share used"></div>
+                <div class="share remaining"></div>
+              </div>
+              <div
+                class="text-xs text-gray-500 text-right mt-1 quota-percentage"
+                aria-hidden="true"
+              ></div>
+              <div id="agent-quota-state" class="text-xs text-gray-500 mt-2"></div>
+            </div>
+          </section>
+
+          <section id="premium-upsell" class="hidden">
+            <div class="premium-banner">
+              <div class="premium-copy">
+                <strong data-i18n="premiumBannerTitle">Upgrade for premium features</strong>
+                <p data-i18n="premiumBannerDescription">
+                  Unlock more voice conversation time, higher quality responses, and powerful
+                  agent tools with a Say, Pi plan.
+                </p>
+              </div>
+              <button id="upgrade-button" data-i18n="upgradeButton">See plans</button>
+            </div>
+          </section>
+
+          <div id="premium-status-loading" class="premium-status loading hidden">
+            <div class="spinner"></div>
+            <p data-i18n="loadingPremiumStatus">Checking premium status…</p>
+          </div>
+          <div id="premium-status-error" class="premium-status error hidden">
+            <div class="icon"></div>
+            <div>
+              <p data-i18n="premiumStatusErrorTitle">Can't reach Say, Pi</p>
+              <p data-i18n="premiumStatusErrorDescription">
+                Check your internet connection, then try reloading the popup.
+              </p>
+            </div>
+          </div>
+
+          <section id="about-saypi" class="about-saypi">
+            <div>
+              <h2 data-i18n="aboutSayPiHeading">About Say, Pi</h2>
+              <p data-i18n="aboutSayPiDescription">
+                Say, Pi brings rich, voice-first conversational experiences to popular AI
+                chatbots, with real-time dictation, transcription, and agent tools for power
+                users.
+              </p>
+              <div class="about-links">
+                <a
+                  href="https://www.saypi.ai"
+                  data-i18n="aboutSayPiWebsite"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Visit saypi.ai</a
+                >
+                <a
+                  href="https://www.saypi.ai/blog"
+                  data-i18n="aboutSayPiBlog"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Read the blog</a
+                >
+                <a
+                  href="https://www.saypi.ai/support"
+                  data-i18n="aboutSayPiSupport"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Get support</a
+                >
+              </div>
+            </div>
+            <div class="feature-highlight" data-i18n="aboutSayPiFeatureHighlight">
+              More than transcription: agency, automation, crafted for AI explorers.
+            </div>
+          </section>
+        </section>
+
+        <section id="tab-chat" class="tab-panel hidden">
+          <h2 class="panel-heading" data-i18n="sectionHeadingChat">AI Chat</h2>
+          <div class="user-preference-item w-full max-w-lg">
+            <div class="copy">
+              <div class="label-text" data-i18n="submitModeLabel">Submit Pi responses</div>
+              <p class="description" data-i18n="submitModeDescription">
+                Choose how Say, Pi submits to chatbots
+              </p>
+            </div>
+            <div id="submit-mode-preference">
+              <div id="submit-mode-toggle" class="toggle">
+                <span class="toggle-option" data-mode="enter" data-i18n="submitModeEnter">
+                  Enter
+                </span>
+                <span class="toggle-option active" data-mode="shiftEnter" data-i18n="submitModeShiftEnter">
+                  Shift + Enter
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="user-preference-item w-full max-w-lg"
+            id="agent-mode-preference"
+            data-i18n-attr="data-entitlement-required:agent_mode"
+          >
+            <div class="copy">
+              <div class="label-text" data-i18n="agentModeLabel">Agent mode on Claude</div>
+              <p class="description" data-i18n="agentModeDescription">
+                Pick how Say, Pi writes replies to keep your conversations flowing
+              </p>
+            </div>
+            <div id="agent-mode-settings" class="hidden">
+              <div class="toggle mode">
+                <span class="toggle-option" data-mode="auto" id="agent-mode-auto" data-i18n="agentModeAuto"
+                  >Auto</span
+                >
+                <span class="toggle-option" data-mode="agent" id="agent-mode-agent" data-i18n="agentModeAgent"
+                  >Agent</span
+                >
+                <span class="toggle-option" data-mode="off" id="agent-mode-off" data-i18n="agentModeOff"
+                  >Off</span
+                >
+              </div>
+              <div class="description" data-i18n="agentModeNickname">
+                Give names to your agents to make it easier to pick the right one.
+              </div>
+              <label class="nickname">
+                <span data-i18n="agentModeNicknameLabel">Agent nickname</span>
+                <input id="agent-mode-nickname" type="text" maxlength="32" />
+              </label>
+            </div>
+            <div id="agent-mode-upsell" class="hidden">
+              <p data-i18n="agentModeUpsell">
+                Agent mode is a premium feature. Upgrade for faster task execution.
+              </p>
+              <button
+                id="agent-mode-upgrade"
+                class="li4-btn li4-btn--primary"
+                data-i18n="upgradeButton"
+              >
+                See plans
+              </button>
+            </div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg">
+            <label class="wraper" for="chatgpt-auto-read-aloud">
+              <span class="label-text" data-i18n="chatgptAutoReadAloud"
+                >Auto read aloud responses</span
+              >
+              <div class="switch-wrap control">
+                <input type="checkbox" id="chatgpt-auto-read-aloud" name="chatgptAutoReadAloud" />
+                <div class="switch"></div>
+              </div>
+            </label>
+            <p class="description" data-i18n="chatgptAutoReadAloudDescription">
+              Automatically play the response audio when available
+            </p>
+          </div>
+        </section>
+
+        <section id="tab-dictation" class="tab-panel hidden">
+          <h2 class="panel-heading" data-i18n="sectionHeadingDictation">Dictation</h2>
+          <div class="dictation-mode-selector">
+            <h3 data-i18n="dictationModeHeading">Dictation mode</h3>
+            <div id="preference-selector" class="dictation-preference">
+              <div class="mode-icon" id="speed" data-i18n="mode_speed_label">Speed</div>
+              <div class="mode-icon" id="balanced" data-i18n="mode_balanced_label">Balanced</div>
+              <div class="mode-icon" id="accuracy" data-i18n="mode_accuracy_label">Accuracy</div>
+            </div>
+            <input type="range" min="0" max="2" step="1" id="customRange" />
+            <div class="description selected" data-i18n="mode_speed_description">
+              Fastest transcription with minimal latency
+            </div>
+            <div class="description" data-i18n="mode_balanced_description">
+              Balanced quality and latency for most workflows
+            </div>
+            <div class="description" data-i18n="mode_accuracy_description">
+              Highest accuracy, but slower transcription speed
+            </div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="language-preference">
+            <div
+              id="language-picker"
+              class="language-picker user-preference language-picker--hide-label js-language-picker"
+              data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
+            >
+              <label for="language-picker-select" class="label-text" data-i18n="preferedLanguage"
+                >Language</label
+              >
+              <form action="" class="language-picker__form">
+                <select name="language-picker-select" id="language-picker-select">
+                  <option lang="ar" value="arabic">العربية</option>
+                  <option lang="bg" value="bulgarian">Български</option>
+                  <option lang="zh" value="chinese">中文</option>
+                  <option lang="hr" value="croatian">Hrvatski</option>
+                  <option lang="cs" value="czech">Čeština</option>
+                  <option lang="da" value="danish">Dansk</option>
+                  <option lang="nl" value="dutch">Nederlands</option>
+                  <option lang="en" value="english">English</option>
+                  <option lang="tl" value="filipino">Filipino</option>
+                  <option lang="fi" value="finnish">Suomi</option>
+                  <option lang="fr" value="francais">Français</option>
+                  <option lang="de" value="deutsch">Deutsch</option>
+                  <option lang="el" value="greek">Ελληνικά</option>
+                  <option lang="hi" value="hindi">हिन्दी</option>
+                  <option lang="id" value="indonesian">Bahasa Indonesia</option>
+                  <option lang="it" value="italiano">Italiano</option>
+                  <option lang="ja" value="japanese">日本語</option>
+                  <option lang="ko" value="korean">한국어</option>
+                  <option lang="ms" value="malay">Bahasa Melayu</option>
+                  <option lang="pl" value="polish">Polski</option>
+                  <option lang="pt" value="portuguese">Português</option>
+                  <option lang="ro" value="romanian">Română</option>
+                  <option lang="ru" value="russian">Русский</option>
+                  <option lang="sk" value="slovak">Slovenčina</option>
+                  <option lang="es" value="espanol">Español</option>
+                  <option lang="sv" value="swedish">Svenska</option>
+                  <option lang="ta" value="tamil">தமிழ்</option>
+                  <option lang="tr" value="turkish">Türkçe</option>
+                  <option lang="uk" value="ukrainian">Українська</option>
+                  <option lang="" value="global">Auto-detect</option>
+                </select>
+              </form>
+            </div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="vad-status-indicator-preference">
+            <label class="wraper" for="vad-status-indicator-enabled">
+              <span class="label-text" data-i18n="vadStatusIndicatorEnabledLabel"
+                >Show VAD Status</span
+              >
+              <div class="switch-wrap control">
+                <input
+                  type="checkbox"
+                  id="vad-status-indicator-enabled"
+                  name="vadStatusIndicatorEnabled"
+                />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="remove-filler-words-preference">
+            <label class="wraper" for="remove-filler-words" data-i18n-attr="title:removeFillerWordsTooltip">
+              <span class="label-text" data-i18n="removeFillerWordsLabel"
+                >Remove filler words (beta)</span
+              >
+              <div class="switch-wrap control">
+                <input type="checkbox" id="remove-filler-words" name="removeFillerWords" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <section id="tab-about" class="tab-panel hidden">
+          <h2 class="panel-heading" data-i18n="sectionHeadingAbout">About</h2>
+          <section id="application-status">
+            <div class="status-container">
+              <div class="status">
+                <p class="message unknown" data-i18n="checkingApplicationStatus">
+                  Checking on our servers...
+                </p>
+              </div>
+            </div>
+          </section>
+          <section id="application-status-detail" class="hidden issue"></section>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>

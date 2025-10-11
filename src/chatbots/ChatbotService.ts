@@ -10,7 +10,7 @@ import { ChatbotIdentifier } from "./ChatbotIdentifier";
  * All other parts of the application should use this service to get a chatbot.
  */
 export class ChatbotService {
-  static async getChatbot(): Promise<Chatbot> {
+  static getChatbotSync(): Chatbot {
     // Check if we're on a chatbot site
     const hostname = window.location.hostname;
     
@@ -25,6 +25,10 @@ export class ChatbotService {
       // For all other sites (universal dictation), use the web dictation chatbot
       return new WebDictationChatbot();
     }
+  }
+
+  static async getChatbot(): Promise<Chatbot> {
+    return this.getChatbotSync();
   }
 
   static async addChatbotFlags(): Promise<void> {
