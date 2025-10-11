@@ -336,6 +336,7 @@ export default defineConfig((env) => {
       resolve: {
         alias: {
           "~": fileURLToPath(new URL("./src", import.meta.url)),
+          events: fileURLToPath(new URL("./src/utils/EventEmitterShim.js", import.meta.url)),
         },
       },
       build: {

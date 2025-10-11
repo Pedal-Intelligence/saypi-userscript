@@ -1,8 +1,9 @@
 import { defineBackground } from "wxt/utils/define-background";
+import "../src/svc/background.ts";
 
 export default defineBackground({
   type: "module",
   async main() {
-    await import("../src/svc/background.ts");
+    // Background logic executes via the side-effect import above.
   },
 });
