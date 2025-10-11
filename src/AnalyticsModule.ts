@@ -1,4 +1,3 @@
-import axios from "axios";
 import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 
@@ -72,36 +71,41 @@ class AnalyticsService {
 
     const url = `${this.endpoint}?measurement_id=${this.measurementId}&api_secret=${this.apiKey}`;
     try {
-      await axios.post(url, payload, { headers });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const blockedByClient = typeof error.message === "string" && error.message.includes("ERR_BLOCKED_BY_CLIENT");
-        if (error.code === "ERR_NETWORK" || blockedByClient) {
-          logger.debug("[AnalyticsService] Analytics request blocked or unreachable", {
-            eventName,
-            code: error.code,
-            message: error.message
-          });
-          return;
-        }
+      const response = await fetch(url, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload),
+      });
 
-        const status = error.response?.status;
-        if (status && status >= 500) {
+      // Check if the response is not ok (status outside 200-299 range)
+      if (!response.ok) {
+        const status = response.status;
+        if (status >= 500) {
           logger.warn("[AnalyticsService] Server error while sending analytics event", {
             eventName,
             status,
-            message: error.message
+            statusText: response.statusText
           });
         } else {
           logger.info("[AnalyticsService] Non-fatal analytics error", {
             eventName,
             status,
-            message: error.message
+            statusText: response.statusText
           });
         }
-      } else {
-        logger.error("[AnalyticsService] Unexpected error sending event", error);
       }
+    } catch (error) {
+      // Network errors or blocked requests
+      if (error instanceof TypeError) {
+        // TypeError typically indicates network errors or CORS issues
+        logger.debug("[AnalyticsService] Analytics request blocked or unreachable", {
+          eventName,
+          message: error.message
+        });
+        return;
+      }
+
+      logger.error("[AnalyticsService] Unexpected error sending event", error);
     }
   }
 }

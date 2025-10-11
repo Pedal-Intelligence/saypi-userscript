@@ -13,8 +13,8 @@
     "downloads"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
-    "https://www.saypi.ai/*"
+    "https://127.0.0.1:5001/*",
+    "http://localhost:3000/*"
   ],
   "content_scripts": [
     {
@@ -24,9 +24,6 @@
         "https://chatgpt.com/*",
         "https://chat.com/*",
         "https://chat.openai.com/*"
-      ],
-      "css": [
-        "public/main.css"
       ],
       "js": [
         "public/saypi.user.js"
@@ -44,9 +41,6 @@
         "https://chatgpt.com/*",
         "https://chat.com/*",
         "https://chat.openai.com/*"
-      ],
-      "css": [
-        "public/main.css"
       ],
       "js": [
         "public/saypi.user.js"

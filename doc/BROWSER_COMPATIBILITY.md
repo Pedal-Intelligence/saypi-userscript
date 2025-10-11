@@ -24,8 +24,8 @@ This document provides a comprehensive overview of Say, Pi extension compatibili
 |---------|-----------|---------------|-------------|-----------|---------------|-------------|-------|
 | **Chrome Desktop** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Full support via offscreen |
 | **Edge Desktop** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Full support via offscreen |
-| **Firefox Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
-| **Firefox Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ChatGPT uses native Read Aloud |
+| **Firefox Desktop** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | Lack of offscreen support and CSP blocking prevents TTS on Claude.ai |
+| **Firefox Mobile** | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | Lack of offscreen support and CSP blocking prevents TTS on Claude.ai |
 | **Safari Desktop** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Unsupported |
 | **Safari Mobile** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | Old version of Say, Pi (v1.5.9) |
 | **Kiwi Browser** | ✅ | ❌ | ✅ | ✅ | ❌ | ❓ | Total voice incompatibility on Claude - VAD notice shown |

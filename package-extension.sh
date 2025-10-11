@@ -169,10 +169,6 @@ for BROWSER in "$@"; do
     mkdir -p "$AUDIO_DIR"
     cp public/saypi.user.js "$PUBLIC_DIR"
     cp public/background.js "$PUBLIC_DIR"
-    # Copy main CSS file (extracted from JS bundle for production)
-    if [ -f "public/main.css" ]; then
-      cp public/main.css "$PUBLIC_DIR"
-    fi
     # Ensure lucide UMD bundle is available to the popup
     cp public/lucide.min.js "$PUBLIC_DIR"
     cp public/silero_vad*.onnx "$PUBLIC_DIR"
