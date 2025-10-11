@@ -40,7 +40,7 @@ import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscree
 import { logger } from "../LoggingModule.js";
 import getMessage from "../i18n";
 
-const PERMISSIONS_PROMPT_PATH_HTML = 'permissions/index.html';
+const PERMISSIONS_PROMPT_PATH_HTML = 'permissions.html';
 
 // Get the JWT manager instance at startup
 const jwtManager = getJwtManagerSync();

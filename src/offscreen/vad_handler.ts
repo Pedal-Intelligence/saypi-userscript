@@ -139,9 +139,14 @@ const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks =
 };
 
 // https://docs.vad.ricky0123.com/user-guide/browser/#bundling
+const EXTENSION_ASSET_BASE = (() => {
+  const url = chrome.runtime.getURL("");
+  return url.endsWith("/") ? url : `${url}/`;
+})();
+
 const vadBundleOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  baseAssetPath: chrome.runtime.getURL("public/"),
-  onnxWASMBasePath: chrome.runtime.getURL("public/"),
+  baseAssetPath: EXTENSION_ASSET_BASE,
+  onnxWASMBasePath: EXTENSION_ASSET_BASE,
 };
 
 function configureOrtRuntime(runtime: typeof ort, existingOrtConfig?: RealTimeVADOptions['ortConfig']) {

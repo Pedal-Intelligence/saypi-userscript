@@ -7,6 +7,9 @@ const COMMONJS_CHUNK_PATTERN = "chunks/chunk-[hash].js";
 const COMMONJS_HELPER_REGEX = /^_commonjsHelpers\.([^.]+)\.js(\.map)?$/;
 const COMMONJS_HELPER_PREFIX = "chunks/commonjs-";
 const TEXT_EXTENSIONS = new Set([".js", ".mjs", ".css", ".html", ".json", ".map"]);
+const VAD_WORKLET_BUNDLE = fileURLToPath(
+  new URL("./node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js", import.meta.url),
+);
 const ICON_SIZES = ["16", "32", "48", "128"] as const;
 const ICON_FILE_NAMES = new Map(
   ICON_SIZES.map((size) => [size, `bubble-${size}px.png`]),
@@ -196,6 +199,24 @@ const addIconPublicAssets = (files: Array<Record<string, any>>) => {
   }
 };
 
+const addVadAssets = (files: Array<Record<string, any>>) => {
+  try {
+    const stats = statSync(VAD_WORKLET_BUNDLE);
+    if (!stats.isFile()) {
+      return;
+    }
+  } catch {
+    return;
+  }
+
+  if (!files.some((file) => file.relativeDest === "vad.worklet.bundle.min.js")) {
+    files.push({
+      relativeDest: "vad.worklet.bundle.min.js",
+      absoluteSrc: VAD_WORKLET_BUNDLE,
+    });
+  }
+};
+
 const applyChunkFilePattern = (config: { build?: Record<string, any>; plugins?: any[] }) => {
   config.build ??= {};
   const buildConfig = config.build as Record<string, any>;
@@ -238,14 +259,24 @@ const formatHostPermission = (url?: string | null): string | null => {
   }
 };
 
+const DEFAULT_HOST_PERMISSION_URLS = [
+  "https://api.saypi.ai",
+  "https://www.saypi.ai",
+];
+
 const hostPermissionCandidates = [
   process.env.VITE_API_SERVER_URL ?? process.env.API_SERVER_URL,
   process.env.VITE_AUTH_SERVER_URL ?? process.env.AUTH_SERVER_URL,
+  ...DEFAULT_HOST_PERMISSION_URLS,
 ];
 
-const HOST_PERMISSIONS = hostPermissionCandidates
-  .map((candidate) => formatHostPermission(candidate))
-  .filter((value): value is string => Boolean(value));
+const HOST_PERMISSIONS = Array.from(
+  new Set(
+    hostPermissionCandidates
+      .map((candidate) => formatHostPermission(candidate))
+      .filter((value): value is string => Boolean(value)),
+  ),
+);
 
 export default defineConfig((env) => {
   const browser = env?.browser ?? "chrome";
@@ -274,6 +305,7 @@ export default defineConfig((env) => {
       "build:publicAssets": (_wxt: any, files: any[]) => {
         addLocalePublicAssets(files);
         addIconPublicAssets(files);
+        addVadAssets(files);
         renamePublicCommonjsAssets(files);
       },
     },
@@ -307,18 +339,17 @@ export default defineConfig((env) => {
       web_accessible_resources: [
         {
           resources: [
-            "public/silero_vad*.onnx",
-            "public/*.wasm",
-            "public/*.mjs",
-            "public/*.js",
-            "public/ort-wasm*",
-            "public/vad.worklet*.js",
-            "public/audio/*.mp3",
-            "public/icons/*.svg",
-            "public/icons/*.png",
-            "public/icons/logos/*.svg",
-            "public/icons/logos/*.png",
-            "src/icons/flags/*.svg",
+            "silero_vad*.onnx",
+            "*.wasm",
+            "*.mjs",
+            "*.js",
+            "ort-wasm*",
+            "vad.worklet*.js",
+            "audio/*.mp3",
+            "icons/*.svg",
+            "icons/*.png",
+            "icons/logos/*.svg",
+            "icons/logos/*.png",
           ],
           matches: ["<all_urls>"],
         },

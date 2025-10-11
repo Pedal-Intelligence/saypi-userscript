@@ -3,7 +3,7 @@ import "../src/svc/background.ts";
 
 export default defineBackground({
   type: "module",
-  async main() {
+  main() {
     // Background logic executes via the side-effect import above.
   },
 });
