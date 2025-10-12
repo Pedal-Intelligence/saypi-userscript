@@ -1,7 +1,15 @@
 html,
 body {
   width: 100%;
-  min-width: 720px;
+  min-width: 736px; /* Match POPUP_MIN_CONTENT_WIDTH in background.ts */
+}
+
+/* Global hidden utility with high specificity */
+.hidden,
+span.hidden,
+div.hidden,
+section.hidden {
+  display: none !important;
 }
 
 .settings-root {

@@ -32,27 +32,33 @@ const bootstrap = async () => {
   console.info("[Popup] Bootstrap starting");
   setStaticIcons();
 
-  const sequentialImports: Array<() => Promise<unknown>> = [
-    () => import("../../src/popup/tabs.js"),
-    () => import("../../src/popup/mode-selector.js"),
-    () => import("../../src/popup/popup-config.js"),
-    () => import("../../src/popup/simple-user-agent.js"),
-    () => import("../../src/popup/language-picker.js"),
-    () => import("../../src/popup/auth-shared.js"),
-    () => import("../../src/popup/auth.js"),
-    () => import("../../src/popup/popup.js"),
-    () => import("../../src/popup/status.js"),
-    () => import("../../src/popup/status-subscription.js"),
-  ];
+  try {
+    // Load independent modules in parallel first
+    await Promise.all([
+      import("../../src/popup/tabs.js"),
+      import("../../src/popup/mode-selector.js"),
+      import("../../src/popup/popup-config.js"),
+      import("../../src/popup/simple-user-agent.js"),
+      import("../../src/popup/language-picker.js"),
+    ]);
 
-  for (const loader of sequentialImports) {
-    try {
-      await loader();
-    } catch (error) {
-      console.error("[Popup] Failed to load module", error);
-    }
+    // Load auth modules sequentially (auth-shared must come before auth.js)
+    await import("../../src/popup/auth-shared.js");
+    await import("../../src/popup/auth.js");
+
+    // Load main popup and status modules in parallel
+    await Promise.all([
+      import("../../src/popup/popup.js"),
+      import("../../src/popup/status.js"),
+    ]);
+
+    // Load status-subscription last as it may depend on popup.js
+    await import("../../src/popup/status-subscription.js");
+
+    console.info("[Popup] Bootstrap finished");
+  } catch (error) {
+    console.error("[Popup] Failed to load module", error);
   }
-  console.info("[Popup] Bootstrap finished");
 };
 
 bootstrap().catch((error) => {

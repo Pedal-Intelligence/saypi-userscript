@@ -74,6 +74,13 @@ const initializePopup = () => {
 
   var submitModeSlider = document.getElementById("submitModeRange");
   var submitModeOutput = document.getElementById("submitModeValue");
+
+  if (!submitModeSlider) {
+    console.warn('[Popup] submitModeRange element not found in DOM - submit mode slider will not work');
+  }
+  if (!submitModeOutput) {
+    console.warn('[Popup] submitModeValue element not found in DOM - submit mode display will not work');
+  }
   var submitModeIcons = {
     0: "auto",
     1: "agent",
@@ -602,7 +609,6 @@ const initializePopup = () => {
 
   function showHideConsent() {
     const sections = [
-      "preferences",
       "premium-status",
       "devtools",
       "upgrade"
@@ -622,24 +628,43 @@ const initializePopup = () => {
   function consentButtons() {
     const optInButton = document.getElementById("opt-in");
     const optOutButton = document.getElementById("opt-out");
+
+    if (!optInButton || !optOutButton) {
+      console.warn('[Popup] Consent buttons (opt-in/opt-out) not found in DOM - consent functionality will not work');
+      return;
+    }
     optInButton.addEventListener("click", function () {
       chrome.storage.local.set({ shareData: true }, function () {
         console.log("User has opted in to data sharing");
-        selectInput(document.getElementById("share-data"), true);
-        showHideConsent();
+        const shareDataInput = document.getElementById("share-data");
+        if (shareDataInput) {
+          selectInput(shareDataInput, true);
+        }
+        // Immediately hide consent and show settings
+        hideAll("analytics-consent");
+        showAll(["premium-status", "devtools", "upgrade"]);
       });
     });
     optOutButton.addEventListener("click", function () {
       chrome.storage.local.set({ shareData: false }, function () {
         console.log("User has opted out of data sharing");
-        selectInput(document.getElementById("share-data"), false);
-        showHideConsent();
+        const shareDataInput = document.getElementById("share-data");
+        if (shareDataInput) {
+          selectInput(shareDataInput, false);
+        }
+        // Immediately hide consent and show settings
+        hideAll("analytics-consent");
+        showAll(["premium-status", "devtools", "upgrade"]);
       });
     });
   }
 
   function resetButton() {
     const resetButton = document.getElementById("clear-preferences");
+    if (!resetButton) {
+      console.warn('[Popup] clear-preferences button not found in DOM - clear preferences functionality will not work');
+      return;
+    }
     resetButton.addEventListener("click", function () {
       chrome.storage.local.clear(function () {
         console.log("All preferences have been cleared");
@@ -658,6 +683,9 @@ const initializePopup = () => {
 
   // Load the saved nickname when the popup opens
   const nicknameInput = document.getElementById("assistant-nickname");
+  if (!nicknameInput) {
+    console.warn('[Popup] assistant-nickname element not found in DOM - nickname preference will not work');
+  }
   getStoredValue("nickname", null).then((nickname) => {
     if (nickname) {
       nicknameInput.value = nickname;
@@ -723,8 +751,17 @@ const initializePopup = () => {
   switchInputs();
   consentButtons();
   showHideConsent();
-  resetButton();
-  
+
+  // Show devtools section only in dev mode
+  const devMode = import.meta.env.VITE_DEV_MODE === 'true';
+  if (devMode) {
+    const devtools = document.getElementById('devtools');
+    if (devtools) {
+      devtools.classList.remove('hidden');
+    }
+    resetButton();
+  }
+
   // Check for feature entitlements and update UI accordingly - this must be done early
   updateSubmitModeUI();
 };

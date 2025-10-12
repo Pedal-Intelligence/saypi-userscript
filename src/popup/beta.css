@@ -73,13 +73,8 @@
 }
 
 button#clear-preferences {
-    display: none; /* hide the button by default */
+    /* Visibility controlled by VITE_DEV_MODE in popup.js */
     width: 100%;
     text-align: left;
-    background-image: url("trash.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position-x: right;
-    padding-right: 2em;
-    margin-right: 0.3em;
+    /* Icon now handled by Lucide <i data-lucide="trash-2"></i> */
 }

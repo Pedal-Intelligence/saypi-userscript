@@ -68,7 +68,11 @@
 			});
 			// lucide refresh
 			if (window.lucide && typeof window.lucide.createIcons === 'function') {
-				window.lucide.createIcons({ nameAttr: 'data-lucide' });
+				const options = { nameAttr: 'data-lucide' };
+				if (window.lucide.icons) {
+					options.icons = window.lucide.icons;
+				}
+				window.lucide.createIcons(options);
 			}
 		}
 

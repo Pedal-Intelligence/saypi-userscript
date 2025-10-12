@@ -8,12 +8,12 @@ const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // buffer keeps us abov
 
 function openSettingsWindow() {
   try {
-    const popupURL = chrome.runtime.getURL('popup.html');
+    const popupURL = chrome.runtime.getURL('settings.html');
     // Decide initial height based on whether we need to show consent overlay
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
     chrome.storage.local.get('shareData', (result: any) => {
       const needsConsent = typeof result.shareData === 'undefined';
-      const height = needsConsent ? 600 : 512; // fallback taller for consent, otherwise compact
+      const height = needsConsent ? 640 : 512; // taller for consent (640px to match illustration), compact for settings (512px)
       // Firefox on Android does not support opening popup windows; open a tab instead
       if (isFirefox() && isMobileDevice()) {
         chrome.tabs.create({ url: popupURL, active: true });

@@ -139,6 +139,49 @@
               ></div>
               <div id="agent-quota-state" class="text-xs text-gray-500 mt-2"></div>
             </div>
+            <div class="flex justify-between items-center mt-2 quota-footer">
+              <a id="view-quota-details" class="view-details" data-i18n="viewDetails" href="#">View details</a>
+              <span id="quota-reset-date" class="reset-date text-xs text-gray-500"></span>
+            </div>
+          </section>
+
+          <section id="upgrade" class="hidden">
+            <div class="flex items-center justify-center w-full max-w-lg">
+              <button id="upgrade-button" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="upgradeButton">Upgrade Plan</button>
+            </div>
+          </section>
+
+          <section id="devtools" class="hidden">
+            <div class="user-preference-item w-full max-w-lg">
+              <button type="button" id="clear-preferences" class="btn btn-primary" data-i18n="clearPreferencesButton">
+                <i data-lucide="trash-2"></i>
+                Clear Preferences
+              </button>
+            </div>
+          </section>
+
+          <!-- Consent overlay lives here to keep DOM simple -->
+          <section id="analytics-consent" class="hidden">
+            <div class="consent-card">
+              <div class="consent-hero" aria-hidden="true" style="--consent-hero-url: url('data-sharing-portrait.jpg');"></div>
+              <div class="consent-content">
+                <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
+                <p data-i18n="consentSharingPurpose">Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone.</p>
+                <ul>
+                  <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+                  <li data-i18n="consentPrivacyParamount">Your privacy is paramount. Anything you say remains between you and Pi.</li>
+                  <li data-i18n="consentDataDeidentified">Analytics are not tied to individuals. Any data used is de-identified.</li>
+                  <li data-i18n="consentNoSale">We won't sell your data to third parties, or use it for advertising.</li>
+                  <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
+                </ul>
+                <a href="https://www.saypi.ai/legal/privacy" target="_blank" rel="noopener" data-i18n="consentPrivacyPolicy">Read our Privacy Policy</a>
+                <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
+                <div class="buttons">
+                  <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">No thanks</button>
+                  <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">I'm in!</button>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section id="premium-upsell" class="hidden">
@@ -208,6 +251,49 @@
 
         <section id="tab-chat" class="tab-panel hidden">
           <h2 class="panel-heading" data-i18n="sectionHeadingChat">AI Chat</h2>
+
+          <!-- Old submit mode selector (slider-based UI) -->
+          <div id="submit-mode-selector" class="w-full max-w-lg user-preference-item mode-selector">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelRocket" aria-label="Rocket" slider-value="0" id="auto">
+                  <span class="icon-circle"><i data-lucide="zap"></i></span>
+                </span>
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelRobot" aria-label="Robot" slider-value="1" id="agent">
+                  <span class="icon-circle"><i data-lucide="bot"></i></span>
+                </span>
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelHand" aria-label="Hand" slider-value="2" id="off">
+                  <span class="icon-circle"><i data-lucide="hand"></i></span>
+                </span>
+              </div>
+              <input type="range" min="0" max="2" value="0" class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" id="submitModeRange" data-i18n-attr="title:submitModeControl" title="Select when to submit your messages" />
+            </div>
+            <div id="submitModeValue" class="mt-2 text-lg font-semibold text-gray-700" data-i18n="submit_mode_auto">auto</div>
+            <div class="description" data-i18n="submit_mode_auto_description">Automatically submit when you stop speaking</div>
+            <div class="description" data-i18n="submit_mode_agent_description" data-i18n-skip="true">Assistant decides when to respond based on context</div>
+            <div class="description" data-i18n="submit_mode_off_description">Only submit when you press the button</div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="nickname-preference">
+            <label class="wraper" for="assistant-nickname">
+              <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
+              <div class="control">
+                <input type="text" id="assistant-nickname" name="assistantNickname" class="px-2 py-1 border rounded w-20 text-sm text-right" data-i18n-attr="placeholder:nicknamePlaceholder" placeholder="Pi" />
+              </div>
+            </label>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="allow-interruptions-preference">
+            <label class="wraper" for="allow-interruptions">
+              <span class="label-text" data-i18n="allowInterruptions">Interruptible</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="allow-interruptions" name="allowInterruptions" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+
+          <!-- New submit mode UI (toggle-based) -->
           <div class="user-preference-item w-full max-w-lg">
             <div class="copy">
               <div class="label-text" data-i18n="submitModeLabel">Submit Pi responses</div>
@@ -297,6 +383,7 @@
               <div class="mode-icon" id="accuracy" data-i18n="mode_accuracy_label">Accuracy</div>
             </div>
             <input type="range" min="0" max="2" step="1" id="customRange" />
+            <div id="sliderValue" class="mt-2 text-lg font-semibold text-gray-700" data-i18n="mode_balanced">balanced</div>
             <div class="description selected" data-i18n="mode_speed_description">
               Fastest transcription with minimal latency
             </div>

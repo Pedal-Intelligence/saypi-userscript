@@ -53,7 +53,7 @@ declare module "wxt/browser" {
     | "/ort-wasm-threaded.wasm"
     | "/ort-wasm.wasm"
     | "/permissions.html"
-    | "/popup.html"
+    | "/settings.html"
     | "/silero_vad.onnx"
     | "/silero_vad_legacy.onnx"
     | "/silero_vad_v5.onnx"

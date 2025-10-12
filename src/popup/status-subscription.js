@@ -117,6 +117,9 @@ function updateUpgradeButtonVisibility() {
     return;
   }
   const consentSection = document.getElementById("analytics-consent");
+  if (!consentSection) {
+    console.warn('[Popup] analytics-consent section not found in DOM - consent overlay will not work');
+  }
   
   // Don't show upgrade button if consent form is visible
   if (consentSection && !consentSection.classList.contains("hidden")) {
@@ -470,6 +473,10 @@ async function getQuotaStatus() {
 
 function setupViewDetailsLinks() {
   const viewQuotaDetailsLink = document.getElementById('view-quota-details');
+  if (!viewQuotaDetailsLink) {
+    console.warn('[Popup] view-quota-details link not found in DOM - quota details link will not work');
+    return;
+  }
 
   // Function to open dashboard
   const openDashboard = () => {

@@ -326,7 +326,11 @@ function updateStatus(status) {
     statusContainer.appendChild(card);
 
     if (window.lucide && typeof window.lucide.createIcons === "function") {
-      window.lucide.createIcons({ nameAttr: "data-lucide" });
+      const options = { nameAttr: "data-lucide" };
+      if (window.lucide.icons) {
+        options.icons = window.lucide.icons;
+      }
+      window.lucide.createIcons(options);
     }
   } else if (status.status_code === "issue") {
     const summaryIssueMessage = getMessageOrDefault(
@@ -356,7 +360,11 @@ function updateStatus(status) {
     renderIssueDetails(status);
 
     if (window.lucide && typeof window.lucide.createIcons === "function") {
-      window.lucide.createIcons({ nameAttr: "data-lucide" });
+      const options = { nameAttr: "data-lucide" };
+      if (window.lucide.icons) {
+        options.icons = window.lucide.icons;
+      }
+      window.lucide.createIcons(options);
     }
 
     showIssueDetailsListener();

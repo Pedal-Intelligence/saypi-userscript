@@ -11,6 +11,10 @@
         padding: 16px; /* provide a small frame around the card */
         overflow-y: auto; /* allow page scroll when content is taller than viewport */
       }
+      /* Higher specificity to override display: flex when hidden */
+      #analytics-consent.hidden {
+        display: none !important;
+      }
       #analytics-consent .consent-card {
         width: 720px;
         padding: 0 0 1.5rem 0;
@@ -32,16 +36,37 @@
         border-bottom-left-radius: 12px;
         min-height: 100%;
       }
-      #analytics-consent .consent-content { 
-        padding: 0.75rem 1rem 1rem 0; 
+      #analytics-consent .consent-content {
+        padding: 0.75rem 1rem 1rem 0;
         display: flex;
         flex-direction: column;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+        color: #1f2937;
       }
-      #analytics-consent .consent-content h1 { margin: 0.25rem 0 0.75rem 0; }
+      #analytics-consent .consent-content h1 {
+        margin: 0.25rem 0 0.75rem 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #111827;
+      }
       #analytics-consent .consent-content p { margin: 0 0 0.75rem 0; }
       #analytics-consent .consent-content ul { margin: 0 0 0.75rem 1rem; }
       #analytics-consent .consent-content li { margin: 0 0 0.5rem 0; }
-      #analytics-consent .consent-content h2 { margin: 0.75rem 0 0.5rem 0; }
+      #analytics-consent .consent-content h2 {
+        margin: 0.75rem 0 0.5rem 0;
+        font-size: 22px;
+        font-weight: 600;
+      }
+      #analytics-consent .consent-content a {
+        color: #2563eb;
+        text-decoration: underline;
+        font-weight: 500;
+      }
+      #analytics-consent .consent-content a:hover {
+        color: #1d4ed8;
+      }
       #analytics-consent .consent-content .buttons { margin-top: 0.5rem; }
       @media (max-width: 720px) {
         #analytics-consent .consent-card { grid-template-columns: 1fr; }
@@ -91,4 +116,29 @@
       #analytics-consent .buttons button:hover {
         background-color: lightskyblue;
         color: white;
+      }
+
+      /* Button with Lucide icon styling */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      .btn i[data-lucide] {
+        width: 16px;
+        height: 16px;
+      }
+      .btn-primary {
+        background-color: #2563eb;
+        color: white;
+      }
+      .btn-primary:hover {
+        background-color: #1d4ed8;
       }
