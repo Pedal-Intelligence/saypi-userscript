@@ -1,0 +1,189 @@
+<h2 class="panel-heading" data-i18n="sectionHeadingGeneral">General</h2>
+<div class="user-preference-item w-full max-w-lg" id="sounds-effects-preference">
+  <label class="wraper" for="sound-effects">
+    <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+    <div class="switch-wrap control">
+      <input type="checkbox" id="sound-effects" name="soundEffects" />
+      <div class="switch"></div>
+    </div>
+  </label>
+</div>
+
+<div
+  class="user-preference-item w-full max-w-lg"
+  id="analytics-consent-preference-item"
+>
+  <label class="wraper" for="share-data">
+    <span class="label-text" data-i18n="shareAnalytics">Share analytics</span>
+    <div class="switch-wrap control">
+      <input type="checkbox" id="share-data" name="shareAnalytics" />
+      <div class="switch"></div>
+    </div>
+  </label>
+</div>
+
+<section id="premium-status">
+  <div class="quota-progress tts">
+    <div class="progress-label">
+      <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation</span>
+      <span class="value" style="display: none">
+        <span id="tts-quota-remaining-value" class="quota-remaining-value">0</span>
+        <span data-i18n="ttsQuotaCharacters">characters</span>
+      </span>
+    </div>
+    <div class="progress-bar">
+      <div class="share used"></div>
+      <div class="share remaining"></div>
+    </div>
+    <div
+      class="text-xs text-gray-500 text-right mt-1 quota-percentage"
+      aria-hidden="true"
+    ></div>
+    <div id="tts-quota-state" class="text-xs text-gray-500 mt-2"></div>
+  </div>
+  <div class="quota-progress stt">
+    <div class="progress-label">
+      <span class="label" data-i18n="sttQuotaRemaining">Dictation Time</span>
+      <span class="value" style="display: none">
+        <span id="stt-quota-remaining-value" class="quota-remaining-value">0</span>
+        <span data-i18n="sttQuotaMinutes">minutes</span>
+      </span>
+    </div>
+    <div class="progress-bar">
+      <div class="share used"></div>
+      <div class="share remaining"></div>
+    </div>
+    <div
+      class="text-xs text-gray-500 text-right mt-1 quota-percentage"
+      aria-hidden="true"
+    ></div>
+    <div id="stt-quota-state" class="text-xs text-gray-500 mt-2"></div>
+  </div>
+  <div class="quota-progress agent hidden">
+    <div class="progress-label">
+      <span class="label" data-i18n="agentQuotaRemaining"
+        >Agent Mode Actions Remaining</span
+      >
+      <span class="value" style="display: none">
+        <span id="agent-quota-remaining-value" class="quota-remaining-value">0</span>
+      </span>
+    </div>
+    <div class="progress-bar">
+      <div class="share used"></div>
+      <div class="share remaining"></div>
+    </div>
+    <div
+      class="text-xs text-gray-500 text-right mt-1 quota-percentage"
+      aria-hidden="true"
+    ></div>
+    <div id="agent-quota-state" class="text-xs text-gray-500 mt-2"></div>
+  </div>
+  <div class="flex justify-between items-center mt-2 quota-footer">
+    <a id="view-quota-details" class="view-details" data-i18n="viewDetails" href="#">View details</a>
+    <span id="quota-reset-date" class="reset-date text-xs text-gray-500"></span>
+  </div>
+</section>
+
+<section id="upgrade" class="hidden">
+  <div class="flex items-center justify-center w-full max-w-lg">
+    <button id="upgrade-button" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="upgradeButton">Upgrade Plan</button>
+  </div>
+</section>
+
+<section id="devtools" class="hidden">
+  <div class="user-preference-item w-full max-w-lg">
+    <button type="button" id="clear-preferences" class="btn btn-primary" data-i18n="clearPreferencesButton">
+      <i data-lucide="trash-2"></i>
+      Clear Preferences
+    </button>
+  </div>
+</section>
+
+<!-- Consent overlay lives here to keep DOM simple -->
+<section id="analytics-consent" class="hidden">
+  <div class="consent-card">
+    <div class="consent-hero" aria-hidden="true" style="--consent-hero-url: url('data-sharing-portrait.jpg');"></div>
+    <div class="consent-content">
+      <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
+      <p data-i18n="consentSharingPurpose">Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone.</p>
+      <ul>
+        <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+        <li data-i18n="consentPrivacyParamount">Your privacy is paramount. Anything you say remains between you and Pi.</li>
+        <li data-i18n="consentDataDeidentified">Analytics are not tied to individuals. Any data used is de-identified.</li>
+        <li data-i18n="consentNoSale">We won't sell your data to third parties, or use it for advertising.</li>
+        <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
+      </ul>
+      <a href="https://www.saypi.ai/legal/privacy" target="_blank" rel="noopener" data-i18n="consentPrivacyPolicy">Read our Privacy Policy</a>
+      <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
+      <div class="buttons">
+        <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">No thanks</button>
+        <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">I'm in!</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="premium-upsell" class="hidden">
+  <div class="premium-banner">
+    <div class="premium-copy">
+      <strong data-i18n="premiumBannerTitle">Upgrade for premium features</strong>
+      <p data-i18n="premiumBannerDescription">
+        Unlock more voice conversation time, higher quality responses, and powerful
+        agent tools with a Say, Pi plan.
+      </p>
+    </div>
+    <button id="upgrade-button" data-i18n="upgradeButton">See plans</button>
+  </div>
+</section>
+
+<div id="premium-status-loading" class="premium-status loading hidden">
+  <div class="spinner"></div>
+  <p data-i18n="loadingPremiumStatus">Checking premium status…</p>
+</div>
+<div id="premium-status-error" class="premium-status error hidden">
+  <div class="icon"></div>
+  <div>
+    <p data-i18n="premiumStatusErrorTitle">Can't reach Say, Pi</p>
+    <p data-i18n="premiumStatusErrorDescription">
+      Check your internet connection, then try reloading the popup.
+    </p>
+  </div>
+</div>
+
+<section id="about-saypi" class="about-saypi">
+  <div>
+    <h2 data-i18n="aboutSayPiHeading">About Say, Pi</h2>
+    <p data-i18n="aboutSayPiDescription">
+      Say, Pi brings rich, voice-first conversational experiences to popular AI
+      chatbots, with real-time dictation, transcription, and agent tools for power
+      users.
+    </p>
+    <div class="about-links">
+      <a
+        href="https://www.saypi.ai"
+        data-i18n="aboutSayPiWebsite"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Visit saypi.ai</a
+      >
+      <a
+        href="https://www.saypi.ai/blog"
+        data-i18n="aboutSayPiBlog"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Read the blog</a
+      >
+      <a
+        href="https://www.saypi.ai/support"
+        data-i18n="aboutSayPiSupport"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Get support</a
+      >
+    </div>
+  </div>
+  <div class="feature-highlight" data-i18n="aboutSayPiFeatureHighlight">
+    More than transcription: agency, automation, crafted for AI explorers.
+  </div>
+</section>
+

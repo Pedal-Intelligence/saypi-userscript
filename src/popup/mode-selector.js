@@ -66,14 +66,7 @@
 				const iconEl = document.getElementById(vv.id);
 				if (iconEl) iconEl.classList.toggle('active', vv.id === v.id);
 			});
-			// lucide refresh
-			if (window.lucide && typeof window.lucide.createIcons === 'function') {
-				const options = { nameAttr: 'data-lucide' };
-				if (window.lucide.icons) {
-					options.icons = window.lucide.icons;
-				}
-				window.lucide.createIcons(options);
-			}
+			// Icons are initialized centrally by index.ts
 		}
 
 		getStoredValue(key, defaultValue) {

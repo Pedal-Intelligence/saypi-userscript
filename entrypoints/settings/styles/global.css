@@ -1,0 +1,32 @@
+/* Global settings page styles */
+.settings-root {
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.settings-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  margin-left: 2rem;
+}
+
+.tab-panel {
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+

@@ -46,14 +46,7 @@
       }
       btn.addEventListener('click', () => selectTab(btn.dataset.tab));
     });
-    // After icons are in DOM, ask Lucide to replace data-lucide elements
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      const options = { nameAttr: 'data-lucide' };
-      if (window.lucide.icons) {
-        options.icons = window.lucide.icons;
-      }
-      window.lucide.createIcons(options);
-    }
+    // Icons will be initialized centrally by index.ts after all modules load
   }
 
   if (document.readyState === 'loading') {

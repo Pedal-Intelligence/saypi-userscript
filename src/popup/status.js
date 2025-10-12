@@ -325,13 +325,7 @@ function updateStatus(status) {
     card.appendChild(iconWrap);
     statusContainer.appendChild(card);
 
-    if (window.lucide && typeof window.lucide.createIcons === "function") {
-      const options = { nameAttr: "data-lucide" };
-      if (window.lucide.icons) {
-        options.icons = window.lucide.icons;
-      }
-      window.lucide.createIcons(options);
-    }
+    // Icons are initialized centrally by index.ts
   } else if (status.status_code === "issue") {
     const summaryIssueMessage = getMessageOrDefault(
       "applicationStatusIssue",
@@ -359,13 +353,7 @@ function updateStatus(status) {
 
     renderIssueDetails(status);
 
-    if (window.lucide && typeof window.lucide.createIcons === "function") {
-      const options = { nameAttr: "data-lucide" };
-      if (window.lucide.icons) {
-        options.icons = window.lucide.icons;
-      }
-      window.lucide.createIcons(options);
-    }
+    // Icons are initialized centrally by index.ts
 
     showIssueDetailsListener();
     hideIssueDetailsListener();

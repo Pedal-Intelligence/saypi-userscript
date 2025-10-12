@@ -439,6 +439,10 @@ const initializePopup = () => {
 
   function switchInputs() {
     const soundEffectsInput = document.getElementById("sound-effects");
+    if (!soundEffectsInput) {
+      console.warn('[Popup] sound-effects element not found in DOM');
+      return;
+    }
     const soundEffectsLabel = soundEffectsInput.closest('.wraper');
     
     // Check if Firefox
@@ -471,6 +475,10 @@ const initializePopup = () => {
     const allowInterruptionsInput = document.getElementById(
       "allow-interruptions"
     );
+    if (!allowInterruptionsInput) {
+      console.warn('[Popup] allow-interruptions element not found in DOM');
+      return;
+    }
     const allowInterruptionsLabel = allowInterruptionsInput.closest(".wraper");
 
     // Check if Firefox
@@ -508,6 +516,10 @@ const initializePopup = () => {
     });
 
     const shareDataInput = document.getElementById("share-data");
+    if (!shareDataInput) {
+      console.warn('[Popup] share-data element not found in DOM');
+      return;
+    }
     getStoredValue("shareData", false).then((shareData) => {
       selectInput(shareDataInput, shareData);
     });
@@ -685,14 +697,15 @@ const initializePopup = () => {
   const nicknameInput = document.getElementById("assistant-nickname");
   if (!nicknameInput) {
     console.warn('[Popup] assistant-nickname element not found in DOM - nickname preference will not work');
+  } else {
+    getStoredValue("nickname", null).then((nickname) => {
+      if (nickname) {
+        nicknameInput.value = nickname;
+      }
+      // Update agent mode description with current nickname
+      updateAgentModeDescription(nickname);
+    });
   }
-  getStoredValue("nickname", null).then((nickname) => {
-    if (nickname) {
-      nicknameInput.value = nickname;
-    }
-    // Update agent mode description with current nickname
-    updateAgentModeDescription(nickname);
-  });
 
   // Auto Read Aloud (ChatGPT) toggle
   if (chatgptAutoReadAloudInput) {
@@ -718,34 +731,36 @@ const initializePopup = () => {
   }
 
   // Save the nickname when it changes
-  nicknameInput.addEventListener("change", function() {
-    const nickname = this.value.trim();
-    if (nickname) {
-      chrome.storage.local.set({ nickname }, function() {
-        console.log("Nickname saved:", nickname);
-      });
-      // Notify content script of the change
-      message({ nickname });
-      // Update agent mode description
-      updateAgentModeDescription(nickname);
-    } else {
-      // If the input is empty, remove the nickname
-      chrome.storage.local.remove("nickname", function() {
-        console.log("Nickname removed");
-      });
-      // Notify content script of the removal
-      message({ nickname: null });
-      // Update agent mode description with default
-      updateAgentModeDescription(null);
-    }
-  });
+  if (nicknameInput) {
+    nicknameInput.addEventListener("change", function() {
+      const nickname = this.value.trim();
+      if (nickname) {
+        chrome.storage.local.set({ nickname }, function() {
+          console.log("Nickname saved:", nickname);
+        });
+        // Notify content script of the change
+        message({ nickname });
+        // Update agent mode description
+        updateAgentModeDescription(nickname);
+      } else {
+        // If the input is empty, remove the nickname
+        chrome.storage.local.remove("nickname", function() {
+          console.log("Nickname removed");
+        });
+        // Notify content script of the removal
+        message({ nickname: null });
+        // Update agent mode description with default
+        updateAgentModeDescription(null);
+      }
+    });
 
-  // Handle Enter key on nickname input
-  nicknameInput.addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
-      this.blur(); // Remove focus, which will trigger the change event if value changed
-    }
-  });
+    // Handle Enter key on nickname input
+    nicknameInput.addEventListener("keyup", function(event) {
+      if (event.key === "Enter") {
+        this.blur(); // Remove focus, which will trigger the change event if value changed
+      }
+    });
+  }
 
   i18nReplace();
   switchInputs();

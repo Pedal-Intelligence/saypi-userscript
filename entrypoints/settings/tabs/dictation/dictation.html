@@ -1,0 +1,95 @@
+<h2 class="panel-heading" data-i18n="sectionHeadingDictation">Dictation</h2>
+<div class="dictation-mode-selector">
+  <h3 data-i18n="dictationModeHeading">Dictation mode</h3>
+  <div id="preference-selector" class="dictation-preference">
+    <div class="mode-icon" id="speed" data-i18n="mode_speed_label">Speed</div>
+    <div class="mode-icon" id="balanced" data-i18n="mode_balanced_label">Balanced</div>
+    <div class="mode-icon" id="accuracy" data-i18n="mode_accuracy_label">Accuracy</div>
+  </div>
+  <input type="range" min="0" max="2" step="1" id="customRange" />
+  <div id="sliderValue" class="mt-2 text-lg font-semibold text-gray-700" data-i18n="mode_balanced">balanced</div>
+  <div class="description selected" data-i18n="mode_speed_description">
+    Fastest transcription with minimal latency
+  </div>
+  <div class="description" data-i18n="mode_balanced_description">
+    Balanced quality and latency for most workflows
+  </div>
+  <div class="description" data-i18n="mode_accuracy_description">
+    Highest accuracy, but slower transcription speed
+  </div>
+</div>
+
+<div class="user-preference-item w-full max-w-lg" id="language-preference">
+  <div
+    id="language-picker"
+    class="language-picker user-preference language-picker--hide-label js-language-picker"
+    data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
+  >
+    <label for="language-picker-select" class="label-text" data-i18n="preferedLanguage"
+      >Language</label
+    >
+    <form action="" class="language-picker__form">
+      <select name="language-picker-select" id="language-picker-select">
+        <option lang="ar" value="arabic">العربية</option>
+        <option lang="bg" value="bulgarian">Български</option>
+        <option lang="zh" value="chinese">中文</option>
+        <option lang="hr" value="croatian">Hrvatski</option>
+        <option lang="cs" value="czech">Čeština</option>
+        <option lang="da" value="danish">Dansk</option>
+        <option lang="nl" value="dutch">Nederlands</option>
+        <option lang="en" value="english">English</option>
+        <option lang="tl" value="filipino">Filipino</option>
+        <option lang="fi" value="finnish">Suomi</option>
+        <option lang="fr" value="francais">Français</option>
+        <option lang="de" value="deutsch">Deutsch</option>
+        <option lang="el" value="greek">Ελληνικά</option>
+        <option lang="hi" value="hindi">हिन्दी</option>
+        <option lang="id" value="indonesian">Bahasa Indonesia</option>
+        <option lang="it" value="italiano">Italiano</option>
+        <option lang="ja" value="japanese">日本語</option>
+        <option lang="ko" value="korean">한국어</option>
+        <option lang="ms" value="malay">Bahasa Melayu</option>
+        <option lang="pl" value="polish">Polski</option>
+        <option lang="pt" value="portuguese">Português</option>
+        <option lang="ro" value="romanian">Română</option>
+        <option lang="ru" value="russian">Русский</option>
+        <option lang="sk" value="slovak">Slovenčina</option>
+        <option lang="es" value="espanol">Español</option>
+        <option lang="sv" value="swedish">Svenska</option>
+        <option lang="ta" value="tamil">தமிழ்</option>
+        <option lang="tr" value="turkish">Türkçe</option>
+        <option lang="uk" value="ukrainian">Українська</option>
+        <option lang="" value="global">Auto-detect</option>
+      </select>
+    </form>
+  </div>
+</div>
+
+<div class="user-preference-item w-full max-w-lg" id="vad-status-indicator-preference">
+  <label class="wraper" for="vad-status-indicator-enabled">
+    <span class="label-text" data-i18n="vadStatusIndicatorEnabledLabel"
+      >Show VAD Status</span
+    >
+    <div class="switch-wrap control">
+      <input
+        type="checkbox"
+        id="vad-status-indicator-enabled"
+        name="vadStatusIndicatorEnabled"
+      />
+      <div class="switch"></div>
+    </div>
+  </label>
+</div>
+
+<div class="user-preference-item w-full max-w-lg" id="remove-filler-words-preference">
+  <label class="wraper" for="remove-filler-words" data-i18n-attr="title:removeFillerWordsTooltip">
+    <span class="label-text" data-i18n="removeFillerWordsLabel"
+      >Remove filler words (beta)</span
+    >
+    <div class="switch-wrap control">
+      <input type="checkbox" id="remove-filler-words" name="removeFillerWords" />
+      <div class="switch"></div>
+    </div>
+  </label>
+</div>
+
