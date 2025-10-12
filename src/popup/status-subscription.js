@@ -112,7 +112,10 @@ function shouldShowUpgradeButton() {
 
 // Function to update the upgrade button visibility
 function updateUpgradeButtonVisibility() {
-  const upgradeSection = document.getElementById("upgrade");
+  const upgradeSection = document.getElementById("premium-upsell");
+  if (!upgradeSection) {
+    return;
+  }
   const consentSection = document.getElementById("analytics-consent");
   
   // Don't show upgrade button if consent form is visible
@@ -491,11 +494,11 @@ function setupViewDetailsLinks() {
     });
   };
 
-  if (viewQuotaDetailsLink) {
-    viewQuotaDetailsLink.onclick = openDashboard;
-  } else {
-    console.error('View details link element not found');
+  if (!viewQuotaDetailsLink) {
+    return;
   }
+
+  viewQuotaDetailsLink.onclick = openDashboard;
 }
 
 // Update the upgrade button text based on authentication status
@@ -520,8 +523,7 @@ function updateUpgradeButtonText() {
   };
 }
 
-// Make sure the function is called after DOM is fully loaded
-document.addEventListener('DOMContentLoaded', async function() {
+const initializeStatusSubscription = async () => {
   try {
     await getQuotaStatus();
     
@@ -532,7 +534,15 @@ document.addEventListener('DOMContentLoaded', async function() {
   } catch (error) {
     console.error("Error initializing status:", error);
   }
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeStatusSubscription, { once: true });
+} else {
+  void initializeStatusSubscription();
+}
 
 // Export functions to global scope for use in other scripts
 window.updateUnauthenticatedDisplay = updateUnauthenticatedDisplay;
+
+export {};

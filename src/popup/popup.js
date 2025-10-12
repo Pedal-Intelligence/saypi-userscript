@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+const initializePopup = () => {
   function message(msg) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       if (tabs.length > 0) {
@@ -227,11 +227,20 @@ document.addEventListener("DOMContentLoaded", function () {
    * This should only be called for users with agent mode entitlement
    */
   function initializeSubmitModeFromStorage() {
+    if (!submitModeSlider || !submitModeOutput) {
+      return;
+    }
     // Load the saved submit mode when the popup opens
     getStoredValue("submitMode", null).then((submitMode) => {
+      if (!submitModeSlider || !submitModeOutput) {
+        return;
+      }
       if (submitMode === null) {
         // No submitMode found - check for old schema and migrate
         getStoredValue("autoSubmit", true).then((autoSubmit) => {
+          if (!submitModeSlider || !submitModeOutput) {
+            return;
+          }
           // Default to 'auto' if autoSubmit is true, 'off' if false
           const migratedMode = autoSubmit ? "auto" : "off";
           
@@ -287,28 +296,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Update the current submit mode slider value
-  submitModeSlider.oninput = function () {
-    var submitMode = submitModeIcons[this.value];
-    const messageKey = "submit_mode_" + submitMode;
-    submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
-    setActiveSubmitModeIcon(submitMode);
-    showSubmitModeDescription(submitMode);
+  if (submitModeSlider && submitModeOutput) {
+    submitModeSlider.oninput = function () {
+      var submitMode = submitModeIcons[this.value];
+      const messageKey = "submit_mode_" + submitMode;
+      submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
+      setActiveSubmitModeIcon(submitMode);
+      showSubmitModeDescription(submitMode);
 
-    // Save the submit mode and update related settings
-    chrome.storage.local.set({ 
-      submitMode: submitMode,
-      autoSubmit: submitMode !== "off",
-      discretionaryMode: submitMode === "agent"
-    }, function () {
-      console.log("User preference saved: submitMode " + submitMode);
-    });
+      // Save the submit mode and update related settings
+      chrome.storage.local.set({ 
+        submitMode: submitMode,
+        autoSubmit: submitMode !== "off",
+        discretionaryMode: submitMode === "agent"
+      }, function () {
+        console.log("User preference saved: submitMode " + submitMode);
+      });
 
-    // Notify content script of changes
-    message({ 
-      autoSubmit: submitMode !== "off",
-      discretionaryMode: submitMode === "agent"
-    });
-  };
+      // Notify content script of changes
+      message({ 
+        autoSubmit: submitMode !== "off",
+        discretionaryMode: submitMode === "agent"
+      });
+    };
+  }
 
   // Set active icon based on the preference
   function setActiveIcon(preference) {
@@ -716,4 +727,12 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // Check for feature entitlements and update UI accordingly - this must be done early
   updateSubmitModeUI();
-});
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializePopup, { once: true });
+} else {
+  initializePopup();
+}
+
+export {};

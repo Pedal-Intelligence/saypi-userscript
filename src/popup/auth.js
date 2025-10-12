@@ -40,8 +40,7 @@ async function signOut() {
 // Make signOut available to the shared module
 window.signOut = signOut;
 
-// Initialize
-document.addEventListener('DOMContentLoaded', async () => {
+const initializeAuth = async () => {
   // Check current auth state
   try {
     const { token } = await browserAPI.storage.local.get('token');
@@ -67,4 +66,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateAuthUI(false);
     isAuthenticated = false;
   }
-}); 
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeAuth, { once: true });
+} else {
+  void initializeAuth();
+}
+
+export {};

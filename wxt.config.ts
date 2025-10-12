@@ -15,6 +15,14 @@ const ICON_FILE_NAMES = new Map(
   ICON_SIZES.map((size) => [size, `bubble-${size}px.png`]),
 );
 
+const EXTRA_ICON_FILES = [
+  "bubble-green.svg",
+  "bubble-bw.svg",
+  "bubble-300px.png",
+];
+
+const FLAGS_DIR = fileURLToPath(new URL("./src/icons/flags", import.meta.url));
+
 const replaceAllMappings = (input: string, mappings: Map<string, string>) => {
   let result = input;
   for (const [from, to] of mappings) {
@@ -197,6 +205,49 @@ const addIconPublicAssets = (files: Array<Record<string, any>>) => {
       absoluteSrc: absolutePath,
     });
   }
+
+  for (const fileName of EXTRA_ICON_FILES) {
+    const relativeDest = `icons/${fileName}`;
+    if (files.some((file) => file.relativeDest === relativeDest)) {
+      continue;
+    }
+    const absolutePath = fileURLToPath(new URL(`./src/icons/${fileName}`, import.meta.url));
+    try {
+      const stats = statSync(absolutePath);
+      if (!stats.isFile()) continue;
+    } catch {
+      continue;
+    }
+    files.push({
+      relativeDest,
+      absoluteSrc: absolutePath,
+    });
+  }
+};
+
+const addFlagIconAssets = (files: Array<Record<string, any>>) => {
+  try {
+    const stats = statSync(FLAGS_DIR);
+    if (!stats.isDirectory()) {
+      return;
+    }
+  } catch {
+    return;
+  }
+
+  const entries = readdirSync(FLAGS_DIR, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isFile()) continue;
+    const extension = extname(entry.name).toLowerCase();
+    if (extension !== ".svg" && extension !== ".png") {
+      continue;
+    }
+    const absolutePath = join(FLAGS_DIR, entry.name);
+    files.push({
+      relativeDest: `icons/flags/${entry.name}`,
+      absoluteSrc: absolutePath,
+    });
+  }
 };
 
 const addVadAssets = (files: Array<Record<string, any>>) => {
@@ -305,6 +356,7 @@ export default defineConfig((env) => {
       "build:publicAssets": (_wxt: any, files: any[]) => {
         addLocalePublicAssets(files);
         addIconPublicAssets(files);
+        addFlagIconAssets(files);
         addVadAssets(files);
         renamePublicCommonjsAssets(files);
       },
@@ -350,6 +402,7 @@ export default defineConfig((env) => {
             "icons/*.png",
             "icons/logos/*.svg",
             "icons/logos/*.png",
+            "icons/flags/*.svg",
           ],
           matches: ["<all_urls>"],
         },

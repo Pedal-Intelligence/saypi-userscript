@@ -1,4 +1,5 @@
 import { createIcons, icons } from "lucide";
+import "../../src/popup/tailwind.min.css";
 import "../../src/popup/toggle.css";
 import "../../src/popup/language-picker.css";
 import "../../src/popup/status.css";
@@ -7,6 +8,8 @@ import "../../src/popup/preferences.css";
 import "../../src/popup/usage.css";
 import "../../src/popup/beta.css";
 import "../../src/popup/tabs.css";
+
+console.info("[Popup] entrypoints/popup/index.ts executing");
 
 (window as typeof window & { lucide?: { createIcons: typeof createIcons; icons: typeof icons } }).lucide = {
   createIcons,
@@ -21,11 +24,12 @@ const setStaticIcons = () => {
   document.querySelectorAll<HTMLImageElement>("[data-icon]").forEach((img) => {
     const asset = img.dataset.icon;
     if (!asset) return;
-    img.src = chrome.runtime.getURL(`src/icons/${asset}`);
+    img.src = chrome.runtime.getURL(`icons/${asset}`);
   });
 };
 
 const bootstrap = async () => {
+  console.info("[Popup] Bootstrap starting");
   setStaticIcons();
 
   const sequentialImports: Array<() => Promise<unknown>> = [
@@ -48,6 +52,7 @@ const bootstrap = async () => {
       console.error("[Popup] Failed to load module", error);
     }
   }
+  console.info("[Popup] Bootstrap finished");
 };
 
 bootstrap().catch((error) => {

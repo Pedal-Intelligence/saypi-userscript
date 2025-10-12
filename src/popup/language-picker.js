@@ -32,6 +32,55 @@ Util.getIndexInArray = function (array, el) {
   return Array.prototype.indexOf.call(array, el);
 };
 
+const FLAG_ICON_BY_LANGUAGE = Object.freeze({
+  arabic: "arab.svg",
+  bengali: "bd.svg",
+  bulgarian: "bg.svg",
+  chinese: "cn.svg",
+  croatian: "hr.svg",
+  czech: "cz.svg",
+  danish: "dk.svg",
+  deutsch: "de.svg",
+  dutch: "nl.svg",
+  english: "us.svg",
+  espanol: "es.svg",
+  filipino: "ph.svg",
+  finnish: "fi.svg",
+  francais: "fr.svg",
+  greek: "gr.svg",
+  hindi: "in.svg",
+  hungarian: "hu.svg",
+  indonesian: "id.svg",
+  italiano: "it.svg",
+  japanese: "jp.svg",
+  korean: "kr.svg",
+  malay: "my.svg",
+  polish: "pl.svg",
+  portuguese: "br.svg",
+  romanian: "ro.svg",
+  russian: "ru.svg",
+  slovak: "sk.svg",
+  swedish: "se.svg",
+  tamil: "lk.svg",
+  turkish: "tr.svg",
+  ukrainian: "ua.svg",
+  vietnamese: "vn.svg",
+  global: "global.svg",
+  system: "system.svg",
+});
+
+function setFlagIcon(element, languageKey) {
+  if (!element) return;
+  const fileName = FLAG_ICON_BY_LANGUAGE[languageKey];
+  const runtime = typeof chrome !== "undefined" ? chrome.runtime : undefined;
+  if (!fileName || !runtime || typeof runtime.getURL !== "function") {
+    element.style.removeProperty("--language-flag-url");
+    return;
+  }
+  const assetUrl = runtime.getURL(`icons/flags/${fileName}`);
+  element.style.setProperty("--language-flag-url", `url("${assetUrl}")`);
+}
+
 // File#: _1_language-picker
 // Usage: codyhouse.co/license
 (function () {
@@ -259,6 +308,7 @@ Util.getIndexInArray = function (array, el) {
     span.classList.add("language-picker__label");
     span.classList.add("language-picker__flag");
     span.classList.add("language-picker__flag--" + selectedOption.value);
+    setFlagIcon(span, selectedOption.value);
 
     span.appendChild(createSvgElement(picker.globeSvgPath));
 
@@ -311,6 +361,7 @@ Util.getIndexInArray = function (array, el) {
         "language-picker__flag",
         "language-picker__flag--" + option.value
       );
+      setFlagIcon(link, option.value);
       link.setAttribute("role", "option");
       
       const optionTextSpan = document.createElement("span");
@@ -389,6 +440,10 @@ Util.getIndexInArray = function (array, el) {
               "language-picker__label language-picker__flag language-picker__flag--" +
                 language.getAttribute("data-value")
             );
+          setFlagIcon(
+            picker.trigger.getElementsByClassName("language-picker__label")[0],
+            language.getAttribute("data-value")
+          );
           picker.trigger
             .getElementsByClassName("language-picker__label")[0]
             .getElementsByTagName("em")[0].textContent = language.textContent;
@@ -442,3 +497,5 @@ Util.getIndexInArray = function (array, el) {
     });
   }
 })();
+
+export {};

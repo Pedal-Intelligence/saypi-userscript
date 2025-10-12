@@ -518,3 +518,5 @@ function setupStatusPolling() {
 }
 
 setupStatusPolling();
+
+export {};

@@ -165,4 +165,6 @@ window.handleSignOut = handleSignOut;
 window.refreshAuthUI = refreshAuthUI;
 window.logoutFromSaas = logoutFromSaas;
 window.updateUIAfterSignOut = updateUIAfterSignOut;
-window.performLocalSignOut = performLocalSignOut; 
+window.performLocalSignOut = performLocalSignOut;
+
+export {};

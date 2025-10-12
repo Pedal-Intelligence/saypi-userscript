@@ -2,9 +2,13 @@ import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 // Declare Chrome extension API for TypeScript
 declare const chrome: any;
+
+const POPUP_MIN_CONTENT_WIDTH = 736;
+const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // buffer keeps us above the 735px mobile breakpoint after window chrome adjustments
+
 function openSettingsWindow() {
   try {
-    const popupURL = chrome.runtime.getURL('popup/index.html');
+    const popupURL = chrome.runtime.getURL('popup.html');
     // Decide initial height based on whether we need to show consent overlay
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
     chrome.storage.local.get('shareData', (result: any) => {
@@ -19,7 +23,7 @@ function openSettingsWindow() {
       chrome.windows.create({
         url: popupURL,
         type: 'popup',
-        width: 736, // 720px + 16px padding
+        width: POPUP_DESKTOP_WIDTH,
         height,
         focused: true
       });

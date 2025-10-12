@@ -1,5 +1,33 @@
+html,
+body {
+  width: 100%;
+  min-width: 720px;
+}
+
 .settings-root {
+  display: flex;
+  flex-wrap: wrap;
   background: #f8fafc;
+}
+
+.user-preference-item,
+.usage-charges-item {
+  display: block;
+  align-items: center;
+  width: 100%;
+  max-width: 504px;
+  padding: 0.5rem 1rem;
+  align-content: space-between;
+}
+
+.control {
+  margin-left: auto;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-top: 0.25rem;
 }
 .settings-container {
   display: flex;
@@ -215,5 +243,4 @@
   .user-preference-item,
   .usage-charges-item { width: 100% !important; }
 }
-
 

@@ -101,5 +101,7 @@
 		}
 	}
 
-	window.ModeSelector = ModeSelector;
+  window.ModeSelector = ModeSelector;
 })();
+
+export {};

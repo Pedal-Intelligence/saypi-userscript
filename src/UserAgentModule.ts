@@ -7,13 +7,21 @@ export function isFirefox(): boolean {
 }
 
 export function isMobileDevice(): boolean {
-  return (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) ||
-    (typeof window.matchMedia === "function" &&
-      window.matchMedia("(max-width: 820px)").matches)
-  );
+  const userAgent =
+    typeof navigator !== "undefined" && typeof navigator.userAgent === "string"
+      ? navigator.userAgent
+      : "";
+
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+    return true;
+  }
+
+  const matchMediaFn = typeof globalThis.matchMedia === "function" ? globalThis.matchMedia : null;
+  try {
+    return Boolean(matchMediaFn?.("(max-width: 820px)")?.matches);
+  } catch {
+    return false;
+  }
 }
 
 /**

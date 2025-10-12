@@ -12,7 +12,10 @@ const CHATBOT_MATCHES = [
 const mode = import.meta.env.MODE;
 const isProduction = mode === "production";
 const BASE_MATCHES = ["http://*/*", "https://*/*"];
-const DEVELOPMENT_MATCHES = ["file://*/*", ...BASE_MATCHES];
+// WXT's dev auto-reloader can't currently handle file:// match patterns, so stick
+// to the http/https set during development. Production keeps the same coverage
+// we ship today.
+const DEVELOPMENT_MATCHES = BASE_MATCHES;
 
 export default defineContentScript({
   matches: isProduction ? BASE_MATCHES : DEVELOPMENT_MATCHES,
