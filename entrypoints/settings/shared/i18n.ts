@@ -1,18 +1,21 @@
-export function getMessage(key: string, substitutions?: string[]): string {
-  return chrome.i18n.getMessage(key, substitutions) || key;
-}
+import getMessage from '../../../src/i18n';
 
 export function replaceI18n(): void {
   document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
     if (el.hasAttribute('data-i18n-skip')) return;
     const messageKey = el.getAttribute('data-i18n');
     if (!messageKey) return;
-    
-    const translatedText = getMessage(messageKey);
-    
+
+    const translatedText = getMessage(messageKey) || '';
+
+    // If no translation found, keep existing content as fallback
+    if (!translatedText) {
+      return;
+    }
+
     // Check if element has important child elements (like icons)
     const hasIconChildren = el.querySelector('.icon-circle, [data-lucide]');
-    
+
     if (hasIconChildren) {
       // Preserve structure - only update text nodes or specific label spans
       const labelSpan = el.querySelector('.tab-label');
