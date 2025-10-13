@@ -60,15 +60,46 @@ class SettingsApp {
     this.tabs.set('about', new AboutTab(document.querySelector('#tab-about')!));
     
     // Load ALL tabs upfront (popup.js needs all DOM to be present)
-    await Promise.all([
-      this.tabs.get('general')!.init(),
-      this.tabs.get('chat')!.init(),
-      this.tabs.get('dictation')!.init(),
-      this.tabs.get('about')!.init(),
-    ]);
+    try {
+      await this.tabs.get('general')!.init();
+      console.info('[Settings] General tab loaded');
+    } catch (error) {
+      console.error('[Settings] General tab failed:', error);
+    }
+    
+    try {
+      await this.tabs.get('chat')!.init();
+      console.info('[Settings] Chat tab loaded');
+    } catch (error) {
+      console.error('[Settings] Chat tab failed:', error);
+    }
+    
+    try {
+      await this.tabs.get('dictation')!.init();
+      console.info('[Settings] Dictation tab loaded');
+    } catch (error) {
+      console.error('[Settings] Dictation tab failed:', error);
+    }
+    
+    try {
+      await this.tabs.get('about')!.init();
+      console.info('[Settings] About tab loaded');
+    } catch (error) {
+      console.error('[Settings] About tab failed:', error);
+    }
     
     // Mark all tabs as initialized
     this.tabs.forEach(tab => tab.initialized = true);
+    
+    // Diagnostic: Check what's actually in the DOM
+    const generalContent = document.querySelector('#tab-general')?.innerHTML;
+    const chatContent = document.querySelector('#tab-chat')?.innerHTML;
+    console.info('[Settings] DOM check:', {
+      generalHasContent: !!generalContent && generalContent.length > 100,
+      chatHasContent: !!chatContent && chatContent.length > 100,
+      generalPreview: generalContent?.substring(0, 50),
+      chatPreview: chatContent?.substring(0, 50)
+    });
     
     // Initialize tab navigator (adds icons to tab buttons)
     this.navigator = new TabNavigator({
@@ -81,6 +112,13 @@ class SettingsApp {
     
     // Apply i18n after all tabs are loaded
     replaceI18n();
+    
+    // Diagnostic: Count icons before initialization
+    const iconElementsBefore = document.querySelectorAll('[data-lucide]');
+    console.info(`[Settings] Found ${iconElementsBefore.length} icon elements before initIcons()`);
+    iconElementsBefore.forEach((el, i) => {
+      console.info(`  Icon ${i + 1}: ${el.getAttribute('data-lucide')} in ${el.closest('.tab-panel')?.id || 'unknown'}`);
+    });
     
     // Initialize icons ONCE after all DOM is ready
     initIcons();

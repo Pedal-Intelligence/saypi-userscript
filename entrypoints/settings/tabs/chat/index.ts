@@ -8,15 +8,22 @@ export class ChatTab implements TabController {
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
+    console.info('[ChatTab] Initializing...', { 
+      hasContainer: !!this.container,
+      htmlLength: chatHTML?.length || 0,
+      htmlType: typeof chatHTML,
+      htmlPreview: chatHTML?.substring(0, 100)
+    });
+    
     this.container.innerHTML = chatHTML;
+    
+    console.info('[ChatTab] HTML injected');
     
     await this.setupNickname();
     await this.setupInterruptions();
     await this.setupAutoReadAloud();
-    // Submit mode logic remains in popup.js for now (Phase 3 will extract it)
     
-    // Icons will be initialized globally after all tabs are set up
-    // replaceI18n() will be called globally as well
+    console.info('[ChatTab] ✅ Initialized');
   }
   
   private async setupNickname(): Promise<void> {

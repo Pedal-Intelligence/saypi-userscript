@@ -16,15 +16,21 @@ export class DictationTab implements TabController {
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
+    console.info('[DictationTab] Initializing...', { 
+      hasContainer: !!this.container,
+      htmlLength: dictationHTML?.length || 0,
+      htmlType: typeof dictationHTML
+    });
+    
     this.container.innerHTML = dictationHTML;
+    
+    console.info('[DictationTab] HTML injected');
     
     await this.setupModeSelector();
     await this.setupVADIndicator();
     await this.setupFillerWords();
-    // Language picker is initialized by language-picker.js
     
-    // Icons will be initialized globally after all tabs are set up
-    // replaceI18n() will be called globally as well
+    console.info('[DictationTab] ✅ Initialized');
   }
   
   private async setupModeSelector(): Promise<void> {

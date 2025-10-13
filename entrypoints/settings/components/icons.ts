@@ -7,15 +7,30 @@ let iconsInitialized = false;
  * Call this after all DOM content is loaded
  */
 export function initIcons(): void {
-  if (iconsInitialized) return;
+  if (iconsInitialized) {
+    console.info('[Icons] Already initialized, skipping');
+    return;
+  }
+  
+  console.info('[Icons] Attempting to initialize...', {
+    hasLucide: !!window.lucide,
+    hasCreateIcons: !!window.lucide?.createIcons,
+    hasIcons: !!window.lucide?.icons,
+    iconCount: window.lucide?.icons ? Object.keys(window.lucide.icons).length : 0
+  });
   
   if (window.lucide?.createIcons) {
+    const iconElements = document.querySelectorAll('[data-lucide]');
+    console.info(`[Icons] Found ${iconElements.length} icon elements to initialize`);
+    
     window.lucide.createIcons({ 
       icons: window.lucide.icons,
       nameAttr: 'data-lucide' 
     });
     iconsInitialized = true;
-    console.info('[Icons] Initialized globally');
+    console.info('[Icons] ✅ Initialized globally');
+  } else {
+    console.error('[Icons] ❌ Cannot initialize - window.lucide not available');
   }
 }
 

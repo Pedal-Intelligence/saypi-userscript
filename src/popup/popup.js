@@ -224,8 +224,11 @@ const initializePopup = () => {
         }
       }
       
-      // Update i18n for the newly added element
-      i18nReplace();
+      // Update i18n for the newly added element (using local function to avoid destroying icons)
+      const autoSubmitLabel = document.querySelector('[data-i18n="autoSubmit"]');
+      if (autoSubmitLabel) {
+        autoSubmitLabel.textContent = chrome.i18n.getMessage('autoSubmit');
+      }
     });
   }
 
@@ -762,7 +765,8 @@ const initializePopup = () => {
     });
   }
 
-  i18nReplace();
+  // i18nReplace() is now called by index.ts before popup.js loads - skip it here
+  // to avoid destroying icons that were just initialized
   switchInputs();
   consentButtons();
   showHideConsent();
