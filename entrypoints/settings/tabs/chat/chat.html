@@ -41,82 +41,14 @@
   </label>
 </div>
 
-<!-- New submit mode UI (toggle-based) -->
-<div class="user-preference-item w-full max-w-lg">
-  <div class="copy">
-    <div class="label-text" data-i18n="submitModeLabel">Submit Pi responses</div>
-    <p class="description" data-i18n="submitModeDescription">
-      Choose how Say, Pi submits to chatbots
-    </p>
-  </div>
-  <div id="submit-mode-preference">
-    <div id="submit-mode-toggle" class="toggle">
-      <span class="toggle-option" data-mode="enter" data-i18n="submitModeEnter">
-        Enter
-      </span>
-      <span class="toggle-option active" data-mode="shiftEnter" data-i18n="submitModeShiftEnter">
-        Shift + Enter
-      </span>
-    </div>
-  </div>
-</div>
-<div
-  class="user-preference-item w-full max-w-lg"
-  id="agent-mode-preference"
-  data-i18n-attr="data-entitlement-required:agent_mode"
->
-  <div class="copy">
-    <div class="label-text" data-i18n="agentModeLabel">Agent mode on Claude</div>
-    <p class="description" data-i18n="agentModeDescription">
-      Pick how Say, Pi writes replies to keep your conversations flowing
-    </p>
-  </div>
-  <div id="agent-mode-settings" class="hidden">
-    <div class="toggle mode">
-      <span class="toggle-option" data-mode="auto" id="agent-mode-auto" data-i18n="agentModeAuto"
-        >Auto</span
-      >
-      <span class="toggle-option" data-mode="agent" id="agent-mode-agent" data-i18n="agentModeAgent"
-        >Agent</span
-      >
-      <span class="toggle-option" data-mode="off" id="agent-mode-off" data-i18n="agentModeOff"
-        >Off</span
-      >
-    </div>
-    <div class="description" data-i18n="agentModeNickname">
-      Give names to your agents to make it easier to pick the right one.
-    </div>
-    <label class="nickname">
-      <span data-i18n="agentModeNicknameLabel">Agent nickname</span>
-      <input id="agent-mode-nickname" type="text" maxlength="32" />
-    </label>
-  </div>
-  <div id="agent-mode-upsell" class="hidden">
-    <p data-i18n="agentModeUpsell">
-      Agent mode is a premium feature. Upgrade for faster task execution.
-    </p>
-    <button
-      id="agent-mode-upgrade"
-      class="li4-btn li4-btn--primary"
-      data-i18n="upgradeButton"
-    >
-      See plans
-    </button>
-  </div>
-</div>
-
-<div class="user-preference-item w-full max-w-lg">
+<div class="user-preference-item w-full max-w-lg" id="chatgpt-auto-read-aloud-preference">
   <label class="wraper" for="chatgpt-auto-read-aloud">
-    <span class="label-text" data-i18n="chatgptAutoReadAloud"
-      >Auto read aloud responses</span
-    >
+    <span class="label-text" data-i18n="chatgptAutoReadAloud">Auto Read Aloud (ChatGPT)</span>
     <div class="switch-wrap control">
       <input type="checkbox" id="chatgpt-auto-read-aloud" name="chatgptAutoReadAloud" />
       <div class="switch"></div>
     </div>
   </label>
-  <p class="description" data-i18n="chatgptAutoReadAloudDescription">
-    Automatically play the response audio when available
-  </p>
+  <div class="description">Autoplay during voice calls. No effect when typing.</div>
 </div>
 
