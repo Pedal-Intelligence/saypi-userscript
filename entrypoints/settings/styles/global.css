@@ -1,24 +1,27 @@
 /* Global settings page styles */
 .settings-root {
-  min-height: 100vh;
   background: #f9fafb;
+  /* No min-height - let content determine natural height */
 }
 
 .settings-container {
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0.5rem 0; /* Reduced from 2rem to minimize empty space */
 }
 
 .sidebar {
   width: 200px;
   flex-shrink: 0;
+  padding-left: 1.5rem; /* Add left padding for balance */
 }
 
 .content {
   flex: 1;
   margin-left: 2rem;
+  padding-right: 2rem; /* Add right padding for balance */
+  width: 504px; /* Fixed width for consistent layout on desktop */
 }
 
 .tab-panel {
@@ -28,5 +31,22 @@
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Mobile/portrait-friendly layout */
+@media (max-width: 735px) {
+  .settings-container {
+    padding: 0.5rem;
+  }
+
+  .sidebar {
+    padding-left: 0;
+  }
+
+  .content {
+    width: 100%; /* Full width on mobile */
+    margin-left: 0;
+    padding-right: 0;
+  }
 }
 

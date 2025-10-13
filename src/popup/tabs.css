@@ -76,12 +76,18 @@ section.hidden {
 
 .content {
   flex: 1;
-  min-width: 520px;
   padding: 0.5rem 0 1rem 0;
+  /* Allow flex growth but don't force minimum */
 }
-.tab-panel { width: 100%; max-width: 520px; }
-/* Ensure consistent desktop sizing for content cards */
-.user-preference-item { min-width: 520px; }
+.tab-panel {
+  width: 100%;
+  max-width: 504px; /* Match production - consistent width across tabs */
+}
+/* Preference items should fit within tab panel width */
+.user-preference-item {
+  max-width: 504px; /* Match tab panel width for consistency */
+  width: 100%;
+}
 
 .tab-panel.hidden {
   display: none !important;

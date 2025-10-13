@@ -112,6 +112,7 @@
         padding: 0.5rem;
         border-radius: 10px;
         margin: 0 auto;
+        text-align: center; /* Center text in consent buttons */
       }
       #analytics-consent .buttons button:hover {
         background-color: lightskyblue;
@@ -122,6 +123,7 @@
       .btn {
         display: inline-flex;
         align-items: center;
+        justify-content: center; /* Center content horizontally */
         gap: 8px;
         padding: 8px 16px;
         border: none;

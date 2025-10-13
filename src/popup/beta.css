@@ -74,7 +74,21 @@
 
 button#clear-preferences {
     /* Visibility controlled by VITE_DEV_MODE in popup.js */
-    width: 100%;
-    text-align: left;
-    /* Icon now handled by Lucide <i data-lucide="trash-2"></i> */
+    /* Layout: label on left, icon button on right */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem; /* Smaller padding for consistency */
+    min-width: auto;
+    font-size: 0.875rem; /* Match other controls */
+}
+
+button#clear-preferences i[data-lucide] {
+    width: 16px;
+    height: 16px;
+}
+
+/* Hide redundant upgrade button - header already has Sign In / auth button */
+section#upgrade {
+    display: none !important;
 }
