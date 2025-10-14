@@ -1,3 +1,18 @@
+/**
+ * @deprecated This file (popup.js) contains legacy popup initialization logic.
+ *
+ * Most functionality has been refactored into the modern settings architecture:
+ * - entrypoints/settings/ - Modern TypeScript-based settings UI
+ * - See SETTINGS_REFACTOR_STATUS.md for migration details
+ *
+ * This file is retained temporarily for:
+ * 1. Some remaining DOM initialization that settings UI depends on
+ * 2. Backward compatibility during transition period
+ *
+ * TODO: Complete extraction of remaining logic and remove this file
+ * Target: After enabling lazy tab loading (see SETTINGS_REFACTOR_STATUS.md Task 1)
+ */
+
 const initializePopup = () => {
   function message(msg) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

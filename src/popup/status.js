@@ -1,3 +1,16 @@
+/**
+ * @deprecated This file (status.js) contains legacy status polling logic.
+ *
+ * Most functionality has been refactored into the modern settings architecture:
+ * - entrypoints/settings/tabs/status/ - Modern TypeScript-based status tab
+ * - See SETTINGS_REFACTOR_STATUS.md for migration details
+ *
+ * This file is retained temporarily for backward compatibility during transition.
+ *
+ * TODO: Complete extraction of remaining logic and remove this file
+ * Target: After enabling lazy tab loading (see SETTINGS_REFACTOR_STATUS.md Task 1)
+ */
+
 const STATUS_ENDPOINT_PATH = "/status.json";
 const DEFAULT_STATUS_ENDPOINT = `https://api.saypi.ai${STATUS_ENDPOINT_PATH}`;
 const STATUS_POLL_INTERVAL_MS = 60000;

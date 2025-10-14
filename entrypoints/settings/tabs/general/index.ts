@@ -7,23 +7,14 @@ export class GeneralTab implements TabController {
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
-    console.info('[GeneralTab] Initializing...', { 
-      hasContainer: !!this.container,
-      htmlLength: generalHTML.length 
-    });
-    
     // Inject HTML template
     this.container.innerHTML = generalHTML;
-    
-    console.info('[GeneralTab] HTML injected, DOM updated');
-    
+
     // Initialize components
     await this.setupSoundEffects();
     await this.setupAnalytics();
     await this.setupConsent();
     this.setupClearPreferences();
-    
-    console.info('[GeneralTab] ✅ Initialized');
   }
   
   private async setupSoundEffects(): Promise<void> {

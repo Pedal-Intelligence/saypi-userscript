@@ -25,7 +25,7 @@ export function initIcons(): void {
     });
     iconsInitialized = true;
   } else {
-    console.error('[Icons] Cannot initialize - window.lucide not available');
+    console.error('Cannot initialize icons - window.lucide not available');
   }
 }
 
