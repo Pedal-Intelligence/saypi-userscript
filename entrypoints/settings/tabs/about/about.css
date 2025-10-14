@@ -34,6 +34,36 @@
   text-decoration: underline;
 }
 
+/* Social media links */
+#about-saypi .social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+#about-saypi .social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+#about-saypi .social-links a:hover {
+  background: #2563eb;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+#about-saypi .social-links svg {
+  width: 20px;
+  height: 20px;
+}
+
 #about-saypi .feature-highlight {
   font-size: 0.875rem;
   font-style: italic;
