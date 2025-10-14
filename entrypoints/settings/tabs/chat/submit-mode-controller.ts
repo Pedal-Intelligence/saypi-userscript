@@ -196,11 +196,12 @@ export class SubmitModeController {
     // Insert into the AI Chat tab
     const chatTab = document.getElementById('tab-chat');
     if (chatTab) {
-      const insertionPoint = this.submitModeSelector || chatTab.firstChild;
-      chatTab.insertBefore(
-        autoSubmitToggle,
-        insertionPoint ? insertionPoint.nextSibling : null
-      );
+      // Try to insert after the submit mode selector, or append to end
+      if (this.submitModeSelector && this.submitModeSelector.parentNode === chatTab) {
+        chatTab.insertBefore(autoSubmitToggle, this.submitModeSelector.nextSibling);
+      } else {
+        chatTab.appendChild(autoSubmitToggle);
+      }
     }
 
     // Setup toggle state and handler

@@ -167,11 +167,7 @@ describe('ChatTab', () => {
 
   describe('interruptions toggle', () => {
     it('should load saved interruptions preference', async () => {
-      // Mock storage to return saved preference
-      chromeMock.storage.local.get.mockImplementation((keys, callback) => {
-        callback({ allowInterruptions: false });
-      });
-
+      // Set storage value directly
       await chromeMock.storage.set({ allowInterruptions: false });
 
       await chatTab.init();

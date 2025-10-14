@@ -30,6 +30,13 @@ describe('Settings Page Integration', () => {
       length: 0
     };
 
+    // Mock agent mode entitlement check to return false (no entitlement) by default
+    chromeMock.runtime.sendMessage.mockImplementation((message: any, callback: any) => {
+      if (message.type === 'CHECK_FEATURE_ENTITLEMENT' && message.feature === 'agent_mode') {
+        callback({ hasEntitlement: false });
+      }
+    });
+
     // Mock window.lucide
     mockLucide = {
       createIcons: vi.fn(),

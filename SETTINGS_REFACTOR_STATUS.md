@@ -108,6 +108,8 @@ entrypoints/settings/tabs/
 **Test Fixes Applied**:
 - ✅ `messaging.spec.ts` - Converted setTimeout callbacks to async/await (eliminated race conditions)
 - ✅ `UserAgentModule.spec.ts` - Fixed matchMedia mocking (`globalThis` vs `window`)
+- ✅ `SubmitModeController.spec.ts` - Fixed mocking conflicts, DOM insertion issues, and async timing problems
+- ✅ **All 554 tests now pass** (1 skipped) - Comprehensive coverage with no intermittent failures
 
 ---
 

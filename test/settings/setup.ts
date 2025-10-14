@@ -78,11 +78,21 @@ export function createMockI18n() {
     'soundEffects': 'Sound Effects',
     'shareData': 'Share Analytics',
     'analyticsConsent': 'Analytics Consent',
-    'interruptionsFirefoxDisabled': 'Interruptions not available in Firefox'
+    'interruptionsFirefoxDisabled': 'Interruptions not available in Firefox',
+    'submit_mode_agent_description': 'Test mode description for {{nickname}}',
+    'submit_mode_auto_description': 'Auto submit description',
+    'submit_mode_off_description': 'Off mode description'
   };
 
   return {
-    getMessage: vi.fn((messageName: string) => messages[messageName] || messageName)
+    getMessage: vi.fn((messageName: string, substitutions?: string[]) => {
+      let message = messages[messageName] || messageName;
+      if (substitutions && substitutions.length > 0) {
+        // Replace {{nickname}} placeholder with first substitution
+        message = message.replace('{{nickname}}', substitutions[0]);
+      }
+      return message;
+    })
   };
 }
 
