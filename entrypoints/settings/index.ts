@@ -79,12 +79,7 @@ class SettingsApp {
     // Initialize icons ONCE after initial DOM is ready
     initIcons();
 
-    // Expose refreshIcons globally for status.js to use
-    (window as any).refreshStatusIcons = refreshIcons;
-
-    // Load popup.js and status.js
-    await import("../../src/popup/popup.js");
-    await import("../../src/popup/status.js");
+    // Load status subscription handler
     await import("../../src/popup/status-subscription.js");
 
     console.info("[Settings] Bootstrap complete");
@@ -102,6 +97,11 @@ class SettingsApp {
         // Refresh i18n and icons for newly loaded tab
         replaceI18n();
         refreshIcons();
+
+        // Update quota display based on auth state (for General tab with usage bars)
+        if (tabId === 'general' && (window as any).updateQuotaDisplayForAuthState) {
+          await (window as any).updateQuotaDisplayForAuthState();
+        }
       } catch (error) {
         console.error(`[Settings] Failed to load ${tabId} tab:`, error);
       }

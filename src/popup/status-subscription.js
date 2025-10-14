@@ -473,21 +473,22 @@ async function getQuotaStatus() {
 
 function setupViewDetailsLinks() {
   const viewQuotaDetailsLink = document.getElementById('view-quota-details');
+
+  // Silently return if link not found (might be called before General tab loads)
   if (!viewQuotaDetailsLink) {
-    console.warn('[Popup] view-quota-details link not found in DOM - quota details link will not work');
     return;
   }
 
   // Function to open dashboard
   const openDashboard = () => {
     console.log('View details clicked, opening dashboard...');
-    
+
     if (!config || !config.authServerUrl) {
       console.error('Config or authServerUrl is missing:', config);
       window.open('https://www.saypi.ai/app/dashboard', "_blank");
       return;
     }
-    
+
     chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
       const isAuthenticated = !!(response && response.claims);
       console.log('Auth check result:', isAuthenticated);
@@ -495,15 +496,11 @@ function setupViewDetailsLinks() {
         window.open(`${config.authServerUrl}/pricing`, "_blank");
         return;
       }
-      
+
       const baseUrl = `${config.authServerUrl}/app/dashboard`;
       window.open(baseUrl, "_blank");
     });
   };
-
-  if (!viewQuotaDetailsLink) {
-    return;
-  }
 
   viewQuotaDetailsLink.onclick = openDashboard;
 }
@@ -551,5 +548,15 @@ if (document.readyState === 'loading') {
 
 // Export functions to global scope for use in other scripts
 window.updateUnauthenticatedDisplay = updateUnauthenticatedDisplay;
+window.updateQuotaDisplayForAuthState = async function() {
+  await checkAuthenticationStatus();
+  if (!isUserAuthenticated) {
+    updateUnauthenticatedDisplay();
+  } else {
+    restoreAuthenticatedDisplay();
+  }
+  // Setup view details links after updating display (in case General tab just loaded)
+  setupViewDetailsLinks();
+};
 
 export {};
