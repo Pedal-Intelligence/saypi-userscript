@@ -7,6 +7,7 @@ import './dictation.css';
 declare global {
   interface Window {
     ModeSelector: any;
+    LanguagePicker: any;
   }
 }
 
@@ -27,9 +28,10 @@ export class DictationTab implements TabController {
     console.info('[DictationTab] HTML injected');
     
     await this.setupModeSelector();
+    await this.setupLanguagePicker();
     await this.setupVADIndicator();
     await this.setupFillerWords();
-    
+
     console.info('[DictationTab] ✅ Initialized');
   }
   
@@ -48,6 +50,24 @@ export class DictationTab implements TabController {
         ]
       });
       this.modeSelector.init();
+    }
+  }
+
+  private async setupLanguagePicker(): Promise<void> {
+    // Manually initialize language picker after HTML is injected
+    const pickerElement = this.container.querySelector('.js-language-picker');
+    if (pickerElement && window.LanguagePicker) {
+      const picker = new window.LanguagePicker(pickerElement);
+
+      // Set up change listener for storage
+      const select = pickerElement.querySelector('select');
+      if (select) {
+        select.addEventListener('change', function() {
+          chrome.storage.local.set({ language: (this as HTMLSelectElement).value }, function() {
+            console.log('Preference saved: Language is set to ' + (this as any).value);
+          });
+        });
+      }
     }
   }
   

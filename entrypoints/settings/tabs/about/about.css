@@ -1,2 +1,73 @@
-/* About tab specific styles */
+/* Application status section */
+#application-status {
+  margin-bottom: 2rem;
+}
 
+/* About Say, Pi section */
+#about-saypi {
+  margin-top: 2rem;
+}
+
+#about-saypi p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+#about-saypi .about-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+#about-saypi .about-links a {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+#about-saypi .about-links a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+#about-saypi .feature-highlight {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #6b7280;
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border-left: 3px solid #e5e7eb;
+  border-radius: 4px;
+}
+
+#application-status .status-container {
+  margin-bottom: 1rem;
+}
+
+#application-status .status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+#application-status .status-icon {
+  flex-shrink: 0;
+}
+
+#application-status .message {
+  flex: 1;
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+#application-status .message.unknown {
+  color: #6b7280;
+}

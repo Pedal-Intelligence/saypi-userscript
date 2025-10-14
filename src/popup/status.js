@@ -317,7 +317,7 @@ function updateStatus(status) {
     const icon = document.createElement("i");
     icon.setAttribute(
       "data-lucide",
-      status.status_code === "normal" ? "check-circle" : "help-circle"
+      status.status_code === "normal" ? "circle-check" : "circle-alert"
     );
     iconWrap.appendChild(icon);
 
@@ -325,7 +325,10 @@ function updateStatus(status) {
     card.appendChild(iconWrap);
     statusContainer.appendChild(card);
 
-    // Icons are initialized centrally by index.ts
+    // Trigger icon refresh callback for dynamically added icons
+    if (window.refreshStatusIcons) {
+      window.refreshStatusIcons(iconWrap);
+    }
   } else if (status.status_code === "issue") {
     const summaryIssueMessage = getMessageOrDefault(
       "applicationStatusIssue",
@@ -353,7 +356,10 @@ function updateStatus(status) {
 
     renderIssueDetails(status);
 
-    // Icons are initialized centrally by index.ts
+    // Trigger icon refresh callback for dynamically added icons
+    if (window.refreshStatusIcons) {
+      window.refreshStatusIcons(iconWrap);
+    }
 
     showIssueDetailsListener();
     hideIssueDetailsListener();

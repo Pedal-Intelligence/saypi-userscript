@@ -496,6 +496,9 @@ function setFlagIcon(element, languageKey) {
       });
     });
   }
+
+  // Expose LanguagePicker globally for manual initialization in modular settings
+  window.LanguagePicker = LanguagePicker;
 })();
 
 export {};

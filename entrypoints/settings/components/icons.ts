@@ -28,7 +28,7 @@ export function initIcons(): void {
       nameAttr: 'data-lucide' 
     });
     iconsInitialized = true;
-    console.info('[Icons] ✅ Initialized globally');
+    console.debug('[Icons] ✅ Initialized globally with ', Object.keys(window.lucide.icons).length, ' icons');
   } else {
     console.error('[Icons] ❌ Cannot initialize - window.lucide not available');
   }
@@ -36,20 +36,33 @@ export function initIcons(): void {
 
 /**
  * Refresh icons in a specific container without destroying others
+ * Uses Lucide's native createIcons() which properly handles icon path data
  * @param container Optional container to scope icon refresh
  */
 export function refreshIcons(container?: HTMLElement): void {
-  if (!window.lucide?.icons) return;
-  
+  if (!window.lucide?.createIcons || !window.lucide?.icons) {
+    console.warn('[Icons] Cannot refresh - Lucide not fully loaded');
+    return;
+  }
+
   const scope = container || document.body;
   const iconElements = scope.querySelectorAll<HTMLElement>('[data-lucide]');
-  
-  iconElements.forEach(el => {
-    const iconName = el.getAttribute('data-lucide');
-    if (iconName && window.lucide?.icons[iconName]) {
-      el.innerHTML = window.lucide?.icons[iconName].toSvg();
-      el.classList.add('lucide', `lucide-${iconName}`);
-    }
+
+  if (iconElements.length === 0) {
+    console.debug('[Icons] No icons to refresh in scope');
+    return;
+  }
+
+  console.debug(`[Icons] Refreshing ${iconElements.length} icons`);
+
+  // Use Lucide's native createIcons() which properly converts icon path data to SVG
+  // This will find and render all [data-lucide] elements in the entire document
+  // We can't scope it easily, but calling it multiple times is safe
+  window.lucide.createIcons({
+    icons: window.lucide.icons,
+    nameAttr: 'data-lucide'
   });
+
+  console.debug('[Icons] ✅ Refresh complete');
 }
 

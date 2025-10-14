@@ -1,22 +1,23 @@
 <h2 class="panel-heading" data-i18n="sectionHeadingDictation">Dictation</h2>
-<div class="dictation-mode-selector">
-  <h3 data-i18n="dictationModeHeading">Dictation mode</h3>
-  <div id="preference-selector" class="dictation-preference">
-    <div class="mode-icon" id="speed" data-i18n="mode_speed_label">Speed</div>
-    <div class="mode-icon" id="balanced" data-i18n="mode_balanced_label">Balanced</div>
-    <div class="mode-icon" id="accuracy" data-i18n="mode_accuracy_label">Accuracy</div>
+<div id="preference-selector" class="w-full max-w-lg user-preference-item mode-selector">
+  <div>
+    <div class="flex justify-between mb-2">
+      <span class="icon" data-i18n-attr="aria-label:ariaLabelFast" aria-label="Fast" slider-value="0" id="speed">
+        <span class="icon-circle"><i data-lucide="rabbit"></i></span>
+      </span>
+      <span class="icon active" data-i18n-attr="aria-label:ariaLabelBalanced" aria-label="Balanced" slider-value="1" id="balanced">
+        <span class="icon-circle"><i data-lucide="scale"></i></span>
+      </span>
+      <span class="icon" data-i18n-attr="aria-label:ariaLabelAccurate" aria-label="Accurate" slider-value="2" id="accuracy">
+        <span class="icon-circle"><i data-lucide="turtle"></i></span>
+      </span>
+    </div>
+    <input type="range" min="0" max="2" value="1" class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" id="customRange" data-i18n-attr="title:preferedModeControl" title="Select your preferred mode" />
   </div>
-  <input type="range" min="0" max="2" step="1" id="customRange" />
   <div id="sliderValue" class="mt-2 text-lg font-semibold text-gray-700" data-i18n="mode_balanced">balanced</div>
-  <div class="description selected" data-i18n="mode_speed_description">
-    Fastest transcription with minimal latency
-  </div>
-  <div class="description" data-i18n="mode_balanced_description">
-    Balanced quality and latency for most workflows
-  </div>
-  <div class="description" data-i18n="mode_accuracy_description">
-    Highest accuracy, but slower transcription speed
-  </div>
+  <div class="description" data-i18n="mode_speed_description">Fastest response, but less accurate and may interrupt speech</div>
+  <div class="description" data-i18n="mode_balanced_description">Good balance of speed and accuracy for most uses</div>
+  <div class="description" data-i18n="mode_accuracy_description">Highest accuracy, but slower transcription speed</div>
 </div>
 
 <div class="user-preference-item w-full max-w-lg" id="language-preference">

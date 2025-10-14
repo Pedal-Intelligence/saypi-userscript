@@ -1,5 +1,5 @@
 import { createIcons, icons } from "lucide";
-import { initIcons } from "./components/icons";
+import { initIcons, refreshIcons } from "./components/icons";
 import { TabNavigator } from "./components/tabs";
 import { GeneralTab } from "./tabs/general";
 import { ChatTab } from "./tabs/chat";
@@ -122,7 +122,10 @@ class SettingsApp {
     
     // Initialize icons ONCE after all DOM is ready
     initIcons();
-    
+
+    // Expose refreshIcons globally for status.js to use
+    (window as any).refreshStatusIcons = refreshIcons;
+
     // NOW load popup.js and status.js - all DOM is ready
     await import("../../src/popup/popup.js");
     await import("../../src/popup/status.js");
