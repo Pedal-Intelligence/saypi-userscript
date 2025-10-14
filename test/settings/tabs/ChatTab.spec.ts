@@ -11,6 +11,15 @@ describe('ChatTab', () => {
     chromeMock = setupChromeMock();
     container = createTestContainer();
     chatTab = new ChatTab(container);
+
+    // Mock agent mode entitlement check to return false (no entitlement) by default
+    chromeMock.runtime.sendMessage.mockImplementation((message: any, callback: any) => {
+      if (message.type === 'CHECK_FEATURE_ENTITLEMENT' && message.feature === 'agent_mode') {
+        callback({ hasEntitlement: false });
+      }
+    });
+
+    // Storage mocks are cleared by chromeMock.cleanup() in afterEach
   });
 
   afterEach(() => {
@@ -47,12 +56,16 @@ describe('ChatTab', () => {
 
   describe('nickname input', () => {
     it('should load saved nickname', async () => {
+      // Set storage value directly
       await chromeMock.storage.set({ nickname: 'TestBot' });
 
       await chatTab.init();
 
       const input = container.querySelector<HTMLInputElement>('#assistant-nickname');
       expect(input?.value).toBe('TestBot');
+
+      // Verify storage was called
+      expect(chromeMock.storage.get).toHaveBeenCalledWith(['nickname'], expect.any(Function));
     });
 
     it('should default to empty when no nickname saved', async () => {
@@ -154,6 +167,11 @@ describe('ChatTab', () => {
 
   describe('interruptions toggle', () => {
     it('should load saved interruptions preference', async () => {
+      // Mock storage to return saved preference
+      chromeMock.storage.local.get.mockImplementation((keys, callback) => {
+        callback({ allowInterruptions: false });
+      });
+
       await chromeMock.storage.set({ allowInterruptions: false });
 
       await chatTab.init();

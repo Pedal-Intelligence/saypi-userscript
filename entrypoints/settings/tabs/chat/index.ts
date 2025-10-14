@@ -1,10 +1,13 @@
 import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
 import { sendMessageToActiveTab } from '../../shared/messaging';
+import { SubmitModeController } from './submit-mode-controller';
 import chatHTML from './chat.html?raw';
 import './chat.css';
 
 export class ChatTab implements TabController {
+  private submitModeController: SubmitModeController | null = null;
+  
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
@@ -22,6 +25,7 @@ export class ChatTab implements TabController {
     await this.setupNickname();
     await this.setupInterruptions();
     await this.setupAutoReadAloud();
+    await this.setupSubmitMode();
     
     console.info('[ChatTab] ✅ Initialized');
   }
@@ -33,14 +37,27 @@ export class ChatTab implements TabController {
     const nickname = await getStoredValue<string | null>('nickname', null);
     if (nickname) input.value = nickname;
     
+    // Update agent mode description with current nickname
+    if (this.submitModeController) {
+      this.submitModeController.updateAgentModeDescription(nickname);
+    }
+    
     input.addEventListener('change', async () => {
       const value = input.value.trim();
       if (value) {
         await setStoredValue('nickname', value);
         sendMessageToActiveTab({ nickname: value });
+        // Update agent mode description
+        if (this.submitModeController) {
+          this.submitModeController.updateAgentModeDescription(value);
+        }
       } else {
         await chrome.storage.local.remove('nickname');
         sendMessageToActiveTab({ nickname: null });
+        // Update agent mode description with default
+        if (this.submitModeController) {
+          this.submitModeController.updateAgentModeDescription(null);
+        }
       }
     });
     
@@ -89,6 +106,15 @@ export class ChatTab implements TabController {
       input.parentElement?.classList.toggle('checked', input.checked);
       sendMessageToActiveTab({ autoReadAloudChatGPT: input.checked });
     });
+  }
+  
+  private async setupSubmitMode(): Promise<void> {
+    this.submitModeController = new SubmitModeController();
+    await this.submitModeController.init();
+    
+    // Update agent mode description with current nickname
+    const nickname = await getStoredValue<string | null>('nickname', null);
+    this.submitModeController.updateAgentModeDescription(nickname);
   }
 }
 
