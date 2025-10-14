@@ -3,6 +3,13 @@ import { createIcons, icons } from 'lucide';
 let iconsInitialized = false;
 
 /**
+ * Reset icon initialization state (for testing)
+ */
+export function _resetIconState(): void {
+  iconsInitialized = false;
+}
+
+/**
  * Initialize Lucide icons globally once
  * Call this after all DOM content is loaded
  */
