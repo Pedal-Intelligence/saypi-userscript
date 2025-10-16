@@ -1,5 +1,6 @@
 import { createIcons, icons } from "lucide";
 import { initIcons, refreshIcons } from "./components/icons";
+import { SettingsHeader } from "./components/header";
 import { TabNavigator } from "./components/tabs";
 import { GeneralTab } from "./tabs/general";
 import { ChatTab } from "./tabs/chat";
@@ -36,14 +37,24 @@ const setStaticIcons = () => {
 };
 
 class SettingsApp {
+  private header!: SettingsHeader;
   private tabs: Map<string, TabController> = new Map();
   private navigator!: TabNavigator;
 
   async init(): Promise<void> {
     console.info("[Settings] Bootstrap starting");
+
+    const headerRoot = document.querySelector<HTMLElement>('.settings-header');
+    if (!headerRoot) {
+      throw new Error("[Settings] Header root element not found");
+    }
+
+    this.header = new SettingsHeader(headerRoot);
+    this.header.render();
+
     setStaticIcons();
 
-    // Load legacy modules that don't need DOM (config, auth)
+    // Load legacy modules that don't need DOM (config, auth-shared only)
     await Promise.all([
       import("../../src/popup/popup-config.js"),
       import("../../src/popup/simple-user-agent.js"),
@@ -51,7 +62,6 @@ class SettingsApp {
       import("../../src/popup/language-picker.js"),
       import("../../src/popup/auth-shared.js"),
     ]);
-    await import("../../src/popup/auth.js");
 
     // Initialize tab controllers
     this.tabs.set('general', new GeneralTab(document.querySelector('#tab-general')!));
@@ -79,6 +89,9 @@ class SettingsApp {
     // Initialize icons ONCE after initial DOM is ready
     initIcons();
 
+    // Initialize auth (auth button is in header, always present)
+    await import("../../src/popup/auth.js");
+
     // Load status subscription handler
     await import("../../src/popup/status-subscription.js");
 
@@ -98,7 +111,7 @@ class SettingsApp {
         replaceI18n();
         refreshIcons();
 
-        // Update quota display based on auth state (for General tab with usage bars)
+        // For General tab: update quota display based on auth state
         if (tabId === 'general' && (window as any).updateQuotaDisplayForAuthState) {
           await (window as any).updateQuotaDisplayForAuthState();
         }
