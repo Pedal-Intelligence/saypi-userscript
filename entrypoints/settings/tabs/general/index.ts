@@ -1,6 +1,7 @@
 import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
 import generalHTML from './general.html?raw';
+import dataSharingPortraitUrl from '../../../../src/popup/data-sharing-portrait.jpg';
 import './general.css';
 
 export class GeneralTab implements TabController {
@@ -10,11 +11,20 @@ export class GeneralTab implements TabController {
     // Inject HTML template
     this.container.innerHTML = generalHTML;
 
+    // Resolve consent imagery before user may see it
+    this.setConsentHeroImage();
+
     // Initialize components
     await this.setupSoundEffects();
     await this.setupAnalytics();
     await this.setupConsent();
     this.setupClearPreferences();
+  }
+
+  private setConsentHeroImage(): void {
+    const hero = this.container.querySelector<HTMLElement>('#analytics-consent .consent-hero');
+    if (!hero) return;
+    hero.style.setProperty('--consent-hero-url', `url("${dataSharingPortraitUrl}")`);
   }
   
   private async setupSoundEffects(): Promise<void> {
@@ -93,4 +103,3 @@ export class GeneralTab implements TabController {
     });
   }
 }
-

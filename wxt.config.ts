@@ -21,10 +21,6 @@ const EXTRA_ICON_FILES = [
   "bubble-300px.png",
 ];
 
-const EXTRA_ASSET_FILES = [
-  { src: "src/popup/data-sharing-portrait.jpg", dest: "data-sharing-portrait.jpg" },
-];
-
 const FLAGS_DIR = fileURLToPath(new URL("./src/icons/flags", import.meta.url));
 
 const replaceAllMappings = (input: string, mappings: Map<string, string>) => {
@@ -272,23 +268,6 @@ const addVadAssets = (files: Array<Record<string, any>>) => {
   }
 };
 
-const addExtraAssets = (files: Array<Record<string, any>>) => {
-  for (const asset of EXTRA_ASSET_FILES) {
-    const absolutePath = fileURLToPath(new URL(`./${asset.src}`, import.meta.url));
-    try {
-      const stats = statSync(absolutePath);
-      if (!stats.isFile()) continue;
-    } catch {
-      console.warn(`Extra asset not found: ${asset.src}`);
-      continue;
-    }
-    files.push({
-      relativeDest: asset.dest,
-      absoluteSrc: absolutePath,
-    });
-  }
-};
-
 const applyChunkFilePattern = (config: { build?: Record<string, any>; plugins?: any[] }) => {
   config.build ??= {};
   const buildConfig = config.build as Record<string, any>;
@@ -379,7 +358,6 @@ export default defineConfig((env) => {
         addIconPublicAssets(files);
         addFlagIconAssets(files);
         addVadAssets(files);
-        addExtraAssets(files);
         renamePublicCommonjsAssets(files);
       },
     },
