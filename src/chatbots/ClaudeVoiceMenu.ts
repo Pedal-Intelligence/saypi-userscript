@@ -359,10 +359,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       const region = parts.find(p => /^[A-Z]{2}$/.test(p));
       const code = region ? region.toLowerCase() : 'global';
 
-      // Prefer extension-packaged flags under src/ (MV3). These are exposed via web_accessible_resources.
+      // Prefer extension-packaged flags under icons/ (MV3). These are exposed via web_accessible_resources.
       const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
       if (isExtension) {
-        return chrome.runtime.getURL(`src/icons/flags/${code}.svg`);
+        return chrome.runtime.getURL(`icons/flags/${code}.svg`);
       }
       // Non-extension environments (tests) fall back to a generic resolver
       return getResourceUrl(`icons/flags/${code}.svg`);
