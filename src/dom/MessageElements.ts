@@ -20,7 +20,7 @@ import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
 import { FailedSpeechUtterance } from "../tts/FailedSpeechUtterance";
 import { config } from "../ConfigModule";
-import volumeMutedSvgContent from "../icons/volume-muted.svg";
+import volumeMutedSvgContent from "../icons/volume-muted.svg?raw";
 import { addSvgToButton } from "../tts/VoiceMenu";
 import getMessage from "../i18n";
 

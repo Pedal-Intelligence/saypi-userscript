@@ -2,17 +2,17 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { VoiceSelector, addSvgToButton } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
-import chevronSvgContent from "../icons/claude-chevron.svg";
-import volumeSvgContent from "../icons/volume-mid.svg";
-import volumeMutedSvgContent from "../icons/volume-muted.svg";
+import chevronSvgContent from "../icons/claude-chevron.svg?raw";
+import volumeSvgContent from "../icons/volume-mid.svg?raw";
+import volumeMutedSvgContent from "../icons/volume-muted.svg?raw";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { getJwtManagerSync } from "../JwtManager";
 import { getResourceUrl } from "../ResourceModule";
-import globeSvgContent from "../icons/lucide-globe.svg";
-import marsSvgContent from "../icons/lucide-mars.svg";
-import venusSvgContent from "../icons/lucide-venus.svg";
+import globeSvgContent from "../icons/lucide-globe.svg?raw";
+import marsSvgContent from "../icons/lucide-mars.svg?raw";
+import venusSvgContent from "../icons/lucide-venus.svg?raw";
 import { logger } from "../LoggingModule";
 
 export class ClaudeVoiceMenu extends VoiceSelector {

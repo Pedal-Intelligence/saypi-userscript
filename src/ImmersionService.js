@@ -4,7 +4,7 @@ import { addChild, createSVGElement } from "./dom/DOMModule.ts";
 import { ThemeManager } from "./themes/ThemeManagerModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
 import getMessage from "./i18n.ts";
-import exitIconSVG from "./icons/exit.svg";
+import exitIconSVG from "./icons/exit.svg?raw";
 
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view

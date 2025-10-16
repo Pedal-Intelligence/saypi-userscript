@@ -48,7 +48,7 @@
     ],
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1",
-      "^.+\\.(css|scss|png|jpg|ttf|woff|woff2|svg)$": "jest-transform-stub"
+      "^.+\\.(css|scss|png|jpg|ttf|woff|woff2|svg)(\\?raw)?$": "jest-transform-stub"
     },
     "setupFilesAfterEnv": [
       "./test/jest.setup.js"
