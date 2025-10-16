@@ -10,6 +10,8 @@ describe('auth-shared updateAuthUI', () => {
   let container: HTMLElement;
   let headerRoot: HTMLElement | null;
   let cleanupChrome: () => void;
+  let restoreAuthenticatedDisplayMock: ReturnType<typeof vi.fn>;
+  let updateQuotaDisplayForAuthStateMock: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     vi.resetModules();
@@ -43,6 +45,11 @@ describe('auth-shared updateAuthUI', () => {
       delete (global as any).chrome;
     };
 
+    restoreAuthenticatedDisplayMock = vi.fn();
+    updateQuotaDisplayForAuthStateMock = vi.fn();
+    (window as any).restoreAuthenticatedDisplay = restoreAuthenticatedDisplayMock;
+    (window as any).updateQuotaDisplayForAuthState = updateQuotaDisplayForAuthStateMock;
+
     await import('../../../src/popup/auth-shared.js');
   });
 
@@ -56,6 +63,8 @@ describe('auth-shared updateAuthUI', () => {
     delete (window as any).logoutFromSaas;
     delete (window as any).updateUIAfterSignOut;
     delete (window as any).performLocalSignOut;
+    delete (window as any).restoreAuthenticatedDisplay;
+    delete (window as any).updateQuotaDisplayForAuthState;
   });
 
   it('shows unauthenticated state with sign-in button', () => {
@@ -67,11 +76,14 @@ describe('auth-shared updateAuthUI', () => {
     const authButton = headerRoot!.querySelector('#auth-button');
     const profileStatus = headerRoot!.querySelector('#profile-status');
     const profileName = headerRoot!.querySelector('#profile-name');
+    const unauthenticatedMessage = headerRoot!.querySelector('#unauthenticated-message');
 
     expect(authButton?.textContent?.trim()).toBe('Sign In');
     expect(authButton?.getAttribute('data-i18n')).toBe('signIn');
     expect(profileStatus?.classList.contains('hidden')).toBe(false);
     expect(profileName?.classList.contains('hidden')).toBe(true);
+    expect(unauthenticatedMessage?.classList.contains('hidden')).toBe(false);
+    expect(restoreAuthenticatedDisplayMock).not.toHaveBeenCalled();
   });
 
   it('shows authenticated state with greeting and sign-out button', () => {
@@ -83,11 +95,15 @@ describe('auth-shared updateAuthUI', () => {
     const authButton = headerRoot!.querySelector('#auth-button');
     const profileStatus = headerRoot!.querySelector('#profile-status');
     const profileName = headerRoot!.querySelector('#profile-name');
+    const unauthenticatedMessage = headerRoot!.querySelector('#unauthenticated-message');
 
     expect(authButton?.textContent?.trim()).toBe('Sign Out');
     expect(authButton?.getAttribute('data-i18n')).toBe('signOut');
     expect(profileStatus?.classList.contains('hidden')).toBe(true);
     expect(profileName?.classList.contains('hidden')).toBe(false);
     expect(profileName?.textContent?.trim()).toBe('Hello, Ada Lovelace');
+    expect(unauthenticatedMessage?.classList.contains('hidden')).toBe(true);
+    expect(restoreAuthenticatedDisplayMock).toHaveBeenCalledTimes(1);
+    expect(updateQuotaDisplayForAuthStateMock).not.toHaveBeenCalled();
   });
 });

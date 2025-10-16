@@ -11,6 +11,7 @@ function updateAuthUI(isAuthenticated, userData = null) {
   const profileStatus = document.getElementById('profile-status');
   const profileName = document.getElementById('profile-name');
   const authButton = document.getElementById('auth-button');
+  const unauthenticatedMessage = document.getElementById('unauthenticated-message');
 
   // First, remove any existing click handlers to prevent duplicates
   authButton.removeEventListener('click', handleSignIn);
@@ -27,6 +28,16 @@ function updateAuthUI(isAuthenticated, userData = null) {
     profileName.textContent = chrome.i18n.getMessage('greeting', [userData.name]);
     // Add sign out handler
     authButton.addEventListener('click', handleSignOut);
+    // Hide unauthenticated inline message if present
+    if (unauthenticatedMessage) {
+      unauthenticatedMessage.classList.add('hidden');
+    }
+    // Restore quota display when available
+    if (typeof window.restoreAuthenticatedDisplay === 'function') {
+      window.restoreAuthenticatedDisplay();
+    } else if (typeof window.updateQuotaDisplayForAuthState === 'function') {
+      window.updateQuotaDisplayForAuthState();
+    }
   } else {
     // User is not signed in
     profileStatus.classList.remove('hidden');
@@ -36,6 +47,9 @@ function updateAuthUI(isAuthenticated, userData = null) {
     authButton.textContent = chrome.i18n.getMessage('signIn');
     // Add sign in handler
     authButton.addEventListener('click', handleSignIn);
+    if (unauthenticatedMessage) {
+      unauthenticatedMessage.classList.remove('hidden');
+    }
   }
 }
 

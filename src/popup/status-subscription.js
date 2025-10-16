@@ -558,5 +558,6 @@ window.updateQuotaDisplayForAuthState = async function() {
   // Setup view details links after updating display (in case General tab just loaded)
   setupViewDetailsLinks();
 };
+window.restoreAuthenticatedDisplay = restoreAuthenticatedDisplay;
 
 export {};
