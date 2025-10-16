@@ -330,22 +330,19 @@ const HOST_PERMISSIONS = Array.from(
 );
 
 export default defineConfig((env) => {
-  const browser = env?.browser ?? "chrome";
-  const mode = env?.mode ?? "development";
-  const isFirefox = browser === "firefox";
-  const isProduction = mode === "production";
-
-  const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus"];
+  const browser =
+    (typeof process.env.WXT_BROWSER === "string" && process.env.WXT_BROWSER.length > 0
+      ? process.env.WXT_BROWSER
+      : env?.browser) ?? "chrome";
+  const isFirefox = browser.startsWith("firefox");
+  const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus", "downloads"];
 
   if (!isFirefox) {
     permissions.push("offscreen", "audio");
   }
 
-  if (!isProduction) {
-    permissions.push("downloads");
-  }
-
   return {
+    $schema: "https://unpkg.com/wxt/schemas/v6.json",
     hooks: {
       "vite:build:extendConfig": (entrypoints, config) => {
         applyChunkFilePattern(config);
@@ -359,6 +356,14 @@ export default defineConfig((env) => {
         addFlagIconAssets(files);
         addVadAssets(files);
         renamePublicCommonjsAssets(files);
+      },
+      "build:manifestGenerated": (wxtInstance: any, manifest: any) => {
+        const targetBrowser = String(wxtInstance.config.browser ?? browser);
+        if (targetBrowser.startsWith("firefox") && Array.isArray(manifest.permissions)) {
+          manifest.permissions = manifest.permissions.filter(
+            (permission: string) => permission !== "offscreen" && permission !== "audio",
+          );
+        }
       },
     },
     root: ".",

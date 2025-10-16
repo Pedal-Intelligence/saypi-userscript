@@ -1,3 +1,15 @@
+## Migration Status
+
+- ✅ **Phase 1 – Install & initialise** (WXT + TypeScript scaffolding in place, `wxt.config.ts` checked in)
+- ✅ **Phase 2 – Folder shape** (entrypoints directory populated: content/background/offscreen/permissions/settings)
+- ✅ **Phase 3 – WXT config** (single-source manifest with dynamic asset hooks and env handling)
+- ✅ **Phase 4 – Entry points** (content + background wired; popup/settings refactor now runs via `entrypoints/settings`)
+- ✅ **Phase 5 – Static assets** (runtime assets resolved through Vite imports/public bundle; inline SVGs restored with `?raw`)
+- 🔄 **Phase 6 – Cross-browser outputs** (Chrome build green; Firefox tasks outlined below)
+- ☐ **Phase 7+** – Pending once Firefox packaging is validated
+
+---
+
 # Phase 0 — Prep (one small mindset shift)
 
 * WXT is **Vite under the hood** with extension-specific conventions.
@@ -6,7 +18,7 @@
 
 ---
 
-# Phase 1 — Install & initialise
+# Phase 1 — Install & initialise  _(✓ complete)_
 
 ```bash
 # 1) Add WXT (and types)
@@ -23,7 +35,7 @@ This generates `.wxt/tsconfig.json` and `.wxt/wxt.d.ts`. Keep your own `tsconfig
 
 ---
 
-# Phase 2 — Folder shape (mirror your Webpack entries)
+# Phase 2 — Folder shape (mirror your Webpack entries)  _(✓ complete)_
 
 Create WXT’s **entrypoints** directory. We’ll map your current entries:
 
@@ -44,7 +56,7 @@ Notes:
 
 ---
 
-# Phase 3 — WXT config (single source of truth)
+# Phase 3 — WXT config (single source of truth)  _(✓ complete — see `wxt.config.ts`)_
 
 Create `wxt.config.ts` at repo root:
 
@@ -127,7 +139,7 @@ Rename `.env` keys to **`VITE_API_BASE_URL`**, **`VITE_AUTH_SERVER_URL`**, etc. 
 
 ---
 
-# Phase 4 — Entry points
+# Phase 4 — Entry points  _(✓ complete — all WXT entrypoints live under `entrypoints/`)_
 
 ## 4.1 Content script (`entrypoints/saypi.content.ts`)
 
@@ -275,7 +287,7 @@ WXT will package this page; open it via `chrome.tabs.create({ url: chrome.runtim
 
 ---
 
-# Phase 5 — Static assets (WASM/ONNX, audio, icons, lucide)
+# Phase 5 — Static assets (WASM/ONNX, audio, icons, lucide)  _(✓ complete — assets bundled via Vite imports + `web_accessible_resources`)_
 
 Move/copy these into **`public/`** (keeps your paths stable):
 
@@ -329,6 +341,19 @@ manifest: {
 
 # Phase 6 — Cross-browser outputs (Chrome/Edge MV3, Firefox MV2)
 
+**Status:** Chrome MV3 build is green (`npm run build`). Offscreen entry now uses `<meta name="manifest.include" content='["chrome","edge"]'>`, and the Firefox manifest hook strips `"audio"` / `"offscreen"`. Next steps:
+
+1. ✅ *Preparation* – confirm env gates/permissions differ per browser (DONE in config; keep under review).
+2. ✅ Run `npm run build:firefox` (aka `wxt build -b firefox`) and audit `.output/firefox-mv2`:
+   - `offscreen.html` no longer generated; only Chromium builds ship the offscreen entry.
+   - Firefox manifest permissions = `["storage","cookies","tabs","contextMenus","downloads", <host origins>]`.
+   - Host permissions remain limited to API/Auth URLs.
+3. ☐ Capture any Firefox-specific gaps:
+   - Service worker polyfills? (None expected, but smoke test background to confirm.)
+   - Asset availability (flags/audio) under Firefox build.
+   - Update plan with follow-up fixes if discrepancies surface.
+4. ☐ Once parity is confirmed, document Firefox build/test steps (screenshot or notes) and mark Phase 6 complete.
+
 WXT makes this easy:
 
 * **Chromium (default):**
@@ -345,7 +370,7 @@ WXT makes this easy:
     ```ts
     // entrypoints/offscreen/index.html
     // Add a meta so WXT includes only for chrome/edge:
-    // <meta name="wxt:include" content="chrome,edge">
+    // <meta name="manifest.include" content='["chrome","edge"]'>
     ```
 
     Or move this to `wxt.config.ts` with an entry rule if you prefer centralisation.
