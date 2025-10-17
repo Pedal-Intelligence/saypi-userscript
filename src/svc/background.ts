@@ -50,9 +50,28 @@ async function openSettingsWindow() {
 }
 
 // Open settings when the toolbar icon is clicked (no default_popup)
-browser.action?.onClicked.addListener(() => {
-  void openSettingsWindow();
-});
+const actionNamespaces: Array<
+  | {
+      onClicked?: {
+        addListener(callback: (tab?: unknown) => void): void;
+      };
+    }
+  | undefined
+> = [
+  browser?.action,
+  (browser as any)?.browserAction,
+  typeof chrome !== 'undefined' ? (chrome.action as any) : undefined,
+  typeof chrome !== 'undefined' ? (chrome as any).browserAction : undefined
+];
+
+for (const actionNamespace of actionNamespaces) {
+  if (actionNamespace?.onClicked?.addListener) {
+    actionNamespace.onClicked.addListener(() => {
+      void openSettingsWindow();
+    });
+    break;
+  }
+}
 
 import { config } from "../ConfigModule";
 import { getJwtManagerSync } from "../JwtManager";

@@ -245,21 +245,20 @@ export class JwtManager {
         }
       };
       
-      // Add auth cookie value to request body as fallback, but only if we're not in Firefox
-      // Firefox should rely on credentials:include since we've fixed CORS
+      // Add auth cookie value to request body as fallback alongside credentials-based auth
       const isFirefoxBrowser = this.isFirefoxBrowser();
-      
-      if (this.authCookieValue && !isFirefoxBrowser) {
-        logger.debug('Including auth cookie value in request body as fallback');
-        requestOptions.body = JSON.stringify({
-          auth_session: this.authCookieValue // Server expects 'auth_session' parameter
-        });
-      } else if (isFirefoxBrowser) {
+      if (isFirefoxBrowser) {
         logger.debug('Firefox detected: relying on credentials:include for cookie transmission');
-        // Firefox will automatically include cookies with credentials:include
-        // No additional body needed
-        requestOptions.body = JSON.stringify({}); // Empty body but still valid JSON
       }
+
+      const refreshPayload: Record<string, string> = {};
+
+      if (this.authCookieValue) {
+        logger.debug('Including auth cookie value in request body as fallback');
+        refreshPayload.auth_session = this.authCookieValue; // Server expects 'auth_session' parameter
+      }
+
+      requestOptions.body = JSON.stringify(refreshPayload);
       
       // Decide whether to route via background to avoid CSP issues
       let respOk = false;
@@ -269,6 +268,8 @@ export class JwtManager {
 
       const shouldProxy = this.shouldUseBackgroundProxy(refreshUrl);
       let proxyHandled = false;
+
+      let proxyError: unknown = null;
 
       if (shouldProxy) {
         try {
@@ -286,16 +287,20 @@ export class JwtManager {
           respStatusText = data.statusText;
           respBody = data.body;
           proxyHandled = true;
-        } catch (proxyError) {
-          if (this.isMissingProxyReceiverError(proxyError)) {
+        } catch (error) {
+          proxyError = error;
+          if (this.isMissingProxyReceiverError(error)) {
             logger.warn('Background proxy unavailable in this context, falling back to direct fetch');
           } else {
-            throw proxyError;
+            logger.warn('Background proxy refresh request failed, falling back to direct fetch', error);
           }
         }
       }
 
       if (!proxyHandled) {
+        if (proxyError && !this.isMissingProxyReceiverError(proxyError)) {
+          logger.debug('Retrying token refresh with direct fetch after proxy failure');
+        }
         const response = await fetch(refreshUrl, requestOptions);
         respOk = response.ok;
         respStatus = response.status;
