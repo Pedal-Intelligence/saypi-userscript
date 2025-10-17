@@ -15,6 +15,7 @@
     "switch": "node scripts/switch-env.js",
     "predev": "node scripts/validate-env.js --file .env --env development && npm run copy-onnx",
     "dev": "wxt --browser chrome",
+    "dev:firefox": "wxt --browser firefox --mv2",
     "prebuild": "node scripts/validate-env.js --file .env.production --env production && node i18n-validate.cjs && npm run copy-onnx",
     "build": "wxt build",
     "start": "node server.js",

@@ -4,7 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
-- `npm run dev` - Development build with watch mode (runs manifest update first)
+- `npm run dev` - WXT dev server with live reload for Chromium targets (runs manifest update first)
+- `npm run dev:firefox` - Firefox MV2 dev session (`wxt --browser firefox --mv2`; opens a temporary private profile)
 - `npm run build` - Production build (validates locale files, copies ONNX files, updates manifest)
 - `npm run build:firefox` - Build and package for Firefox
 - `npm test` - Run all tests (Jest + Vitest)

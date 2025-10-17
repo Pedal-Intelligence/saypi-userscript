@@ -1,10 +1,11 @@
+import { browser } from "wxt/browser";
 import { logger } from "../LoggingModule.js";
 
 export const OFFSCREEN_DOCUMENT_PATH = "offscreen.html";
 
 class OffscreenManager {
   private creating?: Promise<void>;
-  private portMap: Map<number, chrome.runtime.Port> = new Map(); // tabId to Port
+  private portMap: Map<number, browser.runtime.Port> = new Map(); // tabId to Port
   private lastOffscreenExistsLog = 0;
   private readonly offscreenExistsThrottleMs = 30000;
   private lastVadEventByTab: Map<number, { type: string; loggedAt: number }> = new Map();
@@ -16,17 +17,17 @@ class OffscreenManager {
   }> = new Map();
 
   async hasDocument(): Promise<boolean> {
-    // Check if chrome.offscreen exists first
-    if (!chrome.offscreen) {
-      logger.debug("[OffscreenManager] chrome.offscreen API not available in this browser");
+    // Check if browser.offscreen exists first
+    if (!browser.offscreen) {
+      logger.debug("[OffscreenManager] browser.offscreen API not available in this browser");
       return false;
     }
     
-    if (typeof chrome.offscreen.hasDocument === 'function') {
+    if (typeof browser.offscreen.hasDocument === 'function') {
       try {
-        return await chrome.offscreen.hasDocument();
+        return await browser.offscreen.hasDocument();
       } catch (error) {
-        logger.warn("[OffscreenManager] Error calling chrome.offscreen.hasDocument:", error);
+        logger.warn("[OffscreenManager] Error calling browser.offscreen.hasDocument:", error);
         return false;
       }
     }
@@ -36,15 +37,15 @@ class OffscreenManager {
     // and seeing if it fails, or maintaining an internal state variable.
     // For now, we'll rely on our internal state tracking if the API isn't there.
     // This part might need refinement based on testing.
-    logger.debug("[OffscreenManager] chrome.offscreen.hasDocument API not available. Relying on internal state.");
+    logger.debug("[OffscreenManager] browser.offscreen.hasDocument API not available. Relying on internal state.");
     // A simple internal check if we've attempted creation.
     // This doesn't confirm the document *still* exists if closed externally.
     return !!this.creating; // A proxy for "attempted to create"
   }
 
   private async setupOffscreenDocument(): Promise<void> {
-    // Check if chrome.offscreen is available
-    if (!chrome.offscreen) {
+    // Check if browser.offscreen is available
+    if (!browser.offscreen) {
       throw new Error("Offscreen documents API not available in this browser");
     }
     
@@ -74,9 +75,9 @@ class OffscreenManager {
     });
     
     try {
-      this.creating = chrome.offscreen.createDocument({
+      this.creating = browser.offscreen.createDocument({
         url: OFFSCREEN_DOCUMENT_PATH,
-        reasons: [chrome.offscreen.Reason.USER_MEDIA, chrome.offscreen.Reason.AUDIO_PLAYBACK],
+        reasons: [browser.offscreen.Reason.USER_MEDIA, browser.offscreen.Reason.AUDIO_PLAYBACK],
         justification: "Microphone VAD and TTS playback under restrictive host-page CSP",
       });
 
@@ -93,9 +94,9 @@ class OffscreenManager {
   }
 
   public async closeOffscreenDocument(): Promise<void> {
-    // Check if chrome.offscreen is available
-    if (!chrome.offscreen) {
-      logger.debug("[OffscreenManager] chrome.offscreen API not available - cannot close offscreen document");
+    // Check if browser.offscreen is available
+    if (!browser.offscreen) {
+      logger.debug("[OffscreenManager] browser.offscreen API not available - cannot close offscreen document");
       return;
     }
     
@@ -111,7 +112,7 @@ class OffscreenManager {
     });
     
     try {
-      await chrome.offscreen.closeDocument();
+      await browser.offscreen.closeDocument();
       this.portMap.clear(); // Clear ports as the document is gone
       this.pendingAudioMessages.clear();
       logger.debug("[OffscreenManager] Offscreen document closed.");
@@ -155,8 +156,8 @@ class OffscreenManager {
 
   public async sendMessageToOffscreenDocument(message: any, targetTabId?: number): Promise<void> {
     try {
-      // Check if chrome.offscreen is available before trying to set up
-      if (!chrome.offscreen) {
+      // Check if browser.offscreen is available before trying to set up
+      if (!browser.offscreen) {
         throw new Error("Offscreen documents API not available in this browser");
       }
       
@@ -205,7 +206,7 @@ class OffscreenManager {
       });
       
       // Promise for the actual message sending
-      const sendPromise = new Promise<void>((resolve, reject) => {
+      const sendPromise = (async () => {
         try {
           logger.debug(`[OffscreenManager] Forwarding message to offscreen: ${messageWithTabId.type}`, {
             tabId: messageWithTabId.tabId,
@@ -213,29 +214,21 @@ class OffscreenManager {
             origin: messageWithTabId.origin,
           });
 
-          chrome.runtime.sendMessage(messageWithTabId, () => {
-            const lastError = chrome.runtime.lastError;
-            if (lastError) {
-              const errMsg = lastError.message || 'Unknown runtime error';
-              const isNoResponse = errMsg.includes('The message port closed before a response was received');
-              if (isNoResponse) {
-                logger.debug('[OffscreenManager] Message delivered without explicit response', {
-                  messageType: messageWithTabId.type,
-                  tabId: messageWithTabId.tabId,
-                  messageId: messageWithTabId.messageId,
-                });
-                resolve();
-                return;
-              }
-              reject(new Error(errMsg));
-              return;
-            }
-            resolve();
-          });
-        } catch (error) {
-          reject(error);
+          await browser.runtime.sendMessage(messageWithTabId);
+        } catch (error: any) {
+          const errMsg = error instanceof Error ? error.message : String(error);
+          const isNoResponse = errMsg.includes('The message port closed before a response was received');
+          if (isNoResponse) {
+            logger.debug('[OffscreenManager] Message delivered without explicit response', {
+              messageType: messageWithTabId.type,
+              tabId: messageWithTabId.tabId,
+              messageId: messageWithTabId.messageId,
+            });
+            return;
+          }
+          throw error;
         }
-      });
+      })();
       
       // Race the message sending against the timeout
       await Promise.race([sendPromise, timeoutPromise]);
@@ -284,7 +277,7 @@ class OffscreenManager {
     }
   }
 
-  public registerContentScriptConnection(port: chrome.runtime.Port): void {
+  public registerContentScriptConnection(port: browser.runtime.Port): void {
     // Accept both the old VAD connection name and the new media connection name
     if (port.name !== "vad-content-script-connection" && port.name !== "media-content-script-connection") {
       return;

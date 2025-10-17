@@ -7,7 +7,8 @@
 - `_locales/` i18n bundles; `scripts/` build helpers; `doc/` reference; `manifest.json` extension metadata.
 
 ## Build, Test, and Development Commands
-- `npm run dev` — Webpack watch build (updates manifest via `predev`). Outputs to `public/`.
+- `npm run dev` — WXT dev server for Chrome/Edge (MV3) with live reload; runs `predev` first.
+- `npm run dev:firefox` — Launches WXT’s Firefox MV2 dev session in a temporary private profile (`wxt --browser firefox --mv2`).
 - `npm start` — Serves `public/` at `http://localhost:8080` (HTTPS if `CERT_DIR` is set).
 - `npm run build` — Production build (validates i18n, copies ONNX/VAD assets).
 - `npm test` — Runs Jest and Vitest. Use `npm run test:vitest:watch` for watch mode.

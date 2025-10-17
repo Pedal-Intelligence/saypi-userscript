@@ -1,16 +1,26 @@
+import { browser } from "wxt/browser";
+
 /**
  * Browser API utility functions for usage analytics and extension functionality.
  * Provides consistent and safe access to browser extension APIs across different contexts.
  */
+
+const extensionApi = ((): typeof browser | typeof chrome | undefined => {
+  if (typeof browser !== "undefined") {
+    return browser;
+  }
+  if (typeof chrome !== "undefined") {
+    return chrome;
+  }
+  return undefined;
+})();
 
 /**
  * Checks if the Chrome extension runtime API is available and functional
  * @returns true if chrome.runtime is available with basic methods
  */
 export function isChromeRuntimeAvailable(): boolean {
-  return typeof chrome !== 'undefined' && 
-         chrome.runtime !== undefined && 
-         chrome.runtime !== null;
+  return Boolean(extensionApi?.runtime);
 }
 
 /**
@@ -19,7 +29,7 @@ export function isChromeRuntimeAvailable(): boolean {
  */
 export function isChromeManifestAvailable(): boolean {
   return isChromeRuntimeAvailable() && 
-         typeof chrome.runtime.getManifest === 'function';
+         typeof extensionApi?.runtime?.getManifest === 'function';
 }
 
 /**
@@ -27,11 +37,10 @@ export function isChromeManifestAvailable(): boolean {
  * @returns true if chrome.storage.local is available
  */
 export function isChromeStorageAvailable(): boolean {
-  return typeof chrome !== 'undefined' &&
-         chrome.storage !== undefined &&
-         chrome.storage !== null &&
-         chrome.storage.local !== undefined &&
-         chrome.storage.local !== null;
+  return Boolean(
+    extensionApi?.storage &&
+    extensionApi.storage.local
+  );
 }
 
 /**
@@ -44,7 +53,7 @@ export function getExtensionManifest(): chrome.runtime.Manifest | null {
   }
 
   try {
-    return chrome.runtime.getManifest();
+    return extensionApi!.runtime!.getManifest();
   } catch (error) {
     console.warn('[BrowserApiUtils] Failed to get extension manifest:', error);
     return null;
@@ -61,7 +70,7 @@ export function getExtensionId(): string | null {
   }
 
   try {
-    return chrome.runtime.id || null;
+    return extensionApi!.runtime!.id || null;
   } catch (error) {
     console.warn('[BrowserApiUtils] Failed to get extension ID:', error);
     return null;

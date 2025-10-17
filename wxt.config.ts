@@ -349,6 +349,18 @@ export default defineConfig((env) => {
       },
       "vite:devServer:extendConfig": (config) => {
         applyChunkFilePattern(config);
+
+        const desiredPort = Number(process.env.WXT_DEV_PORT ?? 3333);
+        config.server ??= {};
+        if (typeof config.server === "object") {
+          const serverConfig = config.server as Record<string, any>;
+          if (serverConfig.port == null) {
+            serverConfig.port = desiredPort;
+          }
+          if (serverConfig.strictPort == null) {
+            serverConfig.strictPort = true;
+          }
+        }
       },
       "build:publicAssets": (_wxt: any, files: any[]) => {
         addLocalePublicAssets(files);
