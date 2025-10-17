@@ -6,7 +6,8 @@
 - ✅ **Phase 4 – Entry points** (content + background wired; popup/settings refactor now runs via `entrypoints/settings`)
 - ✅ **Phase 5 – Static assets** (runtime assets resolved through Vite imports/public bundle; inline SVGs restored with `?raw`)
 - ✅ **Phase 6 – Cross-browser outputs** (Chrome + Firefox parity verified; notes below)
-- ☐ **Phase 7+** – Pending once Firefox packaging is validated
+- ✅ **Phase 7 – Packaging** (script zips WXT output for Chrome/Edge/Firefox; Safari sync documented)
+- ☐ **Phase 8+** – Pending (env cleanup + remaining follow-ups)
 
 ---
 
@@ -386,39 +387,21 @@ WXT makes this easy:
 
 ---
 
-# Phase 7 — Replace the packaging script
+# Phase 7 — Replace the packaging script _(✓ complete — see `package-extension.sh`)_
 
-Good news: WXT can zip for you, but if you like your script’s ergonomics, minimally adapt it to **consume WXT’s output** instead of rebuilding itself.
-
-**Before:** script copied `manifest.json`, massaged it with `jq`, and zipped.
-**After:** simply zip WXT’s build folders:
+The packaging flow now shells out to WXT builds and zips the generated bundles:
 
 ```bash
-# package-wxt.sh
-#!/usr/bin/env bash
-set -e
+# Chrome / Edge
+npm run build
+zip -r dist/saypi.chrome.zip .output/chrome-mv3
 
-rm -rf dist && mkdir -p dist
-
-# Chrome
-npx wxt build
-cd .output/chrome-mv3
-zip -r ../../dist/saypi.chrome.zip *
-cd - >/dev/null
-
-# Firefox (MV2)
-npx wxt build -b firefox
-cd .output/firefox-mv2
-zip -r ../../dist/saypi.firefox.xpi *
-cd - >/dev/null
-
-# Edge -> reuse Chrome zip (or duplicate if you prefer a separate artifact)
-cp dist/saypi.chrome.zip dist/saypi.edge.zip
-
-# Safari: keep your existing flow (pull from dist/saypi.chrome.zip)
+# Firefox
+npm run build:firefox
+zip -r dist/saypi.firefox.xpi .output/firefox-mv2
 ```
 
-This eliminates the brittle `jq` transforms; WXT handles browser differences.
+Edge reuses the Chrome archive, and the Safari helper step copies the Chrome zip into the Xcode project (`saypi-safari`). No more `jq` manifest surgery or webpack-specific packaging: WXT is the single source of build artifacts.
 
 ---
 
