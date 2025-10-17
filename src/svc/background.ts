@@ -2,12 +2,29 @@ import { browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 
+// Helper function to get extension URL with fallback for WXT compatibility
+function getExtensionURL(path: string): string {
+  // Use WXT's typed getURL API directly (it's available at runtime)
+  // The TypeScript error was due to type definitions, but the function exists
+  if (browser.runtime && typeof (browser.runtime as any).getURL === 'function') {
+    return (browser.runtime as any).getURL(path);
+  }
+  
+  // Fallback to Chrome API
+  if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+    return chrome.runtime.getURL(path);
+  }
+  
+  // Final fallback - construct URL manually
+  return `chrome-extension://${browser.runtime.id}/${path}`;
+}
+
 const POPUP_MIN_CONTENT_WIDTH = 736;
 const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // buffer keeps us above the 735px mobile breakpoint after window chrome adjustments
 
 async function openSettingsWindow() {
   try {
-    const popupURL = browser.runtime.getURL('settings.html');
+    const popupURL = getExtensionURL('settings.html');
     // Decide initial height based on whether we need to show consent overlay
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
     const { shareData } = await browser.storage.local.get('shareData');
@@ -565,7 +582,7 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
     }
 
     // If 'denied' or 'prompt', proceed to open the permissions tab.
-    const permissionsPageUrl = browser.runtime.getURL(PERMISSIONS_PROMPT_PATH_HTML);
+    const permissionsPageUrl = getExtensionURL(PERMISSIONS_PROMPT_PATH_HTML);
     let newTabId: number | undefined;
     let handlingPrompt = true; // Flag to manage listeners correctly
 
@@ -793,7 +810,7 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
   if (message.type === 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION' && message.requestId) {
     // Ensure the sender is from the extension itself (e.g., AudioInputMachine)
     // content scripts will have sender.id as undefined, extension pages will have browser.runtime.id
-    if (sender.id === browser.runtime.id || sender.url?.startsWith(browser.runtime.getURL(''))) {
+    if (sender.id === browser.runtime.id || sender.url?.startsWith(getExtensionURL(''))) {
       logger.debug("[Background] Received CHECK_AND_REQUEST_MICROPHONE_PERMISSION from valid sender.");
       handleCheckAndRequestMicPermission(message.requestId, sender);
       // Acknowledge the request. The actual result is sent asynchronously by handleCheckAndRequestMicPermission.
@@ -940,7 +957,7 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
   // Prioritize messages from the offscreen document (VAD events)
   if (
     typeof OFFSCREEN_DOCUMENT_PATH === 'string' &&
-    sender.url === browser.runtime.getURL(OFFSCREEN_DOCUMENT_PATH) &&
+    sender.url === getExtensionURL(OFFSCREEN_DOCUMENT_PATH) &&
     message.origin === "offscreen-document"
   ) {
     // Handle auto-shutdown request

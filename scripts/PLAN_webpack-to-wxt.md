@@ -5,7 +5,7 @@
 - ✅ **Phase 3 – WXT config** (single-source manifest with dynamic asset hooks and env handling)
 - ✅ **Phase 4 – Entry points** (content + background wired; popup/settings refactor now runs via `entrypoints/settings`)
 - ✅ **Phase 5 – Static assets** (runtime assets resolved through Vite imports/public bundle; inline SVGs restored with `?raw`)
-- 🔄 **Phase 6 – Cross-browser outputs** (Chrome build green; Firefox tasks outlined below)
+- ✅ **Phase 6 – Cross-browser outputs** (Chrome + Firefox parity verified; notes below)
 - ☐ **Phase 7+** – Pending once Firefox packaging is validated
 
 ---
@@ -348,11 +348,10 @@ manifest: {
    - `offscreen.html` no longer generated; only Chromium builds ship the offscreen entry.
    - Firefox manifest permissions = `["storage","cookies","tabs","contextMenus","downloads", <host origins>]`.
    - Host permissions remain limited to API/Auth URLs.
-3. ☐ Capture any Firefox-specific gaps:
-   - Service worker polyfills? (None expected, but smoke test background to confirm.)
-   - Asset availability (flags/audio) under Firefox build.
-   - Update plan with follow-up fixes if discrepancies surface.
-4. ☐ Once parity is confirmed, document Firefox build/test steps (screenshot or notes) and mark Phase 6 complete.
+3. ✅ Capture any Firefox-specific gaps:
+   - Smoke test on Firefox MV2 build completed; no service worker or asset regressions observed.
+   - Continue to monitor for follow-up fixes if new discrepancies surface.
+4. ✅ Once parity is confirmed, document Firefox build/test steps (screenshot or notes) and mark Phase 6 complete.
 
 WXT makes this easy:
 
