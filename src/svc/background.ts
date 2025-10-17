@@ -16,7 +16,8 @@ function getExtensionURL(path: string): string {
   }
   
   // Final fallback - construct URL manually
-  return `chrome-extension://${browser.runtime.id}/${path}`;
+  const protocol = isFirefox() ? 'moz-extension://' : 'chrome-extension://';
+  return `${protocol}${browser.runtime.id}/${path}`;
 }
 
 const POPUP_MIN_CONTENT_WIDTH = 736;
