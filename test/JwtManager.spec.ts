@@ -1,4 +1,27 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+vi.mock('wxt/browser', () => {
+  const createMockFn = () => vi.fn();
+  return {
+    browser: {
+      storage: {
+        local: {
+          get: createMockFn(),
+          set: createMockFn(),
+          remove: createMockFn(),
+        },
+      },
+      cookies: {
+        get: createMockFn(),
+      },
+      runtime: {
+        getURL: createMockFn(),
+        sendMessage: createMockFn(),
+      },
+    },
+  };
+});
+
+import { browser } from 'wxt/browser';
 import { JwtManager } from '../src/JwtManager';
 import * as ApiRequestSerializer from '../src/utils/ApiRequestSerializer';
 
@@ -8,23 +31,16 @@ describe('JwtManager', () => {
   let serializeRequestSpy: ReturnType<typeof vi.spyOn>;
   
   beforeEach(() => {
-    // Mock chrome API
-    global.chrome = {
-      storage: {
-        local: {
-          get: vi.fn().mockResolvedValue({}),
-          set: vi.fn().mockResolvedValue(undefined),
-          remove: vi.fn().mockResolvedValue(undefined)
-        }
-      },
-      cookies: {
-        get: vi.fn().mockImplementation(() => Promise.resolve(null))
-      },
-      runtime: {
-        getURL: vi.fn().mockReturnValue('chrome-extension://id'),
-        sendMessage: vi.fn()
-      }
-    } as any;
+    // Reset browser mocks
+    (browser.storage.local.get as unknown as vi.Mock).mockReset().mockResolvedValue({});
+    (browser.storage.local.set as unknown as vi.Mock).mockReset().mockResolvedValue(undefined);
+    (browser.storage.local.remove as unknown as vi.Mock).mockReset().mockResolvedValue(undefined);
+    (browser.cookies.get as unknown as vi.Mock).mockReset().mockResolvedValue(null);
+    (browser.runtime.getURL as unknown as vi.Mock).mockReset().mockReturnValue('chrome-extension://id');
+    (browser.runtime.sendMessage as unknown as vi.Mock).mockReset().mockResolvedValue(undefined);
+
+    // Provide chrome alias for legacy fallbacks
+    (global as any).chrome = browser;
 
     // Mock fetch
     global.fetch = vi.fn().mockResolvedValue({
@@ -87,12 +103,12 @@ describe('JwtManager', () => {
       vi.setSystemTime(now);
 
       // Mock cookie existence
-      (global.chrome.cookies.get as any).mockResolvedValueOnce({ value: 'test-cookie' });
+      (browser.cookies.get as any).mockResolvedValueOnce({ value: 'test-cookie' });
 
       await jwtManager.refresh();
 
       // Verify token was saved with correct expiration
-      expect(chrome.storage.local.set).toHaveBeenCalledWith({
+      expect(browser.storage.local.set).toHaveBeenCalledWith({
         jwtToken: 'test-token',
         tokenExpiresAt: now + (15 * 60 * 1000), // 15 minutes in ms
         authCookieValue: null
@@ -130,7 +146,7 @@ describe('JwtManager', () => {
       jwtManager.expiresAt = now + (10 * 60 * 1000); // expires in 10 minutes
 
       // Mock cookie existence
-      (global.chrome.cookies.get as any).mockResolvedValueOnce({ value: 'test-cookie' });
+      (browser.cookies.get as any).mockResolvedValueOnce({ value: 'test-cookie' });
 
       await jwtManager.refresh(true);
 
@@ -152,7 +168,7 @@ describe('JwtManager', () => {
       const originalClients = globalScope.clients;
 
       (fetch as any).mockClear();
-      (chrome.runtime.sendMessage as any).mockClear();
+      (browser.runtime.sendMessage as any).mockClear();
 
       globalScope.skipWaiting = vi.fn();
       globalScope.clients = {};
@@ -161,7 +177,7 @@ describe('JwtManager', () => {
       try {
         await jwtManager.refresh(true);
 
-        expect(chrome.runtime.sendMessage).not.toHaveBeenCalled();
+        expect(browser.runtime.sendMessage).not.toHaveBeenCalled();
         expect(fetch).toHaveBeenCalledWith(
           expect.stringContaining('/api/auth/refresh'),
           expect.objectContaining({ method: 'POST' })
@@ -195,7 +211,7 @@ describe('JwtManager', () => {
       await jwtManager.storeAuthCookieValue(cookieValue);
       
       // Check it was saved to storage
-      expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      expect(browser.storage.local.set).toHaveBeenCalledWith(
         expect.objectContaining({
           authCookieValue: cookieValue
         })
@@ -334,7 +350,7 @@ describe('JwtManager', () => {
       expect(jwtManager.authCookieValue).toBeNull();
       
       // Check storage values are cleared
-      expect(chrome.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
+      expect(browser.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
     });
   });
 }); 
