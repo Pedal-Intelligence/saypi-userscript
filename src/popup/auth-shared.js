@@ -1,3 +1,5 @@
+import { config } from '../ConfigModule';
+
 // auth-shared.js - Shared authentication functionality for popup UI
 
 /**
@@ -70,8 +72,7 @@ function redirectToLogin(loginUrl, returnUrl) {
  * Handler for sign in button click
  */
 function handleSignIn() {
-  // Try to use config from the global scope
-  if (typeof config !== 'undefined' && config.authServerUrl) {
+  if (config.authServerUrl) {
     const loginUrl = `${config.authServerUrl}/auth/login`;
     // Use the Pi AI talk page instead of the SaaS dashboard
     const returnUrl = 'https://pi.ai/talk';
@@ -137,10 +138,8 @@ function handleSignOut() {
  */
 async function logoutFromSaas() {
   try {
-    // Use config if available, otherwise fall back to default URL
-    const baseUrl = (typeof config !== 'undefined' && config.authServerUrl) 
-      ? config.authServerUrl 
-      : 'https://www.saypi.ai';
+    // Use configured auth host when available, otherwise fall back to production
+    const baseUrl = config.authServerUrl || 'https://www.saypi.ai';
     
     const logoutUrl = `${baseUrl}/api/auth/logout`;
     

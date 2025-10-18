@@ -1,3 +1,5 @@
+import { config } from '../../../../src/ConfigModule';
+
 /**
  * Status Service
  * Handles fetching and displaying application status information
@@ -53,10 +55,8 @@ export class StatusService {
     const STATUS_ENDPOINT_PATH = '/status.json';
     const DEFAULT_STATUS_ENDPOINT = `https://api.saypi.ai${STATUS_ENDPOINT_PATH}`;
 
-    // Try to get API base URL from config or environment
-    const baseUrl = this.normalizeBaseUrl(
-      (globalThis as any).config?.apiBaseUrl || ''
-    );
+    // Prefer the configured API server URL when available
+    const baseUrl = this.normalizeBaseUrl(config.apiServerUrl || '');
 
     if (!baseUrl) return DEFAULT_STATUS_ENDPOINT;
     return `${baseUrl}${STATUS_ENDPOINT_PATH}`;

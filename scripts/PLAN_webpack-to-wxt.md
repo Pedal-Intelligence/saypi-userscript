@@ -7,7 +7,9 @@
 - ✅ **Phase 5 – Static assets** (runtime assets resolved through Vite imports/public bundle; inline SVGs restored with `?raw`)
 - ✅ **Phase 6 – Cross-browser outputs** (Chrome + Firefox parity verified; notes below)
 - ✅ **Phase 7 – Packaging** (script zips WXT output for Chrome/Edge/Firefox; Safari sync documented)
-- ☐ **Phase 8+** – Pending (env cleanup + remaining follow-ups)
+- ✅ **Phase 8 – Env config** (popup envs now read from `ConfigModule`, legacy generator removed)
+- ☐ **Phase 9 – CSS & assets parity** (pending)
+- ☐ **Phase 10 – Testing checklist** (pending)
 
 ---
 

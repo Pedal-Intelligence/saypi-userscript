@@ -56,7 +56,6 @@ class SettingsApp {
 
     // Load legacy modules that don't need DOM (config, auth-shared only)
     await Promise.all([
-      import("../../src/popup/popup-config.js"),
       import("../../src/popup/simple-user-agent.js"),
       import("../../src/popup/mode-selector.js"),
       import("../../src/popup/language-picker.js"),

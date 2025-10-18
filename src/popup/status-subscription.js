@@ -1,4 +1,5 @@
 import { browser } from 'wxt/browser';
+import { config } from '../ConfigModule';
 
 const quotaStatusUnknown = {
   status_code: "unknown",
@@ -416,7 +417,11 @@ async function getQuotaStatus() {
     } else {
       // Fall back to API endpoint if no JWT quota available
       try {
-        const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
+        const statusEndpoint = buildStatusEndpoint('tts');
+        if (!statusEndpoint) {
+          updateQuotaProgress({ noEntitlement: true }, 'tts');
+          return;
+        }
         const data = await callApiJSON(statusEndpoint);
         
         // If the API response indicates no quota, mark as no entitlement
@@ -437,7 +442,11 @@ async function getQuotaStatus() {
       updateQuotaProgress(quotaData.stt, 'stt');
     } else {
       try {
-        const statusEndpoint = `${config.apiBaseUrl}/status/stt`;
+        const statusEndpoint = buildStatusEndpoint('stt');
+        if (!statusEndpoint) {
+          updateQuotaProgress({ noEntitlement: true }, 'stt');
+          return;
+        }
         const data = await callApiJSON(statusEndpoint);
         
         // If the API response indicates no quota, mark as no entitlement
@@ -475,8 +484,8 @@ function setupViewDetailsLinks() {
   const openDashboard = async () => {
     console.log('View details clicked, opening dashboard...');
 
-    if (!config || !config.authServerUrl) {
-      console.error('Config or authServerUrl is missing:', config);
+    if (!config.authServerUrl) {
+      console.error('authServerUrl is missing from config:', config);
       window.open('https://www.saypi.ai/app/dashboard', "_blank");
       return;
     }
@@ -494,7 +503,7 @@ function setupViewDetailsLinks() {
       window.open(baseUrl, "_blank");
     } catch (error) {
       console.error('Failed to determine authentication state for dashboard redirect:', error);
-      window.open(`${config?.authServerUrl || 'https://www.saypi.ai'}/pricing`, "_blank");
+      window.open(`${config.authServerUrl || 'https://www.saypi.ai'}/pricing`, "_blank");
     }
   };
 
@@ -559,3 +568,16 @@ window.updateQuotaDisplayForAuthState = async function() {
 window.restoreAuthenticatedDisplay = restoreAuthenticatedDisplay;
 
 export {};
+const normalizeBaseUrl = (baseUrl) => {
+  if (!baseUrl) return "";
+  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+};
+
+const buildStatusEndpoint = (path) => {
+  const baseUrl = normalizeBaseUrl(config.apiServerUrl || "");
+  if (!baseUrl) {
+    console.error(`Missing API server URL while building status endpoint for "${path}".`);
+    return null;
+  }
+  return `${baseUrl}/status/${path}`;
+};
