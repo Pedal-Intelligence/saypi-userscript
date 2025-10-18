@@ -8,7 +8,7 @@
 - ✅ **Phase 6 – Cross-browser outputs** (Chrome + Firefox parity verified; notes below)
 - ✅ **Phase 7 – Packaging** (script zips WXT output for Chrome/Edge/Firefox; Safari sync documented)
 - ✅ **Phase 8 – Env config** (popup envs now read from `ConfigModule`, legacy generator removed)
-- ☐ **Phase 9 – CSS & assets parity** (pending)
+- ✅ **Phase 9 – CSS & assets parity** (permissions CSS now bundles via entry script)
 - ☐ **Phase 10 – Testing checklist** (pending)
 
 ---
@@ -431,6 +431,7 @@ Create `.env.development` / `.env.production` with `VITE_` prefixes. WXT/Vite in
 
 * Keep CSS either **all injected** or **all linked**, consistently across dev/prod. (This previously caused an AMO-time bug in your Webpack attempt; you documented it well.) 
 * With WXT, prefer importing CSS in your TS/HTML entry; WXT/Vite will handle it consistently.
+* Permissions prompt now loads `style.css` via `index.ts`, so dev/server and production share the same bundled stylesheet, and the hero image is emitted by Vite instead of relying on relative links.
 
 ---
 
