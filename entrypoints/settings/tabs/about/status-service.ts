@@ -1,4 +1,5 @@
 import { config } from '../../../../src/ConfigModule';
+import { refreshIcons } from '../../components/icons';
 
 /**
  * Status Service
@@ -6,22 +7,63 @@ import { config } from '../../../../src/ConfigModule';
  * Polls status endpoint and updates UI accordingly
  */
 
+export type StatusCode = 'normal' | 'issue' | 'unknown';
+export type IncidentSeverity = 'minor' | 'major' | 'critical';
+
+export interface StatusIncident {
+  id?: string;
+  title?: string;
+  status?: string;
+  severity?: IncidentSeverity | null;
+  updated_at?: string;
+  started_at?: string;
+}
+
+export interface TTSProviderQuota {
+  character_count?: number;
+  character_limit?: number;
+  extend_character_limit?: boolean;
+  remaining_pct?: number;
+}
+
+export interface TTSProviderSnapshot {
+  ok?: boolean;
+  status?: string;
+  status_reason?: string | null;
+  requests?: number;
+  errors?: number;
+  zero_output_events?: number;
+  consecutive_errors?: number;
+  bytes_generated?: number;
+  last_error_at?: string | null;
+  last_success_at?: string | null;
+  last_error_message?: string | null;
+  quota_remaining_pct?: number;
+  quota_extend_enabled?: boolean;
+  quota?: TTSProviderQuota;
+}
+
+export interface StatusComponent {
+  name: string;
+  status: string;
+  provider?: string;
+  providers?: Record<string, TTSProviderSnapshot>;
+  active_provider?: string;
+  quota_remaining_pct?: number;
+  quota_extend_enabled?: boolean;
+  window_seconds?: number;
+  generated_at?: string;
+}
+
 export interface StatusResponse {
-  status_code: 'normal' | 'issue' | 'unknown';
+  status_code: StatusCode;
   message: string;
-  severity?: 'minor' | 'major' | 'critical' | null;
+  severity?: IncidentSeverity | null;
   since?: string;
-  incidents?: Array<{
-    title: string;
-    status: string;
-    updated_at?: string;
-    started_at?: string;
-  }>;
-  components?: Array<{
-    name: string;
-    status: string;
-  }>;
+  incidents?: StatusIncident[];
+  components?: StatusComponent[];
   overall?: string;
+  version?: number;
 }
 
 export interface StatusConfig {
@@ -170,15 +212,18 @@ export class StatusService {
   /**
    * Determine highest severity from incidents
    */
-  private highestSeverity(incidents: any[], fallbackSeverity = 'minor'): string {
+  private highestSeverity(
+    incidents: StatusIncident[],
+    fallbackSeverity: IncidentSeverity = 'minor'
+  ): IncidentSeverity {
     if (!Array.isArray(incidents) || incidents.length === 0) {
       return fallbackSeverity;
     }
 
-    const SEVERITY_ORDER = ['minor', 'major', 'critical'];
+    const SEVERITY_ORDER: IncidentSeverity[] = ['minor', 'major', 'critical'];
 
-    return incidents.reduce((highest, incident) => {
-      const severity = incident?.severity;
+    return incidents.reduce<IncidentSeverity>((highest, incident) => {
+      const severity = incident?.severity || null;
       if (!severity) return highest;
       const currentIndex = SEVERITY_ORDER.indexOf(highest);
       const candidateIndex = SEVERITY_ORDER.indexOf(severity);
@@ -201,31 +246,59 @@ export class StatusService {
       };
     }
 
-    const incidents = Array.isArray(payload.incidents) ? payload.incidents : [];
-    const components = Array.isArray(payload.components) ? payload.components : [];
-    const hasIncidents = incidents.length > 0;
+    const incidents: StatusIncident[] = Array.isArray(payload.incidents)
+      ? payload.incidents.map((incident: any) => ({
+          id: incident?.id,
+          title: incident?.title,
+          status: incident?.status,
+          severity: incident?.severity ?? null,
+          updated_at: incident?.updated_at,
+          started_at: incident?.started_at,
+        }))
+      : [];
 
-    const severityByOverall: Record<string, string> = {
+    const activeIncidents = incidents.filter(
+      (incident) => incident.status && !['resolved', 'completed'].includes(incident.status)
+    );
+
+    const components: StatusComponent[] = Array.isArray(payload.components)
+      ? payload.components.map((component: any) => ({
+          name: component?.name,
+          status: component?.status,
+          provider: component?.provider,
+          providers: component?.providers,
+          active_provider: component?.active_provider,
+          quota_remaining_pct: component?.quota_remaining_pct,
+          quota_extend_enabled: component?.quota_extend_enabled,
+          window_seconds: component?.window_seconds,
+          generated_at: component?.generated_at,
+        }))
+      : [];
+
+    const hasActiveIncidents = activeIncidents.length > 0;
+
+    const severityByOverall: Record<string, IncidentSeverity> = {
       degraded: 'minor',
       partial_outage: 'major',
       outage: 'critical',
     };
 
     const statusCode =
-      payload.overall === 'operational' && !hasIncidents ? 'normal' : 'issue';
+      payload.overall === 'operational' && !hasActiveIncidents ? 'normal' : 'issue';
     const severity =
       statusCode === 'issue'
-        ? this.highestSeverity(incidents, severityByOverall[payload.overall] || 'minor')
+        ? this.highestSeverity(activeIncidents, severityByOverall[payload.overall] || 'minor')
         : null;
 
     return {
       status_code: statusCode as StatusResponse['status_code'],
-      message: this.getOverallMessage(payload.overall, hasIncidents),
+      message: this.getOverallMessage(payload.overall, hasActiveIncidents),
       severity: severity as StatusResponse['severity'],
       since: payload.since,
       incidents,
       components,
       overall: payload.overall,
+      version: payload.version,
     };
   }
 
@@ -415,10 +488,8 @@ export class StatusService {
       card.appendChild(iconWrap);
       statusContainer.appendChild(card);
 
-      // Trigger icon refresh callback for dynamically added icons
-      if ((window as any).refreshStatusIcons) {
-        (window as any).refreshStatusIcons(iconWrap);
-      }
+      // Refresh Lucide icons for newly inserted elements
+      refreshIcons();
     } else if (status.status_code === 'issue') {
       const summaryIssueMessage = this.getMessageOrDefault(
         'applicationStatusIssue',
@@ -446,10 +517,8 @@ export class StatusService {
 
       this.renderIssueDetails(status);
 
-      // Trigger icon refresh callback for dynamically added icons
-      if ((window as any).refreshStatusIcons) {
-        (window as any).refreshStatusIcons(iconWrap);
-      }
+      // Refresh Lucide icons for newly inserted elements
+      refreshIcons();
 
       this.showIssueDetailsListener();
       this.hideIssueDetailsListener();
