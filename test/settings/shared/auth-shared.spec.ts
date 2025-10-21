@@ -42,7 +42,7 @@ describe('auth-shared updateAuthUI', () => {
 
     cleanupChrome = () => {
       chromeMocks.cleanup();
-      delete (global as any).chrome;
+      // Don't delete global.chrome - it's a shared mock used by wxt/browser
     };
 
     restoreAuthenticatedDisplayMock = vi.fn();

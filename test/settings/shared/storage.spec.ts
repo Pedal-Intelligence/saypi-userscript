@@ -20,7 +20,7 @@ describe('storage utilities', () => {
       const result = await getStoredValue('testKey', 'default');
 
       expect(result).toBe('testValue');
-      expect(chromeMock.storage.get).toHaveBeenCalledWith(['testKey'], expect.any(Function));
+      expect(chromeMock.storage.get).toHaveBeenCalledWith(['testKey']);
     });
 
     it('should return default value when key does not exist', async () => {
@@ -97,8 +97,7 @@ describe('storage utilities', () => {
       const stored = chromeMock.storage._getState();
       expect(stored.strKey).toBe('strValue');
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { strKey: 'strValue' },
-        expect.any(Function)
+        { strKey: 'strValue' }
       );
     });
 

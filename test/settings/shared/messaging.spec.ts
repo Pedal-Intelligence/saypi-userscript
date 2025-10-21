@@ -20,8 +20,7 @@ describe('messaging utilities', () => {
       sendMessageToActiveTab(message);
 
       expect(chromeMock.tabs.query).toHaveBeenCalledWith(
-        { active: true, currentWindow: true },
-        expect.any(Function)
+        { active: true, currentWindow: true }
       );
 
       // Wait for microtasks to complete
@@ -29,8 +28,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         123, // mock tab ID
-        message,
-        expect.any(Function)
+        message
       );
     });
 
@@ -45,8 +43,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         123,
-        message,
-        expect.any(Function)
+        message
       );
     });
 
@@ -61,8 +58,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         123,
-        message,
-        expect.any(Function)
+        message
       );
     });
 
@@ -144,8 +140,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         123,
-        complexMessage,
-        expect.any(Function)
+        complexMessage
       );
     });
 
@@ -158,8 +153,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         123,
-        null,
-        expect.any(Function)
+        null
       );
     });
 
@@ -172,8 +166,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         123,
-        undefined,
-        expect.any(Function)
+        undefined
       );
     });
   });
@@ -200,8 +193,7 @@ describe('messaging utilities', () => {
 
       expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(
         456,
-        testMessage,
-        expect.any(Function)
+        testMessage
       );
     });
   });

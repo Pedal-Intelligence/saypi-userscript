@@ -112,29 +112,24 @@ export function createMockRuntime() {
 
 /**
  * Setup complete chrome mock for tests
+ * Note: This returns the global chrome mock set up in test/vitest.setup.js
+ * We don't create new mocks because wxt/browser needs to use the same instance
  */
 export function setupChromeMock() {
-  const mockStorage = createMockStorage();
-  const mockTabs = createMockTabs();
-  const mockI18n = createMockI18n();
-  const mockRuntime = createMockRuntime();
+  const chrome = (global as any).chrome;
 
-  (global as any).chrome = {
-    storage: {
-      local: mockStorage
-    },
-    tabs: mockTabs,
-    i18n: mockI18n,
-    runtime: mockRuntime
-  };
+  if (!chrome) {
+    throw new Error('Global chrome mock not found. Ensure vitest.setup.js is loaded.');
+  }
 
   return {
-    storage: mockStorage,
-    tabs: mockTabs,
-    i18n: mockI18n,
-    runtime: mockRuntime,
+    storage: chrome.storage.local,
+    tabs: chrome.tabs,
+    i18n: chrome.i18n,
+    runtime: chrome.runtime,
     cleanup: () => {
-      mockStorage._reset();
+      // Reset storage state
+      chrome.storage.local.clear();
       vi.clearAllMocks();
     }
   };

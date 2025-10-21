@@ -13,10 +13,11 @@ describe('ChatTab', () => {
     chatTab = new ChatTab(container);
 
     // Mock agent mode entitlement check to return false (no entitlement) by default
-    chromeMock.runtime.sendMessage.mockImplementation((message: any, callback: any) => {
+    chromeMock.runtime.sendMessage.mockImplementation((message: any) => {
       if (message.type === 'CHECK_FEATURE_ENTITLEMENT' && message.feature === 'agent_mode') {
-        callback({ hasEntitlement: false });
+        return Promise.resolve({ hasEntitlement: false });
       }
+      return Promise.resolve();
     });
 
     // Storage mocks are cleared by chromeMock.cleanup() in afterEach
@@ -65,7 +66,7 @@ describe('ChatTab', () => {
       expect(input?.value).toBe('TestBot');
 
       // Verify storage was called
-      expect(chromeMock.storage.get).toHaveBeenCalledWith(['nickname'], expect.any(Function));
+      expect(chromeMock.storage.get).toHaveBeenCalledWith(['nickname']);
     });
 
     it('should default to empty when no nickname saved', async () => {

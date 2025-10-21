@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SpeechSynthesisVoiceRemote } from '../../src/tts/SpeechModel';
 
 const store: Record<string, any> = {};
+let originalChrome: any;
 
 const createPiVoice = (id: string, name: string): SpeechSynthesisVoiceRemote => ({
   id,
@@ -20,6 +21,9 @@ let prefsModule: typeof import('../../src/prefs/PreferenceModule');
 beforeEach(async () => {
   Object.keys(store).forEach((key) => delete store[key]);
   vi.resetModules();
+
+  // Save original chrome mock
+  originalChrome = (globalThis as any).chrome;
 
   (globalThis as any).chrome = {
     storage: {
@@ -59,7 +63,8 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
-  delete (globalThis as any).chrome;
+  // Restore original chrome mock instead of deleting
+  (globalThis as any).chrome = originalChrome;
 });
 
 describe('UserPreferenceModule voice scoping', () => {

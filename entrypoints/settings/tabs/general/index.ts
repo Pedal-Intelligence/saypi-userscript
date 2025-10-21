@@ -43,8 +43,12 @@ export class GeneralTab implements TabController {
     }
     
     input.addEventListener('change', async () => {
-      await setStoredValue('soundEffects', input.checked);
-      input.parentElement?.classList.toggle('checked', input.checked);
+      try {
+        await setStoredValue('soundEffects', input.checked);
+        input.parentElement?.classList.toggle('checked', input.checked);
+      } catch (error) {
+        // Error already logged by setStoredValue, just prevent unhandled rejection
+      }
     });
   }
   

@@ -42,10 +42,11 @@ describe('SubmitModeController', () => {
       `;
 
       // Mock agent mode entitlement check to return true
-      chromeMock.runtime.sendMessage.mockImplementation((message: any, callback: any) => {
+      chromeMock.runtime.sendMessage.mockImplementation((message: any) => {
         if (message.type === 'CHECK_FEATURE_ENTITLEMENT' && message.feature === 'agent_mode') {
-          callback({ hasEntitlement: true });
+          return Promise.resolve({ hasEntitlement: true });
         }
+        return Promise.resolve();
       });
 
       // Storage mocks are reset by chromeMock.cleanup() in afterEach
@@ -79,7 +80,7 @@ describe('SubmitModeController', () => {
 
       const slider = document.getElementById('submitModeRange') as HTMLInputElement;
       expect(slider.value).toBe('1'); // agent = position 1
-      expect(chromeMock.storage.get).toHaveBeenCalledWith(['submitMode'], expect.any(Function));
+      expect(chromeMock.storage.get).toHaveBeenCalledWith(['submitMode']);
     });
 
     it('should migrate from old autoSubmit schema', async () => {
@@ -90,12 +91,10 @@ describe('SubmitModeController', () => {
 
       // Should save migrated values
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { submitMode: 'off' },
-        expect.any(Function)
+        { submitMode: 'off' }
       );
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { autoSubmit: false },
-        expect.any(Function)
+        { autoSubmit: false }
       );
     });
 
@@ -110,8 +109,7 @@ describe('SubmitModeController', () => {
 
       // The controller makes multiple storage calls, check for the final one
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { submitMode: 'off' },
-        expect.any(Function)
+        { submitMode: 'off' }
       );
     });
 
@@ -220,10 +218,11 @@ describe('SubmitModeController', () => {
       `;
 
       // Mock agent mode entitlement check to return false
-      chromeMock.runtime.sendMessage.mockImplementation((message: any, callback: any) => {
+      chromeMock.runtime.sendMessage.mockImplementation((message: any) => {
         if (message.type === 'CHECK_FEATURE_ENTITLEMENT' && message.feature === 'agent_mode') {
-          callback({ hasEntitlement: false });
+          return Promise.resolve({ hasEntitlement: false });
         }
+        return Promise.resolve();
       });
 
       controller = new SubmitModeController();
@@ -258,8 +257,8 @@ describe('SubmitModeController', () => {
     });
 
     it('should initialize toggle with stored autoSubmit value', async () => {
-      chromeMock.storage.get.mockImplementation((keys, callback) => {
-        callback({ autoSubmit: false });
+      chromeMock.storage.get.mockImplementation((keys) => {
+        return Promise.resolve({ autoSubmit: false });
       });
 
       await controller.init();
@@ -280,23 +279,20 @@ describe('SubmitModeController', () => {
 
       expect(chromeMock.storage.set).toHaveBeenCalledTimes(3);
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { autoSubmit: false },
-        expect.any(Function)
+        { autoSubmit: false }
       );
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { discretionaryMode: false },
-        expect.any(Function)
+        { discretionaryMode: false }
       );
       expect(chromeMock.storage.set).toHaveBeenCalledWith(
-        { submitMode: 'off' },
-        expect.any(Function)
+        { submitMode: 'off' }
       );
     });
 
     it('should update checked class on toggle', async () => {
       // Mock storage to return false for autoSubmit
-      chromeMock.storage.get.mockImplementation((keys, callback) => {
-        callback({ autoSubmit: false });
+      chromeMock.storage.get.mockImplementation((keys) => {
+        return Promise.resolve({ autoSubmit: false });
       });
       
       await controller.init();
@@ -350,8 +346,8 @@ describe('SubmitModeController', () => {
     });
 
     it('should return current submit mode state', async () => {
-      chromeMock.storage.get.mockImplementation((keys, callback) => {
-        callback({
+      chromeMock.storage.get.mockImplementation((keys) => {
+        return Promise.resolve({
           submitMode: 'agent',
           autoSubmit: true,
           discretionaryMode: true,
@@ -368,8 +364,8 @@ describe('SubmitModeController', () => {
     });
 
     it('should return defaults if no state stored', async () => {
-      chromeMock.storage.get.mockImplementation((keys, callback) => {
-        callback({});
+      chromeMock.storage.get.mockImplementation((keys) => {
+        return Promise.resolve({});
       });
 
       const state = await controller.getState();

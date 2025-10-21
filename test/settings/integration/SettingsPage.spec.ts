@@ -362,12 +362,12 @@ describe('Settings Page Integration', () => {
       const input = container.querySelector<HTMLInputElement>('#sound-effects');
       if (input) {
         input.checked = false;
-        // This will try to save and fail, but shouldn't throw
+        // This will try to save and fail, but shouldn't throw synchronously
         expect(() => input.dispatchEvent(new Event('change'))).not.toThrow();
-      }
 
-      // Wait for async to settle
-      await new Promise(resolve => setTimeout(resolve, 10));
+        // Wait for async rejection to be handled (the error is logged but not propagated to UI)
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
     });
 
     it('should handle missing i18n translations', () => {

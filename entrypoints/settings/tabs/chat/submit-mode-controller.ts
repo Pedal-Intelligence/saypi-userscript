@@ -321,7 +321,7 @@ export class SubmitModeController {
       return;
     }
 
-    let submitMode = await this.getStoredValue<SubmitMode>('submitMode', null);
+    let submitMode = await this.getStoredValue<SubmitMode | null>('submitMode', null);
 
     // Migrate from old schema if needed
     if (submitMode === null) {

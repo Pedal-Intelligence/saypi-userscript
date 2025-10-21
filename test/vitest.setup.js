@@ -85,13 +85,17 @@ const mockStorage = (() => {
   };
 })();
 
-global.chrome = {
+const chromeMock = {
   storage: {
     local: {
       get: vi.fn((keys, callback) => mockStorage.get(keys, callback)),
       set: vi.fn((items, callback) => mockStorage.set(items, callback)),
       remove: vi.fn((keys, callback) => mockStorage.remove(keys, callback)),
       clear: vi.fn((callback) => mockStorage.clear(callback)),
+      // Expose test helpers
+      _getState: () => mockStorage._getState(),
+      _setState: (newState) => mockStorage._setState(newState),
+      _reset: () => mockStorage.clear()
     },
     sync: { // Add sync mock
       get: vi.fn((keys, callback) => mockStorage.get(keys, callback)),
@@ -116,12 +120,47 @@ global.chrome = {
     getURL: vi.fn(path => `chrome-extension://mockextensionid/${path}`), // Mock getURL
     getManifest: vi.fn(() => ({ manifest_version: 3, name: "Test Extension", version: "1.0" })), // Mock getManifest
   },
+  tabs: {
+    query: vi.fn((queryInfo, callback) => {
+      const mockTabs = [{ id: 123, active: true, currentWindow: true }];
+      if (callback) callback(mockTabs);
+      return Promise.resolve(mockTabs);
+    }),
+    sendMessage: vi.fn((tabId, message, callback) => {
+      if (callback) callback({ success: true });
+      return Promise.resolve({ success: true });
+    })
+  },
   // Mock other chrome APIs if UserPreferenceModule or its dependencies use them directly
   // For example, if i18n is used directly:
   i18n: {
-    getMessage: vi.fn(messageName => messageName) // Simple mock for getMessage
+    getMessage: vi.fn((messageName, substitutions) => {
+      const messages = {
+        'aboutSayPiHeading': 'About SayPi',
+        'aboutSayPiDescription': 'Voice assistant for Pi.ai',
+        'soundEffects': 'Sound Effects',
+        'shareData': 'Share Analytics',
+        'analyticsConsent': 'Analytics Consent',
+        'interruptionsFirefoxDisabled': 'Interruptions not available in Firefox',
+        'submit_mode_agent_description': 'Test mode description for {{nickname}}',
+        'submit_mode_auto_description': 'Auto submit description',
+        'submit_mode_off_description': 'Off mode description'
+      };
+      let message = messages[messageName] || messageName;
+      if (substitutions && substitutions.length > 0) {
+        message = message.replace('{{nickname}}', substitutions[0]);
+      }
+      return message;
+    })
   }
 };
+
+global.chrome = chromeMock;
+
+// Mock wxt/browser to return the same chrome mock
+vi.mock('wxt/browser', () => ({
+  browser: chromeMock
+}));
 
 // Mock SVG imports because webpack rawloader is not available in the test environment
 vi.mock("../src/icons/copy.svg", () => ({
