@@ -43,17 +43,20 @@ def check_requirements():
     if not os.getenv('OPENAI_API_KEY'):
         errors.append("OPENAI_API_KEY environment variable not set")
     
-    # Check for required files
-    if not Path('i18n-translate-chrome.sh').exists():
-        errors.append("i18n-translate-chrome.sh not found in current directory")
-    
-    if not Path('i18n-translate-release-text.py').exists():
-        errors.append("i18n-translate-release-text.py not found in current directory")
-    
-    if not Path('_locales/en/messages.json').exists():
+    # Check for required files (relative to repo root)
+    script_dir = Path(__file__).parent
+    repo_root = script_dir.parent.parent
+
+    if not (script_dir / 'i18n-translate-chrome.sh').exists():
+        errors.append("i18n-translate-chrome.sh not found in tools/i18n/ directory")
+
+    if not (script_dir / 'i18n-translate-release-text.py').exists():
+        errors.append("i18n-translate-release-text.py not found in tools/i18n/ directory")
+
+    if not (repo_root / '_locales/en/messages.json').exists():
         errors.append("_locales/en/messages.json not found")
-        
-    if not Path('_locales/en/description.txt').exists():
+
+    if not (repo_root / '_locales/en/description.txt').exists():
         errors.append("_locales/en/description.txt not found")
     
     return errors
@@ -62,17 +65,21 @@ def run_ui_translations(skip_confirm=False, translate_cli_args=""):
     """Run the Chrome extension UI string translations."""
     print("🔄 Step 1: Translating UI strings (messages.json files)...")
     print("=" * 60)
-    
-    cmd = ['./i18n-translate-chrome.sh']
-    
+
+    script_dir = Path(__file__).parent
+    repo_root = script_dir.parent.parent
+    script_path = script_dir / 'i18n-translate-chrome.sh'
+
+    cmd = [str(script_path)]
+
     if skip_confirm:
         cmd.append('--yes')
-    
+
     if translate_cli_args:
         cmd.extend(['--'] + translate_cli_args.split())
-    
+
     try:
-        result = subprocess.run(cmd, check=True)
+        result = subprocess.run(cmd, check=True, cwd=str(repo_root))
         print("✅ UI string translations completed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -83,9 +90,13 @@ def run_description_translations():
     """Run the store description translations."""
     print("\n🔄 Step 2: Translating store descriptions (description.txt files)...")
     print("=" * 60)
-    
+
+    script_dir = Path(__file__).parent
+    repo_root = script_dir.parent.parent
+    script_path = script_dir / 'i18n-translate-release-text.py'
+
     try:
-        result = subprocess.run([sys.executable, 'i18n-translate-release-text.py'], check=True)
+        result = subprocess.run([sys.executable, str(script_path)], check=True, cwd=str(repo_root))
         print("✅ Store description translations completed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -96,9 +107,12 @@ def validate_translations():
     """Run basic validation on the translated files."""
     print("\n🔄 Step 3: Validating translations...")
     print("=" * 60)
-    
+
+    script_dir = Path(__file__).parent
+    repo_root = script_dir.parent.parent
+
     # Count locale directories
-    locales_dir = Path('_locales')
+    locales_dir = repo_root / '_locales'
     locale_dirs = [d for d in locales_dir.iterdir() if d.is_dir() and d.name != 'en']
     
     print(f"Found {len(locale_dirs)} target locales: {[d.name for d in locale_dirs]}")

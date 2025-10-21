@@ -9,8 +9,8 @@ This implementation provides a functional MVP of universal dictation for Say, Pi
 ### New Files
 1. **`src/state-machines/DictationMachine.ts`** - Simplified state machine for dictation-only workflow
 2. **`src/UniversalDictationModule.ts`** - Main module that handles UI injection and dictation management
-3. **`test-dictation.html`** - Test form for verifying functionality
-4. **`UNIVERSAL_DICTATION_SUMMARY.md`** - This summary document
+3. **`test/fixtures/test-dictation.html`** - Test form for verifying functionality
+4. **`doc/UNIVERSAL_DICTATION_SUMMARY.md`** - This summary document
 
 ### Modified Files
 1. **`src/saypi.index.js`** - Added universal dictation module initialization
@@ -91,7 +91,7 @@ dictation.getCurrentTarget(); // HTMLElement | null
 
 ## Testing
 
-Use `test-dictation.html` to verify:
+Use `test/fixtures/test-dictation.html` to verify:
 1. Button injection on various input types
 2. Focus/blur behavior
 3. Real-time transcription streaming

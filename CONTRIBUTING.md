@@ -180,8 +180,8 @@ This repository uses a unified command-line workflow for translating both UI str
 # Using npm script (recommended)
 npm run translate
 
-# Or directly
-python3 i18n-translate-all.py
+# Or directly (from repo root)
+python3 tools/i18n/i18n-translate-all.py
 ```
 
 **Options:**
@@ -202,8 +202,8 @@ npm run translate -- --skip-validation
 #### What the unified script does
 
 1. **Validates requirements**: Checks for `translate-cli`, OpenAI API key, and required files
-2. **Translates UI strings**: Runs `i18n-translate-chrome.sh` to translate `messages.json` files
-3. **Translates store descriptions**: Runs `i18n-translate-release-text.py` to translate `description.txt` files
+2. **Translates UI strings**: Runs `tools/i18n/i18n-translate-chrome.sh` to translate `messages.json` files
+3. **Translates store descriptions**: Runs `tools/i18n/i18n-translate-release-text.py` to translate `description.txt` files
 4. **Validates results**: Checks that all locales have valid JSON and description files
 
 #### Individual script usage (advanced)
@@ -212,12 +212,12 @@ If you need to run translations separately:
 
 **UI strings only:**
 ```bash
-./i18n-translate-chrome.sh [LOCALES_DIR] -- [translate-cli flags…]
+./tools/i18n/i18n-translate-chrome.sh [LOCALES_DIR] -- [translate-cli flags…]
 ```
 
 **Store descriptions only:**
 ```bash
-python3 i18n-translate-release-text.py
+python3 tools/i18n/i18n-translate-release-text.py
 ```
 
 #### Translation workflow for releases
@@ -232,7 +232,7 @@ python3 i18n-translate-release-text.py
 
 #### Chrome Web Store Publishing Helper
 
-The `i18n-translate-release-text.py` script provides a convenient alias for copying locale-specific descriptions to your clipboard for easy pasting into Chrome Web Store:
+The `tools/i18n/i18n-translate-release-text.py` script provides a convenient alias for copying locale-specific descriptions to your clipboard for easy pasting into Chrome Web Store:
 
 ```bash
 # Set up the alias (run once per terminal session)
