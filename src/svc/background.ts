@@ -21,7 +21,7 @@ function getExtensionURL(path: string): string {
 }
 
 const POPUP_MIN_CONTENT_WIDTH = 736;
-const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // buffer keeps us above the 735px mobile breakpoint after window chrome adjustments
+const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // The buffer value 6 accounts for window chrome (browser borders and controls) to ensure the content area stays above the 735px mobile breakpoint.
 
 async function openSettingsWindow() {
   try {
