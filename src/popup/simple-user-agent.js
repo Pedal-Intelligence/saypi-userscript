@@ -20,3 +20,5 @@ function addDeviceFlags(element) {
   }
 }
 addDeviceFlags(document.documentElement);
+
+export {};

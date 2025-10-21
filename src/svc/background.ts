@@ -1,28 +1,48 @@
+import { browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
-// Declare Chrome extension API for TypeScript
-declare const chrome: any;
-function openSettingsWindow() {
+
+// Helper function to get extension URL with fallback for WXT compatibility
+function getExtensionURL(path: string): string {
+  // Use WXT's typed getURL API directly (it's available at runtime)
+  // The TypeScript error was due to type definitions, but the function exists
+  if (browser.runtime && typeof (browser.runtime as any).getURL === 'function') {
+    return (browser.runtime as any).getURL(path);
+  }
+  
+  // Fallback to Chrome API
+  if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+    return chrome.runtime.getURL(path);
+  }
+  
+  // Final fallback - construct URL manually
+  const protocol = isFirefox() ? 'moz-extension://' : 'chrome-extension://';
+  return `${protocol}${browser.runtime.id}/${path}`;
+}
+
+const POPUP_MIN_CONTENT_WIDTH = 736;
+const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // The buffer value 6 accounts for window chrome (browser borders and controls) to ensure the content area stays above the 735px mobile breakpoint.
+
+async function openSettingsWindow() {
   try {
-    const popupURL = chrome.runtime.getURL('src/popup/popup.html');
+    const popupURL = getExtensionURL('settings.html');
     // Decide initial height based on whether we need to show consent overlay
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
-    chrome.storage.local.get('shareData', (result: any) => {
-      const needsConsent = typeof result.shareData === 'undefined';
-      const height = needsConsent ? 600 : 512; // fallback taller for consent, otherwise compact
-      // Firefox on Android does not support opening popup windows; open a tab instead
-      if (isFirefox() && isMobileDevice()) {
-        chrome.tabs.create({ url: popupURL, active: true });
-        return;
-      }
+    const { shareData } = await browser.storage.local.get('shareData');
+    const needsConsent = typeof shareData === 'undefined';
+    const height = needsConsent ? 640 : 512; // taller for consent (640px to match illustration), compact for settings (512px)
+    // Firefox on Android does not support opening popup windows; open a tab instead
+    if (isFirefox() && isMobileDevice()) {
+      await browser.tabs.create({ url: popupURL, active: true });
+      return;
+    }
 
-      chrome.windows.create({
-        url: popupURL,
-        type: 'popup',
-        width: 736, // 720px + 16px padding
-        height,
-        focused: true
-      });
+    await browser.windows.create({
+      url: popupURL,
+      type: 'popup',
+      width: POPUP_DESKTOP_WIDTH,
+      height,
+      focused: true
     });
   } catch (error) {
     console.error('Failed to open popup:', error);
@@ -30,9 +50,28 @@ function openSettingsWindow() {
 }
 
 // Open settings when the toolbar icon is clicked (no default_popup)
-chrome.action?.onClicked.addListener(() => {
-  openSettingsWindow();
-});
+const actionNamespaces: Array<
+  | {
+      onClicked?: {
+        addListener(callback: (tab?: unknown) => void): void;
+      };
+    }
+  | undefined
+> = [
+  browser?.action,
+  (browser as any)?.browserAction,
+  typeof chrome !== 'undefined' ? (chrome.action as any) : undefined,
+  typeof chrome !== 'undefined' ? (chrome as any).browserAction : undefined
+];
+
+for (const actionNamespace of actionNamespaces) {
+  if (actionNamespace?.onClicked?.addListener) {
+    actionNamespace.onClicked.addListener(() => {
+      void openSettingsWindow();
+    });
+    break;
+  }
+}
 
 import { config } from "../ConfigModule";
 import { getJwtManagerSync } from "../JwtManager";
@@ -40,7 +79,7 @@ import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscree
 import { logger } from "../LoggingModule.js";
 import getMessage from "../i18n";
 
-const PERMISSIONS_PROMPT_PATH_HTML = 'public/permissions/permissions-prompt.html';
+const PERMISSIONS_PROMPT_PATH_HTML = 'permissions.html';
 
 // Get the JWT manager instance at startup
 const jwtManager = getJwtManagerSync();
@@ -201,41 +240,41 @@ function sendAudioMessageToContent(
       requestId: message?.requestMessageId || message?.messageId,
       queuedBeforeSend: state.queue.length,
     });
-    const callback = () => {
-      const lastError = chrome.runtime.lastError;
-      if (lastError) {
-        const errMsg = lastError.message || "Unknown runtime error";
+
+    const sendPromise =
+      state.frameId !== undefined
+        ? browser.tabs.sendMessage(tabId, message, { frameId: state.frameId })
+        : browser.tabs.sendMessage(tabId, message);
+
+    sendPromise
+      .then(() => {
+        logger.debug(`[Background] Successfully forwarded audio message to tab ${tabId}`, audioContext);
+      })
+      .catch((error: any) => {
+        const errMsg = error?.message || String(error);
         const isNoResponse = errMsg.includes("The message port closed before a response was received");
-        const isBridgeMissing = !isNoResponse && (
-          errMsg.includes("Receiving end does not exist") ||
-          errMsg.includes("No tab with id") ||
-          errMsg.includes("No frame with id")
-        );
+        const isBridgeMissing =
+          !isNoResponse &&
+          (errMsg.includes("Receiving end does not exist") ||
+            errMsg.includes("No tab with id") ||
+            errMsg.includes("No frame with id"));
+
         if (isBridgeMissing) {
           state.ready = false;
           logger.warn(`[Background] Audio bridge unavailable; queuing message ${message.type} for tab ${tabId}`, {
             ...audioContext,
-            error: errMsg
+            error: errMsg,
           });
           queueAudioMessage(tabId, message, audioContext, { front: true });
         } else if (isNoResponse) {
           logger.debug(`[Background] Audio message ${message.type} delivered without explicit response`, {
             ...audioContext,
-            error: errMsg
+            error: errMsg,
           });
         } else {
           logger.error(`[Background] Error forwarding audio message: ${errMsg}`, audioContext);
         }
-      } else {
-        logger.debug(`[Background] Successfully forwarded audio message to tab ${tabId}`, audioContext);
-      }
-    };
-
-    if (state.frameId !== undefined) {
-      chrome.tabs.sendMessage(tabId, message, { frameId: state.frameId }, callback);
-    } else {
-      chrome.tabs.sendMessage(tabId, message, callback);
-    }
+      });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`[Background] Exception forwarding audio message: ${errorMessage}`, audioContext);
@@ -252,24 +291,24 @@ function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
     : getMessage("contextMenuStartDictation", appName);
     
   try {
-    if (chrome.contextMenus && typeof chrome.contextMenus.update === 'function') {
-      chrome.contextMenus.update("start-dictation", {
-        title: title
-      }, () => {
-        if (chrome.runtime.lastError) {
-          console.debug("Failed to update context menu title:", chrome.runtime.lastError.message);
-        }
-      });
+    if (browser.contextMenus && typeof browser.contextMenus.update === 'function') {
+      browser.contextMenus
+        .update("start-dictation", {
+          title,
+        })
+        .catch((error: any) => {
+          console.debug("Failed to update context menu title:", error?.message || error);
+        });
     }
   } catch {}
 }
 
 // Context menu setup for dictation
-chrome.runtime.onInstalled.addListener(() => {
+browser.runtime.onInstalled.addListener(() => {
   try {
-    if (!chrome.contextMenus || typeof chrome.contextMenus.create !== 'function') return;
+    if (!browser.contextMenus || typeof browser.contextMenus.create !== 'function') return;
     const appName = getMessage("appName");
-    chrome.contextMenus.create({
+    browser.contextMenus.create({
       id: "start-dictation",
       title: getMessage("contextMenuStartDictation", appName),
       contexts: ["editable"],
@@ -284,15 +323,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Handle context menu clicks
 try {
-  if (chrome.contextMenus && typeof chrome.contextMenus.onClicked?.addListener === 'function') {
-    chrome.contextMenus.onClicked.addListener((info: any, tab: any) => {
+  if (browser.contextMenus && typeof browser.contextMenus.onClicked?.addListener === 'function') {
+    browser.contextMenus.onClicked.addListener((info: any, tab: any) => {
       if (info.menuItemId === "start-dictation" && tab?.id) {
         const tabId = tab.id;
         const isDictationActive = dictationStates.get(tabId) || false;
         const messageType = isDictationActive
           ? "stop-dictation-from-context-menu"
           : "start-dictation-from-context-menu";
-        chrome.tabs.sendMessage(tabId, {
+        browser.tabs.sendMessage(tabId, {
           type: messageType,
           frameId: info.frameId || 0
         }).catch((error: any) => {
@@ -374,7 +413,7 @@ async function checkAuthCookie() {
   
   // Standard method - try to get cookie directly (works in Chrome)
   try {
-    const cookie = await chrome.cookies.get({
+    const cookie = await browser.cookies.get({
       name: 'auth_session',
       url: config.authServerUrl
     });
@@ -395,7 +434,7 @@ async function broadcastAuthStatus() {
   
   try {
     // Query all tabs - we'll filter and handle errors silently
-    const tabs = await chrome.tabs.query({});
+    const tabs = await browser.tabs.query({});
     
     // Track tabs where we successfully send messages
     let successCount = 0;
@@ -404,7 +443,7 @@ async function broadcastAuthStatus() {
     for (const tab of tabs) {
       if (tab.id) {
         // Only log success or unexpected errors, not connection errors
-        chrome.tabs.sendMessage(tab.id, { 
+        browser.tabs.sendMessage(tab.id, { 
           type: 'AUTH_STATUS_CHANGED',
           isAuthenticated,
           timestamp: Date.now()
@@ -494,7 +533,7 @@ async function pollAuthCookie() {
     }
     
     // Standard approach for Chrome and other browsers
-    const cookie = await chrome.cookies.get({
+    const cookie = await browser.cookies.get({
       name: 'auth_session',
       url: config.authServerUrl
     });
@@ -524,7 +563,7 @@ const pollingInterval = isFirefox() ? 300000 : 5000; // 5 minutes for Firefox, 5
 setInterval(pollAuthCookie, pollingInterval);
 
 // Handle VAD communication via Offscreen Document
-chrome.runtime.onConnect.addListener((port: any) => {
+browser.runtime.onConnect.addListener((port: any) => {
   // Handle connections from content scripts for VAD and audio
   if (port.name === "vad-content-script-connection" || port.name === "media-content-script-connection") {
     logger.debug(`[Background] Port connection established: ${port.name} from tab ${port.sender?.tab?.id}`);
@@ -540,10 +579,10 @@ function replyToRequester(
 ) {
   if (sender.tab?.id !== undefined) {
     // Came from a content script – send directly to that tab
-    chrome.tabs.sendMessage(sender.tab.id, payload);
+    browser.tabs.sendMessage(sender.tab.id, payload);
   } else {
     // Came from another extension page (popup, off-screen, etc.)
-    chrome.runtime.sendMessage(payload);   // fallback broadcast
+    browser.runtime.sendMessage(payload).catch(() => undefined);   // fallback broadcast
   }
 }
 
@@ -563,7 +602,7 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
     }
 
     // If 'denied' or 'prompt', proceed to open the permissions tab.
-    const permissionsPageUrl = chrome.runtime.getURL(PERMISSIONS_PROMPT_PATH_HTML);
+    const permissionsPageUrl = getExtensionURL(PERMISSIONS_PROMPT_PATH_HTML);
     let newTabId: number | undefined;
     let handlingPrompt = true; // Flag to manage listeners correctly
 
@@ -571,9 +610,9 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
       if (!handlingPrompt) return;
       handlingPrompt = false; // Prevent re-entry or duplicate cleanups
       logger.debug(`[Background] Cleaning up listeners for permission request ${originalRequestId}`);
-      chrome.runtime.onMessage.removeListener(messageListenerFromPromptTab);
+      browser.runtime.onMessage.removeListener(messageListenerFromPromptTab);
       if (newTabId !== undefined) {
-        chrome.tabs.onRemoved.removeListener(removedListenerForPromptTab);
+        browser.tabs.onRemoved.removeListener(removedListenerForPromptTab);
       }
     };
 
@@ -608,16 +647,16 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
       }
     };
     
-    chrome.runtime.onMessage.addListener(messageListenerFromPromptTab);
+    browser.runtime.onMessage.addListener(messageListenerFromPromptTab);
 
     try {
       logger.debug(`[Background] Creating permissions tab for request ${originalRequestId} with URL: ${permissionsPageUrl}`);
-      const tab = await chrome.tabs.create({ url: permissionsPageUrl, active: true });
+      const tab = await browser.tabs.create({ url: permissionsPageUrl, active: true });
       newTabId = tab.id;
       if (newTabId === undefined) { 
         throw new Error("Failed to create permissions tab (no ID returned).");
       }
-      chrome.tabs.onRemoved.addListener(removedListenerForPromptTab);
+      browser.tabs.onRemoved.addListener(removedListenerForPromptTab);
       logger.debug(`[Background] Permissions tab ${newTabId} created and listeners attached for request ${originalRequestId}`);
     } catch (tabError: any) {
       logger.error(`[Background] Error creating permissions tab for request ${originalRequestId}:`, tabError);
@@ -764,7 +803,7 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
 }
 
 // Handle popup opening AND messages from Offscreen Document AND Error Reports AND Mic Permissions
-chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
+browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
   // Sanitize the message for logging
   const sanitizedMessage = sanitizeMessageForLogs(message);
   logger.debug(`[Background] onMessage received ${sanitizedMessage.type} from ${sender.tab?.title || sender.url}`);
@@ -790,8 +829,8 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   // --- START: Microphone Permission Handling ---
   if (message.type === 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION' && message.requestId) {
     // Ensure the sender is from the extension itself (e.g., AudioInputMachine)
-    // content scripts will have sender.id as undefined, extension pages will have chrome.runtime.id
-    if (sender.id === chrome.runtime.id || sender.url?.startsWith(chrome.runtime.getURL(''))) {
+    // content scripts will have sender.id as undefined, extension pages will have browser.runtime.id
+    if (sender.id === browser.runtime.id || sender.url?.startsWith(getExtensionURL(''))) {
       logger.debug("[Background] Received CHECK_AND_REQUEST_MICROPHONE_PERMISSION from valid sender.");
       handleCheckAndRequestMicPermission(message.requestId, sender);
       // Acknowledge the request. The actual result is sent asynchronously by handleCheckAndRequestMicPermission.
@@ -808,20 +847,21 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   if (message.type === 'SAVE_SEGMENT_WAV' && typeof message.base64 === 'string' && typeof message.filename === 'string') {
     try {
       const url = `data:audio/wav;base64,${message.base64}`;
-      chrome.downloads.download({
-        url,
-        filename: message.filename,
-        saveAs: false,
-        conflictAction: 'uniquify'
-      }, (downloadId: any) => {
-        if (chrome.runtime.lastError) {
-          logger.error('[Background] Failed to queue segment download:', chrome.runtime.lastError.message);
-          sendResponse({ ok: false, error: chrome.runtime.lastError.message });
-        } else {
+      browser.downloads
+        .download({
+          url,
+          filename: message.filename,
+          saveAs: false,
+          conflictAction: 'uniquify',
+        })
+        .then((downloadId: any) => {
           logger.debug(`[Background] Queued segment download: ${downloadId} -> ${message.filename}`);
           sendResponse({ ok: true, id: downloadId });
-        }
-      });
+        })
+        .catch((error: any) => {
+          logger.error('[Background] Failed to queue segment download:', error);
+          sendResponse({ ok: false, error: error?.message || 'download_failed' });
+        });
       return true; // async
     } catch (error: any) {
       logger.error('[Background] Exception while saving segment:', error);
@@ -834,14 +874,14 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   // --- START: Offscreen API Support Check ---
   if (message.type === 'CHECK_OFFSCREEN_SUPPORT') {
     try {
-      // Check if chrome.offscreen is available
-      const isOffscreenSupported = typeof chrome.offscreen !== 'undefined';
+      // Check if browser.offscreen is available
+      const isOffscreenSupported = typeof browser.offscreen !== 'undefined';
       logger.debug(`[Background] Checking offscreen support: ${isOffscreenSupported}`);
       
       // Send the result back to the content script
       sendResponse({ 
         supported: isOffscreenSupported,
-        hasHasDocument: typeof chrome.offscreen?.hasDocument === 'function'
+        hasHasDocument: typeof browser.offscreen?.hasDocument === 'function'
       });
     } catch (error: any) {
       logger.error("[Background] Error checking offscreen support:", error);
@@ -922,14 +962,14 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
    * This extension has two clients in the content script that handle offscreen communication:
    * 
    * 1. OffscreenVADClient (src/vad/OffscreenVADClient.ts):
-   *    - Uses chrome.runtime.connect() with port-based messaging
+   *    - Uses browser.runtime.connect() with port-based messaging
    *    - Handles VAD_* and OFFSCREEN_VAD_* messages
    *    - Receives messages via offscreenManager.forwardMessageToContentScript() -> port.postMessage()
    * 
    * 2. OffscreenAudioBridge (src/audio/OffscreenAudioBridge.js):
-   *    - Uses chrome.runtime.onMessage.addListener() for direct messaging
+   *    - Uses browser.runtime.onMessage.addListener() for direct messaging
    *    - Handles AUDIO_* and OFFSCREEN_AUDIO_* messages
-   *    - Receives messages via chrome.tabs.sendMessage()
+   *    - Receives messages via browser.tabs.sendMessage()
    * 
    * The routing logic below prevents message cross-contamination by routing messages
    * based on their type prefix to the appropriate client communication channel.
@@ -937,7 +977,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   // Prioritize messages from the offscreen document (VAD events)
   if (
     typeof OFFSCREEN_DOCUMENT_PATH === 'string' &&
-    sender.url === chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH) &&
+    sender.url === getExtensionURL(OFFSCREEN_DOCUMENT_PATH) &&
     message.origin === "offscreen-document"
   ) {
     // Handle auto-shutdown request
@@ -958,7 +998,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
         return; // Stop processing - message handled via port
       }
       
-      // Route audio messages via chrome.tabs.sendMessage to OffscreenAudioBridge
+      // Route audio messages via browser.tabs.sendMessage to OffscreenAudioBridge
       if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
         logger.debug(`[Background] Routing audio message via tabs.sendMessage: ${message.type}`);
 
@@ -1066,14 +1106,14 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
       try {
         if (config.authServerUrl) {
           // Check cookie first
-          const cookie = await chrome.cookies.get({
+          const cookie = await browser.cookies.get({
             name: 'auth_session',
             url: config.authServerUrl
           });
 
           if (!cookie) {
             // No cookie present, redirect to login immediately
-            chrome.tabs.create({
+            browser.tabs.create({
               url: `${config.authServerUrl}/auth/login`
             });
             sendResponse({ authenticated: false });
@@ -1089,7 +1129,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
               sendResponse({ authenticated: true });
             } else {
               // Refresh failed or token invalid, redirect to login
-              chrome.tabs.create({
+              browser.tabs.create({
                 url: `${config.authServerUrl}/auth/login`
               });
               sendResponse({ authenticated: false });
@@ -1097,7 +1137,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
           } catch (error) {
             console.error('Failed to refresh token:', error);
             // On refresh failure, redirect to login
-            chrome.tabs.create({
+            browser.tabs.create({
               url: `${config.authServerUrl}/auth/login`
             });
             sendResponse({ authenticated: false });
@@ -1110,7 +1150,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
         console.error('Failed to check auth state:', error);
         // On any error, try redirect to login
         if (config.authServerUrl) {
-          chrome.tabs.create({
+          browser.tabs.create({
             url: `${config.authServerUrl}/auth/login`
           });
         }
@@ -1124,7 +1164,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
       try {
         // Clear the auth cookie
         if (config.authServerUrl) {
-          await chrome.cookies.remove({
+          await browser.cookies.remove({
             name: 'auth_session',
             url: config.authServerUrl
           });
@@ -1185,7 +1225,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
 });
 
 // Clean up dictation state when tabs are closed
-chrome.tabs.onRemoved.addListener((tabId: any) => {
+browser.tabs.onRemoved.addListener((tabId: any) => {
   if (dictationStates.has(tabId)) {
     dictationStates.delete(tabId);
     logger.debug(`[Background] Cleaned up dictation state for closed tab ${tabId}`);
@@ -1196,7 +1236,7 @@ chrome.tabs.onRemoved.addListener((tabId: any) => {
 });
 
 // Handle authentication cookie changes
-chrome.cookies.onChanged.addListener(async (changeInfo: any) => {
+browser.cookies.onChanged.addListener(async (changeInfo: any) => {
   const { cookie, removed, cause } = changeInfo;
   
   // Only interested in our auth cookie
@@ -1221,25 +1261,25 @@ chrome.cookies.onChanged.addListener(async (changeInfo: any) => {
         
         // Get and handle return URL if it exists
         try {
-          const { authReturnUrl } = await chrome.storage.local.get('authReturnUrl');
+          const { authReturnUrl } = await browser.storage.local.get('authReturnUrl');
           if (authReturnUrl) {
             console.debug('Found return URL, redirecting to:', authReturnUrl);
             
             // Clear the return URL
-            await chrome.storage.local.remove('authReturnUrl');
+            await browser.storage.local.remove('authReturnUrl');
             
             // Close the auth tab and return to the popup
-            const tabs = await chrome.tabs.query({ url: `${config.authServerUrl}/*` });
+            const tabs = await browser.tabs.query({ url: `${config.authServerUrl}/*` });
             for (const tab of tabs) {
               if (tab.id !== undefined) {
-                await chrome.tabs.remove(tab.id);
+                await browser.tabs.remove(tab.id);
               }
             }
             
             // If the return URL is an extension URL, open it
             if (authReturnUrl.startsWith('chrome-extension://') || 
                 authReturnUrl.startsWith('moz-extension://')) {
-              await chrome.tabs.create({ url: authReturnUrl });
+              await browser.tabs.create({ url: authReturnUrl });
             }
           }
         } catch (error) {

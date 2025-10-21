@@ -30,19 +30,63 @@ const presets = {
   local: {
     name: 'Local Development',
     config: {
-      APP_SERVER_URL: 'https://app.saypi.ai',
-      API_SERVER_URL: 'https://127.0.0.1:5001',
-      AUTH_SERVER_URL: 'http://localhost:3000',
+      VITE_APP_SERVER_URL: 'https://app.saypi.ai',
+      VITE_API_SERVER_URL: 'https://127.0.0.1:5001',
+      VITE_AUTH_SERVER_URL: 'http://localhost:3000',
     }
   },
   remote: {
     name: 'Remote/Production',
     config: {
-      APP_SERVER_URL: 'https://app.saypi.ai',
-      API_SERVER_URL: 'https://api.saypi.ai',
-      AUTH_SERVER_URL: 'https://www.saypi.ai',
+      VITE_APP_SERVER_URL: 'https://app.saypi.ai',
+      VITE_API_SERVER_URL: 'https://api.saypi.ai',
+      VITE_AUTH_SERVER_URL: 'https://www.saypi.ai',
     }
   }
+};
+
+const getValueWithAliases = (config, key) => {
+  if (Object.prototype.hasOwnProperty.call(config, key)) {
+    return config[key];
+  }
+  const aliases = keyAliases[key] || [];
+  for (const alias of aliases) {
+    if (Object.prototype.hasOwnProperty.call(config, alias)) {
+      return config[alias];
+    }
+  }
+  return undefined;
+};
+
+const upsertEnvEntry = (content, key, value) => {
+  const candidates = [key, ...(keyAliases[key] || [])];
+  for (const candidate of candidates) {
+    const regex = new RegExp(`^${candidate}=.*$`, 'm');
+    if (regex.test(content)) {
+      content = content.replace(regex, `${key}=${value}`);
+      break;
+    }
+  }
+
+  if (!new RegExp(`^${key}=`, 'm').test(content)) {
+    const needsNewline = content.length > 0 && !content.endsWith('\n');
+    content += `${needsNewline ? '\n' : ''}${key}=${value}\n`;
+  }
+
+  const legacyKeys = keyAliases[key] || [];
+  for (const legacyKey of legacyKeys) {
+    if (legacyKey === key) continue;
+    const regex = new RegExp(`^${legacyKey}=.*$\n?`, 'gm');
+    content = content.replace(regex, '');
+  }
+
+  return content;
+};
+
+const keyAliases = {
+  VITE_APP_SERVER_URL: ['APP_SERVER_URL'],
+  VITE_API_SERVER_URL: ['API_SERVER_URL'],
+  VITE_AUTH_SERVER_URL: ['AUTH_SERVER_URL'],
 };
 
 function readEnvFile() {
@@ -86,7 +130,7 @@ function detectCurrentMode() {
   
   for (const [modeName, preset] of Object.entries(presets)) {
     const matches = Object.entries(preset.config).every(([key, value]) => 
-      current[key] === value
+      getValueWithAliases(current, key) === value
     );
     if (matches) {
       return modeName;
@@ -107,20 +151,13 @@ function updateEnvFile(targetMode) {
   
   // Update each configuration value and clean up inline comments
   for (const [key, value] of Object.entries(preset.config)) {
-    const regex = new RegExp(`^${key}=.*$`, 'm');
-    if (content.match(regex)) {
-      // Replace existing value, removing any inline comments
-      content = content.replace(regex, `${key}=${value}`);
-    } else {
-      // Add new value (shouldn't happen with current setup, but good to be safe)
-      content += `\n${key}=${value}`;
-    }
+    content = upsertEnvEntry(content, key, value);
   }
   
   writeEnvFile(content);
   console.log(`✅ Switched to ${preset.name} configuration`);
-  console.log(`   API: ${preset.config.API_SERVER_URL}`);
-  console.log(`   Auth: ${preset.config.AUTH_SERVER_URL}`);
+  console.log(`   API: ${preset.config.VITE_API_SERVER_URL}`);
+  console.log(`   Auth: ${preset.config.VITE_AUTH_SERVER_URL}`);
 }
 
 function showStatus() {
@@ -139,17 +176,17 @@ function showStatus() {
   
   console.log('');
   console.log('🔗 Server URLs:');
-  console.log(`   APP:  ${current.APP_SERVER_URL || 'not set'}`);
-  console.log(`   API:  ${current.API_SERVER_URL || 'not set'}`);
-  console.log(`   Auth: ${current.AUTH_SERVER_URL || 'not set'}`);
+  console.log(`   APP:  ${getValueWithAliases(current, 'VITE_APP_SERVER_URL') || 'not set'}`);
+  console.log(`   API:  ${getValueWithAliases(current, 'VITE_API_SERVER_URL') || 'not set'}`);
+  console.log(`   Auth: ${getValueWithAliases(current, 'VITE_AUTH_SERVER_URL') || 'not set'}`);
   
   console.log('');
   console.log('💡 Available modes:');
   for (const [modeName, preset] of Object.entries(presets)) {
     const indicator = currentMode === modeName ? '👉' : '  ';
     console.log(`${indicator} ${modeName.padEnd(8)} - ${preset.name}`);
-    console.log(`     API: ${preset.config.API_SERVER_URL}`);
-    console.log(`     Auth: ${preset.config.AUTH_SERVER_URL}`);
+    console.log(`     API: ${preset.config.VITE_API_SERVER_URL}`);
+    console.log(`     Auth: ${preset.config.VITE_AUTH_SERVER_URL}`);
   }
 }
 

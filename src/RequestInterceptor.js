@@ -57,13 +57,13 @@ function redirectXMLHttpRequest(open) {
 }
 
 // Function to redirect specific fetch requests without re-wrapping the Response
-function redirectFetch(_fetch) {
-  window.fetch = async function (url, opts = {}) {
+function redirectFetch(originalFetch) {
+  const wrappedFetch = async function (url, opts = {}) {
     const urlString = url.toString();
     
     // Skip interception for API endpoints - check if URL contains API paths
     if (urlString.includes('/transcribe') || urlString.includes('/api/') || urlString.includes('api.')) {
-      return _fetch.apply(this, arguments);
+      return originalFetch.apply(this, arguments);
     }
     
     const filename = urlString.split("/").pop()?.split("?")[0]; // Remove query parameters when extracting filename
@@ -97,17 +97,32 @@ function redirectFetch(_fetch) {
 
       try {
         // Important: return the original Response to avoid cross-realm issues in Firefox
-        return await _fetch.apply(this, [resourceUrl, opts]);
+        return await originalFetch.apply(this, [resourceUrl, opts]);
       } catch (error) {
         console.error(`[RequestInterceptor] Error redirecting ${filename}:`, error);
         // Fallback to original request if redirect fails
-        return _fetch.apply(this, arguments);
+        return originalFetch.apply(this, arguments);
       }
     }
     
     // For all other requests (including API calls), use original fetch
-    return _fetch.apply(this, arguments);
+    return originalFetch.apply(this, arguments);
   };
+
+  try {
+    const descriptor = {
+      value: wrappedFetch,
+      configurable: true,
+      writable: true,
+    };
+
+    Reflect.defineProperty(window, "fetch", descriptor);
+    if (globalThis !== window) {
+      Reflect.defineProperty(globalThis, "fetch", descriptor);
+    }
+  } catch (error) {
+    console.warn("[RequestInterceptor] Failed to override fetch; falling back to original fetch.", error);
+  }
 }
 
 // Function to set up the interceptors

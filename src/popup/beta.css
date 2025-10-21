@@ -73,13 +73,22 @@
 }
 
 button#clear-preferences {
-    display: none; /* hide the button by default */
-    width: 100%;
-    text-align: left;
-    background-image: url("trash.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position-x: right;
-    padding-right: 2em;
-    margin-right: 0.3em;
+    /* Visibility controlled by VITE_DEV_MODE in popup.js */
+    /* Layout: label on left, icon button on right */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem; /* Smaller padding for consistency */
+    min-width: auto;
+    font-size: 0.875rem; /* Match other controls */
+}
+
+button#clear-preferences i[data-lucide] {
+    width: 16px;
+    height: 16px;
+}
+
+/* Hide redundant upgrade button - header already has Sign In / auth button */
+section#upgrade {
+    display: none !important;
 }

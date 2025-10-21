@@ -1,3 +1,5 @@
+import { config } from '../ConfigModule';
+
 // auth-shared.js - Shared authentication functionality for popup UI
 
 /**
@@ -11,6 +13,7 @@ function updateAuthUI(isAuthenticated, userData = null) {
   const profileStatus = document.getElementById('profile-status');
   const profileName = document.getElementById('profile-name');
   const authButton = document.getElementById('auth-button');
+  const unauthenticatedMessage = document.getElementById('unauthenticated-message');
 
   // First, remove any existing click handlers to prevent duplicates
   authButton.removeEventListener('click', handleSignIn);
@@ -27,6 +30,16 @@ function updateAuthUI(isAuthenticated, userData = null) {
     profileName.textContent = chrome.i18n.getMessage('greeting', [userData.name]);
     // Add sign out handler
     authButton.addEventListener('click', handleSignOut);
+    // Hide unauthenticated inline message if present
+    if (unauthenticatedMessage) {
+      unauthenticatedMessage.classList.add('hidden');
+    }
+    // Restore quota display when available
+    if (typeof window.restoreAuthenticatedDisplay === 'function') {
+      window.restoreAuthenticatedDisplay();
+    } else if (typeof window.updateQuotaDisplayForAuthState === 'function') {
+      window.updateQuotaDisplayForAuthState();
+    }
   } else {
     // User is not signed in
     profileStatus.classList.remove('hidden');
@@ -36,6 +49,9 @@ function updateAuthUI(isAuthenticated, userData = null) {
     authButton.textContent = chrome.i18n.getMessage('signIn');
     // Add sign in handler
     authButton.addEventListener('click', handleSignIn);
+    if (unauthenticatedMessage) {
+      unauthenticatedMessage.classList.remove('hidden');
+    }
   }
 }
 
@@ -56,8 +72,7 @@ function redirectToLogin(loginUrl, returnUrl) {
  * Handler for sign in button click
  */
 function handleSignIn() {
-  // Try to use config from the global scope
-  if (typeof config !== 'undefined' && config.authServerUrl) {
+  if (config.authServerUrl) {
     const loginUrl = `${config.authServerUrl}/auth/login`;
     // Use the Pi AI talk page instead of the SaaS dashboard
     const returnUrl = 'https://pi.ai/talk';
@@ -123,10 +138,8 @@ function handleSignOut() {
  */
 async function logoutFromSaas() {
   try {
-    // Use config if available, otherwise fall back to default URL
-    const baseUrl = (typeof config !== 'undefined' && config.authServerUrl) 
-      ? config.authServerUrl 
-      : 'https://www.saypi.ai';
+    // Use configured auth host when available, otherwise fall back to production
+    const baseUrl = config.authServerUrl || 'https://www.saypi.ai';
     
     const logoutUrl = `${baseUrl}/api/auth/logout`;
     
@@ -165,4 +178,6 @@ window.handleSignOut = handleSignOut;
 window.refreshAuthUI = refreshAuthUI;
 window.logoutFromSaas = logoutFromSaas;
 window.updateUIAfterSignOut = updateUIAfterSignOut;
-window.performLocalSignOut = performLocalSignOut; 
+window.performLocalSignOut = performLocalSignOut;
+
+export {};

@@ -4,7 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
-- `npm run dev` - Development build with watch mode (runs manifest update first)
+- `npm run dev` - WXT dev server with live reload for Chromium targets (runs manifest update first)
+- `npm run dev:firefox` - Firefox MV2 dev session (`wxt --browser firefox --mv2`; opens a temporary private profile)
 - `npm run build` - Production build (validates locale files, copies ONNX files, updates manifest)
 - `npm run build:firefox` - Build and package for Firefox
 - `npm test` - Run all tests (Jest + Vitest)
@@ -99,7 +100,38 @@ For detailed browser and feature compatibility across different chatbot sites, s
 - **Webpack** bundles TypeScript/JavaScript with multiple entry points
 - **Environment-specific configs** injected via webpack DefinePlugin
 - **Asset copying** for ONNX models, WASM files, and extension resources
-- **No minification** to maintain code readability for extension store review
+- **Minification enabled** in production builds to meet Firefox AMO 5MB file limit
+- **Code splitting** separates vendor libraries and enables on-demand loading
+
+#### Build Output
+
+The webpack build produces the following files in `/public`:
+
+**Core bundles (8 files):**
+- `saypi.user.js` (450KB) - Main content script entry point
+- `background.js` (45KB) - Service worker
+- `common.bundle.js` (63KB) - Shared code across entry points
+- `vendor-onnx.bundle.js` (534KB) - ONNX runtime for ML inference
+- `vendor-xstate.bundle.js` (63KB) - XState state machine library
+- `vendor-vad.bundle.js` (18KB) - Voice Activity Detection library
+- `vendor-rxjs.bundle.js` (10KB) - RxJS reactive programming
+- `vendors.bundle.js` (29KB) - Other vendor libraries
+
+**Dynamic chunks (loaded on-demand):**
+- `793.js` (131KB) - AIChatModule (loads for Pi.ai, Claude.ai, ChatGPT)
+- `239.js` (33KB) - Supporting modules
+- `208.js`, `301.js`, `411.js`, `763.js` (126B each) - Tiny async chunks
+
+**Other resources:**
+- `lucide.min.js` (362KB) - Icon library for popup UI
+- `vad.worklet.bundle.min.js` (2.6KB) - Audio worklet processor
+- Offscreen scripts: `audio_handler.js`, `media_coordinator.js`, `media_offscreen.js`, `vad_handler.js`
+
+**Binary assets (not counted toward AMO 5MB limit):**
+- 4 WASM files (37MB total) - See [src/vad/README.md](src/vad/README.md) for why all 4 are required
+- 3 ONNX models (5MB total) - Silero VAD models for speech detection
+
+**Total package:** ~50MB (JavaScript: 1.8MB, well under Firefox AMO's 5MB non-binary file limit)
 
 ### Testing
 

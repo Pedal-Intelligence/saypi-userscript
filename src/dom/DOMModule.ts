@@ -66,16 +66,61 @@ export function createElement(
 }
 
 export function createSVGElement(svgString: string): SVGElement {
+  if (!svgString) {
+    throw new Error("Failed to create SVGElement. SVG string is empty.");
+  }
+
+  let source = svgString.trim();
+
+  if (source.startsWith("data:image/svg+xml")) {
+    const commaIndex = source.indexOf(",");
+    if (commaIndex === -1) {
+      throw new Error(
+        "Failed to create SVGElement. Invalid SVG data URI format: " +
+          source.slice(0, 100)
+      );
+    }
+
+    const metadata = source.slice(0, commaIndex);
+    const payload = source.slice(commaIndex + 1);
+    if (metadata.includes(";base64")) {
+      try {
+        if (typeof atob === "function") {
+          source = atob(payload);
+        } else {
+          source = Buffer.from(payload, "base64").toString("utf8");
+        }
+      } catch (error) {
+        throw new Error(
+          "Failed to create SVGElement. Could not decode base64 payload: " +
+            (error instanceof Error ? error.message : String(error))
+        );
+      }
+    } else {
+      source = decodeURIComponent(payload);
+    }
+  }
+
   const parser = new DOMParser();
-  const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+  const svgDoc = parser.parseFromString(source, "image/svg+xml");
   const svgElement = svgDoc.documentElement;
 
-  // Check if it's an SVG element by tag name, not just instance type
+  if (svgElement.tagName.toLowerCase() === "parsererror") {
+    throw new Error(
+      "Failed to create SVGElement. The provided SVG markup could not be parsed."
+    );
+  }
+
   if (svgElement.tagName.toLowerCase() === "svg") {
+    const currentDocument = typeof document !== "undefined" ? document : null;
+    if (currentDocument?.importNode) {
+      return currentDocument.importNode(svgElement, true) as SVGElement;
+    }
     return svgElement as unknown as SVGElement;
   }
+
   throw new Error(
     "Failed to create SVGElement. Invalid SVG string: " +
-      svgString.slice(0, 100)
+      source.slice(0, 100)
   );
 }

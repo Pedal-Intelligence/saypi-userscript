@@ -1,16 +1,16 @@
-import darkModeIconSVG from "./mode-night.svg";
-import lightModeIconSVG from "./mode-day.svg";
-import rectanglesSVG from "./rectangles.svg";
-import rectanglesDarkModeSVG from "./rectangles-moonlight.svg";
-import stopwatchSVG from "./stopwatch.svg";
-import brainSVG from "./brain.svg";
-import steerSVG from "./steer.svg";
+import darkModeIconSVG from "./mode-night.svg?raw";
+import lightModeIconSVG from "./mode-day.svg?raw";
+import rectanglesSVG from "./rectangles.svg?raw";
+import rectanglesDarkModeSVG from "./rectangles-moonlight.svg?raw";
+import stopwatchSVG from "./stopwatch.svg?raw";
+import brainSVG from "./brain.svg?raw";
+import steerSVG from "./steer.svg?raw";
 // Lucide originals for consistency with rest of UI
-import lucideBrainSVG from "./lucide-brain.svg";
-import lucideShipWheelSVG from "./lucide-ship-wheel.svg";
-import lucideBotSVG from "./lucide-bot.svg";
-import lucideInfoSVG from "./lucide-info.svg";
-import bubbleBwSVG from "./bubble-bw.svg";
+import lucideBrainSVG from "./lucide-brain.svg?raw";
+import lucideShipWheelSVG from "./lucide-ship-wheel.svg?raw";
+import lucideBotSVG from "./lucide-bot.svg?raw";
+import lucideInfoSVG from "./lucide-info.svg?raw";
+import bubbleBwSVG from "./bubble-bw.svg?raw";
 import { createSVGElement } from "../dom/DOMModule";
 
 export class IconModule {

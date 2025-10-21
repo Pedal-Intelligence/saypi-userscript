@@ -66,3 +66,5 @@ test-csp-bypass.html
 # Python virtual environments
 .venv/
 *.egg-info/
+/.output/
+public/.vite/

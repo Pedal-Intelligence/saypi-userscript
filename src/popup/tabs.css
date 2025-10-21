@@ -1,5 +1,41 @@
+html,
+body {
+  width: 100%;
+  min-width: 736px; /* Match POPUP_MIN_CONTENT_WIDTH in background.ts */
+}
+
+/* Global hidden utility with high specificity */
+.hidden,
+span.hidden,
+div.hidden,
+section.hidden {
+  display: none !important;
+}
+
 .settings-root {
+  display: flex;
+  flex-wrap: wrap;
   background: #f8fafc;
+}
+
+.user-preference-item,
+.usage-charges-item {
+  display: block;
+  align-items: center;
+  width: 100%;
+  max-width: 504px;
+  padding: 0.5rem 1rem;
+  align-content: space-between;
+}
+
+.control {
+  margin-left: auto;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-top: 0.25rem;
 }
 .settings-container {
   display: flex;
@@ -40,12 +76,18 @@
 
 .content {
   flex: 1;
-  min-width: 520px;
   padding: 0.5rem 0 1rem 0;
+  /* Allow flex growth but don't force minimum */
 }
-.tab-panel { width: 100%; max-width: 520px; }
-/* Ensure consistent desktop sizing for content cards */
-.user-preference-item { min-width: 520px; }
+.tab-panel {
+  width: 100%;
+  max-width: 504px; /* Match production - consistent width across tabs */
+}
+/* Preference items should fit within tab panel width */
+.user-preference-item {
+  max-width: 504px; /* Match tab panel width for consistency */
+  width: 100%;
+}
 
 .tab-panel.hidden {
   display: none !important;
@@ -215,5 +257,4 @@
   .user-preference-item,
   .usage-charges-item { width: 100% !important; }
 }
-
 

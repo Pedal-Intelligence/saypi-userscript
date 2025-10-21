@@ -1,9 +1,9 @@
 import getMessage from "../i18n";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
-import volumeIconSVG from "../icons/volume-mid.svg";
-import copyIconSVG from "../icons/copy.svg";
-import copiedIconSVG from "../icons/copied.svg";
-import regenerateIconSVG from "../icons/regenerate.svg";
+import volumeIconSVG from "../icons/volume-mid.svg?raw";
+import copyIconSVG from "../icons/copy.svg?raw";
+import copiedIconSVG from "../icons/copied.svg?raw";
+import regenerateIconSVG from "../icons/regenerate.svg?raw";
 import { getResourceUrl } from "../ResourceModule";
 import EventBus from "../events/EventBus";
 import { UtteranceCharge } from "../billing/BillingModule";

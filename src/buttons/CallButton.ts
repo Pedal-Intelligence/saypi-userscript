@@ -6,10 +6,10 @@ import AnimationModule from "../AnimationModule";
 import { GlowColorUpdater } from "./GlowColorUpdater";
 import { addChild, createSVGElement } from "../dom/DOMModule"; // Assuming createSVGElement is okay for full SVGs now, or stick to createElementNS
 import getMessage from "../i18n";
-import callIconSVG from "../icons/call.svg";
-import callStartingIconSVG from "../icons/call-starting.svg";
-import hangupIconSVG from "../icons/hangup.svg";
-import interruptIconSVG from "../icons/interrupt.svg";
+import callIconSVG from "../icons/call.svg?raw";
+import callStartingIconSVG from "../icons/call-starting.svg?raw";
+import hangupIconSVG from "../icons/hangup.svg?raw";
+import interruptIconSVG from "../icons/interrupt.svg?raw";
 import { State } from 'xstate'; // Import State type
 import { logger } from "../LoggingModule";
 // import hangupMincedIconSVG from "../icons/hangup-minced.svg"; // Not used anymore

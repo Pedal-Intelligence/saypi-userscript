@@ -1,3 +1,5 @@
+@use "sass:meta";
+
 html.immersive-view {
   #saypi-panel,
   .notification {
@@ -165,9 +167,9 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
   }
 }
 
-@import "dark-mode.scss";
-@import "focus-mode.scss";
-@import "lock.scss";
+@include meta.load-css("./dark-mode.scss");
+@include meta.load-css("./focus-mode.scss");
+@include meta.load-css("./lock.scss");
 
 /* Improve tappability of maintenance messages on mobile */
 html.mobile-device .assistant-message.maintenance-message {

@@ -1,3 +1,4 @@
+import { browser } from 'wxt/browser';
 import { isChromeStorageAvailable } from './BrowserApiUtils';
 import { logger } from '../LoggingModule';
 
@@ -89,7 +90,7 @@ export class ClientIdManager {
       }
 
       // Try to load existing client ID from storage
-      const result = await chrome.storage.local.get(ClientIdManager.STORAGE_KEY);
+      const result = await browser.storage.local.get(ClientIdManager.STORAGE_KEY);
       const existingId = result[ClientIdManager.STORAGE_KEY];
 
       if (existingId && this.isValidUuidV4(existingId)) {
@@ -100,7 +101,7 @@ export class ClientIdManager {
 
       // Generate new client ID if none exists or invalid
       const newClientId = this.generateUuidV4();
-      await chrome.storage.local.set({ [ClientIdManager.STORAGE_KEY]: newClientId });
+      await browser.storage.local.set({ [ClientIdManager.STORAGE_KEY]: newClientId });
       this.clientId = newClientId;
       logger.debug('[ClientIdManager] Generated and stored new client ID');
     } catch (error) {
@@ -216,7 +217,7 @@ export class ClientIdManager {
     }
 
     try {
-      await chrome.storage.local.set({ [ClientIdManager.STORAGE_KEY]: newClientId });
+      await browser.storage.local.set({ [ClientIdManager.STORAGE_KEY]: newClientId });
       this.clientId = newClientId;
       logger.debug('[ClientIdManager] Client ID reset successfully');
       return newClientId;

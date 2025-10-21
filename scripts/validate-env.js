@@ -52,6 +52,34 @@ const trim = (value) => (typeof value === 'string' ? value.trim() : value);
 
 const errors = [];
 const warnings = [];
+const resolvedValues = new Map();
+
+const resolveEnvValue = (key, { legacyKey } = {}) => {
+  if (resolvedValues.has(key)) {
+    return resolvedValues.get(key);
+  }
+
+  const modern = trim(parsed[key]);
+  if (modern) {
+    const entry = { value: modern, sourceKey: key, legacyUsed: false };
+    resolvedValues.set(key, entry);
+    return entry;
+  }
+
+  if (legacyKey) {
+    const legacy = trim(parsed[legacyKey]);
+    if (legacy) {
+      const entry = { value: legacy, sourceKey: legacyKey, legacyUsed: true };
+      resolvedValues.set(key, entry);
+      warnings.push(`• ${legacyKey} is deprecated. Rename it to ${key} in ${envFile}.`);
+      return entry;
+    }
+  }
+
+  const entry = { value: undefined, sourceKey: key, legacyUsed: false };
+  resolvedValues.set(key, entry);
+  return entry;
+};
 
 const parseUrl = (value, varName) => {
   try {
@@ -63,13 +91,13 @@ const parseUrl = (value, varName) => {
   }
 };
 
-const expectUrl = (key, { requireHttps = false, allowHttpLocalhost = false } = {}) => {
-  const raw = trim(parsed[key]);
-  if (!raw) {
+const expectUrl = (key, { legacyKey, requireHttps = false, allowHttpLocalhost = false } = {}) => {
+  const { value } = resolveEnvValue(key, { legacyKey });
+  if (!value) {
     errors.push(`• ${key} is missing. Add it to ${envFile} (see ${templateLookup} for guidance).`);
     return;
   }
-  const url = parseUrl(raw, key);
+  const url = parseUrl(value, key);
   if (!url) {
     return;
   }
@@ -90,35 +118,35 @@ const expectUrl = (key, { requireHttps = false, allowHttpLocalhost = false } = {
   }
 };
 
-const expectNonPlaceholder = (key, { minLength = 1, disallow = [] } = {}) => {
-  const raw = trim(parsed[key]);
-  if (!raw) {
+const expectNonPlaceholder = (key, { legacyKey, minLength = 1, disallow = [] } = {}) => {
+  const { value } = resolveEnvValue(key, { legacyKey });
+  if (!value) {
     errors.push(`• ${key} is missing. Add it to ${envFile} (see ${templateLookup} for guidance).`);
     return;
   }
-  if (raw.length < minLength) {
+  if (value.length < minLength) {
     errors.push(`• ${key} must be at least ${minLength} characters long.`);
     return;
   }
-  const upper = raw.toUpperCase();
+  const upper = value.toUpperCase();
   if (disallow.some((invalid) => upper === invalid.toUpperCase())) {
     errors.push(`• ${key} still uses a placeholder value. Update it with the real credential.`);
   }
 };
 
-const expectRegex = (key, regex, message) => {
-  const raw = trim(parsed[key]);
-  if (!raw) {
+const expectRegex = (key, regex, message, { legacyKey } = {}) => {
+  const { value } = resolveEnvValue(key, { legacyKey });
+  if (!value) {
     errors.push(`• ${key} is missing. Add it to ${envFile} (see ${templateLookup} for guidance).`);
     return;
   }
-  if (!regex.test(raw)) {
-    errors.push(`• ${key} ${message}. Received "${raw}".`);
+  if (!regex.test(value)) {
+    errors.push(`• ${key} ${message}. Received "${value}".`);
   }
 };
 
-const expectBoolean = (key, { recommended = null, hardError = false } = {}) => {
-  const value = parsed[key];
+const expectBoolean = (key, { legacyKey, recommended = null, hardError = false } = {}) => {
+  const { value } = resolveEnvValue(key, { legacyKey });
   if (typeof value === 'undefined') {
     return; // optional flag
   }
@@ -137,8 +165,8 @@ const expectBoolean = (key, { recommended = null, hardError = false } = {}) => {
   }
 };
 
-const expectInteger = (key, { min = 0 } = {}) => {
-  const value = parsed[key];
+const expectInteger = (key, { legacyKey, min = 0 } = {}) => {
+  const { value } = resolveEnvValue(key, { legacyKey });
   if (typeof value === 'undefined' || value.trim() === '') {
     return; // optional
   }
@@ -149,36 +177,61 @@ const expectInteger = (key, { min = 0 } = {}) => {
 };
 
 // Required URLs
-expectUrl('APP_SERVER_URL', { requireHttps: envType === 'production', allowHttpLocalhost: true });
-expectUrl('API_SERVER_URL', { requireHttps: envType === 'production', allowHttpLocalhost: true });
-expectUrl('AUTH_SERVER_URL', { requireHttps: envType === 'production', allowHttpLocalhost: true });
+expectUrl('VITE_APP_SERVER_URL', {
+  legacyKey: 'APP_SERVER_URL',
+  requireHttps: envType === 'production',
+  allowHttpLocalhost: true,
+});
+expectUrl('VITE_API_SERVER_URL', {
+  legacyKey: 'API_SERVER_URL',
+  requireHttps: envType === 'production',
+  allowHttpLocalhost: true,
+});
+expectUrl('VITE_AUTH_SERVER_URL', {
+  legacyKey: 'AUTH_SERVER_URL',
+  requireHttps: envType === 'production',
+  allowHttpLocalhost: true,
+});
 
 // Analytics configuration
-expectRegex('GA_MEASUREMENT_ID', /^G-[A-Z0-9]{4,}$/i, 'must match the format G-XXXXXXXXXX');
-expectNonPlaceholder('GA_API_SECRET', { minLength: 8, disallow: ['XXXXXXXXXX', 'REPLACE_ME'] });
+expectRegex(
+  'VITE_GA_MEASUREMENT_ID',
+  /^G-[A-Z0-9]{4,}$/i,
+  'must match the format G-XXXXXXXXXX',
+  { legacyKey: 'GA_MEASUREMENT_ID' }
+);
+expectNonPlaceholder('VITE_GA_API_SECRET', {
+  legacyKey: 'GA_API_SECRET',
+  minLength: 8,
+  disallow: ['XXXXXXXXXX', 'REPLACE_ME'],
+});
 
-const gaEndpoint = trim(parsed.GA_ENDPOINT);
+const { value: gaEndpoint } = resolveEnvValue('VITE_GA_ENDPOINT', { legacyKey: 'GA_ENDPOINT' });
 if (!gaEndpoint) {
-  errors.push(`• GA_ENDPOINT is missing. Add it to ${envFile} (see ${templateLookup} for guidance).`);
+  errors.push(`• VITE_GA_ENDPOINT is missing. Add it to ${envFile} (see ${templateLookup} for guidance).`);
 } else {
-  const url = parseUrl(gaEndpoint, 'GA_ENDPOINT');
+  const url = parseUrl(gaEndpoint, 'VITE_GA_ENDPOINT');
   if (url) {
     if (!['http:', 'https:'].includes(url.protocol)) {
-      errors.push(`• GA_ENDPOINT must use http or https. Received "${url.protocol}".`);
+      errors.push(`• VITE_GA_ENDPOINT must use http or https. Received "${url.protocol}".`);
     }
     const host = url.hostname.toLowerCase();
     if (!host.endsWith('google-analytics.com')) {
-      errors.push('• GA_ENDPOINT must point to a google-analytics.com endpoint.');
+      errors.push('• VITE_GA_ENDPOINT must point to a google-analytics.com endpoint.');
     }
   }
 }
 
 // Optional flags
-expectBoolean('KEEP_SEGMENTS', {
+expectBoolean('VITE_KEEP_SEGMENTS', {
+  legacyKey: 'KEEP_SEGMENTS',
   recommended: envType === 'production' ? 'false' : null,
 });
-expectBoolean('DEBUG_LOGS');
-expectInteger('AUTH_SESSION_LIFETIME', { min: 60 });
+expectBoolean('VITE_DEBUG_LOGS', { legacyKey: 'DEBUG_LOGS' });
+expectInteger('VITE_AUTH_SESSION_LIFETIME', {
+  legacyKey: 'AUTH_SESSION_LIFETIME',
+  min: 60,
+});
 
 if (errors.length) {
   console.error(`\nEnvironment validation failed for ${envFile}:`);

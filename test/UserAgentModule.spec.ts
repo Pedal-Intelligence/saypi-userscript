@@ -13,7 +13,7 @@ describe("UserAgentModule", () => {
 
   beforeEach(() => {
     originalUserAgent = navigator.userAgent;
-    originalMatchMedia = window.matchMedia;
+    originalMatchMedia = globalThis.matchMedia;
   });
 
   afterEach(() => {
@@ -21,7 +21,7 @@ describe("UserAgentModule", () => {
       value: originalUserAgent,
       configurable: true,
     });
-    window.matchMedia = originalMatchMedia;
+    globalThis.matchMedia = originalMatchMedia;
   });
 
   describe("isSafari", () => {
@@ -80,7 +80,7 @@ describe("UserAgentModule", () => {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         configurable: true,
       });
-      window.matchMedia = vi.fn().mockImplementation((query) => ({
+      globalThis.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: query === "(max-width: 820px)",
         media: query,
         onchange: null,
@@ -99,7 +99,7 @@ describe("UserAgentModule", () => {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         configurable: true,
       });
-      window.matchMedia = vi.fn().mockImplementation((query) => ({
+      globalThis.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
@@ -159,7 +159,7 @@ describe("UserAgentModule", () => {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         configurable: true,
       });
-      window.matchMedia = vi.fn().mockImplementation((query) => ({
+      globalThis.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,

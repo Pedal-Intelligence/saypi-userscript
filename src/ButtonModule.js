@@ -2,15 +2,14 @@ import { ImmersionService } from "./ImmersionService.js";
 import { addChild, createElement, createSVGElement } from "./dom/DOMModule.ts";
 import EventBus from "./events/EventBus.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
-import exitIconSVG from "./icons/exit.svg";
-import maximizeIconSVG from "./icons/focus.svg";
-import immersiveIconSVG from "./icons/focus.svg";
-import settingsIconSVG from "./icons/settings.svg";
-import lockIconSVG from "./icons/lock.svg";
-import unlockIconSVG from "./icons/unlock.svg";
+import exitIconSVG from "./icons/exit.svg?raw";
+import maximizeIconSVG from "./icons/focus.svg?raw";
+import immersiveIconSVG from "./icons/focus.svg?raw";
+import settingsIconSVG from "./icons/settings.svg?raw";
+import lockIconSVG from "./icons/lock.svg?raw";
+import unlockIconSVG from "./icons/unlock.svg?raw";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
@@ -21,7 +20,7 @@ import StateMachineService from "./StateMachineService.js";
 class ButtonModule {
   /**
    * Initializes the button module with dependencies
-   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
+   * @param {import("./chatbots/Chatbot.ts").Chatbot} chatbot - The chatbot instance (dependency injection)
    */
   constructor(chatbot) {
     this.icons = new IconModule();
@@ -327,14 +326,6 @@ class ButtonModule {
   }
 }
 
-let instance = null;
+const instance = new ButtonModule(ChatbotService.getChatbotSync());
 
-async function initializeModule() {
-  if (!instance) {
-    const chatbot = await ChatbotService.getChatbot();
-    instance = new ButtonModule(chatbot);
-  }
-  return instance;
-}
-
-export const buttonModule = await initializeModule();
+export const buttonModule = instance;

@@ -81,17 +81,9 @@ class StateMachineService {
 }
 
 // Singleton initialization
-let instance = null;
+const instance = new StateMachineService(ChatbotService.getChatbotSync());
 
-async function initializeService() {
-  if (!instance) {
-    const chatbot = await ChatbotService.getChatbot();
-    instance = new StateMachineService(chatbot);
-  }
-  return instance;
-}
-
-export default await initializeService();
+export default instance;
 
 // Also expose the instance on globalThis to allow lazy, non-import access
 try {

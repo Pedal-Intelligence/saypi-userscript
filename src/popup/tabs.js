@@ -16,7 +16,7 @@
     } catch (e) {}
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initializeTabs() {
     const saved = localStorage.getItem('saypi.settings.selectedTab') || 'general';
     selectTab(saved);
     document.querySelectorAll('.tab-button').forEach((btn) => {
@@ -46,11 +46,14 @@
       }
       btn.addEventListener('click', () => selectTab(btn.dataset.tab));
     });
-    // After icons are in DOM, ask Lucide to replace data-lucide elements
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      window.lucide.createIcons({ nameAttr: 'data-lucide' });
-    }
-  });
+    // Icons will be initialized centrally by index.ts after all modules load
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTabs, { once: true });
+  } else {
+    initializeTabs();
+  }
 })();
 
-
+export {};

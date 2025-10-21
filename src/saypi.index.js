@@ -1,5 +1,3 @@
-// Set runtime public path so async chunks load from extension URL, not host
-import "./webpack-public-path.js";
 import AudioModule from "./audio/AudioModule.js";
 import EventBus from "./events/EventBus.js";
 import { logger } from "./LoggingModule.js";

@@ -1,3 +1,4 @@
+import { browser } from 'wxt/browser';
 import { config } from './ConfigModule';
 import { serializeApiRequest, shouldRouteViaBackground } from './utils/ApiRequestSerializer';
 import { isFirefox as isFirefoxBrowser } from './UserAgentModule';
@@ -71,7 +72,7 @@ export class JwtManager {
   public async loadFromStorage(): Promise<void> {
     try {
       logger.debug('[status] Loading token from storage');
-      const { jwtToken, tokenExpiresAt, authCookieValue } = await chrome.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
+      const { jwtToken, tokenExpiresAt, authCookieValue } = await browser.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
       
       // Always load authCookieValue if present
       if (authCookieValue) {
@@ -110,7 +111,7 @@ export class JwtManager {
 
   private async saveToStorage(): Promise<void> {
     try {
-      await chrome.storage.local.set({
+      await browser.storage.local.set({
         jwtToken: this.jwtToken,
         tokenExpiresAt: this.expiresAt,
         authCookieValue: this.authCookieValue
@@ -190,8 +191,8 @@ export class JwtManager {
     // Check if the user is already authenticated with the auth server
     // by verifying if the auth_session cookie exists
     try {
-      if (chrome.cookies && config.authServerUrl) {
-        const cookie = await chrome.cookies.get({
+      if (browser.cookies && config.authServerUrl) {
+        const cookie = await browser.cookies.get({
           name: 'auth_session',
           url: config.authServerUrl
         });
@@ -244,21 +245,20 @@ export class JwtManager {
         }
       };
       
-      // Add auth cookie value to request body as fallback, but only if we're not in Firefox
-      // Firefox should rely on credentials:include since we've fixed CORS
+      // Add auth cookie value to request body as fallback alongside credentials-based auth
       const isFirefoxBrowser = this.isFirefoxBrowser();
-      
-      if (this.authCookieValue && !isFirefoxBrowser) {
-        logger.debug('Including auth cookie value in request body as fallback');
-        requestOptions.body = JSON.stringify({
-          auth_session: this.authCookieValue // Server expects 'auth_session' parameter
-        });
-      } else if (isFirefoxBrowser) {
+      if (isFirefoxBrowser) {
         logger.debug('Firefox detected: relying on credentials:include for cookie transmission');
-        // Firefox will automatically include cookies with credentials:include
-        // No additional body needed
-        requestOptions.body = JSON.stringify({}); // Empty body but still valid JSON
       }
+
+      const refreshPayload: Record<string, string> = {};
+
+      if (this.authCookieValue) {
+        logger.debug('Including auth cookie value in request body as fallback');
+        refreshPayload.auth_session = this.authCookieValue; // Server expects 'auth_session' parameter
+      }
+
+      requestOptions.body = JSON.stringify(refreshPayload);
       
       // Decide whether to route via background to avoid CSP issues
       let respOk = false;
@@ -269,18 +269,15 @@ export class JwtManager {
       const shouldProxy = this.shouldUseBackgroundProxy(refreshUrl);
       let proxyHandled = false;
 
+      let proxyError: unknown = null;
+
       if (shouldProxy) {
         try {
           const serialized = await serializeApiRequest(
             refreshUrl,
             { ...(requestOptions as any), responseType: 'json' as const }
           );
-          const bg = await new Promise<any>((resolve, reject) => {
-            chrome.runtime.sendMessage({ type: 'API_REQUEST', ...serialized }, (response) => {
-              if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
-              resolve(response);
-            });
-          });
+          const bg = await browser.runtime.sendMessage({ type: 'API_REQUEST', ...serialized });
           if (!bg?.success) {
             throw new Error(bg?.error || 'Background API request failed');
           }
@@ -290,16 +287,20 @@ export class JwtManager {
           respStatusText = data.statusText;
           respBody = data.body;
           proxyHandled = true;
-        } catch (proxyError) {
-          if (this.isMissingProxyReceiverError(proxyError)) {
+        } catch (error) {
+          proxyError = error;
+          if (this.isMissingProxyReceiverError(error)) {
             logger.warn('Background proxy unavailable in this context, falling back to direct fetch');
           } else {
-            throw proxyError;
+            logger.warn('Background proxy refresh request failed, falling back to direct fetch', error);
           }
         }
       }
 
       if (!proxyHandled) {
+        if (proxyError && !this.isMissingProxyReceiverError(proxyError)) {
+          logger.debug('Retrying token refresh with direct fetch after proxy failure');
+        }
         const response = await fetch(refreshUrl, requestOptions);
         respOk = response.ok;
         respStatus = response.status;
@@ -484,7 +485,7 @@ export class JwtManager {
       clearTimeout(this.refreshTimeout);
       this.refreshTimeout = null;
     }
-    chrome.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue']).catch(error => {
+    browser.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue']).catch(error => {
       logger.error('Failed to clear token from storage:', error);
     });
   }
@@ -530,6 +531,10 @@ export class JwtManager {
    */
   private getExtensionOrigin(): string {
     // First try to use the extension's URL
+    if (browser?.runtime?.getURL) {
+      return new URL(browser.runtime.getURL('')).origin;
+    }
+
     if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
       return new URL(chrome.runtime.getURL('')).origin;
     }
@@ -597,11 +602,7 @@ export class JwtManager {
     if (this.isServiceWorkerContext()) {
       return false;
     }
-    return (
-      typeof chrome !== 'undefined' &&
-      typeof (chrome as any).runtime !== 'undefined' &&
-      typeof (chrome as any).runtime.sendMessage === 'function'
-    );
+    return Boolean(browser?.runtime?.sendMessage);
   }
 
   /**

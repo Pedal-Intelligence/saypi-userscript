@@ -6,7 +6,7 @@ const profileStatus = document.getElementById('profile-status');
 let isAuthenticated = false;
 
 // Cross-browser compatibility
-const browserAPI = chrome || browser;
+const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
 // JWT handling
 function parseJwt(token) {
@@ -31,7 +31,13 @@ function parseJwt(token) {
 // Sign out functionality - used by the shared handleSignOut function
 async function signOut() {
   // Clear stored token
-  await browserAPI.storage.local.remove(['token', 'authReturnUrl']);
+  await browserAPI.storage.local.remove([
+    'token',
+    'jwtToken',
+    'tokenExpiresAt',
+    'authCookieValue',
+    'authReturnUrl',
+  ]);
   
   // Update UI using the shared function
   updateAuthUI(false);
@@ -40,11 +46,14 @@ async function signOut() {
 // Make signOut available to the shared module
 window.signOut = signOut;
 
-// Initialize
-document.addEventListener('DOMContentLoaded', async () => {
+const initializeAuth = async () => {
   // Check current auth state
   try {
-    const { token } = await browserAPI.storage.local.get('token');
+    const storageValues = (await browserAPI.storage.local.get([
+      'jwtToken',
+      'token',
+    ])) || {};
+    const token = storageValues.jwtToken || storageValues.token;
     if (token) {
       const claims = parseJwt(token);
       if (claims) {
@@ -60,11 +69,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Use the shared updateAuthUI function
         updateAuthUI(true, userData);
         isAuthenticated = true;
+      } else {
+        // Token exists but couldn't be parsed
+        updateAuthUI(false);
+        isAuthenticated = false;
       }
+    } else {
+      // No token - user is not authenticated
+      updateAuthUI(false);
+      isAuthenticated = false;
     }
   } catch (error) {
     console.error('Failed to initialize auth UI:', error);
     updateAuthUI(false);
     isAuthenticated = false;
   }
-}); 
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeAuth, { once: true });
+} else {
+  void initializeAuth();
+}
+
+// Listen for auth status changes from background script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'AUTH_STATUS_CHANGED') {
+    console.log('Auth status changed, refreshing UI');
+    // Refresh the auth UI when auth status changes
+    void initializeAuth();
+  }
+});
+
+export {};

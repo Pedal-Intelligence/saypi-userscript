@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import { logger } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isFirefox, isSafari, isMobileChromium, likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule.ts";
@@ -24,9 +25,11 @@ export default class OffscreenAudioBridge {
     this.bridgeReadyNotified = false;
     
     // Set up message listener
-    chrome.runtime.onMessage.addListener(this._handleMessageFromBackground.bind(this));
+    browser.runtime.onMessage.addListener(this._handleMessageFromBackground.bind(this));
 
-    queueMicrotask(() => this._notifyBackgroundReady());
+    queueMicrotask(() => {
+      void this._notifyBackgroundReady();
+    });
     
     OffscreenAudioBridge.instance = this;
   }
@@ -60,7 +63,7 @@ export default class OffscreenAudioBridge {
     
     try {
       // Ask the background service worker to check if offscreen API is available
-      const response = await chrome.runtime.sendMessage({ 
+      const response = await browser.runtime.sendMessage({ 
         type: "CHECK_OFFSCREEN_SUPPORT" 
       });
       
@@ -109,28 +112,21 @@ export default class OffscreenAudioBridge {
     return true;
   }
 
-  _notifyBackgroundReady() {
+  async _notifyBackgroundReady() {
     if (this.bridgeReadyNotified) {
       return;
     }
     try {
-      chrome.runtime.sendMessage({ type: "AUDIO_BRIDGE_READY" }, () => {
-        const lastError = chrome.runtime.lastError;
-        if (lastError) {
-          logger.warn("[OffscreenAudioBridge] Failed to notify background of readiness", lastError);
-          // Retry after a short delay to handle transient service worker startup delays
-          setTimeout(() => {
-            this.bridgeReadyNotified = false;
-            this._notifyBackgroundReady();
-          }, 250);
-          return;
-        }
-
-        this.bridgeReadyNotified = true;
-        logger.debug("[OffscreenAudioBridge] Notified background that audio bridge is ready");
-      });
+      await browser.runtime.sendMessage({ type: "AUDIO_BRIDGE_READY" });
+      this.bridgeReadyNotified = true;
+      logger.debug("[OffscreenAudioBridge] Notified background that audio bridge is ready");
     } catch (error) {
       logger.warn("[OffscreenAudioBridge] Failed to notify background of readiness", error);
+      // Retry after a short delay to handle transient service worker startup delays
+      setTimeout(() => {
+        this.bridgeReadyNotified = false;
+        void this._notifyBackgroundReady();
+      }, 250);
     }
   }
 
@@ -319,26 +315,22 @@ export default class OffscreenAudioBridge {
       const timeout = 5000; // 5 seconds
       
       // Create a promise that resolves when the message is sent
-      const sendPromise = new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage(message, (response) => {
-          // Check for a runtime error (indicates a disconnected port)
-          const lastError = chrome.runtime.lastError;
-          if (lastError) {
-            reject(new Error(`Failed to send message: ${lastError.message}`));
-            return;
-          }
-          
-          resolve(response);
-        });
-      });
-      
+      const sendPromise = (async () => {
+        try {
+          await browser.runtime.sendMessage(message);
+        } catch (error) {
+          const err = error instanceof Error ? error : new Error(String(error));
+          throw new Error(`Failed to send message: ${err.message}`);
+        }
+      })();
+
       // Create a promise that rejects after the timeout
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => {
           reject(new Error(`Message sending timed out after ${timeout}ms`));
         }, timeout);
       });
-      
+
       // Race the promises
       await Promise.race([sendPromise, timeoutPromise]);
       

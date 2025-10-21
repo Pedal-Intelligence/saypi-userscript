@@ -1,4 +1,5 @@
 
+@use "sass:meta";
 
 #saypi-callButton.disabled svg path.background {
   fill: rgb(245 238 223); /* bg-cream-550 */
@@ -44,7 +45,7 @@
   display: none;
 }
 
-@import "progress-ring.scss";
-@import "neon.scss";
-@import "notifications.scss";
-@import "voices.scss";
+@include meta.load-css("./progress-ring.scss");
+@include meta.load-css("./neon.scss");
+@include meta.load-css("./notifications.scss");
+@include meta.load-css("./voices.scss");

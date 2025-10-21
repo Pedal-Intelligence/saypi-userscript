@@ -2,17 +2,17 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { VoiceSelector, addSvgToButton } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
-import chevronSvgContent from "../icons/claude-chevron.svg";
-import volumeSvgContent from "../icons/volume-mid.svg";
-import volumeMutedSvgContent from "../icons/volume-muted.svg";
+import chevronSvgContent from "../icons/claude-chevron.svg?raw";
+import volumeSvgContent from "../icons/volume-mid.svg?raw";
+import volumeMutedSvgContent from "../icons/volume-muted.svg?raw";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { getJwtManagerSync } from "../JwtManager";
 import { getResourceUrl } from "../ResourceModule";
-import globeSvgContent from "../icons/lucide-globe.svg";
-import marsSvgContent from "../icons/lucide-mars.svg";
-import venusSvgContent from "../icons/lucide-venus.svg";
+import globeSvgContent from "../icons/lucide-globe.svg?raw";
+import marsSvgContent from "../icons/lucide-mars.svg?raw";
+import venusSvgContent from "../icons/lucide-venus.svg?raw";
 import { logger } from "../LoggingModule";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
@@ -359,10 +359,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       const region = parts.find(p => /^[A-Z]{2}$/.test(p));
       const code = region ? region.toLowerCase() : 'global';
 
-      // Prefer extension-packaged flags under src/ (MV3). These are exposed via web_accessible_resources.
+      // Prefer extension-packaged flags under icons/ (MV3). These are exposed via web_accessible_resources.
       const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
       if (isExtension) {
-        return chrome.runtime.getURL(`src/icons/flags/${code}.svg`);
+        return chrome.runtime.getURL(`icons/flags/${code}.svg`);
       }
       // Non-extension environments (tests) fall back to a generic resolver
       return getResourceUrl(`icons/flags/${code}.svg`);

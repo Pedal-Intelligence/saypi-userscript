@@ -1,6 +1,9 @@
+import { browser } from 'wxt/browser';
+import { config } from '../ConfigModule';
+
 const quotaStatusUnknown = {
   status_code: "unknown",
-  message: chrome.i18n.getMessage("quotaStatusUnknown"),
+  message: browser.i18n.getMessage("quotaStatusUnknown"),
 };
 
 // Helper function to format dates from numeric timestamp
@@ -35,12 +38,9 @@ let isUserAuthenticated = false;
 
 // Function to check authentication status
 async function checkAuthenticationStatus() {
-  return new Promise((resolve) => {
-    chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
-      isUserAuthenticated = !!(response && response.claims);
-      resolve(isUserAuthenticated);
-    });
-  });
+  const response = await browser.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' });
+  isUserAuthenticated = !!(response && response.claims);
+  return isUserAuthenticated;
 }
 
 // Encapsulated helper to fetch JSON via ApiClient proxying
@@ -58,28 +58,21 @@ async function callApiJSON(url) {
   }
 
   // Fallback: call background directly
-  const bg = await new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
-      type: 'API_REQUEST',
-      url,
-      options: {
-        method: 'GET',
-        headers: {},
-        responseType: 'json'
-      }
-    }, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError.message));
-        return;
-      }
-      if (!response || !response.success) {
-        reject(new Error(response?.error || 'Background API request failed'));
-        return;
-      }
-      resolve(response.response);
-    });
+  const bg = await browser.runtime.sendMessage({
+    type: 'API_REQUEST',
+    url,
+    options: {
+      method: 'GET',
+      headers: {},
+      responseType: 'json',
+    },
   });
-  return (bg && bg.body) ? bg.body : {};
+
+  if (!bg || !bg.success) {
+    throw new Error(bg?.error || 'Background API request failed');
+  }
+
+  return bg.response?.body ? bg.response.body : {};
 }
 
 // Function to check if upgrade button should be shown
@@ -112,8 +105,14 @@ function shouldShowUpgradeButton() {
 
 // Function to update the upgrade button visibility
 function updateUpgradeButtonVisibility() {
-  const upgradeSection = document.getElementById("upgrade");
+  const upgradeSection = document.getElementById("premium-upsell");
+  if (!upgradeSection) {
+    return;
+  }
   const consentSection = document.getElementById("analytics-consent");
+  if (!consentSection) {
+    console.warn('[Popup] analytics-consent section not found in DOM - consent overlay will not work');
+  }
   
   // Don't show upgrade button if consent form is visible
   if (consentSection && !consentSection.classList.contains("hidden")) {
@@ -209,7 +208,7 @@ function updateQuotaProgress(status, type = 'tts') {
   // Check if quota is exhausted
   if (status.quota.remaining <= 0) {
     // Exhausted quota
-    progressLabel.textContent = chrome.i18n.getMessage(`${type}QuotaExhausted`);
+    progressLabel.textContent = browser.i18n.getMessage(`${type}QuotaExhausted`);
     quotaValue.textContent = "0";
     
     // Update progress bar to show 100% used
@@ -242,7 +241,7 @@ function updateQuotaProgress(status, type = 'tts') {
     
     // Set tooltip for progress bar
     if (status.quota && status.quota.total) {
-      progressBar.title = chrome.i18n.getMessage(`${type}QuotaProgress`, [
+      progressBar.title = browser.i18n.getMessage(`${type}QuotaProgress`, [
         "0",
         status.quota.total.toLocaleString(),
       ]);
@@ -296,7 +295,7 @@ function updateQuotaProgress(status, type = 'tts') {
     // Convert seconds to minutes for STT
     const minutes = Math.floor(status.quota.remaining / 60);
     const plural = minutes !== 1 ? 's' : '';
-    remainingText = chrome.i18n.getMessage('sttMinutesRemaining', [minutes, plural]);
+    remainingText = browser.i18n.getMessage('sttMinutesRemaining', [minutes, plural]);
   }
   
   // Update percentage text to only show remaining text
@@ -328,7 +327,7 @@ function updateQuotaProgress(status, type = 'tts') {
 
   // Set the tooltip for the progress bar
   if (type === 'tts') {
-    progressBar.title = chrome.i18n.getMessage(`${type}QuotaProgress`, [
+    progressBar.title = browser.i18n.getMessage(`${type}QuotaProgress`, [
       status.quota.remaining.toLocaleString(),
       status.quota.total.toLocaleString(),
     ]);
@@ -336,7 +335,7 @@ function updateQuotaProgress(status, type = 'tts') {
     // For STT, convert to minutes for the tooltip
     const remainingMinutes = Math.floor(status.quota.remaining / 60);
     const totalMinutes = Math.floor(status.quota.total / 60);
-    progressBar.title = chrome.i18n.getMessage('sttQuotaProgressMinutes', [
+    progressBar.title = browser.i18n.getMessage('sttQuotaProgressMinutes', [
       remainingMinutes,
       totalMinutes
     ]);
@@ -349,8 +348,8 @@ function updateQuotaProgress(status, type = 'tts') {
 async function getJwtQuota() {
   try {
     // Send message to background script to get quota details
-    const ttsQuotaDetails = await chrome.runtime.sendMessage({ type: 'GET_TTS_QUOTA_DETAILS' });
-    const sttQuotaDetails = await chrome.runtime.sendMessage({ type: 'GET_STT_QUOTA_DETAILS' });
+    const ttsQuotaDetails = await browser.runtime.sendMessage({ type: 'GET_TTS_QUOTA_DETAILS' });
+    const sttQuotaDetails = await browser.runtime.sendMessage({ type: 'GET_STT_QUOTA_DETAILS' });
     
     const result = {
       tts: null,
@@ -418,7 +417,11 @@ async function getQuotaStatus() {
     } else {
       // Fall back to API endpoint if no JWT quota available
       try {
-        const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
+        const statusEndpoint = buildStatusEndpoint('tts');
+        if (!statusEndpoint) {
+          updateQuotaProgress({ noEntitlement: true }, 'tts');
+          return;
+        }
         const data = await callApiJSON(statusEndpoint);
         
         // If the API response indicates no quota, mark as no entitlement
@@ -439,7 +442,11 @@ async function getQuotaStatus() {
       updateQuotaProgress(quotaData.stt, 'stt');
     } else {
       try {
-        const statusEndpoint = `${config.apiBaseUrl}/status/stt`;
+        const statusEndpoint = buildStatusEndpoint('stt');
+        if (!statusEndpoint) {
+          updateQuotaProgress({ noEntitlement: true }, 'stt');
+          return;
+        }
         const data = await callApiJSON(statusEndpoint);
         
         // If the API response indicates no quota, mark as no entitlement
@@ -468,34 +475,41 @@ async function getQuotaStatus() {
 function setupViewDetailsLinks() {
   const viewQuotaDetailsLink = document.getElementById('view-quota-details');
 
+  // Silently return if link not found (might be called before General tab loads)
+  if (!viewQuotaDetailsLink) {
+    return;
+  }
+
   // Function to open dashboard
-  const openDashboard = () => {
+  const openDashboard = async () => {
     console.log('View details clicked, opening dashboard...');
-    
-    if (!config || !config.authServerUrl) {
-      console.error('Config or authServerUrl is missing:', config);
+
+    if (!config.authServerUrl) {
+      console.error('authServerUrl is missing from config:', config);
       window.open('https://www.saypi.ai/app/dashboard', "_blank");
       return;
     }
-    
-    chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
+
+    try {
+      const response = await browser.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' });
       const isAuthenticated = !!(response && response.claims);
       console.log('Auth check result:', isAuthenticated);
       if (!isAuthenticated) {
         window.open(`${config.authServerUrl}/pricing`, "_blank");
         return;
       }
-      
+
       const baseUrl = `${config.authServerUrl}/app/dashboard`;
       window.open(baseUrl, "_blank");
-    });
+    } catch (error) {
+      console.error('Failed to determine authentication state for dashboard redirect:', error);
+      window.open(`${config.authServerUrl || 'https://www.saypi.ai'}/pricing`, "_blank");
+    }
   };
 
-  if (viewQuotaDetailsLink) {
-    viewQuotaDetailsLink.onclick = openDashboard;
-  } else {
-    console.error('View details link element not found');
-  }
+  viewQuotaDetailsLink.onclick = () => {
+    void openDashboard();
+  };
 }
 
 // Update the upgrade button text based on authentication status
@@ -505,10 +519,10 @@ function updateUpgradeButtonText() {
   
   // Set different text for authenticated vs unauthenticated users
   if (!isUserAuthenticated) {
-    upgradeButton.textContent = chrome.i18n.getMessage('signIn');
+    upgradeButton.textContent = browser.i18n.getMessage('signIn');
     upgradeButton.dataset.i18n = 'signIn';
   } else {
-    upgradeButton.textContent = chrome.i18n.getMessage('upgradeButton');
+    upgradeButton.textContent = browser.i18n.getMessage('upgradeButton');
     upgradeButton.dataset.i18n = 'upgradeButton';
   }
   
@@ -520,8 +534,7 @@ function updateUpgradeButtonText() {
   };
 }
 
-// Make sure the function is called after DOM is fully loaded
-document.addEventListener('DOMContentLoaded', async function() {
+const initializeStatusSubscription = async () => {
   try {
     await getQuotaStatus();
     
@@ -532,7 +545,39 @@ document.addEventListener('DOMContentLoaded', async function() {
   } catch (error) {
     console.error("Error initializing status:", error);
   }
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeStatusSubscription, { once: true });
+} else {
+  void initializeStatusSubscription();
+}
 
 // Export functions to global scope for use in other scripts
 window.updateUnauthenticatedDisplay = updateUnauthenticatedDisplay;
+window.updateQuotaDisplayForAuthState = async function() {
+  await checkAuthenticationStatus();
+  if (!isUserAuthenticated) {
+    updateUnauthenticatedDisplay();
+  } else {
+    restoreAuthenticatedDisplay();
+  }
+  // Setup view details links after updating display (in case General tab just loaded)
+  setupViewDetailsLinks();
+};
+window.restoreAuthenticatedDisplay = restoreAuthenticatedDisplay;
+
+export {};
+const normalizeBaseUrl = (baseUrl) => {
+  if (!baseUrl) return "";
+  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+};
+
+const buildStatusEndpoint = (path) => {
+  const baseUrl = normalizeBaseUrl(config.apiServerUrl || "");
+  if (!baseUrl) {
+    console.error(`Missing API server URL while building status endpoint for "${path}".`);
+    return null;
+  }
+  return `${baseUrl}/status/${path}`;
+};

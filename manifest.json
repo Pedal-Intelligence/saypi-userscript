@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.10.4",
+  "version": "1.10.5",
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
@@ -25,16 +25,12 @@
         "https://chat.com/*",
         "https://chat.openai.com/*"
       ],
-      "css": [
-        "public/main.css"
-      ],
       "js": [
         "public/saypi.user.js"
       ]
     },
     {
       "matches": [
-        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -44,9 +40,6 @@
         "https://chatgpt.com/*",
         "https://chat.com/*",
         "https://chat.openai.com/*"
-      ],
-      "css": [
-        "public/main.css"
       ],
       "js": [
         "public/saypi.user.js"
@@ -102,7 +95,6 @@
         "public/permissions/*.css"
       ],
       "matches": [
-        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]

@@ -39,8 +39,12 @@ class Logger {
 
     // Auto-configure debug mode from environment or runtime flags
     try {
-      const env = (typeof process !== 'undefined' && process.env) ? process.env : {};
-      const envDebug = env.DEBUG_LOGS === 'true' || env.SAYPI_DEBUG === 'true';
+      const envSource = (typeof import.meta !== 'undefined' && import.meta.env)
+        || (typeof process !== 'undefined' ? process.env : {})
+        || {};
+      const envDebug = envSource.VITE_DEBUG_LOGS === 'true'
+        || envSource.DEBUG_LOGS === 'true'
+        || envSource.SAYPI_DEBUG === 'true';
       const urlDebug = (typeof window !== 'undefined' && typeof window.location !== 'undefined')
         ? (window.location.search || '').includes('saypi_debug=1')
         : false;

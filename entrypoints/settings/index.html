@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="extensionPopupTitle">Say, Pi Settings</title>
+  </head>
+  <body class="settings-root">
+    <header class="settings-header"></header>
+
+    <div class="settings-container">
+      <nav class="sidebar">
+        <button class="tab-button active" data-tab="general" data-i18n="tabGeneral">
+          General
+        </button>
+        <button class="tab-button" data-tab="chat" data-i18n="tabAIChat">AI Chat</button>
+        <button class="tab-button" data-tab="dictation" data-i18n="tabDictation">
+          Dictation
+        </button>
+        <button class="tab-button" data-tab="about" data-i18n="tabAbout">About</button>
+      </nav>
+      <main class="content">
+        <section id="tab-general" class="tab-panel">
+          <!-- Content loaded by GeneralTab controller -->
+        </section>
+
+        <section id="tab-chat" class="tab-panel hidden">
+          <!-- Content loaded by ChatTab controller -->
+        </section>
+
+        <section id="tab-dictation" class="tab-panel hidden">
+          <!-- Content loaded by DictationTab controller -->
+        </section>
+
+        <section id="tab-about" class="tab-panel hidden">
+          <!-- Content loaded by AboutTab controller -->
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>
