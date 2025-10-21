@@ -1,7 +1,11 @@
+:root {
+  --popup-min-content-width: 736px; /* Keep in sync with POPUP_MIN_CONTENT_WIDTH in background.ts */
+}
+
 html,
 body {
   width: 100%;
-  min-width: 736px; /* Match POPUP_MIN_CONTENT_WIDTH in background.ts */
+  min-width: var(--popup-min-content-width); /* Uses CSS custom property for POPUP_MIN_CONTENT_WIDTH */
 }
 
 /* Global hidden utility with high specificity */

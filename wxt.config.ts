@@ -308,7 +308,8 @@ const formatHostPermission = (url?: string | null): string | null => {
     const parsed = new URL(url);
     const port = parsed.port ? `:${parsed.port}` : "";
     return `${parsed.protocol}//${parsed.hostname}${port}/*`;
-  } catch {
+  } catch (err) {
+    console.error(`Invalid URL in formatHostPermission: "${url}". Error:`, err);
     return null;
   }
 };

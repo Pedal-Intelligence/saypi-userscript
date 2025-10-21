@@ -9,23 +9,39 @@ const quotaStatusUnknown = {
 // Helper function to format dates from numeric timestamp
 function formatResetDate(timestamp) {
   if (!timestamp) return '';
-  
+
   try {
     // Convert Unix timestamp (seconds) to milliseconds if needed
     const milliseconds = timestamp > 10000000000 ? timestamp : timestamp * 1000;
     const date = new Date(milliseconds);
-    
+
     // Check if date is valid
     if (isNaN(date.getTime())) {
       return '';
     }
-    
+
     return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   } catch (e) {
     console.error('Error formatting date:', e);
     return '';
   }
 }
+
+// Helper function to normalize base URL
+const normalizeBaseUrl = (baseUrl) => {
+  if (!baseUrl) return "";
+  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+};
+
+// Helper function to build status endpoint URL
+const buildStatusEndpoint = (path) => {
+  const baseUrl = normalizeBaseUrl(config.apiServerUrl || "");
+  if (!baseUrl) {
+    console.error(`Missing API server URL while building status endpoint for "${path}".`);
+    return null;
+  }
+  return `${baseUrl}/status/${path}`;
+};
 
 // Track quota status across both types
 let quotaStatuses = {
@@ -568,16 +584,3 @@ window.updateQuotaDisplayForAuthState = async function() {
 window.restoreAuthenticatedDisplay = restoreAuthenticatedDisplay;
 
 export {};
-const normalizeBaseUrl = (baseUrl) => {
-  if (!baseUrl) return "";
-  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
-};
-
-const buildStatusEndpoint = (path) => {
-  const baseUrl = normalizeBaseUrl(config.apiServerUrl || "");
-  if (!baseUrl) {
-    console.error(`Missing API server URL while building status endpoint for "${path}".`);
-    return null;
-  }
-  return `${baseUrl}/status/${path}`;
-};

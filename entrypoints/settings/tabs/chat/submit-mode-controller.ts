@@ -1,14 +1,13 @@
 /**
  * Submit Mode Controller
  * Manages agent mode, submit mode UI, and related settings
- * 
+ *
  * Agent Mode: Users with agent_mode entitlement see a 3-way slider (auto/agent/off)
  * Auto-Submit Only: Users without entitlement see a simple auto-submit toggle
  */
 
+import { browser } from 'wxt/browser';
 import { sendMessageToActiveTab } from '../../shared/messaging';
-
-// Use chrome APIs directly within class methods to avoid import issues in tests
 
 export type SubmitMode = 'auto' | 'agent' | 'off';
 
@@ -30,37 +29,30 @@ export class SubmitModeController {
   private submitModeOutput: HTMLElement | null = null;
   private submitModeSelector: HTMLElement | null = null;
 
-  // Helper methods that use chrome APIs directly
+  // Helper methods for storage access
   private async getStoredValue<T>(key: string, defaultValue: T): Promise<T> {
-    if (!chrome?.storage?.local) {
-      console.warn(`chrome.storage.local not available. Returning default for ${key}.`);
+    if (!browser?.storage?.local) {
+      console.warn(`browser.storage.local not available. Returning default for ${key}.`);
       return defaultValue;
     }
 
-    return new Promise((resolve) => {
-      chrome.storage.local.get([key], (result) => {
-        if (chrome.runtime?.lastError) {
-          console.error(`Error getting ${key}:`, chrome.runtime.lastError.message);
-          resolve(defaultValue);
-        } else {
-          resolve(result[key] !== undefined ? result[key] : defaultValue);
-        }
-      });
-    });
+    try {
+      const result = await browser.storage.local.get([key]);
+      return result[key] !== undefined ? result[key] : defaultValue;
+    } catch (error) {
+      console.error(`Error getting ${key}:`, error);
+      return defaultValue;
+    }
   }
 
   private async setStoredValue<T>(key: string, value: T): Promise<void> {
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ [key]: value }, () => {
-        if (chrome.runtime?.lastError) {
-          console.error(`Failed to save ${key}:`, chrome.runtime.lastError.message);
-          reject(chrome.runtime.lastError);
-        } else {
-          console.log(`Preference saved: ${key}`, value);
-          resolve();
-        }
-      });
-    });
+    try {
+      await browser.storage.local.set({ [key]: value });
+      console.log(`Preference saved: ${key}`, value);
+    } catch (error) {
+      console.error(`Failed to save ${key}:`, error);
+      throw error;
+    }
   }
 
   private readonly SUBMIT_MODE_ICONS: Record<number, SubmitMode> = {
@@ -98,14 +90,16 @@ export class SubmitModeController {
    * Check if user has agent mode entitlement
    */
   private async checkAgentModeEntitlement(): Promise<boolean> {
-    return new Promise((resolve) => {
-      chrome.runtime.sendMessage(
-        { type: 'CHECK_FEATURE_ENTITLEMENT', feature: 'agent_mode' },
-        (response) => {
-          resolve(!!response && response.hasEntitlement);
-        }
-      );
-    });
+    try {
+      const response = await browser.runtime.sendMessage({
+        type: 'CHECK_FEATURE_ENTITLEMENT',
+        feature: 'agent_mode'
+      });
+      return !!response && response.hasEntitlement;
+    } catch (error) {
+      console.error('Error checking agent mode entitlement:', error);
+      return false;
+    }
   }
 
   /**
