@@ -3,6 +3,9 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "wxt";
 
+// These constants are used for renaming CommonJS helper files generated during the build.
+// Chrome requires safe filenames for extension chunks, and specifically does not allow underscores in chunk names.
+// This is because Chrome's extension loader may fail to load chunks with underscores in their filenames.
 const COMMONJS_CHUNK_PATTERN = "chunks/chunk-[hash].js";
 const COMMONJS_HELPER_REGEX = /^_commonjsHelpers\.([^.]+)\.js(\.map)?$/;
 const COMMONJS_HELPER_PREFIX = "chunks/commonjs-";
