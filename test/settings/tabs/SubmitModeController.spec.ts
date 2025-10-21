@@ -240,9 +240,7 @@ describe('SubmitModeController', () => {
     it('should create auto-submit toggle', async () => {
       await controller.init();
 
-      console.log('Container innerHTML after init:', container.innerHTML);
       const toggle = document.getElementById('auto-submit');
-      console.log('Toggle found:', toggle);
       expect(toggle).not.toBeNull();
     });
 
