@@ -88,8 +88,8 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   isChatablePath(path: string): boolean {
-    // true if path starts with /talk or /discover
-    return path.startsWith("/talk") || path.startsWith("/discover") || path.startsWith("/threads") || path.startsWith("/profile");
+    // true for talk, discover, threads, and profile voice settings (but not account settings)
+    return path.startsWith("/talk") || path.startsWith("/discover") || path.startsWith("/threads") || path.startsWith("/profile") && !path.endsWith("/account");
   }
 
   getVoiceMenuSelector(): string {
