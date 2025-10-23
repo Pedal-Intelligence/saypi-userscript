@@ -9,6 +9,10 @@
 const fs = require("fs");
 const path = require("path");
 
+// Calculate the path to the root-level _locales directory
+// Script is in tools/i18n/, so we need to go up two levels
+const rootLocalesPath = path.resolve(__dirname, '..', '..', '_locales');
+
 // Recursively read all files in a directory
 function readFiles(dir) {
   const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -54,14 +58,13 @@ function validateI18nFiles(dir) {
 
 function validateMessageLengths(dir) {
   // Get the list of locale directories
-  const localeDirs = fs.readdirSync("./_locales");
+  const localeDirs = fs.readdirSync(dir);
 
-  localeDirs.forEach((dir) => {
+  localeDirs.forEach((localeDir) => {
     // Read the messages.json file for each locale
     const messages = require(path.join(
-      __dirname,
-      "_locales",
       dir,
+      localeDir,
       "messages.json"
     ));
 
@@ -69,12 +72,12 @@ function validateMessageLengths(dir) {
     for (const [key, value] of Object.entries(messages)) {
       if (key === "appName" && value.message.length > 40) {
         console.log(
-          `Locale: ${dir}, Message: ${key}, app name is too long (${value.message.length}): ${value.message}`
+          `Locale: ${localeDir}, Message: ${key}, app name is too long (${value.message.length}): ${value.message}`
         );
         process.exit(1);
       } else if (key === "appDescription" && value.message.length > 112) {
         console.log(
-          `Locale: ${dir}, Message: ${key}, app description is too long (${value.message.length}): ${value.message}`
+          `Locale: ${localeDir}, Message: ${key}, app description is too long (${value.message.length}): ${value.message}`
         );
         process.exit(1);
       }
@@ -83,5 +86,5 @@ function validateMessageLengths(dir) {
 }
 
 // Run validation
-validateI18nFiles("./_locales");
-validateMessageLengths("./_locales");
+validateI18nFiles(rootLocalesPath);
+validateMessageLengths(rootLocalesPath);
