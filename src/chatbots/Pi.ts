@@ -40,11 +40,22 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
+    // Pi.ai has different DOM structures for input vs textarea prompts:
+    // - Textarea: buttons are siblings to .saypi-prompt-container (return parent)
+    // - Input: buttons are children of .saypi-prompt-container (return container itself)
+    const promptElement = promptContainer.querySelector('#saypi-prompt');
+    if (promptElement && promptElement.tagName.toLowerCase() === 'input') {
+      // Input element: buttons should be inside the prompt container
+      return promptContainer;
+    }
+    // Textarea element: buttons should be siblings to prompt container
     return promptContainer.parentElement as HTMLElement;
   }
 
   getPromptTextInputSelector(): string {
-    return "textarea[enterkeyhint]";
+    // Match both new chat (input) and existing chat (textarea) prompt elements
+    // See doc/dom/pi/prompt-selectors.md for details
+    return "textarea[enterkeyhint], input[type='text'][placeholder]";
   }
 
   getPromptSubmitButtonSelector(): string {
@@ -77,8 +88,8 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   isChatablePath(path: string): boolean {
-    // true if path starts with /talk or /discover
-    return path.startsWith("/talk") || path.startsWith("/discover") || path.startsWith("/threads") || path.startsWith("/profile");
+    // true for talk, discover, threads, and profile voice settings (but not account settings)
+    return path.startsWith("/talk") || path.startsWith("/discover") || path.startsWith("/threads") || path.startsWith("/profile") && !path.endsWith("/account");
   }
 
   getVoiceMenuSelector(): string {
@@ -194,28 +205,37 @@ class PiAIChatbot extends AbstractChatbot {
 
 
 class PiPrompt extends AbstractUserPrompt {
-  private textArea: HTMLTextAreaElement = this.element as HTMLTextAreaElement;
+  // Support both textarea (existing chats) and input (new chats)
+  private inputElement: HTMLTextAreaElement | HTMLInputElement = this.element as HTMLTextAreaElement | HTMLInputElement;
   readonly PROMPT_CHARACTER_LIMIT = 4000;
 
   setText(text: string): void {
-    this.setNativeValue(this.textArea, text);
-    this.scrollToBottom(this.textArea);
+    this.setNativeValue(this.inputElement, text);
+    if (this.isTextArea(this.inputElement)) {
+      this.scrollToBottom(this.inputElement);
+    }
   }
   getText(): string {
-    return this.textArea.value;
+    return this.inputElement.value;
   }
   setPlaceholderText(text: string): void {
-    this.textArea.placeholder = text;
-    this.scrollToBottom(this.textArea);
+    this.inputElement.placeholder = text;
+    if (this.isTextArea(this.inputElement)) {
+      this.scrollToBottom(this.inputElement);
+    }
   }
   getPlaceholderText(): string {
-    return this.textArea.placeholder;
+    return this.inputElement.placeholder;
   }
   getDefaultPlaceholderText(): string {
-    return this.textArea.placeholder;
+    return this.inputElement.placeholder;
   }
 
-  setNativeValue(element: HTMLTextAreaElement, value: string) {
+  private isTextArea(element: HTMLTextAreaElement | HTMLInputElement): element is HTMLTextAreaElement {
+    return element.tagName.toLowerCase() === 'textarea';
+  }
+
+  setNativeValue(element: HTMLTextAreaElement | HTMLInputElement, value: string) {
     let lastValue = element.value;
     element.value = value;
     let event = new InputEvent("input", { bubbles: true });

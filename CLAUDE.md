@@ -140,6 +140,39 @@ The webpack build produces the following files in `/public`:
 - **JSDOM** test environment for DOM manipulation testing
 - Mock implementations for Chrome extension APIs
 
+#### Test-Driven Development (TDD) Requirements
+
+**Fail-First TDD Protocol (MANDATORY for bug fixes)**
+When fixing bugs, follow this strict protocol:
+
+1. **Reproduce**: Add a failing test that captures the incorrect behavior
+2. **Prove failure**: Run the test and confirm it fails for the expected reason
+3. **Implement**: Apply the smallest, safest change that satisfies the test
+4. **Verify**: Ensure the new test passes and related tests still pass
+5. **Document**: Update relevant docs and include rationale in PR description
+
+**Writing Tests**
+- **Mock External APIs**: Use Jest/Vitest mocks for Chrome extension APIs
+- **Async Tests**: Use `async/await` for async test functions
+- **Test Isolation**: Each test should be independent
+- **Fixtures**: Use setup/teardown for common test configuration
+- **Fail-First**: Write the test BEFORE the fix to capture the bug
+
+**Test Commands**
+```bash
+npm test                    # Run all tests (Jest + Vitest)
+npm run test:jest          # Run Jest tests only
+npm run test:vitest        # Run Vitest tests only
+npm run test:vitest:watch  # Run Vitest in watch mode
+```
+
+**Extension-Specific Testing Considerations**
+- Mock Web Audio API for audio input/output testing
+- Test VAD (Voice Activity Detection) with mock audio streams
+- Use JSDOM for DOM querying and chatbot integration testing
+- Test XState state machine transitions and state persistence
+- Verify cross-browser compatibility (Firefox vs Chrome, MV2 vs MV3)
+
 ### Key Patterns
 
 1. **Singleton Services** - Many core services use getInstance() pattern

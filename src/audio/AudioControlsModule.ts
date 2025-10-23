@@ -28,10 +28,23 @@ export default class AudioControlsModule {
         "saypi-audio-output-button"
       );
       if (audioOutputButton) {
-        EventBus.emit("audio:skipNext");
+        // Only skip next audio on Pi.ai when there are existing messages
+        // Pi.ai auto-plays the last message when audio output is enabled,
+        // which we want to prevent during call start in existing threads.
+        // Don't skip on new/empty chats or during page navigation.
+        const chatbotId = ChatbotIdentifier.identifyChatbot();
+        if (chatbotId === "pi" && this.hasChatHistory()) {
+          EventBus.emit("audio:skipNext");
+        }
         audioOutputButton.click();
       }
     }
+  }
+
+  private hasChatHistory(): boolean {
+    // Check if there are any assistant messages in the chat history
+    const assistantMessages = document.querySelectorAll(".assistant-message");
+    return assistantMessages.length > 0;
   }
 
   isAudioOutputEnabled(): boolean {
