@@ -1,0 +1,223 @@
+---
+description: Test-Driven Development (TDD) requirements and testing guidelines for WXT/TypeScript extension development
+globs: src/**/*.ts, src/**/*.js, test/**/*.ts, test/**/*.js
+alwaysApply: true
+---
+
+# Test-Driven Development (TDD) Requirements
+
+## Fail-First TDD Protocol (MANDATORY for bug fixes)
+When fixing bugs, follow this strict protocol:
+
+1. **Reproduce**: Add a failing test that captures the incorrect behavior
+2. **Prove failure**: Run the test and confirm it fails for the expected reason
+3. **Implement**: Apply the smallest, safest change that satisfies the test
+4. **Verify**: Ensure the new test passes and related tests still pass
+5. **Document**: Update relevant docs and include rationale in PR description
+
+## Testing Framework & Structure
+
+### Test Runners & Environments
+- **Vitest** for TypeScript/ESM unit tests (`*.spec.ts`)
+- **Jest** for JavaScript/DOM or legacy tests (`*.test.js`)
+- **JSDOM** is the default test environment
+- Chrome extension APIs are mocked in `test/jest.setup.js` and `test/vitest.setup.js`
+
+### Test File Organization
+- Tests mirror `src/` structure under `test/` directory
+- Use matching names: `FeatureName.spec.ts` or `feature.test.js`
+- Common setup in `test/vitest.setup.js` and `test/jest.setup.js`
+
+### Test Commands
+```bash
+npm test                    # Run all tests (Jest + Vitest)
+npm run test:jest          # Run Jest tests only
+npm run test:vitest        # Run Vitest tests only
+npm run test:vitest:watch  # Run Vitest in watch mode
+```
+
+## Writing Tests
+
+### Test Structure & Patterns
+- **Mock External APIs**: Use Jest/Vitest mocks for Chrome extension APIs
+- **Async Tests**: Use `async/await` for async test functions
+- **Test Isolation**: Each test should be independent
+- **Fixtures**: Use setup/teardown for common test configuration
+- **Fail-First**: Write the test BEFORE the fix to capture the bug
+
+### Chrome Extension Testing
+- Mock `chrome.runtime.*` APIs in test setup
+- Mock `chrome.tabs.*` APIs for tab-related functionality
+- Mock `chrome.storage.*` APIs for storage operations
+- Use JSDOM for DOM manipulation testing
+- Don't rely on real browser globals in tests
+
+### Example Test Patterns
+
+#### Vitest TypeScript Test
+```typescript
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { TranscriptionModule } from '../src/TranscriptionModule';
+
+describe('TranscriptionModule', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should handle audio transcription', async () => {
+    const module = new TranscriptionModule();
+    const result = await module.transcribe('audio-data');
+    expect(result).toBeDefined();
+  });
+});
+```
+
+#### Jest JavaScript Test
+```javascript
+const { TranscriptionModule } = require('../src/TranscriptionModule');
+
+describe('TranscriptionModule', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should handle audio transcription', async () => {
+    const module = new TranscriptionModule();
+    const result = await module.transcribe('audio-data');
+    expect(result).toBeDefined();
+  });
+});
+```
+
+### Mocking Chrome Extension APIs
+```typescript
+// In test setup files
+global.chrome = {
+  runtime: {
+    sendMessage: vi.fn(),
+    onMessage: {
+      addListener: vi.fn(),
+      removeListener: vi.fn()
+    }
+  },
+  tabs: {
+    query: vi.fn(),
+    sendMessage: vi.fn()
+  },
+  storage: {
+    local: {
+      get: vi.fn(),
+      set: vi.fn()
+    }
+  }
+};
+```
+
+## TDD Implementation Process
+
+### For Bug Fixes (MANDATORY)
+1. **Write failing test first** that reproduces the bug
+2. **Run test** to confirm it fails for the expected reason
+3. **Implement minimal fix** that makes the test pass
+4. **Verify** all tests pass and no regressions
+5. **Refactor** if needed while keeping tests green
+
+### For New Features
+1. **Write test** that describes the desired behavior
+2. **Run test** to confirm it fails (red phase)
+3. **Implement** the minimal code to make test pass (green phase)
+4. **Refactor** while keeping tests green
+5. **Add edge cases** and error handling tests
+
+### Test Quality Requirements
+- **Fast**: Tests should run quickly (< 1 second per test)
+- **Isolated**: Tests should not depend on each other
+- **Repeatable**: Tests should produce same results every time
+- **Clear**: Test names should describe what they're testing
+- **Comprehensive**: Cover happy path, edge cases, and error conditions
+
+## Extension-Specific Testing Considerations
+
+### Audio Processing Tests
+- Mock Web Audio API for audio input/output testing
+- Test VAD (Voice Activity Detection) with mock audio streams
+- Verify offscreen document communication
+
+### DOM Manipulation Tests
+- Use JSDOM for DOM querying and manipulation
+- Test chatbot-specific selectors and UI integration
+- Mock dynamic content loading scenarios
+
+### State Machine Tests
+- Test XState state machine transitions
+- Verify state persistence and recovery
+- Mock external triggers and events
+
+### Cross-Browser Compatibility Tests
+- Test Firefox vs Chrome specific behavior
+- Verify manifest v2 vs v3 differences
+- Mock browser-specific API availability
+
+## Test Coverage Requirements
+
+### Minimum Coverage Targets
+- **Unit tests**: 80%+ line coverage for core modules
+- **Integration tests**: Cover critical user workflows
+- **Edge cases**: Test error conditions and fallbacks
+
+### Critical Modules Requiring Tests
+- `src/chatbots/*` - Chatbot integration logic
+- `src/audio/*` - Audio processing pipeline
+- `src/vad/*` - Voice Activity Detection
+- `src/tts/*` - Text-to-Speech functionality
+- `src/dom/*` - DOM manipulation and observation
+
+## Continuous Integration
+
+### Pre-commit Requirements
+- All tests must pass before commit
+- Run `npm test` to verify test suite
+- Use `npm run test:vitest:watch` for development
+
+### Quality Gates
+- No failing tests allowed
+- Maintain or improve test coverage
+- All new code must have corresponding tests
+
+## Common Testing Anti-Patterns
+
+### ❌ DON'T
+- Write tests after implementation
+- Mock everything (test real behavior when possible)
+- Write tests that depend on external services
+- Skip testing error conditions
+- Write overly complex test setups
+
+### ✅ DO
+- Write tests first (TDD)
+- Mock only external dependencies
+- Test both success and failure paths
+- Keep tests simple and focused
+- Use descriptive test names
+
+## Debugging Failed Tests
+
+### Common Issues
+- **Chrome API mocks**: Ensure all used APIs are mocked
+- **Async timing**: Use proper async/await patterns
+- **DOM state**: Reset DOM between tests
+- **Module imports**: Check ESM vs CommonJS compatibility
+
+### Debug Commands
+```bash
+npm run test:vitest:watch  # Watch mode for debugging
+npm run test:jest -- --verbose  # Verbose Jest output
+```
+
+## Integration with Development Workflow
+
+### Code Review Requirements
+- All PRs must include tests for new functionality
+- Bug fixes must include regression tests
+- Test coverage should not decrease
+- Tests should be readable and maintainable

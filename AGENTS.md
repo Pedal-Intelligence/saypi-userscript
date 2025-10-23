@@ -22,9 +22,37 @@
 - Tests live beside feature folder under `test/` with matching names: `FeatureName.spec.ts` or `feature.test.js`.
 
 ## Testing Guidelines
-- Vitest for TS unit tests (`*.spec.ts`); Jest for JS/DOM or legacy tests (`*.test.js`).
-- JSDOM is the default env; Chrome APIs are mocked in `test/jest.setup.js` — don’t rely on real browser globals.
-- Add/adjust tests with code changes; keep fast, isolated tests.
+
+### Test-Driven Development (TDD) Requirements
+
+**Fail-First TDD Protocol (MANDATORY for bug fixes)**
+When fixing bugs, follow this strict protocol:
+
+1. **Reproduce**: Add a failing test that captures the incorrect behavior
+2. **Prove failure**: Run the test and confirm it fails for the expected reason
+3. **Implement**: Apply the smallest, safest change that satisfies the test
+4. **Verify**: Ensure the new test passes and related tests still pass
+5. **Document**: Update relevant docs and include rationale in PR description
+
+**Writing Tests**
+- **Mock External APIs**: Use Jest/Vitest mocks for Chrome extension APIs
+- **Async Tests**: Use `async/await` for async test functions
+- **Test Isolation**: Each test should be independent
+- **Fixtures**: Use setup/teardown for common test configuration
+- **Fail-First**: Write the test BEFORE the fix to capture the bug
+
+**Test Framework & Commands**
+- Vitest for TS unit tests (`*.spec.ts`); Jest for JS/DOM or legacy tests (`*.test.js`)
+- JSDOM is the default env; Chrome APIs are mocked in `test/jest.setup.js` — don't rely on real browser globals
+- Add/adjust tests with code changes; keep fast, isolated tests
+- Run `npm test` for all tests, `npm run test:vitest:watch` for development
+
+**Extension-Specific Testing**
+- Mock Web Audio API for audio input/output testing
+- Test VAD (Voice Activity Detection) with mock audio streams
+- Use JSDOM for DOM querying and chatbot integration testing
+- Test XState state machine transitions and state persistence
+- Verify cross-browser compatibility (Firefox vs Chrome, MV2 vs MV3)
 
 ## Commit & Pull Request Guidelines
 - Project is proprietary; external PRs aren’t accepted. Internal changes only.
@@ -38,10 +66,7 @@
 
 ## Assistant/Agent Docs
 - `CLAUDE.md` — Detailed guide for Claude Code: build commands, architecture, testing patterns.
-- `.cursor/` — Cursor IDE rules in `rules/*.mdc` and MCP config in `mcp.json` (Task Master server). These guide agent behavior; no runtime effect.
-- `.windsurfrules` — Windsurf agent rules for task-driven dev workflow (Task Master CLI usage).
-- `.roo/` and `.roomodes` — Roo agent rules and mode definitions (boomerang/architect/debug/test). Use for delegation and task orchestration.
-- `.taskmasterconfig` — Task Master model and defaults. Pairs with rules above for planning/expansion.
+- `.cursor/` — Cursor IDE rules in `rules/*.mdc` and MCP config in `mcp.json`. These guide agent behavior; no runtime effect.
 - Precedence: follow this `AGENTS.md` and build scripts first; treat the agent-specific files as complementary guidance.
 
 ## Responding to Code Reviews
