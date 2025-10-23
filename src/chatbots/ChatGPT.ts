@@ -205,7 +205,7 @@ class ChatGPTChatbot extends AbstractChatbot {
     return null;
   }
 
-  protected createAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse {
+  protected createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse {
     const container = (element.closest('[data-message-author-role="assistant"]') ||
       element.closest('article[data-testid^="conversation-turn-"]') ||
       element.closest('article[data-testid^="conversation-turn"]') ||
@@ -214,7 +214,7 @@ class ChatGPTChatbot extends AbstractChatbot {
       const nodes = Array.from(document.querySelectorAll('[data-saypi-shielded]')) as HTMLElement[];
       nodes.forEach(n => { try { n.removeAttribute('data-saypi-shielded'); } catch {} });
     } catch {}
-    return new ChatGPTResponse(container, includeInitialText);
+    return new ChatGPTResponse(container, includeInitialText, isStreaming);
   }
 
   getUserMessage(element: HTMLElement): UserMessage {

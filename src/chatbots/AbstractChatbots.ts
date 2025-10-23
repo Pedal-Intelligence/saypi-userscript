@@ -48,17 +48,17 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
     
     abstract simulateFormSubmit(): boolean;
-    
-    protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
 
-    getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse {
+    protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse;
+
+    getAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse {
       if (this.assistantResponseCache.has(element)) {
         // TODO: Consider if includeInitialText should affect a cached instance.
         // For now, returning cached instance directly as per user agreement.
         // console.debug(`Cache hit for element (xpathHash: ${this.simpleHash(this.getElementXPath(element))}, utteranceId: ${element.dataset.utteranceId || "N/A"})`);
         return this.assistantResponseCache.get(element)!;
       }
-      const newResponse = this.createAssistantResponse(element, includeInitialText);
+      const newResponse = this.createAssistantResponse(element, includeInitialText, isStreaming);
       this.assistantResponseCache.set(element, newResponse);
       // console.debug(`Cache miss for element (xpathHash: ${this.simpleHash(this.getElementXPath(element))}, utteranceId: ${element.dataset.utteranceId || "N/A"})`);
       return newResponse;

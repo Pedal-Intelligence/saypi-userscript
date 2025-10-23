@@ -130,7 +130,7 @@ class PiAIChatbot extends AbstractChatbot {
     return super.getAssistantResponse(element);
   }
 
-  protected createAssistantResponse(element: HTMLElement): AssistantResponse {
+  protected createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse {
     return new PiResponse(element);
   }
 

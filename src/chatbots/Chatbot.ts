@@ -34,7 +34,8 @@ export interface Chatbot {
   getPrompt(element: HTMLElement): UserPrompt;
   getAssistantResponse(
     element: HTMLElement,
-    includeInitialText?: boolean
+    includeInitialText?: boolean,
+    isStreaming?: boolean
   ): AssistantResponse;
   getUserMessage(element: HTMLElement): UserMessage; // Get a user message from an element
   getName(): string; // the display name of the chatbot, e.g. "Pi", "Claude"

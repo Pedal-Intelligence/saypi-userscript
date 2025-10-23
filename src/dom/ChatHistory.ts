@@ -522,7 +522,7 @@ class ChatHistoryNewMessageObserver
   public decorateAssistantResponse(
     messageElement: HTMLElement
   ): AssistantResponse {
-    const message = this.chatbot.getAssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
+    const message = this.chatbot.getAssistantResponse(messageElement, false, true); // streaming assistant messages should not include initial text, and are marked as new/streaming
     return message;
   }
 

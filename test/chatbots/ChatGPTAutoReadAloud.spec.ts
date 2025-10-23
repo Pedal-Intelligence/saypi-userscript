@@ -66,7 +66,7 @@ describe('ChatGPT auto Read Aloud', () => {
     // Use chatbot API to create and decorate the assistant response, which
     // will internally attach ChatGPT's message controls and observers
     const chatbot = new ChatGPTChatbot();
-    chatbot.getAssistantResponse(msg as HTMLElement, true);
+    chatbot.getAssistantResponse(msg as HTMLElement, true, true); // isStreaming=true for new messages
 
     // Append native button after observers are attached
     const actionBar = document.createElement('div');
@@ -95,9 +95,9 @@ describe('ChatGPT auto Read Aloud', () => {
     oldMsg.appendChild(oldContent);
     list.appendChild(oldMsg);
 
-    // Decorate old message
+    // Decorate old message (not streaming)
     const chatbot = new ChatGPTChatbot();
-    chatbot.getAssistantResponse(oldMsg as HTMLElement, true);
+    chatbot.getAssistantResponse(oldMsg as HTMLElement, true, false);
 
     // Append native button to old message AFTER decoration
     const oldActionBar = document.createElement('div');
@@ -115,8 +115,8 @@ describe('ChatGPT auto Read Aloud', () => {
     newMsg.appendChild(newContent);
     list.appendChild(newMsg);
 
-    // Decorate new message
-    chatbot.getAssistantResponse(newMsg as HTMLElement, true);
+    // Decorate new message (streaming)
+    chatbot.getAssistantResponse(newMsg as HTMLElement, true, true);
 
     // Append native button to new message AFTER decoration
     const newActionBar = document.createElement('div');
@@ -147,7 +147,7 @@ describe('ChatGPT auto Read Aloud', () => {
     list.appendChild(msg);
 
     const chatbot = new ChatGPTChatbot();
-    chatbot.getAssistantResponse(msg as HTMLElement, true);
+    chatbot.getAssistantResponse(msg as HTMLElement, true, true); // isStreaming=true
 
     const actionBar = document.createElement('div');
     msg.appendChild(actionBar);
@@ -160,6 +160,37 @@ describe('ChatGPT auto Read Aloud', () => {
     await new Promise((r) => setTimeout(r, 10));
 
     expect(clickSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('does NOT auto-click for old/completed messages without isStreaming flag', async () => {
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    // Create message WITHOUT isStreaming flag (simulates old message on page load)
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true, false); // isStreaming=false
+
+    // Append native button after observers are attached
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const btn = document.createElement('button');
+    btn.setAttribute('data-testid', 'voice-play-turn-action-button');
+    const clickSpy = vi.spyOn(btn, 'click');
+    actionBar.appendChild(btn);
+
+    // Allow mutation observer microtask to run
+    await new Promise((r) => setTimeout(r, 10));
+
+    // Should NOT auto-click for old messages
+    expect(clickSpy).toHaveBeenCalledTimes(0);
   });
 
   it('opens the ellipsis menu and clicks Read Aloud (non‑English UI)', async () => {
@@ -175,7 +206,7 @@ describe('ChatGPT auto Read Aloud', () => {
     list.appendChild(msg);
 
     const chatbot = new ChatGPTChatbot();
-    chatbot.getAssistantResponse(msg as HTMLElement, true);
+    chatbot.getAssistantResponse(msg as HTMLElement, true, true); // isStreaming=true
 
     // Action bar with only an ellipsis trigger (menu), labeled in French
     const actionBar = document.createElement('div');
@@ -228,7 +259,7 @@ describe('ChatGPT auto Read Aloud', () => {
     list.appendChild(msg);
 
     const chatbot = new ChatGPTChatbot();
-    chatbot.getAssistantResponse(msg as HTMLElement, true);
+    chatbot.getAssistantResponse(msg as HTMLElement, true, true); // isStreaming=true
 
     const actionBar = document.createElement('div');
     msg.appendChild(actionBar);
@@ -286,7 +317,7 @@ describe('ChatGPT auto Read Aloud', () => {
     oldMsg.setAttribute('data-turn', 'assistant');
     oldMsg.appendChild(Object.assign(document.createElement('div'), { className: 'markdown' }));
     list.appendChild(oldMsg);
-    chatbot.getAssistantResponse(oldMsg as HTMLElement, true);
+    chatbot.getAssistantResponse(oldMsg as HTMLElement, true, true); // isStreaming=true
 
     const oldBar = document.createElement('div');
     oldMsg.appendChild(oldBar);
@@ -320,7 +351,7 @@ describe('ChatGPT auto Read Aloud', () => {
     newMsg.setAttribute('data-turn', 'assistant');
     newMsg.appendChild(Object.assign(document.createElement('div'), { className: 'markdown' }));
     list.appendChild(newMsg);
-    chatbot.getAssistantResponse(newMsg as HTMLElement, true);
+    chatbot.getAssistantResponse(newMsg as HTMLElement, true, true); // isStreaming=true
 
     const newBar = document.createElement('div');
     newMsg.appendChild(newBar);
