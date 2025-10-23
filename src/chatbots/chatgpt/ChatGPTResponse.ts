@@ -6,8 +6,12 @@ import { ElementTextStream, InputStreamOptions, AddedText } from "../../tts/Inpu
 import { TTSControlsModule } from "../../tts/TTSControlsModule";
 
 export class ChatGPTResponse extends AssistantResponse {
-  constructor(element: HTMLElement, includeInitialText?: boolean) {
+  constructor(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean) {
     super(element, includeInitialText);
+    // Mark streaming messages as unread for auto-read aloud functionality
+    if (isStreaming) {
+      element.setAttribute('data-saypi-unread', 'true');
+    }
   }
 
   protected useMaintenancePill(): boolean { return false; }
@@ -195,11 +199,19 @@ export class ChatGPTMessageControls extends MessageControls {
     if (!prefs.getCachedAutoReadAloudChatGPT()) return;
     if (!this.isCallActive()) return;
     if (this.skipReadAloud()) { logger.debug('[ChatGPT] Skipping read aloud for maintenance message'); return; }
+    // Only auto-click for new/streaming messages marked with data-saypi-unread
+    if (this.message.element.getAttribute('data-saypi-unread') !== 'true') {
+      const messageId = this.message.element.getAttribute('data-testid');
+      logger.debug('[ChatGPT] Skipping auto-click for already-read message', messageId);
+      return;
+    }
 
     const direct = this.getReadAloudButton();
     if (direct && !direct.disabled) {
       if ((direct as any)._saypiClicked) return;
       (direct as any)._saypiClicked = true;
+      // Clear the unread flag since we're now reading it
+      try { this.message.element.removeAttribute('data-saypi-unread'); } catch {}
       try { direct.click(); } catch {}
       return;
     }
@@ -243,6 +255,8 @@ export class ChatGPTMessageControls extends MessageControls {
       if (!enabled) return;
       if (!this.isCallActive()) return;
       if (this.skipReadAloud()) return;
+      // Only auto-click for new/streaming messages marked with data-saypi-unread
+      if (this.message.element.getAttribute('data-saypi-unread') !== 'true') return;
       const btn = this.getReadAloudButton();
       if ((btn && (btn as any)._saypiClicked)) return;
       // button does need to be clicked, so open more actions and click read aloud
@@ -252,6 +266,8 @@ export class ChatGPTMessageControls extends MessageControls {
       }
       (btn as any)._saypiClicked = true;
       try {
+        // Clear the unread flag since we're now reading it
+        try { this.message.element.removeAttribute('data-saypi-unread'); } catch {}
         setTimeout(() => {
           if (this.isMaintenanceMessage()) {
             logger.debug('[ChatGPT] Skipping read aloud for maintenance message (late check)');
@@ -283,6 +299,12 @@ export class ChatGPTMessageControls extends MessageControls {
     if (!prefs.getCachedAutoReadAloudChatGPT()) return;
     if (!this.isCallActive()) return;
     if (this.skipReadAloud()) { logger.debug('[ChatGPT] Skipping read aloud for maintenance message (late check)'); return; }
+    // Only auto-click for new/streaming messages marked with data-saypi-unread
+    if (this.message.element.getAttribute('data-saypi-unread') !== 'true') {
+      const messageId = this.message.element.getAttribute('data-testid'); 
+      logger.debug('[ChatGPT] Skipping auto-click for already-read message (late check)', messageId);
+      return;
+    }
 
     const triggers = this.getActionMenuTriggers();
     if (!triggers.length) return;
@@ -399,6 +421,8 @@ export class ChatGPTMessageControls extends MessageControls {
     try { readAloudButton.setAttribute('data-saypi-read-aloud-clicked', 'true'); } catch {}
     try { (readAloudButton as any)._saypiClicked = true; } catch {}
     try { this.message.element.setAttribute('data-saypi-read-aloud-clicked', 'true'); } catch {}
+    // Clear the unread flag since we're now reading it
+    try { this.message.element.removeAttribute('data-saypi-unread'); } catch {}
     try { readAloudButton.click?.(); } catch {}
   }
 
