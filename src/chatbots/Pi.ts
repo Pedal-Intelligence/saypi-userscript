@@ -196,28 +196,37 @@ class PiAIChatbot extends AbstractChatbot {
 
 
 class PiPrompt extends AbstractUserPrompt {
-  private textArea: HTMLTextAreaElement = this.element as HTMLTextAreaElement;
+  // Support both textarea (existing chats) and input (new chats)
+  private inputElement: HTMLTextAreaElement | HTMLInputElement = this.element as HTMLTextAreaElement | HTMLInputElement;
   readonly PROMPT_CHARACTER_LIMIT = 4000;
 
   setText(text: string): void {
-    this.setNativeValue(this.textArea, text);
-    this.scrollToBottom(this.textArea);
+    this.setNativeValue(this.inputElement, text);
+    if (this.isTextArea(this.inputElement)) {
+      this.scrollToBottom(this.inputElement);
+    }
   }
   getText(): string {
-    return this.textArea.value;
+    return this.inputElement.value;
   }
   setPlaceholderText(text: string): void {
-    this.textArea.placeholder = text;
-    this.scrollToBottom(this.textArea);
+    this.inputElement.placeholder = text;
+    if (this.isTextArea(this.inputElement)) {
+      this.scrollToBottom(this.inputElement);
+    }
   }
   getPlaceholderText(): string {
-    return this.textArea.placeholder;
+    return this.inputElement.placeholder;
   }
   getDefaultPlaceholderText(): string {
-    return this.textArea.placeholder;
+    return this.inputElement.placeholder;
   }
 
-  setNativeValue(element: HTMLTextAreaElement, value: string) {
+  private isTextArea(element: HTMLTextAreaElement | HTMLInputElement): element is HTMLTextAreaElement {
+    return element.tagName.toLowerCase() === 'textarea';
+  }
+
+  setNativeValue(element: HTMLTextAreaElement | HTMLInputElement, value: string) {
     let lastValue = element.value;
     element.value = value;
     let event = new InputEvent("input", { bubbles: true });

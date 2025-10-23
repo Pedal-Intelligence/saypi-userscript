@@ -87,4 +87,12 @@ html body.pi {
       max-width: 350px;  /* Mobile width matching prompt composer */
     }
   }
+
+  /* Call button positioning for new chat input element */
+  /* On new chat pages, Pi uses an input element with inline flex styling */
+  /* The call button needs consistent positioning regardless of input vs textarea */
+  #saypi-callButton {
+    /* Ensure button stays properly positioned next to both input and textarea */
+    align-self: center;
+  }
 }
