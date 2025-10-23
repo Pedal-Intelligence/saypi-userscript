@@ -301,7 +301,7 @@ export class ChatGPTMessageControls extends MessageControls {
     if (this.skipReadAloud()) { logger.debug('[ChatGPT] Skipping read aloud for maintenance message (late check)'); return; }
     // Only auto-click for new/streaming messages marked with data-saypi-unread
     if (this.message.element.getAttribute('data-saypi-unread') !== 'true') {
-      const messageId = this.message.element.getAttribute('data-testid'); 
+      const messageId = this.message.element.getAttribute('data-testid');
       logger.debug('[ChatGPT] Skipping auto-click for already-read message (late check)', messageId);
       return;
     }
