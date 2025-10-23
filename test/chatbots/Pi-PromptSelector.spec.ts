@@ -131,4 +131,53 @@ describe("Pi Prompt Selector", () => {
       expect(foundElement).toBe(input);
     });
   });
+
+  describe("getPromptControlsContainer", () => {
+    it("should return parent element for textarea (existing chat structure)", () => {
+      // Create DOM structure matching textarea prompt
+      const controlsContainer = document.createElement("div");
+      controlsContainer.id = "saypi-prompt-controls-container";
+
+      const promptContainer = document.createElement("div");
+      promptContainer.className = "saypi-prompt-container";
+
+      const textarea = document.createElement("textarea");
+      textarea.id = "saypi-prompt";
+      textarea.setAttribute("enterkeyhint", "enter");
+
+      promptContainer.appendChild(textarea);
+      controlsContainer.appendChild(promptContainer);
+      document.body.appendChild(controlsContainer);
+
+      // Get controls container - should return parent for textarea
+      const result = chatbot.getPromptControlsContainer(promptContainer);
+
+      expect(result).toBe(controlsContainer);
+      expect(result.id).toBe("saypi-prompt-controls-container");
+    });
+
+    it("should return same element for input (new chat structure)", () => {
+      // Create DOM structure matching input prompt
+      const controlsContainer = document.createElement("div");
+      controlsContainer.id = "saypi-prompt-controls-container";
+
+      const promptContainer = document.createElement("div");
+      promptContainer.className = "saypi-prompt-container";
+
+      const input = document.createElement("input");
+      input.id = "saypi-prompt";
+      input.setAttribute("type", "text");
+      input.setAttribute("placeholder", "What's on your mind?");
+
+      promptContainer.appendChild(input);
+      controlsContainer.appendChild(promptContainer);
+      document.body.appendChild(controlsContainer);
+
+      // Get controls container - should return promptContainer itself for input
+      const result = chatbot.getPromptControlsContainer(promptContainer);
+
+      expect(result).toBe(promptContainer);
+      expect(result.className).toBe("saypi-prompt-container");
+    });
+  });
 });

@@ -40,6 +40,15 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
+    // Pi.ai has different DOM structures for input vs textarea prompts:
+    // - Textarea: buttons are siblings to .saypi-prompt-container (return parent)
+    // - Input: buttons are children of .saypi-prompt-container (return container itself)
+    const promptElement = promptContainer.querySelector('#saypi-prompt');
+    if (promptElement && promptElement.tagName.toLowerCase() === 'input') {
+      // Input element: buttons should be inside the prompt container
+      return promptContainer;
+    }
+    // Textarea element: buttons should be siblings to prompt container
     return promptContainer.parentElement as HTMLElement;
   }
 
