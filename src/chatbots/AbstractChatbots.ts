@@ -48,7 +48,7 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
     
     abstract simulateFormSubmit(): boolean;
-    abstract getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null;
+    abstract getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null;
 
     supportsFocusMode(): boolean {
       return false;

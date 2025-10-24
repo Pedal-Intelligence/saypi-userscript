@@ -83,9 +83,9 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getSidebarSelector(): string {
-    // Prefer the slideover container that wraps the chat history navigation
-    // Fallback to the nav element itself if the container is unavailable
-    return '#stage-slideover-sidebar, nav[aria-label="Chat history"]';
+    // Prefer the direct descendant of the slideover container,
+    // avoiding the slideover container itself so we don't clobber its id attribute
+    return '#stage-slideover-sidebar > div';
   }
 
   getChatPath(): string {
@@ -184,69 +184,13 @@ class ChatGPTChatbot extends AbstractChatbot {
     return false;
   }
 
-  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
-    const sidebar = sidePanel.matches('nav[aria-label="Chat history"]')
-      ? sidePanel
-      : (sidePanel.querySelector('nav[aria-label="Chat history"]') as HTMLElement | null);
-
-    if (!sidebar) {
-      console.warn('[ChatGPT] sidebar: Could not locate navigation root');
-      return null;
-    }
-
-    const header = sidebar.querySelector('#sidebar-header') as HTMLElement | null;
-    if (!header) {
-      console.warn('[ChatGPT] sidebar: Could not find header element');
-      return null;
-    }
-
-    // Locate the primary menu container that holds the navigation buttons
-    const newChatButton = sidebar.querySelector(
-      '[data-testid="create-new-chat-button"], [aria-label="New chat"]'
-    ) as HTMLElement | null;
-
-    let menuContainer: HTMLElement | null = null;
-
-    if (newChatButton) {
-      const wrapper = newChatButton.closest('[data-state]') as HTMLElement | null;
-      if (wrapper && wrapper.parentElement) {
-        menuContainer = wrapper.parentElement as HTMLElement;
-      } else if (newChatButton.parentElement) {
-        menuContainer = newChatButton.parentElement as HTMLElement;
-      }
-    }
-
-    if (!menuContainer) {
-      // Fallback: find the first parent that contains sidebar menu items
-      const wrappers = Array.from(
-        sidebar.querySelectorAll('[data-state]')
-      );
-      menuContainer =
-        wrappers
-          .map((wrapper) => wrapper.parentElement as HTMLElement | null)
-          .find((parent): parent is HTMLElement => !!parent) ?? null;
-    }
+  getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
+    const menuContainer = sidebar.querySelector('aside');
 
     if (!menuContainer) {
       console.warn('[ChatGPT] sidebar: Could not find menu container');
       return null;
-    }
-
-    if (!header.contains(menuContainer)) {
-      const headerWrapper = header.querySelector('[data-state]');
-      if (
-        headerWrapper instanceof HTMLElement &&
-        headerWrapper.parentElement
-      ) {
-        menuContainer = headerWrapper.parentElement as HTMLElement;
-      } else {
-        console.debug('[ChatGPT] sidebar: Menu container located outside header scope');
-      }
-    }
-
-    sidePanel.id = "saypi-sidebar";
-    sidePanel.classList.add("saypi-sidebar", "saypi-control-panel");
-    sidePanel.classList.add("saypi-side-panel");
+    } 
 
     return {
       buttonContainer: menuContainer,

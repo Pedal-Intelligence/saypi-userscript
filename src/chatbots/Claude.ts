@@ -198,30 +198,24 @@ class ClaudeChatbot extends AbstractChatbot {
 
   simulateFormSubmit(): boolean {
     // Claude.ai uses the standard SayPi submit button, so fallback to keyboard events
-    const textarea = document.getElementById("saypi-prompt");
-    if (textarea) {
+    const promptComposer = document.getElementById("saypi-prompt");
+    if (promptComposer) {
       const enterEvent = new KeyboardEvent("keydown", {
         bubbles: true,
         key: "Enter",
         keyCode: 13,
         which: 13,
       });
-      textarea.dispatchEvent(enterEvent);
+      promptComposer.dispatchEvent(enterEvent);
       console.debug("Dispatched Enter keydown event to Claude at", Date.now());
       return true;
     }
 
-    console.error("Cannot simulate submit for Claude: No textarea found.");
+    console.error("Cannot submit prompt for Claude: No prompt composer found.");
     return false;
   }
 
-  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
-    const sidebar = sidePanel.matches('nav') ? sidePanel : (sidePanel.querySelector('nav[aria-label]') as HTMLElement | null);
-    if (!sidebar) {
-      console.warn('[Claude] sidebar: Could not locate navigation root');
-      return null;
-    }
-
+  getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
     const actionSelectors = [
       '[data-testid="new-chat-button"]',
       '[data-testid="navigation-link-new-chat"]',
@@ -269,10 +263,6 @@ class ClaudeChatbot extends AbstractChatbot {
       console.warn('[Claude] sidebar: Could not find header element');
       return null;
     }
-
-    sidePanel.id = "saypi-sidebar";
-    sidePanel.classList.add("saypi-sidebar", "saypi-control-panel");
-    sidePanel.classList.add("saypi-side-panel");
 
     return {
       buttonContainer: menuContainer,
