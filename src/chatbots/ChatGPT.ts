@@ -82,12 +82,10 @@ class ChatGPTChatbot extends AbstractChatbot {
     return '';
   }
 
-  getSidePanelSelector(): string {
-    // TODO(GH-249): Implement ChatGPT sidebar decoration (currently not supported)
-    // The nav[aria-label="Chat history"] selector exists but decoration is disabled
-    // Related: CHATGPT_FEATURES.enableControlPanel is false
-    // Return empty selector to skip decoration without blocking other features
-    return '';
+  getSidebarSelector(): string {
+    // Prefer the direct descendant of the slideover container,
+    // avoiding the slideover container itself so we don't clobber its id attribute
+    return '#stage-slideover-sidebar > div';
   }
 
   getChatPath(): string {
@@ -186,13 +184,85 @@ class ChatGPTChatbot extends AbstractChatbot {
     return false;
   }
 
-  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
-    // TODO(GH-249): Implement ChatGPT sidebar decoration
-    // See doc/issues/sidebar-integration-standardization.md for detailed implementation guide
-    // Pattern: Follow Pi.ts lines 208-239 for reference implementation
-    // For now, return null to indicate decoration is not supported
-    console.debug('ChatGPT sidebar decoration not yet implemented');
-    return null;
+  getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
+    const menuContainer = sidebar.querySelector('aside');
+
+    if (!menuContainer) {
+      console.warn('[ChatGPT] sidebar: Could not find menu container');
+      return null;
+    }
+
+    return {
+      buttonContainer: menuContainer,
+      buttonStyle: 'menu',
+      insertPosition: 2, // After New chat + Search
+      createButton: this.createChatGPTMenuButton.bind(this),
+    };
+  }
+
+  /**
+   * Creates a menu button matching ChatGPT's native sidebar button structure
+   */
+  private createChatGPTMenuButton(options: { label: string; icon: string | SVGElement; onClick: () => void }): HTMLElement {
+    const { label, icon, onClick } = options;
+
+    // Create the main button container matching ChatGPT's native structure
+    // Uses ChatGPT's __menu-item and hoverable classes for native integration
+    const button = document.createElement('div');
+    button.className = 'settings-button group __menu-item hoverable gap-1.5';
+    button.setAttribute('role', 'button');
+    button.setAttribute('tabindex', '0');
+    button.setAttribute('aria-label', label);
+
+    // Add click and keyboard handlers
+    button.addEventListener('click', onClick);
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onClick();
+      }
+    });
+
+    // Create icon container with group-disabled states for accessibility
+    const iconContainer = document.createElement('div');
+    iconContainer.className = 'flex items-center justify-center group-disabled:opacity-50 group-data-disabled:opacity-50 icon';
+
+    // Add icon
+    let svgElement: SVGElement | null = null;
+    if (typeof icon === 'string') {
+      // Parse SVG string
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(icon, 'image/svg+xml');
+      svgElement = doc.documentElement as unknown as SVGElement;
+    } else {
+      svgElement = icon.cloneNode(true) as SVGElement;
+    }
+
+    if (svgElement) {
+      svgElement.setAttribute('width', '20');
+      svgElement.setAttribute('height', '20');
+      svgElement.setAttribute('aria-hidden', 'true');
+      svgElement.classList.add('icon');
+      svgElement.style.width = '20px';
+      svgElement.style.height = '20px';
+      iconContainer.appendChild(svgElement);
+    }
+
+    // Create label container matching ChatGPT's structure
+    const labelContainer = document.createElement('div');
+    labelContainer.className = 'flex min-w-0 grow items-center gap-2.5 group-data-no-contents-gap:gap-0';
+
+    const labelSpan = document.createElement('div');
+    labelSpan.className = 'truncate';
+    labelSpan.textContent = label;
+
+    labelContainer.appendChild(labelSpan);
+
+    // Assemble button
+    button.appendChild(iconContainer);
+    button.appendChild(labelContainer);
+
+    return button;
   }
 
   private findChatGPTSubmitButton(): HTMLElement | null {
@@ -290,4 +360,3 @@ class ChatGPTUserMessage extends UserMessage {
 }
 
 export default ChatGPTChatbot;
-

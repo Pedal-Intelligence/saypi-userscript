@@ -29,7 +29,7 @@ See GH-243's description for detailed DOM analysis of Pi's sidebar structure.
 ## Current Implementation Status
 
 ### Pi.ai (✅ Implemented in PR #251)
-- ✅ `getSidePanelSelector()` returns sidebar root selector
+- ✅ `getSidebarSelector()` returns sidebar root selector
 - ✅ `getSidebarConfig()` returns `SidebarConfig` with:
   - `buttonContainer`: header menu element
   - `buttonStyle: 'menu'` (compact menu buttons)
@@ -39,7 +39,7 @@ See GH-243's description for detailed DOM analysis of Pi's sidebar structure.
   - `createSettingsMenuButton()`
 
 ### Claude.ai (🚧 Partially Implemented)
-- ❌ `getSidePanelSelector()` returns `""` (disabled, see GH-250)
+- ❌ `getSidebarSelector()` returns `""` (disabled, see GH-250)
 - ❌ `getSidebarConfig()` returns `null` (not implemented)
 - ⚠️ **Custom workaround:** `insertSettingsMenuItem()` adds button to **tools menu** (not sidebar)
   - Uses `IconModule.bubbleBw` icon
@@ -49,7 +49,7 @@ See GH-243's description for detailed DOM analysis of Pi's sidebar structure.
 **Note:** Claude's custom implementation demonstrates the desired visual style (bubble icon + "Voice settings" label) but in the wrong location (tools menu vs sidebar).
 
 ### ChatGPT (❌ Not Implemented)
-- ❌ `getSidePanelSelector()` returns `""` (disabled, see GH-249)
+- ❌ `getSidebarSelector()` returns `""` (disabled, see GH-249)
 - ❌ `getSidebarConfig()` returns `null` (not implemented)
 - ❌ `CHATGPT_FEATURES.enableControlPanel = false`
 
@@ -62,14 +62,13 @@ When implementing GH-249 (ChatGPT) and GH-250 (Claude), apply these standards:
 **Rationale:** "Sidebar" is more accurate and matches industry terminology. "Side-panel" is a legacy artifact.
 
 **Scope:**
-- Method names: `getSidePanelSelector()` → keep method name for backward compatibility, but document as deprecated
+- Method names: use `getSidebarSelector()` for all chatbots
 - Variable names: `sidePanel` → `sidebar` in new code
 - CSS classes/IDs: `saypi-side-panel` → `saypi-sidebar` (add both for transition period)
 - Comments and documentation: Update all references
 
 **Migration approach:**
-- Keep `getSidePanelSelector()` method name (interface requirement)
-- Add `getSidebarSelector()` as alias (mark old method deprecated in comments)
+- Rename any legacy `getSidePanelSelector()` implementations and call sites to `getSidebarSelector()`
 - Update internal implementation to use "sidebar" terminology
 
 ### 2. Button Placement: Add to Sidebar Header Menu
@@ -228,7 +227,7 @@ if (!element) {
 
 ### For GH-250 (Claude Sidebar Integration)
 
-- [ ] Update `getSidePanelSelector()` to return Claude's sidebar root selector
+- [ ] Update `getSidebarSelector()` to return Claude's sidebar root selector
   - Research Claude's sidebar DOM structure
   - Find stable selector (similar to Pi's approach)
 - [ ] Implement `getSidebarConfig()` following Pi's pattern
@@ -253,7 +252,7 @@ if (!element) {
 - [ ] Research ChatGPT's sidebar DOM structure
   - Note: `nav[aria-label="Chat history"]` exists but may not be the sidebar root
   - Document findings similar to GH-243 for Pi
-- [ ] Update `getSidePanelSelector()` to return ChatGPT's sidebar root selector
+- [ ] Update `getSidebarSelector()` to return ChatGPT's sidebar root selector
 - [ ] Implement `getSidebarConfig()` following Pi's pattern
   - Find header element in sidebar
   - Find menu container in header
@@ -292,7 +291,7 @@ if (!element) {
   - Default implementation in `AbstractChatbot`: return `false`
   - Override in chatbots that support it (e.g., Pi returns `true`)
 - [ ] Add `getSidebarSelector()` as alias
-  - Deprecate `getSidePanelSelector()` in comments
+  - Deprecate `getSidebarSelector()` in comments
   - Update documentation to prefer new name
 
 ### Documentation & Testing
@@ -365,4 +364,3 @@ See attached screenshots at the top of this issue showing ChatGPT's sidebar stru
 - This standardization makes the codebase more maintainable and consistent across chatbots
 - The bubble icon better represents SayPi's voice-centric functionality than a generic settings gear
 - "Voice settings" is more descriptive than generic "Settings" and avoids confusion with host platform settings
-

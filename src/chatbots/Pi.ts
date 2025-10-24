@@ -78,7 +78,7 @@ class PiAIChatbot extends AbstractChatbot {
     return ".flex.items-center.grow";
   }
 
-  getSidePanelSelector(): string {
+  getSidebarSelector(): string {
     // Matches Pi.ai's redesigned sidebar (Oct 2025) - works across all viewport sizes
     // Key classes: z-[999] (stacking), h-screen (full height), border-r (right border)
     // Works for both collapsed (w-0 md:w-16) and expanded (w-[280px]) states
@@ -119,8 +119,8 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getDiscoveryPanelSelector(): string {
-    // note: depends on the side panel having already been identified
-    return "#saypi-side-panel + div";
+    // note: depends on the sidebar having already been identified
+    return "#saypi-sidebar + div, #saypi-side-panel + div";
   }
 
   getAssistantResponseSelector(): string {
@@ -204,16 +204,20 @@ class PiAIChatbot extends AbstractChatbot {
     return false;
   }
 
-  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
+  supportsFocusMode(): boolean {
+    return true;
+  }
+
+  getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
     // Pi.ai's sidebar structure (Oct 2025):
-    // div.sidebar (root, found by getSidePanelSelector)
+    // div.sidebar (root, found by getSidebarSelector)
     //   └── div.header (first child, contains pt-* pb-* classes)
     //       └── div.menu (flex flex-col items-start - contains nav buttons)
     //
     // We need to add our buttons to div.menu, using Pi's menu-style buttons
 
     // Find the header (first child with pt-* pb-* padding classes)
-    const header = sidePanel.querySelector('div[class*="pt-"][class*="pb-"]');
+    const header = sidebar.querySelector('div[class*="pt-"][class*="pb-"]');
     if (!header) {
       console.warn('Pi sidebar: Could not find header element');
       return null;
@@ -227,8 +231,9 @@ class PiAIChatbot extends AbstractChatbot {
     }
 
     // Mark the sidebar for styling
-    sidePanel.id = "saypi-side-panel";
-    sidePanel.classList.add("saypi-control-panel");
+    sidebar.id = "saypi-sidebar";
+    sidebar.classList.add("saypi-sidebar", "saypi-control-panel");
+    sidebar.classList.add("saypi-side-panel"); // legacy class for transition
 
     return {
       buttonContainer: menu as HTMLElement,

@@ -60,7 +60,7 @@ describe("Pi Sidebar Selector (Issue #243)", () => {
       `;
 
       const dom = new JSDOM(collapsedSidebarHTML);
-      const newSelector = chatbot.getSidePanelSelector();
+      const newSelector = chatbot.getSidebarSelector();
       const sidebar = dom.window.document.querySelector(newSelector);
       expect(sidebar).not.toBeNull(); // New selector should match
       expect(sidebar?.classList.contains("z-[999]")).toBe(true);
@@ -81,7 +81,7 @@ describe("Pi Sidebar Selector (Issue #243)", () => {
       `;
 
       const dom = new JSDOM(expandedSidebarHTML);
-      const newSelector = chatbot.getSidePanelSelector();
+      const newSelector = chatbot.getSidebarSelector();
       const sidebar = dom.window.document.querySelector(newSelector);
       expect(sidebar).not.toBeNull(); // New selector should match
       expect(sidebar?.classList.contains("z-[999]")).toBe(true);
@@ -107,7 +107,7 @@ describe("Pi Sidebar Selector (Issue #243)", () => {
         </div>
       `;
 
-      const newSelector = chatbot.getSidePanelSelector();
+      const newSelector = chatbot.getSidebarSelector();
 
       const mobileDom = new JSDOM(mobileHTML);
       const mobileSidebar = mobileDom.window.document.querySelector(newSelector);
@@ -139,7 +139,7 @@ describe("Pi Sidebar Selector (Issue #243)", () => {
       `;
 
       const dom = new JSDOM(expandedSidebarHTML, { url: 'https://pi.ai' });
-      const newSelector = chatbot.getSidePanelSelector();
+      const newSelector = chatbot.getSidebarSelector();
       const sidebar = dom.window.document.querySelector(newSelector) as HTMLElement;
       expect(sidebar).not.toBeNull();
 
@@ -157,7 +157,8 @@ describe("Pi Sidebar Selector (Issue #243)", () => {
       expect(config?.buttonContainer.classList.contains('items-start')).toBe(true);
 
       // Verify the sidebar itself got the ID and class
-      expect(sidebar.id).toBe('saypi-side-panel');
+      expect(sidebar.id).toBe('saypi-sidebar');
+      expect(sidebar.classList.contains('saypi-side-panel')).toBe(true);
       expect(sidebar.classList.contains('saypi-control-panel')).toBe(true);
     });
 
@@ -171,7 +172,7 @@ describe("Pi Sidebar Selector (Issue #243)", () => {
       `;
 
       const dom = new JSDOM(malformedSidebarHTML);
-      const newSelector = chatbot.getSidePanelSelector();
+      const newSelector = chatbot.getSidebarSelector();
       const sidebar = dom.window.document.querySelector(newSelector) as HTMLElement;
       expect(sidebar).not.toBeNull();
 

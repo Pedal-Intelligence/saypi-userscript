@@ -6,9 +6,6 @@ import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
-import { openSettings } from "../popup/popupopener";
-import getMessage from "../i18n";
-import { IconModule } from "../icons/IconModule";
 import { ClaudeResponse } from "./claude/ClaudeResponse";
 
 class ClaudeChatbot extends AbstractChatbot {
@@ -100,11 +97,12 @@ class ClaudeChatbot extends AbstractChatbot {
     return ".flex.items-center.grow";
   }
 
-  getSidePanelSelector(): string {
-    // TODO(GH-250): Implement Claude.ai sidebar decoration (currently not supported)
-    // This selector is a legacy artifact from Pi.ts and doesn't match Claude's DOM
-    // Return empty selector to skip decoration without blocking other features
-    return "";
+  getSidebarSelector(): string {
+    // Match Claude's primary navigation sidebar. Prefer the nav element, but allow for non-English labels.
+    return [
+      'nav[aria-label="Sidebar"]',
+      '.z-sidebar nav[aria-label]'
+    ].join(", ");
   }
 
   getChatPath(): string {
@@ -151,8 +149,8 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getDiscoveryPanelSelector(): string {
-    // note: depends on the side panel having already been identified
-    return "#saypi-side-panel + div";
+    // note: depends on the sidebar having already been identified
+    return "#saypi-sidebar + div, #saypi-side-panel + div";
   }
 
   getAssistantResponseSelector(): string {
@@ -200,30 +198,75 @@ class ClaudeChatbot extends AbstractChatbot {
 
   simulateFormSubmit(): boolean {
     // Claude.ai uses the standard SayPi submit button, so fallback to keyboard events
-    const textarea = document.getElementById("saypi-prompt");
-    if (textarea) {
+    const promptComposer = document.getElementById("saypi-prompt");
+    if (promptComposer) {
       const enterEvent = new KeyboardEvent("keydown", {
         bubbles: true,
         key: "Enter",
         keyCode: 13,
         which: 13,
       });
-      textarea.dispatchEvent(enterEvent);
+      promptComposer.dispatchEvent(enterEvent);
       console.debug("Dispatched Enter keydown event to Claude at", Date.now());
       return true;
     }
 
-    console.error("Cannot simulate submit for Claude: No textarea found.");
+    console.error("Cannot submit prompt for Claude: No prompt composer found.");
     return false;
   }
 
-  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
-    // TODO(GH-250): Implement Claude.ai sidebar decoration
-    // See doc/issues/sidebar-integration-standardization.md for detailed implementation guide
-    // Pattern: Follow Pi.ts lines 208-239 for reference implementation
-    // For now, return null to indicate decoration is not supported
-    console.debug('Claude sidebar decoration not yet implemented');
-    return null;
+  getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
+    const actionSelectors = [
+      '[data-testid="new-chat-button"]',
+      '[data-testid="navigation-link-new-chat"]',
+      '[data-testid="create-new-chat-button"]',
+      '[aria-label="New chat"]',
+      'a[href="/new"]',
+      'a[href="/chat/new"]',
+    ];
+
+    const newChatButton = actionSelectors
+      .map((selector) => sidebar.querySelector(selector) as HTMLElement | null)
+      .find((element) => element !== null) as HTMLElement | null;
+
+    const collectCandidateContainers = () => {
+      const candidates: HTMLElement[] = [];
+      if (newChatButton) {
+        let ancestor = newChatButton.parentElement as HTMLElement | null;
+        while (ancestor && ancestor !== sidebar) {
+          candidates.push(ancestor);
+          ancestor = ancestor.parentElement as HTMLElement | null;
+        }
+      }
+      const allDivs = Array.from(sidebar.querySelectorAll('div')).map((div) => div as HTMLElement);
+      return [...candidates, ...allDivs];
+    };
+
+    const menuContainer = collectCandidateContainers().find((candidate) => {
+      const actions = Array.from(candidate.querySelectorAll('a, button, div[role="button"]')).filter((action) => !action.closest('[data-testid="user-profile"]'));
+      return actions.length >= 3;
+    }) || null;
+
+    if (!menuContainer) {
+      console.warn('[Claude] sidebar: Could not find menu container');
+      return null;
+    }
+
+    let header: HTMLElement | null = menuContainer;
+    while (header && header.parentElement && header.parentElement !== sidebar) {
+      header = header.parentElement as HTMLElement;
+    }
+
+    if (!header || header.parentElement !== sidebar) {
+      console.warn('[Claude] sidebar: Could not find header element');
+      return null;
+    }
+
+    return {
+      buttonContainer: menuContainer,
+      buttonStyle: 'menu',
+      insertPosition: 3,
+    };
   }
 }
 
@@ -263,156 +306,6 @@ class ClaudePrompt extends AbstractUserPrompt {
     super(element);
     this.promptElement = element as HTMLDivElement;
     this.initializePlaceholderManager(this.promptElement);
-    this.addSettingsButtonToToolsMenu();
-  }
-
-  /**
-   * Get the selector for the tools menu button in Claude's UI
-   * Centralizing this makes it easier to update if Claude's UI changes
-   */
-  private getToolsMenuButtonSelector(): string {
-    return '[data-testid="input-menu-tools"]';
-  }
-
-  /**
-   * Get the selector for the tools menu dialog in Claude's UI
-   */
-  private getToolsMenuDialogSelector(): string {
-    return '.top-10.block, .bottom-10.block';
-  }
-
-  /**
-   * Add a settings button to Claude's search and tools menu
-   * This adds a shortcut to the SayPi extension settings within Claude's UI
-   */
-  private addSettingsButtonToToolsMenu(): void {
-    // Wait for the DOM to be fully loaded
-    setTimeout(() => {
-      try {
-        // Find the tools menu button within the prompt editor's container
-        const promptContainer = ClaudeChatbot.getPromptContainer(this.promptElement);
-        const toolsButton = promptContainer?.querySelector(this.getToolsMenuButtonSelector());
-        if (!toolsButton) {
-          console.debug("Claude tools menu button not found, settings button not added");
-          return;
-        }
-
-        // Flag to track when the tools button is clicked
-        let toolsButtonClicked = false;
-        let lastToolsButtonClickTime = 0;
-        
-        // Observer to detect when the menu is opened
-        const bodyObserver = new MutationObserver((mutations) => {
-          // Wait a heartbeat before checking if button was clicked
-          // This prevents race conditions between click and mutation events
-          setTimeout(() => {
-            // Only proceed if the tools button was clicked recently (within last 800ms)
-            const currentTime = Date.now();
-            const isRecentClick = (currentTime - lastToolsButtonClickTime) < 800;
-            
-            if (!toolsButtonClicked && !isRecentClick) return;
-            
-            mutations.forEach((mutation) => {
-              if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                // Look for the tools menu that appears when the button is clicked
-                const toolsMenu = promptContainer?.querySelector(this.getToolsMenuDialogSelector());
-                if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
-                  this.insertSettingsMenuItem(toolsMenu);
-                  // Reset the flag after we've added the menu item
-                  toolsButtonClicked = false;
-                }
-              }
-            });
-          }, 10); // Small delay to allow click event to process first
-        });
-
-        // Start observing the body for the menu to appear
-        bodyObserver.observe(document.body, { childList: true, subtree: true });
-
-        // Click handler for the tools button
-        toolsButton.addEventListener('click', () => {
-          // Set the flag when the tools button is clicked
-          toolsButtonClicked = true;
-          lastToolsButtonClickTime = Date.now();
-          
-          // Reset the flag after a timeout in case the menu doesn't appear
-          setTimeout(() => {
-            toolsButtonClicked = false;
-          }, 500);
-        });
-      } catch (error) {
-        console.error("Error adding settings button to Claude tools menu:", error);
-      }
-    }, 1000); // Wait for Claude's UI to initialize
-  }
-
-  /**
-   * Insert the settings menu item into the tools menu
-   * @param toolsMenu The tools menu element
-   */
-  private insertSettingsMenuItem(toolsMenu: Element): void {
-    try {
-      // Find the specific menu items container
-      const menuItemsContainer = toolsMenu.querySelector('.flex.flex-col > div:first-child > div.p-1\\.5 > div.flex.flex-col');
-      if (!menuItemsContainer) {
-        console.debug("Menu items container not found in tools menu");
-        return;
-      }
-
-      // Create the button element using exact classes from existing items
-      const button = document.createElement('button');
-      button.className = 'saypi-settings-menu-item group flex w-full items-center text-left gap-2.5 h-[2rem] py-auto px-1.5 text-[0.875rem] text-text-200 rounded-md transition-colors select-none active:!scale-100 active:scale-[0.995] hover:bg-bg-200/50 hover:text-text-000';
-      
-      // Create icon container
-      const iconContainer = document.createElement('div');
-      iconContainer.className = 'group/icon h-4 w-4 flex items-center justify-center text-text-300 shrink-0 group-hover:text-text-100';
-      
-      // Use the bubble icon from IconModule
-      const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
-      bubbleIcon.setAttribute('width', '18');
-      bubbleIcon.setAttribute('height', '18');
-      bubbleIcon.classList.add('shrink-0', '-m-[1px]');
-      
-      // Change the fill color of black paths to dark gray
-      const blackPaths = bubbleIcon.querySelectorAll('path[fill="#000000"]');
-      blackPaths.forEach(path => {
-        path.setAttribute('fill', 'rgb(61, 61, 58)');
-      });
-      
-      iconContainer.appendChild(bubbleIcon);
-      
-      // Create text container
-      const textContainer = document.createElement('div');
-      textContainer.className = 'flex flex-row items-center flex-1 min-w-0';
-      
-      // Create text paragraph with "Voice settings" label
-      const textParagraph = document.createElement('p');
-      textParagraph.className = 'text-[0.9375rem] text-text-300 text-ellipsis break-words whitespace-nowrap leading-tight min-w-0 overflow-hidden group-hover:text-text-100';
-      textParagraph.textContent = getMessage("voiceSettings");
-      
-      // Assemble the elements
-      textContainer.appendChild(textParagraph);
-      button.appendChild(iconContainer);
-      button.appendChild(textContainer);
-      
-      // Add click handler to open settings
-      button.addEventListener('click', () => {
-        // Close the menu by simulating a click outside
-        document.body.click();
-        // Open settings popup
-        openSettings();
-      });
-      
-      // Create a wrapper div like the other menu items have
-      const wrapper = document.createElement('div');
-      wrapper.className = '';
-      wrapper.appendChild(button);
-      
-      // Add to the menu after the existing items
-      menuItemsContainer.appendChild(wrapper);
-    } catch (error) {
-      console.error("Error inserting settings menu item:", error);
-    }
   }
 
   /**

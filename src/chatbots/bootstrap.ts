@@ -9,6 +9,10 @@ import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 import { logger } from "../LoggingModule";
 import { AgentModeNoticeModule } from "../ui/AgentModeNoticeModule";
+import { IconModule } from "../icons/IconModule";
+import { openSettings } from "../popup/popupopener";
+import { addChild } from "../dom/DOMModule";
+import getMessage from "../i18n";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -28,8 +32,8 @@ export class DOMObserver {
           const addedElement = node as HTMLElement;
           const promptObs = this.findAndDecoratePrompt(addedElement);
           const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
-          const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
-          if (sidePanelObs.found && sidePanelObs.decorated) {
+          const sidebarObs = this.findAndDecorateSidebar(addedElement);
+          if (sidebarObs.found && sidebarObs.decorated) {
             const discoveryPanelObs =
               this.findAndDecorateDiscoveryPanel(addedElement);
             const voiceSettingsObs =
@@ -153,6 +157,11 @@ export class DOMObserver {
       
       // First immediate attempt to find chat history
       const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
+      const sidebarObs = this.findAndDecorateSidebar(document.body);
+      if (sidebarObs.found && sidebarObs.decorated) {
+        this.findAndDecorateDiscoveryPanel(document.body);
+        this.findAndDecorateVoiceSettings(document.body);
+      }
       
       // If not found on first try, start progressive backoff search
       if (!chatHistoryObs.found) {
@@ -287,53 +296,90 @@ export class DOMObserver {
     return obs;
   }
 
-  findSidePanel(searchRoot: Element): Observation {
-    const id = "saypi-side-panel";
-    const existingSidePanel = document.getElementById(id);
-    if (existingSidePanel) {
-      // Side panel already exists, no need to search
-      return Observation.foundAlreadyDecorated(id, existingSidePanel);
+  findSidebar(searchRoot: Element): Observation {
+    const id = "saypi-sidebar";
+    const legacyId = "saypi-side-panel";
+    const existingSidebar =
+      document.getElementById(id) || document.getElementById(legacyId);
+    if (existingSidebar) {
+      // Sidebar already exists, no need to search
+      return Observation.foundAlreadyDecorated(
+        existingSidebar.id || id,
+        existingSidebar
+      );
     }
 
-    const selector = this.chatbot.getSidePanelSelector();
+    const selector = this.chatbot.getSidebarSelector();
     // Guard against empty selectors to prevent SyntaxError in querySelector
-    if (!selector || selector.trim() === '') {
+    if (!selector || selector.trim() === "") {
       return Observation.notFound(id);
     }
 
-    const sidePanel = searchRoot.querySelector(selector);
-    if (sidePanel) {
-      return Observation.foundUndecorated(id, sidePanel);
+    const sidebar = searchRoot.querySelector(selector);
+    if (sidebar) {
+      return Observation.foundUndecorated(id, sidebar);
     }
     return Observation.notFound(id);
   }
 
-  decorateSidePanel(sidePanel: HTMLElement): void {
+  decorateSidebar(sidebar: HTMLElement): void {
     // Get chatbot-specific sidebar configuration
-    const config = this.chatbot.getSidebarConfig(sidePanel);
+    const config = this.chatbot.getSidebarConfig(sidebar);
     if (!config) {
       console.debug('Sidebar decoration skipped - chatbot returned null config');
       return;
     }
 
-    const { buttonContainer, buttonStyle, insertPosition = 0 } = config;
+    // Standardize sidebar identification & styling
+    sidebar.id = "saypi-sidebar";
+    sidebar.classList.add("saypi-sidebar", "saypi-control-panel");
+    // Maintain legacy class for backwards-compatible styling during transition
+    sidebar.classList.add("saypi-side-panel");
+
+    const { buttonContainer, buttonStyle, insertPosition = 0, createButton } = config;
 
     // Create buttons using the appropriate style
-    if (buttonStyle === 'menu') {
+    const supportsFocus = this.chatbot.supportsFocusMode?.() ?? false;
+
+    // If chatbot provides custom button creator, use it
+    if (createButton) {
+      const settingsButton = createButton({
+        label: getMessage('voiceSettings'),
+        icon: IconModule.bubbleBw,
+        onClick: () => openSettings(),
+      });
+      addChild(buttonContainer, settingsButton, insertPosition);
+    } else if (buttonStyle === "menu") {
       // Menu-style buttons for compact sidebars (e.g., Pi.ai)
-      buttonModule.createImmersiveModeMenuButton(buttonContainer, insertPosition);
-      buttonModule.createSettingsMenuButton(buttonContainer, insertPosition + 1);
+      if (supportsFocus) {
+        buttonModule.createImmersiveModeMenuButton(
+          buttonContainer,
+          insertPosition
+        );
+      }
+      buttonModule.createSettingsMenuButton(
+        buttonContainer,
+        supportsFocus ? insertPosition + 1 : insertPosition
+      );
     } else {
       // Control-style buttons for larger panels
-      buttonModule.createImmersiveModeButton(buttonContainer, insertPosition);
-      buttonModule.createSettingsButton(buttonContainer, insertPosition + 1);
+      if (supportsFocus) {
+        buttonModule.createImmersiveModeButton(
+          buttonContainer,
+          insertPosition
+        );
+      }
+      buttonModule.createSettingsButton(
+        buttonContainer,
+        supportsFocus ? insertPosition + 1 : insertPosition
+      );
     }
   }
 
-  findAndDecorateSidePanel(searchRoot: Element): Observation {
-    const obs = this.findSidePanel(searchRoot);
+  findAndDecorateSidebar(searchRoot: Element): Observation {
+    const obs = this.findSidebar(searchRoot);
     if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
-      this.decorateSidePanel(obs.target as HTMLElement);
+      this.decorateSidebar(obs.target as HTMLElement);
       return Observation.foundAndDecorated(obs);
     }
     return obs;

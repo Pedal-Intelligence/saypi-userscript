@@ -187,6 +187,50 @@ html body.claude {
     border-radius: 12px;
     transition: outline-offset 0.12s ease, box-shadow 0.12s ease;
   }
+
+  #saypi-sidebar {
+    .settings-button {
+      align-items: center;
+      border-radius: 0.75rem;
+      color: hsl(var(--text-300));
+      display: inline-flex;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 400;
+      gap: 0.75rem;
+      height: 2.25rem; /* match h-9 */
+      line-height: 1.2;
+      padding: 0.5rem 6px;
+      text-decoration: none;
+      transition: color 0.2s ease, background-color 0.2s ease;
+      overflow: clip; /* hide the label text when sidebar is collapsed */
+      text-wrap-mode: nowrap;
+
+      &:hover,
+      &:focus-visible {
+        background-color: hsl(var(--bg-400));
+        color: hsl(var(--text-100));
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        color: currentColor;
+
+        path[fill="#000000"],
+        path[fill="#000"],
+        path[fill="#000000ff"] {
+          fill: currentColor;
+        }
+      }
+
+      span {
+        display: inline-block;
+        font: inherit;
+        letter-spacing: normal;
+      }
+    }
+  }
 }
 
 /* Fix voice menu display for both mobile and desktop */
@@ -258,5 +302,4 @@ html body.claude #claude-voice-selector {
 html[data-mode='dark'] body.claude #claude-voice-selector .saypi-voice-divider {
   background-color: rgba(255, 255, 255, 0.08);
 }
-
 
