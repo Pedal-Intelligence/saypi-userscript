@@ -47,9 +47,28 @@ export interface Chatbot {
   // Submit method - chatbot-specific submission logic
   simulateFormSubmit(): boolean;
 
+  // Sidebar configuration - chatbot-specific logic for sidebar button placement
+  // The sidebar element is found via getSidePanelSelector(), then this method
+  // returns a SidebarConfig describing where and how to add buttons
+  // Follows the pattern of getPrompt(), getUserMessage(), etc.
+  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null;
+
   // Cache and utility methods - implementations are in AbstractChatbot
   getCachedAssistantResponse(element: HTMLElement): AssistantResponse | undefined;
   clearCachedAssistantResponse(element: HTMLElement): boolean;
+}
+
+export interface SidebarConfig {
+  // The container element where buttons should be added
+  buttonContainer: HTMLElement;
+
+  // Button style variant - determines which button creation method to use
+  // 'control' = large control panel buttons (a.maxi with h-16 w-16)
+  // 'menu' = compact menu buttons (div[role=button] with h-[2.5rem])
+  buttonStyle: 'control' | 'menu';
+
+  // Position where the first button should be inserted (0 = prepend, etc.)
+  insertPosition?: number;
 }
 
 export interface UserPrompt {

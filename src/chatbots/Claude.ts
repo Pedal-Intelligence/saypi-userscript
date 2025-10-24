@@ -4,7 +4,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
-import { UserPrompt } from "./Chatbot";
+import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
 import { openSettings } from "../popup/popupopener";
 import getMessage from "../i18n";
@@ -101,7 +101,10 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getSidePanelSelector(): string {
-    return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+    // TODO(GH-250): Implement Claude.ai sidebar decoration (currently not supported)
+    // This selector is a legacy artifact from Pi.ts and doesn't match Claude's DOM
+    // Return empty selector to skip decoration without blocking other features
+    return "";
   }
 
   getChatPath(): string {
@@ -209,9 +212,16 @@ class ClaudeChatbot extends AbstractChatbot {
       console.debug("Dispatched Enter keydown event to Claude at", Date.now());
       return true;
     }
-    
+
     console.error("Cannot simulate submit for Claude: No textarea found.");
     return false;
+  }
+
+  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
+    // TODO(GH-250): Implement Claude.ai sidebar decoration
+    // For now, return null to indicate decoration is not supported
+    console.debug('Claude sidebar decoration not yet implemented');
+    return null;
   }
 }
 

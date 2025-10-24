@@ -258,6 +258,66 @@ class ButtonModule {
     }
   }
 
+  /**
+   * Creates a menu-style button for sidebar navigation
+   * Matches Pi.ai's sidebar button structure: div[role=button] with flex layout
+   */
+  createMenuButton(options) {
+    const { label, icon, onClick, className = '' } = options;
+
+    // Create button container matching Pi's structure
+    const button = createElement("div", {
+      className: `${className} flex cursor-pointer flex-nowrap items-center rounded-lg text-left h-[2.5rem] gap-3 px-3 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900`,
+      role: "button",
+      tabindex: 0,
+      ariaLabel: label,
+      onclick: onClick,
+      style: "width: 100%"
+    });
+
+    // Add icon
+    const svgElement = createSVGElement(icon);
+    if (svgElement) {
+      svgElement.classList.add("size-[20px]");
+      button.appendChild(svgElement);
+    } else {
+      console.error("Failed to create SVG for menu button:", icon);
+    }
+
+    // Add label
+    const labelSpan = createElement("span", {
+      className: "text-sm font-medium",
+      textContent: label
+    });
+    button.appendChild(labelSpan);
+
+    return button;
+  }
+
+  createImmersiveModeMenuButton(container, position = 0) {
+    const button = this.createMenuButton({
+      label: getMessage("enterImmersiveModeShort"),
+      icon: immersiveIconSVG,
+      onClick: () => this.immersionService.enterImmersiveMode(),
+      className: 'immersive-mode-button'
+    });
+
+    addChild(container, button, position);
+    return button;
+  }
+
+  createSettingsMenuButton(container, position = 0) {
+    const button = this.createMenuButton({
+      label: getMessage("extensionSettings"),
+      icon: settingsIconSVG,
+      onClick: () => openSettings(),
+      className: 'settings-button'
+    });
+
+    addChild(container, button, position);
+    return button;
+  }
+
   createLockButton(container) {
     const label = getMessage("lockButton");
     const button = createElement("button", {

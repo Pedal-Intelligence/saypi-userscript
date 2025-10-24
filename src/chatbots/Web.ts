@@ -53,4 +53,5 @@ export class WebDictationChatbot implements Chatbot {
   getCachedAssistantResponse(): any { throw new Error("Not implemented for dictation"); }
   clearCachedAssistantResponse(): boolean { throw new Error("Not implemented for dictation"); }
   simulateFormSubmit(): boolean { throw new Error("Not implemented for dictation"); }
+  getSidebarConfig(): any { throw new Error("Not implemented for dictation"); }
 }
