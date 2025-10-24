@@ -8,13 +8,6 @@ vi.mock("../../src/dom/MessageElements", () => {
   return { AssistantResponse, MessageControls, UserMessage };
 });
 
-vi.mock("../dom/MessageElements", () => {
-  class AssistantResponse {}
-  class MessageControls {}
-  class UserMessage {}
-  return { AssistantResponse, MessageControls, UserMessage };
-});
-
 vi.mock("../../src/tts/VoiceMenu", () => {
   class VoiceSelector {
     constructor() {}

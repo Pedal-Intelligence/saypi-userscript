@@ -243,9 +243,7 @@ class ClaudeChatbot extends AbstractChatbot {
     };
 
     const menuContainer = collectCandidateContainers().find((candidate) => {
-      const actions = Array.from(candidate.querySelectorAll('a, button, div[role="button"]')).filter((action) =>
-        !action.closest('[data-testid="user-profile"]')
-      );
+      const actions = Array.from(candidate.querySelectorAll('a, button, div[role="button"]')).filter((action) => !action.closest('[data-testid="user-profile"]'));
       return actions.length >= 3;
     }) || null;
 

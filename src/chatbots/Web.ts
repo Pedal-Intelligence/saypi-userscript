@@ -20,6 +20,10 @@ export class WebDictationChatbot implements Chatbot {
     return false;
   }
 
+  supportsFocusMode(): boolean {
+    return false;
+  }
+
   // All other methods throw errors as they should not be called during dictation
   getChatHistory(): HTMLElement { throw new Error("Not implemented for dictation"); }
   getAudioControls(): HTMLElement { throw new Error("Not implemented for dictation"); }

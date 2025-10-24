@@ -288,9 +288,7 @@ class ButtonModule {
     }
 
     if (svgElement) {
-      if (!svgElement.classList.contains("size-[20px]")) {
-        svgElement.classList.add("size-[20px]");
-      }
+      svgElement.classList.add("size-[20px]");
       if (!svgElement.getAttribute("width")) {
         svgElement.setAttribute("width", "20");
         svgElement.setAttribute("height", "20");
