@@ -121,5 +121,23 @@ html body.pi {
         stroke: rgb(107, 98, 85);
       }
     }
+
+    /* Collapsed sidebar mode (w-16 = 64px): icon-only buttons */
+    &.w-16,
+    &[class*="w-0"] {
+      .immersive-mode-button,
+      .settings-button {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        margin: 0 auto;
+        justify-content: center;
+        gap: 0;
+
+        span {
+          display: none;
+        }
+      }
+    }
   }
 }
