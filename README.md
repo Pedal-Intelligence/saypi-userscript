@@ -401,4 +401,4 @@ Say, Pi is an **unofficial enhancement** for Pi.ai, Claude.ai, and ChatGPT. It i
 
 ---
 
-**Built with ❤️ by the Say, Pi team** • [www.saypi.ai](https://www.saypi.ai) • Version 1.10.5
+**Built with ❤️ by the Say, Pi team** • [www.saypi.ai](https://www.saypi.ai)
