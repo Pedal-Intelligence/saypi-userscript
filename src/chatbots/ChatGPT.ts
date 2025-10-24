@@ -4,7 +4,7 @@ import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import getMessage from "../i18n";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
-import { UserPrompt } from "./Chatbot";
+import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { findControlsContainerInComposer, findPromptInputInComposer, getScopedSubmitSelector } from "./chatgpt/ComposerSelectors";
 import { getAssistantContentSelector } from "./chatgpt/MessageSelectors";
 import { findThreadRoot } from "./chatgpt/HistorySelectors";
@@ -83,7 +83,11 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getSidePanelSelector(): string {
-    return 'nav[aria-label="Chat history"]';
+    // TODO(GH-249): Implement ChatGPT sidebar decoration (currently not supported)
+    // The nav[aria-label="Chat history"] selector exists but decoration is disabled
+    // Related: CHATGPT_FEATURES.enableControlPanel is false
+    // Return empty selector to skip decoration without blocking other features
+    return '';
   }
 
   getChatPath(): string {
@@ -180,6 +184,13 @@ class ChatGPTChatbot extends AbstractChatbot {
     }
     console.error("Cannot simulate submit for ChatGPT: No submit button or textarea found.");
     return false;
+  }
+
+  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
+    // TODO(GH-249): Implement ChatGPT sidebar decoration
+    // For now, return null to indicate decoration is not supported
+    console.debug('ChatGPT sidebar decoration not yet implemented');
+    return null;
   }
 
   private findChatGPTSubmitButton(): HTMLElement | null {

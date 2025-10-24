@@ -4,7 +4,7 @@ import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
-import { UserPrompt } from "./Chatbot";
+import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { PiVoiceMenu } from "./PiVoiceMenu";
 import { PiResponse } from "./pi/PiResponse";
@@ -80,7 +80,10 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getSidePanelSelector(): string {
-    return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+    // Matches Pi.ai's redesigned sidebar (Oct 2025) - works across all viewport sizes
+    // Key classes: z-[999] (stacking), h-screen (full height), border-r (right border)
+    // Works for both collapsed (w-0 md:w-16) and expanded (w-[280px]) states
+    return "div.z-\\[999\\].flex.h-screen.flex-col.border-r.border-neutral-300.bg-neutral-50";
   }
 
   getChatPath(): string {
@@ -197,9 +200,42 @@ class PiAIChatbot extends AbstractChatbot {
       console.debug("Dispatched Enter keydown event to Pi at", Date.now());
       return true;
     }
-    
+
     console.error("Cannot simulate submit for Pi: No textarea found.");
     return false;
+  }
+
+  getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
+    // Pi.ai's sidebar structure (Oct 2024):
+    // div.sidebar (root, found by getSidePanelSelector)
+    //   └── div.header (first child, contains pt-* pb-* classes)
+    //       └── div.menu (flex flex-col items-start - contains nav buttons)
+    //
+    // We need to add our buttons to div.menu, using Pi's menu-style buttons
+
+    // Find the header (first child with pt-* pb-* padding classes)
+    const header = sidePanel.querySelector('div[class*="pt-"][class*="pb-"]');
+    if (!header) {
+      console.warn('Pi sidebar: Could not find header element');
+      return null;
+    }
+
+    // Find the menu container within header
+    const menu = header.querySelector('div.flex.flex-col.items-start');
+    if (!menu) {
+      console.warn('Pi sidebar: Could not find menu container');
+      return null;
+    }
+
+    // Mark the sidebar for styling
+    sidePanel.id = "saypi-side-panel";
+    sidePanel.classList.add("saypi-control-panel");
+
+    return {
+      buttonContainer: menu as HTMLElement,
+      buttonStyle: 'menu',  // Use menu-style buttons to match Pi's sidebar
+      insertPosition: 2     // Insert after second nav button (Discover)
+    };
   }
 }
 

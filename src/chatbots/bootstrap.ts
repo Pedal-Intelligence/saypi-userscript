@@ -305,11 +305,25 @@ export class DOMObserver {
   }
 
   decorateSidePanel(sidePanel: HTMLElement): void {
-    sidePanel.id = "saypi-side-panel";
-    sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
-    const immersiveModeBtnPos = 1;
-    buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
-    buttonModule.createSettingsButton(sidePanel, immersiveModeBtnPos + 1);
+    // Get chatbot-specific sidebar configuration
+    const config = this.chatbot.getSidebarConfig(sidePanel);
+    if (!config) {
+      console.debug('Sidebar decoration skipped - chatbot returned null config');
+      return;
+    }
+
+    const { buttonContainer, buttonStyle, insertPosition = 0 } = config;
+
+    // Create buttons using the appropriate style
+    if (buttonStyle === 'menu') {
+      // Menu-style buttons for compact sidebars (e.g., Pi.ai)
+      buttonModule.createImmersiveModeMenuButton(buttonContainer, insertPosition);
+      buttonModule.createSettingsMenuButton(buttonContainer, insertPosition + 1);
+    } else {
+      // Control-style buttons for larger panels
+      buttonModule.createImmersiveModeButton(buttonContainer, insertPosition);
+      buttonModule.createSettingsButton(buttonContainer, insertPosition + 1);
+    }
   }
 
   findAndDecorateSidePanel(searchRoot: Element): Observation {
