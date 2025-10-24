@@ -116,9 +116,9 @@ html body.pi {
         text-overflow: ellipsis;
       }
 
-      /* Override icon stroke/fill colors from black to brown */
+      /* Set icon color to Pi's brown - icons use currentColor */
       svg {
-        stroke: rgb(107, 98, 85);
+        color: rgb(107, 98, 85);
       }
     }
 
