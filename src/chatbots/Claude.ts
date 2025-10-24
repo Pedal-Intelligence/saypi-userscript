@@ -219,6 +219,8 @@ class ClaudeChatbot extends AbstractChatbot {
 
   getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
     // TODO(GH-250): Implement Claude.ai sidebar decoration
+    // See doc/issues/sidebar-integration-standardization.md for detailed implementation guide
+    // Pattern: Follow Pi.ts lines 208-239 for reference implementation
     // For now, return null to indicate decoration is not supported
     console.debug('Claude sidebar decoration not yet implemented');
     return null;
