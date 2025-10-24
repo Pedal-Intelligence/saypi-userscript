@@ -69,3 +69,4 @@ test-csp-bypass.html
 /.output/
 public/.vite/
 doc/dom/chatgpt/sidebar.header.menu.html
+doc/dom/chatgpt/sidebar.header.menu-tiny.html
