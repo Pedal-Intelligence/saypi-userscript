@@ -1,4 +1,4 @@
-import { Chatbot, UserPrompt } from "./Chatbot";
+import { Chatbot, UserPrompt, SidebarConfig } from "./Chatbot";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import EventBus from "../events/EventBus";
 import { shortenTranscript } from "../TextModule";
@@ -48,6 +48,7 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
     
     abstract simulateFormSubmit(): boolean;
+    abstract getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null;
 
     protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse;
 

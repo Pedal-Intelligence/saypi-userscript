@@ -295,9 +295,13 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingSidePanel);
     }
 
-    const sidePanel = searchRoot.querySelector(
-      this.chatbot.getSidePanelSelector()
-    );
+    const selector = this.chatbot.getSidePanelSelector();
+    // Guard against empty selectors to prevent SyntaxError in querySelector
+    if (!selector || selector.trim() === '') {
+      return Observation.notFound(id);
+    }
+
+    const sidePanel = searchRoot.querySelector(selector);
     if (sidePanel) {
       return Observation.foundUndecorated(id, sidePanel);
     }
