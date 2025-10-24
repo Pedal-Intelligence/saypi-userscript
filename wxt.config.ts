@@ -339,7 +339,7 @@ export default defineConfig((env) => {
       ? process.env.WXT_BROWSER
       : env?.browser) ?? "chrome";
   const isFirefox = browser.startsWith("firefox");
-  const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus", "downloads"];
+  const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus"];
 
   if (!isFirefox) {
     permissions.push("offscreen", "audio");
@@ -375,6 +375,14 @@ export default defineConfig((env) => {
       },
       "build:manifestGenerated": (wxtInstance: any, manifest: any) => {
         const targetBrowser = String(wxtInstance.config.browser ?? browser);
+        const isDev = String(wxtInstance.config.mode) === "development";
+        const keepSegments = String(process.env.VITE_KEEP_SEGMENTS ?? process.env.KEEP_SEGMENTS ?? "").toLowerCase() === "true";
+
+        // Add downloads permission only in dev mode when keepSegments is enabled
+        if (isDev && keepSegments && Array.isArray(manifest.permissions) && !manifest.permissions.includes("downloads")) {
+          manifest.permissions.push("downloads");
+        }
+
         if (targetBrowser.startsWith("firefox") && Array.isArray(manifest.permissions)) {
           manifest.permissions = manifest.permissions.filter(
             (permission: string) => permission !== "offscreen" && permission !== "audio",
