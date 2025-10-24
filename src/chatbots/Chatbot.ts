@@ -18,7 +18,10 @@ export interface Chatbot {
   getAudioOutputButtonSelector(): string;
   getAudioControlsSelector(): string;
   getControlPanelSelector(): string;
-  getSidePanelSelector(): string;
+  /**
+   * Returns a selector that matches the chatbot's sidebar/root navigation container.
+   */
+  getSidebarSelector(): string;
   getPromptTextInputSelector(): string;
   getPromptSubmitButtonSelector(): string;
   getAssistantResponseSelector(): string;
@@ -47,8 +50,11 @@ export interface Chatbot {
   // Submit method - chatbot-specific submission logic
   simulateFormSubmit(): boolean;
 
+  // Feature capability helpers
+  supportsFocusMode(): boolean;
+
   // Sidebar configuration - chatbot-specific logic for sidebar button placement
-  // The sidebar element is found via getSidePanelSelector(), then this method
+  // The sidebar element is found via getSidebarSelector(), then this method
   // returns a SidebarConfig describing where and how to add buttons
   // Follows the pattern of getPrompt(), getUserMessage(), etc.
   getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null;
@@ -84,4 +90,3 @@ export interface UserPrompt {
   setMessage(label: string): void;
   setFinal(transcript: string, isMaintainanceMessage?: boolean): void;
 }
-

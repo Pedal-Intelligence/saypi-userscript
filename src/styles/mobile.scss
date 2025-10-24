@@ -117,7 +117,8 @@ html.immersive-view {
   div.lg\:flex-row-reverse {
     flex-direction: unset;
   }
-  /* hide the side panel in immersive mode */
+  /* hide the sidebar in immersive mode (supporting legacy ID during transition) */
+  #saypi-sidebar.lg\:flex,
   #saypi-side-panel.lg\:flex {
     display: none;
   }

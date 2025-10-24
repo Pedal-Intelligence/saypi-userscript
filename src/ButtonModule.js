@@ -263,7 +263,7 @@ class ButtonModule {
    * Matches Pi.ai's sidebar button structure: div[role=button] with flex layout
    */
   createMenuButton(options) {
-    const { label, icon, onClick, className = '' } = options;
+    const { label, icon, iconElement, onClick, className = '' } = options;
 
     // Create button container matching Pi's structure
     const button = createElement("div", {
@@ -276,12 +276,28 @@ class ButtonModule {
     });
 
     // Add icon
-    const svgElement = createSVGElement(icon);
+    let svgElement = null;
+    if (iconElement) {
+      try {
+        svgElement = iconElement.cloneNode(true);
+      } catch (error) {
+        console.error("Failed to clone SVG element for menu button:", error);
+      }
+    } else if (icon) {
+      svgElement = createSVGElement(icon);
+    }
+
     if (svgElement) {
-      svgElement.classList.add("size-[20px]");
+      if (!svgElement.classList.contains("size-[20px]")) {
+        svgElement.classList.add("size-[20px]");
+      }
+      if (!svgElement.getAttribute("width")) {
+        svgElement.setAttribute("width", "20");
+        svgElement.setAttribute("height", "20");
+      }
       button.appendChild(svgElement);
     } else {
-      console.error("Failed to create SVG for menu button:", icon);
+      console.error("Failed to create SVG for menu button:", icon || iconElement);
     }
 
     // Add label
@@ -308,11 +324,19 @@ class ButtonModule {
 
   createSettingsMenuButton(container, position = 0) {
     const button = this.createMenuButton({
-      label: getMessage("extensionSettings"),
-      icon: settingsIconSVG,
+      label: getMessage("voiceSettings"),
+      iconElement: IconModule.bubbleBw,
       onClick: () => openSettings(),
       className: 'settings-button'
     });
+
+    const icon = button.querySelector('svg');
+    if (icon) {
+      icon.classList.remove('size-[20px]');
+      icon.classList.add('size-[18px]');
+      icon.setAttribute('width', '18');
+      icon.setAttribute('height', '18');
+    }
 
     addChild(container, button, position);
     return button;

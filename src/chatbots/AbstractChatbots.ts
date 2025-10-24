@@ -31,7 +31,7 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getAudioControls(searchRoot: Element): HTMLElement;
     abstract getAudioControlsSelector(): string;
     abstract getControlPanelSelector(): string;
-    abstract getSidePanelSelector(): string;
+    abstract getSidebarSelector(): string;
     abstract getPromptTextInputSelector(): string;
     abstract getPromptSubmitButtonSelector(): string;
     abstract getAssistantResponseSelector(): string;
@@ -49,6 +49,10 @@ export abstract class AbstractChatbot implements Chatbot {
     
     abstract simulateFormSubmit(): boolean;
     abstract getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null;
+
+    supportsFocusMode(): boolean {
+      return false;
+    }
 
     protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse;
 

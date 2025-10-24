@@ -35,7 +35,7 @@ export class WebDictationChatbot implements Chatbot {
   getAudioOutputButtonSelector(): string { throw new Error("Not implemented for dictation"); }
   getAudioControlsSelector(): string { throw new Error("Not implemented for dictation"); }
   getControlPanelSelector(): string { throw new Error("Not implemented for dictation"); }
-  getSidePanelSelector(): string { throw new Error("Not implemented for dictation"); }
+  getSidebarSelector(): string { throw new Error("Not implemented for dictation"); }
   getPromptTextInputSelector(): string { throw new Error("Not implemented for dictation"); }
   getPromptSubmitButtonSelector(): string { throw new Error("Not implemented for dictation"); }
   getAssistantResponseSelector(): string { throw new Error("Not implemented for dictation"); }

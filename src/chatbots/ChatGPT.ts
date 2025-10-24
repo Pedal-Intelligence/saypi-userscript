@@ -82,12 +82,10 @@ class ChatGPTChatbot extends AbstractChatbot {
     return '';
   }
 
-  getSidePanelSelector(): string {
-    // TODO(GH-249): Implement ChatGPT sidebar decoration (currently not supported)
-    // The nav[aria-label="Chat history"] selector exists but decoration is disabled
-    // Related: CHATGPT_FEATURES.enableControlPanel is false
-    // Return empty selector to skip decoration without blocking other features
-    return '';
+  getSidebarSelector(): string {
+    // Prefer the slideover container that wraps the chat history navigation
+    // Fallback to the nav element itself if the container is unavailable
+    return '#stage-slideover-sidebar, nav[aria-label="Chat history"]';
   }
 
   getChatPath(): string {
@@ -187,12 +185,74 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
-    // TODO(GH-249): Implement ChatGPT sidebar decoration
-    // See doc/issues/sidebar-integration-standardization.md for detailed implementation guide
-    // Pattern: Follow Pi.ts lines 208-239 for reference implementation
-    // For now, return null to indicate decoration is not supported
-    console.debug('ChatGPT sidebar decoration not yet implemented');
-    return null;
+    const sidebar = sidePanel.matches('nav[aria-label="Chat history"]')
+      ? sidePanel
+      : (sidePanel.querySelector('nav[aria-label="Chat history"]') as HTMLElement | null);
+
+    if (!sidebar) {
+      console.warn('[ChatGPT] sidebar: Could not locate navigation root');
+      return null;
+    }
+
+    const header = sidebar.querySelector('#sidebar-header') as HTMLElement | null;
+    if (!header) {
+      console.warn('[ChatGPT] sidebar: Could not find header element');
+      return null;
+    }
+
+    // Locate the primary menu container that holds the navigation buttons
+    const newChatButton = sidebar.querySelector(
+      '[data-testid="create-new-chat-button"], [aria-label="New chat"]'
+    ) as HTMLElement | null;
+
+    let menuContainer: HTMLElement | null = null;
+
+    if (newChatButton) {
+      const wrapper = newChatButton.closest('[data-state]') as HTMLElement | null;
+      if (wrapper && wrapper.parentElement) {
+        menuContainer = wrapper.parentElement as HTMLElement;
+      } else if (newChatButton.parentElement) {
+        menuContainer = newChatButton.parentElement as HTMLElement;
+      }
+    }
+
+    if (!menuContainer) {
+      // Fallback: find the first parent that contains sidebar menu items
+      const wrappers = Array.from(
+        sidebar.querySelectorAll('[data-state]')
+      );
+      menuContainer =
+        wrappers
+          .map((wrapper) => wrapper.parentElement as HTMLElement | null)
+          .find((parent): parent is HTMLElement => !!parent) ?? null;
+    }
+
+    if (!menuContainer) {
+      console.warn('[ChatGPT] sidebar: Could not find menu container');
+      return null;
+    }
+
+    if (!header.contains(menuContainer)) {
+      const headerWrapper = header.querySelector('[data-state]');
+      if (
+        headerWrapper instanceof HTMLElement &&
+        headerWrapper.parentElement
+      ) {
+        menuContainer = headerWrapper.parentElement as HTMLElement;
+      } else {
+        console.debug('[ChatGPT] sidebar: Menu container located outside header scope');
+      }
+    }
+
+    sidePanel.id = "saypi-sidebar";
+    sidePanel.classList.add("saypi-sidebar", "saypi-control-panel");
+    sidePanel.classList.add("saypi-side-panel");
+
+    return {
+      buttonContainer: menuContainer,
+      buttonStyle: 'menu',
+      insertPosition: 2, // After New chat + Search
+    };
   }
 
   private findChatGPTSubmitButton(): HTMLElement | null {
@@ -290,4 +350,3 @@ class ChatGPTUserMessage extends UserMessage {
 }
 
 export default ChatGPTChatbot;
-
