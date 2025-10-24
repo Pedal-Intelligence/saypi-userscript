@@ -68,3 +68,4 @@ test-csp-bypass.html
 *.egg-info/
 /.output/
 public/.vite/
+doc/dom/chatgpt/sidebar.header.menu.html

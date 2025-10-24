@@ -75,6 +75,11 @@ export interface SidebarConfig {
 
   // Position where the first button should be inserted (0 = prepend, etc.)
   insertPosition?: number;
+
+  // Optional: chatbot-specific button creation function
+  // If provided, this will be used instead of the default ButtonModule methods
+  // This allows chatbots to create buttons with their own DOM structure and classes
+  createButton?: (options: { label: string; icon: string | SVGElement; onClick: () => void }) => HTMLElement;
 }
 
 export interface UserPrompt {

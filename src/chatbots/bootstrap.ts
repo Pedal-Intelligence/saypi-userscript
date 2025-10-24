@@ -9,6 +9,10 @@ import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 import { logger } from "../LoggingModule";
 import { AgentModeNoticeModule } from "../ui/AgentModeNoticeModule";
+import { IconModule } from "../icons/IconModule";
+import { openSettings } from "../popup/popupopener";
+import { addChild } from "../dom/DOMModule";
+import getMessage from "../i18n";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -332,12 +336,20 @@ export class DOMObserver {
     // Maintain legacy class for backwards-compatible styling during transition
     sidebar.classList.add("saypi-side-panel");
 
-    const { buttonContainer, buttonStyle, insertPosition = 0 } = config;
+    const { buttonContainer, buttonStyle, insertPosition = 0, createButton } = config;
 
     // Create buttons using the appropriate style
     const supportsFocus = this.chatbot.supportsFocusMode?.() ?? false;
 
-    if (buttonStyle === "menu") {
+    // If chatbot provides custom button creator, use it
+    if (createButton) {
+      const settingsButton = createButton({
+        label: getMessage('voiceSettings'),
+        icon: IconModule.bubbleBw,
+        onClick: () => openSettings(),
+      });
+      addChild(buttonContainer, settingsButton, insertPosition);
+    } else if (buttonStyle === "menu") {
       // Menu-style buttons for compact sidebars (e.g., Pi.ai)
       if (supportsFocus) {
         buttonModule.createImmersiveModeMenuButton(
