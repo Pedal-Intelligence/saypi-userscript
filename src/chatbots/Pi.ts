@@ -206,7 +206,7 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getSidebarConfig(sidePanel: HTMLElement): SidebarConfig | null {
-    // Pi.ai's sidebar structure (Oct 2024):
+    // Pi.ai's sidebar structure (Oct 2025):
     // div.sidebar (root, found by getSidePanelSelector)
     //   └── div.header (first child, contains pt-* pb-* classes)
     //       └── div.menu (flex flex-col items-start - contains nav buttons)
