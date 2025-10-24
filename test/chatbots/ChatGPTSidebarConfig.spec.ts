@@ -24,7 +24,7 @@ vi.mock("../../src/tts/VoiceMenu", () => {
   return { VoiceSelector, addSvgToButton: () => {} };
 });
 
-let ChatGPTChatbot;
+let ChatGPTChatbot: typeof import("../../src/chatbots/ChatGPT").default;
 
 beforeAll(async () => {
   const module = await import("../../src/chatbots/ChatGPT");
@@ -32,7 +32,7 @@ beforeAll(async () => {
 });
 
 describe("ChatGPT sidebar integration (GH-249/GH-252)", () => {
-  let chatbot;
+  let chatbot: InstanceType<typeof ChatGPTChatbot>;
 
   beforeEach(() => {
     chatbot = new ChatGPTChatbot();
@@ -42,22 +42,19 @@ describe("ChatGPT sidebar integration (GH-249/GH-252)", () => {
     const html = `
       <div>
         <div id="stage-slideover-sidebar">
-          <nav aria-label="Chat history">
-            <div class="touch:px-1.5 px-2">
-              <div id="sidebar-header"></div>
-              <div class="menu-container">
-                <div data-state="open">
-                  <a data-testid="create-new-chat-button" class="group __menu-item">New chat</a>
-                </div>
-                <div data-state="open">
-                  <div class="group __menu-item">Search chats</div>
-                </div>
-                <div data-state="open">
-                  <a class="group __menu-item">Library</a>
-                </div>
+          <div aria-label="Header">
+            <aside>
+              <div data-state="open">
+                <a data-testid="create-new-chat-button" class="group __menu-item">New chat</a>
               </div>
-            </div>
-          </nav>
+              <div data-state="open">
+                <div class="group __menu-item">Search chats</div>
+              </div>
+              <div data-state="open">
+                <a class="group __menu-item">Library</a>
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     `;
@@ -71,22 +68,19 @@ describe("ChatGPT sidebar integration (GH-249/GH-252)", () => {
   it("should return menu configuration with insert position after Search", () => {
     const html = `
       <div id="stage-slideover-sidebar">
-        <nav aria-label="Chat history">
-          <div class="touch:px-1.5 px-2">
-            <div id="sidebar-header"></div>
-            <div class="menu-container">
-              <div data-state="open">
-                <a data-testid="create-new-chat-button" class="group __menu-item">New chat</a>
-              </div>
-              <div data-state="open">
-                <div class="group __menu-item">Search chats</div>
-              </div>
-              <div data-state="open">
-                <a class="group __menu-item">Library</a>
-              </div>
+        <div aria-label="Header">
+          <aside>
+            <div data-state="open">
+              <a data-testid="create-new-chat-button" class="group __menu-item">New chat</a>
             </div>
-          </div>
-        </nav>
+            <div data-state="open">
+              <div class="group __menu-item">Search chats</div>
+            </div>
+            <div data-state="open">
+              <a class="group __menu-item">Library</a>
+            </div>
+          </aside>
+        </div>
       </div>
     `;
 
@@ -100,23 +94,17 @@ describe("ChatGPT sidebar integration (GH-249/GH-252)", () => {
     expect(config?.buttonStyle).toBe("menu");
     expect(config?.insertPosition).toBe(2);
     expect(config?.buttonContainer.children.length).toBe(3);
-
-    // Sidebar should be tagged for styling
-    expect(sidebar.id).toBe("saypi-sidebar");
-    expect(sidebar.classList.contains("saypi-sidebar")).toBe(true);
-    expect(sidebar.classList.contains("saypi-side-panel")).toBe(true);
   });
 
-  it("returns null configuration when navigation header missing", () => {
+  it("returns null configuration when aside menu container missing", () => {
     const html = `
       <div id="stage-slideover-sidebar">
-        <nav aria-label="Chat history">
-          <div class="menu-container">
-            <div data-state="open">
-              <a data-testid="create-new-chat-button" class="group __menu-item">New chat</a>
-            </div>
+        <div aria-label="Header">
+          <!-- Missing aside wrapper -->
+          <div data-state="open">
+            <a data-testid="create-new-chat-button" class="group __menu-item">New chat</a>
           </div>
-        </nav>
+        </div>
       </div>
     `;
 

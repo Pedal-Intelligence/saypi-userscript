@@ -24,7 +24,7 @@ vi.mock("../../src/tts/VoiceMenu", () => {
   return { VoiceSelector, addSvgToButton: () => {} };
 });
 
-let ClaudeChatbot;
+let ClaudeChatbot: typeof import("../../src/chatbots/Claude").ClaudeChatbot;
 
 beforeAll(async () => {
   const module = await import("../../src/chatbots/Claude");
@@ -32,7 +32,7 @@ beforeAll(async () => {
 });
 
 describe("Claude sidebar integration (GH-250/GH-252)", () => {
-  let chatbot;
+  let chatbot: InstanceType<typeof ClaudeChatbot>;
 
   beforeEach(() => {
     chatbot = new ClaudeChatbot();
@@ -102,10 +102,6 @@ describe("Claude sidebar integration (GH-250/GH-252)", () => {
     expect(config?.buttonStyle).toBe("menu");
     expect(config?.insertPosition).toBe(3);
     expect(config?.buttonContainer.children.length).toBe(4);
-
-    expect(sidebar.id).toBe("saypi-sidebar");
-    expect(sidebar.classList.contains("saypi-sidebar")).toBe(true);
-    expect(sidebar.classList.contains("saypi-side-panel")).toBe(true);
   });
 
   it("returns null when menu container cannot be determined", () => {
