@@ -96,6 +96,18 @@ html body.pi {
     align-self: center;
   }
 
+  /* Mobile-specific call button sizing for new chat pages */
+  @media (max-width: 768px) {
+    #saypi-callButton {
+      /* Ensure button is visible and tappable on mobile */
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex-shrink: 0; /* Prevent button from shrinking in flex container */
+    }
+  }
+
   /* Sidebar menu button styling to match Pi's native buttons */
   #saypi-side-panel {
     /* Match Pi's sidebar menu button text styling */

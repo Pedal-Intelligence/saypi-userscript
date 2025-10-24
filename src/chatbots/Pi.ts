@@ -2,7 +2,6 @@ import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageE
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
-import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
