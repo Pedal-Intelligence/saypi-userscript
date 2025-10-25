@@ -43,3 +43,125 @@ test("uses global location when window is unavailable", () => {
 
   locationSpy.mockRestore();
 });
+
+// Tests for chat mode vs dictation mode with path checking
+test("isInChatMode returns true for chatable paths on Claude", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "claude.ai", pathname: "/chat/abc123" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns false for /code path on Claude (coding agent route)", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "claude.ai", pathname: "/code" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(false);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(true);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns true for /new path on Claude", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "claude.ai", pathname: "/new" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns true for /project path on Claude", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "claude.ai", pathname: "/project/123" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns true for chatable paths on ChatGPT", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "chatgpt.com", pathname: "/c/abc123" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns false for /codex path on ChatGPT (coding agent route)", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "chatgpt.com", pathname: "/codex" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(false);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(true);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns true for / path on ChatGPT", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "chatgpt.com", pathname: "/" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns true for /g/ path on ChatGPT", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "chatgpt.com", pathname: "/g/g-123" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns true for chatable paths on Pi", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "pi.ai", pathname: "/talk" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(true);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(false);
+
+  locationSpy.mockRestore();
+});
+
+test("isInChatMode returns false for non-chatable paths on Pi", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "pi.ai", pathname: "/onboarding" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(false);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(true);
+
+  locationSpy.mockRestore();
+});
+
+test("isInDictationMode returns true for web (non-chatbot) sites", () => {
+  const locationSpy = vi
+    .spyOn(ChatbotIdentifier as unknown as { getGlobalLocation: () => Location | null }, "getGlobalLocation")
+    .mockReturnValue({ hostname: "example.com", pathname: "/" } as unknown as Location);
+
+  expect(ChatbotIdentifier.isInChatMode()).toBe(false);
+  expect(ChatbotIdentifier.isInDictationMode()).toBe(true);
+
+  locationSpy.mockRestore();
+});

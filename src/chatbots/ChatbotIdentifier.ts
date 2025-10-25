@@ -102,17 +102,72 @@ export class ChatbotIdentifier {
     return this.identifyChatbot() === type;
   }
 
+  /**
+   * Checks if the current path is chatable for the given chatbot
+   * This duplicates logic from individual chatbot classes to avoid circular dependencies
+   * @param chatbot The chatbot identifier
+   * @param path The current path
+   * @returns True if the path supports chat mode
+   */
+  private static isChatablePath(chatbot: ChatbotId, path: string): boolean {
+    switch (chatbot) {
+      case "claude":
+        // Exclude coding agent routes like /code
+        return (
+          path.includes("/new") ||
+          path.includes("/chat") ||
+          path.includes("/project")
+        );
+      case "chatgpt":
+        // Exclude coding agent routes like /codex
+        return (
+          path === "/" ||
+          path.startsWith("/c/") ||
+          path.startsWith("/g/") ||
+          path.startsWith("/share/")
+        );
+      case "pi":
+        // Pi's chatable paths
+        return (
+          path.startsWith("/talk") ||
+          path.startsWith("/discover") ||
+          path.startsWith("/threads") ||
+          (path.startsWith("/profile") && !path.endsWith("/account"))
+        );
+      case "web":
+      default:
+        return false;
+    }
+  }
+
   static isInDictationMode(): boolean {
     const chatbot = this.identifyChatbot();
-    return chatbot === "web";
+    if (chatbot === "web") {
+      return true;
+    }
+    
+    // Check if current path is non-chatable for chatbot sites
+    const location = this.getGlobalLocation();
+    if (!location) {
+      return true; // Default to dictation mode if we can't determine location
+    }
+    
+    return chatbot !== undefined && !this.isChatablePath(chatbot, location.pathname);
   }
 
   static isInChatMode(): boolean {
     const chatbot = this.identifyChatbot();
-    if (!chatbot) {
+    if (!chatbot || chatbot === "web") {
       return false;
     }
-    return chatbot !== "web";
+    
+    // Check if current path is chatable for chatbot sites
+    const location = this.getGlobalLocation();
+    if (!location) {
+      return false; // Default to dictation mode if we can't determine location
+    }
+    
+    return this.isChatablePath(chatbot, location.pathname);
   }
 
 }
