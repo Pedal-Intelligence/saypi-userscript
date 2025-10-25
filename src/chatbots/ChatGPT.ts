@@ -96,6 +96,7 @@ class ChatGPTChatbot extends AbstractChatbot {
     const host = window.location.hostname;
     const supportedHosts = ['chatgpt.com', 'chat.com', 'chat.openai.com'];
     if (!supportedHosts.some(h => host.includes(h))) return false;
+    if (path.startsWith("/codex") || path.startsWith("/atlas")) return false; // chat not supported for coding agent or agentic browser
     return path === "/" || path.startsWith("/c/") || path.startsWith("/g/") || path.startsWith("/share/");
   }
 

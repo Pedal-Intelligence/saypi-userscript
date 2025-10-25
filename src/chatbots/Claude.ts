@@ -110,7 +110,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   isChatablePath(path: string): boolean {
-    // routes on which Claude can chat
+    if (path.startsWith("/code")) return false; // chat not supported for Claude Code coding agents
     return (
       path.includes("/new") ||
       path.includes("/chat") ||
