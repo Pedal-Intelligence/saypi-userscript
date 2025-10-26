@@ -1466,6 +1466,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           Object.keys(targetTranscriptions).forEach(key => {
             const seq = parseInt(key, 10);
             delete context.transcriptions[seq];
+            delete context.transcriptionTargets[seq]; // Clean up target mapping too
           });
 
           // Store the refined transcription
@@ -1976,6 +1977,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           console.debug(
             `[DictationMachine] Refinement transcription sent with sequence ${sequenceNum} for target ${targetId}`
           );
+
+          // Map the refinement sequence to the target element so the response can be routed correctly
+          context.transcriptionTargets[sequenceNum] = targetElement;
 
           // Track this as an active refinement
           context.activeRefinementSequences.set(targetId, sequenceNum);
