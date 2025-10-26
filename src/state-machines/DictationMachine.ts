@@ -381,8 +381,15 @@ function mapTargetForSequence(
   return finalTarget;
 }
 
+// Maximum audio buffer length per target in milliseconds (120 seconds = 2 minutes)
+// This prevents unbounded memory growth if user leaves hot-mic on
+const MAX_AUDIO_BUFFER_DURATION_MS = 120000;
+
 /**
  * Store an audio segment in the context for later refinement.
+ * Buffers accumulate the full dictation session up to MAX_AUDIO_BUFFER_DURATION_MS
+ * to provide maximum context for Phase 2 refinement.
+ *
  * @param context - The dictation context
  * @param targetElement - The target element this audio belongs to
  * @param blob - The audio blob
@@ -407,8 +414,34 @@ function storeAudioSegment(
     context.audioSegmentsByTarget[targetId] = [];
   }
 
-  // Store the segment
-  context.audioSegmentsByTarget[targetId].push({
+  const segments = context.audioSegmentsByTarget[targetId];
+
+  // Calculate total duration including the new segment
+  const currentTotalDuration = segments.reduce((sum, seg) => sum + seg.duration, 0);
+  const newTotalDuration = currentTotalDuration + duration;
+
+  // If adding this segment would exceed the max buffer duration, trim old segments
+  if (newTotalDuration > MAX_AUDIO_BUFFER_DURATION_MS) {
+    let excessDuration = newTotalDuration - MAX_AUDIO_BUFFER_DURATION_MS;
+    let segmentsToRemove = 0;
+
+    // Remove oldest segments until we're under the limit
+    for (let i = 0; i < segments.length && excessDuration > 0; i++) {
+      excessDuration -= segments[i].duration;
+      segmentsToRemove++;
+    }
+
+    if (segmentsToRemove > 0) {
+      const removed = segments.splice(0, segmentsToRemove);
+      console.debug(
+        `Trimmed ${segmentsToRemove} old audio segments for target ${targetId} to stay under ${MAX_AUDIO_BUFFER_DURATION_MS}ms limit. ` +
+        `Removed ${removed.reduce((sum, seg) => sum + seg.duration, 0)}ms of audio.`
+      );
+    }
+  }
+
+  // Store the new segment
+  segments.push({
     blob,
     frames,
     duration,
@@ -419,8 +452,9 @@ function storeAudioSegment(
   // Mark this target as pending refinement
   context.refinementPendingForTargets.add(targetId);
 
+  const totalDuration = segments.reduce((sum, seg) => sum + seg.duration, 0);
   console.debug(
-    `Stored audio segment ${sequenceNumber} for target ${targetId}. Total segments: ${context.audioSegmentsByTarget[targetId].length}`
+    `Stored audio segment ${sequenceNumber} for target ${targetId}. Total: ${segments.length} segments, ${(totalDuration / 1000).toFixed(1)}s of audio`
   );
 }
 
