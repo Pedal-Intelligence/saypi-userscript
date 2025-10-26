@@ -21,7 +21,7 @@ import { convertToWavBlob } from "../audio/AudioEncoder";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
 import { calculateDelay } from "../TimerModule";
 
-type DictationTranscribedEvent = {
+export type DictationTranscribedEvent = {
   type: "saypi:transcribed";
   text: string;
   sequenceNumber: number;
