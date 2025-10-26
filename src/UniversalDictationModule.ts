@@ -328,6 +328,19 @@ export class UniversalDictationModule {
     };
 
     const hideButton = () => {
+      // Trigger refinement if dictation is active for this element
+      if (target.machine) {
+        const state = target.machine.getSnapshot();
+        // Check if machine is in a state where refinement makes sense
+        if (state.matches("listening")) {
+          console.debug("[UniversalDictation] Field blur - triggering refinement for element:", element);
+          target.machine.send({
+            type: "saypi:refineTranscription",
+            targetElement: element,
+          });
+        }
+      }
+
       // Use setTimeout to delay hiding so click event can fire first
       setTimeout(() => {
         if (button && !this.currentActiveTarget) {
