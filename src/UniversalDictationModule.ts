@@ -400,14 +400,14 @@ export class UniversalDictationModule {
     element.addEventListener("input", handleContentChange);
     
     // Listen for dictation updates to track dictated content
-    EventBus.on("dictation:contentUpdated", (data) => {
+    EventBus.on("dictation:contentUpdated", (data: { targetElement: HTMLElement }) => {
       if (data.targetElement === element) {
         markDictationUpdate();
       }
     });
-    
+
     // Listen for dictation termination due to manual edit
-    EventBus.on("dictation:terminatedByManualEdit", (data) => {
+    EventBus.on("dictation:terminatedByManualEdit", (data: { targetElement: HTMLElement; reason: string }) => {
       if (data.targetElement === element && this.currentActiveTarget?.element === element) {
         console.debug("Dictation terminated due to manual edit on element:", element);
         // Clean up the active dictation state
