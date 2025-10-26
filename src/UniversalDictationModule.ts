@@ -1039,7 +1039,7 @@ export class UniversalDictationModule {
 
     // Events with additional data
     [USER_STOPPED_SPEAKING, AUDIO_DEVICE_CONNECTED, SESSION_ASSIGNED].forEach((eventName) => {
-      EventBus.on(eventName, (detail) => {
+      EventBus.on(eventName, (detail: any) => {
         if (detail) {
           // sanitise the detail object to replace any `frames` property with `[REDACTED]`
           const sanitisedDetail = { ...detail };
@@ -1055,7 +1055,7 @@ export class UniversalDictationModule {
     });
 
     // Listen for transcription events
-    EventBus.on("saypi:transcription:completed", (detail) => {
+    EventBus.on("saypi:transcription:completed", (detail: { text: string; sequenceNumber: number; pFinishedSpeaking?: number; tempo?: number; merged?: number[] }) => {
       logger.debug(`[UniversalDictationModule] Forwarding transcription to dictation machine`, detail);
       dictationService.send({ type: "saypi:transcribed", ...detail });
     });
