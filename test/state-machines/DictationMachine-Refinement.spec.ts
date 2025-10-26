@@ -837,5 +837,165 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().context.refinementPendingForTargets.has(targetId1)).toBe(true);
       expect(service.getSnapshot().context.refinementPendingForTargets.has(targetId2)).toBe(true);
     });
+
+    it('should refine all pending targets even after target switch (Codex bug)', async () => {
+      service.start();
+
+      const inputElement2 = document.createElement('input');
+      inputElement2.id = 'test-input-2';
+      inputElement2.name = 'testField2';
+
+      // Start dictation on first target
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement });
+      service.send({ type: 'saypi:callReady' });
+      service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
+      service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
+
+      // Add segment to first target with endpoint indicators
+      service.send({ type: 'saypi:userSpeaking' });
+
+      const mockFrames1 = new Float32Array(1000);
+      const mockBlob1 = new Blob([new ArrayBuffer(4000)]);
+
+      vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+
+      service.send({
+        type: 'saypi:userStoppedSpeaking',
+        duration: 1000,
+        blob: mockBlob1,
+        frames: mockFrames1,
+      });
+
+      service.send({
+        type: 'saypi:transcribed',
+        text: 'target1 text',
+        sequenceNumber: 2,
+        pFinishedSpeaking: 0.9, // High probability - will trigger endpoint delay
+        tempo: 0.5,
+      });
+
+      const targetId1 = `${inputElement.id || inputElement.name}`;
+
+      // Verify target1 is pending refinement
+      expect(service.getSnapshot().context.refinementPendingForTargets.has(targetId1)).toBe(true);
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId1]).toBeDefined();
+
+      // NOW SWITCH TO SECOND TARGET (this is the bug scenario)
+      service.send({ type: 'saypi:switchTarget', targetElement: inputElement2 });
+
+      // Verify current target is now target2
+      expect(service.getSnapshot().context.targetElement).toBe(inputElement2);
+
+      // Mock refinement upload for target1
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockClear();
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+
+      // Wait for endpoint delay to trigger refinement
+      await new Promise(resolve => setTimeout(resolve, 150));
+
+      // The bug was: refinement would check context.targetElement (now target2)
+      // and find no segments, leaving target1 unrefined
+      // The fix: iterate over refinementPendingForTargets instead
+
+      // Verify refinement was triggered for target1 (not current target)
+      expect(TranscriptionModule.uploadAudioWithRetry).toHaveBeenCalled();
+
+      const uploadCall = vi.mocked(TranscriptionModule.uploadAudioWithRetry).mock.calls[0];
+
+      // Should be refinement (empty precedingTranscripts)
+      expect(uploadCall[2]).toEqual({});
+
+      // Should have target1's input context
+      expect(uploadCall[8]).toBe('Test input'); // inputLabel (parameter 8)
+      expect(uploadCall[7]).toBe('text'); // inputType (parameter 7)
+
+      // Send refinement response
+      service.send({
+        type: 'saypi:transcribed',
+        text: 'refined target1 text',
+        sequenceNumber: 100,
+      });
+
+      // Verify target1 was refined even though current target is target2
+      const state = service.getSnapshot();
+      expect(state.context.transcriptionsByTarget[targetId1]).toEqual({
+        100: 'refined target1 text',
+      });
+
+      // Audio buffer for target1 should be cleared
+      expect(state.context.audioSegmentsByTarget[targetId1]).toBeUndefined();
+
+      // Refinement pending flag should be cleared
+      expect(state.context.refinementPendingForTargets.has(targetId1)).toBe(false);
+    });
+  });
+
+  describe('Manual Edit Cleanup', () => {
+    it('should clear audio buffers and refinement state on manual edit (Codex bug)', async () => {
+      service.start();
+
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement });
+      service.send({ type: 'saypi:callReady' });
+      service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
+      service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
+
+      // Add multiple segments to build up buffer
+      for (let i = 0; i < 3; i++) {
+        service.send({ type: 'saypi:userSpeaking' });
+
+        const mockFrames = new Float32Array(1000);
+        const mockBlob = new Blob([new ArrayBuffer(4000)]);
+
+        vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(i * 2 + 2);
+
+        service.send({
+          type: 'saypi:userStoppedSpeaking',
+          duration: 1000,
+          blob: mockBlob,
+          frames: mockFrames,
+        });
+
+        service.send({
+          type: 'saypi:transcribed',
+          text: `segment ${i}`,
+          sequenceNumber: i * 2 + 2,
+        });
+      }
+
+      const targetId = `${inputElement.id || inputElement.name}`;
+
+      // Verify we have buffered audio and pending refinement
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeDefined();
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId].length).toBe(3);
+      expect(service.getSnapshot().context.refinementPendingForTargets.has(targetId)).toBe(true);
+
+      // User manually edits the field
+      service.send({
+        type: 'saypi:manualEdit',
+        targetElement: inputElement,
+        newContent: 'user typed this',
+        oldContent: 'segment 0 segment 1 segment 2',
+      });
+
+      // The bug was: audio buffers and refinement state were not cleared
+      // This could lead to stale audio (up to 120s) being refined later
+
+      // Verify audio buffers are cleared
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeUndefined();
+
+      // Verify refinement pending flag is cleared
+      expect(service.getSnapshot().context.refinementPendingForTargets.has(targetId)).toBe(false);
+
+      // Verify active refinement sequences are cleared
+      expect(service.getSnapshot().context.activeRefinementSequences.has(targetId)).toBe(false);
+
+      // Verify transcription state is also cleared (existing behavior)
+      expect(service.getSnapshot().context.transcriptionsByTarget[targetId]).toBeUndefined();
+
+      // Should transition to idle
+      expect(service.getSnapshot().matches('idle')).toBe(true);
+    });
   });
 });

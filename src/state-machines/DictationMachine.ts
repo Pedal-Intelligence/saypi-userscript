@@ -1891,18 +1891,22 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         
         // Clear initial text for this target
         delete context.initialTextByTarget[targetId];
-        
+
         // Reset accumulated text if this is the current target
         if (event.targetElement === context.targetElement) {
           context.accumulatedText = "";
         }
+
+        // Clear audio buffers and refinement state for this target
+        // This prevents stale audio (up to 120s) from being refined later
+        clearAudioForTarget(context, targetId);
 
         // Emit event to notify that dictation was terminated due to manual edit
         EventBus.emit("dictation:terminatedByManualEdit", {
           targetElement: event.targetElement,
           reason: "manual-edit"
         });
-        
+
         // Stop recording and cleanup
         EventBus.emit("audio:stopRecording");
         EventBus.emit("audio:tearDownRecording");
@@ -1914,29 +1918,46 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       ) => {
         console.debug("[DictationMachine] performContextualRefinement triggered");
 
-        // Determine which target to refine
-        let targetElement: HTMLElement | undefined;
+        // Determine which target(s) to refine
+        let targetsToRefine: HTMLElement[] = [];
 
         if (event.type === "saypi:refineTranscription") {
           // Explicit refinement request for a specific target
-          targetElement = (event as DictationRefineTranscriptionEvent).targetElement;
-        } else if (context.targetElement) {
-          // Refine current target (endpoint-triggered)
-          targetElement = context.targetElement;
+          targetsToRefine = [(event as DictationRefineTranscriptionEvent).targetElement];
         } else {
-          console.warn("[DictationMachine] No target element for refinement");
+          // Endpoint-triggered: refine ALL pending targets (not just current one)
+          // This handles the case where user switched targets mid-dictation
+          for (const targetId of context.refinementPendingForTargets) {
+            // Find the target element by looking through transcription targets
+            const targetElement = Object.values(context.transcriptionTargets).find(
+              el => getTargetElementId(el) === targetId
+            );
+
+            if (targetElement) {
+              targetsToRefine.push(targetElement);
+            } else {
+              console.warn(`[DictationMachine] No element found for pending refinement target ${targetId}`);
+              context.refinementPendingForTargets.delete(targetId);
+            }
+          }
+        }
+
+        if (targetsToRefine.length === 0) {
+          console.debug("[DictationMachine] No targets to refine");
           return;
         }
 
-        const targetId = getTargetElementId(targetElement);
-        const segments = context.audioSegmentsByTarget[targetId];
+        // Process each target
+        for (const targetElement of targetsToRefine) {
+          const targetId = getTargetElementId(targetElement);
+          const segments = context.audioSegmentsByTarget[targetId];
 
-        if (!segments || segments.length === 0) {
-          console.debug(`[DictationMachine] No audio segments to refine for target ${targetId}`);
-          // Clear the pending flag even if no segments (cleanup)
-          context.refinementPendingForTargets.delete(targetId);
-          return;
-        }
+          if (!segments || segments.length === 0) {
+            console.debug(`[DictationMachine] No audio segments to refine for target ${targetId}`);
+            // Clear the pending flag even if no segments (cleanup)
+            context.refinementPendingForTargets.delete(targetId);
+            continue;
+          }
 
         console.debug(
           `[DictationMachine] Starting refinement for target ${targetId} with ${segments.length} segments`
@@ -2002,6 +2023,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Clean up on failure
           clearAudioForTarget(context, targetId);
         });
+        } // end for loop over targetsToRefine
       },
     },
     services: {},
