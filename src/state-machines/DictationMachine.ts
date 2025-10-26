@@ -21,6 +21,19 @@ import { convertToWavBlob } from "../audio/AudioEncoder";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
 import { calculateDelay } from "../TimerModule";
 
+/**
+ * Normalizes ellipses and whitespace in transcription text.
+ * Converts Unicode ellipsis (…) and triple dots (...) to spaces,
+ * then collapses consecutive spaces/tabs into single spaces.
+ */
+function normalizeTranscriptionText(text: string): string {
+  return text
+    .replace(/\u2026/g, " ")      // "…" → space
+    .replace(/\.{3}/g, " ")       // "..." → space
+    .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs
+    .trim();
+}
+
 export type DictationTranscribedEvent = {
   type: "saypi:transcribed";
   text: string;
@@ -30,7 +43,7 @@ export type DictationTranscribedEvent = {
   merged?: number[];
 };
 
-type DictationSpeechStoppedEvent = {
+export type DictationSpeechStoppedEvent = {
   type: "saypi:userStoppedSpeaking";
   duration: number;
   blob?: Blob;
@@ -40,13 +53,13 @@ type DictationSpeechStoppedEvent = {
   handlerTimestamp?: number;
 };
 
-type DictationAudioConnectedEvent = {
+export type DictationAudioConnectedEvent = {
   type: "saypi:audio:connected";
   deviceId: string;
   deviceLabel: string;
 };
 
-type DictationSessionAssignedEvent = {
+export type DictationSessionAssignedEvent = {
   type: "saypi:session:assigned";
   session_id: string;
 };
@@ -1453,11 +1466,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           }
 
           // Normalize the refined transcription
-          transcription = transcription
-            .replace(/\u2026/g, " ")   // "…" → space
-            .replace(/\.{3}/g, " ")    // "..." → space
-            .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs
-            .trim();
+          transcription = normalizeTranscriptionText(transcription);
 
           // Replace all Phase 1 transcriptions for this target with the refined result
           const targetTranscriptions = context.transcriptionsByTarget[refinedTargetId] || {};
@@ -1513,11 +1522,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         // sees consistent whitespace. Then collapse *spaces or tabs* (but not
         // line breaks) and trim the string.
         const originalTranscription = transcription;
-        transcription = transcription
-          .replace(/\u2026/g, " ")   // "…" → space
-          .replace(/\.{3}/g, " ")    // "..." → space
-          .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs but keep line-breaks
-          .trim();
+        transcription = normalizeTranscriptionText(transcription);
 
         console.debug(
           `Dictation transcript [${sequenceNumber}]: ${transcription}` +
@@ -2028,7 +2033,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
 
         const transcriptionEvent = event as DictationTranscribedEvent;
-        const maxDelay = 5000; // 5 seconds (vs 7s for conversation - accounts for p50 transcription time ~2s)
+
+        // Use 5s max delay for dictation endpoint detection (vs 7s in ConversationMachine).
+        // The shorter delay accounts for dictation's faster p50 transcription time (~2s)
+        // compared to conversation mode, allowing quicker refinement trigger without
+        // sacrificing accuracy in detecting natural speech endpoints.
+        const maxDelay = 5000;
 
         // Use pFinishedSpeaking from API, default to 1 if not provided
         let probabilityFinished = transcriptionEvent.pFinishedSpeaking ?? 1;
