@@ -246,8 +246,14 @@ def translate_keys(keys, locales_dir="_locales", skip_confirm=False, model="gpt-
         target_file = locales_path / lang / "messages.json"
         
         # Load existing target file (or create new structure)
-        target_data = load_json_file(target_file) if target_file.exists() else {}
-        if target_data is None:
+        if target_file.exists():
+            target_data = load_json_file(target_file)
+            if target_data is None:
+                print(f"\n✘ CRITICAL ERROR: Failed to parse {target_file}", file=sys.stderr)
+                print(f"   The file may contain JSON syntax errors.", file=sys.stderr)
+                print(f"   Aborting to prevent data loss. Fix the JSON errors and try again.", file=sys.stderr)
+                sys.exit(1)
+        else:
             target_data = {}
         
         # Translate each key
