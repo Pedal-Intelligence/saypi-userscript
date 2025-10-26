@@ -30,12 +30,12 @@
     "message": "Megszakítható"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Hangalapú gépelés mindenhol. Könnyű beszélgetés Pi-vel, Claude-dal és ChatGPT-vel. Beszélj bátran."
+    "message": "Kéz nélküli hangchat ChatGPT, Claude & Pi-vel. Nincs gombnyomás. Hangalapú gépelés mindenhol.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Kéz nélküli AI hangchat",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Az egyes komponensek állapotainak listájához tartozó címsor.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Az ablak tetején egy böngésző prompt látható. \nCsak nyomja meg a \u003cstrong\u003e \"Engedélyezést, miközben meglátogatja a webhelyet\" \u003c/strong\u003e, hogy elkezdhessük a beszélgetést."
+    "message": "Az ablak tetején egy böngésző prompt látható. \nCsak nyomja meg a <strong> \"Engedélyezést, miközben meglátogatja a webhelyet\" </strong>, hogy elkezdhessük a beszélgetést."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

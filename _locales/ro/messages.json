@@ -30,12 +30,12 @@
     "message": "Întreruptibil"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Dictare vocală peste tot, conversații fluide cu Pi, Claude și ChatGPT. Vorbește liber—Pi se ocupă de restul."
+    "message": "Chat vocal fără mâini cu ChatGPT, Claude & Pi. Fără apăsare de buton. Tastare vocală peste tot.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Chat vocal AI fără mâini",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Etichetă pentru lista stărilor individuale ale componentelor.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește \u003cstrong\u003e „Permiteți -vă în timp ce vizitați site -ul” \u003c/strong\u003e, astfel încât să putem începe să vorbim."
+    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește <strong> „Permiteți -vă în timp ce vizitați site -ul” </strong>, astfel încât să putem începe să vorbim."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

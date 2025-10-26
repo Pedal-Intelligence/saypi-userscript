@@ -30,12 +30,12 @@
     "message": "தடுப்பு வேண்டிய"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "எங்கும் குரல் தட்டச்சு. Pi, Claude, ChatGPT உடன் எளிய உரையாடல். சுதந்திரமாக பேசுங்கள்."
+    "message": "பட்டன் அழுத்த தேவையின்றி ChatGPT, Claude & Pi உடன் கையற்ற குரல் அரட்டை. எங்கும் குரல் தட்டச்சு.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: கைமாறு இல்லாத AI குரல் உரையாடல்",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "தனிப்பட்ட கூறுகளின் நிலை பட்டியலுக்கான தலைப்பு லேபிள்.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "You'll see a browser prompt at the top of this window. Just hit \u003cstrong\u003e\"Allow while visiting the site\"\u003c/strong\u003e so we can start talking."
+    "message": "You'll see a browser prompt at the top of this window. Just hit <strong>\"Allow while visiting the site\"</strong> so we can start talking."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -30,12 +30,12 @@
     "message": "Afbrydelig"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Stemmeindtastning overalt. Nem chat med Pi, Claude og ChatGPT. Tal frit."
+    "message": "Håndfri stemmechat med ChatGPT, Claude & Pi. Ingen knaptryk nødvendig. Stemmeskrivning overalt.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Håndfri AI-stemmechat",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Overskriftsmærke for listen over individuelle komponenters status.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Du kan se en browserprompt øverst i dette vindue. \nBare ramt \u003cstrong\u003e \"Tillad, mens du besøger webstedet\" \u003c/strong\u003e så vi kan begynde at tale."
+    "message": "Du kan se en browserprompt øverst i dette vindue. \nBare ramt <strong> \"Tillad, mens du besøger webstedet\" </strong> så vi kan begynde at tale."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

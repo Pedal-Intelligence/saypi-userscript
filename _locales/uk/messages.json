@@ -30,12 +30,12 @@
     "message": "Переривний"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Голосовий набір усюди, безперебійне спілкування з Pi, Claude та ChatGPT. Говори вільно — Pi зробить решту."
+    "message": "Голосовий чат без рук з ChatGPT, Claude & Pi. Не потрібно натискати кнопки. Голосовий набір всюди.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: голосовий чат з AI без рук",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Заголовок для списку статусів окремих компонентів.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Ви побачите підказку браузера у верхній частині цього вікна. \nПросто натисніть \u003cstrong\u003e \"Дозволити під час відвідування сайту\" \u003c/strong\u003e, щоб ми могли почати розмову."
+    "message": "Ви побачите підказку браузера у верхній частині цього вікна. \nПросто натисніть <strong> \"Дозволити під час відвідування сайту\" </strong>, щоб ми могли почати розмову."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

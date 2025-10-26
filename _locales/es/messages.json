@@ -30,12 +30,12 @@
     "message": "interrumpible"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Dictado por voz en todas partes. Charlas fáciles con Pi, Claude y ChatGPT. Habla libremente."
+    "message": "Chat de voz manos libres con ChatGPT, Claude y Pi. Sin pulsar botones. Dictado por voz en todas partes.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Chat de Voz AI Manos Libres",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Etiqueta de encabezado para la lista de estados individuales de los componentes.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Verá un mensaje de navegador en la parte superior de esta ventana. \nSimplemente presione \u003cstrong\u003e \"Permitir mientras visita el sitio\" \u003c/strong\u003e para que podamos comenzar a hablar."
+    "message": "Verá un mensaje de navegador en la parte superior de esta ventana. \nSimplemente presione <strong> \"Permitir mientras visita el sitio\" </strong> para que podamos comenzar a hablar."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

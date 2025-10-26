@@ -1,48 +1,33 @@
-Say, Pi turns your conversations with ChatGPT, Pi, and Claude into smooth, voice‑driven experiences, and brings high‑quality voice typing to any website.
-Just tap the call button, speak like you would to a person, and get lifelike spoken replies. Plus, dictate text into any input field across the web with the same accuracy you love.
-Perfect for multitasking, accessibility, or anyone who thinks better out loud.
+Experience true hands-free, speech-to-speech conversations with ChatGPT, Claude, and Pi. Unlike other extensions that require a button press, Say, Pi's smart AI voice assistant knows when you're done speaking, allowing for natural, uninterrupted voice chat.
 
+🎯 KEY FEATURES
 
-NEW IN v1.10.0 — “Say, Pi for ChatGPT” (Save Standard Voice)
-- Bring back the feel of ChatGPT’s Standard Voice Mode (SVM) with a patient, predictable, hands‑free experience.
-- Drop‑in on chatgpt.com: a call button appears in the ChatGPT composer; start/stop just like SVM.
-- Automatic Read Aloud: when enabled, we press ChatGPT’s native “read aloud” once per response—no double audio.
-- Designed for the #SaveStandardVoice moment: warmth, presence, and dependable pacing.
+✓ True Hands-Free Voice Chat – No push-to-talk button needed. Our AI detects when you've finished speaking.
+✓ Complete Speech-to-Speech – The only browser extension offering full conversational AI with spoken replies.
+✓ Universal Voice Typing – Dictate into any text field on any website with professional accuracy.
+✓ Multi-AI Support – Seamlessly switch between ChatGPT, Claude, and Pi.
+✓ 32+ Languages – Powered by OpenAI Whisper and ElevenLabs for lifelike voices.
+✓ Works (Nearly) Everywhere – Mac, Windows, Linux, Android.
 
-FREE PLAN – TRY INSTANTLY, NO ACCOUNT NEEDED
-- Voice Chat with AI: Talk to ChatGPT, Pi, and Claude with Whisper‑powered voice recognition that knows when you're done speaking.  
-- Universal Voice Typing: Dictate into any text field or email on any website – just right-click and select "Start dictation with Say, Pi."
-- Accurate & Fast: Enjoy high-accuracy speech-to-text, even with accents and background noise.  
-- Hear Natural Voices: Warm, lifelike replies in supported modes.  
-- Flexible Layouts: Use full-screen immersive mode or standard chat view.  
-- Dark Mode Support: Eye-friendly design that blends in with Pi's interface.  
-- Works Everywhere: Mac, Windows, Linux, Android, iOS – all covered.
+🆕 NEW: "Say, Pi for ChatGPT" (Save Standard Voice)
+Bring back the feel of ChatGPT's Standard Voice Mode with a patient, predictable, hands-free experience.
 
+💎 WHY USERS LOVE SAY, PI
 
-SAY, PI PREMIUM – UNLOCK THE FULL EXPERIENCE
-Your voice, your language, your AI – across all your devices and websites.  
-- ChatGPT, Claude & Pi Support: Seamless switching between top AI assistants.  
-- Universal Dictation: Professional-grade voice typing for emails, documents, and forms anywhere on the web.
-- Lifelike Replies in 32+ Languages: Powered by ElevenLabs, crafted to sound natural in your language.  
-- Bigger Usage Limits: More talking time, more listening time, more dictation.  
-- One Account, Everywhere: Premium follows you across platforms and browsers.
+"This is INCREDIBLE! I'll happily pay for updates!" – Sophie
+"Unreal. Functionally superior to the native interface." – iTwit
+"Thank you for helping my mute and deaf students find their familiar voice." – Elsie
+"Some of my best work so far through using Say Pi interface." – Chad
 
-See pricing at: https://saypi.ai/pricing
+⭐ Rated 4.9/5 by 2,000+ users
 
+🚀 GET STARTED IN SECONDS
+1. Install the extension
+2. Open chatgpt.com, pi.ai, or claude.ai
+3. Click the call button and start speaking
+4. For voice typing: Right-click any text field → "Start dictation with Say, Pi"
 
-WHY THOUSANDS LOVE SAY, PI
-- Boost Your Workflow: Take notes, write emails, ideate, or draft while keeping your hands free.  
-- Speak Any Language: Multilingual support with smooth mid-conversation switching.  
-- Built for Accessibility: Designed with inclusivity in mind – great for users with motor or visual challenges.  
-- Rated ★ 4.9/5 by 2,000+ Users: Trusted by a growing global community.  
-- Privacy First: Your voice data is secure and never misused. See our policy at: https://saypi.ai/legal/privacy
+🔒 PRIVACY FIRST
+Your voice data is secure and never misused. See our policy at: https://saypi.ai/legal/privacy
 
-
-GET STARTED IN SECONDS
-1. Install the extension.  
-2. For AI chat: Open chatgpt.com, pi.ai, or claude.ai and click the call button.
-3. For voice typing: From any text field, press the floating "Say, Pi" icon or right-click and select "Start dictation with Say, Pi."
-4. Speak naturally. That's it.
-
-
-Start talking to AI and typing with your voice the natural way—install Say, Pi and experience the future of conversation and productivity.
+Start talking to AI and typing with your voice the natural way. Install Say, Pi and experience the future of hands-free productivity.

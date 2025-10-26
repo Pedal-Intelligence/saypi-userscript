@@ -30,12 +30,12 @@
     "message": "可中断的"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "随时随地语音输入，与Pi、Claude和ChatGPT无缝交流。畅所欲言，剩下的交给Pi。"
+    "message": "免按键语音聊天，支持ChatGPT、Claude和Pi。随时随地语音输入。",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi：免提AI语音聊天",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "各组件状态列表的标题标签。",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "您会在此窗口的顶部看到一个浏览器提示。\n只需点击\u003cstrong\u003e“访问网站时允许” \u003c/strong\u003e，我们就可以开始交谈。"
+    "message": "您会在此窗口的顶部看到一个浏览器提示。\n只需点击<strong>“访问网站时允许” </strong>，我们就可以开始交谈。"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -30,12 +30,12 @@
     "message": "विच्छेदनीय"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "हर जगह वॉइस टाइपिंग, Pi, Claude और ChatGPT के साथ सहज बातचीत। बेझिझक बोलो—बाकी सब Pi संभालेगा।"
+    "message": "बिना बटन दबाए ChatGPT, Claude और Pi के साथ हैंड्स-फ्री वॉयस चैट। हर जगह वॉयस टाइपिंग।",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: हैंड्स-फ्री एआई वॉयस चैट",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "विभिन्न घटकों की स्थिति की सूची के लिए शीर्षक लेबल।",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "आप इस विंडो के शीर्ष पर एक ब्राउज़र प्रॉम्प्ट देखेंगे। \nबस हिट \u003cstrong\u003e \"साइट पर जाने के दौरान\" \u003c/strong\u003e पर जाने की अनुमति दें ताकि हम बात करना शुरू कर सकें।"
+    "message": "आप इस विंडो के शीर्ष पर एक ब्राउज़र प्रॉम्प्ट देखेंगे। \nबस हिट <strong> \"साइट पर जाने के दौरान\" </strong> पर जाने की अनुमति दें ताकि हम बात करना शुरू कर सकें।"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

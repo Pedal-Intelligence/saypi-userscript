@@ -30,12 +30,12 @@
     "message": "Có thể gián đoạn"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Nhập bằng giọng nói mọi nơi. Trò chuyện dễ dàng với Pi, Claude và ChatGPT. Nói tự nhiên."
+    "message": "Trò chuyện thoại rảnh tay với ChatGPT, Claude & Pi. Không cần nhấn nút. Nhập liệu bằng giọng nói mọi nơi.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Chat AI giọng nói rảnh tay",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Tiêu đề cho danh sách trạng thái của các thành phần riêng biệt.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn \u003cstrong\u003e \"cho phép trong khi truy cập trang web\" \u003c/strong\u003e để chúng ta có thể bắt đầu nói chuyện."
+    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn <strong> \"cho phép trong khi truy cập trang web\" </strong> để chúng ta có thể bắt đầu nói chuyện."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

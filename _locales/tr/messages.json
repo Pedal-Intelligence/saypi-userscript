@@ -30,12 +30,12 @@
     "message": "Kesilebilir"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Her yerde sesle yazma, Pi, Claude ve ChatGPT ile kesintisiz sohbetler. Özgürce konuş—geri kalanını Pi halleder."
+    "message": "ChatGPT, Claude & Pi ile eller serbest sesli sohbet. Düğmeye basmaya gerek yok. Her yerde sesli yazma.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Eller Serbest AI Sesli Sohbet",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Bireysel bileşen durumlarının listesi için başlık etiketi.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece \u003cstrong\u003e \"Siteyi ziyaret ederken izin ver\" \u003c/strong\u003e, böylece konuşmaya başlayabiliriz."
+    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece <strong> \"Siteyi ziyaret ederken izin ver\" </strong>, böylece konuşmaya başlayabiliriz."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
