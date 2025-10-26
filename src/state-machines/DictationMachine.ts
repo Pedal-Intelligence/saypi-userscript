@@ -398,6 +398,10 @@ function mapTargetForSequence(
 // This prevents unbounded memory growth if user leaves hot-mic on
 const MAX_AUDIO_BUFFER_DURATION_MS = 120000;
 
+// Maximum delay for refinement endpoint detection (5 seconds)
+// Shorter than ConversationMachine's 7s to account for faster p50 transcription time (~2s)
+const REFINEMENT_MAX_DELAY_MS = 5000;
+
 /**
  * Store an audio segment in the context for later refinement.
  * Buffers accumulate the full dictation session up to MAX_AUDIO_BUFFER_DURATION_MS
@@ -1487,8 +1491,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Get initial text for this target
           const initialText = context.initialTextByTarget[refinedTargetId] || "";
 
-          // Set the final refined text
-          const finalText = initialText ? initialText + " " + transcription : transcription;
+          // Set the final refined text using smart joining to handle whitespace correctly
+          const finalText = smartJoinTwoTexts(initialText, transcription);
           setTextInTarget(finalText, targetElement, true); // Replace all content
 
           // Update accumulated text if this is the current target
@@ -2034,11 +2038,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
         const transcriptionEvent = event as DictationTranscribedEvent;
 
-        // Use 5s max delay for dictation endpoint detection (vs 7s in ConversationMachine).
-        // The shorter delay accounts for dictation's faster p50 transcription time (~2s)
-        // compared to conversation mode, allowing quicker refinement trigger without
-        // sacrificing accuracy in detecting natural speech endpoints.
-        const maxDelay = 5000;
+        // Use configured max delay for dictation endpoint detection
+        const maxDelay = REFINEMENT_MAX_DELAY_MS;
 
         // Use pFinishedSpeaking from API, default to 1 if not provided
         let probabilityFinished = transcriptionEvent.pFinishedSpeaking ?? 1;
