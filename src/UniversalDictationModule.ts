@@ -1,6 +1,12 @@
 import { Observation } from "./dom/Observation";
 import { addChild } from "./dom/DOMModule";
-import { createDictationMachine, DictationTranscribedEvent } from "./state-machines/DictationMachine";
+import {
+  createDictationMachine,
+  DictationTranscribedEvent,
+  DictationSpeechStoppedEvent,
+  DictationAudioConnectedEvent,
+  DictationSessionAssignedEvent,
+} from "./state-machines/DictationMachine";
 import { interpret } from "xstate";
 import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
@@ -1039,7 +1045,7 @@ export class UniversalDictationModule {
 
     // Events with additional data
     [USER_STOPPED_SPEAKING, AUDIO_DEVICE_CONNECTED, SESSION_ASSIGNED].forEach((eventName) => {
-      EventBus.on(eventName, (detail: any) => {
+      EventBus.on(eventName, (detail: Omit<DictationSpeechStoppedEvent, 'type'> | Omit<DictationAudioConnectedEvent, 'type'> | Omit<DictationSessionAssignedEvent, 'type'>) => {
         if (detail) {
           // sanitise the detail object to replace any `frames` property with `[REDACTED]`
           const sanitisedDetail = { ...detail };
