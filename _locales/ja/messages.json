@@ -30,12 +30,12 @@
     "message": "中断可能な"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "どこでも音声入力、PiやClaude、ChatGPTとのスムーズなチャット。話すだけで、あとはPiにおまかせ。"
+    "message": "ChatGPT、Claude、Piとハンズフリー音声チャット。ボタン不要。どこでも音声入力。",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: ハンズフリーAI音声チャット",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "各コンポーネントの状態一覧の見出しラベル。",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n\u003cstrong\u003e「サイトにアクセスしながら許可」を押してください\u003c/strong\u003e。"
+    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n<strong>「サイトにアクセスしながら許可」を押してください</strong>。"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -30,12 +30,12 @@
     "message": "Mapuputol"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Voice typing saanman. Madaling usapan kasama sina Pi, Claude at ChatGPT. Magsalita nang malaya."
+    "message": "Voice chat na walang kamay gamit ang ChatGPT, Claude & Pi. Walang pindutan. Voice typing kahit saan.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Hands-Free AI Voice Chat",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Pamagat para sa listahan ng indibidwal na kalagayan ng mga bahagi.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang \u003cstrong\u003e \"Payagan habang bumibisita sa site\" \u003c/strong\u003e upang maaari nating simulan ang pakikipag -usap."
+    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang <strong> \"Payagan habang bumibisita sa site\" </strong> upang maaari nating simulan ang pakikipag -usap."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

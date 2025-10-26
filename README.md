@@ -345,7 +345,9 @@ npm run dev
 
 ## Internationalization (i18n)
 
-The extension supports 20+ languages with unified translation workflow:
+The extension supports 30+ languages with a flexible translation workflow:
+
+### Quick Translation
 
 ```bash
 # Translate all content (UI strings + store descriptions)
@@ -358,15 +360,36 @@ npm run translate:check
 npm run translate -- --yes
 ```
 
+### Targeted Translation (for rapid iteration)
+
+When you only need to translate specific keys (e.g., after updating marketing copy):
+
+```bash
+# Translate specific keys from messages.json
+python3 tools/i18n/i18n-translate-keys.py appName appDescription
+
+# Translate multiple keys at once
+python3 tools/i18n/i18n-translate-keys.py -y callInProgress callNotStarted voiceSettings
+
+# Translate only description.txt (store listings)
+python3 tools/i18n/i18n-translate-release-text.py -y
+```
+
+**When to use which tool:**
+- **`npm run translate`** - Full translation before major releases (slow but comprehensive)
+- **`i18n-translate-keys.py`** - Update specific UI strings (fast, targeted)
+- **`i18n-translate-release-text.py`** - Update store descriptions only
+
+### Translation Files
+
 **What gets translated:**
-- `_locales/{locale}/messages.json` - UI strings (via `translate-cli`)
+- `_locales/{locale}/messages.json` - UI strings (via `translate-cli` for full sync, OpenAI for targeted)
 - `_locales/{locale}/description.txt` - Browser store listings (via OpenAI API)
 
 **Requirements:**
 - `translate-cli` (Go): `go install github.com/quailyquaily/translate-cli@latest`
 - OpenAI API key: `export OPENAI_API_KEY="..."`
-
-See [README:268-348](README.md#L268-L348) for detailed i18n workflow.
+- Python 3.6+ with `requests` library: `pip install requests`
 
 ---
 

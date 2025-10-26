@@ -30,12 +30,12 @@
     "message": "বাধাপ্রাপ্তিসাধ্য"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "যেকোনো জায়গায় ভয়েস টাইপিং, Pi, Claude, এবং ChatGPT’র নীতন্তরহীন চ্যাট। মুক্তভাবে বলুন—বাকিটা Pi করবে।"
+    "message": "চ্যাটজিপিটি, ক্লড ও পাই-এর সাথে হ্যান্ডস-ফ্রি ভয়েস চ্যাট। কোনো বোতাম চাপার প্রয়োজন নেই। সর্বত্র ভয়েস টাইপিং।",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: হ্যান্ডস-ফ্রি এআই ভয়েস চ্যাট",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "ব্যক্তিগত উপাদানগুলোর স্থিতি তালিকার শিরোনাম লেবেল।",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "আপনি এই উইন্ডোর শীর্ষে একটি ব্রাউজার প্রম্পট দেখতে পাবেন। \nকেবলমাত্র \u003cstrong\u003e \"হিট করুন\" সাইটটি দেখার সময় অনুমতি দিন \"\u003c/strong\u003e যাতে আমরা কথা বলা শুরু করতে পারি।"
+    "message": "আপনি এই উইন্ডোর শীর্ষে একটি ব্রাউজার প্রম্পট দেখতে পাবেন। \nকেবলমাত্র <strong> \"হিট করুন\" সাইটটি দেখার সময় অনুমতি দিন \"</strong> যাতে আমরা কথা বলা শুরু করতে পারি।"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

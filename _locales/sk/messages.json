@@ -30,12 +30,12 @@
     "message": "Prerušiteľný"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Diktovanie hlasom všade, plynulá komunikácia s Pi, Claude a ChatGPT. Hovor slobodne – Pi sa postará o zvyšok."
+    "message": "Hlasový chat bez rúk s ChatGPT, Claude & Pi. Bez stlačenia tlačidla. Hlasové písanie všade.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: AI hlasový chat bez rúk",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Nadpis pre zoznam stavov jednotlivých komponentov.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "V hornej časti tohto okna sa zobrazí výzva prehliadača. \nStačí zasiahnuť \u003cstrong\u003e „Povoliť pri návšteve stránky“ \u003c/strong\u003e, aby sme mohli začať hovoriť."
+    "message": "V hornej časti tohto okna sa zobrazí výzva prehliadača. \nStačí zasiahnuť <strong> „Povoliť pri návšteve stránky“ </strong>, aby sme mohli začať hovoriť."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

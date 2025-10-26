@@ -30,12 +30,12 @@
     "message": "Διακόπτομενη"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Φωνητική πληκτρολόγηση παντού. Εύκολες συνομιλίες με Pi, Claude και ChatGPT. Μίλα ελεύθερα."
+    "message": "Φωνητική συνομιλία χωρίς χέρια με ChatGPT, Claude & Pi. Χωρίς πάτημα κουμπιού. Φωνητική πληκτρολόγηση παντού.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Φωνητική Συνομιλία AI",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Ετικέτα επικεφαλίδας για τη λίστα επιμέρους καταστάσεων των στοιχείων.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Θα δείτε μια προτροπή του προγράμματος περιήγησης στην κορυφή αυτού του παραθύρου. \nΑπλά χτυπήστε \u003cstrong\u003e, επιτρέψτε κατά την επίσκεψη στον ιστότοπο \"\u003c/strong\u003e έτσι μπορούμε να αρχίσουμε να μιλάμε."
+    "message": "Θα δείτε μια προτροπή του προγράμματος περιήγησης στην κορυφή αυτού του παραθύρου. \nΑπλά χτυπήστε <strong>, επιτρέψτε κατά την επίσκεψη στον ιστότοπο \"</strong> έτσι μπορούμε να αρχίσουμε να μιλάμε."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -30,12 +30,12 @@
     "message": "중단 가능한"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "어디서나 음성 타이핑, Pi, Claude, ChatGPT와 매끄러운 대화. 자유롭게 말하면 Pi가 나머지를 처리해줍니다."
+    "message": "ChatGPT, Claude, Pi와 핸즈프리 음성 채팅. 버튼 누름 없이 음성 입력 가능.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: 핸즈프리 AI 음성 채팅",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "개별 구성 요소 상태 목록의 제목 레이블입니다.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n\u003cstrong\u003e \"사이트를 방문하는 동안 허용\"\u003c/strong\u003e을 누르면 대화를 시작할 수 있습니다."
+    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n<strong> \"사이트를 방문하는 동안 허용\"</strong>을 누르면 대화를 시작할 수 있습니다."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

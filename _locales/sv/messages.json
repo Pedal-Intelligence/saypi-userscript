@@ -30,12 +30,12 @@
     "message": "Avbrytbar"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Röstinmatning överallt, sömlösa samtal med Pi, Claude och ChatGPT. Tala fritt—Pi sköter resten."
+    "message": "Röstchatt utan händer med ChatGPT, Claude & Pi. Ingen knapptryckning behövs. Röstsök överallt.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Handsfree AI-röstchatt",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Rubriktikett för listan över individuella komponentstatusar.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Du ser en webbläsarprompt högst upp i detta fönster. \nHit bara \u003cstrong\u003e \"Tillåt när vi besöker webbplatsen\" \u003c/strong\u003e så att vi kan börja prata."
+    "message": "Du ser en webbläsarprompt högst upp i detta fönster. \nHit bara <strong> \"Tillåt när vi besöker webbplatsen\" </strong> så att vi kan börja prata."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

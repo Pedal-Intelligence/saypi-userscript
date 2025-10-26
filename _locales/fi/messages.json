@@ -30,12 +30,12 @@
     "message": "Keskeytettävissä"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Äänikirjoitus kaikkialla, sujuvat keskustelut Pi:n, Clauden ja ChatGPT:n kanssa. Puhu vapaasti—Pi hoitaa loput."
+    "message": "Kädet vapaana puhechat ChatGPT:n, Claude:n & Pi:n kanssa. Ei painikkeen painallusta. Puhekirjoitus kaikkialla.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Kädetön AI-äänikeskustelu",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Otsikkotunniste yksittäisten komponenttien tilojen listalle.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma \u003cstrong\u003e \"Salli vieraillessasi sivustolla\" \u003c/strong\u003e, jotta voimme alkaa puhua."
+    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma <strong> \"Salli vieraillessasi sivustolla\" </strong>, jotta voimme alkaa puhua."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -30,12 +30,12 @@
     "message": "Prekidljiv"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Pisanje glasom posvuda, neometani razgovori s Pi, Claudeom i ChatGPT-om. Govori slobodno—Pi će obaviti ostalo."
+    "message": "Glasovni chat bez ruku s ChatGPT, Claude & Pi. Nema potrebe za pritiskom gumba. Glasovno tipkanje svugdje.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Hands-Free AI Glasovni Chat",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Naslov za popis statusa pojedinih komponenti.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Na vrhu ovog prozora vidjet ćete upit preglednika. \nSamo pogodite \u003cstrong\u003e \"Dopustite dok posjećujete web mjesto\" \u003c/strong\u003e kako bismo mogli početi razgovarati."
+    "message": "Na vrhu ovog prozora vidjet ćete upit preglednika. \nSamo pogodite <strong> \"Dopustite dok posjećujete web mjesto\" </strong> kako bismo mogli početi razgovarati."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

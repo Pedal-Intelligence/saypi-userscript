@@ -30,12 +30,12 @@
     "message": "Прекъсваем"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Гласово въвеждане навсякъде. Лесни разговори с Pi, Claude и ChatGPT. Говори свободно."
+    "message": "Гласов чат без ръце с ChatGPT, Claude & Pi. Без нужда от натискане на бутон. Гласово въвеждане навсякъде.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Гласов чат с AI без ръце",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Заглавен надпис за списъка с индивидуални статуси на компоненти.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Ще видите подкана за браузър в горната част на този прозорец. \nПросто ударете \u003cstrong\u003e \"позволете, докато посещавате сайта\" \u003c/strong\u003e, за да можем да започнем да говорим."
+    "message": "Ще видите подкана за браузър в горната част на този прозорец. \nПросто ударете <strong> \"позволете, докато посещавате сайта\" </strong>, за да можем да започнем да говорим."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

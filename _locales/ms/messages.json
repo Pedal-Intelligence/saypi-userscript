@@ -30,12 +30,12 @@
     "message": "Boleh diganggu"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Dikte suara di mana-mana. Sembang mudah dengan Pi, Claude dan ChatGPT. Bersuara bebas."
+    "message": "Sembang suara tanpa tangan dengan ChatGPT, Claude & Pi. Tiada butang diperlukan. Taip suara di mana-mana.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Sembang Suara AI Bebas Tangan",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Label tajuk untuk senarai status komponen individu.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Anda akan melihat penyemak imbas di bahagian atas tetingkap ini. \nHanya tekan \u003cstrong\u003e \"Benarkan semasa melawat laman web\" \u003c/strong\u003e supaya kita boleh mula bercakap."
+    "message": "Anda akan melihat penyemak imbas di bahagian atas tetingkap ini. \nHanya tekan <strong> \"Benarkan semasa melawat laman web\" </strong> supaya kita boleh mula bercakap."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

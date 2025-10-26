@@ -30,12 +30,12 @@
     "message": "Onderbreekbaar"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "spraakgestuurd typen overal, naadloze chats met Pi, Claude en ChatGPT. Spreek vrijuit—Pi regelt de rest."
+    "message": "Handsfree spraakchat met ChatGPT, Claude & Pi. Geen knopdruk nodig. Overal spraaktypen.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Hands-Free AI Voice Chat",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Koptekst voor de lijst met individuele componentstatussen.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon \u003cstrong\u003e \"Tijdens een bezoek aan de site\" \u003c/strong\u003e zodat we kunnen beginnen met praten."
+    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon <strong> \"Tijdens een bezoek aan de site\" </strong> zodat we kunnen beginnen met praten."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

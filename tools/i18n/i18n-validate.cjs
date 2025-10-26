@@ -68,16 +68,18 @@ function validateMessageLengths(dir) {
       "messages.json"
     ));
 
+    const maxAppNameLength = 40;
+    const maxAppDescriptionLength = 112;
     // Check each message
     for (const [key, value] of Object.entries(messages)) {
-      if (key === "appName" && value.message.length > 40) {
+      if (key === "appName" && value.message.length > maxAppNameLength) {
         console.log(
-          `Locale: ${localeDir}, Message: ${key}, app name is too long (${value.message.length}): ${value.message}`
+          `Locale: ${localeDir}, Message: ${key}, app name is too long (${value.message.length}/${maxAppNameLength}): ${value.message}`
         );
         process.exit(1);
-      } else if (key === "appDescription" && value.message.length > 112) {
+      } else if (key === "appDescription" && value.message.length > maxAppDescriptionLength) {
         console.log(
-          `Locale: ${localeDir}, Message: ${key}, app description is too long (${value.message.length}): ${value.message}`
+          `Locale: ${localeDir}, Message: ${key}, app description is too long (${value.message.length}/${maxAppDescriptionLength}): ${value.message}`
         );
         process.exit(1);
       }

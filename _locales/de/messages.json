@@ -30,12 +30,12 @@
     "message": "Unterbrechbar"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Sprachschreibung überall, nahtlose Chats mit Pi, Claude und ChatGPT. Frei sprechen – Pi erledigt den Rest."
+    "message": "Freihändiger Sprachchat mit ChatGPT, Claude & Pi. Kein Tastendruck nötig. Sprachsteuerung überall.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Freihändiger KI-Sprachchat",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Überschrift für die Liste der einzelnen Komponentenstatus.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach \u003cstrong\u003e \"Erlauben Sie beim Besuch der Website\" \u003c/strong\u003e, damit wir anfangen können zu reden."
+    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach <strong> \"Erlauben Sie beim Besuch der Website\" </strong>, damit wir anfangen können zu reden."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

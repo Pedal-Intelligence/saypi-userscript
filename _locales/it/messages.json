@@ -30,12 +30,12 @@
     "message": "Interrompibile"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Dettatura vocale ovunque. Chat facili con Pi, Claude e ChatGPT. Parla liberamente."
+    "message": "Chat vocale senza mani con ChatGPT, Claude e Pi. Nessun pulsante necessario. Digitazione vocale ovunque.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: Chat vocale AI senza mani",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Intestazione per la lista degli stati dei singoli componenti.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Vedrai un prompt del browser nella parte superiore di questa finestra. \nBasta premere \u003cstrong\u003e \"Consenti durante la visita del sito\" \u003c/strong\u003e in modo da poter iniziare a parlare."
+    "message": "Vedrai un prompt del browser nella parte superiore di questa finestra. \nBasta premere <strong> \"Consenti durante la visita del sito\" </strong> in modo da poter iniziare a parlare."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -30,12 +30,12 @@
     "message": "قابل للمقاطعة"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "الكتابة بالصوت في كل مكان، دردشات سلسة مع Pi وClaude وChatGPT. تحدث بحرية—دع Pi يتولى الباقي."
+    "message": "دردشة صوتية بدون استخدام اليدين مع ChatGPT وClaude وPi. لا حاجة للضغط على الأزرار. الكتابة الصوتية في كل مكان.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi: محادثة صوتية AI بدون أيدي",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "عنوان لقائمة حالة المكونات الفردية.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب \u003cstrong\u003e \"السماح أثناء زيارة الموقع\" \u003c/strong\u003e حتى نتمكن من البدء في الحديث."
+    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب <strong> \"السماح أثناء زيارة الموقع\" </strong> حتى نتمكن من البدء في الحديث."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

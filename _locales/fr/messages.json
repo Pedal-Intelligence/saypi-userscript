@@ -30,12 +30,12 @@
     "message": "Interruptible"
   },
   "appDescription": {
-    "description": "The description of the application.",
-    "message": "Saisie vocale partout, conversations fluides avec Pi, Claude et ChatGPT. Parle librement—Pi s’occupe du reste."
+    "message": "Chat vocal mains libres avec ChatGPT, Claude & Pi. Pas besoin d'appuyer sur un bouton. Saisie vocale partout.",
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "appName": {
-    "description": "The name of the application.",
-    "message": "Say, Pi"
+    "message": "Say, Pi : Chat vocal IA mains libres",
+    "description": "The name of the application."
   },
   "applicationStatusComponentsHeading": {
     "description": "Libellé d'en-tête pour la liste des statuts des différents composants.",
@@ -654,7 +654,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Vous verrez une invite de navigateur en haut de cette fenêtre. \nIl suffit de frapper \u003cstrong\u003e \"Autoriser lors de la visite du site\" \u003c/strong\u003e afin que nous puissions commencer à parler."
+    "message": "Vous verrez une invite de navigateur en haut de cette fenêtre. \nIl suffit de frapper <strong> \"Autoriser lors de la visite du site\" </strong> afin que nous puissions commencer à parler."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
