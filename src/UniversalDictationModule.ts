@@ -1,6 +1,6 @@
 import { Observation } from "./dom/Observation";
 import { addChild } from "./dom/DOMModule";
-import { createDictationMachine } from "./state-machines/DictationMachine";
+import { createDictationMachine, DictationTranscribedEvent } from "./state-machines/DictationMachine";
 import { interpret } from "xstate";
 import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
@@ -1055,7 +1055,7 @@ export class UniversalDictationModule {
     });
 
     // Listen for transcription events
-    EventBus.on("saypi:transcription:completed", (detail: { text: string; sequenceNumber: number; pFinishedSpeaking?: number; tempo?: number; merged?: number[] }) => {
+    EventBus.on("saypi:transcription:completed", (detail: Omit<DictationTranscribedEvent, 'type'>) => {
       logger.debug(`[UniversalDictationModule] Forwarding transcription to dictation machine`, detail);
       dictationService.send({ type: "saypi:transcribed", ...detail });
     });
