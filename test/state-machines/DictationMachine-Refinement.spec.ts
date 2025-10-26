@@ -4,7 +4,13 @@ import EventBus from '../../src/events/EventBus.js';
 
 // Mock dependencies
 vi.mock('../../src/TranscriptionModule', () => ({
-  uploadAudioWithRetry: vi.fn(() => Promise.resolve(1)),
+  uploadAudioWithRetry: vi.fn((...args: any[]) => {
+    const callback = args[9];
+    if (typeof callback === 'function') {
+      callback(1);
+    }
+    return Promise.resolve(1);
+  }),
   isTranscriptionPending: vi.fn(() => false),
   clearPendingTranscriptions: vi.fn(),
   getCurrentSequenceNumber: vi.fn(() => 0),
@@ -61,6 +67,14 @@ import * as TranscriptionModule from '../../src/TranscriptionModule';
 import * as AudioEncoder from '../../src/audio/AudioEncoder';
 import * as TimerModule from '../../src/TimerModule';
 
+const resolveUpload = (sequence: number) => (...args: any[]) => {
+  const callback = args[9] as ((seq: number) => void) | undefined;
+  if (typeof callback === 'function') {
+    callback(sequence);
+  }
+  return Promise.resolve(sequence);
+};
+
 describe('DictationMachine - Dual-Phase Refinement', () => {
   let service: any;
   let inputElement: HTMLInputElement;
@@ -110,7 +124,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       // Stop speaking - should buffer the audio
       service.send({
@@ -143,7 +157,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       // Stop speaking WITHOUT frames
       service.send({
@@ -175,7 +189,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         const mockBlob = new Blob([new ArrayBuffer(40000)]);
 
         vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i + 1);
-        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(i + 2);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i + 2));
 
         service.send({
           type: 'saypi:userStoppedSpeaking',
@@ -222,7 +236,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -289,7 +303,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
         vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
-        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(i * 2 + 2);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
 
         service.send({
           type: 'saypi:userStoppedSpeaking',
@@ -307,7 +321,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
 
       // Clear the mock to track refinement upload
       vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockClear();
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
       vi.mocked(AudioEncoder.convertToWavBlob).mockClear();
 
       // Trigger refinement manually
@@ -355,7 +369,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
         vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
-        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(i * 2 + 2);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
 
         service.send({
           type: 'saypi:userStoppedSpeaking',
@@ -372,7 +386,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       }
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       service.send({
         type: 'saypi:refineTranscription',
@@ -419,7 +433,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -438,7 +452,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       vi.mocked(EventBus.emit).mockClear();
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       service.send({
         type: 'saypi:refineTranscription',
@@ -482,7 +496,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -501,7 +515,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().matches({ listening: { converting: 'accumulating' } })).toBe(true);
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       service.send({
         type: 'saypi:refineTranscription',
@@ -526,7 +540,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -542,7 +556,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       });
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       service.send({
         type: 'saypi:refineTranscription',
@@ -581,7 +595,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -619,7 +633,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -641,7 +655,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().context.audioSegmentsByTarget[targetId].length).toBe(1);
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       service.send({
         type: 'saypi:refineTranscription',
@@ -677,7 +691,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -721,7 +735,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -737,7 +751,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       });
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       service.send({
         type: 'saypi:refineTranscription',
@@ -786,7 +800,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob1 = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -811,7 +825,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob2 = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(3);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(4);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(4));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -858,7 +872,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const mockBlob1 = new Blob([new ArrayBuffer(4000)]);
 
       vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(2);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
 
       service.send({
         type: 'saypi:userStoppedSpeaking',
@@ -889,7 +903,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
 
       // Mock refinement upload for target1
       vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockClear();
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(100);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
 
       // Wait for endpoint delay to trigger refinement
       await new Promise(resolve => setTimeout(resolve, 150));
@@ -948,7 +962,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
         vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
-        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockResolvedValue(i * 2 + 2);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
 
         service.send({
           type: 'saypi:userStoppedSpeaking',

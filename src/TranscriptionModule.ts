@@ -210,6 +210,7 @@ export async function uploadAudioWithRetry(
   clientReceiveTimestamp?: number,
   inputType?: string,
   inputLabel?: string,
+  onSequenceNumber?: (sequenceNumber: number) => void,
 ): Promise<number> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
@@ -240,6 +241,16 @@ export async function uploadAudioWithRetry(
   while (retryCount < maxRetries) {
     try {
       usedSequenceNumber = transcriptionSent();
+      if (onSequenceNumber) {
+        try {
+          onSequenceNumber(usedSequenceNumber);
+        } catch (callbackError) {
+          logger.error(
+            "[TranscriptionModule] onSequenceNumber callback threw an error",
+            callbackError
+          );
+        }
+      }
       await uploadAudio(
         audioBlob,
         audioDurationMillis,
