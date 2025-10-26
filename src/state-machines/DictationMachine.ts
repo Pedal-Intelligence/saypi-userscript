@@ -2019,6 +2019,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           );
 
           // For logging, treat the capture timestamp as the time we initiate refinement.
+          // Refinement intentionally reuses the *current* timestamp so Telemetry treats the
+          // Phase 2 upload as new work rather than flagging the earlier capture delay.
           const refinementStartTimestamp = Date.now();
 
           // Reserve a provisional sequence number so the response can be routed immediately.
