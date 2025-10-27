@@ -309,22 +309,8 @@ export async function uploadAudioWithRetry(
 }
 
 /**
- * Upload audio for refinement pass (Phase 2 dual-phase transcription).
- * This is a bare-bones transcription request that bypasses sequence number tracking.
- *
- * Key differences from uploadAudioWithRetry():
- * - No sequenceNumber parameter or tracking
- * - No precedingTranscripts/acceptsMerge (full audio → full transcription)
- * - No increment of global sequence counter
- * - Uses requestId (UUID) for response correlation instead
- * - Emits separate events: saypi:refinement:started, saypi:refinement:completed, saypi:refinement:failed
- *
- * @param audioBlob - Combined audio from all segments
- * @param audioDurationMillis - Total duration in milliseconds
- * @param requestId - UUID for tracking this refinement request
- * @param sessionId - Optional session ID
- * @param maxRetries - Maximum number of retry attempts
- * @returns Promise resolving to the transcription text
+ * Upload audio for refinement (Phase 2).
+ * Uses UUID tracking instead of sequence numbers. No precedingTranscripts sent.
  */
 export async function uploadAudioForRefinement(
   audioBlob: Blob,
@@ -403,8 +389,8 @@ export async function uploadAudioForRefinement(
 }
 
 /**
- * Internal function to upload audio for refinement (bare-bones request).
- * Does NOT use sequence numbers, precedingTranscripts, or acceptsMerge.
+ * Internal refinement upload (bare-bones request).
+ * No sequence numbers, precedingTranscripts, or acceptsMerge.
  */
 async function uploadAudioForRefinementInternal(
   audioBlob: Blob,
