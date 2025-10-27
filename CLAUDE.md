@@ -59,6 +59,7 @@ For detailed browser and feature compatibility across different chatbot sites, s
    - `AudioModule.js` - Main audio coordination and state management
    - `OffscreenAudioBridge.js` - Communication bridge between content script and offscreen audio processing
    - `AudioInputMachine.ts`, `AudioOutputMachine.ts` - State machines for audio input/output flow
+   - **Dictation transcription**: Uses dual-phase approach (live streaming + refinement) - see [doc/DUAL_PHASE_TRANSCRIPTION.md](doc/DUAL_PHASE_TRANSCRIPTION.md)
 
 3. **Voice Activity Detection** (`src/vad/`)
    - `OffscreenVADClient.ts` - Content script client for VAD communication

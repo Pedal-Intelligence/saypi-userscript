@@ -1096,7 +1096,10 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
             context.sessionId,
             3, // default maxRetries
             event.captureTimestamp,
-            event.clientReceiveTimestamp
+            event.clientReceiveTimestamp,
+            undefined, // inputType - not used in conversation mode
+            undefined, // inputLabel - not used in conversation mode
+            undefined  // onSequenceNumber - no target switching in conversation mode
           );
           EventBus.emit("session:transcribing", {
             audio_duration_seconds: event.duration / 1000,

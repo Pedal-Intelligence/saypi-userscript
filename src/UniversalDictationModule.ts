@@ -1,6 +1,12 @@
 import { Observation } from "./dom/Observation";
 import { addChild } from "./dom/DOMModule";
-import { createDictationMachine } from "./state-machines/DictationMachine";
+import {
+  createDictationMachine,
+  DictationTranscribedEvent,
+  DictationSpeechStoppedEvent,
+  DictationAudioConnectedEvent,
+  DictationSessionAssignedEvent,
+} from "./state-machines/DictationMachine";
 import { interpret } from "xstate";
 import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
@@ -328,6 +334,19 @@ export class UniversalDictationModule {
     };
 
     const hideButton = () => {
+      // Trigger refinement if dictation is active for this element
+      if (target.machine) {
+        const state = target.machine.getSnapshot();
+        // Check if machine is in a state where refinement makes sense
+        if (state.matches("listening")) {
+          console.debug("[UniversalDictation] Field blur - triggering refinement for element:", element);
+          target.machine.send({
+            type: "saypi:refineTranscription",
+            targetElement: element,
+          });
+        }
+      }
+
       // Use setTimeout to delay hiding so click event can fire first
       setTimeout(() => {
         if (button && !this.currentActiveTarget) {
@@ -387,14 +406,14 @@ export class UniversalDictationModule {
     element.addEventListener("input", handleContentChange);
     
     // Listen for dictation updates to track dictated content
-    EventBus.on("dictation:contentUpdated", (data) => {
+    EventBus.on("dictation:contentUpdated", (data: { targetElement: HTMLElement }) => {
       if (data.targetElement === element) {
         markDictationUpdate();
       }
     });
-    
+
     // Listen for dictation termination due to manual edit
-    EventBus.on("dictation:terminatedByManualEdit", (data) => {
+    EventBus.on("dictation:terminatedByManualEdit", (data: { targetElement: HTMLElement; reason: string }) => {
       if (data.targetElement === element && this.currentActiveTarget?.element === element) {
         console.debug("Dictation terminated due to manual edit on element:", element);
         // Clean up the active dictation state
@@ -1026,7 +1045,7 @@ export class UniversalDictationModule {
 
     // Events with additional data
     [USER_STOPPED_SPEAKING, AUDIO_DEVICE_CONNECTED, SESSION_ASSIGNED].forEach((eventName) => {
-      EventBus.on(eventName, (detail) => {
+      EventBus.on(eventName, (detail: Omit<DictationSpeechStoppedEvent, 'type'> | Omit<DictationAudioConnectedEvent, 'type'> | Omit<DictationSessionAssignedEvent, 'type'>) => {
         if (detail) {
           // sanitise the detail object to replace any `frames` property with `[REDACTED]`
           const sanitisedDetail = { ...detail };
@@ -1042,7 +1061,7 @@ export class UniversalDictationModule {
     });
 
     // Listen for transcription events
-    EventBus.on("saypi:transcription:completed", (detail) => {
+    EventBus.on("saypi:transcription:completed", (detail: Omit<DictationTranscribedEvent, 'type'>) => {
       logger.debug(`[UniversalDictationModule] Forwarding transcription to dictation machine`, detail);
       dictationService.send({ type: "saypi:transcribed", ...detail });
     });
@@ -1050,6 +1069,17 @@ export class UniversalDictationModule {
     EventBus.on("saypi:transcribeFailed", () => {
       logger.debug(`[UniversalDictationModule] Forwarding transcription failure to dictation machine`);
       dictationService.send("saypi:transcribeFailed");
+    });
+
+    // Listen for refinement events (Phase 2 dual-phase transcription)
+    // Refinements are handled internally by DictationMachine via Promise callbacks
+    // These listeners are for telemetry/debugging only
+    EventBus.on("saypi:refinement:completed", (detail: {requestId: string, text: string}) => {
+      logger.debug(`[UniversalDictationModule] Refinement ${detail.requestId} completed: ${detail.text.substring(0, 50)}...`);
+    });
+
+    EventBus.on("saypi:refinement:failed", (detail: {requestId: string, error: any}) => {
+      logger.warn(`[UniversalDictationModule] Refinement ${detail.requestId} failed:`, detail.error);
     });
 
     EventBus.on("saypi:transcribedEmpty", () => {
