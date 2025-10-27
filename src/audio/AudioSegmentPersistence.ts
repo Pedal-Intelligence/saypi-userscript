@@ -21,7 +21,7 @@ export function persistAudioSegment(
   prefix: string = "saypi-segment"
 ): void {
   try {
-    const keep = String(config.keepSegments || '').toLowerCase() === 'true';
+    const keep = config.keepSegments === true || config.keepSegments === 'true';
     if (!keep || audioBlob.size === 0) {
       return;
     }
