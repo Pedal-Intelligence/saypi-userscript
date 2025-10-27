@@ -11,6 +11,10 @@ vi.mock('../../src/TranscriptionModule', () => ({
     }
     return Promise.resolve(1);
   }),
+  uploadAudioForRefinement: vi.fn((blob, duration, requestId) => {
+    // Mock refinement upload - returns full transcription of audio
+    return Promise.resolve('Refined transcription text');
+  }),
   isTranscriptionPending: vi.fn(() => false),
   clearPendingTranscriptions: vi.fn(),
   getCurrentSequenceNumber: vi.fn(() => 0),
@@ -75,6 +79,23 @@ const resolveUpload = (sequence: number) => (...args: any[]) => {
   return Promise.resolve(sequence);
 };
 
+/**
+ * NOTE: These tests were updated for UUID-based refinement tracking.
+ *
+ * Key changes from sequence-based approach:
+ * - Refinements no longer use sequence numbers or `saypi:transcribed` events
+ * - Refinements are uploaded via `uploadAudioForRefinement()` (not `uploadAudioWithRetry()`)
+ * - Refinement responses are handled via Promise callbacks (not event bus)
+ * - Refinement tracking uses `pendingRefinements` Map (requestId → metadata)
+ * - Refinement transcriptions use negative keys to avoid collision with Phase 1 sequences
+ *
+ * To test refinement completion:
+ * 1. Trigger refinement with `saypi:refineTranscription` event
+ * 2. Wait for `uploadAudioForRefinement` Promise to resolve
+ * 3. Check `pendingRefinements` Map is cleared
+ * 4. Check `transcriptionsByTarget` has negative key with refinement text
+ * 5. Check Phase 1 sequences (positive keys) are deleted
+ */
 describe('DictationMachine - Dual-Phase Refinement', () => {
   let service: any;
   let inputElement: HTMLInputElement;
@@ -90,6 +111,11 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
     vi.clearAllMocks();
 
     vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockClear();
+    vi.mocked(TranscriptionModule.uploadAudioForRefinement).mockClear();
+    vi.mocked(TranscriptionModule.uploadAudioForRefinement).mockImplementation((blob, duration, requestId) => {
+      // Default: Return full refined transcription
+      return Promise.resolve('refined transcription');
+    });
     vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(0);
     vi.mocked(EventBus.emit).mockClear();
     vi.mocked(AudioEncoder.convertToWavBlob).mockClear();
@@ -320,8 +346,6 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       }
 
       // Clear the mock to track refinement upload
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockClear();
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
       vi.mocked(AudioEncoder.convertToWavBlob).mockClear();
 
       // Trigger refinement manually
@@ -331,7 +355,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       });
 
       // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       // Verify convertToWavBlob was called with concatenated frames
       expect(AudioEncoder.convertToWavBlob).toHaveBeenCalled();
@@ -340,20 +364,24 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       // Should have combined 3 segments of 1000 frames each = 3000 frames
       expect(concatenatedFrames.length).toBe(3000);
 
-      // Verify refinement upload was called
-      expect(TranscriptionModule.uploadAudioWithRetry).toHaveBeenCalled();
-      const uploadCall = vi.mocked(TranscriptionModule.uploadAudioWithRetry).mock.calls[0];
+      // Verify refinement upload was called (UUID-based, no sequence numbers)
+      expect(TranscriptionModule.uploadAudioForRefinement).toHaveBeenCalled();
+      const uploadCall = vi.mocked(TranscriptionModule.uploadAudioForRefinement).mock.calls[0];
 
-      // Refinement should have empty precedingTranscripts
-      expect(uploadCall[2]).toEqual({});
+      // uploadAudioForRefinement has signature: (blob, duration, requestId, sessionId, maxRetries)
+      // Check duration parameter (index 1)
+      expect(uploadCall[1]).toBe(3000); // Total duration should be 3000ms
 
-      // Total duration should be 3000ms
-      expect(uploadCall[1]).toBe(3000);
+      // Check requestId is a UUID string (index 2)
+      expect(typeof uploadCall[2]).toBe('string');
+
+      // Check blob was passed (index 0)
+      expect(uploadCall[0]).toBeInstanceOf(Blob);
     });
   });
 
   describe('Refinement Response Handling', () => {
-    it('should replace Phase 1 transcriptions with refined result', async () => {
+    it('should replace Phase 1 transcriptions with refined result (full contextual refinement)', async () => {
       service.start();
 
       service.send({ type: 'saypi:startDictation', targetElement: inputElement });
@@ -385,38 +413,36 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         });
       }
 
-      // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
-
+      // Trigger refinement (UUID-based, no sequence number)
       service.send({
         type: 'saypi:refineTranscription',
         targetElement: inputElement,
       });
 
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Wait for refinement Promise to resolve
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-      // Send refinement response
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'refined transcription',
-        sequenceNumber: 100,
-      });
-
-      // Check that Phase 1 transcriptions were replaced
+      // Check that Phase 1 transcriptions were REPLACED (not appended)
       const state = service.getSnapshot();
       const targetId = `${inputElement.id || inputElement.name}`;
 
-      // Should only have the refined transcription
-      expect(state.context.transcriptionsByTarget[targetId]).toEqual({
-        100: 'refined transcription',
-      });
+      // Refinement should be stored with negative key (not sequence number)
+      const transcriptionKeys = Object.keys(state.context.transcriptionsByTarget[targetId] || {}).map(k => parseInt(k, 10));
 
-      // Old Phase 1 sequences should be deleted from global transcriptions
+      // Should have exactly 1 transcription (refinement with negative key)
+      expect(transcriptionKeys.length).toBe(1);
+      expect(transcriptionKeys[0]).toBeLessThan(0); // Negative timestamp key
+
+      // Phase 1 transcriptions should be deleted from global storage
       expect(state.context.transcriptions[2]).toBeUndefined();
       expect(state.context.transcriptions[4]).toBeUndefined();
 
-      // Refinement should be in global transcriptions
-      expect(state.context.transcriptions[100]).toBe('refined transcription');
+      // Refinement should remain in global storage
+      const refinementKey = transcriptionKeys[0];
+      expect(state.context.transcriptions[refinementKey]).toBe('refined transcription');
+
+      // Pending refinement metadata should be cleared
+      expect(state.context.pendingRefinements.size).toBe(0);
     });
 
     it('should emit dictation:refined event on successful refinement', async () => {
@@ -427,46 +453,41 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
       service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
 
-      service.send({ type: 'saypi:userSpeaking' });
+      // Add 2 segments (need >=2 for refinement)
+      for (let i = 0; i < 2; i++) {
+        service.send({ type: 'saypi:userSpeaking' });
 
-      const mockFrames = new Float32Array(1000);
-      const mockBlob = new Blob([new ArrayBuffer(4000)]);
+        const mockFrames = new Float32Array(1000);
+        const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
-      vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
+        vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
 
-      service.send({
-        type: 'saypi:userStoppedSpeaking',
-        duration: 1000,
-        blob: mockBlob,
-        frames: mockFrames,
-      });
+        service.send({
+          type: 'saypi:userStoppedSpeaking',
+          duration: 1000,
+          blob: mockBlob,
+          frames: mockFrames,
+        });
 
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'phase1 text',
-        sequenceNumber: 2,
-      });
+        service.send({
+          type: 'saypi:transcribed',
+          text: `phase1 segment ${i}`,
+          sequenceNumber: i * 2 + 2,
+        });
+      }
 
       // Clear EventBus mock to track refinement event
       vi.mocked(EventBus.emit).mockClear();
 
       // Trigger refinement
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(100));
-
       service.send({
         type: 'saypi:refineTranscription',
         targetElement: inputElement,
       });
 
-      await new Promise(resolve => setTimeout(resolve, 10));
-
-      // Send refinement response
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'refined text',
-        sequenceNumber: 100,
-      });
+      // Wait for refinement Promise to resolve
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       // Verify dictation:refined event was emitted
       const refinedEvents = vi.mocked(EventBus.emit).mock.calls.filter(
@@ -476,7 +497,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(refinedEvents.length).toBeGreaterThan(0);
       expect(refinedEvents[0][1]).toMatchObject({
         targetElement: inputElement,
-        refinedText: 'refined text',
+        refinedText: 'refined transcription', // From default mock in beforeEach
       });
     });
   });
@@ -619,7 +640,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().context.audioSegmentsByTarget[targetId1]).toBeDefined();
     });
 
-    it('should clear audio buffers after refinement completes', async () => {
+    it('should keep audio buffers after refinement (for incremental refinement)', async () => {
       service.start();
 
       service.send({ type: 'saypi:startDictation', targetElement: inputElement });
@@ -662,17 +683,12 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         targetElement: inputElement,
       });
 
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Wait for refinement Promise to resolve
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-      // Send refinement response
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'refined',
-        sequenceNumber: 100,
-      });
-
-      // Audio buffer should be cleared
-      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeUndefined();
+      // Audio buffer should still exist (kept for future refinements)
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeDefined();
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId].length).toBe(1);
     });
   });
 
@@ -685,40 +701,52 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
       service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
 
-      service.send({ type: 'saypi:userSpeaking' });
+      // Add 2 segments (need >=2 for refinement to trigger)
+      for (let i = 0; i < 2; i++) {
+        service.send({ type: 'saypi:userSpeaking' });
 
-      const mockFrames = new Float32Array(1000);
-      const mockBlob = new Blob([new ArrayBuffer(4000)]);
+        const mockFrames = new Float32Array(1000);
+        const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
-      vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
+        vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
 
-      service.send({
-        type: 'saypi:userStoppedSpeaking',
-        duration: 1000,
-        blob: mockBlob,
-        frames: mockFrames,
-      });
+        service.send({
+          type: 'saypi:userStoppedSpeaking',
+          duration: 1000,
+          blob: mockBlob,
+          frames: mockFrames,
+        });
 
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'hello',
-        sequenceNumber: 2,
-      });
+        service.send({
+          type: 'saypi:transcribed',
+          text: `segment ${i}`,
+          sequenceNumber: i * 2 + 2,
+        });
+      }
+
+      // Clear the mock and set up rejection BEFORE triggering refinement
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockReset();
 
       // Make refinement upload fail
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockRejectedValue(new Error('Upload failed'));
+      vi.mocked(TranscriptionModule.uploadAudioForRefinement).mockRejectedValue(new Error('Upload failed'));
 
+      // Manually trigger refinement
       service.send({
         type: 'saypi:refineTranscription',
         targetElement: inputElement,
       });
 
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Wait for async error handling
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Should clean up audio buffers even on failure
+      // With UUID-based tracking, audio buffers are NOT cleared on refinement failure
+      // (they may be retried later)
       const targetId = `${inputElement.id || inputElement.name}`;
-      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeUndefined();
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeDefined();
+
+      // But pending refinement metadata should be cleaned up
+      expect(service.getSnapshot().context.pendingRefinements.size).toBe(0);
     });
 
     it('should handle missing target element in refinement response', async () => {
@@ -777,6 +805,155 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().context.transcriptionsByTarget[targetId]).not.toEqual({
         100: 'refined',
       });
+    });
+  });
+
+  describe('Incremental Refinement', () => {
+    it('should skip refinement for single segment until more arrive', async () => {
+      service.start();
+
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement });
+      service.send({ type: 'saypi:callReady' });
+      service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
+      service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
+
+      service.send({ type: 'saypi:userSpeaking' });
+
+      const mockFrames = new Float32Array(1000);
+      const mockBlob = new Blob([new ArrayBuffer(4000)]);
+
+      vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
+
+      service.send({
+        type: 'saypi:userStoppedSpeaking',
+        duration: 1000,
+        blob: mockBlob,
+        frames: mockFrames,
+      });
+
+      service.send({
+        type: 'saypi:transcribed',
+        text: 'segment 0',
+        sequenceNumber: 2,
+      });
+
+      // Clear upload mock to track refinement attempts
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockClear();
+
+      // Try to trigger refinement with only 1 segment
+      service.send({
+        type: 'saypi:refineTranscription',
+        targetElement: inputElement,
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      // Should NOT upload refinement (only 1 segment)
+      expect(TranscriptionModule.uploadAudioWithRetry).not.toHaveBeenCalled();
+
+      // Buffer should still exist
+      const targetId = `${inputElement.id || inputElement.name}`;
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId]).toBeDefined();
+      expect(service.getSnapshot().context.audioSegmentsByTarget[targetId].length).toBe(1);
+    });
+
+    it('should refine ALL segments with full context in subsequent passes', async () => {
+      service.start();
+
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement });
+      service.send({ type: 'saypi:callReady' });
+      service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
+      service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
+
+      // Add 2 segments
+      for (let i = 0; i < 2; i++) {
+        service.send({ type: 'saypi:userSpeaking' });
+
+        const mockFrames = new Float32Array(1000);
+        const mockBlob = new Blob([new ArrayBuffer(4000)]);
+
+        vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
+
+        service.send({
+          type: 'saypi:userStoppedSpeaking',
+          duration: 1000,
+          blob: mockBlob,
+          frames: mockFrames,
+        });
+
+        service.send({
+          type: 'saypi:transcribed',
+          text: `segment ${i}`,
+          sequenceNumber: i * 2 + 2,
+        });
+      }
+
+      // First refinement pass
+      vi.mocked(AudioEncoder.convertToWavBlob).mockClear();
+
+      service.send({
+        type: 'saypi:refineTranscription',
+        targetElement: inputElement,
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 50)); // Wait for refinement Promise
+
+      // Should have concatenated 2 segments (2000 frames)
+      expect(AudioEncoder.convertToWavBlob).toHaveBeenCalled();
+      let concatenatedFrames = vi.mocked(AudioEncoder.convertToWavBlob).mock.calls[0][0];
+      expect(concatenatedFrames.length).toBe(2000);
+
+      // Add one more segment
+      service.send({ type: 'saypi:userSpeaking' });
+
+      const mockFrames3 = new Float32Array(1000);
+      const mockBlob3 = new Blob([new ArrayBuffer(4000)]);
+
+      vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(5);
+      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(6));
+
+      service.send({
+        type: 'saypi:userStoppedSpeaking',
+        duration: 1000,
+        blob: mockBlob3,
+        frames: mockFrames3,
+      });
+
+      service.send({
+        type: 'saypi:transcribed',
+        text: 'segment 2',
+        sequenceNumber: 6,
+      });
+
+      // Second refinement pass - should refine ALL 3 segments (full context)
+      vi.mocked(AudioEncoder.convertToWavBlob).mockClear();
+
+      service.send({
+        type: 'saypi:refineTranscription',
+        targetElement: inputElement,
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 50)); // Wait for refinement Promise
+
+      // Should have concatenated ALL 3 segments (3000 frames) for full context
+      expect(AudioEncoder.convertToWavBlob).toHaveBeenCalled();
+      concatenatedFrames = vi.mocked(AudioEncoder.convertToWavBlob).mock.calls[0][0];
+      expect(concatenatedFrames.length).toBe(3000);
+
+      // Check final state after second refinement completes
+      const state = service.getSnapshot();
+      const targetId = `${inputElement.id || inputElement.name}`;
+
+      // Should have exactly 1 transcription (latest refinement with negative key)
+      const transcriptionKeys = Object.keys(state.context.transcriptionsByTarget[targetId] || {}).map(k => parseInt(k, 10));
+      expect(transcriptionKeys.length).toBe(1);
+      expect(transcriptionKeys[0]).toBeLessThan(0); // Negative timestamp key
+
+      // Latest refinement text should be stored (from mock default)
+      const refinementKey = transcriptionKeys[0];
+      expect(state.context.transcriptions[refinementKey]).toBe('refined transcription');
     });
   });
 
@@ -865,29 +1042,31 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
       service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
 
-      // Add segment to first target with endpoint indicators
-      service.send({ type: 'saypi:userSpeaking' });
+      // Add TWO segments to first target (need >=2 for refinement)
+      for (let i = 0; i < 2; i++) {
+        service.send({ type: 'saypi:userSpeaking' });
 
-      const mockFrames1 = new Float32Array(1000);
-      const mockBlob1 = new Blob([new ArrayBuffer(4000)]);
+        const mockFrames = new Float32Array(1000);
+        const mockBlob = new Blob([new ArrayBuffer(4000)]);
 
-      vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(1);
-      vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(2));
+        vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
 
-      service.send({
-        type: 'saypi:userStoppedSpeaking',
-        duration: 1000,
-        blob: mockBlob1,
-        frames: mockFrames1,
-      });
+        service.send({
+          type: 'saypi:userStoppedSpeaking',
+          duration: 1000,
+          blob: mockBlob,
+          frames: mockFrames,
+        });
 
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'target1 text',
-        sequenceNumber: 2,
-        pFinishedSpeaking: 0.9, // High probability - will trigger endpoint delay
-        tempo: 0.5,
-      });
+        service.send({
+          type: 'saypi:transcribed',
+          text: `target1 segment ${i}`,
+          sequenceNumber: i * 2 + 2,
+          pFinishedSpeaking: 0.9, // High probability - will trigger endpoint delay
+          tempo: 0.5,
+        });
+      }
 
       const targetId1 = `${inputElement.id || inputElement.name}`;
 
@@ -912,36 +1091,36 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       // and find no segments, leaving target1 unrefined
       // The fix: iterate over refinementPendingForTargets instead
 
-      // Verify refinement was triggered for target1 (not current target)
-      expect(TranscriptionModule.uploadAudioWithRetry).toHaveBeenCalled();
+      // Verify refinement was triggered for target1 (not current target) using UUID-based approach
+      expect(TranscriptionModule.uploadAudioForRefinement).toHaveBeenCalled();
 
-      const uploadCall = vi.mocked(TranscriptionModule.uploadAudioWithRetry).mock.calls[0];
+      const uploadCall = vi.mocked(TranscriptionModule.uploadAudioForRefinement).mock.calls[0];
 
-      // Should be refinement (empty precedingTranscripts)
-      expect(uploadCall[2]).toEqual({});
+      // uploadAudioForRefinement has signature: (blob, duration, requestId, sessionId, maxRetries)
+      expect(uploadCall[0]).toBeInstanceOf(Blob); // blob
+      expect(uploadCall[1]).toBeGreaterThan(0); // duration
+      expect(typeof uploadCall[2]).toBe('string'); // requestId (UUID)
+      expect(uploadCall[3]).toBe('test-session'); // sessionId
 
-      // Should have target1's input context
-      expect(uploadCall[8]).toBe('Test input'); // inputLabel (parameter 8)
-      expect(uploadCall[7]).toBe('text'); // inputType (parameter 7)
-
-      // Send refinement response
-      service.send({
-        type: 'saypi:transcribed',
-        text: 'refined target1 text',
-        sequenceNumber: 100,
-      });
+      // Wait for refinement Promise to resolve (handled internally)
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       // Verify target1 was refined even though current target is target2
       const state = service.getSnapshot();
-      expect(state.context.transcriptionsByTarget[targetId1]).toEqual({
-        100: 'refined target1 text',
-      });
 
-      // Audio buffer for target1 should be cleared
-      expect(state.context.audioSegmentsByTarget[targetId1]).toBeUndefined();
+      // Refinement should be stored with negative key
+      const transcriptionKeys = Object.keys(state.context.transcriptionsByTarget[targetId1] || {}).map(k => parseInt(k, 10));
+      expect(transcriptionKeys.length).toBe(1);
+      expect(transcriptionKeys[0]).toBeLessThan(0); // Negative timestamp key
+
+      // Audio buffer for target1 should still exist (kept for future refinements)
+      expect(state.context.audioSegmentsByTarget[targetId1]).toBeDefined();
 
       // Refinement pending flag should be cleared
       expect(state.context.refinementPendingForTargets.has(targetId1)).toBe(false);
+
+      // Pending refinement metadata should be cleared
+      expect(state.context.pendingRefinements.size).toBe(0);
     });
   });
 
@@ -1002,8 +1181,8 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       // Verify refinement pending flag is cleared
       expect(service.getSnapshot().context.refinementPendingForTargets.has(targetId)).toBe(false);
 
-      // Verify active refinement sequences are cleared
-      expect(service.getSnapshot().context.activeRefinementSequences.has(targetId)).toBe(false);
+      // Verify pending refinements are cleared (UUID-based tracking)
+      expect(service.getSnapshot().context.pendingRefinements.size).toBe(0);
 
       // Verify transcription state is also cleared (existing behavior)
       expect(service.getSnapshot().context.transcriptionsByTarget[targetId]).toBeUndefined();

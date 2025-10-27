@@ -308,6 +308,208 @@ export async function uploadAudioWithRetry(
   throw new Error("Max retries reached");
 }
 
+/**
+ * Upload audio for refinement pass (Phase 2 dual-phase transcription).
+ * This is a bare-bones transcription request that bypasses sequence number tracking.
+ *
+ * Key differences from uploadAudioWithRetry():
+ * - No sequenceNumber parameter or tracking
+ * - No precedingTranscripts/acceptsMerge (full audio → full transcription)
+ * - No increment of global sequence counter
+ * - Uses requestId (UUID) for response correlation instead
+ * - Emits separate event: saypi:refinement:completed
+ *
+ * @param audioBlob - Combined audio from all segments
+ * @param audioDurationMillis - Total duration in milliseconds
+ * @param requestId - UUID for tracking this refinement request
+ * @param sessionId - Optional session ID
+ * @param maxRetries - Maximum number of retry attempts
+ * @returns Promise resolving to the transcription text
+ */
+export async function uploadAudioForRefinement(
+  audioBlob: Blob,
+  audioDurationMillis: number,
+  requestId: string,
+  sessionId?: string,
+  maxRetries: number = 3
+): Promise<string> {
+  let retryCount = 0;
+  let delay = 1000; // initial delay of 1 second
+  const transcriptionStartTimestamp = Date.now();
+
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  while (retryCount < maxRetries) {
+    try {
+      const transcriptionText = await uploadAudioForRefinementInternal(
+        audioBlob,
+        audioDurationMillis,
+        requestId,
+        sessionId,
+        transcriptionStartTimestamp
+      );
+
+      // Emit refinement-specific completion event
+      EventBus.emit("saypi:refinement:completed", {
+        requestId,
+        text: transcriptionText,
+      });
+
+      return transcriptionText;
+    } catch (error) {
+      // check for timeout errors (30s on Heroku)
+      if (
+        error instanceof TypeError &&
+        knownNetworkErrorMessages.includes(error.message)
+      ) {
+        logger.info(
+          `[Refinement ${requestId}] Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${
+            delay / 1000
+          } seconds...`
+        );
+        await sleep(delay);
+
+        // Exponential backoff
+        delay *= 2;
+
+        retryCount++;
+      } else {
+        console.error(`[Refinement ${requestId}] Unexpected error:`, error);
+        // Emit refinement-specific failure event
+        EventBus.emit("saypi:refinement:failed", {
+          requestId,
+          error,
+        });
+        throw error; // Re-throw non-network errors to exit the retry loop
+      }
+    }
+  }
+
+  logger.error(`[Refinement ${requestId}] Max retries reached. Giving up.`);
+  EventBus.emit("saypi:refinement:failed", {
+    requestId,
+    error: new Error("Max retries reached"),
+  });
+  throw new Error("Max retries reached");
+}
+
+/**
+ * Internal function to upload audio for refinement (bare-bones request).
+ * Does NOT use sequence numbers, precedingTranscripts, or acceptsMerge.
+ */
+async function uploadAudioForRefinementInternal(
+  audioBlob: Blob,
+  audioDurationMillis: number,
+  requestId: string,
+  sessionId?: string,
+  transcriptionStartTimestamp?: number
+): Promise<string> {
+  try {
+    const chatbot = await ChatbotService.getChatbot();
+
+    // Build minimal FormData (no sequence number, no messages, no acceptsMerge)
+    const formData = new FormData();
+    let audioFilename = "audio.webm";
+    if (audioBlob.type === "audio/mp4") {
+      audioFilename = "audio.mp4";
+    } else if (audioBlob.type === "audio/wav") {
+      audioFilename = "audio.wav";
+    }
+
+    formData.append("audio", audioBlob, audioFilename);
+    formData.append("duration", (audioDurationMillis / 1000).toString());
+    formData.append("requestId", requestId); // UUID for correlation
+
+    if (sessionId) {
+      formData.append("sessionId", sessionId);
+    }
+
+    // Add minimal usage metadata
+    try {
+      const usageMeta = await buildUsageMetadata(chatbot);
+      if (usageMeta.clientId) formData.append("clientId", usageMeta.clientId);
+      if (usageMeta.version) formData.append("version", usageMeta.version);
+      if (usageMeta.app) formData.append("app", usageMeta.app);
+      if (usageMeta.language) formData.append("language", usageMeta.language);
+    } catch (error) {
+      logger.warn(`[Refinement ${requestId}] Failed to add usage metadata:`, error);
+    }
+
+    // Get user preferences for transcription
+    const preference = userPreferences.getCachedTranscriptionMode();
+    if (preference) {
+      formData.append("prefer", preference);
+    }
+
+    // Remove filler words if enabled
+    const removeFiller = userPreferences.getCachedRemoveFillerWords();
+    if (removeFiller) {
+      formData.append("removeFillerWords", "true");
+    }
+
+    logger.debug(
+      `[Refinement ${requestId}] Uploading ${(audioBlob.size / 1024).toFixed(2)}kb of audio`
+    );
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    const startTime = Date.now();
+
+    // Emit refinement started event
+    EventBus.emit("saypi:refinement:started", {
+      requestId,
+      timestamp: startTime,
+      audioDurationMs: audioDurationMillis,
+      audioBytes: audioBlob.size,
+    });
+
+    // Build URL params
+    const usageMeta = await buildUsageMetadata(chatbot);
+    const params = new URLSearchParams();
+    if (usageMeta.app) params.set("app", usageMeta.app);
+    if (usageMeta.language) params.set("language", usageMeta.language);
+
+    const response = await callApi(
+      `${config.apiServerUrl}/transcribe${params.toString() ? `?${params.toString()}` : ""}`,
+      {
+        method: "POST",
+        body: formData,
+        signal,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const responseJson = await response.json();
+    const endTime = Date.now();
+    const transcriptionDurationMillis = endTime - startTime;
+    const transcript = responseJson.text;
+    const wc = transcript.split(" ").length;
+
+    logger.debug(
+      `[Refinement ${requestId}] Transcribed ${Math.round(
+        audioDurationMillis / 1000
+      )}s of audio into ${wc} words in ${Math.round(
+        transcriptionDurationMillis / 1000
+      )}s`
+    );
+
+    if (transcript.length === 0) {
+      logger.warn(`[Refinement ${requestId}] Received empty transcription`);
+    }
+
+    return transcript;
+  } catch (error) {
+    logger.error(`[Refinement ${requestId}] Upload failed:`, error);
+    throw error;
+  }
+}
+
 async function uploadAudio(
   audioBlob: Blob,
   audioDurationMillis: number,
