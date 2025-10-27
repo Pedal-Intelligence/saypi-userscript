@@ -1543,9 +1543,10 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
 
-        // NOTE: Refinement responses are now handled separately via UUID-based tracking
-        // in the Promise callback of performContextualRefinement.
-        // This handler ONLY processes Phase 1 (live) transcriptions.
+        // NOTE: Refinement responses bypass the event bus entirely and are handled
+        // synchronously in the Promise callback of performContextualRefinement via
+        // UUID-based tracking. This handler ONLY processes Phase 1 (live) transcriptions,
+        // which arrive via the event bus.
 
         // ---- NORMALISE ELLIPSES ----
         // Convert any ellipsis—either the single Unicode "…" character or the
