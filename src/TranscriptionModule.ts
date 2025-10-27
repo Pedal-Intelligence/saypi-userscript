@@ -317,7 +317,7 @@ export async function uploadAudioWithRetry(
  * - No precedingTranscripts/acceptsMerge (full audio → full transcription)
  * - No increment of global sequence counter
  * - Uses requestId (UUID) for response correlation instead
- * - Emits separate event: saypi:refinement:completed
+ * - Emits separate events: saypi:refinement:started, saypi:refinement:completed, saypi:refinement:failed
  *
  * @param audioBlob - Combined audio from all segments
  * @param audioDurationMillis - Total duration in milliseconds
@@ -336,6 +336,14 @@ export async function uploadAudioForRefinement(
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
   const transcriptionStartTimestamp = Date.now();
+
+  // Emit refinement started event (moved to outer function to avoid multiple emissions on retry)
+  EventBus.emit("saypi:refinement:started", {
+    requestId,
+    timestamp: transcriptionStartTimestamp,
+    audioDurationMs: audioDurationMillis,
+    audioBytes: audioBlob.size,
+  });
 
   const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -457,9 +465,6 @@ async function uploadAudioForRefinementInternal(
     setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     const startTime = Date.now();
-
-    // Emit refinement started event
-    // (moved to outer function to avoid multiple emissions on retry)
 
     // Build URL params
     const usageMeta = await buildUsageMetadata(chatbot);
