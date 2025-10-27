@@ -483,8 +483,8 @@ function mapTargetForSequence(
 const MAX_AUDIO_BUFFER_DURATION_MS = 120000;
 
 // Maximum delay for refinement endpoint detection (8 seconds)
-// Longer than ConversationMachine's 7s because dictation has less urgency (no AI waiting for prompt)
-// Reduces premature refinement passes from brief pauses during continuous dictation
+// Dictation uses a longer delay than prompt-based interactions, since there is less urgency (no AI waiting for prompt).
+// This reduces premature refinement passes from brief pauses during continuous dictation.
 const REFINEMENT_MAX_DELAY_MS = 8000;
 
 /**
