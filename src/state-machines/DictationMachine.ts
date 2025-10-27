@@ -18,6 +18,7 @@ import EventBus from "../events/EventBus.js";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 import { TranscriptMergeService } from "../TranscriptMergeService";
+import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
@@ -1987,7 +1988,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             continue;
           }
 
-          // Skip refinement if only 1 segment (already fully transcribed in Phase 1)
+          // Skip refinement if only 1 segment (no additional context available for improvement)
           if (segments.length === 1) {
             console.debug(`[DictationMachine] Skipping refinement for target ${targetId} until more segments arrive`);
             continue; // Keep buffering, don't clear
