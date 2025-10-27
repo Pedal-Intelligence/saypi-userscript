@@ -1071,6 +1071,17 @@ export class UniversalDictationModule {
       dictationService.send("saypi:transcribeFailed");
     });
 
+    // Listen for refinement events (Phase 2 dual-phase transcription)
+    // Refinements are handled internally by DictationMachine via Promise callbacks
+    // These listeners are for telemetry/debugging only
+    EventBus.on("saypi:refinement:completed", (detail: {requestId: string, text: string}) => {
+      logger.debug(`[UniversalDictationModule] Refinement ${detail.requestId} completed: ${detail.text.substring(0, 50)}...`);
+    });
+
+    EventBus.on("saypi:refinement:failed", (detail: {requestId: string, error: any}) => {
+      logger.warn(`[UniversalDictationModule] Refinement ${detail.requestId} failed:`, detail.error);
+    });
+
     EventBus.on("saypi:transcribedEmpty", () => {
       logger.debug(`[UniversalDictationModule] Forwarding empty transcription to dictation machine`);
       dictationService.send("saypi:transcribedEmpty");

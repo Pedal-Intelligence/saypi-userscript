@@ -8,6 +8,7 @@ import {
 } from "xstate";
 import {
   uploadAudioWithRetry,
+  uploadAudioForRefinement,
   isTranscriptionPending,
   clearPendingTranscriptions,
   getCurrentSequenceNumber,
@@ -139,11 +140,14 @@ interface DictationContext {
   // Phase 2 audio buffering - grouped by target element ID
   audioSegmentsByTarget: Record<string, AudioSegment[]>;
 
-  // Phase 2 state tracking - per target
+  // Phase 2 state tracking - per target (UUID-based, separate from Phase 1 sequence tracking)
   refinementPendingForTargets: Set<string>; // target IDs awaiting refinement
-  activeRefinementSequences: Map<string, number>; // targetId -> sequence number
-  activeRefinementSequenceLookup: Map<number, string>; // sequence number -> targetId
-  refinementQueue: Array<{ targetId: string; element: HTMLElement; sequenceNumber: number }>; // FIFO of in-flight refinements
+  pendingRefinements: Map<string, { // requestId (UUID) -> refinement metadata
+    targetId: string;
+    targetElement: HTMLElement;
+    segmentCount: number; // for validation
+    timestamp: number;
+  }>;
 }
 
 // Define the state schema
@@ -368,6 +372,83 @@ function getTranscriptionsForTarget(context: DictationContext, targetElement: HT
   return context.transcriptionsByTarget[targetId] || {};
 }
 
+/**
+ * Handle completion of a refinement request (Phase 2).
+ * Replaces Phase 1 transcriptions with the refined result.
+ */
+function handleRefinementComplete(
+  context: DictationContext,
+  requestId: string,
+  transcription: string
+): void {
+  const meta = context.pendingRefinements.get(requestId);
+  if (!meta) {
+    console.warn(`[DictationMachine] No metadata found for refinement ${requestId} - already cleaned up?`);
+    return;
+  }
+
+  const { targetId, targetElement, segmentCount } = meta;
+
+  console.debug(
+    `[DictationMachine] Received refinement transcription [${requestId}] for target ${targetId}: ${transcription}`
+  );
+
+  // Normalize the refined transcription
+  transcription = normalizeTranscriptionText(transcription);
+
+  // Get Phase 1 sequences for this target
+  const oldTranscriptions = context.transcriptionsByTarget[targetId] || {};
+  const phase1Sequences = Object.keys(oldTranscriptions)
+    .map(k => parseInt(k, 10))
+    .filter(seq => seq > 0); // Only clear Phase 1 (positive sequences), not previous refinements (negative keys)
+
+  // Clear Phase 1 transcriptions from global storage
+  phase1Sequences.forEach(seq => {
+    delete context.transcriptions[seq];
+    delete context.transcriptionTargets[seq];
+  });
+
+  console.debug(
+    `[DictationMachine] Cleared ${phase1Sequences.length} Phase 1 transcriptions: [${phase1Sequences.join(', ')}]`
+  );
+
+  // Store refinement result using negative timestamp as key (avoids collision with Phase 1 sequences)
+  const refinementKey = -(Date.now());
+  context.transcriptionsByTarget[targetId] = {
+    [refinementKey]: transcription
+  };
+  context.transcriptions[refinementKey] = transcription;
+  context.transcriptionTargets[refinementKey] = targetElement;
+
+  // Calculate final text (initial + refinement)
+  const initialText = context.initialTextByTarget[targetId] || "";
+  const finalText = smartJoinTwoTexts(initialText, transcription);
+
+  setTextInTarget(finalText, targetElement, true); // Replace all content
+
+  // Update accumulated text if this is the current target
+  if (targetElement === context.targetElement) {
+    context.accumulatedText = finalText;
+  }
+
+  // Clean up refinement metadata
+  context.pendingRefinements.delete(requestId);
+
+  // Emit refinement complete event
+  EventBus.emit("dictation:refined", {
+    targetElement,
+    targetId,
+    requestId,
+    refinedText: transcription,
+    finalText,
+    segmentCount
+  });
+
+  console.debug(
+    `[DictationMachine] Refinement ${requestId} complete for target ${targetId}. Final text: ${finalText}`
+  );
+}
+
 function mapTargetForSequence(
   context: DictationContext,
   expectedSequenceNumber: number,
@@ -401,9 +482,10 @@ function mapTargetForSequence(
 // This prevents unbounded memory growth if user leaves hot-mic on
 const MAX_AUDIO_BUFFER_DURATION_MS = 120000;
 
-// Maximum delay for refinement endpoint detection (5 seconds)
-// Shorter than ConversationMachine's 7s to account for faster p50 transcription time (~2s)
-const REFINEMENT_MAX_DELAY_MS = 5000;
+// Maximum delay for refinement endpoint detection (8 seconds)
+// Longer than ConversationMachine's 7s because dictation has less urgency (no AI waiting for prompt)
+// Reduces premature refinement passes from brief pauses during continuous dictation
+const REFINEMENT_MAX_DELAY_MS = 8000;
 
 /**
  * Store an audio segment in the context for later refinement.
@@ -486,14 +568,15 @@ function storeAudioSegment(
 function clearAudioForTarget(context: DictationContext, targetId: string): void {
   delete context.audioSegmentsByTarget[targetId];
   context.refinementPendingForTargets.delete(targetId);
-  const activeSequence = context.activeRefinementSequences.get(targetId);
-  if (activeSequence !== undefined) {
-    context.activeRefinementSequenceLookup.delete(activeSequence);
+
+  // Clear any pending refinements for this target (UUID-based tracking)
+  for (const [requestId, meta] of context.pendingRefinements.entries()) {
+    if (meta.targetId === targetId) {
+      context.pendingRefinements.delete(requestId);
+      console.debug(`Cleared pending refinement ${requestId} for target ${targetId}`);
+    }
   }
-  context.activeRefinementSequences.delete(targetId);
-  if (context.refinementQueue.length > 0) {
-    context.refinementQueue = context.refinementQueue.filter((entry) => entry.targetId !== targetId);
-  }
+
   console.debug(`Cleared audio buffers for target ${targetId}`);
 }
 
@@ -504,9 +587,7 @@ function clearAudioForTarget(context: DictationContext, targetId: string): void 
 function clearAllAudioBuffers(context: DictationContext): void {
   context.audioSegmentsByTarget = {};
   context.refinementPendingForTargets.clear();
-  context.activeRefinementSequences.clear();
-  context.activeRefinementSequenceLookup.clear();
-  context.refinementQueue = [];
+  context.pendingRefinements.clear();
   console.debug('Cleared all audio buffers');
 }
 
@@ -1042,9 +1123,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       speechStartTarget: undefined,
       audioSegmentsByTarget: {},
       refinementPendingForTargets: new Set<string>(),
-      activeRefinementSequences: new Map<string, number>(),
-      activeRefinementSequenceLookup: new Map<number, string>(),
-      refinementQueue: [],
+      pendingRefinements: new Map(),
     },
     id: "dictation",
     initial: "idle",
@@ -1464,94 +1543,10 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
 
-        // Check if this is a refinement response
-        let refinedTargetId = context.activeRefinementSequenceLookup.get(sequenceNumber);
+        // NOTE: Refinement responses are now handled separately via UUID-based tracking
+        // in the Promise callback of performContextualRefinement.
+        // This handler ONLY processes Phase 1 (live) transcriptions.
 
-        if (!refinedTargetId) {
-          const queueEntry = context.refinementQueue[0];
-          if (queueEntry) {
-            const fallbackTargetId = queueEntry.targetId;
-            const provisionalSequence = context.activeRefinementSequences.get(fallbackTargetId);
-            if (provisionalSequence !== undefined) {
-              context.activeRefinementSequenceLookup.delete(provisionalSequence);
-              delete context.transcriptionTargets[provisionalSequence];
-            }
-            context.activeRefinementSequences.set(fallbackTargetId, sequenceNumber);
-            context.activeRefinementSequenceLookup.set(sequenceNumber, fallbackTargetId);
-            context.transcriptionTargets[sequenceNumber] = queueEntry.element;
-            queueEntry.sequenceNumber = sequenceNumber;
-            refinedTargetId = fallbackTargetId;
-          }
-        }
-
-        if (refinedTargetId) {
-          console.debug(
-            `[DictationMachine] Received refinement transcription [${sequenceNumber}] for target ${refinedTargetId}: ${transcription}`
-          );
-
-          // Get the target element from the ID
-          const targetElement = context.transcriptionTargets[sequenceNumber];
-          if (!targetElement) {
-            console.warn(`[DictationMachine] No target element found for refinement sequence ${sequenceNumber}`);
-            // Clean up
-            context.activeRefinementSequences.delete(refinedTargetId);
-            context.activeRefinementSequenceLookup.delete(sequenceNumber);
-            clearAudioForTarget(context, refinedTargetId);
-            return;
-          }
-
-          // Normalize the refined transcription
-          transcription = normalizeTranscriptionText(transcription);
-
-          // Replace all Phase 1 transcriptions for this target with the refined result
-          const targetTranscriptions = context.transcriptionsByTarget[refinedTargetId] || {};
-
-          // Clear old interim transcriptions from both global and target-specific storage
-          Object.keys(targetTranscriptions).forEach(key => {
-            const seq = parseInt(key, 10);
-            delete context.transcriptions[seq];
-            delete context.transcriptionTargets[seq]; // Clean up target mapping too
-          });
-
-          // Store the refined transcription
-          context.transcriptions[sequenceNumber] = transcription;
-          context.transcriptionsByTarget[refinedTargetId] = {
-            [sequenceNumber]: transcription
-          };
-
-          // Get initial text for this target
-          const initialText = context.initialTextByTarget[refinedTargetId] || "";
-
-          // Set the final refined text using smart joining to handle whitespace correctly
-          const finalText = smartJoinTwoTexts(initialText, transcription);
-          setTextInTarget(finalText, targetElement, true); // Replace all content
-
-          // Update accumulated text if this is the current target
-          if (targetElement === context.targetElement) {
-            context.accumulatedText = finalText;
-          }
-
-          // Clean up refinement state and audio buffers
-          context.activeRefinementSequenceLookup.delete(sequenceNumber);
-          context.activeRefinementSequences.delete(refinedTargetId);
-          clearAudioForTarget(context, refinedTargetId);
-
-          // Emit refinement complete event
-          EventBus.emit("dictation:refined", {
-            targetElement,
-            targetId: refinedTargetId,
-            sequenceNumber,
-            refinedText: transcription,
-            finalText
-          });
-
-          console.debug(
-            `[DictationMachine] Refinement complete for target ${refinedTargetId}. Final text: ${finalText}`
-          );
-
-          // Don't continue with normal Phase 1 processing
-          return;
-        }
         // ---- NORMALISE ELLIPSES ----
         // Convert any ellipsis—either the single Unicode "…" character or the
         // three-dot sequence "..." — into a single space so downstream merging
@@ -1684,9 +1679,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         speechStartTarget: () => undefined,
         audioSegmentsByTarget: () => ({}),
         refinementPendingForTargets: () => new Set<string>(),
-        activeRefinementSequences: () => new Map<string, number>(),
-        activeRefinementSequenceLookup: () => new Map<number, string>(),
-        refinementQueue: () => [],
+        pendingRefinements: () => new Map(),
       }),
 
       finalizeDictation: (context: DictationContext) => {
@@ -1993,14 +1986,21 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             continue;
           }
 
+          // Skip refinement if only 1 segment (already fully transcribed in Phase 1)
+          if (segments.length === 1) {
+            console.debug(`[DictationMachine] Skipping refinement for target ${targetId} until more segments arrive`);
+            continue; // Keep buffering, don't clear
+          }
+
           // Remove pending flag now that refinement is in-flight to avoid duplicate submissions
           context.refinementPendingForTargets.delete(targetId);
 
+          // Always refine ALL segments for maximum context (full contextual refinement)
           console.debug(
-            `[DictationMachine] Starting refinement for target ${targetId} with ${segments.length} segments`
+            `[DictationMachine] Starting refinement for target ${targetId} with ${segments.length} segments (full context)`
           );
 
-          // Concatenate all audio segments
+          // Concatenate ALL audio segments from session start
           const totalDuration = segments.reduce((sum, seg) => sum + seg.duration, 0);
           const totalFrames = segments.reduce((sum, seg) => sum + seg.frames.length, 0);
 
@@ -2027,62 +2027,37 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Optionally persist the refinement chunk if keepSegments is enabled
           persistAudioSegment(combinedBlob, refinementStartTimestamp, totalDuration, "saypi-refinement");
 
-          // Reserve a provisional sequence number so the response can be routed immediately.
-          const provisionalSequenceNumber = getCurrentSequenceNumber() + 1;
-          context.transcriptionTargets[provisionalSequenceNumber] = targetElement;
-          context.activeRefinementSequences.set(targetId, provisionalSequenceNumber);
-          context.activeRefinementSequenceLookup.set(provisionalSequenceNumber, targetId);
-          const existingQueueEntry = context.refinementQueue.find(
-            (entry) => entry.targetId === targetId
-          );
-          if (existingQueueEntry) {
-            existingQueueEntry.element = targetElement;
-            existingQueueEntry.sequenceNumber = provisionalSequenceNumber;
-          } else {
-            context.refinementQueue.push({
-              targetId,
-              element: targetElement,
-              sequenceNumber: provisionalSequenceNumber,
-            });
-          }
+          // Generate UUID for this refinement request (separate from Phase 1 sequence tracking)
+          const requestId = crypto.randomUUID();
 
-          // Upload the combined audio for refinement
-          // Pass empty precedingTranscripts because the context is in the audio itself
-          uploadAudioWithRetry(
+          // Track refinement metadata independently
+          context.pendingRefinements.set(requestId, {
+            targetId,
+            targetElement,
+            segmentCount: segments.length,
+            timestamp: refinementStartTimestamp
+          });
+
+          console.debug(
+            `[DictationMachine] Refinement ${requestId} initiated for target ${targetId}`
+          );
+
+          // Upload using bare-bones refinement function (no sequence number tracking)
+          uploadAudioForRefinement(
             combinedBlob,
             totalDuration,
-            {}, // Empty precedingTranscripts - context is in the audio
+            requestId,
             context.sessionId,
-            3, // max retries
-            refinementStartTimestamp,
-            undefined, // clientReceiveTimestamp
-            getInputContext(targetElement).inputType || undefined,
-            getInputContext(targetElement).inputLabel || undefined,
-            (sequenceNum) => {
-              if (sequenceNum !== provisionalSequenceNumber) {
-                context.activeRefinementSequenceLookup.delete(provisionalSequenceNumber);
-                delete context.transcriptionTargets[provisionalSequenceNumber];
-              }
-              context.transcriptionTargets[sequenceNum] = targetElement;
-              context.activeRefinementSequences.set(targetId, sequenceNum);
-              context.activeRefinementSequenceLookup.set(sequenceNum, targetId);
-              const queueEntry = context.refinementQueue.find(
-                (entry) => entry.targetId === targetId
-              );
-              if (queueEntry) {
-                queueEntry.sequenceNumber = sequenceNum;
-              }
-            }
-          ).then((sequenceNum) => {
-            console.debug(
-              `[DictationMachine] Refinement transcription sent with sequence ${sequenceNum} for target ${targetId}`
-            );
-
-          // Note: Audio segments will be cleared when refinement response is received
-        }).catch((error) => {
-          console.error("[DictationMachine] Refinement transcription failed:", error);
-          clearAudioForTarget(context, targetId);
-        });
+            3 // max retries
+          ).then((transcriptionText) => {
+            // Handle response inline (no event bus routing needed)
+            handleRefinementComplete(context, requestId, transcriptionText);
+          }).catch((error) => {
+            console.error(`[DictationMachine] Refinement ${requestId} failed:`, error);
+            // Clean up metadata on failure
+            context.pendingRefinements.delete(requestId);
+            // Note: We don't clear audio segments - they may be retried later
+          });
         } // end for loop over targetsToRefine
       },
     },
