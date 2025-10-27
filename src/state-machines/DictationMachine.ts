@@ -20,6 +20,7 @@ import { TranscriptMergeService } from "../TranscriptMergeService";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
 import { calculateDelay } from "../TimerModule";
+import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 
 /**
  * Normalizes ellipses and whitespace in transcription text.
@@ -2022,6 +2023,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Refinement intentionally reuses the *current* timestamp so Telemetry treats the
           // Phase 2 upload as new work rather than flagging the earlier capture delay.
           const refinementStartTimestamp = Date.now();
+
+          // Optionally persist the refinement chunk if keepSegments is enabled
+          persistAudioSegment(combinedBlob, refinementStartTimestamp, totalDuration, "saypi-refinement");
 
           // Reserve a provisional sequence number so the response can be routed immediately.
           const provisionalSequenceNumber = getCurrentSequenceNumber() + 1;
