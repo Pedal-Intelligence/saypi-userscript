@@ -11,7 +11,7 @@ import { logger } from "../LoggingModule";
 import { likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule";
 import { VADPreset } from "../vad/VADConfigs";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
-import { config } from "../ConfigModule";
+import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 
 setupInterceptors();
 
@@ -137,29 +137,7 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
   logger.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
 
   // Optionally persist the segment if keepSegments is enabled
-  try {
-    const keep = String(config.keepSegments || '').toLowerCase() === 'true';
-    if (keep && audioBlob.size > 0) {
-      // Create a unique filename with timestamps
-      const startedAt = data.captureTimestamp - Math.round(data.duration);
-      const startedIso = new Date(startedAt).toISOString().replace(/[:.]/g, "-");
-      const endedIso = new Date(data.captureTimestamp).toISOString().replace(/[:.]/g, "-");
-      const filename = `SayPiSegments/saypi-segment_${startedIso}_to_${endedIso}_${Math.round(data.duration)}ms.wav`;
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Data = (reader.result as string).split(",")[1];
-        // Send to background to save via downloads API
-        chrome.runtime.sendMessage({
-          type: "SAVE_SEGMENT_WAV",
-          filename,
-          base64: base64Data
-        }, () => void 0);
-      };
-      reader.readAsDataURL(audioBlob);
-    }
-  } catch (e) {
-    console.warn("Failed to persist segment locally:", e);
-  }
+  persistAudioSegment(audioBlob, data.captureTimestamp, data.duration, "saypi-segment");
   
   // Emit both blob and duration for transcription
   EventBus.emit("audio:dataavailable", {
