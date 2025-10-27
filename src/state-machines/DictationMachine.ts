@@ -19,9 +19,9 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 import { TranscriptMergeService } from "../TranscriptMergeService";
 import { convertToWavBlob } from "../audio/AudioEncoder";
+import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
 import { calculateDelay } from "../TimerModule";
-import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 
 /**
  * Normalizes ellipses and whitespace in transcription text.
