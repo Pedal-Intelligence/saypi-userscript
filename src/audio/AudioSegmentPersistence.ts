@@ -1,6 +1,6 @@
 /**
- * Shared utility for persisting audio segments to disk for debugging purposes.
- * Used by both AudioInputMachine (for VAD-captured segments) and DictationMachine (for refinement chunks).
+ * Shared utility for persisting audio segments to disk for debugging.
+ * Used by AudioInputMachine (VAD segments) and DictationMachine (refinement chunks).
  */
 
 import { config } from "../ConfigModule";

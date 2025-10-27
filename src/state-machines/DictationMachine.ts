@@ -18,7 +18,6 @@ import EventBus from "../events/EventBus.js";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 import { TranscriptMergeService } from "../TranscriptMergeService";
-import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
@@ -138,15 +137,13 @@ interface DictationContext {
    */
   speechStartTarget?: HTMLElement;
 
-  // Phase 2 audio buffering - grouped by target element ID
+  // Phase 2 (Refinement) - See doc/DUAL_PHASE_TRANSCRIPTION.md
   audioSegmentsByTarget: Record<string, AudioSegment[]>;
-
-  // Phase 2 state tracking - per target (UUID-based, separate from Phase 1 sequence tracking)
-  refinementPendingForTargets: Set<string>; // target IDs awaiting refinement
-  pendingRefinements: Map<string, { // requestId (UUID) -> refinement metadata
+  refinementPendingForTargets: Set<string>;
+  pendingRefinements: Map<string, {
     targetId: string;
     targetElement: HTMLElement;
-    segmentCount: number; // for validation
+    segmentCount: number;
     timestamp: number;
   }>;
 }
@@ -376,6 +373,7 @@ function getTranscriptionsForTarget(context: DictationContext, targetElement: HT
 /**
  * Handle completion of a refinement request (Phase 2).
  * Replaces Phase 1 transcriptions with the refined result.
+ * Note: Multiple passes may occur per target (false-positive EOS detection).
  */
 function handleRefinementComplete(
   context: DictationContext,
@@ -479,27 +477,16 @@ function mapTargetForSequence(
   return finalTarget;
 }
 
-// Maximum audio buffer length per target in milliseconds (120 seconds = 2 minutes)
-// This prevents unbounded memory growth if user leaves hot-mic on
+// Maximum audio buffer per target (120s) - prevents unbounded memory growth
 const MAX_AUDIO_BUFFER_DURATION_MS = 120000;
 
-// Maximum delay for refinement endpoint detection (8 seconds)
-// Dictation uses a longer delay than prompt-based interactions, since there is less urgency (no AI waiting for prompt).
-// This reduces premature refinement passes from brief pauses during continuous dictation.
+// Maximum delay for refinement endpoint detection (8s)
+// Longer than prompt-based interactions to reduce premature refinements during continuous dictation
 const REFINEMENT_MAX_DELAY_MS = 8000;
 
 /**
- * Store an audio segment in the context for later refinement.
- * Buffers accumulate the full dictation session up to MAX_AUDIO_BUFFER_DURATION_MS
- * to provide maximum context for Phase 2 refinement.
- *
- * @param context - The dictation context
- * @param targetElement - The target element this audio belongs to
- * @param blob - The audio blob
- * @param frames - The raw audio frames (Float32Array)
- * @param duration - Duration in milliseconds
- * @param sequenceNumber - Sequence number of this segment
- * @param captureTimestamp - When the audio was captured
+ * Store audio segment for later refinement (Phase 2).
+ * Buffers accumulate up to MAX_AUDIO_BUFFER_DURATION_MS and persist across EOS events.
  */
 function storeAudioSegment(
   context: DictationContext,
@@ -623,7 +610,7 @@ function uploadAudioSegment(
     )}`
   );
 
-  // Extract input context for dictation mode
+  // Extract input context for dictation mode (Phase 1)
   const { inputType, inputLabel } = getInputContext(finalTarget);
   console.debug(`Input context for transcription: type="${inputType}", label="${inputLabel}"`);
 
@@ -1350,7 +1337,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                   refinementDelay: {
                     target: "refining",
                     cond: "refinementConditionsMet",
-                    description: "Trigger refinement after endpoint detected",
+                    description: "Trigger refinement after endpoint (EOS) detected",
                   },
                 },
                 on: {
@@ -1377,7 +1364,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                 },
               },
               refining: {
-                description: "Performing contextual refinement with full audio context.",
+                description: "Phase 2 refinement: re-transcribing with full audio context",
                 entry: [
                   {
                     type: "performContextualRefinement",
@@ -1544,10 +1531,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
 
-        // NOTE: Refinement responses bypass the event bus entirely and are handled
-        // synchronously in the Promise callback of performContextualRefinement via
-        // UUID-based tracking. This handler ONLY processes Phase 1 (live) transcriptions,
-        // which arrive via the event bus.
+        // NOTE: Refinement responses bypass event bus (handled in performContextualRefinement).
+        // This handler ONLY processes Phase 1 (live streaming) transcriptions.
 
         // ---- NORMALISE ELLIPSES ----
         // Convert any ellipsis—either the single Unicode "…" character or the
@@ -1988,7 +1973,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             continue;
           }
 
-          // Skip refinement if only 1 segment (no additional context available for improvement)
+          // Skip refinement if only 1 segment (no additional context for improvement)
           if (segments.length === 1) {
             console.debug(`[DictationMachine] Skipping refinement for target ${targetId} until more segments arrive`);
             continue; // Keep buffering, don't clear
