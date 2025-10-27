@@ -459,12 +459,7 @@ async function uploadAudioForRefinementInternal(
     const startTime = Date.now();
 
     // Emit refinement started event
-    EventBus.emit("saypi:refinement:started", {
-      requestId,
-      timestamp: startTime,
-      audioDurationMs: audioDurationMillis,
-      audioBytes: audioBlob.size,
-    });
+    // (moved to outer function to avoid multiple emissions on retry)
 
     // Build URL params
     const usageMeta = await buildUsageMetadata(chatbot);
