@@ -14,10 +14,23 @@ source-code.zip
 doc/dom/claude/*
 doc/data/*
 doc/store/*
-.env
-.env.*
+# Environment files (NEVER commit real .env files!)
+# Broad pattern to catch all .env variants (.env, .env.local, .env.staging, etc.)
+.env*
+# Allow example templates to be committed
 !.env.example
 !.env.production.example
+!.env*.example
+
+# Security-sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+**/secrets/
+**/credentials/
+.npmrc
+.yarnrc
 
 # Added by Claude Task Master
 # Logs

@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+# Prevent accidental commits of .env files and other sensitive data
+
+# Pattern for sensitive files (excludes .example files)
+SENSITIVE_PATTERN='^\.env$|^\.env\.[^e].*$|^\.env\.e[^x].*$|\.key$|\.pem$|\.p12$|\.pfx$'
+
+# Check for .env files in staged changes (but allow .env.example and .env.production.example)
+SENSITIVE_FILES=$(git diff --cached --name-only | grep -E "$SENSITIVE_PATTERN" | grep -v '\.example$' || true)
+
+if [ -n "$SENSITIVE_FILES" ]; then
+  echo ""
+  echo "❌ COMMIT BLOCKED: Attempting to commit sensitive files!"
+  echo ""
+  echo "The following sensitive files were detected:"
+  echo "$SENSITIVE_FILES" | sed 's/^/   • /'
+  echo ""
+  echo "These files should NEVER be committed to version control."
+  echo "Remove them from staging with: git reset HEAD <file>"
+  echo ""
+  exit 1
+fi
+
+# Check for real secrets accidentally added to example files
+if git diff --cached --name-only | grep -qE '\.env.*\.example$'; then
+  # Look for patterns that indicate real secrets (not placeholders)
+  if git diff --cached -- '*.example' | grep -qE '(sk-[a-zA-Z0-9]{20,}|G-[A-Z0-9]{10}|[a-f0-9]{32,}|ghp_[a-zA-Z0-9]{36})'; then
+    echo ""
+    echo "❌ COMMIT BLOCKED: Detected potential secrets in example files!"
+    echo ""
+    echo "Example files should only contain placeholder values, not real credentials."
+    echo "Please replace any real API keys, tokens, or secrets with placeholder values."
+    echo ""
+    exit 1
+  fi
+fi
