@@ -48,14 +48,17 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
    getPromptContainer(prompt: HTMLElement): HTMLElement {
-    return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
+    // Exclude hidden fieldsets (Claude.ai has a hidden fieldset with opacity-0)
+    return prompt.ownerDocument.querySelector("fieldset.w-full:not(.opacity-0)") as HTMLElement;
   }
 
   static getPromptContainer(prompt: HTMLElement): HTMLElement {
-    return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
+    // Exclude hidden fieldsets (Claude.ai has a hidden fieldset with opacity-0)
+    return prompt.ownerDocument.querySelector("fieldset.w-full:not(.opacity-0)") as HTMLElement;
   }
 
-  PROMPT_CONTROLS_CONTAINER_SELECTOR = "div.flex.gap-2\\.5.w-full.items-center";
+  // Claude.ai uses gap-2 for the prompt controls container (Dec 2025)
+  PROMPT_CONTROLS_CONTAINER_SELECTOR = "div.flex.gap-2.w-full.items-center";
   getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
     return promptContainer.querySelector(this.PROMPT_CONTROLS_CONTAINER_SELECTOR) as HTMLElement;
   }
@@ -137,7 +140,8 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getChatHistorySelector(): string {
-    return ".flex-1.flex.flex-col.gap-3.px-4.max-w-3xl.mx-auto.w-full.pt-1";
+    // Claude.ai removed gap-3 class from chat history container (Dec 2025)
+    return ".flex-1.flex.flex-col.px-4.max-w-3xl.mx-auto.w-full.pt-1";
   }
 
   getPastChatHistorySelector(): string {
