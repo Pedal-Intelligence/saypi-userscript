@@ -3,6 +3,63 @@
  */
 
 html body.pi {
+  /* Pi-specific tooltip styling to match native Pi tooltips */
+  .tooltip[aria-label]::after {
+    background: rgb(107, 98, 85); /* Pi's native tooltip brown/olive */
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  /* Pi-specific button sizing for control panel */
+  /* Use 40x40 button containers to match Pi's native button sizing */
+  #saypi-control-panel,
+  .saypi-control-panel {
+    .saypi-control-button.mini {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* Match Pi's native brown icon color */
+    .saypi-control-button svg {
+      color: rgb(107, 98, 85);
+      stroke: rgb(107, 98, 85);
+
+      path, line, circle, rect, polyline {
+        stroke: rgb(107, 98, 85);
+      }
+    }
+  }
+
+  /* Enter focus mode button specific sizing */
+  #saypi-enter-button {
+    width: 40px;
+    height: 40px;
+
+    svg {
+      color: rgb(107, 98, 85);
+      stroke: rgb(107, 98, 85);
+
+      path, line, circle, rect, polyline {
+        stroke: rgb(107, 98, 85);
+      }
+    }
+  }
+
+  /* Message controls: size copy button to better match native thumbs up/down */
+  .message-action-bar,
+  .message-hover-menu {
+    .saypi-copy-button {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
   .saypi-credit-notification {
     color: rgb(107, 98, 85);
   }
