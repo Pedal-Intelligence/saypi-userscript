@@ -11,19 +11,23 @@
  *   - Authenticated with: op signin
  *   - Secrets previously pushed with: npm run env:push
  *
+ * Configuration (optional environment variables):
+ *   - OP_VAULT_NAME: Override default vault name (default: 'saypi-userscript-dev')
+ *   - OP_ITEM_NAME: Override default item name (default: 'SayPi Dev Secrets')
+ *
  * This script:
- * 1. Fetches secrets from 1Password item "SayPi Dev Secrets"
+ * 1. Fetches secrets from 1Password item
  * 2. Updates .env and .env.production with fetched values
  * 3. Preserves comments and non-secret values in existing files
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 
 const root = process.cwd();
-const VAULT_NAME = 'saypi-userscript-dev';
-const ITEM_NAME = 'SayPi Dev Secrets';
+const VAULT_NAME = process.env.OP_VAULT_NAME || 'saypi-userscript-dev';
+const ITEM_NAME = process.env.OP_ITEM_NAME || 'SayPi Dev Secrets';
 
 /**
  * Check if 1Password CLI is available and authenticated
@@ -46,14 +50,21 @@ function check1PasswordCLI() {
 }
 
 /**
- * Fetch secrets from 1Password
+ * Fetch secrets from 1Password using spawnSync for safety
  */
 function fetchSecrets() {
   try {
-    const result = execSync(`op item get "${ITEM_NAME}" --vault="${VAULT_NAME}" --format=json`, {
-      encoding: 'utf8',
-    });
-    const item = JSON.parse(result);
+    const result = spawnSync('op', [
+      'item', 'get', ITEM_NAME,
+      `--vault=${VAULT_NAME}`,
+      '--format=json'
+    ], { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
+
+    if (result.status !== 0) {
+      throw new Error(result.stderr || 'Command failed');
+    }
+
+    const item = JSON.parse(result.stdout);
 
     const secrets = { dev: {}, prod: {} };
 
@@ -84,6 +95,31 @@ function fetchSecrets() {
 }
 
 /**
+ * Update env file content with secrets while preserving structure.
+ * Exported for testing.
+ * @param {string} content - Existing file content (empty string if new file)
+ * @param {Object} secrets - Key-value pairs to update
+ * @returns {string} - Updated content
+ */
+export function updateEnvContent(content, secrets) {
+  let result = content;
+
+  for (const [key, value] of Object.entries(secrets)) {
+    const regex = new RegExp(`^${key}=.*$`, 'm');
+
+    if (regex.test(result)) {
+      // Update existing key
+      result = result.replace(regex, `${key}=${value}`);
+    } else {
+      // Add new key at the end
+      result = result.trimEnd() + `\n${key}=${value}\n`;
+    }
+  }
+
+  return result;
+}
+
+/**
  * Update .env file with secrets while preserving structure
  */
 function updateEnvFile(filePath, secrets) {
@@ -95,20 +131,8 @@ function updateEnvFile(filePath, secrets) {
     console.log(`   Creating new file: ${path.basename(filePath)}`);
   }
 
-  // Update or add each secret
-  for (const [key, value] of Object.entries(secrets)) {
-    const regex = new RegExp(`^${key}=.*$`, 'm');
-
-    if (regex.test(content)) {
-      // Update existing key
-      content = content.replace(regex, `${key}=${value}`);
-    } else {
-      // Add new key at the end
-      content = content.trimEnd() + `\n${key}=${value}\n`;
-    }
-  }
-
-  fs.writeFileSync(filePath, content, 'utf8');
+  const updated = updateEnvContent(content, secrets);
+  fs.writeFileSync(filePath, updated, 'utf8');
 }
 
 /**
@@ -147,4 +171,8 @@ function main() {
   console.log('   Run "npm run validate:env" to verify configuration.\n');
 }
 
-main();
+// Only run main() when executed directly, not when imported
+import { fileURLToPath } from 'node:url';
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main();
+}

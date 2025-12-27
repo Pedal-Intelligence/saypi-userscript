@@ -10,20 +10,24 @@
  *   - 1Password CLI installed: https://developer.1password.com/docs/cli/get-started/
  *   - Authenticated with: op signin
  *
+ * Configuration (optional environment variables):
+ *   - OP_VAULT_NAME: Override default vault name (default: 'saypi-userscript-dev')
+ *   - OP_ITEM_NAME: Override default item name (default: 'SayPi Dev Secrets')
+ *
  * This script:
  * 1. Reads sensitive values from .env and .env.production
  * 2. Creates/updates a secure note in 1Password with the secrets
- * 3. Uses the 'saypi-userscript-dev' vault (creates if missing)
+ * 3. Uses the configured vault (creates if missing)
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import dotenv from 'dotenv';
 
 const root = process.cwd();
-const VAULT_NAME = 'saypi-userscript-dev';
-const ITEM_NAME = 'SayPi Dev Secrets';
+const VAULT_NAME = process.env.OP_VAULT_NAME || 'saypi-userscript-dev';
+const ITEM_NAME = process.env.OP_ITEM_NAME || 'SayPi Dev Secrets';
 
 /**
  * Check if 1Password CLI is available and authenticated
@@ -70,32 +74,47 @@ function ensureVault() {
 }
 
 /**
+ * Keys to sync to 1Password (sensitive values only).
+ * Exported for testing.
+ */
+export const KEYS_TO_SYNC = [
+  'VITE_GA_MEASUREMENT_ID',
+  'VITE_GA_API_SECRET',
+  'VITE_APP_SERVER_URL',
+  'VITE_API_SERVER_URL',
+  'VITE_AUTH_SERVER_URL',
+  'VITE_GA_ENDPOINT',
+];
+
+/**
+ * Extract secrets from parsed env object.
+ * Exported for testing.
+ * @param {Object} parsed - Parsed env file content
+ * @param {string} prefix - Prefix for secret keys ('dev_' or 'prod_')
+ * @returns {Object} - Secrets with prefixed keys
+ */
+export function extractSecrets(parsed, prefix) {
+  const secrets = {};
+  for (const key of KEYS_TO_SYNC) {
+    if (parsed[key]) {
+      secrets[`${prefix}${key}`] = parsed[key];
+    }
+  }
+  return secrets;
+}
+
+/**
  * Read environment files and extract secrets
  */
 function readSecrets() {
   const secrets = {};
-
-  // Keys we want to sync (sensitive values only)
-  const keysToSync = [
-    'VITE_GA_MEASUREMENT_ID',
-    'VITE_GA_API_SECRET',
-    'VITE_APP_SERVER_URL',
-    'VITE_API_SERVER_URL',
-    'VITE_AUTH_SERVER_URL',
-    'VITE_GA_ENDPOINT',
-  ];
 
   // Read .env
   const envPath = path.resolve(root, '.env');
   if (fs.existsSync(envPath)) {
     const envContent = fs.readFileSync(envPath, 'utf8');
     const parsed = dotenv.parse(envContent);
-
-    for (const key of keysToSync) {
-      if (parsed[key]) {
-        secrets[`dev_${key}`] = parsed[key];
-      }
-    }
+    Object.assign(secrets, extractSecrets(parsed, 'dev_'));
   }
 
   // Read .env.production
@@ -103,19 +122,14 @@ function readSecrets() {
   if (fs.existsSync(prodEnvPath)) {
     const prodContent = fs.readFileSync(prodEnvPath, 'utf8');
     const parsed = dotenv.parse(prodContent);
-
-    for (const key of keysToSync) {
-      if (parsed[key]) {
-        secrets[`prod_${key}`] = parsed[key];
-      }
-    }
+    Object.assign(secrets, extractSecrets(parsed, 'prod_'));
   }
 
   return secrets;
 }
 
 /**
- * Save secrets to 1Password
+ * Save secrets to 1Password using spawnSync to avoid shell injection
  */
 function saveSecrets(vaultId, secrets) {
   const secretCount = Object.keys(secrets).length;
@@ -136,24 +150,36 @@ function saveSecrets(vaultId, secrets) {
     // Item doesn't exist, will create
   }
 
-  // Build field assignments
-  const fields = Object.entries(secrets)
-    .map(([key, value]) => `${key}[password]=${value}`)
-    .join(' ');
+  // Build field assignments as separate arguments (safe from shell injection)
+  const fieldArgs = Object.entries(secrets).map(
+    ([key, value]) => `${key}[password]=${value}`
+  );
 
   try {
+    let result;
     if (itemExists) {
-      // Edit existing item
-      const cmd = `op item edit "${ITEM_NAME}" --vault="${VAULT_NAME}" ${fields}`;
-      execSync(cmd, { stdio: 'pipe' });
-      console.log(`✅ Updated "${ITEM_NAME}" in 1Password`);
+      // Edit existing item using spawnSync (no shell, args passed directly)
+      result = spawnSync('op', [
+        'item', 'edit', ITEM_NAME,
+        `--vault=${VAULT_NAME}`,
+        ...fieldArgs
+      ], { stdio: 'pipe', encoding: 'utf8' });
     } else {
-      // Create new item
-      const cmd = `op item create --category="Secure Note" --title="${ITEM_NAME}" --vault="${VAULT_NAME}" ${fields}`;
-      execSync(cmd, { stdio: 'pipe' });
-      console.log(`✅ Created "${ITEM_NAME}" in 1Password`);
+      // Create new item using spawnSync (no shell, args passed directly)
+      result = spawnSync('op', [
+        'item', 'create',
+        '--category=Secure Note',
+        `--title=${ITEM_NAME}`,
+        `--vault=${VAULT_NAME}`,
+        ...fieldArgs
+      ], { stdio: 'pipe', encoding: 'utf8' });
     }
 
+    if (result.status !== 0) {
+      throw new Error(result.stderr || 'Command failed');
+    }
+
+    console.log(`✅ ${itemExists ? 'Updated' : 'Created'} "${ITEM_NAME}" in 1Password`);
     console.log(`\n📦 Secrets saved to vault: ${VAULT_NAME}`);
     console.log('   Pull on other devices with: npm run env:pull\n');
   } catch (error) {
@@ -174,4 +200,8 @@ function main() {
   saveSecrets(vaultId, secrets);
 }
 
-main();
+// Only run main() when executed directly, not when imported
+import { fileURLToPath } from 'node:url';
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main();
+}

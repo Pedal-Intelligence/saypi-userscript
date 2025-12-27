@@ -82,6 +82,7 @@
     "xstate": "^4.38.2"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
     "@babel/core": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
     "@eslint/config-array": "^0.19.2",

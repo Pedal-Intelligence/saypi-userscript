@@ -15,12 +15,12 @@ doc/dom/claude/*
 doc/data/*
 doc/store/*
 # Environment files (NEVER commit real .env files!)
-.env
-.env.local
-.env.*.local
-.env.production
+# Broad pattern to catch all .env variants (.env, .env.local, .env.staging, etc.)
+.env*
+# Allow example templates to be committed
 !.env.example
 !.env.production.example
+!.env*.example
 
 # Security-sensitive files
 *.key
