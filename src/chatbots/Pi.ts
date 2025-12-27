@@ -52,9 +52,11 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getPromptTextInputSelector(): string {
-    // Match both new chat (input) and existing chat (textarea) prompt elements
+    // Match both new chat and existing chat textarea prompt elements
+    // - Existing chats: textarea with enterkeyhint attribute
+    // - New chats: textarea with non-empty placeholder (no enterkeyhint)
     // See doc/dom/pi/prompt-selectors.md for details
-    return "textarea[enterkeyhint], input[type='text'][placeholder]";
+    return "textarea[enterkeyhint], textarea[placeholder]:not([placeholder=''])";
   }
 
   getPromptSubmitButtonSelector(): string {
