@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+# Prevent accidental commits of .env files
+
+# Check for .env files in staged changes
+if git diff --cached --name-only | grep -E '^\.env$|^\.env\.production$|^\.env\.local$|\.key$|\.pem$'; then
+  echo ""
+  echo "❌ COMMIT BLOCKED: Attempting to commit sensitive files!"
+  echo ""
+  echo "The following sensitive files were detected:"
+  git diff --cached --name-only | grep -E '^\.env|\.key$|\.pem$' | sed 's/^/   • /'
+  echo ""
+  echo "These files should NEVER be committed to version control."
+  echo "Remove them from staging with: git reset HEAD <file>"
+  echo ""
+  exit 1
+fi
+
+# Check for placeholder values that might indicate .env was committed by accident
+if git diff --cached --name-only | grep -q '\.env\.example$\|\.env\.production\.example$'; then
+  if git diff --cached | grep -qE '(XXXXXXXXXX|REPLACE_ME|your-api-key|sk-[a-zA-Z0-9]{20,})'; then
+    echo ""
+    echo "⚠️  WARNING: Detected potential secrets in example files!"
+    echo "Make sure you're not committing real credentials."
+    echo ""
+  fi
+fi

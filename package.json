@@ -7,6 +7,10 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
+    "prepare": "husky",
+    "setup": "node scripts/setup-env.js",
+    "env:push": "node scripts/1password-push.js",
+    "env:pull": "node scripts/1password-pull.js",
     "copy-onnx": "node copy-onnx-files.js",
     "postcopy-onnx": "npm run prune-onnx",
     "prune-onnx": "node scripts/prune-onnx.js",

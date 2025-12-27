@@ -14,10 +14,23 @@ source-code.zip
 doc/dom/claude/*
 doc/data/*
 doc/store/*
+# Environment files (NEVER commit real .env files!)
 .env
-.env.*
+.env.local
+.env.*.local
+.env.production
 !.env.example
 !.env.production.example
+
+# Security-sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+**/secrets/
+**/credentials/
+.npmrc
+.yarnrc
 
 # Added by Claude Task Master
 # Logs

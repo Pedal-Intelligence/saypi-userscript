@@ -37,21 +37,71 @@ For developers interested in understanding the project's technical implementatio
 
 ### Environment Setup
 
-#### Environment Files
+This project uses a 4-tier environment management system for secure, convenient secret handling across devices.
 
-The working `.env` (development) and `.env.production` (build) files are ignored by Git. Copy the templates and keep them up to date with new variables:
+#### Quick Start (First Time Setup)
 
 ```bash
-cp .env.example .env
-cp .env.production.example .env.production
+npm run setup
 ```
 
-**Validation:**
+This creates `.env` and `.env.production` from templates. Update the values before running dev/build.
+
+#### Tier 1: Validation (Built-in)
+
+Environment files are automatically validated before dev/build:
+
 ```bash
-npm run validate:env  # Runs automatically before dev/build
+npm run validate:env  # Manual validation
 ```
 
-The validator checks for missing or malformed values and provides actionable error messages.
+The validator checks for:
+- Missing required variables
+- Malformed URLs and API keys
+- Placeholder values (XXXXXXXXXX)
+- Incorrect formats
+
+#### Tier 2: Setup Script
+
+```bash
+npm run setup  # One-command initialization
+```
+
+Creates environment files from templates and checks for 1Password CLI integration.
+
+#### Tier 3: 1Password CLI Integration (Recommended for Multiple Devices)
+
+Sync secrets across devices using 1Password CLI:
+
+**Prerequisites:**
+1. Install 1Password CLI: https://developer.1password.com/docs/cli/get-started/
+2. Sign in: `op signin`
+
+**First-time setup (on your primary device):**
+```bash
+# Edit .env and .env.production with real values
+npm run env:push  # Save to 1Password
+```
+
+**On other devices:**
+```bash
+npm run setup      # Create template files
+npm run env:pull   # Load secrets from 1Password
+```
+
+**Workflow:**
+- `npm run env:push` - Save current `.env` values to 1Password vault
+- `npm run env:pull` - Load secrets from 1Password to local `.env` files
+
+Secrets are stored in a 1Password vault named `saypi-userscript-dev` in an item called `SayPi Dev Secrets`.
+
+#### Tier 4: Safety Nets (Git Hooks)
+
+Pre-commit hooks automatically prevent accidental commits of:
+- `.env` and `.env.production` files
+- `.key`, `.pem`, and other credential files
+
+The hook is installed automatically via `npm install` (husky).
 
 #### Quick Environment Switching
 
