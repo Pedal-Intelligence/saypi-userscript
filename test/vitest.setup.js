@@ -1,6 +1,12 @@
 // setup file for vitest - applied before testing *.spec.ts files
 import { vi } from "vitest";
 import { JSDOM } from "jsdom";
+import { webcrypto } from "node:crypto";
+
+// Polyfill crypto for Node.js test environment (needed for crypto.randomUUID())
+if (typeof global.crypto === 'undefined') {
+  global.crypto = webcrypto;
+}
 
 // JSDOM Setup
 const dom = new JSDOM("<!DOCTYPE html>", {

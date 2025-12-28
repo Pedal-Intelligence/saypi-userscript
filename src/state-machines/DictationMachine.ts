@@ -8,6 +8,7 @@ import {
 } from "xstate";
 import {
   uploadAudioWithRetry,
+  uploadAudioForRefinement,
   isTranscriptionPending,
   clearPendingTranscriptions,
   getCurrentSequenceNumber,
@@ -18,9 +19,24 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 import { TranscriptMergeService } from "../TranscriptMergeService";
 import { convertToWavBlob } from "../audio/AudioEncoder";
+import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
+import { calculateDelay } from "../TimerModule";
 
-type DictationTranscribedEvent = {
+/**
+ * Normalizes ellipses and whitespace in transcription text.
+ * Converts Unicode ellipsis (…) and triple dots (...) to spaces,
+ * then collapses consecutive spaces/tabs into single spaces.
+ */
+function normalizeTranscriptionText(text: string): string {
+  return text
+    .replace(/\u2026/g, " ")      // "…" → space
+    .replace(/\.{3}/g, " ")       // "..." → space
+    .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs
+    .trim();
+}
+
+export type DictationTranscribedEvent = {
   type: "saypi:transcribed";
   text: string;
   sequenceNumber: number;
@@ -29,7 +45,7 @@ type DictationTranscribedEvent = {
   merged?: number[];
 };
 
-type DictationSpeechStoppedEvent = {
+export type DictationSpeechStoppedEvent = {
   type: "saypi:userStoppedSpeaking";
   duration: number;
   blob?: Blob;
@@ -39,13 +55,13 @@ type DictationSpeechStoppedEvent = {
   handlerTimestamp?: number;
 };
 
-type DictationAudioConnectedEvent = {
+export type DictationAudioConnectedEvent = {
   type: "saypi:audio:connected";
   deviceId: string;
   deviceLabel: string;
 };
 
-type DictationSessionAssignedEvent = {
+export type DictationSessionAssignedEvent = {
   type: "saypi:session:assigned";
   session_id: string;
 };
@@ -60,6 +76,11 @@ type DictationManualEditEvent = {
   targetElement: HTMLElement;
   newContent: string;
   oldContent: string;
+};
+
+type DictationRefineTranscriptionEvent = {
+  type: "saypi:refineTranscription";
+  targetElement: HTMLElement;
 };
 
 type DictationEvent =
@@ -77,7 +98,17 @@ type DictationEvent =
   | { type: "saypi:visible" }
   | DictationAudioConnectedEvent
   | DictationSessionAssignedEvent
-  | DictationManualEditEvent;
+  | DictationManualEditEvent
+  | DictationRefineTranscriptionEvent;
+
+interface AudioSegment {
+  blob: Blob;
+  frames: Float32Array;
+  duration: number;
+  sequenceNumber: number;
+  captureTimestamp?: number;
+  refined?: boolean;  // Tracks if segment was included in a refinement (for O(n) incremental refinement)
+}
 
 interface DictationContext {
   transcriptions: Record<number, string>; // Global transcriptions for backwards compatibility
@@ -87,6 +118,7 @@ interface DictationContext {
   userIsSpeaking: boolean;
   timeUserStoppedSpeaking: number;
   timeUserStartedSpeaking: number; // Track when current speech started
+  timeLastTranscriptionReceived: number; // Track when last transcription was received (for endpoint timing)
   sessionId?: string;
   targetElement?: HTMLElement; // The input field being dictated to
   accumulatedText: string; // Text accumulated during this dictation session
@@ -105,6 +137,19 @@ interface DictationContext {
    * that we always know which target the very first portion of audio belongs to.
    */
   speechStartTarget?: HTMLElement;
+
+  // Phase 2 (Refinement) - See doc/DUAL_PHASE_TRANSCRIPTION.md
+  audioSegmentsByTarget: Record<string, AudioSegment[]>;
+  refinementPendingForTargets: Set<string>;
+  pendingRefinements: Map<string, {
+    targetId: string;
+    targetElement: HTMLElement;
+    segmentCount: number;
+    timestamp: number;
+  }>;
+  // Accumulated refined text per target for incremental refinement (O(n) optimization)
+  // Used as initial_prompt context when refining only new segments
+  refinedTextByTarget: Record<string, string>;
 }
 
 // Define the state schema
@@ -130,6 +175,7 @@ type DictationStateSchema = {
           states: {
             transcribing: {};
             accumulating: {};
+            refining: {};
           };
         };
       };
@@ -328,6 +374,100 @@ function getTranscriptionsForTarget(context: DictationContext, targetElement: HT
   return context.transcriptionsByTarget[targetId] || {};
 }
 
+/**
+ * Handle completion of a refinement request (Phase 2).
+ * For O(n) incremental refinement, APPENDS new refinement to accumulated refined text.
+ * Note: Multiple passes may occur per target (false-positive EOS detection).
+ */
+function handleRefinementComplete(
+  context: DictationContext,
+  requestId: string,
+  transcription: string
+): void {
+  const meta = context.pendingRefinements.get(requestId);
+  if (!meta) {
+    console.warn(`[DictationMachine] No metadata found for refinement ${requestId} - already cleaned up?`);
+    return;
+  }
+
+  const { targetId, targetElement, segmentCount } = meta;
+
+  console.debug(
+    `[DictationMachine] Received refinement transcription [${requestId}] for target ${targetId}: ${transcription}`
+  );
+
+  // Normalize the refined transcription
+  transcription = normalizeTranscriptionText(transcription);
+
+  // Get Phase 1 sequences for this target
+  const oldTranscriptions = context.transcriptionsByTarget[targetId] || {};
+  const phase1Sequences = Object.keys(oldTranscriptions)
+    .map(k => parseInt(k, 10))
+    .filter(seq => seq > 0); // Only clear Phase 1 (positive sequences), not previous refinements (negative keys)
+
+  // Clear Phase 1 transcriptions from global storage
+  phase1Sequences.forEach(seq => {
+    delete context.transcriptions[seq];
+    delete context.transcriptionTargets[seq];
+  });
+
+  console.debug(
+    `[DictationMachine] Cleared ${phase1Sequences.length} Phase 1 transcriptions: [${phase1Sequences.join(', ')}]`
+  );
+
+  // O(n) OPTIMIZATION: Get existing refined text and APPEND new refinement
+  // This accumulates all refined text for use as initial_prompt context in future refinements
+  const existingRefinement = context.refinedTextByTarget[targetId] || "";
+  const combinedRefinement = existingRefinement
+    ? smartJoinTwoTexts(existingRefinement, transcription)
+    : transcription;
+
+  // Store accumulated refined text for future initial_prompt context
+  context.refinedTextByTarget[targetId] = combinedRefinement;
+
+  console.debug(
+    `[DictationMachine] Accumulated refined text for target ${targetId}: ` +
+    `${existingRefinement.length} chars (existing) + ${transcription.length} chars (new) = ${combinedRefinement.length} chars (total)`
+  );
+
+  // Store refinement result using negative timestamp as key (avoids collision with Phase 1 sequences)
+  const refinementKey = -(Date.now());
+  context.transcriptionsByTarget[targetId] = {
+    [refinementKey]: combinedRefinement  // Use combined refinement, not just new transcription
+  };
+  context.transcriptions[refinementKey] = combinedRefinement;
+  context.transcriptionTargets[refinementKey] = targetElement;
+
+  // Calculate final text (initial + accumulated refinement)
+  const initialText = context.initialTextByTarget[targetId] || "";
+  const finalText = smartJoinTwoTexts(initialText, combinedRefinement);
+
+  setTextInTarget(finalText, targetElement, true); // Replace all content
+
+  // Update accumulated text if this is the current target
+  if (targetElement === context.targetElement) {
+    context.accumulatedText = finalText;
+  }
+
+  // Clean up refinement metadata
+  context.pendingRefinements.delete(requestId);
+
+  // Emit refinement complete event
+  EventBus.emit("dictation:refined", {
+    targetElement,
+    targetId,
+    requestId,
+    refinedText: transcription,
+    combinedRefinement,  // Include combined refinement for visibility
+    finalText,
+    segmentCount
+  });
+
+  console.debug(
+    `[DictationMachine] Refinement ${requestId} complete for target ${targetId}. Final text: ${finalText}`
+  );
+}
+
 function mapTargetForSequence(
   context: DictationContext,
   expectedSequenceNumber: number,
@@ -357,6 +497,109 @@ function mapTargetForSequence(
   return finalTarget;
 }
 
+// Maximum audio buffer per target (120s) - prevents unbounded memory growth
+const MAX_AUDIO_BUFFER_DURATION_MS = 120000;
+
+// Maximum delay for refinement endpoint detection (8s)
+// Longer than prompt-based interactions to reduce premature refinements during continuous dictation
+const REFINEMENT_MAX_DELAY_MS = 8000;
+
+/**
+ * Store audio segment for later refinement (Phase 2).
+ * Buffers accumulate up to MAX_AUDIO_BUFFER_DURATION_MS and persist across EOS events.
+ */
+function storeAudioSegment(
+  context: DictationContext,
+  targetElement: HTMLElement,
+  blob: Blob,
+  frames: Float32Array,
+  duration: number,
+  sequenceNumber: number,
+  captureTimestamp?: number
+): void {
+  const targetId = getTargetElementId(targetElement);
+
+  // Initialize array for this target if it doesn't exist
+  if (!context.audioSegmentsByTarget[targetId]) {
+    context.audioSegmentsByTarget[targetId] = [];
+  }
+
+  const segments = context.audioSegmentsByTarget[targetId];
+
+  // Calculate total duration including the new segment
+  const currentTotalDuration = segments.reduce((sum, seg) => sum + seg.duration, 0);
+  const newTotalDuration = currentTotalDuration + duration;
+
+  // If adding this segment would exceed the max buffer duration, trim old segments
+  if (newTotalDuration > MAX_AUDIO_BUFFER_DURATION_MS) {
+    let excessDuration = newTotalDuration - MAX_AUDIO_BUFFER_DURATION_MS;
+    let segmentsToRemove = 0;
+
+    // Remove oldest segments until we're under the limit
+    for (let i = 0; i < segments.length && excessDuration > 0; i++) {
+      excessDuration -= segments[i].duration;
+      segmentsToRemove++;
+    }
+
+    if (segmentsToRemove > 0) {
+      const removed = segments.splice(0, segmentsToRemove);
+      console.debug(
+        `Trimmed ${segmentsToRemove} old audio segments for target ${targetId} to stay under ${MAX_AUDIO_BUFFER_DURATION_MS}ms limit. ` +
+        `Removed ${removed.reduce((sum, seg) => sum + seg.duration, 0)}ms of audio.`
+      );
+    }
+  }
+
+  // Store the new segment (unrefined - will be marked refined after successful refinement upload)
+  segments.push({
+    blob,
+    frames,
+    duration,
+    sequenceNumber,
+    captureTimestamp,
+    refined: false,
+  });
+
+  // Mark this target as pending refinement
+  context.refinementPendingForTargets.add(targetId);
+
+  const totalDuration = segments.reduce((sum, seg) => sum + seg.duration, 0);
+  console.debug(
+    `Stored audio segment ${sequenceNumber} for target ${targetId}. Total: ${segments.length} segments, ${(totalDuration / 1000).toFixed(1)}s of audio`
+  );
+}
+
+/**
+ * Clear audio buffers for a specific target element.
+ * @param context - The dictation context
+ * @param targetId - The target element ID to clear buffers for
+ */
+function clearAudioForTarget(context: DictationContext, targetId: string): void {
+  delete context.audioSegmentsByTarget[targetId];
+  context.refinementPendingForTargets.delete(targetId);
+
+  // Clear any pending refinements for this target (UUID-based tracking)
+  for (const [requestId, meta] of context.pendingRefinements.entries()) {
+    if (meta.targetId === targetId) {
+      context.pendingRefinements.delete(requestId);
+      console.debug(`Cleared pending refinement ${requestId} for target ${targetId}`);
+    }
+  }
+
+  console.debug(`Cleared audio buffers for target ${targetId}`);
+}
+
+/**
+ * Clear all audio buffers.
+ * @param context - The dictation context
+ */
+function clearAllAudioBuffers(context: DictationContext): void {
+  context.audioSegmentsByTarget = {};
+  context.refinementPendingForTargets.clear();
+  context.pendingRefinements.clear();
+  console.debug('Cleared all audio buffers');
+}
+
 /**
  * Common helper for preparing and uploading an audio segment.
  */
@@ -368,7 +611,8 @@ function uploadAudioSegment(
   sessionId?: string,
   maxRetries: number = 3,
   captureTimestamp?: number,
-  clientReceiveTimestamp?: number
+  clientReceiveTimestamp?: number,
+  frames?: Float32Array
 ) {
   const expectedSequenceNumber = getCurrentSequenceNumber() + 1;
   const finalTarget = mapTargetForSequence(
@@ -387,9 +631,22 @@ function uploadAudioSegment(
     )}`
   );
 
-  // Extract input context for dictation mode
+  // Extract input context for dictation mode (Phase 1)
   const { inputType, inputLabel } = getInputContext(finalTarget);
   console.debug(`Input context for transcription: type="${inputType}", label="${inputLabel}"`);
+
+  // Store audio segment for Phase 2 refinement if frames are available
+  if (frames) {
+    storeAudioSegment(
+      context,
+      finalTarget,
+      audioBlob,
+      frames,
+      duration,
+      expectedSequenceNumber,
+      captureTimestamp
+    );
+  }
 
   uploadAudioWithRetry(
     audioBlob,
@@ -400,7 +657,14 @@ function uploadAudioSegment(
     captureTimestamp,
     clientReceiveTimestamp,
     inputType || undefined,
-    inputLabel || undefined
+    inputLabel || undefined,
+    (sequenceNum) => {
+      // Keep transcription target mapping in sync even if sequence numbers shift
+      if (sequenceNum !== expectedSequenceNumber) {
+        delete context.transcriptionTargets[expectedSequenceNumber];
+      }
+      context.transcriptionTargets[sequenceNum] = finalTarget;
+    }
   ).then((sequenceNum) => {
     console.debug(`Sent transcription ${sequenceNum} to target`, finalTarget);
     if (sequenceNum !== expectedSequenceNumber) {
@@ -860,11 +1124,16 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
       timeUserStartedSpeaking: 0,
+      timeLastTranscriptionReceived: 0,
       accumulatedText: "",
       transcriptionTargets: {},
       provisionalTranscriptionTarget: undefined,
       targetSwitchesDuringSpeech: undefined,
       speechStartTarget: undefined,
+      audioSegmentsByTarget: {},
+      refinementPendingForTargets: new Set<string>(),
+      pendingRefinements: new Map(),
+      refinedTextByTarget: {},
     },
     id: "dictation",
     initial: "idle",
@@ -1086,6 +1355,13 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
               },
               accumulating: {
                 description: "Accumulating transcriptions and streaming to target field.",
+                after: {
+                  refinementDelay: {
+                    target: "refining",
+                    cond: "refinementConditionsMet",
+                    description: "Trigger refinement after endpoint (EOS) detected",
+                  },
+                },
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
@@ -1094,6 +1370,11 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                     },
                     description: "Additional transcriptions received.",
                   },
+                  "saypi:refineTranscription": {
+                    target: "refining",
+                    cond: "hasSegmentsForRefinement",
+                    description: "Explicit refinement request (e.g., from field blur)",
+                  },
                   "saypi:transcribeFailed": {
                     target: "#dictation.errors.transcribeFailed",
                     description: "Error response from the /transcribe API",
@@ -1101,6 +1382,27 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                   "saypi:transcribedEmpty": {
                     target: "#dictation.errors.micError",
                     description: "Empty response from the /transcribe API",
+                  },
+                },
+              },
+              refining: {
+                description: "Phase 2 refinement: re-transcribing with full audio context",
+                entry: [
+                  {
+                    type: "performContextualRefinement",
+                  },
+                ],
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description: "Refinement transcription received.",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "accumulating",
+                    description: "Refinement failed, continue with Phase 1 text",
                   },
                 },
               },
@@ -1244,20 +1546,23 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         context: DictationContext,
         event: DictationTranscribedEvent
       ) => {
+        // Update the timestamp for endpoint detection
+        context.timeLastTranscriptionReceived = Date.now();
+
         let transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
+
+        // NOTE: Refinement responses bypass event bus (handled in performContextualRefinement).
+        // This handler ONLY processes Phase 1 (live streaming) transcriptions.
+
         // ---- NORMALISE ELLIPSES ----
         // Convert any ellipsis—either the single Unicode "…" character or the
         // three-dot sequence "..." — into a single space so downstream merging
         // sees consistent whitespace. Then collapse *spaces or tabs* (but not
         // line breaks) and trim the string.
         const originalTranscription = transcription;
-        transcription = transcription
-          .replace(/\u2026/g, " ")   // "…" → space
-          .replace(/\.{3}/g, " ")    // "..." → space
-          .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs but keep line-breaks
-          .trim();
+        transcription = normalizeTranscriptionText(transcription);
 
         console.debug(
           `Dictation transcript [${sequenceNumber}]: ${transcription}` +
@@ -1374,29 +1679,37 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         userIsSpeaking: false,
         timeUserStoppedSpeaking: 0,
         timeUserStartedSpeaking: 0,
+        timeLastTranscriptionReceived: 0,
         targetElement: () => undefined,
         accumulatedText: "",
         transcriptionTargets: () => ({}),
         provisionalTranscriptionTarget: () => undefined,
         targetSwitchesDuringSpeech: () => undefined,
         speechStartTarget: () => undefined,
+        audioSegmentsByTarget: () => ({}),
+        refinementPendingForTargets: () => new Set<string>(),
+        pendingRefinements: () => new Map(),
+        refinedTextByTarget: () => ({}),
       }),
 
       finalizeDictation: (context: DictationContext) => {
         // Generate final merged text from current target's transcriptions
         let finalText = context.accumulatedText;
-        
+
         if (context.targetElement) {
           const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
           finalText = computeFinalText(targetTranscriptions, [], finalText, "", false);
         }
-        
+
+        // Clear all audio buffers when dictation is finalized
+        clearAllAudioBuffers(context);
+
         // Emit event that dictation is complete
         EventBus.emit("dictation:complete", {
           targetElement: context.targetElement,
           text: finalText,
         });
-        
+
         console.log("Dictation completed for target:", context.targetElement, "with text:", finalText);
       },
 
@@ -1504,7 +1817,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             context.sessionId,
             MAX_RETRIES,
             captureTs,
-            clientReceiveTs
+            clientReceiveTs,
+            audioData  // Pass frames for buffering
           );
         };
 
@@ -1564,7 +1878,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             context.sessionId,
             MAX_RETRIES,
             event.captureTimestamp,
-            event.clientReceiveTimestamp
+            event.clientReceiveTimestamp,
+            event.frames  // Pass frames for buffering
           );
         } else {
           console.warn("No target element set for transcription");
@@ -1613,21 +1928,176 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         
         // Clear initial text for this target
         delete context.initialTextByTarget[targetId];
-        
+
         // Reset accumulated text if this is the current target
         if (event.targetElement === context.targetElement) {
           context.accumulatedText = "";
         }
+
+        // Clear audio buffers and refinement state for this target
+        // This prevents stale audio (up to 120s) from being refined later
+        clearAudioForTarget(context, targetId);
 
         // Emit event to notify that dictation was terminated due to manual edit
         EventBus.emit("dictation:terminatedByManualEdit", {
           targetElement: event.targetElement,
           reason: "manual-edit"
         });
-        
+
         // Stop recording and cleanup
         EventBus.emit("audio:stopRecording");
         EventBus.emit("audio:tearDownRecording");
+      },
+
+      performContextualRefinement: (
+        context: DictationContext,
+        event: DictationEvent
+      ) => {
+        console.debug("[DictationMachine] performContextualRefinement triggered");
+
+        // Determine which target(s) to refine
+        let targetsToRefine: HTMLElement[] = [];
+
+        if (event.type === "saypi:refineTranscription") {
+          // Explicit refinement request for a specific target
+          targetsToRefine = [(event as DictationRefineTranscriptionEvent).targetElement];
+        } else {
+          // Endpoint-triggered: refine ALL pending targets (not just current one)
+          // This handles the case where user switched targets mid-dictation
+          for (const targetId of context.refinementPendingForTargets) {
+            // Find the target element by looking through transcription targets
+            const targetElement = Object.values(context.transcriptionTargets).find(
+              el => getTargetElementId(el) === targetId
+            );
+
+            if (targetElement) {
+              targetsToRefine.push(targetElement);
+            } else {
+              console.warn(`[DictationMachine] No element found for pending refinement target ${targetId}`);
+              context.refinementPendingForTargets.delete(targetId);
+            }
+          }
+        }
+
+        if (targetsToRefine.length === 0) {
+          console.debug("[DictationMachine] No targets to refine");
+          return;
+        }
+
+        // Process each target
+        for (const targetElement of targetsToRefine) {
+          const targetId = getTargetElementId(targetElement);
+          const segments = context.audioSegmentsByTarget[targetId];
+
+          if (!segments || segments.length === 0) {
+            console.debug(`[DictationMachine] No audio segments to refine for target ${targetId}`);
+            // Clear the pending flag even if no segments (cleanup)
+            context.refinementPendingForTargets.delete(targetId);
+            continue;
+          }
+
+          // O(n) OPTIMIZATION: Only refine UNREFINED segments (incremental refinement)
+          // This avoids re-uploading already-refined audio, reducing upload from O(n²) to O(n)
+          const unrefinedSegments = segments.filter(seg => !seg.refined);
+
+          if (unrefinedSegments.length === 0) {
+            console.debug(`[DictationMachine] No new segments to refine for target ${targetId}, all ${segments.length} segments already refined`);
+            context.refinementPendingForTargets.delete(targetId);
+            continue;
+          }
+
+          // Skip refinement if only 1 unrefined segment AND no previous refined context
+          // (no additional context for improvement)
+          const hasPreviousRefinedContext = context.refinedTextByTarget[targetId] &&
+                                            context.refinedTextByTarget[targetId].length > 0;
+          if (unrefinedSegments.length === 1 && !hasPreviousRefinedContext) {
+            console.debug(`[DictationMachine] Skipping refinement for target ${targetId} until more segments arrive (only 1 unrefined segment, no prior context)`);
+            continue; // Keep buffering, don't clear
+          }
+
+          // Remove pending flag now that refinement is in-flight to avoid duplicate submissions
+          context.refinementPendingForTargets.delete(targetId);
+
+          // Get preceding refined text for initial_prompt context (last 500 chars)
+          const precedingRefinedText = context.refinedTextByTarget[targetId] || "";
+          const initialPrompt = precedingRefinedText.slice(-500);
+
+          console.debug(
+            `[DictationMachine] Starting incremental refinement for target ${targetId}: ` +
+            `${unrefinedSegments.length} new segments (${segments.length} total), ` +
+            `initial_prompt: ${initialPrompt.length} chars`
+          );
+
+          // Concatenate only UNREFINED audio segments (O(n) optimization)
+          const totalDuration = unrefinedSegments.reduce((sum, seg) => sum + seg.duration, 0);
+          const totalFrames = unrefinedSegments.reduce((sum, seg) => sum + seg.frames.length, 0);
+
+          // Combine all unrefined frames into a single Float32Array
+          const combinedFrames = new Float32Array(totalFrames);
+          let offset = 0;
+          for (const segment of unrefinedSegments) {
+            combinedFrames.set(segment.frames, offset);
+            offset += segment.frames.length;
+          }
+
+          // Convert combined frames to WAV blob
+          const combinedBlob = convertToWavBlob(combinedFrames);
+
+          console.debug(
+            `[DictationMachine] Concatenated ${unrefinedSegments.length} unrefined segments: ${totalDuration}ms, ${totalFrames} frames, ${combinedBlob.size} bytes`
+          );
+
+          // For logging, treat the capture timestamp as the time we initiate refinement.
+          // Refinement intentionally reuses the *current* timestamp so Telemetry treats the
+          // Phase 2 upload as new work rather than flagging the earlier capture delay.
+          const refinementStartTimestamp = Date.now();
+
+          // Optionally persist the refinement chunk if keepSegments is enabled
+          persistAudioSegment(combinedBlob, refinementStartTimestamp, totalDuration, "saypi-refinement");
+
+          // Generate UUID for this refinement request (separate from Phase 1 sequence tracking)
+          const requestId = crypto.randomUUID();
+
+          // Capture reference to unrefined segments for marking after upload
+          // (closure captures array reference to mark segments as refined on success)
+          const segmentsToMark = unrefinedSegments;
+
+          // Track refinement metadata independently
+          context.pendingRefinements.set(requestId, {
+            targetId,
+            targetElement,
+            segmentCount: unrefinedSegments.length,
+            timestamp: refinementStartTimestamp
+          });
+
+          console.debug(
+            `[DictationMachine] Refinement ${requestId} initiated for target ${targetId}`
+          );
+
+          // Upload using bare-bones refinement function with initial_prompt for context
+          uploadAudioForRefinement(
+            combinedBlob,
+            totalDuration,
+            requestId,
+            context.sessionId,
+            3, // max retries
+            initialPrompt // Pass preceding refined text as context
+          ).then((transcriptionText) => {
+            // Mark segments as refined BEFORE handling completion (they've been sent)
+            segmentsToMark.forEach(seg => {
+              seg.refined = true;
+            });
+            console.debug(`[DictationMachine] Marked ${segmentsToMark.length} segments as refined for target ${targetId}`);
+
+            // Handle response inline (no event bus routing needed)
+            handleRefinementComplete(context, requestId, transcriptionText);
+          }).catch((error) => {
+            console.error(`[DictationMachine] Refinement ${requestId} failed:`, error);
+            // Clean up metadata on failure
+            context.pendingRefinements.delete(requestId);
+            // Note: We don't mark segments as refined on failure - they may be retried later
+          });
+        } // end for loop over targetsToRefine
       },
     },
     services: {},
@@ -1650,8 +2120,69 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
         return false;
       },
+      refinementConditionsMet: (context: DictationContext) => {
+        // Check if we have pending refinements and not currently transcribing
+        return context.refinementPendingForTargets.size > 0 && !context.isTranscribing;
+      },
+      hasSegmentsForRefinement: (context: DictationContext, event: DictationEvent) => {
+        if (event.type !== "saypi:refineTranscription") {
+          return false;
+        }
+        const targetElement =
+          (event as DictationRefineTranscriptionEvent).targetElement ?? context.targetElement;
+        if (!targetElement) {
+          return false;
+        }
+        const targetId = getTargetElementId(targetElement);
+        const segments = context.audioSegmentsByTarget[targetId];
+        return Array.isArray(segments) && segments.length > 0;
+      },
     },
-    delays: {},
+    delays: {
+      refinementDelay: (context: DictationContext, event: DictationEvent) => {
+        // Only calculate delay for transcription events
+        if (event.type !== "saypi:transcribed") {
+          return 0;
+        }
+
+        const transcriptionEvent = event as DictationTranscribedEvent;
+
+        // Use configured max delay for dictation endpoint detection
+        const maxDelay = REFINEMENT_MAX_DELAY_MS;
+
+        // Use pFinishedSpeaking from API, default to 1 if not provided
+        let probabilityFinished = transcriptionEvent.pFinishedSpeaking ?? 1;
+
+        // Use tempo from API, default to 0 if not provided (neutral)
+        let tempo = transcriptionEvent.tempo ?? 0;
+        // Clamp tempo to [0, 1]
+        tempo = Math.max(0, Math.min(1, tempo));
+
+        const scheduledAt = Date.now();
+        const timeElapsed = scheduledAt - context.timeLastTranscriptionReceived;
+        const finalDelay = calculateDelay(
+          context.timeLastTranscriptionReceived,
+          probabilityFinished,
+          tempo,
+          maxDelay
+        );
+
+        console.debug(
+          "[DictationMachine] refinementDelay:",
+          JSON.stringify({
+            seq: transcriptionEvent.sequenceNumber,
+            pFinished: probabilityFinished,
+            tempo,
+            maxDelay,
+            timeElapsed,
+            finalDelay,
+            scheduledAt
+          })
+        );
+
+        return finalDelay;
+      },
+    },
   }
 );
 
