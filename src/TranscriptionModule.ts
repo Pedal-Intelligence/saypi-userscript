@@ -311,13 +311,15 @@ export async function uploadAudioWithRetry(
 /**
  * Upload audio for refinement (Phase 2).
  * Uses UUID tracking instead of sequence numbers. No precedingTranscripts sent.
+ * @param initialPrompt - Optional preceding refined text (last 500 chars) for incremental refinement context
  */
 export async function uploadAudioForRefinement(
   audioBlob: Blob,
   audioDurationMillis: number,
   requestId: string,
   sessionId?: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
+  initialPrompt?: string
 ): Promise<string> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
@@ -329,6 +331,8 @@ export async function uploadAudioForRefinement(
     timestamp: transcriptionStartTimestamp,
     audioDurationMs: audioDurationMillis,
     audioBytes: audioBlob.size,
+    hasInitialPrompt: !!initialPrompt,
+    initialPromptLength: initialPrompt?.length || 0,
   });
 
   const sleep = (ms: number) =>
@@ -341,7 +345,8 @@ export async function uploadAudioForRefinement(
         audioDurationMillis,
         requestId,
         sessionId,
-        transcriptionStartTimestamp
+        transcriptionStartTimestamp,
+        initialPrompt
       );
 
       // Emit refinement-specific completion event
@@ -391,13 +396,15 @@ export async function uploadAudioForRefinement(
 /**
  * Internal refinement upload (bare-bones request).
  * No sequence numbers, precedingTranscripts, or acceptsMerge.
+ * @param initialPrompt - Optional preceding refined text for incremental refinement context
  */
 async function uploadAudioForRefinementInternal(
   audioBlob: Blob,
   audioDurationMillis: number,
   requestId: string,
   sessionId?: string,
-  transcriptionStartTimestamp?: number
+  transcriptionStartTimestamp?: number,
+  initialPrompt?: string
 ): Promise<string> {
   try {
     const chatbot = await ChatbotService.getChatbot();
@@ -417,6 +424,15 @@ async function uploadAudioForRefinementInternal(
 
     if (sessionId) {
       formData.append("sessionId", sessionId);
+    }
+
+    // Add initial_prompt for incremental refinement context (O(n) optimization)
+    // This provides context from previously refined text when only uploading new audio segments
+    if (initialPrompt && initialPrompt.length > 0) {
+      // Take last 500 chars to stay within API limits while providing useful context
+      const truncatedPrompt = initialPrompt.slice(-500);
+      formData.append("initial_prompt", truncatedPrompt);
+      logger.debug(`[Refinement ${requestId}] Added initial_prompt: ${truncatedPrompt.length} chars`);
     }
 
     // Add minimal usage metadata

@@ -858,7 +858,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().context.audioSegmentsByTarget[targetId].length).toBe(1);
     });
 
-    it('should refine ALL segments with full context in subsequent passes', async () => {
+    it('should only refine UNREFINED segments in subsequent passes (O(n) optimization)', async () => {
       service.start();
 
       service.send({ type: 'saypi:startDictation', targetElement: inputElement });
@@ -900,12 +900,18 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
 
       await new Promise(resolve => setTimeout(resolve, 50)); // Wait for refinement Promise
 
-      // Should have concatenated 2 segments (2000 frames)
+      // Should have concatenated 2 unrefined segments (2000 frames)
       expect(AudioEncoder.convertToWavBlob).toHaveBeenCalled();
       let concatenatedFrames = vi.mocked(AudioEncoder.convertToWavBlob).mock.calls[0][0];
       expect(concatenatedFrames.length).toBe(2000);
 
-      // Add one more segment
+      // Verify segments are marked as refined after first refinement completes
+      const targetId = `${inputElement.id || inputElement.name}`;
+      const segmentsAfterFirstRefinement = service.getSnapshot().context.audioSegmentsByTarget[targetId];
+      expect(segmentsAfterFirstRefinement.length).toBe(2);
+      expect(segmentsAfterFirstRefinement.every(seg => seg.refined === true)).toBe(true);
+
+      // Add one more segment (this one should be unrefined)
       service.send({ type: 'saypi:userSpeaking' });
 
       const mockFrames3 = new Float32Array(1000);
@@ -927,7 +933,12 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
         sequenceNumber: 6,
       });
 
-      // Second refinement pass - should refine ALL 3 segments (full context)
+      // Verify third segment is unrefined
+      const segmentsBeforeSecondRefinement = service.getSnapshot().context.audioSegmentsByTarget[targetId];
+      expect(segmentsBeforeSecondRefinement.length).toBe(3);
+      expect(segmentsBeforeSecondRefinement[2].refined).toBe(false);
+
+      // Second refinement pass - should only refine the 1 NEW unrefined segment (O(n) optimization)
       vi.mocked(AudioEncoder.convertToWavBlob).mockClear();
 
       service.send({
@@ -937,23 +948,28 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
 
       await new Promise(resolve => setTimeout(resolve, 50)); // Wait for refinement Promise
 
-      // Should have concatenated ALL 3 segments (3000 frames) for full context
+      // O(n) OPTIMIZATION: Should only concatenate 1 NEW unrefined segment (1000 frames)
+      // NOT all 3 segments - that would be O(n²) behavior
       expect(AudioEncoder.convertToWavBlob).toHaveBeenCalled();
       concatenatedFrames = vi.mocked(AudioEncoder.convertToWavBlob).mock.calls[0][0];
-      expect(concatenatedFrames.length).toBe(3000);
+      expect(concatenatedFrames.length).toBe(1000);
+
+      // All 3 segments should now be marked as refined
+      const segmentsAfterSecondRefinement = service.getSnapshot().context.audioSegmentsByTarget[targetId];
+      expect(segmentsAfterSecondRefinement.length).toBe(3);
+      expect(segmentsAfterSecondRefinement.every(seg => seg.refined === true)).toBe(true);
 
       // Check final state after second refinement completes
       const state = service.getSnapshot();
-      const targetId = `${inputElement.id || inputElement.name}`;
 
-      // Should have exactly 1 transcription (latest refinement with negative key)
+      // Should have exactly 1 transcription (combined refinements with negative key)
       const transcriptionKeys = Object.keys(state.context.transcriptionsByTarget[targetId] || {}).map(k => parseInt(k, 10));
       expect(transcriptionKeys.length).toBe(1);
       expect(transcriptionKeys[0]).toBeLessThan(0); // Negative timestamp key
 
-      // Latest refinement text should be stored (from mock default)
-      const refinementKey = transcriptionKeys[0];
-      expect(state.context.transcriptions[refinementKey]).toBe('refined transcription');
+      // Accumulated refined text should be stored in refinedTextByTarget
+      expect(state.context.refinedTextByTarget[targetId]).toBeDefined();
+      expect(state.context.refinedTextByTarget[targetId].length).toBeGreaterThan(0);
     });
   });
 

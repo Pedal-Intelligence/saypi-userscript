@@ -107,6 +107,7 @@ interface AudioSegment {
   duration: number;
   sequenceNumber: number;
   captureTimestamp?: number;
+  refined?: boolean;  // Tracks if segment was included in a refinement (for O(n) incremental refinement)
 }
 
 interface DictationContext {
@@ -146,6 +147,9 @@ interface DictationContext {
     segmentCount: number;
     timestamp: number;
   }>;
+  // Accumulated refined text per target for incremental refinement (O(n) optimization)
+  // Used as initial_prompt context when refining only new segments
+  refinedTextByTarget: Record<string, string>;
 }
 
 // Define the state schema
@@ -372,7 +376,7 @@ function getTranscriptionsForTarget(context: DictationContext, targetElement: HT
 
 /**
  * Handle completion of a refinement request (Phase 2).
- * Replaces Phase 1 transcriptions with the refined result.
+ * For O(n) incremental refinement, APPENDS new refinement to accumulated refined text.
  * Note: Multiple passes may occur per target (false-positive EOS detection).
  */
 function handleRefinementComplete(
@@ -411,17 +415,32 @@ function handleRefinementComplete(
     `[DictationMachine] Cleared ${phase1Sequences.length} Phase 1 transcriptions: [${phase1Sequences.join(', ')}]`
   );
 
+  // O(n) OPTIMIZATION: Get existing refined text and APPEND new refinement
+  // This accumulates all refined text for use as initial_prompt context in future refinements
+  const existingRefinement = context.refinedTextByTarget[targetId] || "";
+  const combinedRefinement = existingRefinement
+    ? smartJoinTwoTexts(existingRefinement, transcription)
+    : transcription;
+
+  // Store accumulated refined text for future initial_prompt context
+  context.refinedTextByTarget[targetId] = combinedRefinement;
+
+  console.debug(
+    `[DictationMachine] Accumulated refined text for target ${targetId}: ` +
+    `${existingRefinement.length} chars (existing) + ${transcription.length} chars (new) = ${combinedRefinement.length} chars (total)`
+  );
+
   // Store refinement result using negative timestamp as key (avoids collision with Phase 1 sequences)
   const refinementKey = -(Date.now());
   context.transcriptionsByTarget[targetId] = {
-    [refinementKey]: transcription
+    [refinementKey]: combinedRefinement  // Use combined refinement, not just new transcription
   };
-  context.transcriptions[refinementKey] = transcription;
+  context.transcriptions[refinementKey] = combinedRefinement;
   context.transcriptionTargets[refinementKey] = targetElement;
 
-  // Calculate final text (initial + refinement)
+  // Calculate final text (initial + accumulated refinement)
   const initialText = context.initialTextByTarget[targetId] || "";
-  const finalText = smartJoinTwoTexts(initialText, transcription);
+  const finalText = smartJoinTwoTexts(initialText, combinedRefinement);
 
   setTextInTarget(finalText, targetElement, true); // Replace all content
 
@@ -439,6 +458,7 @@ function handleRefinementComplete(
     targetId,
     requestId,
     refinedText: transcription,
+    combinedRefinement,  // Include combined refinement for visibility
     finalText,
     segmentCount
   });
@@ -530,13 +550,14 @@ function storeAudioSegment(
     }
   }
 
-  // Store the new segment
+  // Store the new segment (unrefined - will be marked refined after successful refinement upload)
   segments.push({
     blob,
     frames,
     duration,
     sequenceNumber,
     captureTimestamp,
+    refined: false,
   });
 
   // Mark this target as pending refinement
@@ -1112,6 +1133,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       audioSegmentsByTarget: {},
       refinementPendingForTargets: new Set<string>(),
       pendingRefinements: new Map(),
+      refinedTextByTarget: {},
     },
     id: "dictation",
     initial: "idle",
@@ -1667,6 +1689,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         audioSegmentsByTarget: () => ({}),
         refinementPendingForTargets: () => new Set<string>(),
         pendingRefinements: () => new Map(),
+        refinedTextByTarget: () => ({}),
       }),
 
       finalizeDictation: (context: DictationContext) => {
@@ -1973,28 +1996,46 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             continue;
           }
 
-          // Skip refinement if only 1 segment (no additional context for improvement)
-          if (segments.length === 1) {
-            console.debug(`[DictationMachine] Skipping refinement for target ${targetId} until more segments arrive`);
+          // O(n) OPTIMIZATION: Only refine UNREFINED segments (incremental refinement)
+          // This avoids re-uploading already-refined audio, reducing upload from O(n²) to O(n)
+          const unrefinedSegments = segments.filter(seg => !seg.refined);
+
+          if (unrefinedSegments.length === 0) {
+            console.debug(`[DictationMachine] No new segments to refine for target ${targetId}, all ${segments.length} segments already refined`);
+            context.refinementPendingForTargets.delete(targetId);
+            continue;
+          }
+
+          // Skip refinement if only 1 unrefined segment AND no previous refined context
+          // (no additional context for improvement)
+          const hasPreviousRefinedContext = context.refinedTextByTarget[targetId] &&
+                                            context.refinedTextByTarget[targetId].length > 0;
+          if (unrefinedSegments.length === 1 && !hasPreviousRefinedContext) {
+            console.debug(`[DictationMachine] Skipping refinement for target ${targetId} until more segments arrive (only 1 unrefined segment, no prior context)`);
             continue; // Keep buffering, don't clear
           }
 
           // Remove pending flag now that refinement is in-flight to avoid duplicate submissions
           context.refinementPendingForTargets.delete(targetId);
 
-          // Always refine ALL segments for maximum context (full contextual refinement)
+          // Get preceding refined text for initial_prompt context (last 500 chars)
+          const precedingRefinedText = context.refinedTextByTarget[targetId] || "";
+          const initialPrompt = precedingRefinedText.slice(-500);
+
           console.debug(
-            `[DictationMachine] Starting refinement for target ${targetId} with ${segments.length} segments (full context)`
+            `[DictationMachine] Starting incremental refinement for target ${targetId}: ` +
+            `${unrefinedSegments.length} new segments (${segments.length} total), ` +
+            `initial_prompt: ${initialPrompt.length} chars`
           );
 
-          // Concatenate ALL audio segments from session start
-          const totalDuration = segments.reduce((sum, seg) => sum + seg.duration, 0);
-          const totalFrames = segments.reduce((sum, seg) => sum + seg.frames.length, 0);
+          // Concatenate only UNREFINED audio segments (O(n) optimization)
+          const totalDuration = unrefinedSegments.reduce((sum, seg) => sum + seg.duration, 0);
+          const totalFrames = unrefinedSegments.reduce((sum, seg) => sum + seg.frames.length, 0);
 
-          // Combine all frames into a single Float32Array
+          // Combine all unrefined frames into a single Float32Array
           const combinedFrames = new Float32Array(totalFrames);
           let offset = 0;
-          for (const segment of segments) {
+          for (const segment of unrefinedSegments) {
             combinedFrames.set(segment.frames, offset);
             offset += segment.frames.length;
           }
@@ -2003,7 +2044,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           const combinedBlob = convertToWavBlob(combinedFrames);
 
           console.debug(
-            `[DictationMachine] Concatenated ${segments.length} segments: ${totalDuration}ms, ${totalFrames} frames, ${combinedBlob.size} bytes`
+            `[DictationMachine] Concatenated ${unrefinedSegments.length} unrefined segments: ${totalDuration}ms, ${totalFrames} frames, ${combinedBlob.size} bytes`
           );
 
           // For logging, treat the capture timestamp as the time we initiate refinement.
@@ -2017,11 +2058,15 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Generate UUID for this refinement request (separate from Phase 1 sequence tracking)
           const requestId = crypto.randomUUID();
 
+          // Capture reference to unrefined segments for marking after upload
+          // (closure captures array reference to mark segments as refined on success)
+          const segmentsToMark = unrefinedSegments;
+
           // Track refinement metadata independently
           context.pendingRefinements.set(requestId, {
             targetId,
             targetElement,
-            segmentCount: segments.length,
+            segmentCount: unrefinedSegments.length,
             timestamp: refinementStartTimestamp
           });
 
@@ -2029,21 +2074,28 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             `[DictationMachine] Refinement ${requestId} initiated for target ${targetId}`
           );
 
-          // Upload using bare-bones refinement function (no sequence number tracking)
+          // Upload using bare-bones refinement function with initial_prompt for context
           uploadAudioForRefinement(
             combinedBlob,
             totalDuration,
             requestId,
             context.sessionId,
-            3 // max retries
+            3, // max retries
+            initialPrompt // Pass preceding refined text as context
           ).then((transcriptionText) => {
+            // Mark segments as refined BEFORE handling completion (they've been sent)
+            segmentsToMark.forEach(seg => {
+              seg.refined = true;
+            });
+            console.debug(`[DictationMachine] Marked ${segmentsToMark.length} segments as refined for target ${targetId}`);
+
             // Handle response inline (no event bus routing needed)
             handleRefinementComplete(context, requestId, transcriptionText);
           }).catch((error) => {
             console.error(`[DictationMachine] Refinement ${requestId} failed:`, error);
             // Clean up metadata on failure
             context.pendingRefinements.delete(requestId);
-            // Note: We don't clear audio segments - they may be retried later
+            // Note: We don't mark segments as refined on failure - they may be retried later
           });
         } // end for loop over targetsToRefine
       },
