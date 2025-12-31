@@ -2,6 +2,55 @@ import { config } from '../ConfigModule';
 
 // auth-shared.js - Shared authentication functionality for popup UI
 
+// Track auth button state
+let isAuthInProgress = false;
+
+/**
+ * Sets the auth button to loading state
+ * @param {boolean} loading - Whether to show loading state
+ */
+function setAuthButtonLoading(loading) {
+  const authButton = document.getElementById('auth-button');
+  if (!authButton) return;
+
+  isAuthInProgress = loading;
+
+  if (loading) {
+    authButton.disabled = true;
+    authButton.classList.add('auth-loading');
+    // Store original text
+    authButton.dataset.originalText = authButton.textContent;
+    authButton.innerHTML = `
+      <span class="auth-spinner"></span>
+      <span>${chrome.i18n.getMessage('signingIn') || 'Signing in...'}</span>
+    `;
+  } else {
+    authButton.disabled = false;
+    authButton.classList.remove('auth-loading');
+    // Restore original text if available
+    if (authButton.dataset.originalText) {
+      authButton.textContent = authButton.dataset.originalText;
+      delete authButton.dataset.originalText;
+    }
+  }
+}
+
+/**
+ * Shows a brief success message on the auth button
+ */
+function showAuthSuccess() {
+  const authButton = document.getElementById('auth-button');
+  if (!authButton) return;
+
+  authButton.classList.add('auth-success');
+  authButton.innerHTML = `
+    <span>✓</span>
+    <span>${chrome.i18n.getMessage('signedIn') || 'Signed in!'}</span>
+  `;
+
+  // The UI will be properly updated by refreshAuthUI shortly after
+}
+
 /**
  * Updates the authentication UI elements based on the current authentication state
  * @param {boolean} isAuthenticated - Whether the user is authenticated
@@ -15,9 +64,18 @@ function updateAuthUI(isAuthenticated, userData = null) {
   const authButton = document.getElementById('auth-button');
   const unauthenticatedMessage = document.getElementById('unauthenticated-message');
 
+  // Clear loading state
+  if (isAuthInProgress) {
+    setAuthButtonLoading(false);
+    isAuthInProgress = false;
+  }
+
   // First, remove any existing click handlers to prevent duplicates
   authButton.removeEventListener('click', handleSignIn);
   authButton.removeEventListener('click', handleSignOut);
+
+  // Clear any success/loading classes
+  authButton.classList.remove('auth-loading', 'auth-success');
 
   if (isAuthenticated && userData && userData.name) {
     // User is signed in
@@ -72,17 +130,26 @@ function redirectToLogin(loginUrl, returnUrl) {
  * Handler for sign in button click
  */
 function handleSignIn() {
+  // Show loading state immediately for user feedback
+  setAuthButtonLoading(true);
+
   if (config.authServerUrl) {
     const loginUrl = `${config.authServerUrl}/auth/login`;
-    // Use the Pi AI talk page instead of the SaaS dashboard
-    const returnUrl = 'https://pi.ai/talk';
+    // Return to the extension's settings page after login
+    // This enables the return-to-context flow where the auth tab closes
+    // and the settings page reopens automatically
+    const returnUrl = chrome.runtime.getURL('settings.html');
     redirectToLogin(loginUrl, returnUrl);
   } else {
     // Fallback to using the message API
     chrome.runtime.sendMessage({ type: 'REDIRECT_TO_LOGIN' }, function(response) {
       if (response && response.authenticated) {
         // Token was refreshed successfully, update the UI
-        refreshAuthUI();
+        showAuthSuccess();
+        setTimeout(() => refreshAuthUI(), 500);
+      } else {
+        // Reset loading state on failure
+        setAuthButtonLoading(false);
       }
     });
   }
@@ -179,5 +246,7 @@ window.refreshAuthUI = refreshAuthUI;
 window.logoutFromSaas = logoutFromSaas;
 window.updateUIAfterSignOut = updateUIAfterSignOut;
 window.performLocalSignOut = performLocalSignOut;
+window.setAuthButtonLoading = setAuthButtonLoading;
+window.showAuthSuccess = showAuthSuccess;
 
 export {};

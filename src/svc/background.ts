@@ -558,8 +558,27 @@ async function pollAuthCookie() {
   }
 }
 
-// Poll every 5 seconds for standard browsers, but much less frequently for Firefox
-const pollingInterval = isFirefox() ? 300000 : 5000; // 5 minutes for Firefox, 5 seconds for others
+// Auth state change listener - reacts immediately when JWT token changes in storage
+// This replaces the old polling mechanism for much faster, event-driven updates
+browser.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== 'local') return;
+
+  // React to JWT token changes
+  if (changes.jwtToken) {
+    const hadToken = !!changes.jwtToken.oldValue;
+    const hasToken = !!changes.jwtToken.newValue;
+
+    if (hadToken !== hasToken) {
+      console.log(`Auth state changed via storage: ${hadToken ? 'signed out' : 'signed in'}`);
+      // Broadcast immediately to all tabs
+      broadcastAuthStatus();
+    }
+  }
+});
+
+// Keep a minimal polling interval as a fallback for edge cases (e.g., cookie set without JWT update)
+// This is much less frequent since we now have event-driven updates
+const pollingInterval = isFirefox() ? 300000 : 60000; // 5 minutes for Firefox, 1 minute for others (was 5 seconds)
 setInterval(pollAuthCookie, pollingInterval);
 
 // Handle VAD communication via Offscreen Document
@@ -1235,10 +1254,59 @@ browser.tabs.onRemoved.addListener((tabId: any) => {
   }
 });
 
+/**
+ * Handles return-to-context after successful authentication.
+ * Closes the auth tab and reopens the settings page.
+ */
+async function handleAuthReturnToContext() {
+  try {
+    const { authReturnUrl } = await browser.storage.local.get('authReturnUrl');
+    if (!authReturnUrl) return;
+
+    console.log('Auth completed - handling return to context:', authReturnUrl);
+
+    // Clear the return URL immediately to prevent duplicate handling
+    await browser.storage.local.remove('authReturnUrl');
+
+    // Close all auth server tabs
+    if (config.authServerUrl) {
+      const authTabs = await browser.tabs.query({ url: `${config.authServerUrl}/*` });
+      for (const tab of authTabs) {
+        if (tab.id !== undefined) {
+          try {
+            await browser.tabs.remove(tab.id);
+            console.debug(`Closed auth tab ${tab.id}`);
+          } catch (e) {
+            console.debug('Failed to close auth tab:', e);
+          }
+        }
+      }
+    }
+
+    // Open the return URL if it's an extension URL
+    if (authReturnUrl.startsWith('chrome-extension://') ||
+        authReturnUrl.startsWith('moz-extension://')) {
+      // Check if the settings page is already open
+      const extensionTabs = await browser.tabs.query({ url: authReturnUrl });
+      if (extensionTabs.length > 0 && extensionTabs[0].id !== undefined) {
+        // Focus existing tab
+        await browser.tabs.update(extensionTabs[0].id, { active: true });
+        console.debug('Focused existing settings tab');
+      } else {
+        // Open new settings tab
+        await browser.tabs.create({ url: authReturnUrl, active: true });
+        console.debug('Opened new settings tab');
+      }
+    }
+  } catch (error) {
+    console.error('Failed to handle return to context:', error);
+  }
+}
+
 // Handle authentication cookie changes
 browser.cookies.onChanged.addListener(async (changeInfo: any) => {
   const { cookie, removed, cause } = changeInfo;
-  
+
   // Only interested in our auth cookie
   if (cookie.name === 'auth_session' && config.authServerUrl && cookie.domain === new URL(config.authServerUrl).hostname) {
     console.debug('Auth session cookie changed:', {
@@ -1246,45 +1314,26 @@ browser.cookies.onChanged.addListener(async (changeInfo: any) => {
       cause,
       domain: cookie.domain
     });
-    
+
     // Only refresh on explicit cookie additions or updates
     if (!removed && (cause === 'explicit' || cause === 'overwrite')) {
       // Store the cookie value for fallback authentication
       await jwtManager.storeAuthCookieValue(cookie.value);
 
-      // Only refresh if we don't have a valid token already
-      if (!jwtManager.isAuthenticated()) {
+      // Attempt to refresh token
+      const wasAuthenticated = jwtManager.isAuthenticated();
+
+      if (!wasAuthenticated) {
         await jwtManager.refresh();
-        
+
         // Broadcast auth status change after refresh
         broadcastAuthStatus();
-        
-        // Get and handle return URL if it exists
-        try {
-          const { authReturnUrl } = await browser.storage.local.get('authReturnUrl');
-          if (authReturnUrl) {
-            console.debug('Found return URL, redirecting to:', authReturnUrl);
-            
-            // Clear the return URL
-            await browser.storage.local.remove('authReturnUrl');
-            
-            // Close the auth tab and return to the popup
-            const tabs = await browser.tabs.query({ url: `${config.authServerUrl}/*` });
-            for (const tab of tabs) {
-              if (tab.id !== undefined) {
-                await browser.tabs.remove(tab.id);
-              }
-            }
-            
-            // If the return URL is an extension URL, open it
-            if (authReturnUrl.startsWith('chrome-extension://') || 
-                authReturnUrl.startsWith('moz-extension://')) {
-              await browser.tabs.create({ url: authReturnUrl });
-            }
-          }
-        } catch (error) {
-          console.error('Failed to handle return URL:', error);
-        }
+      }
+
+      // Handle return-to-context after successful auth
+      // Do this regardless of whether we just refreshed or were already authenticated
+      if (jwtManager.isAuthenticated()) {
+        await handleAuthReturnToContext();
       }
     } else if (removed) {
       // If cookie was removed, clear JWT and broadcast status change

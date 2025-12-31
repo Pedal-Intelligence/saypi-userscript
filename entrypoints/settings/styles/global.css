@@ -4,6 +4,43 @@
   /* No min-height - let content determine natural height */
 }
 
+/* Auth button states */
+#auth-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+#auth-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+#auth-button.auth-loading {
+  background-color: #4b5563;
+}
+
+#auth-button.auth-success {
+  background-color: #059669;
+}
+
+/* Auth spinner animation */
+.auth-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: auth-spin 0.8s linear infinite;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .settings-container {
   display: flex;
   max-width: 1200px;
