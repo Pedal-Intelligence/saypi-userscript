@@ -1,0 +1,535 @@
+// Auth Prompt Styling
+// Progressive authentication prompts - toast and modal variants
+
+// Common variables
+$primary-color: rgba(59, 130, 246, 1); // Blue
+$primary-hover: rgba(37, 99, 235, 1);
+$primary-light: rgba(59, 130, 246, 0.1);
+$secondary-color: rgba(107, 114, 128, 0.8);
+$success-color: rgba(16, 185, 129, 1);
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+
+// ============================================================
+// TOAST NOTIFICATION
+// Non-blocking notification in bottom-right corner
+// Positioned above VAD status indicator (which is at bottom: 20px)
+// ============================================================
+.saypi-auth-toast {
+  position: fixed;
+  bottom: 100px; // Above VAD status indicator
+  right: 1.5rem;
+  z-index: 10001;
+  max-width: 380px;
+  padding: 0;
+  border-radius: 0.75rem;
+  background: white;
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  font-family: $font-family;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .saypi-auth-prompt-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    padding-right: 2.5rem; // Extra space for absolute-positioned close button
+    position: relative;
+  }
+
+  .saypi-auth-prompt-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+    border-radius: 50%;
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    // No filter needed - bubble-bw.svg already has white bubble with black "Pi"
+  }
+
+  .saypi-auth-prompt-text {
+    flex: 1;
+    color: rgba(55, 65, 81, 1);
+    font-size: 0.875rem;
+  }
+
+  .saypi-auth-prompt-signin {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    background: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: $primary-hover;
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .saypi-auth-prompt-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: rgba(107, 114, 128, 0.1);
+    border-radius: 50%;
+    color: rgba(107, 114, 128, 0.6);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(107, 114, 128, 0.2);
+      color: rgba(107, 114, 128, 0.8);
+    }
+
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+  }
+
+  // Dark mode
+  @media (prefers-color-scheme: dark) {
+    background: rgba(31, 41, 55, 1);
+    border-color: rgba(55, 65, 81, 0.8);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.25);
+
+    .saypi-auth-prompt-icon {
+      background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
+      box-shadow: 0 2px 8px rgba(102, 187, 106, 0.3);
+    }
+
+    .saypi-auth-prompt-text {
+      color: rgba(229, 231, 235, 1);
+    }
+
+    .saypi-auth-prompt-close {
+      background: rgba(156, 163, 175, 0.1);
+      color: rgba(156, 163, 175, 0.7);
+
+      &:hover {
+        background: rgba(156, 163, 175, 0.2);
+        color: rgba(156, 163, 175, 0.9);
+      }
+    }
+  }
+
+  // Mobile
+  @media (max-width: 768px) {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+
+    .saypi-auth-prompt-content {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .saypi-auth-prompt-text {
+      flex-basis: calc(100% - 60px);
+    }
+
+    .saypi-auth-prompt-signin {
+      width: 100%;
+    }
+  }
+}
+
+// ============================================================
+// OVERLAY (for modals)
+// ============================================================
+.saypi-auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  &.saypi-auth-overlay-soft {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+  }
+}
+
+// ============================================================
+// MODAL
+// Centered modal with value proposition
+// ============================================================
+.saypi-auth-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10001;
+  width: 90%;
+  max-width: 420px;
+  padding: 0;
+  border-radius: 1rem;
+  background: white;
+  font-family: $font-family;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  &.saypi-auth-modal-soft {
+    max-width: 380px;
+  }
+
+  .saypi-auth-modal-content {
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .saypi-auth-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: rgba(107, 114, 128, 0.1);
+    border-radius: 50%;
+    color: rgba(107, 114, 128, 0.6);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(107, 114, 128, 0.2);
+      color: rgba(107, 114, 128, 0.8);
+      transform: scale(1.1);
+    }
+
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .saypi-auth-modal-brand {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+  }
+
+  .saypi-auth-modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 1.25rem;
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+    border-radius: 50%;
+    color: white;
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.35), 0 2px 8px rgba(0, 0, 0, 0.1);
+    // No filter needed - bubble-bw.svg already has white bubble with black "Pi"
+
+    svg {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  .saypi-auth-modal-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgba(17, 24, 39, 1);
+  }
+
+  .saypi-auth-modal-description {
+    margin: 0 0 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgba(107, 114, 128, 1);
+  }
+
+  .saypi-auth-modal-benefits {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    text-align: left;
+
+    li {
+      position: relative;
+      padding: 0.5rem 0 0.5rem 1.75rem;
+      font-size: 0.875rem;
+      color: rgba(55, 65, 81, 1);
+
+      &::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 50%;
+        color: $success-color;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .saypi-auth-modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .saypi-auth-modal-signin {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary-hover;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+    }
+
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .saypi-auth-modal-later {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: $secondary-color;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(107, 114, 128, 0.1);
+      color: rgba(55, 65, 81, 1);
+    }
+
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+  }
+
+  // Dark mode
+  @media (prefers-color-scheme: dark) {
+    background: rgba(31, 41, 55, 1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.35);
+
+    .saypi-auth-modal-close {
+      background: rgba(156, 163, 175, 0.1);
+      color: rgba(156, 163, 175, 0.7);
+
+      &:hover {
+        background: rgba(156, 163, 175, 0.2);
+        color: rgba(156, 163, 175, 0.9);
+      }
+    }
+
+    .saypi-auth-modal-brand {
+      color: #66BB6A;
+    }
+
+    .saypi-auth-modal-icon {
+      background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
+      box-shadow: 0 4px 16px rgba(102, 187, 106, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .saypi-auth-modal-title {
+      color: rgba(243, 244, 246, 1);
+    }
+
+    .saypi-auth-modal-description {
+      color: rgba(156, 163, 175, 1);
+    }
+
+    .saypi-auth-modal-benefits li {
+      color: rgba(229, 231, 235, 1);
+
+      &::before {
+        background: rgba(76, 175, 80, 0.15);
+        color: rgba(129, 199, 132, 1);
+      }
+    }
+
+    .saypi-auth-modal-signin {
+      &:hover {
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+      }
+    }
+
+    .saypi-auth-modal-later {
+      color: rgba(156, 163, 175, 1);
+
+      &:hover {
+        background: rgba(156, 163, 175, 0.1);
+        color: rgba(229, 231, 235, 1);
+      }
+    }
+  }
+
+  // Mobile
+  @media (max-width: 768px) {
+    width: calc(100% - 2rem);
+    max-width: none;
+
+    .saypi-auth-modal-content {
+      padding: 1.5rem;
+    }
+
+    .saypi-auth-modal-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+
+      svg {
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    .saypi-auth-modal-title {
+      font-size: 1.25rem;
+    }
+
+    .saypi-auth-modal-description {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// ============================================================
+// ACCESSIBILITY
+// ============================================================
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .saypi-auth-toast,
+  .saypi-auth-modal,
+  .saypi-auth-overlay {
+    transition: opacity 0.2s ease;
+    transform: none;
+
+    &.visible {
+      transform: none;
+    }
+  }
+
+  .saypi-auth-modal.visible {
+    transform: translate(-50%, -50%);
+  }
+
+  .saypi-auth-prompt-signin,
+  .saypi-auth-modal-signin,
+  .saypi-auth-prompt-close,
+  .saypi-auth-modal-close {
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover,
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+// High contrast
+@media (prefers-contrast: high) {
+  .saypi-auth-toast,
+  .saypi-auth-modal {
+    border: 2px solid currentColor;
+  }
+
+  .saypi-auth-prompt-signin,
+  .saypi-auth-modal-signin {
+    border: 2px solid currentColor;
+  }
+
+  .saypi-auth-prompt-close,
+  .saypi-auth-modal-close {
+    border: 1px solid currentColor;
+    background: transparent;
+  }
+}

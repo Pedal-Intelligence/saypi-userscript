@@ -12,6 +12,7 @@ import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import "./styles/agent-notice.scss";
 import "./styles/compat-notice.scss";
+import "./styles/auth-prompt.scss";
 
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
@@ -42,6 +43,20 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   logger.debug("Initializing compatibility notification UI");
   const { CompatibilityNotificationUI } = await import(/* webpackMode: "eager" */ "./compat/CompatibilityNotificationUI.ts");
   CompatibilityNotificationUI.getInstance().initialize();
+
+  // Initialize progressive authentication prompt system (for chatbot overlay prompts)
+  logger.debug("Initializing auth prompt system");
+  const { getAuthPromptController } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptController.ts");
+  const { getAuthPromptUI } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptUI.ts");
+  const { getUsageTracker } = await import(/* webpackMode: "eager" */ "./auth/UsageTracker.ts");
+  await getAuthPromptController().initialize();
+  getAuthPromptUI().initialize();
+
+  // Expose debug method for resetting auth prompt tracking
+  window.saypiResetAuthPrompts = async () => {
+    await getUsageTracker().resetStats();
+    console.log("[SayPi] Auth prompt tracking reset. Reload page to take effect.");
+  };
 
   // Initialize telemetry module
   logger.debug("Initializing telemetry module");
