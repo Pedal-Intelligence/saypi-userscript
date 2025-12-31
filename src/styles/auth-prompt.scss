@@ -56,10 +56,7 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     border-radius: 50%;
     color: white;
     box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-
-    &.saypi-brand-icon svg {
-      filter: brightness(0) invert(1); // Make SVG white
-    }
+    // No filter needed - bubble-bw.svg already has white bubble with black "Pi"
   }
 
   .saypi-auth-prompt-text {
@@ -288,10 +285,7 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     border-radius: 50%;
     color: white;
     box-shadow: 0 4px 16px rgba(76, 175, 80, 0.35), 0 2px 8px rgba(0, 0, 0, 0.1);
-
-    &.saypi-brand-icon svg {
-      filter: brightness(0) invert(1); // Make SVG white
-    }
+    // No filter needed - bubble-bw.svg already has white bubble with black "Pi"
 
     svg {
       width: 56px;
