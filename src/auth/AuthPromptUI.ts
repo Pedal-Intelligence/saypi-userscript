@@ -128,12 +128,12 @@ export class AuthPromptUI {
       toast.classList.add("visible");
     });
 
-    // Auto-dismiss after 10 seconds
+    // Auto-dismiss after 20 seconds
     setTimeout(() => {
       if (this.currentPrompt === toast) {
         this.hidePrompt();
       }
-    }, 10000);
+    }, 20000);
 
     logger.debug("[AuthPromptUI] Toast shown");
   }
