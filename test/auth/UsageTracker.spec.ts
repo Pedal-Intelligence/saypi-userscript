@@ -22,13 +22,15 @@ describe("UsageTracker logic", () => {
 
       // The default stats should have all required fields
       const defaultStats = {
-        transcriptionCount: 0,
+        interactionCount: 0,
+        transcriptionCount: 0, // deprecated but kept for compatibility
         firstUseDate: 0,
         lastPromptShown: 0,
         promptsDismissed: 0,
         lastPromptLevel: undefined,
       };
 
+      expect(defaultStats).toHaveProperty("interactionCount");
       expect(defaultStats).toHaveProperty("transcriptionCount");
       expect(defaultStats).toHaveProperty("firstUseDate");
       expect(defaultStats).toHaveProperty("lastPromptShown");
@@ -60,7 +62,7 @@ describe("UsageTracker logic", () => {
   });
 
   describe("prompt level determination", () => {
-    it("should determine correct prompt level based on transcription count", () => {
+    it("should determine correct prompt level based on interaction count", () => {
       const thresholds = {
         toast: 5,
         softModal: 10,
@@ -84,7 +86,7 @@ describe("UsageTracker logic", () => {
         return null;
       };
 
-      // Fresh user at 5 transcriptions -> toast
+      // Fresh user at 5 interactions -> toast
       expect(determinePromptLevel(5, undefined)).toBe("toast");
 
       // User at 10 after seeing toast -> soft-modal

@@ -218,16 +218,16 @@ export class AuthPromptUI {
     const content = document.createElement("div");
     content.className = "saypi-auth-prompt-content";
 
-    // Icon
+    // Icon - use SayPi bubble logo for brand recognition
     const iconContainer = document.createElement("div");
-    iconContainer.className = "saypi-auth-prompt-icon";
+    iconContainer.className = "saypi-auth-prompt-icon saypi-brand-icon";
     try {
-      const icon = IconModule.user.cloneNode(true) as SVGElement;
-      icon.setAttribute("width", "20");
-      icon.setAttribute("height", "20");
+      const icon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+      icon.setAttribute("width", "24");
+      icon.setAttribute("height", "24");
       iconContainer.appendChild(icon);
     } catch {
-      iconContainer.textContent = "👤";
+      iconContainer.textContent = "🗣️";
     }
     content.appendChild(iconContainer);
 
@@ -271,16 +271,22 @@ export class AuthPromptUI {
     closeButton.addEventListener("click", () => this.handleDismiss());
     content.appendChild(closeButton);
 
-    // Icon
+    // Brand header - SayPi identification
+    const brandHeader = document.createElement("div");
+    brandHeader.className = "saypi-auth-modal-brand";
+    brandHeader.textContent = "Say, Pi";
+    content.appendChild(brandHeader);
+
+    // Icon - use SayPi bubble logo for brand recognition
     const iconContainer = document.createElement("div");
-    iconContainer.className = "saypi-auth-modal-icon";
+    iconContainer.className = "saypi-auth-modal-icon saypi-brand-icon";
     try {
-      const icon = IconModule.userCheck.cloneNode(true) as SVGElement;
-      icon.setAttribute("width", "48");
-      icon.setAttribute("height", "48");
+      const icon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+      icon.setAttribute("width", "56");
+      icon.setAttribute("height", "56");
       iconContainer.appendChild(icon);
     } catch {
-      iconContainer.textContent = "👤";
+      iconContainer.textContent = "🗣️";
     }
     content.appendChild(iconContainer);
 
@@ -289,7 +295,7 @@ export class AuthPromptUI {
     title.id = "saypi-auth-title";
     title.className = "saypi-auth-modal-title";
     title.textContent = getMessage("authPromptTitle") ||
-      "Get More from SayPi";
+      "Unlock More Voice Features";
     content.appendChild(title);
 
     // Description
@@ -311,9 +317,9 @@ export class AuthPromptUI {
       benefitsList.className = "saypi-auth-modal-benefits";
 
       const benefits = [
-        getMessage("authBenefitUsage") || "Track your voice usage across devices",
-        getMessage("authBenefitSync") || "Sync voice settings everywhere",
-        getMessage("authBenefitSupport") || "Priority support for issues"
+        getMessage("authBenefitLimits") || "Higher usage limits with free account",
+        getMessage("authBenefitTTS") || "Text-to-speech voices (paid plans)",
+        getMessage("authBenefitPremium") || "Premium features & chatbot support"
       ];
 
       benefits.forEach(benefit => {

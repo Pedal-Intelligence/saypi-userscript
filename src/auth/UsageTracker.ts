@@ -1,15 +1,19 @@
 /**
  * UsageTracker - Anonymous usage tracking for progressive authentication prompts
  *
- * Tracks transcription count and usage stats without identifying the user.
+ * Tracks voice interaction count and usage stats without identifying the user.
  * Data is stored locally and used to determine when to show auth prompts.
  *
  * Features:
- * - Tracks transcription count across sessions
+ * - Tracks voice interaction count across sessions (conversation turns + dictation completions)
  * - Stores first use date for engagement analysis
  * - Tracks prompt interactions (shown, dismissed)
  * - Uses browser.storage.local for persistence
  * - Resets only on extension uninstall
+ *
+ * Note: We track high-level interactions (conversation turns, dictation completions)
+ * rather than individual transcription requests, since a single user message
+ * may require many transcription segments.
  */
 
 import EventBus from "../events/EventBus";
@@ -22,9 +26,11 @@ const browserAPI = typeof browser !== "undefined" ? browser : chrome;
  * Usage statistics stored in browser.storage.local
  */
 export interface UsageStats {
-  /** Total number of completed transcriptions */
+  /** Total number of voice interactions (conversation turns + dictation completions) */
+  interactionCount: number;
+  /** @deprecated Use interactionCount instead - kept for backwards compatibility */
   transcriptionCount: number;
-  /** Timestamp of first transcription (ms since epoch) */
+  /** Timestamp of first interaction (ms since epoch) */
   firstUseDate: number;
   /** Timestamp of last auth prompt shown (ms since epoch) */
   lastPromptShown: number;
@@ -38,7 +44,8 @@ export interface UsageStats {
  * Default initial stats for new users
  */
 const DEFAULT_STATS: UsageStats = {
-  transcriptionCount: 0,
+  interactionCount: 0,
+  transcriptionCount: 0, // deprecated, kept for backwards compatibility
   firstUseDate: 0,
   lastPromptShown: 0,
   promptsDismissed: 0,
@@ -85,12 +92,28 @@ export class UsageTracker {
 
   /**
    * Load stats from browser storage
+   * Handles migration from old format (transcriptionCount only) to new format (interactionCount)
    */
   private async loadStats(): Promise<void> {
     try {
       const result = await browserAPI.storage.local.get(STORAGE_KEY);
       if (result[STORAGE_KEY]) {
-        this.stats = { ...DEFAULT_STATS, ...result[STORAGE_KEY] };
+        const loadedStats = { ...DEFAULT_STATS, ...result[STORAGE_KEY] };
+
+        // Migration: if interactionCount is 0 but transcriptionCount exists, use transcriptionCount
+        // This handles upgrading from old format where only transcriptionCount was tracked
+        if (loadedStats.interactionCount === 0 && loadedStats.transcriptionCount > 0) {
+          // Old data used transcriptionCount for raw transcription requests
+          // Since we're changing to track interactions (messages/dictations),
+          // we'll start fresh rather than carry over inflated counts
+          logger.debug(
+            `[UsageTracker] Migration: resetting count (was ${loadedStats.transcriptionCount} transcriptions)`
+          );
+          loadedStats.interactionCount = 0;
+          loadedStats.transcriptionCount = 0;
+        }
+
+        this.stats = loadedStats;
       }
     } catch (error) {
       logger.error("[UsageTracker] Failed to load stats:", error);
@@ -109,27 +132,35 @@ export class UsageTracker {
   }
 
   /**
-   * Set up event listeners for transcription completions
+   * Set up event listeners for voice interactions
+   * We track conversation turns (messages sent) and dictation completions
+   * rather than individual transcription segments
    */
   private setupEventListeners(): void {
     if (this.isListening) {
       return;
     }
 
-    // Listen for completed transcriptions
-    EventBus.on("saypi:transcription:completed", this.handleTranscriptionCompleted);
+    // Listen for conversation turn completions (message submitted to chatbot)
+    EventBus.on("session:message-sent", this.handleInteractionCompleted);
+
+    // Listen for dictation completions (user finished dictating to a field)
+    EventBus.on("dictation:complete", this.handleInteractionCompleted);
+
     this.isListening = true;
 
-    logger.debug("[UsageTracker] Event listeners set up");
+    logger.debug("[UsageTracker] Event listeners set up for voice interactions");
   }
 
   /**
-   * Handle a completed transcription event
+   * Handle a completed voice interaction (conversation turn or dictation)
    */
-  private handleTranscriptionCompleted = async (): Promise<void> => {
-    this.stats.transcriptionCount++;
+  private handleInteractionCompleted = async (): Promise<void> => {
+    this.stats.interactionCount++;
+    // Also update deprecated field for backwards compatibility
+    this.stats.transcriptionCount = this.stats.interactionCount;
 
-    // Set first use date if this is the first transcription
+    // Set first use date if this is the first interaction
     if (this.stats.firstUseDate === 0) {
       this.stats.firstUseDate = Date.now();
     }
@@ -137,12 +168,12 @@ export class UsageTracker {
     await this.saveStats();
 
     logger.debug(
-      `[UsageTracker] Transcription completed. Total count: ${this.stats.transcriptionCount}`
+      `[UsageTracker] Voice interaction completed. Total count: ${this.stats.interactionCount}`
     );
 
     // Emit event for AuthPromptController to react to
     EventBus.emit("saypi:usage:updated", {
-      transcriptionCount: this.stats.transcriptionCount,
+      transcriptionCount: this.stats.interactionCount, // Use interactionCount for compatibility
       firstUseDate: this.stats.firstUseDate,
     });
   };
@@ -155,10 +186,17 @@ export class UsageTracker {
   }
 
   /**
-   * Get the current transcription count
+   * Get the current voice interaction count
+   */
+  public getInteractionCount(): number {
+    return this.stats.interactionCount;
+  }
+
+  /**
+   * @deprecated Use getInteractionCount instead
    */
   public getTranscriptionCount(): number {
-    return this.stats.transcriptionCount;
+    return this.stats.interactionCount;
   }
 
   /**
@@ -221,7 +259,8 @@ export class UsageTracker {
    */
   public cleanup(): void {
     if (this.isListening) {
-      EventBus.off("saypi:transcription:completed", this.handleTranscriptionCompleted);
+      EventBus.off("session:message-sent", this.handleInteractionCompleted);
+      EventBus.off("dictation:complete", this.handleInteractionCompleted);
       this.isListening = false;
     }
     this.isInitialized = false;

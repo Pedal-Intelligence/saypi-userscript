@@ -1370,19 +1370,19 @@
     "description": "Label for the checkbox to enable/disable automatic reading of ChatGPT responses during voice calls."
   },
   "authPromptToast": {
-    "message": "Sign in to track your voice usage and sync settings",
+    "message": "Sign in to SayPi for higher limits & premium features",
     "description": "Toast notification encouraging user to sign in."
   },
   "authPromptTitle": {
-    "message": "Get More from SayPi",
+    "message": "Unlock More Voice Features",
     "description": "Title for the auth prompt modal."
   },
   "authPromptModalSoft": {
-    "message": "Sign in to track your voice usage and sync your settings across all your devices.",
+    "message": "Create a free SayPi account for higher usage limits and access to premium voice features.",
     "description": "Description for the soft modal auth prompt."
   },
   "authPromptModalFull": {
-    "message": "You've been using SayPi for a while now! Sign in to unlock usage tracking, sync your settings across devices, and get personalized voice features.",
+    "message": "You're getting great use from SayPi! Sign in for higher limits, text-to-speech voices, and premium features across all supported chatbots.",
     "description": "Description for the full modal auth prompt with value proposition."
   },
   "authBenefitUsage": {
@@ -1396,6 +1396,18 @@
   "authBenefitSupport": {
     "message": "Priority support for issues",
     "description": "Benefit listed in auth modal - priority support."
+  },
+  "authBenefitLimits": {
+    "message": "Higher usage limits with free account",
+    "description": "Benefit listed in auth modal - increased usage limits."
+  },
+  "authBenefitTTS": {
+    "message": "Text-to-speech voices (paid plans)",
+    "description": "Benefit listed in auth modal - TTS feature."
+  },
+  "authBenefitPremium": {
+    "message": "Premium features & chatbot support",
+    "description": "Benefit listed in auth modal - premium features across chatbots."
   },
   "maybeLater": {
     "message": "Maybe Later",

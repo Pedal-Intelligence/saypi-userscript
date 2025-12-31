@@ -50,11 +50,16 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    background: $primary-light;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
     border-radius: 50%;
-    color: $primary-color;
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+
+    &.saypi-brand-icon svg {
+      filter: brightness(0) invert(1); // Make SVG white
+    }
   }
 
   .saypi-auth-prompt-text {
@@ -128,8 +133,8 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.25);
 
     .saypi-auth-prompt-icon {
-      background: rgba(59, 130, 246, 0.15);
-      color: rgba(96, 165, 250, 1);
+      background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
+      box-shadow: 0 2px 8px rgba(102, 187, 106, 0.3);
     }
 
     .saypi-auth-prompt-text {
@@ -263,20 +268,34 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     }
   }
 
+  .saypi-auth-modal-brand {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+  }
+
   .saypi-auth-modal-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 1.25rem;
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
     border-radius: 50%;
-    color: $primary-color;
+    color: white;
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.35), 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &.saypi-brand-icon svg {
+      filter: brightness(0) invert(1); // Make SVG white
+    }
 
     svg {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
     }
   }
 
@@ -396,9 +415,13 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       }
     }
 
+    .saypi-auth-modal-brand {
+      color: #66BB6A;
+    }
+
     .saypi-auth-modal-icon {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
-      color: rgba(96, 165, 250, 1);
+      background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
+      box-shadow: 0 4px 16px rgba(102, 187, 106, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .saypi-auth-modal-title {
@@ -413,8 +436,8 @@ $font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       color: rgba(229, 231, 235, 1);
 
       &::before {
-        background: rgba(16, 185, 129, 0.15);
-        color: rgba(52, 211, 153, 1);
+        background: rgba(76, 175, 80, 0.15);
+        color: rgba(129, 199, 132, 1);
       }
     }
 
