@@ -48,8 +48,15 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   logger.debug("Initializing auth prompt system");
   const { getAuthPromptController } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptController.ts");
   const { getAuthPromptUI } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptUI.ts");
+  const { getUsageTracker } = await import(/* webpackMode: "eager" */ "./auth/UsageTracker.ts");
   await getAuthPromptController().initialize();
   getAuthPromptUI().initialize();
+
+  // Expose debug method for resetting auth prompt tracking
+  window.saypiResetAuthPrompts = async () => {
+    await getUsageTracker().resetStats();
+    console.log("[SayPi] Auth prompt tracking reset. Reload page to take effect.");
+  };
 
   // Initialize telemetry module
   logger.debug("Initializing telemetry module");
