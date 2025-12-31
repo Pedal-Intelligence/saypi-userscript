@@ -265,9 +265,12 @@ export class AuthPromptController {
    * Called when user clicks sign in from a prompt
    */
   public handleSignInClicked(): void {
-    // Open the extension's settings page which has sign-in
-    const settingsUrl = browserAPI.runtime.getURL("settings.html");
-    browserAPI.tabs.create({ url: settingsUrl });
+    // Open the extension's settings page (reuses existing window if open)
+    browserAPI.runtime.sendMessage({ action: "openPopup" }).catch(() => {
+      // Fallback: open settings directly if message fails
+      const settingsUrl = browserAPI.runtime.getURL("settings.html");
+      browserAPI.tabs.create({ url: settingsUrl });
+    });
 
     // Hide the prompt
     EventBus.emit("saypi:authPrompt:hide");

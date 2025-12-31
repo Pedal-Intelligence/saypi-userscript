@@ -26,6 +26,20 @@ const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // The buffer value 6 a
 async function openSettingsWindow() {
   try {
     const popupURL = getExtensionURL('settings.html');
+
+    // Check if settings window/tab already exists
+    const existingTab = await findExistingSettingsTab(popupURL);
+    if (existingTab) {
+      // Focus existing window/tab instead of opening a new one
+      if (existingTab.windowId !== undefined) {
+        await browser.windows.update(existingTab.windowId, { focused: true });
+      }
+      if (existingTab.id !== undefined) {
+        await browser.tabs.update(existingTab.id, { active: true });
+      }
+      return;
+    }
+
     // Decide initial height based on whether we need to show consent overlay
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
     const { shareData } = await browser.storage.local.get('shareData');
@@ -46,6 +60,32 @@ async function openSettingsWindow() {
     });
   } catch (error) {
     console.error('Failed to open popup:', error);
+  }
+}
+
+/**
+ * Find an existing settings tab if one is already open
+ */
+async function findExistingSettingsTab(settingsUrl: string): Promise<browser.Tabs.Tab | null> {
+  try {
+    // Query all tabs for our settings URL
+    const tabs = await browser.tabs.query({ url: settingsUrl });
+    if (tabs.length > 0) {
+      return tabs[0];
+    }
+
+    // Also check with wildcard in case URL has query params or hash
+    const baseUrl = settingsUrl.replace(/\?.*$/, '').replace(/#.*$/, '');
+    const tabsWithWildcard = await browser.tabs.query({ url: baseUrl + '*' });
+    if (tabsWithWildcard.length > 0) {
+      return tabsWithWildcard[0];
+    }
+
+    return null;
+  } catch (error) {
+    // tabs.query may fail in some contexts, fall back to creating new window
+    console.debug('Could not query tabs:', error);
+    return null;
   }
 }
 
