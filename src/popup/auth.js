@@ -95,9 +95,28 @@ if (document.readyState === 'loading') {
 // Listen for auth status changes from background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'AUTH_STATUS_CHANGED') {
-    console.log('Auth status changed, refreshing UI');
+    console.log('Auth status changed (via message), refreshing UI');
     // Refresh the auth UI when auth status changes
     void initializeAuth();
+  }
+});
+
+// Listen for storage changes as a backup mechanism
+// This ensures the UI updates even if the message broadcast doesn't reach us
+// (e.g., if the popup was closed and reopened during auth flow)
+browserAPI.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== 'local') return;
+
+  // React to JWT token changes
+  if (changes.jwtToken) {
+    const hadToken = !!changes.jwtToken.oldValue;
+    const hasToken = !!changes.jwtToken.newValue;
+
+    // Only reinitialize if auth state actually changed
+    if (hadToken !== hasToken) {
+      console.log(`Auth state changed (via storage): ${hasToken ? 'signed in' : 'signed out'}`);
+      void initializeAuth();
+    }
   }
 });
 

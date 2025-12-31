@@ -689,6 +689,10 @@
     "message": "Sign In",
     "description": "Text for the sign in button."
   },
+  "signingIn": {
+    "message": "Signing in...",
+    "description": "Text for the sign in button while authentication is in progress."
+  },
   "signOut": {
     "message": "Sign Out",
     "description": "Text for the sign out button."
