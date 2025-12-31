@@ -1368,5 +1368,37 @@
   "autoReadAloudChatGPT": {
     "message": "Auto Read Aloud (ChatGPT)",
     "description": "Label for the checkbox to enable/disable automatic reading of ChatGPT responses during voice calls."
+  },
+  "authPromptToast": {
+    "message": "Sign in to track your voice usage and sync settings",
+    "description": "Toast notification encouraging user to sign in."
+  },
+  "authPromptTitle": {
+    "message": "Get More from SayPi",
+    "description": "Title for the auth prompt modal."
+  },
+  "authPromptModalSoft": {
+    "message": "Sign in to track your voice usage and sync your settings across all your devices.",
+    "description": "Description for the soft modal auth prompt."
+  },
+  "authPromptModalFull": {
+    "message": "You've been using SayPi for a while now! Sign in to unlock usage tracking, sync your settings across devices, and get personalized voice features.",
+    "description": "Description for the full modal auth prompt with value proposition."
+  },
+  "authBenefitUsage": {
+    "message": "Track your voice usage across devices",
+    "description": "Benefit listed in auth modal - usage tracking."
+  },
+  "authBenefitSync": {
+    "message": "Sync voice settings everywhere",
+    "description": "Benefit listed in auth modal - settings sync."
+  },
+  "authBenefitSupport": {
+    "message": "Priority support for issues",
+    "description": "Benefit listed in auth modal - priority support."
+  },
+  "maybeLater": {
+    "message": "Maybe Later",
+    "description": "Button text to dismiss auth prompt."
   }
 }
