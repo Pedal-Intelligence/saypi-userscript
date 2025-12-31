@@ -339,7 +339,7 @@ export default defineConfig((env) => {
       ? process.env.WXT_BROWSER
       : env?.browser) ?? "chrome";
   const isFirefox = browser.startsWith("firefox");
-  const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus"];
+  const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus", "alarms"];
 
   if (!isFirefox) {
     permissions.push("offscreen", "audio");

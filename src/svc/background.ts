@@ -114,9 +114,20 @@ for (const actionNamespace of actionNamespaces) {
 }
 
 import { config } from "../ConfigModule";
-import { getJwtManagerSync } from "../JwtManager";
+import { getJwtManagerSync, JwtManager } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
+
+// Handle JWT refresh alarm
+browser.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === JwtManager.getRefreshAlarmName()) {
+    logger.debug('[background] JWT refresh alarm triggered');
+    const jwtManager = getJwtManagerSync();
+    jwtManager.refresh().catch((error) => {
+      logger.error('[background] JWT refresh from alarm failed:', error);
+    });
+  }
+});
 import getMessage from "../i18n";
 
 const PERMISSIONS_PROMPT_PATH_HTML = 'permissions.html';
