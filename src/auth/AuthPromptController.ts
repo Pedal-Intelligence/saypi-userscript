@@ -263,18 +263,49 @@ export class AuthPromptController {
 
   /**
    * Called when user clicks sign in from a prompt
+   * Attempts PKCE authentication directly, falls back to opening settings
    */
   public handleSignInClicked(): void {
-    // Open the extension's settings page (reuses existing window if open)
+    // Hide the prompt immediately for better UX
+    EventBus.emit("saypi:authPrompt:hide");
+    logger.debug("[AuthPromptController] Sign in clicked, starting authentication");
+
+    // Try PKCE authentication directly via background script
+    browserAPI.runtime.sendMessage({ type: "AUTHENTICATE_WITH_PKCE" }, (response) => {
+      if (browserAPI.runtime.lastError) {
+        logger.warn("[AuthPromptController] PKCE message failed:", browserAPI.runtime.lastError);
+        this.openSettingsPage();
+        return;
+      }
+
+      if (response && response.success) {
+        // Authentication succeeded
+        logger.info("[AuthPromptController] PKCE authentication successful");
+        this.cachedAuthStatus = true;
+      } else if (response && response.useFallback) {
+        // PKCE not supported (Firefox), open settings for tab-based flow
+        logger.debug("[AuthPromptController] PKCE not supported, opening settings");
+        this.openSettingsPage();
+      } else if (response && response.error === "auth_cancelled") {
+        // User cancelled - nothing to do
+        logger.debug("[AuthPromptController] Authentication cancelled by user");
+      } else {
+        // PKCE failed, fall back to settings page
+        logger.warn("[AuthPromptController] PKCE failed:", response?.error);
+        this.openSettingsPage();
+      }
+    });
+  }
+
+  /**
+   * Open the settings page as a fallback for authentication
+   */
+  private openSettingsPage(): void {
     browserAPI.runtime.sendMessage({ action: "openPopup" }).catch(() => {
       // Fallback: open settings directly if message fails
       const settingsUrl = browserAPI.runtime.getURL("settings.html");
       browserAPI.tabs.create({ url: settingsUrl });
     });
-
-    // Hide the prompt
-    EventBus.emit("saypi:authPrompt:hide");
-    logger.debug("[AuthPromptController] Sign in clicked, opening settings");
   }
 
   /**

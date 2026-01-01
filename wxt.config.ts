@@ -342,7 +342,7 @@ export default defineConfig((env) => {
   const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus", "alarms"];
 
   if (!isFirefox) {
-    permissions.push("offscreen", "audio");
+    permissions.push("offscreen", "audio", "identity");
   }
 
   return {

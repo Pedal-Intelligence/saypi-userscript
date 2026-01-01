@@ -44,6 +44,8 @@ export class JwtManager {
   private expiresAt: number | null = null;
   // Value of the auth_session cookie - used as fallback when cookies can't be sent
   private authCookieValue: string | null = null;
+  // OAuth refresh token for PKCE flow
+  private oauthRefreshToken: string | null = null;
   // Promise that resolves when initialization is complete
   private initializationPromise: Promise<void>;
   // Track if initialization has completed
@@ -81,13 +83,18 @@ export class JwtManager {
   public async loadFromStorage(): Promise<void> {
     try {
       logger.debug('[status] Loading token from storage');
-      const { jwtToken, tokenExpiresAt, authCookieValue } = await browser.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
-      
+      const { jwtToken, tokenExpiresAt, authCookieValue, oauthRefreshToken } = await browser.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue', 'oauthRefreshToken']);
+
       // Always load authCookieValue if present
       if (authCookieValue) {
         this.authCookieValue = authCookieValue;
       }
-      
+
+      // Load OAuth refresh token if present
+      if (oauthRefreshToken) {
+        this.oauthRefreshToken = oauthRefreshToken;
+      }
+
       if (jwtToken && tokenExpiresAt) {
         logger.debug('[status] Token loaded from storage');
         this.jwtToken = jwtToken;
@@ -95,7 +102,21 @@ export class JwtManager {
         this.scheduleRefresh();
       } else {
         logger.debug('[status] No token found in storage');
-        
+
+        // If we have OAuth refresh token but no JWT, attempt OAuth refresh
+        if (oauthRefreshToken) {
+          logger.debug('[status] Found OAuth refresh token but no JWT - attempting OAuth refresh');
+          try {
+            await this.refreshWithOAuth();
+            if (this.isAuthenticated()) {
+              logger.debug('[status] Successfully recovered authentication state from OAuth refresh token');
+              return;
+            }
+          } catch (error) {
+            logger.debug('[status] Failed to refresh using OAuth refresh token:', error);
+          }
+        }
+
         // If we have authCookieValue but no JWT token, attempt to refresh
         // This handles extension reload scenarios where JWT data is lost but auth cookie remains
         if (authCookieValue) {
@@ -123,7 +144,8 @@ export class JwtManager {
       await browser.storage.local.set({
         jwtToken: this.jwtToken,
         tokenExpiresAt: this.expiresAt,
-        authCookieValue: this.authCookieValue
+        authCookieValue: this.authCookieValue,
+        oauthRefreshToken: this.oauthRefreshToken
       });
     } catch (error) {
       logger.error('Failed to save token to storage:', error);
@@ -139,7 +161,7 @@ export class JwtManager {
     // Schedule refresh 1 minute before expiration
     const refreshTime = this.expiresAt - Date.now() - 60000;
     if (refreshTime <= 0) {
-      this.refresh();
+      this.performRefresh();
       return;
     }
 
@@ -155,7 +177,21 @@ export class JwtManager {
     } catch (error) {
       // Fallback to setTimeout if alarms API is not available (e.g., content script context)
       logger.debug('[JwtManager] Alarms API not available, using setTimeout fallback');
-      setTimeout(() => this.refresh(), refreshTime);
+      setTimeout(() => this.performRefresh(), refreshTime);
+    }
+  }
+
+  /**
+   * Perform token refresh using the appropriate method
+   * Prefers OAuth refresh token over cookie-based refresh
+   */
+  public async performRefresh(): Promise<void> {
+    if (this.oauthRefreshToken) {
+      logger.debug('[JwtManager] Using OAuth refresh token');
+      await this.refreshWithOAuth();
+    } else {
+      logger.debug('[JwtManager] Using cookie-based refresh');
+      await this.refresh();
     }
   }
 
@@ -545,11 +581,130 @@ export class JwtManager {
     this.jwtToken = null;
     this.expiresAt = null;
     this.authCookieValue = null;
+    this.oauthRefreshToken = null;
     this.refreshFailureCount = 0;
     this.clearRefreshAlarm();
-    browser.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue']).catch(error => {
+    browser.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue', 'oauthRefreshToken']).catch(error => {
       logger.error('Failed to clear token from storage:', error);
     });
+  }
+
+  /**
+   * Set tokens from OAuth 2.1 + PKCE flow
+   * @param accessToken The JWT access token
+   * @param expiresIn Token lifetime in seconds
+   * @param refreshToken The OAuth refresh token for token renewal
+   */
+  public async setOAuthTokens(accessToken: string, expiresIn: number, refreshToken: string): Promise<void> {
+    // Get the old claims to compare
+    const oldClaims = this.getClaims();
+
+    this.jwtToken = accessToken;
+    this.expiresAt = Date.now() + (expiresIn * 1000);
+    this.oauthRefreshToken = refreshToken;
+
+    // Clear cookie-based auth when using OAuth
+    this.authCookieValue = null;
+
+    await this.saveToStorage();
+
+    // Reset failure count on successful token set
+    this.refreshFailureCount = 0;
+
+    this.scheduleRefresh();
+
+    // Get the new claims
+    const newClaims = this.getClaims();
+
+    // Check if features have changed
+    if (this.haveClaimsChanged(oldClaims, newClaims)) {
+      logger.debug('JWT claims have changed, emitting event');
+      EventBus.emit('jwt:claims:changed', { newClaims });
+    }
+
+    logger.info('[JwtManager] OAuth tokens set successfully');
+  }
+
+  /**
+   * Check if we have an OAuth refresh token
+   */
+  public hasOAuthRefreshToken(): boolean {
+    return !!this.oauthRefreshToken;
+  }
+
+  /**
+   * Refresh tokens using OAuth refresh token
+   */
+  public async refreshWithOAuth(): Promise<void> {
+    if (!this.oauthRefreshToken) {
+      throw new Error('No OAuth refresh token available');
+    }
+
+    if (!config.authServerUrl) {
+      throw new Error('Auth server URL not configured');
+    }
+
+    const tokenUrl = `${config.authServerUrl}/api/oauth/token`;
+
+    logger.debug('[JwtManager] Refreshing token using OAuth refresh token');
+
+    try {
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: this.oauthRefreshToken,
+          client_id: 'saypi-extension',
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error_description ||
+            errorData.error ||
+            `OAuth token refresh failed: ${response.status}`
+        );
+      }
+
+      const tokens = await response.json();
+
+      // Update tokens
+      await this.setOAuthTokens(
+        tokens.access_token,
+        tokens.expires_in,
+        tokens.refresh_token
+      );
+
+      logger.info('[JwtManager] OAuth token refresh successful');
+    } catch (error) {
+      this.refreshFailureCount++;
+      logger.error(`[JwtManager] OAuth refresh failed (attempt ${this.refreshFailureCount}/${MAX_REFRESH_FAILURES}):`, error);
+
+      if (this.refreshFailureCount >= MAX_REFRESH_FAILURES) {
+        logger.warn('[JwtManager] Max OAuth refresh failures reached, clearing auth state');
+        this.clear();
+        EventBus.emit('jwt:auth:failed', { reason: 'max_refresh_failures' });
+      } else {
+        // Schedule retry with exponential backoff
+        const retryDelayMs = BASE_RETRY_DELAY_MS * Math.pow(2, this.refreshFailureCount - 1);
+        const retryDelayMinutes = retryDelayMs / 60000;
+        logger.debug(`[JwtManager] Scheduling OAuth retry in ${retryDelayMinutes.toFixed(1)} minutes`);
+
+        try {
+          await browser.alarms.create(JWT_REFRESH_ALARM, {
+            delayInMinutes: Math.max(retryDelayMinutes, 0.5)
+          });
+        } catch (alarmError) {
+          setTimeout(() => this.refreshWithOAuth(), retryDelayMs);
+        }
+      }
+
+      throw error;
+    }
   }
 
   public getTTSQuotaDetails(): QuotaDetails {

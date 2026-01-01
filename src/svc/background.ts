@@ -123,7 +123,8 @@ browser.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === JwtManager.getRefreshAlarmName()) {
     logger.debug('[background] JWT refresh alarm triggered');
     const jwtManager = getJwtManagerSync();
-    jwtManager.refresh().catch((error) => {
+    // Use performRefresh to prefer OAuth refresh token when available
+    jwtManager.performRefresh().catch((error) => {
       logger.error('[background] JWT refresh from alarm failed:', error);
     });
   }
@@ -1170,8 +1171,57 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
       }
     })();
     return true; // Async sendResponse executes inside IIFE
+  } else if (message.type === 'AUTHENTICATE_WITH_PKCE') {
+    // Handle PKCE authentication request
+    (async () => {
+      try {
+        // Dynamic import to avoid loading OAuth service in content scripts
+        const { authenticate, isPKCESupported } = await import('../auth/OAuthService');
+
+        if (!isPKCESupported()) {
+          logger.debug('[Background] PKCE not supported, falling back to tab flow');
+          sendResponse({ success: false, error: 'pkce_not_supported', useFallback: true });
+          return;
+        }
+
+        logger.debug('[Background] Starting PKCE authentication');
+        const result = await authenticate();
+
+        if (result.success) {
+          // Store tokens in JwtManager
+          await jwtManager.setOAuthTokens(
+            result.tokens.access_token,
+            result.tokens.expires_in,
+            result.tokens.refresh_token
+          );
+
+          // Broadcast auth status change
+          broadcastAuthStatus();
+
+          sendResponse({
+            success: true,
+            claims: jwtManager.getClaims()
+          });
+        } else {
+          logger.warn('[Background] PKCE authentication failed:', result.error);
+          sendResponse({
+            success: false,
+            error: result.error,
+            errorDescription: result.errorDescription
+          });
+        }
+      } catch (error: any) {
+        logger.error('[Background] PKCE authentication error:', error);
+        sendResponse({
+          success: false,
+          error: 'auth_error',
+          errorDescription: error.message || 'Authentication failed'
+        });
+      }
+    })();
+    return true; // Async sendResponse executes inside IIFE
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
-    // Handle login redirect request - async handler
+    // Handle login redirect request - async handler (legacy cookie-based flow)
     (async () => {
       try {
         if (config.authServerUrl) {
@@ -1193,7 +1243,7 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
           // Cookie exists, try to refresh
           try {
             await jwtManager.refresh(true);
-            
+
             if (jwtManager.isAuthenticated()) {
               // Refresh succeeded, notify popup
               sendResponse({ authenticated: true });

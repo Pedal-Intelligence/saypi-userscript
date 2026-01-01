@@ -111,7 +111,8 @@ describe('JwtManager', () => {
       expect(browser.storage.local.set).toHaveBeenCalledWith({
         jwtToken: 'test-token',
         tokenExpiresAt: now + (15 * 60 * 1000), // 15 minutes in ms
-        authCookieValue: null
+        authCookieValue: null,
+        oauthRefreshToken: null
       });
 
       // Verify next refresh is scheduled 1 minute before expiration
@@ -350,7 +351,7 @@ describe('JwtManager', () => {
       expect(jwtManager.authCookieValue).toBeNull();
       
       // Check storage values are cleared
-      expect(browser.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
+      expect(browser.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue', 'oauthRefreshToken']);
     });
   });
 }); 
