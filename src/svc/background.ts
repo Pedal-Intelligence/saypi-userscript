@@ -1,6 +1,7 @@
 import { browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
+import { authenticate, isPKCESupported } from "../auth/OAuthService";
 
 // Helper function to get extension URL with fallback for WXT compatibility
 function getExtensionURL(path: string): string {
@@ -1175,9 +1176,6 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
     // Handle PKCE authentication request
     (async () => {
       try {
-        // Dynamic import to avoid loading OAuth service in content scripts
-        const { authenticate, isPKCESupported } = await import('../auth/OAuthService');
-
         if (!isPKCESupported()) {
           logger.debug('[Background] PKCE not supported, falling back to tab flow');
           sendResponse({ success: false, error: 'pkce_not_supported', useFallback: true });
