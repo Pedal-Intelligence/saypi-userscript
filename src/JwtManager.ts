@@ -27,20 +27,29 @@ export interface QuotaDetails {
   resetDate?: number; // Unix timestamp for quota reset date
 }
 
+// Alarm name for JWT refresh scheduling
+const JWT_REFRESH_ALARM = 'saypi-jwt-refresh';
+
+// Maximum consecutive refresh failures before clearing auth
+const MAX_REFRESH_FAILURES = 3;
+
+// Base retry delay for exponential backoff (1 minute)
+const BASE_RETRY_DELAY_MS = 60 * 1000;
+
 // Export the class for testing
 export class JwtManager {
   // The JWT token used for API authorization
   private jwtToken: string | null = null;
   // When the JWT token expires (in milliseconds since epoch)
   private expiresAt: number | null = null;
-  // Timer for refreshing the JWT before expiration
-  private refreshTimeout: ReturnType<typeof setTimeout> | null = null;
   // Value of the auth_session cookie - used as fallback when cookies can't be sent
   private authCookieValue: string | null = null;
   // Promise that resolves when initialization is complete
   private initializationPromise: Promise<void>;
   // Track if initialization has completed
   private isInitialized: boolean = false;
+  // Track consecutive refresh failures for exponential backoff
+  private refreshFailureCount: number = 0;
 
   constructor() {
     // Load token from storage on initialization
@@ -121,10 +130,9 @@ export class JwtManager {
     }
   }
 
-  private scheduleRefresh(): void {
-    if (this.refreshTimeout) {
-      clearTimeout(this.refreshTimeout);
-    }
+  private async scheduleRefresh(): Promise<void> {
+    // Clear any existing alarm
+    await this.clearRefreshAlarm();
 
     if (!this.expiresAt) return;
 
@@ -135,7 +143,38 @@ export class JwtManager {
       return;
     }
 
-    this.refreshTimeout = setTimeout(() => this.refresh(), refreshTime);
+    // Use browser.alarms which survives service worker suspension
+    // delayInMinutes must be at least 1 minute in production, but can be less in dev
+    const delayInMinutes = Math.max(refreshTime / 60000, 0.5);
+
+    try {
+      await browser.alarms.create(JWT_REFRESH_ALARM, {
+        delayInMinutes
+      });
+      logger.debug(`[JwtManager] Scheduled token refresh in ${delayInMinutes.toFixed(1)} minutes`);
+    } catch (error) {
+      // Fallback to setTimeout if alarms API is not available (e.g., content script context)
+      logger.debug('[JwtManager] Alarms API not available, using setTimeout fallback');
+      setTimeout(() => this.refresh(), refreshTime);
+    }
+  }
+
+  /**
+   * Clear the JWT refresh alarm
+   */
+  private async clearRefreshAlarm(): Promise<void> {
+    try {
+      await browser.alarms.clear(JWT_REFRESH_ALARM);
+    } catch (error) {
+      // Alarms API may not be available in all contexts
+    }
+  }
+
+  /**
+   * Get the alarm name for external handlers
+   */
+  public static getRefreshAlarmName(): string {
+    return JWT_REFRESH_ALARM;
   }
 
   /**
@@ -407,19 +446,44 @@ export class JwtManager {
       this.expiresAt = Date.now() + this.parseDuration(expiresIn);
       
       await this.saveToStorage();
+
+      // Reset failure count on successful refresh
+      this.refreshFailureCount = 0;
+
       this.scheduleRefresh();
-      
+
       // Get the new claims
       const newClaims = this.getClaims();
-      
+
       // Check if features have changed
       if (this.haveClaimsChanged(oldClaims, newClaims)) {
         logger.debug('JWT claims have changed, emitting event');
         EventBus.emit('jwt:claims:changed', { newClaims });
       }
     } catch (error) {
-      logger.error('Failed to refresh token:', error);
-      this.clear();
+      this.refreshFailureCount++;
+      logger.error(`Failed to refresh token (attempt ${this.refreshFailureCount}/${MAX_REFRESH_FAILURES}):`, error);
+
+      if (this.refreshFailureCount >= MAX_REFRESH_FAILURES) {
+        logger.warn('[JwtManager] Max refresh failures reached, clearing auth state');
+        this.clear();
+        // Emit event so UI can prompt user to re-login
+        EventBus.emit('jwt:auth:failed', { reason: 'max_refresh_failures' });
+      } else {
+        // Schedule retry with exponential backoff
+        const retryDelayMs = BASE_RETRY_DELAY_MS * Math.pow(2, this.refreshFailureCount - 1);
+        const retryDelayMinutes = retryDelayMs / 60000;
+        logger.debug(`[JwtManager] Scheduling retry in ${retryDelayMinutes.toFixed(1)} minutes`);
+
+        try {
+          await browser.alarms.create(JWT_REFRESH_ALARM, {
+            delayInMinutes: Math.max(retryDelayMinutes, 0.5)
+          });
+        } catch (alarmError) {
+          // Fallback to setTimeout if alarms API not available
+          setTimeout(() => this.refresh(), retryDelayMs);
+        }
+      }
     }
   }
 
@@ -481,10 +545,8 @@ export class JwtManager {
     this.jwtToken = null;
     this.expiresAt = null;
     this.authCookieValue = null;
-    if (this.refreshTimeout) {
-      clearTimeout(this.refreshTimeout);
-      this.refreshTimeout = null;
-    }
+    this.refreshFailureCount = 0;
+    this.clearRefreshAlarm();
     browser.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue']).catch(error => {
       logger.error('Failed to clear token from storage:', error);
     });
