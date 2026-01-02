@@ -3,11 +3,36 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+// Mock wxt/browser before importing PKCEManager
+const mockStorage: Record<string, any> = {};
+vi.mock('wxt/browser', () => ({
+  browser: {
+    storage: {
+      local: {
+        get: vi.fn((key: string) => Promise.resolve({ [key]: mockStorage[key] })),
+        set: vi.fn((data: Record<string, any>) => {
+          Object.assign(mockStorage, data);
+          return Promise.resolve();
+        }),
+        remove: vi.fn((key: string) => {
+          delete mockStorage[key];
+          return Promise.resolve();
+        }),
+      },
+    },
+  },
+}));
+
 import {
   generateCodeVerifier,
   generateCodeChallenge,
   generateState,
   generatePKCEPair,
+  storePKCEState,
+  retrievePKCEState,
+  clearPKCEState,
+  type PKCEState,
 } from '../../src/auth/PKCEManager';
 
 describe('PKCEManager', () => {
@@ -116,6 +141,97 @@ describe('PKCEManager', () => {
 
       expect(pair1.codeVerifier).not.toBe(pair2.codeVerifier);
       expect(pair1.codeChallenge).not.toBe(pair2.codeChallenge);
+    });
+  });
+
+  describe('PKCE State Storage', () => {
+    const PKCE_STATE_KEY = 'saypi-pkce-state';
+
+    beforeEach(() => {
+      // Clear mock storage before each test
+      Object.keys(mockStorage).forEach(key => delete mockStorage[key]);
+    });
+
+    describe('storePKCEState', () => {
+      it('stores PKCE state in browser storage', async () => {
+        const state: PKCEState = {
+          codeVerifier: 'test-verifier',
+          state: 'test-state',
+          redirectUri: 'https://test.chromiumapp.org/',
+          createdAt: Date.now(),
+        };
+
+        await storePKCEState(state);
+
+        expect(mockStorage[PKCE_STATE_KEY]).toEqual(state);
+      });
+    });
+
+    describe('retrievePKCEState', () => {
+      it('retrieves and clears valid PKCE state', async () => {
+        const state: PKCEState = {
+          codeVerifier: 'test-verifier',
+          state: 'expected-state',
+          redirectUri: 'https://test.chromiumapp.org/',
+          createdAt: Date.now(),
+        };
+        mockStorage[PKCE_STATE_KEY] = state;
+
+        const retrieved = await retrievePKCEState('expected-state');
+
+        expect(retrieved).toEqual(state);
+        // State should be cleared after retrieval (single-use)
+        expect(mockStorage[PKCE_STATE_KEY]).toBeUndefined();
+      });
+
+      it('returns null for state mismatch (CSRF protection)', async () => {
+        const state: PKCEState = {
+          codeVerifier: 'test-verifier',
+          state: 'stored-state',
+          redirectUri: 'https://test.chromiumapp.org/',
+          createdAt: Date.now(),
+        };
+        mockStorage[PKCE_STATE_KEY] = state;
+
+        const retrieved = await retrievePKCEState('different-state');
+
+        expect(retrieved).toBeNull();
+      });
+
+      it('returns null for expired state', async () => {
+        const state: PKCEState = {
+          codeVerifier: 'test-verifier',
+          state: 'test-state',
+          redirectUri: 'https://test.chromiumapp.org/',
+          createdAt: Date.now() - (11 * 60 * 1000), // 11 minutes ago (expired)
+        };
+        mockStorage[PKCE_STATE_KEY] = state;
+
+        const retrieved = await retrievePKCEState('test-state');
+
+        expect(retrieved).toBeNull();
+      });
+
+      it('returns null when no state is stored', async () => {
+        const retrieved = await retrievePKCEState('any-state');
+
+        expect(retrieved).toBeNull();
+      });
+    });
+
+    describe('clearPKCEState', () => {
+      it('removes PKCE state from storage', async () => {
+        mockStorage[PKCE_STATE_KEY] = {
+          codeVerifier: 'test-verifier',
+          state: 'test-state',
+          redirectUri: 'https://test.chromiumapp.org/',
+          createdAt: Date.now(),
+        };
+
+        await clearPKCEState();
+
+        expect(mockStorage[PKCE_STATE_KEY]).toBeUndefined();
+      });
     });
   });
 });

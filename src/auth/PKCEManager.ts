@@ -7,6 +7,7 @@
  * @see https://tools.ietf.org/html/rfc7636
  */
 
+import { browser } from 'wxt/browser';
 import { logger } from '../LoggingModule';
 
 /**
@@ -104,7 +105,6 @@ const PKCE_STATE_EXPIRY_MS = 10 * 60 * 1000;
  */
 export async function storePKCEState(state: PKCEState): Promise<void> {
   try {
-    const { browser } = await import('wxt/browser');
     await browser.storage.local.set({ [PKCE_STATE_KEY]: state });
     logger.debug('[PKCEManager] Stored PKCE state');
   } catch (error) {
@@ -120,7 +120,6 @@ export async function storePKCEState(state: PKCEState): Promise<void> {
  */
 export async function retrievePKCEState(expectedState: string): Promise<PKCEState | null> {
   try {
-    const { browser } = await import('wxt/browser');
     const result = await browser.storage.local.get(PKCE_STATE_KEY);
     const storedState = result[PKCE_STATE_KEY] as PKCEState | undefined;
 
@@ -157,7 +156,6 @@ export async function retrievePKCEState(expectedState: string): Promise<PKCEStat
  */
 export async function clearPKCEState(): Promise<void> {
   try {
-    const { browser } = await import('wxt/browser');
     await browser.storage.local.remove(PKCE_STATE_KEY);
     logger.debug('[PKCEManager] Cleared PKCE state');
   } catch (error) {
