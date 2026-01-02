@@ -52,6 +52,8 @@ export class JwtManager {
   private isInitialized: boolean = false;
   // Track consecutive refresh failures for exponential backoff
   private refreshFailureCount: number = 0;
+  // Flag to prevent race conditions during sign-out
+  private isClearing: boolean = false;
 
   constructor() {
     // Load token from storage on initialization
@@ -186,6 +188,12 @@ export class JwtManager {
    * Prefers OAuth refresh token over cookie-based refresh
    */
   public async performRefresh(): Promise<void> {
+    // Don't refresh if we're in the middle of clearing auth state
+    if (this.isClearing) {
+      logger.debug('[JwtManager] Skipping refresh - auth is being cleared');
+      return;
+    }
+
     if (this.oauthRefreshToken) {
       logger.debug('[JwtManager] Using OAuth refresh token');
       await this.refreshWithOAuth();
@@ -292,6 +300,12 @@ export class JwtManager {
    * 2. Sends the cookie value in the request body (fallback)
    */
   public async refresh(force: boolean = false, silent401: boolean = true): Promise<void> {
+    // Don't refresh if we're in the middle of clearing auth state
+    if (this.isClearing) {
+      logger.debug('[JwtManager] Skipping refresh - auth is being cleared');
+      return;
+    }
+
     if (!config.authServerUrl) {
       logger.warn('Auth server URL not configured');
       return;
@@ -577,16 +591,25 @@ export class JwtManager {
     return !!this.jwtToken && !this.isTokenExpired();
   }
 
-  public clear(): void {
+  public async clear(): Promise<void> {
+    // Set flag to prevent in-flight refreshes from re-authenticating
+    this.isClearing = true;
+
     this.jwtToken = null;
     this.expiresAt = null;
     this.authCookieValue = null;
     this.oauthRefreshToken = null;
     this.refreshFailureCount = 0;
-    this.clearRefreshAlarm();
-    browser.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue', 'oauthRefreshToken']).catch(error => {
+
+    try {
+      await this.clearRefreshAlarm();
+      await browser.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue', 'oauthRefreshToken']);
+      logger.debug('[JwtManager] Auth state cleared successfully');
+    } catch (error) {
       logger.error('Failed to clear token from storage:', error);
-    });
+    } finally {
+      this.isClearing = false;
+    }
   }
 
   /**
@@ -636,6 +659,12 @@ export class JwtManager {
    * Refresh tokens using OAuth refresh token
    */
   public async refreshWithOAuth(): Promise<void> {
+    // Don't refresh if we're in the middle of clearing auth state
+    if (this.isClearing) {
+      logger.debug('[JwtManager] Skipping OAuth refresh - auth is being cleared');
+      return;
+    }
+
     if (!this.oauthRefreshToken) {
       throw new Error('No OAuth refresh token available');
     }
