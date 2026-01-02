@@ -342,7 +342,7 @@ export default defineConfig((env) => {
   const permissions: string[] = ["storage", "cookies", "tabs", "contextMenus", "alarms"];
 
   if (!isFirefox) {
-    permissions.push("offscreen", "audio");
+    permissions.push("offscreen", "audio", "identity");
   }
 
   return {
@@ -454,6 +454,9 @@ export default defineConfig((env) => {
         },
       },
       build: {
+        // Disable modulePreload to avoid injecting window-dependent polyfill code
+        // into service worker bundles (service workers don't have window object)
+        modulePreload: false,
         rollupOptions: {
           output: {
             chunkFileNames: COMMONJS_CHUNK_PATTERN,

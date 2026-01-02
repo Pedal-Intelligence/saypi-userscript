@@ -111,7 +111,8 @@ describe('JwtManager', () => {
       expect(browser.storage.local.set).toHaveBeenCalledWith({
         jwtToken: 'test-token',
         tokenExpiresAt: now + (15 * 60 * 1000), // 15 minutes in ms
-        authCookieValue: null
+        authCookieValue: null,
+        oauthRefreshToken: null
       });
 
       // Verify next refresh is scheduled 1 minute before expiration
@@ -327,10 +328,10 @@ describe('JwtManager', () => {
   });
 
   describe('clear', () => {
-    it('clears token, authCookieValue, and expiresAt', () => {
+    it('clears token, authCookieValue, and expiresAt', async () => {
       const now = new Date('2024-01-01T12:00:00Z').getTime();
       vi.setSystemTime(now);
-      
+
       // Setup initial values
       // @ts-expect-error: accessing private properties for testing
       jwtManager.jwtToken = 'test-token';
@@ -338,9 +339,9 @@ describe('JwtManager', () => {
       jwtManager.expiresAt = now + 3600000;
       // @ts-expect-error: accessing private properties for testing
       jwtManager.authCookieValue = 'test-cookie-value';
-      
-      jwtManager.clear();
-      
+
+      await jwtManager.clear();
+
       // Check memory values are cleared
       // @ts-expect-error: accessing private properties for testing
       expect(jwtManager.jwtToken).toBeNull();
@@ -348,9 +349,9 @@ describe('JwtManager', () => {
       expect(jwtManager.expiresAt).toBeNull();
       // @ts-expect-error: accessing private properties for testing
       expect(jwtManager.authCookieValue).toBeNull();
-      
+
       // Check storage values are cleared
-      expect(browser.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
+      expect(browser.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue', 'oauthRefreshToken']);
     });
   });
 }); 

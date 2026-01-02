@@ -1,6 +1,10 @@
 import { browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
+import { authenticate, isPKCESupported } from "../auth/OAuthService";
+
+// Track when PKCE authentication is in progress to prevent cookie listener interference
+let isPKCEAuthInProgress = false;
 
 // Helper function to get extension URL with fallback for WXT compatibility
 function getExtensionURL(path: string): string {
@@ -123,7 +127,8 @@ browser.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === JwtManager.getRefreshAlarmName()) {
     logger.debug('[background] JWT refresh alarm triggered');
     const jwtManager = getJwtManagerSync();
-    jwtManager.refresh().catch((error) => {
+    // Use performRefresh to prefer OAuth refresh token when available
+    jwtManager.performRefresh().catch((error) => {
       logger.error('[background] JWT refresh from alarm failed:', error);
     });
   }
@@ -1170,8 +1175,76 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
       }
     })();
     return true; // Async sendResponse executes inside IIFE
+  } else if (message.type === 'AUTHENTICATE_WITH_PKCE') {
+    // Handle PKCE authentication request
+    (async () => {
+      try {
+        // Detailed logging for PKCE support check
+        logger.debug('[Background] AUTHENTICATE_WITH_PKCE received, checking identity API:', {
+          browserIdentityExists: typeof browser.identity !== 'undefined',
+          launchWebAuthFlowExists: typeof browser.identity?.launchWebAuthFlow,
+          getRedirectURLExists: typeof browser.identity?.getRedirectURL,
+        });
+
+        const pkceSupported = isPKCESupported();
+        logger.debug('[Background] isPKCESupported() returned:', pkceSupported);
+
+        if (!pkceSupported) {
+          logger.debug('[Background] PKCE not supported, falling back to tab flow');
+          sendResponse({ success: false, error: 'pkce_not_supported', useFallback: true });
+          return;
+        }
+
+        logger.debug('[Background] Starting PKCE authentication');
+        isPKCEAuthInProgress = true;
+
+        try {
+          const result = await authenticate();
+          logger.debug('[Background] authenticate() returned:', {
+            success: result.success,
+            error: result.success ? undefined : (result as any).error,
+            errorDescription: result.success ? undefined : (result as any).errorDescription,
+          });
+
+          if (result.success) {
+            // Store tokens in JwtManager
+            await jwtManager.setOAuthTokens(
+              result.tokens.access_token,
+              result.tokens.expires_in,
+              result.tokens.refresh_token
+            );
+
+            // Broadcast auth status change
+            broadcastAuthStatus();
+
+            sendResponse({
+              success: true,
+              claims: jwtManager.getClaims()
+            });
+          } else {
+            logger.warn('[Background] PKCE authentication failed:', result.error);
+            sendResponse({
+              success: false,
+              error: result.error,
+              errorDescription: result.errorDescription
+            });
+          }
+        } finally {
+          isPKCEAuthInProgress = false;
+        }
+      } catch (error: any) {
+        isPKCEAuthInProgress = false;
+        logger.error('[Background] PKCE authentication error:', error);
+        sendResponse({
+          success: false,
+          error: 'auth_error',
+          errorDescription: error.message || 'Authentication failed'
+        });
+      }
+    })();
+    return true; // Async sendResponse executes inside IIFE
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
-    // Handle login redirect request - async handler
+    // Handle login redirect request - async handler (legacy cookie-based flow)
     (async () => {
       try {
         if (config.authServerUrl) {
@@ -1193,7 +1266,7 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
           // Cookie exists, try to refresh
           try {
             await jwtManager.refresh(true);
-            
+
             if (jwtManager.isAuthenticated()) {
               // Refresh succeeded, notify popup
               sendResponse({ authenticated: true });
@@ -1232,6 +1305,9 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
     // Handle sign out request - make this block async
     (async () => {
       try {
+        // Clear the JWT token first (this sets isClearing flag to prevent race conditions)
+        await jwtManager.clear();
+
         // Clear the auth cookie
         if (config.authServerUrl) {
           await browser.cookies.remove({
@@ -1239,12 +1315,10 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
             url: config.authServerUrl
           });
         }
-        // Clear the JWT token
-        jwtManager.clear();
-        
-        // Broadcast auth status change
+
+        // Broadcast auth status change (already called by overridden clear(), but ensure final state)
         broadcastAuthStatus();
-        
+
         sendResponse({ success: true });
       } catch (error: any) {
         logger.error('Failed to sign out:', error);
@@ -1382,14 +1456,15 @@ browser.cookies.onChanged.addListener(async (changeInfo: any) => {
       }
 
       // Handle return-to-context after successful auth
-      // Do this regardless of whether we just refreshed or were already authenticated
-      if (jwtManager.isAuthenticated()) {
+      // Skip this when PKCE auth is in progress - PKCE flow manages its own completion
+      // Only do this for tab-based auth flow (Firefox or fallback)
+      if (jwtManager.isAuthenticated() && !isPKCEAuthInProgress) {
         await handleAuthReturnToContext();
       }
     } else if (removed) {
       // If cookie was removed, clear JWT and broadcast status change
-      jwtManager.clear();
-      broadcastAuthStatus();
+      await jwtManager.clear();
+      // broadcastAuthStatus() is already called by the overridden clear()
     }
   }
 });
@@ -1409,7 +1484,7 @@ jwtManager.refresh = async (force = false) => {
 
 // Override the clear method to broadcast auth status after clearing
 const originalClear = jwtManager.clear.bind(jwtManager);
-jwtManager.clear = () => {
-  originalClear();
+jwtManager.clear = async () => {
+  await originalClear();
   broadcastAuthStatus();
 };

@@ -128,11 +128,45 @@ function redirectToLogin(loginUrl, returnUrl) {
 
 /**
  * Handler for sign in button click
+ * Attempts PKCE authentication first (Chrome), falls back to tab-based flow (Firefox)
  */
 function handleSignIn() {
   // Show loading state immediately for user feedback
   setAuthButtonLoading(true);
 
+  // Try PKCE authentication first (works on Chrome with identity API)
+  chrome.runtime.sendMessage({ type: 'AUTHENTICATE_WITH_PKCE' }, function(response) {
+    if (chrome.runtime.lastError) {
+      console.error('PKCE auth message failed:', chrome.runtime.lastError);
+      fallbackToTabAuth();
+      return;
+    }
+
+    if (response && response.success) {
+      // PKCE authentication succeeded
+      console.log('PKCE authentication successful');
+      showAuthSuccess();
+      setTimeout(() => refreshAuthUI(), 500);
+    } else if (response && response.useFallback) {
+      // PKCE not supported (Firefox), use tab-based flow
+      console.log('PKCE not supported, using tab flow');
+      fallbackToTabAuth();
+    } else if (response && response.error === 'auth_cancelled') {
+      // User cancelled - just reset the button
+      console.log('Authentication cancelled by user');
+      setAuthButtonLoading(false);
+    } else {
+      // PKCE failed for another reason, try tab flow as backup
+      console.warn('PKCE auth failed:', response?.error, response?.errorDescription);
+      fallbackToTabAuth();
+    }
+  });
+}
+
+/**
+ * Fallback to tab-based authentication (for Firefox or when PKCE fails)
+ */
+function fallbackToTabAuth() {
   if (config.authServerUrl) {
     const loginUrl = `${config.authServerUrl}/auth/login`;
     // Return to the extension's settings page after login
@@ -248,5 +282,6 @@ window.updateUIAfterSignOut = updateUIAfterSignOut;
 window.performLocalSignOut = performLocalSignOut;
 window.setAuthButtonLoading = setAuthButtonLoading;
 window.showAuthSuccess = showAuthSuccess;
+window.fallbackToTabAuth = fallbackToTabAuth;
 
 export {};
