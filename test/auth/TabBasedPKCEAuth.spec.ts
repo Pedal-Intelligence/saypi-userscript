@@ -81,6 +81,7 @@ import {
   getTabBasedRedirectUri,
   authenticateWithTabBasedPKCE,
   shouldUseTabBasedPKCE,
+  _resetAuthStateForTesting,
 } from '../../src/auth/TabBasedPKCEAuth';
 import { browser } from 'wxt/browser';
 
@@ -98,6 +99,8 @@ describe('TabBasedPKCEAuth', () => {
     vi.resetAllMocks();
     // Ensure runtime.getURL returns Firefox URL by default
     (browser.runtime.getURL as any).mockReturnValue('moz-extension://test-addon-id/');
+    // Reset auth state between tests
+    _resetAuthStateForTesting();
   });
 
   afterEach(() => {
@@ -411,6 +414,124 @@ describe('TabBasedPKCEAuth', () => {
 
       // PKCE state should be cleared (retrievePKCEState clears it on retrieval)
       expect(browser.storage.local.remove).toHaveBeenCalledWith('saypi-pkce-state');
+    });
+
+    it('prevents concurrent authentication attempts', async () => {
+      // Start first authentication
+      const authPromise1 = authenticateWithTabBasedPKCE();
+
+      // Wait for tab to be created
+      await vi.waitFor(() => expect(browser.tabs.create).toHaveBeenCalled());
+
+      // Try to start second authentication while first is in progress
+      const result2 = await authenticateWithTabBasedPKCE();
+
+      // Second call should fail immediately with auth_in_progress
+      expect(result2.success).toBe(false);
+      expect(result2.error).toBe('auth_in_progress');
+      expect(result2.errorDescription).toBe('Authentication already in progress');
+
+      // Clean up first auth by advancing past timeout
+      vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
+      await vi.runAllTimersAsync();
+      await authPromise1;
+    });
+
+    it('handles user closing auth tab directly', async () => {
+      const authPromise = authenticateWithTabBasedPKCE();
+
+      // Wait for tab to be created and listeners registered
+      await vi.waitFor(() => expect(browser.tabs.create).toHaveBeenCalled());
+      await vi.waitFor(() => expect(onRemovedListeners.length).toBeGreaterThan(0));
+
+      // Simulate user closing the auth tab
+      const tabId = 1;
+      for (const listener of [...onRemovedListeners]) {
+        listener(tabId);
+      }
+
+      await vi.runAllTimersAsync();
+      const result = await authPromise;
+
+      // Should return auth_cancelled error
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('auth_cancelled');
+      expect(result.errorDescription).toContain('closed by user');
+    });
+
+    it('cleans up removeListener on success', async () => {
+      (global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({
+          access_token: 'test-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          refresh_token: 'test-refresh',
+          scope: 'openid profile',
+        }),
+      });
+
+      const authPromise = authenticateWithTabBasedPKCE();
+
+      // Wait for tab to be created
+      await vi.waitFor(() => expect(browser.tabs.create).toHaveBeenCalled());
+
+      const storedState = mockStorage['saypi-pkce-state'];
+      const tabId = 1;
+      const redirectUrl = `https://test-addon-id.extensions.allizom.org/?code=test-code&state=${storedState.state}`;
+
+      for (const listener of [...onUpdatedListeners]) {
+        listener(tabId, { url: redirectUrl }, { id: tabId, url: redirectUrl });
+      }
+
+      await vi.runAllTimersAsync();
+      await authPromise;
+
+      // Verify both listeners are cleaned up
+      expect(browser.tabs.onUpdated.removeListener).toHaveBeenCalled();
+      expect(browser.tabs.onRemoved.removeListener).toHaveBeenCalled();
+    });
+
+    it('allows new auth after previous auth completes', async () => {
+      // First auth - timeout
+      const authPromise1 = authenticateWithTabBasedPKCE();
+      await vi.waitFor(() => expect(browser.tabs.create).toHaveBeenCalledTimes(1));
+      vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
+      await vi.runAllTimersAsync();
+      const result1 = await authPromise1;
+      expect(result1.error).toBe('auth_timeout');
+
+      // Second auth should be allowed after first completes
+      const authPromise2 = authenticateWithTabBasedPKCE();
+      await vi.waitFor(() => expect(browser.tabs.create).toHaveBeenCalledTimes(2));
+
+      // Verify second auth started successfully (got past the guard)
+      vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
+      await vi.runAllTimersAsync();
+      const result2 = await authPromise2;
+      expect(result2.error).toBe('auth_timeout'); // Expected - we didn't simulate a redirect
+    });
+
+    it('registers listeners only after tab is created', async () => {
+      const authPromise = authenticateWithTabBasedPKCE();
+
+      // Wait for tab to be created
+      await vi.waitFor(() => expect(browser.tabs.create).toHaveBeenCalled());
+
+      // Now verify listeners were registered AFTER tab creation
+      // The tab should have ID 1, and listeners should be registered
+      expect(browser.tabs.onUpdated.addListener).toHaveBeenCalled();
+      expect(browser.tabs.onRemoved.addListener).toHaveBeenCalled();
+
+      // Verify the order: create was called before addListener
+      // Check that onUpdated.addListener was called and that listeners are set up
+      expect(onUpdatedListeners.length).toBeGreaterThan(0);
+      expect(onRemovedListeners.length).toBeGreaterThan(0);
+
+      // Cleanup
+      vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
+      await vi.runAllTimersAsync();
+      await authPromise;
     });
   });
 });

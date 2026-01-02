@@ -49,6 +49,11 @@ const FIREFOX_REDIRECT_PATTERN = /\.extensions\.allizom\.org\//;
 const CHROME_REDIRECT_PATTERN = /\.chromiumapp\.org\//;
 
 /**
+ * Guard flag to prevent concurrent authentication attempts
+ */
+let authInProgress = false;
+
+/**
  * Get the redirect URI for tab-based PKCE flow
  * For Firefox, constructs the extensions.allizom.org URL
  */
@@ -159,6 +164,15 @@ async function exchangeCodeForTokens(
  * API is not available.
  */
 export async function authenticateWithTabBasedPKCE(): Promise<OAuthResult> {
+  // Prevent concurrent authentication attempts
+  if (authInProgress) {
+    return {
+      success: false,
+      error: 'auth_in_progress',
+      errorDescription: 'Authentication already in progress',
+    };
+  }
+
   if (!config.authServerUrl) {
     return {
       success: false,
@@ -167,31 +181,52 @@ export async function authenticateWithTabBasedPKCE(): Promise<OAuthResult> {
     };
   }
 
+  authInProgress = true;
+
   let authTabId: number | undefined;
   let tabListener: ((
     tabId: number,
     changeInfo: browser.Tabs.OnUpdatedChangeInfoType,
     tab: browser.Tabs.Tab
   ) => void) | undefined;
+  let removeListener: ((tabId: number) => void) | undefined;
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  let isCleanedUp = false;
 
-  const cleanup = async () => {
+  /**
+   * Cleanup function that removes all listeners and closes the auth tab.
+   * Uses a guard flag to prevent multiple cleanups.
+   * Synchronous listener removal happens immediately; tab removal is fire-and-forget.
+   */
+  const cleanup = () => {
+    if (isCleanedUp) return;
+    isCleanedUp = true;
+
+    // Synchronous cleanup - remove listeners immediately
     if (tabListener) {
       browser.tabs.onUpdated.removeListener(tabListener);
       tabListener = undefined;
+    }
+    if (removeListener) {
+      browser.tabs.onRemoved.removeListener(removeListener);
+      removeListener = undefined;
     }
     if (timeoutId) {
       clearTimeout(timeoutId);
       timeoutId = undefined;
     }
+
+    // Async cleanup - fire and forget (tab removal doesn't need to complete before we return)
     if (authTabId !== undefined) {
-      try {
-        await browser.tabs.remove(authTabId);
-      } catch {
-        // Tab may already be closed
-      }
+      const tabIdToClose = authTabId;
       authTabId = undefined;
+      browser.tabs.remove(tabIdToClose).catch(() => {
+        // Tab may already be closed - ignore errors
+      });
     }
+
+    // Clear auth in progress flag
+    authInProgress = false;
   };
 
   try {
@@ -215,12 +250,27 @@ export async function authenticateWithTabBasedPKCE(): Promise<OAuthResult> {
     // Build authorization URL
     const authUrl = buildAuthorizationUrl(codeChallenge, state, redirectUri);
 
+    // Open the auth tab FIRST so we have the tab ID before registering listeners
+    logger.debug('[TabBasedPKCE] Opening auth tab');
+    const tab = await browser.tabs.create({ url: authUrl, active: true });
+    authTabId = tab.id;
+
+    if (authTabId === undefined) {
+      cleanup();
+      await clearPKCEState();
+      return {
+        success: false,
+        error: 'tab_creation_failed',
+        errorDescription: 'Failed to create authentication tab',
+      };
+    }
+
     // Create a promise that resolves when we detect the redirect
     const authPromise = new Promise<OAuthResult>((resolve) => {
-      // Set up tab listener
+      // Set up tab listener for URL changes
       tabListener = (tabId, changeInfo, tab) => {
-        // Only watch our auth tab
-        if (tabId !== authTabId) return;
+        // Only watch our auth tab - guard against undefined authTabId
+        if (authTabId === undefined || tabId !== authTabId) return;
 
         // Check for URL changes
         if (changeInfo.url && isRedirectUrl(changeInfo.url)) {
@@ -301,7 +351,24 @@ export async function authenticateWithTabBasedPKCE(): Promise<OAuthResult> {
         }
       };
 
+      // Set up listener for tab removal (user closes tab directly)
+      removeListener = (tabId: number) => {
+        // Guard against undefined authTabId or already cleaned up
+        if (authTabId === undefined || tabId !== authTabId) return;
+
+        logger.debug('[TabBasedPKCE] Auth tab was closed by user');
+        cleanup();
+        clearPKCEState();
+        resolve({
+          success: false,
+          error: 'auth_cancelled',
+          errorDescription: 'Authentication tab was closed by user',
+        });
+      };
+
+      // Register listeners AFTER we have authTabId
       browser.tabs.onUpdated.addListener(tabListener);
+      browser.tabs.onRemoved.addListener(removeListener);
 
       // Set up timeout
       timeoutId = setTimeout(() => {
@@ -315,34 +382,9 @@ export async function authenticateWithTabBasedPKCE(): Promise<OAuthResult> {
       }, AUTH_TIMEOUT_MS);
     });
 
-    // Also listen for tab removal (user closes tab)
-    const removeListener = (tabId: number) => {
-      if (tabId === authTabId) {
-        browser.tabs.onRemoved.removeListener(removeListener);
-        cleanup();
-        clearPKCEState();
-      }
-    };
-    browser.tabs.onRemoved.addListener(removeListener);
-
-    // Open the auth tab
-    logger.debug('[TabBasedPKCE] Opening auth tab');
-    const tab = await browser.tabs.create({ url: authUrl, active: true });
-    authTabId = tab.id;
-
-    if (authTabId === undefined) {
-      await cleanup();
-      await clearPKCEState();
-      return {
-        success: false,
-        error: 'tab_creation_failed',
-        errorDescription: 'Failed to create authentication tab',
-      };
-    }
-
     return authPromise;
   } catch (error: any) {
-    await cleanup();
+    cleanup();
     await clearPKCEState();
 
     logger.error('[TabBasedPKCE] Authentication failed:', error);
@@ -370,4 +412,12 @@ export function shouldUseTabBasedPKCE(): boolean {
 
   // Identity API not available, use tab-based PKCE
   return true;
+}
+
+/**
+ * Reset auth state for testing purposes.
+ * @internal This is only exported for testing - do not use in production code.
+ */
+export function _resetAuthStateForTesting(): void {
+  authInProgress = false;
 }
