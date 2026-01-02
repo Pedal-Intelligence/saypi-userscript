@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
   isSafari,
   isFirefox,
+  isFirefoxAndroid,
+  isKiwiBrowser,
   isMobileDevice,
   addUserAgentFlags,
   addDeviceFlags,
@@ -61,6 +63,64 @@ describe("UserAgentModule", () => {
         configurable: true,
       });
       expect(isFirefox()).toBe(false);
+    });
+  });
+
+  describe("isFirefoxAndroid", () => {
+    it("should return true for Firefox on Android", () => {
+      Object.defineProperty(navigator, "userAgent", {
+        value:
+          "Mozilla/5.0 (Android 12; Mobile; rv:68.0) Gecko/68.0 Firefox/89.0",
+        configurable: true,
+      });
+      expect(isFirefoxAndroid()).toBe(true);
+    });
+
+    it("should return false for Firefox on desktop", () => {
+      Object.defineProperty(navigator, "userAgent", {
+        value:
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+        configurable: true,
+      });
+      expect(isFirefoxAndroid()).toBe(false);
+    });
+
+    it("should return false for Chrome on Android", () => {
+      Object.defineProperty(navigator, "userAgent", {
+        value:
+          "Mozilla/5.0 (Linux; Android 12; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36",
+        configurable: true,
+      });
+      expect(isFirefoxAndroid()).toBe(false);
+    });
+  });
+
+  describe("isKiwiBrowser", () => {
+    it("should return true for Kiwi Browser on Android", () => {
+      Object.defineProperty(navigator, "userAgent", {
+        value:
+          "Mozilla/5.0 (Linux; Android 12; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36 Kiwi",
+        configurable: true,
+      });
+      expect(isKiwiBrowser()).toBe(true);
+    });
+
+    it("should return false for regular Chrome on Android", () => {
+      Object.defineProperty(navigator, "userAgent", {
+        value:
+          "Mozilla/5.0 (Linux; Android 12; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36",
+        configurable: true,
+      });
+      expect(isKiwiBrowser()).toBe(false);
+    });
+
+    it("should return false for Chrome on desktop", () => {
+      Object.defineProperty(navigator, "userAgent", {
+        value:
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        configurable: true,
+      });
+      expect(isKiwiBrowser()).toBe(false);
     });
   });
 

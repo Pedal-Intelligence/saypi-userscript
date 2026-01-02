@@ -6,6 +6,21 @@ export function isFirefox(): boolean {
   return /Firefox/.test(navigator.userAgent);
 }
 
+/**
+ * Check if the browser is Firefox on Android
+ * Used for mobile-specific auth and UI handling
+ */
+export function isFirefoxAndroid(): boolean {
+  return isFirefox() && /Android/.test(navigator.userAgent);
+}
+
+/**
+ * Check if the browser is Kiwi Browser (Android Chromium with extension support)
+ */
+export function isKiwiBrowser(): boolean {
+  return /Kiwi/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
+}
+
 export function isMobileDevice(): boolean {
   const userAgent =
     typeof navigator !== "undefined" && typeof navigator.userAgent === "string"
@@ -125,11 +140,9 @@ export function getTTSCompatibilityIssue(chatbotType: string): {
 }
 
 export function addUserAgentFlags(): void {
-  const isFirefoxAndroid: boolean =
-    /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
   const element: HTMLElement = document.documentElement;
 
-  if (isFirefoxAndroid) {
+  if (isFirefoxAndroid()) {
     element.classList.add("firefox-android");
   }
 

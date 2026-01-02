@@ -13,7 +13,7 @@
 | Extension PKCE implementation | ✅ Done | `OAuthService.ts`, `PKCEManager.ts` |
 | Chrome redirect URI registered | ✅ Done | `chromiumapp.org` |
 | Sign-out race condition fix | ✅ Done | `JwtManager.ts` |
-| Firefox PKCE support | ⚠️ Partial | Falls back to cookie-based auth |
+| Firefox PKCE support | ✅ Done | Tab-based PKCE via `TabBasedPKCEAuth.ts` |
 | Refresh token rotation | ❓ Untested | Needs verification |
 
 ---
@@ -210,12 +210,16 @@ The server must whitelist these redirect URI patterns for `client_id=saypi-exten
 |-------------|--------------|--------|
 | Chrome (published) | `https://pepnjahikiccmajdphdcgeemmedjdgij.chromiumapp.org/` | ✅ Registered |
 | Chrome (development) | May vary - extension ID changes in dev mode | ⚠️ Not registered |
-| Firefox | `https://<addon-id>.extensions.allizom.org/` | ❌ Not registered |
+| Firefox | `https://gecko@saypi.ai.extensions.allizom.org/` | ⚠️ Needs registration |
 
-**Note**: Firefox supports `browser.identity.launchWebAuthFlow()` but the extension currently falls back to cookie-based authentication. Enabling Firefox PKCE would require:
-1. Registering the Firefox redirect URI on the server
-2. Testing that `hasIdentityAPI()` returns true on Firefox
-3. Verifying the flow works with Google/GitHub OAuth (known issues with some providers)
+**Firefox PKCE Implementation**: Firefox uses tab-based PKCE authentication via `TabBasedPKCEAuth.ts`:
+1. Opens authorization URL in a new browser tab
+2. Monitors tab URL changes via `browser.tabs.onUpdated`
+3. Detects redirect to `extensions.allizom.org`
+4. Extracts authorization code and exchanges for tokens
+5. Closes the auth tab
+
+**Server requirement**: Register the Firefox redirect URI to enable PKCE authentication.
 
 ### Testing the Fix
 

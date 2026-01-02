@@ -1,10 +1,12 @@
 /**
  * OAuthService - OAuth 2.1 + PKCE authentication flow for browser extensions
  *
- * Handles the complete OAuth authorization flow using browser.identity.launchWebAuthFlow
- * for Chrome and fallback to tab-based flow for Firefox.
+ * Handles the complete OAuth authorization flow:
+ * - Chrome/Kiwi: Uses browser.identity.launchWebAuthFlow with PKCE
+ * - Firefox: Uses tab-based PKCE flow with browser.tabs.onUpdated
  *
  * @see https://developer.chrome.com/docs/extensions/reference/identity/
+ * @see ./TabBasedPKCEAuth.ts for Firefox implementation
  */
 
 import { browser } from 'wxt/browser';
@@ -18,6 +20,10 @@ import {
   clearPKCEState,
   type PKCEState,
 } from './PKCEManager';
+import {
+  authenticateWithTabBasedPKCE,
+  shouldUseTabBasedPKCE,
+} from './TabBasedPKCEAuth';
 
 /**
  * OAuth client ID for the SayPi extension
@@ -351,23 +357,30 @@ async function authenticateWithTabFlow(): Promise<OAuthResult> {
 
 /**
  * Start the OAuth authentication flow
- * Uses identity API for Chrome, falls back to tab flow for Firefox
+ * Uses identity API for Chrome/Kiwi, tab-based PKCE for Firefox
  */
 export async function authenticate(): Promise<OAuthResult> {
   if (hasIdentityAPI()) {
     logger.debug('[OAuthService] Using identity API for authentication');
     return authenticateWithIdentityAPI();
-  } else {
-    logger.debug('[OAuthService] Falling back to tab-based authentication');
-    return authenticateWithTabFlow();
   }
+
+  if (shouldUseTabBasedPKCE()) {
+    logger.debug('[OAuthService] Using tab-based PKCE for authentication');
+    return authenticateWithTabBasedPKCE();
+  }
+
+  // Ultimate fallback to cookie-based flow (should rarely be needed)
+  logger.debug('[OAuthService] Falling back to cookie-based authentication');
+  return authenticateWithTabFlow();
 }
 
 /**
  * Check if PKCE authentication is supported on this browser
+ * Returns true for both identity API (Chrome) and tab-based PKCE (Firefox)
  */
 export function isPKCESupported(): boolean {
-  return hasIdentityAPI();
+  return hasIdentityAPI() || shouldUseTabBasedPKCE();
 }
 
 /**
