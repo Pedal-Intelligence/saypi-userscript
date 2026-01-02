@@ -1,5 +1,23 @@
 # OAuth 2.1 + PKCE Authentication Spec for SayPi Extension
 
+## Implementation Status
+
+| Item | Status | Notes |
+|------|--------|-------|
+| Authorization endpoint (`/api/oauth/authorize`) | ✅ Done | PR #67 |
+| Token endpoint (`/api/oauth/token`) | ✅ Done | PR #67 |
+| Refresh token endpoint | ✅ Done | PR #67 |
+| Double URL encoding fix | ✅ Done | PR #67 |
+| Social OAuth redirectTo preservation | ✅ Done | PRs #69, #70 |
+| Password login redirect | ✅ Done | PR #74 |
+| Extension PKCE implementation | ✅ Done | `OAuthService.ts`, `PKCEManager.ts` |
+| Chrome redirect URI registered | ✅ Done | `chromiumapp.org` |
+| Sign-out race condition fix | ✅ Done | `JwtManager.ts` |
+| Firefox PKCE support | ⚠️ Partial | Falls back to cookie-based auth |
+| Refresh token rotation | ❓ Untested | Needs verification |
+
+---
+
 ## Summary
 
 The SayPi browser extension needs OAuth 2.1 with PKCE (Proof Key for Code Exchange) support to securely authenticate users without storing secrets in client-side code.
@@ -35,11 +53,13 @@ Chrome (and other Chromium browsers) provides a special `identity.launchWebAuthF
 
 ### Current Problem
 
-When the extension calls `/api/oauth/authorize`, the server redirects to `/auth/login` because the user isn't authenticated. This is correct behavior, but there are two issues:
+> **Note:** All issues in this section have been resolved. Kept for historical reference.
 
-#### Issue 1: Double URL Encoding
+When the extension calls `/api/oauth/authorize`, the server redirects to `/auth/login` because the user isn't authenticated. This is correct behavior, but there were several issues that have since been fixed:
 
-The redirect URL currently looks like:
+#### Issue 1: Double URL Encoding ✅ FIXED (PR #67)
+
+The redirect URL previously looked like:
 ```
 /auth/login?redirect=https://www.saypi.ai/api/oauth/authorize?response_type=code%26client_id=saypi-extension%26redirect_uri=https%253A%252F%252Fxxx.chromiumapp.org%252F
 ```
@@ -52,7 +72,7 @@ Notice `https%253A%252F%252F` - this is **double-encoded**:
 
 **Fix**: When building the login redirect URL, URL-encode the entire `redirect` parameter value **once**, not twice. Most web frameworks handle this automatically if you use their URL builder utilities rather than manual string concatenation.
 
-#### Issue 2: Flow Must Complete to chromiumapp.org
+#### Issue 2: Flow Must Complete to chromiumapp.org ✅ FIXED (PR #67)
 
 After the user logs in at `/auth/login`, they must eventually be redirected to:
 ```
@@ -66,9 +86,9 @@ Chrome is watching for this specific redirect. When it sees it, it:
 
 If the flow ends anywhere else (e.g., stays on a "success" page), Chrome times out and reports failure.
 
-#### Issue 3: Social OAuth Callbacks Ignore redirectTo (CRITICAL)
+#### Issue 3: Social OAuth Callbacks Ignore redirectTo ✅ FIXED (PRs #69, #70)
 
-**Status**: Issues 1 and 2 were fixed in PR #67. This issue remains.
+**Status**: Fixed. Social OAuth now preserves `redirectTo` through the provider round-trip.
 
 When users click "Continue with Google" or "Continue with GitHub", the OAuth callback handlers in `packages/auth/lib/oauth.ts` **hardcode the redirect destination**:
 
@@ -121,6 +141,10 @@ return new Response(null, {
 ```
 
 **Note**: This affects ALL social OAuth providers (Google, GitHub, etc.) since they share the same handler factory in `packages/auth/lib/oauth.ts`.
+
+#### Issue 4: Password Login Redirect ✅ FIXED (PR #74)
+
+When users logged in with username/password via tRPC (`auth.loginWithPassword`), the redirect to `/api/oauth/authorize` resulted in a 404 error. The fix ensured proper redirect handling after password-based authentication.
 
 ### Required Server Flow
 
@@ -182,13 +206,16 @@ return new Response(null, {
 
 The server must whitelist these redirect URI patterns for `client_id=saypi-extension`:
 
-| Environment | Redirect URI |
-|-------------|--------------|
-| Chrome (published) | `https://pepnjahikiccmajdphdcgeemmedjdgij.chromiumapp.org/` |
-| Chrome (development) | May vary - extension ID changes in dev mode |
-| Firefox | `https://<addon-id>.extensions.allizom.org/` |
+| Environment | Redirect URI | Status |
+|-------------|--------------|--------|
+| Chrome (published) | `https://pepnjahikiccmajdphdcgeemmedjdgij.chromiumapp.org/` | ✅ Registered |
+| Chrome (development) | May vary - extension ID changes in dev mode | ⚠️ Not registered |
+| Firefox | `https://<addon-id>.extensions.allizom.org/` | ❌ Not registered |
 
-**Suggestion**: For development flexibility, consider allowing any `*.chromiumapp.org` redirect for non-production environments, or provide a way to register additional extension IDs.
+**Note**: Firefox supports `browser.identity.launchWebAuthFlow()` but the extension currently falls back to cookie-based authentication. Enabling Firefox PKCE would require:
+1. Registering the Firefox redirect URI on the server
+2. Testing that `hasIdentityAPI()` returns true on Firefox
+3. Verifying the flow works with Google/GitHub OAuth (known issues with some providers)
 
 ### Testing the Fix
 
@@ -332,14 +359,16 @@ For context, here's the flow from the extension's side:
 
 ## Timeline Considerations
 
-This work can proceed independently of the extension changes. The extension can continue using the current cookie-based auth until PKCE is ready, then switch over.
+**Completed milestones**:
+1. ✅ Add PKCE parameters to authorization flow (PR #67)
+2. ✅ Implement token endpoint with PKCE validation (PR #67)
+3. ✅ Add refresh token rotation (PR #67)
+4. ✅ Register Chrome extension redirect URI
+5. ✅ Extension team integrates and tests (Chrome)
 
-**Suggested milestones**:
-1. Add PKCE parameters to authorization flow
-2. Implement token endpoint with PKCE validation
-3. Add refresh token rotation
-4. Register extension redirect URIs
-5. Extension team integrates and tests
+**Remaining work**:
+- Register Firefox redirect URI (if Firefox PKCE support desired)
+- Verify refresh token rotation works correctly
 
 ## Questions for SaaS Team
 
