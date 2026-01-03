@@ -13,12 +13,12 @@ html body.pi {
   }
 
   /* Pi-specific button sizing for control panel */
-  /* Use 40x40 button containers to match Pi's native button sizing */
+  /* Use 36x36 button containers to match Pi's native button sizing (size-9) */
   #saypi-control-panel,
   .saypi-control-panel {
     .saypi-control-button.mini {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
     }
 
     /* Match Pi's native brown icon color */
@@ -30,12 +30,28 @@ html body.pi {
         stroke: rgb(107, 98, 85);
       }
     }
+
+    /* Hide outer circle ring on settings icon to match Pi's flat button style */
+    #saypi-settingsButton svg .outer-circle {
+      display: none;
+    }
+
+    /* Give settings button visible background to match enter button */
+    #saypi-settingsButton {
+      background-color: rgb(237, 225, 209); /* bg-cream-550 */
+      border-radius: 50%;
+    }
+
+    /* Consistent spacing between SayPi buttons */
+    #saypi-enter-button {
+      margin-right: 8px;
+    }
   }
 
   /* Enter focus mode button specific sizing */
   #saypi-enter-button {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
 
     svg {
       color: rgb(107, 98, 85);
@@ -153,15 +169,21 @@ html body.pi {
     align-self: center;
   }
 
-  /* Mobile-specific call button sizing for new chat pages */
+  /* Mobile-specific button sizing to match Pi's native buttons */
   @media (max-width: 768px) {
     #saypi-callButton {
-      /* Ensure button is visible and tappable on mobile */
-      min-width: 2.5rem;
-      min-height: 2.5rem;
-      width: 2.5rem;
-      height: 2.5rem;
+      /* Match Pi's native submit button size (size-9 = 36px = 2.25rem) */
+      min-width: 2.25rem;
+      min-height: 2.25rem;
+      width: 2.25rem;
+      height: 2.25rem;
       flex-shrink: 0; /* Prevent button from shrinking in flex container */
+    }
+
+    /* Ensure SayPi toolbar buttons have visible background to match native neighbors */
+    #saypi-enter-button,
+    #saypi-settingsButton {
+      background-color: rgb(237, 225, 209); /* bg-cream-550 */
     }
   }
 

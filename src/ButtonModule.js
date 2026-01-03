@@ -238,7 +238,7 @@ class ButtonModule {
   createMiniSettingsButton(container, position = 0) {
     const button = this.createIconButton({
       id: 'saypi-settingsButton',
-      label: getMessage("extensionSettings"),
+      label: getMessage("voiceSettings"),
       icon: settingsIconSVG,
       onClick: () => openSettings(),
       className: 'settings-button'

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" preserveAspectRatio="xMidYMid meet">
   <!-- Outer circle ring -->
-  <circle cx="384" cy="384" r="350" fill="none" stroke="currentColor" stroke-width="40"/>
+  <circle class="outer-circle" cx="384" cy="384" r="350" fill="none" stroke="currentColor" stroke-width="40"/>
   <!-- Settings sliders - 3 horizontal bars with knobs -->
   <g stroke="currentColor" stroke-width="30" stroke-linecap="round">
     <!-- Top slider -->
