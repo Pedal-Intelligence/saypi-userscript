@@ -220,56 +220,53 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
-    const actionSelectors = [
-      '[data-testid="new-chat-button"]',
-      '[data-testid="navigation-link-new-chat"]',
-      '[data-testid="create-new-chat-button"]',
-      '[aria-label="New chat"]',
-      'a[href="/new"]',
-      'a[href="/chat/new"]',
-    ];
+    // Claude's sidebar structure (Jan 2025):
+    // - "New chat" is in its own container above the scrollable area
+    // - "Chats, Projects, Artifacts, Code" are in a flex column inside the scrollable area
+    // We want to insert our button after "Code" in that menu container
 
-    const newChatButton = actionSelectors
-      .map((selector) => sidebar.querySelector(selector) as HTMLElement | null)
-      .find((element) => element !== null) as HTMLElement | null;
+    // Strategy: Find the container that has menu items like "Chats", "Projects", "Artifacts", "Code"
+    // These are direct children divs that contain anchor or button elements with those labels
+    const findMenuContainer = (): HTMLElement | null => {
+      // Look for a flex column container that has the navigation items
+      const candidates = Array.from(sidebar.querySelectorAll('div.flex.flex-col'));
 
-    const collectCandidateContainers = () => {
-      const candidates: HTMLElement[] = [];
-      if (newChatButton) {
-        let ancestor = newChatButton.parentElement as HTMLElement | null;
-        while (ancestor && ancestor !== sidebar) {
-          candidates.push(ancestor);
-          ancestor = ancestor.parentElement as HTMLElement | null;
+      for (const candidate of candidates) {
+        // Check if this container has children that look like menu items
+        const children = Array.from(candidate.children);
+        if (children.length < 3) continue;
+
+        // Look for recognizable menu items (Chats, Projects, Artifacts, Code)
+        const menuLabels = ['chats', 'projects', 'artifacts', 'code'];
+        const foundLabels = children.filter(child => {
+          const text = child.textContent?.toLowerCase().trim() || '';
+          return menuLabels.some(label => text === label);
+        });
+
+        // If we found at least 3 of the expected menu items, this is our container
+        if (foundLabels.length >= 3) {
+          return candidate as HTMLElement;
         }
       }
-      const allDivs = Array.from(sidebar.querySelectorAll('div')).map((div) => div as HTMLElement);
-      return [...candidates, ...allDivs];
+
+      return null;
     };
 
-    const menuContainer = collectCandidateContainers().find((candidate) => {
-      const actions = Array.from(candidate.querySelectorAll('a, button, div[role="button"]')).filter((action) => !action.closest('[data-testid="user-profile"]'));
-      return actions.length >= 3;
-    }) || null;
+    const menuContainer = findMenuContainer();
 
     if (!menuContainer) {
-      console.warn('[Claude] sidebar: Could not find menu container');
+      console.warn('[Claude] sidebar: Could not find menu container with navigation items');
       return null;
     }
 
-    let header: HTMLElement | null = menuContainer;
-    while (header && header.parentElement && header.parentElement !== sidebar) {
-      header = header.parentElement as HTMLElement;
-    }
-
-    if (!header || header.parentElement !== sidebar) {
-      console.warn('[Claude] sidebar: Could not find header element');
-      return null;
-    }
+    // Insert after "Code" which is typically the last item (position 4, 0-indexed)
+    // Count the actual children to determine insert position
+    const insertPosition = menuContainer.children.length;
 
     return {
       buttonContainer: menuContainer,
       buttonStyle: 'menu',
-      insertPosition: 3,
+      insertPosition: insertPosition,
     };
   }
 }
