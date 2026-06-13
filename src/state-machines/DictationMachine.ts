@@ -1008,7 +1008,118 @@ function updateTranscriptionsForManualEdit(
 }
 
 /**
- * Produce the final merged text for a target, preferring server-merged text when available.
+ * Merge a target's transcription fragments into a single string, using the
+ * shared TranscriptMergeService when it is ready and the local smart-join
+ * otherwise. (mergeService is initialised asynchronously, so both paths occur.)
+ */
+function mergeTargetTranscriptions(
+  transcriptions: Record<number, string>
+): string {
+  return mergeService
+    ? mergeService.mergeTranscriptsLocal(transcriptions)
+    : smartJoinTranscriptions(transcriptions);
+}
+
+/**
+ * Server-merge branch: the server has already combined some sequences into a
+ * single entry, so drop the now-redundant pre-merge sequences and merge the rest.
+ */
+function mergeServerCorrectedTranscriptions(
+  targetTranscriptions: Record<number, string>,
+  mergedSequences: number[]
+): string {
+  const remaining = { ...targetTranscriptions };
+  mergedSequences.forEach((seq) => {
+    delete remaining[seq];
+  });
+  return mergeTargetTranscriptions(remaining).trim();
+}
+
+/**
+ * Heuristics that indicate the target holds manually-edited content we should
+ * preserve, rather than regenerate purely from the transcriptions.
+ *
+ * `mergedAlreadyContainsInitial` is returned separately because it decides how a
+ * detected manual edit is resolved (return the merged text as-is vs. combine).
+ */
+function detectManualEdit(
+  initialText: string,
+  mergedTranscript: string,
+  targetTranscriptions: Record<number, string>,
+  isUsingStoredInitialText: boolean
+): { isManualEdit: boolean; mergedAlreadyContainsInitial: boolean } {
+  // The merged transcript already equals, or contains, the initial text.
+  const mergedAlreadyContainsInitial = Boolean(
+    initialText &&
+      (mergedTranscript === initialText ||
+        mergedTranscript.includes(initialText.trim()))
+  );
+
+  // The initial text is much longer than merging the transcriptions would
+  // explain — often manual edits or repeated content. (20% tolerance.)
+  const expectedApproximateLength = Object.values(targetTranscriptions).join(
+    " "
+  ).length;
+  const hasSignificantLengthDifference =
+    (initialText?.length || 0) > expectedApproximateLength * 1.2;
+
+  // Newlines usually come from manual edits — unless they came from stored
+  // pre-existing text (in which case they are not edits we need to preserve).
+  const hasNewlines =
+    Boolean(initialText?.includes("\n")) && !isUsingStoredInitialText;
+
+  // A single transcription that exactly equals the whole initial text (a manual
+  // edit that consolidated everything).
+  const singleTranscriptionMatches =
+    Object.keys(targetTranscriptions).length === 1 &&
+    Boolean(initialText) &&
+    Object.values(targetTranscriptions)[0] === initialText;
+
+  return {
+    isManualEdit:
+      mergedAlreadyContainsInitial ||
+      hasSignificantLengthDifference ||
+      hasNewlines ||
+      singleTranscriptionMatches,
+    mergedAlreadyContainsInitial,
+  };
+}
+
+/**
+ * Normal (non-manual-edit) path: strip any transcription fragments already
+ * present in the initial text, tidy whitespace, then append the merged
+ * transcript with a single separating space when needed.
+ */
+function appendTranscriptToInitialText(
+  initialText: string,
+  targetTranscriptions: Record<number, string>,
+  mergedTranscript: string
+): string {
+  let remainingInitial = initialText;
+  for (const fragment of Object.values(targetTranscriptions)) {
+    const escaped = fragment.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const regex = new RegExp(`\\s*${escaped}\\s*`, "g");
+    remainingInitial = remainingInitial.replace(regex, " ");
+  }
+
+  remainingInitial = remainingInitial
+    .replace(/[ \t]{2,}/g, " ") // collapse only spaces/tabs, keep newlines
+    .replace(/[ \t]+$/, ""); // trim trailing spaces/tabs but keep final newline
+
+  const normalisedMerged = mergedTranscript.trimStart();
+  const needsSpace =
+    remainingInitial !== "" &&
+    !remainingInitial.endsWith(" ") &&
+    !remainingInitial.endsWith("\n");
+  const combined =
+    (needsSpace ? remainingInitial + " " : remainingInitial) + normalisedMerged;
+  return combined.replace(/[ \t]{2,}/g, " ");
+}
+
+/**
+ * Produce the final merged text for a target, preferring server-merged text when
+ * available, then preserving manual edits, then falling back to a normal
+ * strip-and-append of the transcribed text.
  *
  * Exported for characterization tests (see DictationMachine-computeFinalText.spec.ts).
  */
@@ -1019,100 +1130,38 @@ export function computeFinalText(
   initialText: string = "",
   isUsingStoredInitialText: boolean = false
 ): string {
+  // 1. Prefer text the server has already merged.
   if (mergedSequences.length > 0) {
     console.debug("Using server-merged text directly.");
-
-    // Create a copy of target transcriptions, removing the merged sequences
-    // The server-merged content is already in targetTranscriptions at the correct sequence number
-    const workingTranscriptions = { ...targetTranscriptions };
-    
-    // Remove the sequences that were merged by the server
-    mergedSequences.forEach(seq => {
-      delete workingTranscriptions[seq];
-    });
-    
-    // Now merge all remaining transcriptions in sequence order using the same logic as local merge
-    const finalMergedText = mergeService
-      ? mergeService.mergeTranscriptsLocal(workingTranscriptions)
-      : smartJoinTranscriptions(workingTranscriptions);
-    
-    return finalMergedText.trim();
-  }
-  // Local merge
-  const mergedTranscript = mergeService
-    ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
-    : smartJoinTranscriptions(targetTranscriptions);
-
-  // Check if we're dealing with manually edited content that should be preserved
-  // First check: exact match or the merged transcript contains the initial text
-  const exactOrContainsMatch = initialText && (mergedTranscript === initialText || mergedTranscript.includes(initialText.trim()));
-  
-  // Second check: if initialText is much longer than expected from just merging transcriptions,
-  // it likely contains manual edits (especially newlines or repeated content)
-  const transcriptionCount = Object.keys(targetTranscriptions).length;
-  const expectedApproximateLength = Object.values(targetTranscriptions).join(' ').length;
-  const actualLength = initialText?.length || 0;
-  const hasSignificantLengthDifference = actualLength > expectedApproximateLength * 1.2; // 20% tolerance
-  
-  // Third check: contains newlines which are often from manual edits
-  // But exclude newlines that are from pre-existing text (not actual manual edits)
-  const hasNewlines = initialText?.includes('\n') && !isUsingStoredInitialText;
-  
-  // Fourth check: if there's only one transcription and it matches the entire initial text,
-  // this likely means a significant manual edit consolidated everything
-  const singleTranscriptionMatches = transcriptionCount === 1 && 
-    initialText && Object.values(targetTranscriptions)[0] === initialText;
-  
-  
-  
-  // If any of these conditions indicate manual edits, handle appropriately
-  if (exactOrContainsMatch || hasSignificantLengthDifference || hasNewlines || singleTranscriptionMatches) {
-    
-    
-    // If the merged transcript already contains the initial text, don't combine again
-    if (exactOrContainsMatch) {
-      
-      return mergedTranscript;
-    } else {
-      // For other manual edit cases, combine initial text with merged transcript
-      const combinedManualEditResult = smartJoinTwoTexts(initialText, mergedTranscript);
-      
-      return combinedManualEditResult;
-    }
+    return mergeServerCorrectedTranscriptions(
+      targetTranscriptions,
+      mergedSequences
+    );
   }
 
-  // Only proceed with regex stripping if we're confident this is not manually edited content
-  
-  
-  for (const mergedText of Object.values(targetTranscriptions)) {
-    const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-    const regex = new RegExp(`\\s*${escaped}\\s*`, "g");
-    const beforeReplace = initialText;
-    initialText = initialText.replace(regex, " ");
-    
-    
+  const mergedTranscript = mergeTargetTranscriptions(targetTranscriptions);
+
+  // 2. Preserve manually-edited content rather than regenerating it.
+  const { isManualEdit, mergedAlreadyContainsInitial } = detectManualEdit(
+    initialText,
+    mergedTranscript,
+    targetTranscriptions,
+    isUsingStoredInitialText
+  );
+  if (isManualEdit) {
+    // If the merged transcript already includes the initial text, don't combine
+    // again; otherwise join the manual edit with the merged transcript.
+    return mergedAlreadyContainsInitial
+      ? mergedTranscript
+      : smartJoinTwoTexts(initialText, mergedTranscript);
   }
-  
-  
 
-  // Tidy whitespace
-  const beforeWhitespaceTidy = initialText;
-  initialText = initialText
-    .replace(/[ \t]{2,}/g, " ")   // collapse only spaces/tabs, keep newlines
-    .replace(/[ \t]+$/, "");      // trim trailing spaces/tabs but keep final newline
-  
-  
-  
-  const normalisedMerged = mergedTranscript.trimStart();
-  
-
-  const needsSpace = initialText !== "" && !initialText.endsWith(" ") && !initialText.endsWith("\n");
-  const result = (needsSpace ? initialText + " " : initialText) + normalisedMerged;
-  const finalResult = result.replace(/[ \t]{2,}/g, " ");
-  
-  
-  
-  return finalResult;
+  // 3. Normal path: append the transcribed text to the initial text.
+  return appendTranscriptToInitialText(
+    initialText,
+    targetTranscriptions,
+    mergedTranscript
+  );
 }
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
