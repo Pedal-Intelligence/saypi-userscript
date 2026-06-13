@@ -213,8 +213,19 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       ) {
         const mutatedElement = mutation.target as Element;
 
-        this.findAndDecorateAssistantResponses(mutatedElement);
-        this.findAndDecorateUserPrompts(mutatedElement);
+        // Fire-and-forget: these run outside an awaited path, so a rejection
+        // here would be uncaught. Decoration (incl. TTS) must never crash the
+        // observer — log and move on.
+        this.findAndDecorateAssistantResponses(mutatedElement).catch((error) => {
+          logger.debug(
+            `Assistant response decoration failed on attribute change: ${error}`
+          );
+        });
+        this.findAndDecorateUserPrompts(mutatedElement).catch((error) => {
+          logger.debug(
+            `User prompt decoration failed on attribute change: ${error}`
+          );
+        });
       }
     }
   }
@@ -402,7 +413,19 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
           await message.decorateState(state);
         }
 
-        const speech = await this.streamSpeech(message);
+        let speech: StreamedSpeech | null = null;
+        try {
+          speech = await this.streamSpeech(message);
+        } catch (error) {
+          // A TTS failure (synthesis error for unauthenticated/over-quota users,
+          // or a voice-off race) must never abort message decoration or the
+          // surrounding observer cycle — fall through to the incomplete-speech
+          // state instead of rejecting (which would surface as an uncaught
+          // rejection and could derail prompt submission). See #268 / #241.
+          logger.debug(
+            `Speech unavailable for this message; continuing without it: ${error}`
+          );
+        }
         if (speech) {
           if (speech.utterance) {
             await message.decorateSpeech(speech.utterance);

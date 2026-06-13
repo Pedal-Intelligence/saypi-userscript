@@ -245,10 +245,14 @@ class SpeechSynthesisModule {
 
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice(chatbot);
-    if (!preferedVoice) {
-      throw new Error("No voice selected");
-    }
     const preferedLang = await this.userPreferences.getLanguage();
+    if (!preferedVoice) {
+      // Voice off, or the voice was cleared between the provider check and here
+      // (a race when toggling voice mid-response): degrade to a silent placeholder
+      // rather than throwing. The auto-TTS path must treat "no voice" as a no-op,
+      // not an uncaught rejection that aborts message decoration / submission.
+      return new SpeechPlaceholder(preferedLang, audioProviders.None);
+    }
     const uuid = generateUUID();
     const utterance = await this.audioStreamManager.createStream(
       uuid,
@@ -290,7 +294,10 @@ class SpeechSynthesisModule {
 
   speak(speech: SpeechUtterance, chatbot?: Chatbot): void {
     if (isPlaceholderUtterance(speech)) {
-      console.warn("Cannot speak a placeholder");
+      // Expected whenever voice is off (the auto-TTS path yields a placeholder):
+      // a no-op, not a warning. Debug-level so it doesn't spam the console
+      // on every voice-off turn. See #241.
+      console.debug("Skipping speak for placeholder utterance (voice off)");
       return;
     }
     if (isFailedUtterance(speech)) {
