@@ -15,6 +15,7 @@ import EventBus from "../events/EventBus";
 import { isMobileDevice } from "../UserAgentModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
+import { regenerateSpeech } from "./regenerateSpeech";
 import { MessageState } from "../tts/MessageHistoryModule";
 import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
@@ -463,27 +464,21 @@ abstract class AssistantResponse {
       }
     }
 
-    // add event listener to regenerate speech
-    regenButton.addEventListener("click", async () => {
-      regenButton.disabled = true;
-      const speechSynthesis = SpeechSynthesisModule.getInstance();
-      const speechHistory = SpeechHistoryModule.getInstance();
-      speechSynthesis
-        .createSpeech(this.text, false)
-        .then((utterance) => {
-          speechSynthesis.speak(utterance);
-          this.decorateSpeech(utterance);
-          const charge = BillingModule.getInstance().charge(
-            utterance,
-            this.text
-          );
-          this.decorateCost(charge);
-          const speech = new AssistantSpeech(utterance, charge);
-          speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
-          regenButton.remove();
-          this.safeRemoveClass("speech-incomplete");
-        });
-    });
+    // add event listener to regenerate speech (degrades gracefully on failure; #241/#268)
+    regenButton.addEventListener("click", () =>
+      regenerateSpeech(regenButton, this.text, (utterance) => {
+        const speechSynthesis = SpeechSynthesisModule.getInstance();
+        const speechHistory = SpeechHistoryModule.getInstance();
+        speechSynthesis.speak(utterance);
+        this.decorateSpeech(utterance);
+        const charge = BillingModule.getInstance().charge(utterance, this.text);
+        this.decorateCost(charge);
+        const speech = new AssistantSpeech(utterance, charge);
+        speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
+        regenButton.remove();
+        this.safeRemoveClass("speech-incomplete");
+      })
+    );
   }
 
   async decorateCost(charge: UtteranceCharge): Promise<void> {
@@ -804,27 +799,24 @@ abstract class MessageControls {
       }
     }
 
-    // add event listener to regenerate speech
-    regenButton.addEventListener("click", async () => {
-      regenButton.disabled = true;
-      const speechSynthesis = SpeechSynthesisModule.getInstance();
-      const speechHistory = SpeechHistoryModule.getInstance();
-      speechSynthesis
-        .createSpeech(this.message.text, false)
-        .then((utterance) => {
-          speechSynthesis.speak(utterance);
-          this.decorateSpeech(utterance);
-          const charge = BillingModule.getInstance().charge(
-            utterance,
-            this.message.text
-          );
-          this.decorateCost(charge);
-          const speech = new AssistantSpeech(utterance, charge);
-          speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
-          regenButton.remove();
-          this.safeRemoveClass("speech-incomplete");
-        });
-    });
+    // add event listener to regenerate speech (degrades gracefully on failure; #241/#268)
+    regenButton.addEventListener("click", () =>
+      regenerateSpeech(regenButton, this.message.text, (utterance) => {
+        const speechSynthesis = SpeechSynthesisModule.getInstance();
+        const speechHistory = SpeechHistoryModule.getInstance();
+        speechSynthesis.speak(utterance);
+        this.decorateSpeech(utterance);
+        const charge = BillingModule.getInstance().charge(
+          utterance,
+          this.message.text
+        );
+        this.decorateCost(charge);
+        const speech = new AssistantSpeech(utterance, charge);
+        speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
+        regenButton.remove();
+        this.safeRemoveClass("speech-incomplete");
+      })
+    );
   }
 
   /**
