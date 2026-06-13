@@ -72,6 +72,17 @@ describe("computeFinalText (characterization)", () => {
       );
       expect(result).toBe("a b");
     });
+
+    it("trims surrounding whitespace from the server-merged result", () => {
+      // Single remaining segment carries boundary whitespace; pins the .trim().
+      const result = computeFinalText(
+        { 1: "redundant", 2: "  spaced text  " },
+        [1],
+        "",
+        ""
+      );
+      expect(result).toBe("spaced text");
+    });
   });
 
   describe("manual-edit detection -> returns merged as-is (exactOrContainsMatch)", () => {
@@ -112,6 +123,31 @@ describe("computeFinalText (characterization)", () => {
       const result = computeFinalText({ 1: "buy milk" }, [], "", "Notes:\n", true);
       expect(result).toBe("Notes:\nbuy milk");
     });
+
+    // Discriminating pair: SAME input, the isUsingStoredInitialText toggle alone
+    // changes the OUTPUT — proving the newline-heuristic branch is actually
+    // wired to that flag (a refactor that mis-wires it would fail one of these).
+    it("newline heuristic ON: appends merged after the initial text without stripping (isUsingStoredInitialText=false)", () => {
+      const result = computeFinalText(
+        { 1: "hello", 2: "world" },
+        [],
+        "",
+        "hello\nworld",
+        false
+      );
+      expect(result).toBe("hello\nworld hello world");
+    });
+
+    it("newline heuristic OFF: normal path strips the already-present transcriptions (isUsingStoredInitialText=true)", () => {
+      const result = computeFinalText(
+        { 1: "hello", 2: "world" },
+        [],
+        "",
+        "hello\nworld",
+        true
+      );
+      expect(result).toBe("hello world");
+    });
   });
 
   describe("normal path (no manual edit): strip already-present transcriptions, then join", () => {
@@ -133,6 +169,14 @@ describe("computeFinalText (characterization)", () => {
         "Hello world"
       );
       expect(result).toBe("Hello world again");
+    });
+
+    it("trims trailing whitespace from the initial text before joining (no double space)", () => {
+      // initialText ends with a space; the tidy step strips it, then a single
+      // space is inserted before the merged text — pins the whitespace handling
+      // the insert-at-caret change is most likely to touch.
+      const result = computeFinalText({ 1: "there" }, [], "", "Hello ");
+      expect(result).toBe("Hello there");
     });
   });
 });
