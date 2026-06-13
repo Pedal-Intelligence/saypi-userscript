@@ -22,7 +22,7 @@ interface Segment {
     errorType?: string;
 }
 
-class CallButton {
+export class CallButton {
     private chatbot: Chatbot;
     private userPreferences: UserPreferenceModule;
     private sayPiActor: typeof StateMachineService.conversationActor;
@@ -526,54 +526,61 @@ class CallButton {
         }
     }
 
-    private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
+    private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean, stateKey: string) {
         const callButton = button || this.element;
         if (!callButton) return;
 
-        // 1. Clear ALL previous children from the button.
-        while (callButton.firstChild) {
-            callButton.removeChild(callButton.firstChild);
+        // Only rebuild the SVG when the rendered icon/state actually changes. The call
+        // button's state subscription re-invokes these renderers many times during a
+        // call (listening substates oscillate as the user speaks/pauses/transcribes),
+        // and a full teardown+rebuild destroys and recreates the SVG — including
+        // #progress-ring — wiping the countdown-arc animation before it can render
+        // (#203). Skipping redundant same-state rebuilds lets the ring (and its
+        // .active countdown) persist; genuine icon changes still rebuild.
+        const alreadyRendered =
+            !!callButton.querySelector("svg") && callButton.dataset.callState === stateKey;
+
+        if (!alreadyRendered) {
+            // 1. Clear ALL previous children from the button.
+            while (callButton.firstChild) {
+                callButton.removeChild(callButton.firstChild);
+            }
+
+            // 2. Create the new SVG element from the icon string.
+            const newSvgElement = createSVGElement(svgIconString);
+            if (!newSvgElement || !(newSvgElement instanceof SVGElement)) {
+                console.error("Failed to create SVG element from string or invalid type:", svgIconString);
+                callButton.textContent = label; // Fallback: just show the label as text
+                delete callButton.dataset.callState;
+                return;
+            }
+
+            // 3. Create the segments group (first child) that segments draw into.
+            //    Original background is left in place; updateButtonSegments manages it.
+            const segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            segmentsGroup.setAttribute('id', 'saypi-segments-group');
+            newSvgElement.insertBefore(segmentsGroup, newSvgElement.firstChild);
+
+            // 4. Append the complete new SVG element directly to the button.
+            callButton.appendChild(newSvgElement);
+            callButton.dataset.callState = stateKey;
         }
 
-        // 2. Create the new SVG element from the icon string.
-        const newSvgElement = createSVGElement(svgIconString);
-        if (!newSvgElement || !(newSvgElement instanceof SVGElement)) {
-            console.error("Failed to create SVG element from string or invalid type:", svgIconString);
-            callButton.textContent = label; // Fallback: just show the label as text
-            return;
-        }
-
-        // ChatGPT theming is now applied only for the inactive call state in callInactive()
-
-        // 3. Original background is NOT removed here anymore. It will be handled by updateButtonSegments.
-
-        // 4. Create the segments group that will live inside the new SVG element.
-        const segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        segmentsGroup.setAttribute('id', 'saypi-segments-group');
-
-        // 5. Insert segmentsGroup as the first child of the new SVG element.
-        newSvgElement.insertBefore(segmentsGroup, newSvgElement.firstChild);
-
-        // 6. Append the complete new SVG element directly to the button.
-        callButton.appendChild(newSvgElement);
-
-        // 7. Set attributes and event listeners on the button itself.
+        // 5. Set attributes and event listeners on the button itself. Idempotent, so
+        //    run on every call to keep the label/handler/active-state current even
+        //    when the SVG rebuild was skipped.
         const finalLabel = this.overrideLabelForHost(label, isActiveState, callButton);
         callButton.setAttribute("aria-label", finalLabel);
-        if (onClick) {
-            callButton.onclick = onClick;
-        } else {
-            callButton.onclick = null;
-        }
+        callButton.onclick = onClick || null;
         callButton.classList.toggle("active", isActiveState);
 
-        // 8. Update internal state.
+        // 6. Update internal state.
         this.callIsActive = isActiveState;
 
-        // 9. Now that the SVG structure is in the DOM, draw/update the segments into the segmentsGroup.
+        // 7. Draw/update the segments into the segmentsGroup (reuses the existing group).
         this.updateButtonSegments();
 
-        // 10. Handle glow animation (primarily managed by state machine subscription).
+        // 8. Handle glow animation (primarily managed by state machine subscription).
         if (!this.callIsActive) {
             AnimationModule.stopAnimation("glow");
             this.glowColorUpdater.updateGlowColor(0);
@@ -584,7 +591,8 @@ class CallButton {
         const label = getMessage("callStarting");
         this.updateCallButton(button, callStartingIconSVG, label, () =>
             this.sayPiActor.send({ type: "saypi:hangup" }), // Use object syntax
-            false // Not fully active yet
+            false, // Not fully active yet
+            "starting"
         );
         // Glow might start here or wait for listening state?
     }
@@ -593,7 +601,8 @@ class CallButton {
         const label = getMessage("callInProgress");
         this.updateCallButton(button, hangupIconSVG, label, () =>
              this.sayPiActor.send({ type: "saypi:hangup" }),
-             true
+             true,
+             "active"
         );
         
         // Apply ChatGPT theming specifically for the active hangup.svg icon
@@ -618,7 +627,7 @@ class CallButton {
             const label = getMessage("callInterruptible");
             this.updateCallButton(button, interruptIconSVG, label, () => {
                  this.sayPiActor.send({ type: "saypi:interrupt" });
-            }, true); // Active state
+            }, true, "interruptible"); // Active state
              // AnimationModule.startAnimation("glow"); // Ensure glow is on -- Handled by subscription
         } else {
             // If hands-free interrupt is ON, just show the regular hangup icon
@@ -635,7 +644,8 @@ class CallButton {
         const label = getMessage("callNotStarted", nickname);
         this.updateCallButton(button, callIconSVG, label, () =>
                 this.sayPiActor.send({ type: "saypi:call" }),
-                false
+                false,
+                "inactive"
         );
         
         // Apply ChatGPT theming specifically for the inactive call.svg icon
