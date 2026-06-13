@@ -221,9 +221,9 @@ class ClaudeChatbot extends AbstractChatbot {
 
   getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
     // Claude's sidebar groups "New chat" in its own container above the scrollable
-    // area, with the primary navigation (Chats, Projects, Artifacts, Code, ...) in a
-    // separate flex column. We append our voice-settings button after the last item
-    // in that navigation column.
+    // area, with the primary navigation (Chats, Projects, Artifacts, Customize, …)
+    // in a separate flex column. We append our voice-settings button after the last
+    // item in that navigation column.
     //
     // Claude restructures and *localizes* these labels frequently, so we identify the
     // column structurally (a flex column of short-labelled link/button rows) rather
@@ -231,25 +231,35 @@ class ClaudeChatbot extends AbstractChatbot {
     // preference signal to disambiguate when more than one column looks menu-like
     // (e.g. a recent-chats list); they are never required.
     const NAV_LABEL_MAX_LEN = 30;
-    const KNOWN_LABELS = ["chats", "projects", "artifacts", "code"];
+    // Representative current labels (verified on the live Claude sidebar
+    // 2026-06-13: Chats / Projects / Artifacts / Customize). Only a soft
+    // preference hint to disambiguate when several columns look menu-like;
+    // never required, so localized/relabelled sidebars still work.
+    const KNOWN_LABELS = ["chats", "projects", "artifacts", "customize", "code"];
 
-    // A nav item is a row wrapping a link/button with a short, non-empty label.
-    // Recent-chats rows carry long free-text titles and are excluded by the length cap.
-    const isNavItem = (child: Element): boolean => {
+    // The visible label of a row's link/button control, whitespace-collapsed.
+    // Measured on the control (not the whole row, which may carry icons/badges
+    // whose text would otherwise inflate the length or defeat label matching).
+    const controlLabel = (child: Element): string | null => {
       const control = child.matches("a, button")
         ? child
         : child.querySelector("a, button");
-      if (!control) return false;
-      // Measure the control's own label (not the whole row, which may carry badges)
-      // and collapse whitespace so layout indentation cannot inflate the length.
-      const text = (control.textContent ?? "").replace(/\s+/g, " ").trim();
-      return text.length > 0 && text.length <= NAV_LABEL_MAX_LEN;
+      if (!control) return null;
+      return (control.textContent ?? "").replace(/\s+/g, " ").trim();
+    };
+
+    // A nav item is a row whose control has a short, non-empty label.
+    // Recent-chats rows carry long free-text titles and are excluded by the cap.
+    const isNavItem = (child: Element): boolean => {
+      const label = controlLabel(child);
+      return !!label && label.length <= NAV_LABEL_MAX_LEN;
     };
 
     const knownLabelCount = (container: Element): number =>
-      Array.from(container.children).filter((child) =>
-        KNOWN_LABELS.includes((child.textContent ?? "").toLowerCase().trim())
-      ).length;
+      Array.from(container.children).filter((child) => {
+        const label = controlLabel(child);
+        return label != null && KNOWN_LABELS.includes(label.toLowerCase());
+      }).length;
 
     const navColumns = (
       Array.from(sidebar.querySelectorAll("div.flex.flex-col")) as HTMLElement[]

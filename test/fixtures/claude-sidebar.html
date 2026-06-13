@@ -1,0 +1,38 @@
+<!--
+  Recorded contract fixture for ClaudeChatbot.getSidebarConfig().
+
+  Distilled from the LIVE Claude.ai sidebar (https://claude.ai/new) captured
+  2026-06-13. Real class strings and nav labels are preserved; the chat-history
+  / profile sections and SVG icons are elided (kept PII-free and minimal).
+
+  The structure that matters: the primary navigation menu
+  (div.flex.flex-col.px-2.gap-px — Chats / Projects / Artifacts / Customize) is
+  nested inside an outer scrollable flex column that ALSO qualifies as menu-like.
+  On the live DOM this produced 2 candidate columns; detection must prefer the
+  innermost one and append after the last item. The pre-#274 exact-English-label
+  matcher returned null on this real DOM (it expected "Code", not "Customize"),
+  which is the regression PR #274 fixed and this fixture guards against.
+
+  data-region markers are test-only; production code never reads them.
+-->
+<aside>
+  <nav aria-label="Sidebar">
+    <div class="px-2 py-2">
+      <a data-testid="new-chat-button" href="#">New chat</a>
+    </div>
+    <div class="flex flex-col flex-grow align-center overflow-hidden min-h-0" data-region="outer">
+      <div class="flex flex-col px-2 gap-px" data-region="menu">
+        <div class="group"><a href="#">Chats</a></div>
+        <div class="group"><a href="#">Projects</a></div>
+        <div class="group"><a href="#">Artifacts</a></div>
+        <div class="group"><a href="#">Customize</a></div>
+      </div>
+      <!-- These two siblings are intentional: together with the inner menu they
+           give the outer column 3+ nav items, so it ALSO qualifies as a
+           candidate. That is what exercises the innermost-column preference —
+           do not remove them or the contract test becomes vacuous. -->
+      <div class="group"><a href="#">Recents</a></div>
+      <div class="group"><a href="#">Settings</a></div>
+    </div>
+  </nav>
+</aside>
