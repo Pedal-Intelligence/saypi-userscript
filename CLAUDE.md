@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
-- `npm run dev` - WXT dev server with live reload for Chromium targets (runs manifest update first)
+- `npm run dev` - WXT dev server (Chrome/Edge MV3) with live reload (`predev` runs env validation + ONNX copy first)
 - `npm run dev:firefox` - Firefox MV2 dev session (`wxt --browser firefox --mv2`; opens a temporary private profile)
-- `npm run build` - Production build (validates locale files, copies ONNX files, updates manifest)
+- `npm run build` - Production build via `wxt build` (`prebuild` validates env + i18n and copies ONNX; WXT generates the manifest)
 - `npm run build:firefox` - Build and package for Firefox
 - `npm test` - Run all tests (Jest + Vitest)
 - `npm run test:jest` - Run Jest tests only
 - `npm run test:vitest` - Run Vitest tests only  
 - `npm run test:vitest:watch` - Run Vitest in watch mode
 - `npm run copy-onnx` - Copy ONNX model files from dependencies
-- `npm run start` - Start development server
+- `npm run start` - Static file server (`node server.js`) for `public/` assets; not the WXT dev server (use `npm run dev`)
 - `npm run validate:env` - Validate local `.env` files (runs automatically before dev/build)
 
 ### Environment Setup
@@ -25,7 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture Overview
 
 ### Extension Type
-This is a Chrome/Firefox extension (manifest v3) that enhances voice interactions with AI chatbots (Pi.ai and Claude.ai).
+This is a browser extension built with **WXT** that enhances voice interactions with AI chatbots (Pi.ai, Claude.ai, ChatGPT). It targets Chrome/Edge (Manifest V3) and Firefox (Manifest V2).
 
 ### Browser Compatibility
 
@@ -44,9 +44,12 @@ For detailed browser and feature compatibility across different chatbot sites, s
 ### Key Components
 
 #### Entry Points
-- **src/saypi.index.js** - Main content script entry point that bootstraps the extension
-- **src/svc/background.ts** - Service worker handling extension lifecycle, auth, and message routing
-- **src/offscreen/** - Offscreen documents for audio processing under strict CSP
+WXT discovers entry points in **`entrypoints/`**; each is a thin shim that imports the real logic from `src/`.
+- **entrypoints/saypi.content.ts → src/saypi.index.js** - Main content script that bootstraps the extension on chatbot sites
+- **entrypoints/saypi-universal.content.ts** - Content script for universal dictation on all other sites
+- **entrypoints/background.ts → src/svc/background.ts** - Service worker handling extension lifecycle, auth, and message routing
+- **entrypoints/offscreen/ → src/offscreen/** - Single offscreen document for audio/VAD processing under strict CSP (Chrome/Edge only)
+- **entrypoints/settings/** - Extension settings page UI (shared styles/helpers in `src/popup/`)
 
 #### Core Systems
 
@@ -56,9 +59,9 @@ For detailed browser and feature compatibility across different chatbot sites, s
    - `Claude.ts`, `Pi.ts` - Chatbot-specific implementations with DOM selectors and UI integration
 
 2. **Audio Pipeline** (`src/audio/`)
-   - `AudioModule.js` - Main audio coordination and state management
+   - `AudioModule.js` - Main audio coordination and state management (interprets the audio XState actors)
    - `OffscreenAudioBridge.js` - Communication bridge between content script and offscreen audio processing
-   - `AudioInputMachine.ts`, `AudioOutputMachine.ts` - State machines for audio input/output flow
+   - **State machines** live in `src/state-machines/` (not `src/audio/`): `AudioInputMachine.ts`, `AudioOutputMachine.ts`, `AudioRetryMachine.ts`, plus `ConversationMachine.ts`, `DictationMachine.ts`, and others
    - **Dictation transcription**: Uses dual-phase approach (live streaming + refinement) - see [doc/DUAL_PHASE_TRANSCRIPTION.md](doc/DUAL_PHASE_TRANSCRIPTION.md)
 
 3. **Voice Activity Detection** (`src/vad/`)
@@ -68,7 +71,7 @@ For detailed browser and feature compatibility across different chatbot sites, s
 
 4. **Text-to-Speech** (`src/tts/`)
    - `TextToSpeechService.ts` - Core TTS management
-   - `ChatHistoryManager.ts` - Manages TTS for chat messages
+   - `ChatHistoryManager.ts` (exports `ChatHistorySpeechManager`) - Manages TTS for chat messages
    - `VoiceMenuUIManager.ts` - Voice selection UI components
 
 5. **DOM Management** (`src/dom/`)
@@ -98,41 +101,21 @@ For detailed browser and feature compatibility across different chatbot sites, s
 
 ### Build System
 
-- **Webpack** bundles TypeScript/JavaScript with multiple entry points
-- **Environment-specific configs** injected via webpack DefinePlugin
-- **Asset copying** for ONNX models, WASM files, and extension resources
-- **Minification enabled** in production builds to meet Firefox AMO 5MB file limit
-- **Code splitting** separates vendor libraries and enables on-demand loading
+- **WXT** (Vite/Rollup under the hood) builds the extension — there is **no Webpack**. `wxt build` produces the per-target output; `wxt --browser chrome` runs the dev server. Config: `wxt.config.ts`.
+- **Entry points** are defined in `entrypoints/`; the **manifest is generated** by WXT from `wxt.config.ts`, with per-target permissions (Chrome adds `offscreen`/`audio`/`identity`; Firefox MV2 omits `offscreen`).
+- **Environment values** are injected via WXT/`import.meta.env`, validated by `scripts/validate-env.js` (runs before dev/build).
+- **Asset copying** for ONNX models and VAD WASM (`npm run copy-onnx`) lands in `public/` (WXT's static `publicDir`) and is copied verbatim.
+- **Code splitting / minification** are handled by Vite/Rollup; minification keeps non-binary files under Firefox AMO's 5MB limit.
 
 #### Build Output
 
-The webpack build produces the following files in `/public`:
+`wxt build` emits to **`.output/<target>/`** (git-ignored) — e.g. `.output/chrome-mv3/` (MV3) and `.output/firefox-mv2/` (MV2). Each contains the generated `manifest.json`, `background.js`, `content-scripts/` (`saypi.js`, `saypi-universal.js`), hashed `chunks/`, and the HTML pages (`offscreen.html`, `settings.html`, `permissions.html`). Store-submission packaging (zipping the per-target `.output/` dir) is part of the founder-run release step.
 
-**Core bundles (8 files):**
-- `saypi.user.js` (450KB) - Main content script entry point
-- `background.js` (45KB) - Service worker
-- `common.bundle.js` (63KB) - Shared code across entry points
-- `vendor-onnx.bundle.js` (534KB) - ONNX runtime for ML inference
-- `vendor-xstate.bundle.js` (63KB) - XState state machine library
-- `vendor-vad.bundle.js` (18KB) - Voice Activity Detection library
-- `vendor-rxjs.bundle.js` (10KB) - RxJS reactive programming
-- `vendors.bundle.js` (29KB) - Other vendor libraries
+> `public/` is the static-asset **source** dir (ONNX/WASM/icons), **not** build output. To inspect actual artifacts, run a build and list `.output/`. Never hand-edit `.output/`, `dist/`, `.wxt/`, or generated files in `public/`.
 
-**Dynamic chunks (loaded on-demand):**
-- `793.js` (131KB) - AIChatModule (loads for Pi.ai, Claude.ai, ChatGPT)
-- `239.js` (33KB) - Supporting modules
-- `208.js`, `301.js`, `411.js`, `763.js` (126B each) - Tiny async chunks
-
-**Other resources:**
-- `lucide.min.js` (362KB) - Icon library for popup UI
-- `vad.worklet.bundle.min.js` (2.6KB) - Audio worklet processor
-- Offscreen scripts: `audio_handler.js`, `media_coordinator.js`, `media_offscreen.js`, `vad_handler.js`
-
-**Binary assets (not counted toward AMO 5MB limit):**
-- 4 WASM files (37MB total) - See [src/vad/README.md](src/vad/README.md) for why all 4 are required
-- 3 ONNX models (5MB total) - Silero VAD models for speech detection
-
-**Total package:** ~50MB (JavaScript: 1.8MB, well under Firefox AMO's 5MB non-binary file limit)
+**Binary assets (not counted toward AMO's 5MB non-binary limit):**
+- 4 WASM files - See [src/vad/README.md](src/vad/README.md) for why all 4 are required
+- 3 ONNX models - Silero VAD models for speech detection
 
 ### Testing
 

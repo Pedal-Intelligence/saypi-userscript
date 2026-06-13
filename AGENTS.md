@@ -1,10 +1,54 @@
 # Repository Guidelines
 
+## Autonomous Engineering Mandate
+
+Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered product**: Claude Code agents run the full engineering loop under standing authorization from the founder (Ross Cadogan), the same operating model proven on saypi-api and saypi-saas. This section is the constitution for those sessions; the original bootstrap brief is `doc/autonomous-bootstrap.md`. It **complements** — does not replace — the Testing, Commit/PR, and Code-Review rules below.
+
+**Purpose.** Keep the extension improving for its users at founder-level quality and attention to detail — this repo *is* the product the customer touches. Velocity comes from tooling and discipline, never from lowering the bar; here the tooling that must be built first is the **testability net** (see Testability Investment).
+
+**Standing authorization (proceed without asking):**
+- Explore the codebase; bring `AGENTS.md`/`CLAUDE.md` to verified reality; remove dead cruft coherently.
+- Build the testability layers and their CI wiring — *additive* test/CI changes are explicitly yours to make.
+- Triage the backlog with adversarially-verified evidence; file issues per the Issue Authoring Standard.
+- Fix issues via fail-first TDD (see Testing Guidelines) in **isolated git worktrees**; open small, blast-radius-scoped PRs with full provenance (narrative why/what/verification, `Fixes #N`, Claude Code attribution).
+- Review every PR with independent subagent reviewers before merge (multi-lens for the high-blast-radius domains below). GitHub disallows self-approval, so post verdicts as PR comments.
+- Merge when gates pass; keep persistent operational memory across sessions.
+
+**Merge gate (default):** CI green (`npm test` — Jest **and** Vitest) **plus** a reviewer-subagent verdict on the PR. No flake exceptions until a specific chronic flake is documented in an issue with its exact signature.
+
+**High-blast-radius changes — multi-lens adversarial review + founder sign-off before merge:**
+- Auth / JWT (`src/JwtManager.ts`, OAuth/PKCE in `src/auth/`).
+- Request-contract changes with saypi-api that *require the server (saypi-api/saypi-saas) to also change* (new/changed fields/headers the server must parse, origin/CORS, auth). Backward-compatible *adoption* of a contract the server already supports is normal-gate.
+- MV2/MV3 manifest, permissions, or content-script injection scope (`wxt.config.ts`).
+
+**Hard guardrails (defense-in-depth):**
+- All changes via PR. Never push to `main`, force-push shared branches, or touch branches/issues/PRs that aren't yours.
+- Begin every commit/push command with `[ "$(git rev-parse --abbrev-ref HEAD)" = "<expected-branch>" ] || exit 1` in the same shell invocation. After `gh pr merge`, confirm `gh pr view --json state` is `MERGED`.
+- Never hand-edit generated artifacts: `.output/`, `dist/`, `public/` build output, `.wxt/`. Fix the generator or env input instead.
+- **Credentials (permanent boundary):** never read, copy, load, or echo `.env.production` or any secret; never run `npm run env:pull` against production. Copy only non-production env files into worktrees; never commit them.
+- Gate-weakening (removing/skipping/`.only` tests, relaxing CI triggers/required checks) and any edit to manifest generation, permissions, signing, or store-submission plumbing require founder sign-off.
+
+**Release is founder-only.** **Merging to `main` does NOT reach users.** Production artifacts come from `npm run build` / `build:firefox` and are submitted to the web stores (Chrome Web Store, Firefox AMO) by the founder — store-review-gated and effectively irreversible once users auto-update. Agents may run `npm run build*` *locally for verification only* and stage a release-ready changelog/checklist, but must **never** produce/submit a signed store artifact or load `.env.production` without explicit founder authorization. A bad release is higher, slower-to-reverse customer impact than a server deploy — treat it with more caution.
+
+**Testability Investment (the heart of the mandate).** Real behavior lives in third-party DOMs across two browsers and two manifest versions, so full cross-browser E2E is the *last* mile, not the first. Build toward it in layers, each paying off immediately: (1) extract unit-testable core logic out of DOM/Chrome-API coupling (lean on the XState machines in `src/state-machines/`; `@xstate/test` is a dependency); (2) contract-test the `src/chatbots/` platform adapters with **recorded real-DOM fixtures**; (3) headless E2E against a *local mock* chat page wired into CI (WXT ships `wxt/testing` `fakeBrowser`, purpose-built for this layer and not yet wired in); (4) reserve real-site E2E (Claude-in-Chrome) for periodic spot-checks, not a per-PR gate.
+
+**Escalate to the founder only for:** product/UX taste calls (what/whether to build), credentials/resources you lack, **store releases**, contract changes that require the server side to change, gate-weakening or release-machinery edits, irreversible actions, or anything risking customer trust. Otherwise proceed. End every session with a handoff: shipped / in-flight / waiting-on-human / built-but-unreleased.
+
+### Issue Authoring Standard
+- **Problem:** one-sentence summary of what's wrong.
+- **Scope:** which surfaces/flows are affected (and what's explicitly out of scope).
+- **Reproduction / verification:** precise, deterministic steps; expected vs actual.
+- **Acceptance criteria:** verifiable end states; avoid prescribing implementation.
+- **Notes/Hypotheses (optional):** clearly labelled as non-binding.
+
+Keep issues factual; exclude speculative root-cause or solution ideas from the body.
+
 ## Project Structure & Module Organization
-- `src/` TypeScript/ESM source. Entry: `src/saypi.index.js`; background/offscreen in `src/svc/` and `src/offscreen/`; UI in `src/popup/`, visuals in `src/styles/`, chatbot integrations in `src/chatbots/`.
-- `public/` Webpack output (e.g., `saypi.user.js`, `offscreen/*.js`, `permissions/*`). Do not edit generated files.
-- `test/` Tests mirror `src/`. Vitest: `*.spec.ts`; Jest: `*.test.js`. Common setup in `test/vitest.setup.js` and `test/jest.setup.js`.
-- `_locales/` i18n bundles; `scripts/` build helpers; `doc/` reference; `manifest.json` extension metadata.
+- `entrypoints/` WXT entry layer. `background.ts`, `saypi.content.ts`, and `saypi-universal.content.ts` are thin shims that import logic from `src/`; `entrypoints/offscreen/` and `entrypoints/settings/` (a substantial multi-file UI) hold their own entry-specific code; `entrypoints/permissions/` is a permissions-request page.
+- `src/` TypeScript/ESM source. Content-script bootstrapper: `src/saypi.index.js` (imported by `entrypoints/saypi.content.ts`); background/offscreen logic in `src/svc/` and `src/offscreen/`; shared settings styles/helpers in `src/popup/`; visuals in `src/styles/`; XState machines in `src/state-machines/`; chatbot integrations in `src/chatbots/`.
+- `.output/` WXT build output (`.output/chrome-mv3/`, `.output/firefox-mv2/`) — generated, git-ignored, never hand-edited. `public/` holds static assets copied verbatim by WXT (ONNX/WASM/icons), not build artifacts.
+- `test/` Tests mirror `src/` and `entrypoints/` (e.g. `test/settings/` ↔ `entrypoints/settings/`). Vitest: `*.spec.ts`; Jest: `*.test.js` only. Common setup in `test/vitest.setup.js` and `test/jest.setup.js`.
+- `_locales/` i18n bundles; `scripts/` build helpers; `doc/` reference. The manifest is generated by WXT from `wxt.config.ts` (the root `manifest.json` is legacy/unused by the WXT build).
 
 ## Build, Test, and Development Commands
 - `npm run dev` — WXT dev server for Chrome/Edge (MV3) with live reload; runs `predev` first.
@@ -60,8 +104,8 @@ When fixing bugs, follow this strict protocol:
 - PRs: clear description, linked issues, screenshots/GIFs for UI, passing tests, and updated docs/i18n when applicable.
 
 ## Security & Configuration Tips
-- Never commit secrets. Create local `.env` / `.env.production` from the templates (`.env.example`, `.env.production.example`) and fill in values such as `API_SERVER_URL`, `AUTH_SERVER_URL`.
-- `webpack` generates `src/popup/popup-config.js` from env — don’t edit it manually.
+- Never commit secrets. Create local `.env` / `.env.production` from the templates (`.env.example`, `.env.production.example`) and fill in values such as `API_SERVER_URL`, `AUTH_SERVER_URL`. (A 1Password flow exists via `npm run env:pull`; never run it against production.)
+- Env values reach the bundle via WXT/`import.meta.env`, validated by `scripts/validate-env.js` (run automatically before dev/build). There is no generated `popup-config.js`.
 - For HTTPS dev, set `CERT_DIR` with `localhost.pem` and `localhost-key.pem`.
 
 ## Assistant/Agent Docs
