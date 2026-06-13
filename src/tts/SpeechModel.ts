@@ -72,12 +72,25 @@ const audioProviders = {
   // function to get the provider from the text to speech engine name
   retrieveProviderByEngine: (powered_by: string): AudioProvider => {
     switch (powered_by) {
+      // OpenAI value-tier voices are synthesised and streamed by api.saypi.ai
+      // using the same ?voice_id= stream contract as ElevenLabs, so they are
+      // SayPi-served from the client's perspective (issue #215/#92 — the
+      // released extension previously threw on powered_by="OpenAI").
+      case "OpenAI":
       case "ElevenLabs":
         return audioProviders.SayPi;
       case "inflection.ai":
         return audioProviders.Pi;
       default:
-        throw new Error(`Provider powered by ${powered_by} not found.`);
+        // Every provider the API can serve streams from the SayPi domain. An
+        // unrecognised powered_by must NOT crash voice selection the way
+        // "OpenAI" did before this fix (#215/#92): treat any future API-added
+        // provider as SayPi-served and warn, rather than throwing into the
+        // synchronous setVoice / notifyAudioVoiceSelection call paths.
+        console.warn(
+          `Unrecognised TTS provider "${powered_by}"; treating as SayPi-served.`
+        );
+        return audioProviders.SayPi;
     }
   },
   retreiveProviderByVoice: (
