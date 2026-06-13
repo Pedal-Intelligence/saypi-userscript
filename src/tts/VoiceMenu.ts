@@ -10,6 +10,7 @@ import getMessage from "../i18n";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { audioProviders, SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
+import { getJwtManagerSync } from "../JwtManager";
 
 
 export abstract class VoiceSelector {
@@ -46,6 +47,17 @@ export abstract class VoiceSelector {
         this.addVoicesToSelector(voiceSelector as HTMLElement);
       }
     });
+  }
+
+  /**
+   * Text-to-speech via Say, Pi requires authentication. When the user is signed
+   * out AND there are no voices to offer (the /voices request returns [] on a
+   * 401), the selector should present as unavailable / sign-in-required.
+   * Providers that don't require Say, Pi auth (e.g. Pi.ai's own voices) still
+   * return voices, so this stays false there — they must not be disabled.
+   */
+  protected ttsRequiresSignIn(noVoicesAvailable: boolean): boolean {
+    return noVoicesAvailable && !getJwtManagerSync().isAuthenticated();
   }
 
   // Voice selection management

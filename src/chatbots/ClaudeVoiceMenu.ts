@@ -87,7 +87,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   protected createVoiceButton(
-    voice: SpeechSynthesisVoiceRemote | null
+    voice: SpeechSynthesisVoiceRemote | null,
+    requiresSignIn: boolean = false
   ): HTMLButtonElement {
     const expandButton = document.createElement("button");
     expandButton.classList.add(...this.getButtonClasses());
@@ -154,6 +155,20 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "h-3",
       "ml-1.5"
     );
+
+    if (requiresSignIn) {
+      // Signed out and no Say, Pi voices available: present the selector as
+      // unavailable (greyed via .saypi-voice-unavailable in voices.scss) while
+      // keeping it a real, clickable button so the menu's sign-in item stays
+      // reachable. The accessible name states the action — no aria-disabled,
+      // because the control IS actionable (an aria-disabled-but-clickable button
+      // would hide the sign-in path from assistive tech). Auto-clears on auth
+      // change: the base VoiceSelector re-renders the selector from scratch on
+      // saypi:auth:status-changed.
+      expandButton.classList.add("saypi-voice-unavailable");
+      expandButton.setAttribute("aria-label", getMessage("signInForTTS"));
+      expandButton.setAttribute("title", getMessage("signInForTTS"));
+    }
 
     expandButton.addEventListener("click", () => {
       this.toggleMenu();
@@ -716,15 +731,18 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Comprehensive cleanup to prevent duplicates
     this.cleanupExistingElements(voiceSelector);
 
+    // Check if we have any voices available besides "Voice off"
+    const noVoicesAvailable = voices.length === 0;
+
     // Recreate the menu button and content from scratch
-    this.menuButton = this.createVoiceButton(currentSelectedVoice);
+    this.menuButton = this.createVoiceButton(
+      currentSelectedVoice,
+      this.ttsRequiresSignIn(noVoicesAvailable)
+    );
     voiceSelector.appendChild(this.menuButton);
 
     this.menuContent = this.createVoiceMenu();
     voiceSelector.appendChild(this.menuContent);
-
-    // Check if we have any voices available besides "Voice off"
-    const noVoicesAvailable = voices.length === 0;
 
     // Add "Voice off" option with appropriate messaging
     const voiceOffItem = this.createMenuItem(null, noVoicesAvailable);
