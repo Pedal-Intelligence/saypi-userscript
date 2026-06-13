@@ -276,6 +276,36 @@ describe("ChatHistoryMessageObserver", () => {
       );
       expect(observations.length).toBeGreaterThan(0);
     });
+
+    it("still shows the incomplete-speech indicator when a selected (SayPi) voice fails to synthesize (#268)", async () => {
+      const chatbot = new PiAIChatbot();
+      const observer = new FailingTtsObserver(
+        chatHistoryElement,
+        assistantResponseSelector,
+        speechSynthesisModule,
+        chatbot
+      );
+
+      // A voice IS selected (provider resolves to SayPi) but synthesis fails:
+      // the user must still get the incomplete-speech / regenerate affordance,
+      // not silence. Spy on decorateIncompleteSpeech so we don't execute its
+      // real body (which reaches the global UserPreferenceModule singleton).
+      vi.spyOn(speechSynthesisModule, "getActiveAudioProvider").mockResolvedValue(
+        audioProviders.SayPi
+      );
+      const incompleteSpy = vi
+        .spyOn(AssistantResponse.prototype, "decorateIncompleteSpeech")
+        .mockResolvedValue(undefined);
+
+      const assistantMessage = createAssistantMessage("Hello from the assistant");
+      chatHistoryElement.appendChild(assistantMessage);
+
+      const observations = await observer.findAndDecorateAssistantResponses(
+        chatHistoryElement
+      );
+      expect(observations.length).toBeGreaterThan(0);
+      expect(incompleteSpy).toHaveBeenCalled();
+    });
   });
 
   describe("findAssistantResponse", () => {
