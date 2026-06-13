@@ -8,14 +8,17 @@ const transcriptMergeService = new TranscriptMergeService(
 );
 
 describe("TranscriptMergeService.sortTranscripts", () => {
-  it("orders segments by ascending numeric key", () => {
+  it("orders segments by ascending numeric (not lexicographic) key", () => {
+    // Multi-digit keys so this genuinely exercises the numeric comparator:
+    // a string sort would order ["1","10","2"] and fail this assertion. Sequence
+    // numbers routinely exceed 9 in long sessions, so numeric order is load-bearing.
     const transcripts: Record<number, string> = {
-      3: "third",
-      1: "first",
+      10: "tenth",
       2: "second",
+      1: "first",
     };
     const sorted = transcriptMergeService.sortTranscripts(transcripts);
-    expect(sorted).toEqual(["first", "second", "third"]);
+    expect(sorted).toEqual(["first", "second", "tenth"]);
   });
 
   it("preserves each segment's whitespace verbatim (does not trim)", () => {
