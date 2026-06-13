@@ -1,5 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { JSDOM } from "jsdom";
+import { readFileSync } from "node:fs";
 
 vi.mock("../../src/dom/MessageElements", () => {
   class AssistantResponse {}
@@ -174,5 +175,57 @@ describe("Claude sidebar integration (GH-250/GH-252)", () => {
 
     const config = chatbot.getSidebarConfig(sidebar);
     expect(config).toBeNull();
+  });
+});
+
+describe("Claude sidebar — recorded live-DOM contract (closes #273)", () => {
+  let chatbot: InstanceType<typeof ClaudeChatbot>;
+
+  beforeEach(() => {
+    chatbot = new ClaudeChatbot();
+  });
+
+  // Snapshot distilled from the live Claude.ai sidebar captured 2026-06-13.
+  const liveHtml = readFileSync(
+    new URL("../fixtures/claude-sidebar.html", import.meta.url),
+    "utf-8"
+  );
+
+  it("finds the real nav menu (Chats/Projects/Artifacts/Customize) and appends after it", () => {
+    const sidebar = sidebarFrom(liveHtml, chatbot);
+    expect(sidebar).not.toBeNull();
+
+    const config = chatbot.getSidebarConfig(sidebar);
+    expect(config).not.toBeNull();
+    expect(config?.buttonStyle).toBe("menu");
+    // The live menu is nested in an outer scrollable column that also qualifies;
+    // innermost-preference must select the real menu, not the wrapper.
+    expect(config?.buttonContainer.getAttribute("data-region")).toBe("menu");
+    expect(config?.buttonContainer.children.length).toBe(4);
+    expect(config?.insertPosition).toBe(4);
+    // Assert on each row's control label (robust to future badge/icon siblings).
+    const labels = Array.from(config!.buttonContainer.children).map((c) =>
+      c.querySelector("a, button")?.textContent?.trim()
+    );
+    expect(labels).toEqual(["Chats", "Projects", "Artifacts", "Customize"]);
+    // The pre-#274 exact-English-label matcher (which expected "Code") returned
+    // null on this real DOM — verified live; this fixture guards the regression.
+  });
+
+  it("prefers the known-label nav menu over a preceding recents column even when nav rows carry count badges", () => {
+    // Hardening for the live finding that the known-label tie-break must read the
+    // control's label, not the whole row: nav rows here wrap a count badge OUTSIDE
+    // the link, so each row's textContent ("Chats3") is not an exact label. A
+    // recents column of short titles sits FIRST in document order, so document
+    // order alone would pick it — only a working known-label tie-break selects
+    // the real menu.
+    const sidebar = sidebarFrom(
+      `<aside><nav aria-label="Sidebar"><div class="flex flex-col gap-1" data-region="recents"><div class="group"><a href="#">VAD Bug</a></div><div class="group"><a href="#">Auth Flow</a></div><div class="group"><a href="#">CORS Fix</a></div></div><div class="flex flex-col gap-1" data-region="menu"><div class="group"><a href="#">Chats</a><span class="badge">3</span></div><div class="group"><a href="#">Projects</a><span class="badge">1</span></div><div class="group"><a href="#">Artifacts</a><span class="badge">7</span></div></div></nav></aside>`,
+      chatbot
+    );
+
+    const config = chatbot.getSidebarConfig(sidebar);
+    expect(config).not.toBeNull();
+    expect(config?.buttonContainer.getAttribute("data-region")).toBe("menu");
   });
 });
