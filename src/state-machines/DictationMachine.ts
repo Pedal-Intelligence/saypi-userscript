@@ -1009,8 +1009,10 @@ function updateTranscriptionsForManualEdit(
 
 /**
  * Produce the final merged text for a target, preferring server-merged text when available.
+ *
+ * Exported for characterization tests (see DictationMachine-computeFinalText.spec.ts).
  */
-function computeFinalText(
+export function computeFinalText(
   targetTranscriptions: Record<number, string>,
   mergedSequences: number[],
   serverText: string,
