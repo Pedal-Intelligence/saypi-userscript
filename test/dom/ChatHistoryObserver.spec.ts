@@ -10,6 +10,7 @@ import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { timeoutCalc } from "../tts/InputStream.spec";
 import { AssistantResponse } from "../../src/dom/MessageElements";
 import {
+  audioProviders,
   SayPiSpeech,
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
@@ -234,6 +235,46 @@ describe("ChatHistoryMessageObserver", () => {
           assistantResponseSelector
         );
       expect(withoutJustifyEnd.found).toBe(true); // should match without "justify-end"
+    });
+  });
+
+  describe("resilience to TTS failures (#268 / #241)", () => {
+    // Minimal concrete observer whose streamSpeech rejects, simulating a TTS
+    // synthesis failure (e.g. an unauthenticated user) or a voice-off race.
+    class FailingTtsObserver extends ChatHistoryMessageObserver {
+      protected streamSpeech(): Promise<never> {
+        return Promise.reject(new Error("Failed to synthesize speech"));
+      }
+      protected streamState(): Promise<null> {
+        return Promise.resolve(null);
+      }
+    }
+
+    it("does not propagate a TTS failure out of findAndDecorateAssistantResponses (no uncaught rejection, decoration continues)", async () => {
+      const chatbot = new PiAIChatbot();
+      const observer = new FailingTtsObserver(
+        chatHistoryElement,
+        assistantResponseSelector,
+        speechSynthesisModule,
+        chatbot
+      );
+
+      // Keep the test focused on the catch: a non-SayPi provider skips the
+      // incomplete-speech decoration branch (which reaches the real
+      // UserPreferenceModule singleton, unrelated to this behavior).
+      vi.spyOn(speechSynthesisModule, "getActiveAudioProvider").mockResolvedValue(
+        audioProviders.None
+      );
+
+      const assistantMessage = createAssistantMessage("Hello from the assistant");
+      chatHistoryElement.appendChild(assistantMessage);
+
+      // Must resolve (not reject) despite streamSpeech throwing, and still have
+      // processed/decorated the assistant message so the observer cycle continues.
+      const observations = await observer.findAndDecorateAssistantResponses(
+        chatHistoryElement
+      );
+      expect(observations.length).toBeGreaterThan(0);
     });
   });
 

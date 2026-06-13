@@ -6,7 +6,7 @@ import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { BillingModule } from "../../src/billing/BillingModule";
-import { audioProviders } from "../../src/tts/SpeechModel";
+import { audioProviders, isPlaceholderUtterance } from "../../src/tts/SpeechModel";
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
@@ -157,6 +157,20 @@ describe("SpeechSynthesisModule", () => {
 
     expect(first).toBe(second);
     expect(audioStreamManagerMock.createStream).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns a silent placeholder instead of throwing when no voice is selected (voice off)", async () => {
+    // Voice off (getVoice resolves null) must be a no-op for the auto-TTS path,
+    // not an uncaught "No voice selected" throw that aborts message decoration.
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+
+    const utterance = await speechSynthesisModule.createSpeechStream(
+      { getID: () => "claude" } as any,
+      "message-voiceoff"
+    );
+
+    expect(isPlaceholderUtterance(utterance)).toBe(true);
+    expect(audioStreamManagerMock.createStream).not.toHaveBeenCalled();
   });
 
   it("keeps native audio for chatbots without a Say Pi voice selection", async () => {
