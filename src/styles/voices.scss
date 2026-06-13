@@ -1,3 +1,11 @@
+// Signed-out state (#268): the in-chat voice selector is greyed to signal that
+// TTS requires sign-in, but stays clickable (opens the menu's sign-in item).
+// Kept dimmed on hover too, overriding the host page's hover:opacity utilities.
+.saypi-voice-unavailable,
+.saypi-voice-unavailable:hover {
+  opacity: 0.6 !important;
+}
+
 #saypi-voice-menu .saypi-voice-button {
   display: none;
 }

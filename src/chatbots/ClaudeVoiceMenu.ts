@@ -158,13 +158,16 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     if (requiresSignIn) {
       // Signed out and no Say, Pi voices available: present the selector as
-      // unavailable (greyed, with a sign-in hint) while keeping it clickable so
-      // the menu's sign-in item stays reachable. Auto-clears on auth change via
-      // the base VoiceSelector auth handler, which re-renders the selector.
+      // unavailable (greyed via .saypi-voice-unavailable in voices.scss) while
+      // keeping it a real, clickable button so the menu's sign-in item stays
+      // reachable. The accessible name states the action — no aria-disabled,
+      // because the control IS actionable (an aria-disabled-but-clickable button
+      // would hide the sign-in path from assistive tech). Auto-clears on auth
+      // change: the base VoiceSelector re-renders the selector from scratch on
+      // saypi:auth:status-changed.
       expandButton.classList.add("saypi-voice-unavailable");
-      expandButton.setAttribute("aria-disabled", "true");
+      expandButton.setAttribute("aria-label", getMessage("signInForTTS"));
       expandButton.setAttribute("title", getMessage("signInForTTS"));
-      expandButton.style.opacity = "0.6";
     }
 
     expandButton.addEventListener("click", () => {

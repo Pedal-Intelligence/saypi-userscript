@@ -24,6 +24,7 @@ vi.mock("../../src/JwtManager", () => ({
 }));
 
 import { VoiceSelector } from "../../src/tts/VoiceMenu";
+import { ClaudeVoiceMenu } from "../../src/chatbots/ClaudeVoiceMenu";
 
 // Minimal concrete selector to exercise base-class logic.
 class TestVoiceSelector extends VoiceSelector {
@@ -57,5 +58,36 @@ describe("VoiceSelector.ttsRequiresSignIn", () => {
   it("does NOT require sign-in when authenticated, even before voices have loaded", () => {
     isAuthenticatedMock.mockReturnValue(true);
     expect((selector as any).ttsRequiresSignIn(true)).toBe(false);
+  });
+});
+
+describe("ClaudeVoiceMenu voice selector availability (#268)", () => {
+  // Bypass the heavy constructor (initializeVoiceSelector); createVoiceButton
+  // only needs prototype methods (getButtonClasses, toggleMenu).
+  function makeMenu(): any {
+    const menu = Object.create(ClaudeVoiceMenu.prototype);
+    menu.toggleMenu = vi.fn();
+    return menu;
+  }
+
+  it("greys the selector and names it for sign-in, but keeps it a clickable (NOT aria-disabled) button", () => {
+    const menu = makeMenu();
+    const button: HTMLButtonElement = menu.createVoiceButton(null, true);
+
+    expect(button.classList.contains("saypi-voice-unavailable")).toBe(true);
+    expect(button.getAttribute("aria-label")).toBeTruthy();
+    // a real, actionable control — not announced as disabled (would hide sign-in)
+    expect(button.getAttribute("aria-disabled")).toBeNull();
+    button.click();
+    expect(menu.toggleMenu).toHaveBeenCalledTimes(1); // sign-in path stays reachable
+  });
+
+  it("renders a normal selector with no unavailable treatment when TTS is available (e.g. signed in, or Pi)", () => {
+    const menu = makeMenu();
+    const button: HTMLButtonElement = menu.createVoiceButton(null, false);
+
+    expect(button.classList.contains("saypi-voice-unavailable")).toBe(false);
+    expect(button.getAttribute("aria-disabled")).toBeNull();
+    expect(button.getAttribute("aria-label")).toBeNull();
   });
 });
