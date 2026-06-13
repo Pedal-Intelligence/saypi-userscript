@@ -220,53 +220,67 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
-    // Claude's sidebar structure (Jan 2025):
-    // - "New chat" is in its own container above the scrollable area
-    // - "Chats, Projects, Artifacts, Code" are in a flex column inside the scrollable area
-    // We want to insert our button after "Code" in that menu container
+    // Claude's sidebar groups "New chat" in its own container above the scrollable
+    // area, with the primary navigation (Chats, Projects, Artifacts, Code, ...) in a
+    // separate flex column. We append our voice-settings button after the last item
+    // in that navigation column.
+    //
+    // Claude restructures and *localizes* these labels frequently, so we identify the
+    // column structurally (a flex column of short-labelled link/button rows) rather
+    // than by hard-coded English label text. Known English labels are used only as a
+    // preference signal to disambiguate when more than one column looks menu-like
+    // (e.g. a recent-chats list); they are never required.
+    const NAV_LABEL_MAX_LEN = 30;
+    const KNOWN_LABELS = ["chats", "projects", "artifacts", "code"];
 
-    // Strategy: Find the container that has menu items like "Chats", "Projects", "Artifacts", "Code"
-    // These are direct children divs that contain anchor or button elements with those labels
-    const findMenuContainer = (): HTMLElement | null => {
-      // Look for a flex column container that has the navigation items
-      const candidates = Array.from(sidebar.querySelectorAll('div.flex.flex-col'));
-
-      for (const candidate of candidates) {
-        // Check if this container has children that look like menu items
-        const children = Array.from(candidate.children);
-        if (children.length < 3) continue;
-
-        // Look for recognizable menu items (Chats, Projects, Artifacts, Code)
-        const menuLabels = ['chats', 'projects', 'artifacts', 'code'];
-        const foundLabels = children.filter(child => {
-          const text = child.textContent?.toLowerCase().trim() || '';
-          return menuLabels.some(label => text === label);
-        });
-
-        // If we found at least 3 of the expected menu items, this is our container
-        if (foundLabels.length >= 3) {
-          return candidate as HTMLElement;
-        }
-      }
-
-      return null;
+    // A nav item is a row wrapping a link/button with a short, non-empty label.
+    // Recent-chats rows carry long free-text titles and are excluded by the length cap.
+    const isNavItem = (child: Element): boolean => {
+      const control = child.matches("a, button")
+        ? child
+        : child.querySelector("a, button");
+      if (!control) return false;
+      // Measure the control's own label (not the whole row, which may carry badges)
+      // and collapse whitespace so layout indentation cannot inflate the length.
+      const text = (control.textContent ?? "").replace(/\s+/g, " ").trim();
+      return text.length > 0 && text.length <= NAV_LABEL_MAX_LEN;
     };
 
-    const menuContainer = findMenuContainer();
+    const knownLabelCount = (container: Element): number =>
+      Array.from(container.children).filter((child) =>
+        KNOWN_LABELS.includes((child.textContent ?? "").toLowerCase().trim())
+      ).length;
 
-    if (!menuContainer) {
-      console.warn('[Claude] sidebar: Could not find menu container with navigation items');
+    const navColumns = (
+      Array.from(sidebar.querySelectorAll("div.flex.flex-col")) as HTMLElement[]
+    ).filter((column) => Array.from(column.children).filter(isNavItem).length >= 3);
+
+    // Claude nests the nav column inside outer flex columns that can themselves look
+    // menu-like; keep only the innermost qualifying columns so the button lands among
+    // the nav items rather than as a sibling of the whole column.
+    const candidates = navColumns.filter(
+      (column) => !navColumns.some((other) => other !== column && column.contains(other))
+    );
+
+    if (candidates.length === 0) {
+      console.warn(
+        "[Claude] sidebar: Could not find menu container with navigation items"
+      );
       return null;
     }
 
-    // Insert after "Code" which is typically the last item (position 4, 0-indexed)
-    // Count the actual children to determine insert position
-    const insertPosition = menuContainer.children.length;
+    // Prefer the column with the most recognised labels; otherwise keep document
+    // order (the primary nav sits above any recent-chats list). Sort is stable, so
+    // ties preserve the first-in-document candidate.
+    const menuContainer = candidates
+      .slice()
+      .sort((a, b) => knownLabelCount(b) - knownLabelCount(a))[0];
 
     return {
       buttonContainer: menuContainer,
-      buttonStyle: 'menu',
-      insertPosition: insertPosition,
+      buttonStyle: "menu",
+      // Append after the last existing nav item (#272: "after Code").
+      insertPosition: menuContainer.children.length,
     };
   }
 }
