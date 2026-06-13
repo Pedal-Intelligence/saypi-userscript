@@ -60,17 +60,33 @@ describe("computeFinalText (characterization)", () => {
         "unused-server-text",
         "any initial text"
       );
-      expect(result).toBe("the merged text");
+      // #178: pre-existing text (initialText) is now preserved before the server-merged
+      // text instead of being discarded. Previously this returned "the merged text".
+      expect(result).toBe("any initial text the merged text");
     });
 
-    it("ignores initialText and serverText entirely in the server-merge branch", () => {
+    it("preserves initialText (and still ignores serverText) in the server-merge branch", () => {
       const result = computeFinalText(
         { 1: "a", 2: "b", 3: "a b" },
         [1, 2],
         "serverText-ignored",
-        "initial-ignored"
+        "initial-kept"
       );
-      expect(result).toBe("a b");
+      // #178: initialText is preserved before the merged text; serverText stays unused.
+      // Previously this returned "a b" (initialText dropped).
+      expect(result).toBe("initial-kept a b");
+    });
+
+    it("does not duplicate initialText already contained in the server-merged text", () => {
+      // Guards the double-inclusion case: when initialText was re-read from a field
+      // that already held the dictation, it must not be prepended again.
+      const result = computeFinalText(
+        { 1: "redundant", 2: "hello there world" },
+        [1],
+        "",
+        "there world"
+      );
+      expect(result).toBe("hello there world");
     });
 
     it("trims surrounding whitespace from the server-merged result", () => {

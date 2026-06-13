@@ -110,10 +110,22 @@ interface AudioSegment {
   refined?: boolean;  // Tracks if segment was included in a refinement (for O(n) incremental refinement)
 }
 
+/**
+ * Caret/selection offsets captured from an input/textarea at dictation start, so
+ * transcribed text can be inserted at that position rather than appended at the end
+ * (#178). For a collapsed caret, start === end. A non-collapsed range means the user
+ * had text selected; that range is replaced by the dictation.
+ */
+interface CaretRange {
+  start: number;
+  end: number;
+}
+
 interface DictationContext {
   transcriptions: Record<number, string>; // Global transcriptions for backwards compatibility
   transcriptionsByTarget: Record<string, Record<number, string>>; // Transcriptions grouped by target element ID
   initialTextByTarget: Record<string, string>; // Pre-existing text in each target when dictation started
+  caretRangeByTarget: Record<string, CaretRange>; // Caret/selection offset in each target when dictation started (#178; input/textarea only)
   isTranscribing: boolean;
   userIsSpeaking: boolean;
   timeUserStoppedSpeaking: number;
@@ -217,6 +229,72 @@ function smartJoinTwoTexts(firstText: string, secondText: string): string {
     // Add space if neither condition is met
     return firstText + " " + secondText;
   }
+}
+
+/**
+ * Capture the caret/selection offsets of an input/textarea so transcribed text can
+ * later be inserted at that position rather than appended at the end (#178).
+ *
+ * Returns undefined for contenteditable and other elements — insert-at-caret there
+ * is a follow-up; those targets continue to receive text appended at the end.
+ */
+function captureCaretRange(element?: HTMLElement): CaretRange | undefined {
+  if (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+  ) {
+    try {
+      const start = element.selectionStart;
+      const end = element.selectionEnd;
+      if (start === null || end === null) return undefined;
+      return { start, end };
+    } catch (_) {
+      // selectionStart/End throw for input types that don't expose a selection
+      // (e.g. number, email); treat as "no caret captured".
+      return undefined;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Compose the final field text while honoring the caret captured at dictation start
+ * (#178). The initial text is split at the caret into `before` and `after`; the
+ * dictated text is composed after `before` via `compose`, then `after` is re-attached.
+ *
+ * Returns the composed text and the caret offset to restore (the position just after
+ * the newly inserted text). When there is no caret to honor (`caretRange` undefined,
+ * e.g. contenteditable), it composes against the full initial text and returns no
+ * caret offset — preserving the previous append-at-end behavior.
+ *
+ * Note the regression-safety property: when the caret sits at the end of the initial
+ * text (`after === ""`), the result is identical to composing against the full
+ * initial text, so existing end-of-field behavior is unchanged.
+ */
+function composeFinalTextAtCaret(
+  initialText: string,
+  caretRange: CaretRange | undefined,
+  compose: (before: string) => string
+): { text: string; caretOffset?: number } {
+  if (!caretRange) {
+    return { text: compose(initialText) };
+  }
+
+  const len = initialText.length;
+  const start = Math.max(0, Math.min(caretRange.start, len));
+  const end = Math.max(start, Math.min(caretRange.end, len));
+  const before = initialText.slice(0, start);
+  const after = initialText.slice(end);
+
+  const composed = compose(before);
+  if (after === "") {
+    return { text: composed, caretOffset: composed.length };
+  }
+
+  // smartJoinTwoTexts appends `after` verbatim (with at most a single separating
+  // space before it), so the caret lands exactly where `after` begins.
+  const text = smartJoinTwoTexts(composed, after);
+  return { text, caretOffset: text.length - after.length };
 }
 
 function smartJoinTranscriptions(transcriptions: Record<number, string>): string {
@@ -438,11 +516,17 @@ function handleRefinementComplete(
   context.transcriptions[refinementKey] = combinedRefinement;
   context.transcriptionTargets[refinementKey] = targetElement;
 
-  // Calculate final text (initial + accumulated refinement)
+  // Calculate final text, inserting the refined dictation at the caret captured at
+  // dictation start (#178) rather than appending it at the end of the field.
   const initialText = context.initialTextByTarget[targetId] || "";
-  const finalText = smartJoinTwoTexts(initialText, combinedRefinement);
+  const caretRange = context.caretRangeByTarget[targetId];
+  const { text: finalText, caretOffset } = composeFinalTextAtCaret(
+    initialText,
+    caretRange,
+    (before) => smartJoinTwoTexts(before, combinedRefinement)
+  );
 
-  setTextInTarget(finalText, targetElement, true); // Replace all content
+  setTextInTarget(finalText, targetElement, true, caretOffset); // Replace all content
 
   // Update accumulated text if this is the current target
   if (targetElement === context.targetElement) {
@@ -735,7 +819,7 @@ function positionCursorAtEnd(element: HTMLElement): void {
 const textInsertionManager = TextInsertionManager.getInstance();
 
 // Helper function to set text in a specific target element
-function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false) {
+function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false, caretOffset?: number) {
   const target = targetElement || getTargetElement();
   if (!target) return;
 
@@ -759,8 +843,8 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
   }
 
   // Get the appropriate strategy for this target element using the shared TextInsertionManager
-  const success = textInsertionManager.insertText(target, text, replaceAll);
-  
+  const success = textInsertionManager.insertText(target, text, replaceAll, caretOffset);
+
   if (success) {
     
     // Check what actually ended up in the target after insertion
@@ -780,6 +864,15 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     // Fallback: directly set value/textContent if no strategy is available
     if ((target as any).value !== undefined) {
       (target as any).value = text;
+      // Honor the requested caret offset for input/textarea (#178).
+      if (typeof caretOffset === "number" && typeof (target as any).setSelectionRange === "function") {
+        try {
+          const pos = Math.max(0, Math.min(caretOffset, ((target as any).value || "").length));
+          (target as any).setSelectionRange(pos, pos);
+        } catch (_) {
+          /* setSelectionRange unsupported for this input type; ignore */
+        }
+      }
     } else if ((target as any).textContent !== undefined) {
       (target as any).textContent = text;
     }
@@ -1133,10 +1226,23 @@ export function computeFinalText(
   // 1. Prefer text the server has already merged.
   if (mergedSequences.length > 0) {
     console.debug("Using server-merged text directly.");
-    return mergeServerCorrectedTranscriptions(
+    const serverMerged = mergeServerCorrectedTranscriptions(
       targetTranscriptions,
       mergedSequences
     );
+    // Preserve any pre-existing text (#178): when inserting at a caret, initialText
+    // is the slice *before* the caret and must not be discarded. Guard against
+    // double-inclusion when the merged text already contains it (e.g. initialText was
+    // re-read from a field that already held earlier dictation). Empty initialText
+    // falls through to the merged text unchanged via smartJoinTwoTexts.
+    const alreadyContainsInitial = Boolean(
+      initialText &&
+        (serverMerged === initialText ||
+          serverMerged.includes(initialText.trim()))
+    );
+    return alreadyContainsInitial
+      ? serverMerged
+      : smartJoinTwoTexts(initialText, serverMerged);
   }
 
   const mergedTranscript = mergeTargetTranscriptions(targetTranscriptions);
@@ -1171,6 +1277,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       transcriptions: {},
       transcriptionsByTarget: {},
       initialTextByTarget: {},
+      caretRangeByTarget: {},
       isTranscribing: false,
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
@@ -1230,6 +1337,22 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                     return updated;
                   }
                   return context.initialTextByTarget;
+                },
+                caretRangeByTarget: (context, event: DictationStartEvent) => {
+                  // Capture the caret/selection at dictation start so transcribed
+                  // text is inserted there rather than appended at the end (#178).
+                  if (event.targetElement) {
+                    const targetId = getTargetElementId(event.targetElement);
+                    const caretRange = captureCaretRange(event.targetElement);
+                    const updated = { ...context.caretRangeByTarget };
+                    if (caretRange) {
+                      updated[targetId] = caretRange;
+                    } else {
+                      delete updated[targetId];
+                    }
+                    return updated;
+                  }
+                  return context.caretRangeByTarget;
                 },
               }),
             ],
@@ -1653,9 +1776,11 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
               });
               delete context.transcriptionsByTarget[targetId];
               
-              // Clear initial text for this target since field was cleared
+              // Clear initial text (and the now-meaningless caret offset) for this
+              // target since the field was cleared.
               delete context.initialTextByTarget[targetId];
-              
+              delete context.caretRangeByTarget[targetId];
+
               // Reset accumulated text if this is the current target
               if (originatingTarget === context.targetElement) {
                 context.accumulatedText = "";
@@ -1678,22 +1803,28 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           const initialText = storedInitialText !== undefined ? storedInitialText : currentFieldContent;
           const isUsingStoredInitialText = storedInitialText !== undefined;
 
-          // Get target-specific transcriptions for merging
-          const finalText = computeFinalText(
-            targetTranscriptions,
-            mergedSequences,
-            transcription,
+          // Insert the dictated text at the caret captured at dictation start (#178),
+          // composing it after the text before the caret and re-attaching the text
+          // after the caret. When no caret was captured (e.g. contenteditable) this
+          // composes against the full initial text — the previous append-at-end path.
+          const caretRange = context.caretRangeByTarget[targetId];
+          const { text: finalText, caretOffset } = composeFinalTextAtCaret(
             initialText,
-            isUsingStoredInitialText
+            caretRange,
+            (before) =>
+              computeFinalText(
+                targetTranscriptions,
+                mergedSequences,
+                transcription,
+                before,
+                isUsingStoredInitialText
+              )
           );
           console.debug(
             `Merged text for target ${targetId}: ${finalText}`
           );
 
-          // computeFinalText already includes initial text, so use finalText directly
-          
-          
-          setTextInTarget(finalText, originatingTarget, true); // true = replace all content
+          setTextInTarget(finalText, originatingTarget, true, caretOffset); // true = replace all content
 
           // Finally, handle server-side merging if present, after those sequences have been referenced in composing the final text
           if (mergedSequences.length > 0) {
@@ -1726,6 +1857,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       resetDictationState: assign({
         transcriptions: () => ({}),
         transcriptionsByTarget: () => ({}),
+        caretRangeByTarget: () => ({}),
         isTranscribing: false,
         userIsSpeaking: false,
         timeUserStoppedSpeaking: 0,
@@ -1791,7 +1923,16 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
           
         context.initialTextByTarget[targetId] = cleanedInitialText;
-        
+
+        // Capture the caret/selection in the new target so transcribed text is
+        // inserted at that position rather than appended at the end (#178).
+        const caretRange = captureCaretRange(event.targetElement);
+        if (caretRange) {
+          context.caretRangeByTarget[targetId] = caretRange;
+        } else {
+          delete context.caretRangeByTarget[targetId];
+        }
+
         console.log(`Captured initial text for target ${targetId}:`, JSON.stringify(cleanedInitialText));
         
         // Clear only global transcriptions, preserve target-specific mappings
@@ -1977,8 +2118,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           delete context.transcriptionsByTarget[targetId];
         }
         
-        // Clear initial text for this target
+        // Clear initial text (and the now-stale caret offset) for this target
         delete context.initialTextByTarget[targetId];
+        delete context.caretRangeByTarget[targetId];
 
         // Reset accumulated text if this is the current target
         if (event.targetElement === context.targetElement) {

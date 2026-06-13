@@ -6,7 +6,12 @@
 
 export interface TextInsertionStrategy {
   canHandle(target: HTMLElement): boolean;
-  insertText(target: HTMLElement, text: string, replaceAll: boolean): void;
+  /**
+   * @param caretOffset Optional character offset at which to leave the caret after
+   *   insertion. Supported by InputTextareaStrategy (#178 insert-at-caret); other
+   *   strategies may ignore it and fall back to positioning the caret at the end.
+   */
+  insertText(target: HTMLElement, text: string, replaceAll: boolean, caretOffset?: number): void;
 }
 
 /**
@@ -58,9 +63,9 @@ export class InputTextareaStrategy implements TextInsertionStrategy {
     return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
   }
 
-  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+  insertText(target: HTMLElement, text: string, replaceAll: boolean, caretOffset?: number): void {
     const inputTarget = target as HTMLInputElement | HTMLTextAreaElement;
-    
+
     if (replaceAll) {
       inputTarget.value = text;
     } else {
@@ -69,6 +74,19 @@ export class InputTextareaStrategy implements TextInsertionStrategy {
 
     // Dispatch input event for framework compatibility
     inputTarget.dispatchEvent(new Event("input", { bubbles: true }));
+
+    // Position the caret at the requested offset (#178 insert-at-caret). Done after
+    // dispatching the input event so our position is the final state even if a
+    // framework listener moves the caret in response to the value change.
+    if (typeof caretOffset === "number") {
+      const pos = Math.max(0, Math.min(caretOffset, inputTarget.value.length));
+      try {
+        inputTarget.setSelectionRange(pos, pos);
+      } catch (_) {
+        // setSelectionRange throws for input types that don't support selection
+        // (e.g. number, email); safe to ignore — the caret stays at its default.
+      }
+    }
   }
 }
 

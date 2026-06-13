@@ -34,13 +34,16 @@ export class TextInsertionManager {
    * @param target The HTML element to insert text into
    * @param text The text to insert
    * @param replaceAll Whether to replace all existing text or append
+   * @param caretOffset Optional character offset to leave the caret at after
+   *   insertion (#178 insert-at-caret). Honored by input/textarea targets;
+   *   ignored by strategies that don't support it.
    * @returns true if insertion was successful, false otherwise
    */
-  insertText(target: HTMLElement, text: string, replaceAll: boolean = false): boolean {
+  insertText(target: HTMLElement, text: string, replaceAll: boolean = false, caretOffset?: number): boolean {
     try {
       const strategy = this.getStrategyForTarget(target);
       if (strategy) {
-        strategy.insertText(target, text, replaceAll);
+        strategy.insertText(target, text, replaceAll, caretOffset);
         return true;
       } else {
         console.warn('No text insertion strategy found for target:', target);
