@@ -306,7 +306,11 @@ function updateQuotaProgress(status, type = 'tts') {
   // Format the remaining quota for display
   let remainingText;
   if (type === 'tts') {
-    remainingText = `${status.quota.remaining.toLocaleString()} characters remaining`;
+    // The TTS meter bills per-voice credits, not raw characters (saypi-api #181
+    // Stage 2 / #275). The figure is unchanged; only the unit label is "credits".
+    remainingText = browser.i18n.getMessage('ttsCreditsRemaining', [
+      status.quota.remaining.toLocaleString(),
+    ]);
   } else {
     // Convert seconds to minutes for STT
     const minutes = Math.floor(status.quota.remaining / 60);
