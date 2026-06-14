@@ -454,16 +454,15 @@ Then in the returned object, immediately after `$schema: "https://unpkg.com/wxt/
     },
 ```
 
-- [ ] **Step 3: Verify the config loads (offline, no server, no browser)**
+- [ ] **Step 3: Verify the config — WITHOUT loading `.env.production`**
 
-Run: `npx wxt prepare`
-Expected: completes without error (regenerates `.wxt/types/…`). A config syntax/type error would fail here.
+Do **not** run `npx wxt prepare` or `wxt build`: those default to *production* mode, and WXT's `loadEnv(mode, …)` (`node_modules/wxt/dist/core/utils/env.mjs`) then loads `.env.production` — which the guardrails forbid the loop from touching. `wxt prepare` also has no `--mode` flag, so it can't be made dev-only.
 
-- [ ] **Step 4: Verify prod build config is unaffected (gates off)**
+Config correctness is verified instead by the **rig's own startup** in Task 6: `wxt dev` runs in *development* mode (`command=serve` → mode `development`, per `wxt.mjs`), whose env-file list is `.env.development*` / `.env.<browser>*` / `.env` — **never `.env.production`**. A config syntax/type error makes the dev server fail to start, so a clean start *is* the verification. No separate offline step is needed.
 
-Run: `node -e "process.env.WXT_DEV_PORT=''; process.env.WXT_DISABLE_RUNNER=''; import('./wxt.config.ts').catch(()=>{}); console.log('gates default to undefined/false when env unset')"`
+- [ ] **Step 4: Confirm gate-off inertness by inspection**
 
-This is a sanity reminder, not a hard assertion — the authoritative prod-inertness check is the reviewer in Task 7 confirming `server`/`webExt` are env-gated. Expected: prints the message, no throw.
+Confirm by reading the diff that `dev.server` is `undefined` and `webExt.disabled` is `false` when `WXT_DEV_PORT`/`WXT_DISABLE_RUNNER` are unset — so a normal `npm run build` / `npm run dev` is byte-for-byte unchanged. The authoritative prod-inertness check is the adversarial reviewer (already performed): confirmed `dev.server`/`webExt` only affect `wxt dev`, never the built artifact.
 
 - [ ] **Step 5: Commit**
 
