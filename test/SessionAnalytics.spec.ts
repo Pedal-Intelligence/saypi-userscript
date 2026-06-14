@@ -26,16 +26,20 @@ describe("resolveAnalyticsConfig (#292 fail-soft telemetry)", () => {
     (missingKey) => {
       const cfg: Record<string, string | undefined> = { ...fullConfig };
       delete cfg[missingKey];
-      expect(() => resolveAnalyticsConfig(cfg)).not.toThrow();
-      expect(resolveAnalyticsConfig(cfg)).toBeNull();
+      let result: unknown;
+      expect(() => {
+        result = resolveAnalyticsConfig(cfg);
+      }).not.toThrow();
+      expect(result).toBeNull();
     }
   );
 
-  it("treats a blank string the same as missing", () => {
-    expect(
-      resolveAnalyticsConfig({ ...fullConfig, GA_MEASUREMENT_ID: "" })
-    ).toBeNull();
-  });
+  it.each(["GA_MEASUREMENT_ID", "GA_API_SECRET", "GA_ENDPOINT"])(
+    "treats a blank %s the same as missing",
+    (blankKey) => {
+      expect(resolveAnalyticsConfig({ ...fullConfig, [blankKey]: "" })).toBeNull();
+    }
+  );
 });
 
 describe("SessionAnalyticsMachine module load (#292)", () => {
