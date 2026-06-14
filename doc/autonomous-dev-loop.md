@@ -203,6 +203,52 @@ unit-test the controller plus a `replaceI18n()` re-localization pass rather than
 trying to drive the popup. That is how the 2026-06-14 dictation mode-label fix was
 verified (`test/settings/tabs/DictationModeSelector.spec.ts`).
 
+## Verifying UI parity (check position + states, not just the property you changed)
+
+A real miss on this run: after resizing an injected icon I checked its *size*
+numerically and eyeballed the *resting* state — and shipped it visibly
+off-centre. Two lessons: a change aimed at one property (size) can break another
+(alignment), and the resting state (transparent background) hides alignment
+problems that only the hover/active background reveals.
+
+When decorating or restyling a host control, verify it the way the user sees it:
+
+1. **Position, not just size.** Assert the icon's *centre* matches the button's
+   centre (via `getBoundingClientRect`, and the glyph's via `getBBox`) — not only
+   its dimensions. An icon larger than the padding box won't centre unless the
+   button explicitly flex-centres it.
+2. **All interactive states.** Resting *and* hover *and* active (*and* dark). The
+   hover/active background is what exposes alignment, padding, radius and size
+   mismatches; the resting transparent state hides them.
+3. **Diff the whole box model against the native reference** — size, centre-offset,
+   padding, border-radius, hover fill — not just the one property you touched.
+4. **Re-verify the whole component after *every* change.** Don't assume a property
+   you didn't touch is still fine (resizing the icon is what broke its centring).
+
+A reusable parity probe — compare a SayPi button to a native reference:
+
+```js
+(() => {
+  const box = (el) => {
+    if (!el) return null;
+    const r = el.getBoundingClientRect(); const cs = getComputedStyle(el);
+    const svg = el.querySelector('svg'); let iconCentreOffset = null;
+    if (svg) { const s = svg.getBoundingClientRect();
+      iconCentreOffset = { dx: Math.round((s.x+s.width/2-(r.x+r.width/2))*10)/10,
+                           dy: Math.round((s.y+s.height/2-(r.y+r.height/2))*10)/10 }; }
+    return { size: Math.round(r.width)+'x'+Math.round(r.height), display: cs.display,
+             padding: cs.padding, radius: cs.borderRadius, iconCentreOffset };
+  };
+  return JSON.stringify({
+    saypi: box(document.getElementById('saypi-settingsButton')),
+    native: box(document.querySelector('[data-testid="nav-new-chat"]')),
+  }, null, 1);
+})()
+```
+
+`iconCentreOffset` near `{dx:0, dy:0}` means the glyph is centred; anything else is
+the class of bug missed on 2026-06-14. Run the probe in the hover state too.
+
 ## Staged-vs-released identity check
 
 The founder versions the staged dev build one patch ahead of the store release
