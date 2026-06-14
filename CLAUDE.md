@@ -124,6 +124,16 @@ WXT discovers entry points in **`entrypoints/`**; each is a thin shim that impor
 - **JSDOM** test environment for DOM manipulation testing
 - Mock implementations for Chrome extension APIs
 
+#### Real-site verification (Layer 4 dev-verify loop)
+
+To verify a change in a real browser against the live hosts (pi.ai/Claude/ChatGPT),
+use the autonomous dev-verify loop instead of a manual build: start the rig with
+`node scripts/dev-rig.mjs` (one owned `wxt dev` on `:3001` that hot-reloads a
+manually-loaded dev extension), then iterate edit → tab-reload-via-MCP → assert.
+**See [doc/autonomous-dev-loop.md](doc/autonomous-dev-loop.md)** for the autonomy
+model (per-edit hands-off; the founder reloads the extension once per session after
+a rig (re)start — the agent can't reach `chrome://extensions`) and the full routine.
+
 #### Test-Driven Development (TDD) Requirements
 
 **Fail-First TDD Protocol (MANDATORY for bug fixes)**

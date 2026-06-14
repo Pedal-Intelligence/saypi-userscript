@@ -8,6 +8,31 @@ Claude, ChatGPT) with no per-iteration founder involvement. Design:
 > drive the microphone (see Boundaries). The headless harness with synthetic
 > audio is Layer 3 (separate spec).
 
+## Autonomy model — what's hands-off vs. needs the founder
+
+Read this first; it sets expectations for how the loop actually runs.
+
+- **Every code edit is hands-off.** Edit → rig rebuilds (~1s) → the connected
+  service worker re-registers the content script → the agent reloads the test tab
+  via the MCP → assert. No founder action per edit. (Verified end-to-end on real
+  pi.ai, both directions, 2026-06-14.)
+- **The founder reloads the extension exactly once per session** — right after the
+  agent (re)starts the rig (setup step 3). After that, every edit that session is
+  autonomous.
+- **The agent CANNOT reload the extension itself** (validated 2026-06-14, don't
+  re-attempt): the MCP `navigate` tool forces an `https://` prefix so it can't open
+  `chrome://extensions`, and the `computer` click/screenshot tool only sees the page
+  viewport (no address bar, no browser chrome). `chrome://extensions` is therefore
+  unreachable from automation. When a rig (re)start is unavoidable, ask the founder:
+  *"please click ⟲ on the Say, Pi `<version>` card."*
+- **Minimize rig restarts** to minimize that ask. Keep **one long-lived rig** — it's
+  stable across edits. You only restart it if you change `wxt.config.ts` or it dies.
+  A fresh agent session = a fresh rig = one founder reload at the start, then nothing.
+- **Layer 3 removes this entirely** (its own spec): Playwright launches a fresh,
+  dedicated Chromium per run via `--load-extension`, which it can reload/relaunch
+  itself — no `chrome://extensions`, no stale service worker — and can feed fake mic
+  audio for the VAD/STT paths this layer can't.
+
 ## Setup (order matters)
 
 **Verified live:** the rig must be running *before* the extension's MV3 service
@@ -65,9 +90,10 @@ secret.
 
 1. **Edit** source in this checkout.
 2. **Wait for the rebuild.** WXT rebuilds (~1s) and pushes a reload over
-   `ws://localhost:3001`; the connected service worker re-registers the runtime
-   content script (SayPi's content scripts are runtime-registered — `content_scripts`
-   is absent from the manifest). Confirm the rebuild landed by polling the output
+   `ws://localhost:3001`; the connected service worker re-registers the content
+   script (in MV3 **dev** mode WXT registers content scripts dynamically via
+   `chrome.scripting` — the dev manifest has no `content_scripts`; production
+   declares them statically). Confirm the rebuild landed by polling the output
    dir's mtime (it advances on each rebuild):
 
    ```bash
@@ -75,12 +101,13 @@ secret.
    find .output/chrome-mv3-dev -type f -exec stat -f '%m' {} + | sort -n | tail -1
    ```
 
-   or re-read the rig's background-task log for its `✔ Reloaded` line.
-3. **Reload the test tab** via the MCP (`navigate` to the same URL). This is what
-   makes the re-registered content script take effect on the open page — verified
-   live: with the SW connected, an edit reaches the real pi.ai DOM after just a tab
-   reload, no per-edit extension reload. (If a change *doesn't* appear, the SW
-   likely slept or the rig restarted — reload the extension once, setup step 3.)
+   or re-read the rig's background-task log for its `✔ Reloaded:` line.
+3. **Reload the test tab** via the MCP (`navigate` to the same URL), then read the
+   DOM. With the SW connected WXT already reloads matching tabs itself; the MCP
+   reload is a reliable belt-and-suspenders step and gives a clean point to assert.
+   Verified live: with the SW connected, an edit reaches the real pi.ai DOM with no
+   per-edit extension reload. (If a change *doesn't* appear, the SW likely slept or
+   the rig restarted — reload the extension once, setup step 3.)
 4. **Assert** against the DOM (see the probe below).
 
 ## The verification probe (buffered MutationObserver)
