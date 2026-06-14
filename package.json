@@ -88,6 +88,7 @@
     "@babel/preset-env": "^7.22.9",
     "@eslint/config-array": "^0.19.2",
     "@eslint/object-schema": "^2.1.6",
+    "@playwright/test": "^1.60.0",
     "@types/chai": "^4.3.9",
     "@types/chrome": "^0.0.253",
     "@types/firefox-webext-browser": "^120.0.5",

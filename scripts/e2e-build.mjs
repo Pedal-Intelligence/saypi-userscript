@@ -10,12 +10,21 @@ const run = (cmd, args) =>
 // 1) Public, non-secret dev URLs so the src bundle has a real api host to call
 //    (host-resolver later redirects these hostnames to the local mocks).
 //    NEVER write secrets here; these match .env.example public defaults.
+//    The GA_* values are non-secret placeholders (mirroring .env.example's redacted
+//    form). They are required only because SessionAnalyticsMachine.ts validates the
+//    analytics config at MODULE LOAD and throws "GA_MEASUREMENT_ID is not set" when
+//    absent — that throw aborts the entire content-script bootstrap before SayPi
+//    decorates the page, so the harness needs them present (no analytics is actually
+//    sent: the host is sandboxed and the debug endpoint is a no-op).
 const envFile = resolve(root, ".env.development.local");
 const desired = [
   "VITE_APP_SERVER_URL=https://app.saypi.ai",
   "VITE_API_SERVER_URL=https://api.saypi.ai",
   "VITE_AUTH_SERVER_URL=https://www.saypi.ai",
   "VITE_DEBUG_LOGS=true",
+  "VITE_GA_MEASUREMENT_ID=G-E2E0000000",
+  "VITE_GA_API_SECRET=e2e-no-secret",
+  "VITE_GA_ENDPOINT=https://www.google-analytics.com/debug/mp/collect",
   "",
 ].join("\n");
 writeFileSync(envFile, desired);
