@@ -21,9 +21,19 @@ const statusSubscriptionSrc = readFileSync(
 );
 
 describe("#275 TTS quota wording: credits, not characters", () => {
-  it("status-subscription.js renders the TTS remaining label via i18n, not a hardcoded 'characters' string", () => {
+  it("status-subscription.js never labels a TTS quota unit as 'characters' (normal OR exhausted path)", () => {
+    // The original normal-path bug was a contiguous "characters remaining" string...
     expect(statusSubscriptionSrc).not.toMatch(/characters remaining/i);
-    expect(statusSubscriptionSrc).toMatch(/ttsCreditsRemaining/);
+    // ...but the exhausted-quota path built "0 characters remaining" by
+    // INTERPOLATION (`0 ${quotaUnit} remaining`, quotaUnit = 'characters'), which a
+    // contiguous-substring scan can't see. Guard the *quoted unit literal* directly:
+    // this file has no legitimate reason to contain "characters" as a string token.
+    expect(statusSubscriptionSrc).not.toMatch(/['"`]characters['"`]/);
+  });
+
+  it("renders BOTH live TTS quota labels (normal + exhausted) via ttsCreditsRemaining", () => {
+    const hits = statusSubscriptionSrc.match(/ttsCreditsRemaining/g) ?? [];
+    expect(hits.length).toBeGreaterThanOrEqual(2);
   });
 
   it("en defines ttsCreditsRemaining and it says credits", () => {

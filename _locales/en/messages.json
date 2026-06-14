@@ -775,7 +775,7 @@
   },
   "ttsQuotaCharacters": {
     "message": "credits",
-    "description": "Unit for TTS quota (characters)."
+    "description": "Unit for the TTS quota (per-voice credits; key name retained for compatibility)."
   },
   "sttQuotaRemaining": {
     "message": "Speech Recognition",

@@ -247,12 +247,15 @@ function updateQuotaProgress(status, type = 'tts') {
     }
     percentageLabel.textContent = "100% used";
     
-    // Update quota percentage to show "0 credits remaining"
-    const quotaUnit = type === 'tts' ? 'characters' : 'seconds';
+    // Update quota percentage to show "0 ... remaining".
+    // TTS bills per-voice credits, not characters (#275); STT remains seconds.
     quotaPercentage.textContent = '';
     const remainingSpan = document.createElement('span');
     remainingSpan.className = 'text-muted-foreground';
-    remainingSpan.textContent = `0 ${quotaUnit} remaining`;
+    remainingSpan.textContent =
+      type === 'tts'
+        ? browser.i18n.getMessage('ttsCreditsRemaining', ['0'])
+        : `0 seconds remaining`;
     quotaPercentage.appendChild(remainingSpan);
     
     // Set tooltip for progress bar
