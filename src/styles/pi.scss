@@ -46,6 +46,12 @@ html body.pi {
     #saypi-settingsButton {
       background-color: transparent;
       border-radius: 10px; /* Pi's icon-button radius (rounded-[10px]) */
+      /* Center the icon regardless of its size — the icons are intentionally
+         sized differently (and can exceed the padding box), so rely on flex
+         centering, not the default top-left block flow. */
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
         color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
