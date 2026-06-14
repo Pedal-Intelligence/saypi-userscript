@@ -59,29 +59,7 @@ body.chatgpt {
     }
   }
 
-  /* Tooltip: compact black pill above the button, matching ChatGPT feel */
-  .tooltip[aria-label]::after {
-    content: attr(aria-label);
-    position: absolute;
-    top: -130%;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    background-color: rgba(0, 0, 0, 0.85);
-    color: #fff;
-    padding: 6px 8px;
-    border-radius: 9999px; /* pill */
-    font-size: 0.75rem; /* text-xs */
-    line-height: 1;
-    opacity: 0;
-    transition: opacity 0.15s ease-in-out;
-    pointer-events: none;
-    z-index: 1000;
-  }
-
-  @media (hover: hover) {
-    .tooltip[aria-label]:hover::after { opacity: 1; }
-  }
+  /* Tooltip handled by the body-level portal (.saypi-tooltip); styled below. */
 
   /* Subtle hover background using ::before overlay (composer-btn inspired) */
   #saypi-callButton {
@@ -153,21 +131,14 @@ body.chatgpt {
     --call-button-bg-hangup: color-mix(in srgb, var(--theme-secondary-btn-bg, var(--theme-user-msg-bg, #776d6d)) 85%, #000000 15%);
   }
 
-  /* Portal tooltip element appended to body to avoid overflow clipping */
+  /* ChatGPT colour/shape for the portal tooltip (structure is in common.scss).
+     Black pill for contrast in both themes. */
   .saypi-tooltip {
-    position: fixed;
-    /* Use black pill in both themes for contrast; allow host var override when available */
-    background-color: var(--radix-tooltip-bg, rgba(0,0,0,0.85));
+    background-color: var(--radix-tooltip-bg, rgba(0, 0, 0, 0.85));
     color: var(--radix-tooltip-fg, #fff);
+    border-radius: 9999px; /* pill */
     padding: 6px 8px;
-    border-radius: 9999px;
     font-size: 0.75rem;
-    line-height: 1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.12s ease-in-out;
-    white-space: nowrap;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
 
   /* Invisible holder for temporarily relocated ChatGPT menu item

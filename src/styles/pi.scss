@@ -3,13 +3,11 @@
  */
 
 html body.pi {
-  /* Pi-specific tooltip styling to match native Pi tooltips */
-  .tooltip[aria-label]::after {
-    background: rgb(107, 98, 85); /* Pi's native tooltip brown/olive */
-    color: rgb(255, 255, 255);
+  /* Pi-native colour for the portal tooltip (.saypi-tooltip lives on <body>). */
+  .saypi-tooltip {
+    background-color: rgb(107, 98, 85); /* Pi's native tooltip brown/olive */
     font-size: 14px;
     padding: 4px 8px;
-    border-radius: 4px;
   }
 
   /* Pi-specific button sizing for control panel */

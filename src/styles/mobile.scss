@@ -160,13 +160,8 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
 
 /* Allow settings button on Firefox Android (popup now opens as a tab) */
 
-// Hide tooltip on touch devices after touch ends
-@media (hover: none) {
-  .tooltip[aria-label]:active::after {
-      opacity: 1;
-      z-index: 1000; // sit above host chrome (match desktop)
-  }
-}
+// Tooltips are handled by the body-level portal (src/ui/Tooltip.ts); no
+// touch-device ::after rule needed.
 
 @include meta.load-css("./dark-mode.scss");
 @include meta.load-css("./focus-mode.scss");
