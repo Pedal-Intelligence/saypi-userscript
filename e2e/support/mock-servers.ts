@@ -31,6 +31,18 @@ export async function startMockServers(): Promise<MockServers> {
   });
 
   const apiServer = https.createServer(tls, (req, res) => {
+    // Diagnostic route: how many times has /transcribe been hit so far. The
+    // browser fetches the /transcribe upload from the extension SW/offscreen
+    // context (not the page), so page.on("response") can't see it — specs read
+    // this counter via the SW instead. CORS-open so the SW fetch succeeds.
+    if (req.method === "GET" && req.url && req.url.startsWith("/__transcribe-hits")) {
+      res.writeHead(200, {
+        "content-type": "application/json",
+        "access-control-allow-origin": "*",
+      });
+      res.end(JSON.stringify({ hits }));
+      return;
+    }
     if (req.method === "POST" && req.url && req.url.startsWith("/transcribe")) {
       const chunks: Buffer[] = [];
       req.on("data", (c) => chunks.push(c));
