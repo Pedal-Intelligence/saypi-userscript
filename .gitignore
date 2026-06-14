@@ -86,3 +86,6 @@ test-csp-bypass.html
 public/.vite/
 doc/dom/chatgpt/sidebar.header.menu.html
 doc/dom/chatgpt/sidebar.header.menu-tiny.html
+
+# Git worktrees for isolated agent workspaces
+.worktrees/
