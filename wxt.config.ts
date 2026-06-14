@@ -345,26 +345,29 @@ export default defineConfig((env) => {
     permissions.push("offscreen", "audio", "identity");
   }
 
+  // WXT picks the first open port in 3000-3010 unless dev.server.port is set.
+  // Pin it (with a matching origin baked into the extension's reload client) so a
+  // manually-loaded unpacked extension reconnects to the same port across restarts.
+  // WXT enforces strictPort itself; the rig guarantees the port is free first.
+  const devServer = process.env.WXT_DEV_PORT
+    ? {
+        port: Number(process.env.WXT_DEV_PORT),
+        origin: `http://localhost:${process.env.WXT_DEV_PORT}`,
+      }
+    : undefined;
+
   return {
     $schema: "https://unpkg.com/wxt/schemas/v6.json",
+    dev: { server: devServer },
+    webExt: {
+      disabled: process.env.WXT_DISABLE_RUNNER === "true",
+    },
     hooks: {
       "vite:build:extendConfig": (entrypoints, config) => {
         applyChunkFilePattern(config);
       },
       "vite:devServer:extendConfig": (config) => {
         applyChunkFilePattern(config);
-
-        const desiredPort = Number(process.env.WXT_DEV_PORT ?? 3333);
-        config.server ??= {};
-        if (typeof config.server === "object") {
-          const serverConfig = config.server as Record<string, any>;
-          if (serverConfig.port == null) {
-            serverConfig.port = desiredPort;
-          }
-          if (serverConfig.strictPort == null) {
-            serverConfig.strictPort = true;
-          }
-        }
       },
       "build:publicAssets": (_wxt: any, files: any[]) => {
         addLocalePublicAssets(files);
