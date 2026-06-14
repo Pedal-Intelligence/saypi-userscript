@@ -27,6 +27,8 @@
     "test:vitest": "vitest run --config vitest.config.js",
     "test:vitest:watch": "vitest --watch --config vitest.config.js",
     "test": "npm-run-all -s test:jest test:vitest",
+    "e2e:build": "node --experimental-strip-types scripts/e2e-build.mjs",
+    "test:e2e": "playwright test --config e2e/playwright.config.ts",
     "prebuild:firefox": "node scripts/validate-env.js --file .env.production --env production && npm run copy-onnx",
     "build:firefox": "wxt build -b firefox",
     "source-archive": "git archive --format=zip -o source-code.zip HEAD",
