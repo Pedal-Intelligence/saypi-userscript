@@ -46,9 +46,28 @@ test("fake audio -> VAD -> mock STT -> transcript in prompt", async ({
   // never runs, so the looped speech clip would never produce a transcript.
   await page.click("#saypi-callButton");
 
-  // The fake mic loops the speech clip; the offscreen Silero-v5 model fires
-  // onSpeechEnd, the SW posts to the mock /transcribe, and (autoSubmit=false)
-  // the merged transcript is drafted into the prompt's value.
+  // Localizer #1 — VAD/audio fired: the fake mic loops the clip; once the
+  // offscreen Silero-v5 model fires onSpeechEnd the SW POSTs to the mock
+  // /transcribe. Read the mock's hit counter from the SW context (the upload is
+  // SW/offscreen-issued and invisible to page.on("response")). Asserting this
+  // BEFORE the prompt wait makes a CI failure self-localize: no hit ⇒ VAD/fake-
+  // audio never fired; hit-but-no-prompt-text ⇒ transcript plumbing broke.
+  await expect
+    .poll(
+      () =>
+        serviceWorker.evaluate(async () => {
+          const res = await fetch("https://api.saypi.ai/__transcribe-hits");
+          return ((await res.json()) as { hits: number }).hits;
+        }),
+      {
+        timeout: 30_000,
+        message: "mock /transcribe was never hit — VAD/fake-audio did not fire",
+      },
+    )
+    .toBeGreaterThan(0);
+
+  // Localizer #2 — transcript plumbing: with autoSubmit=false the merged
+  // transcript is drafted into the prompt's value (not submitted and cleared).
   await page.waitForFunction(
     (expected) =>
       (document.getElementById("saypi-prompt") as HTMLTextAreaElement | null)
@@ -59,14 +78,4 @@ test("fake audio -> VAD -> mock STT -> transcript in prompt", async ({
 
   const value = await page.locator("#saypi-prompt").inputValue();
   expect(value).toContain(DEFAULT_TRANSCRIPT);
-
-  // Independently confirm the mock /transcribe was actually hit (not e.g. a
-  // cached/stale value): read the mock's hit counter from the SW context, which
-  // resolves api.saypi.ai to the local mock via --host-resolver-rules.
-  const hits = await serviceWorker.evaluate(async () => {
-    const res = await fetch("https://api.saypi.ai/__transcribe-hits");
-    const body = (await res.json()) as { hits: number };
-    return body.hits;
-  });
-  expect(hits).toBeGreaterThan(0);
 });

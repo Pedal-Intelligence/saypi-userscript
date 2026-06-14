@@ -15,6 +15,11 @@ export function buildLaunchArgs(o: LaunchArgsOptions): string[] {
     `MAP www.google-analytics.com 127.0.0.1:${o.apiPort}`,
     `MAP google-analytics.com 127.0.0.1:${o.apiPort}`,
     `EXCLUDE localhost`,
+    // Fail CLOSED: any host not explicitly mapped above resolves to nothing, so a
+    // future spec (or stray bundle/Chrome request) that touches an unmapped
+    // endpoint errors loudly instead of silently reaching the real internet. Must
+    // be LAST — host-resolver-rules apply the first matching rule.
+    `MAP * ~NOTFOUND`,
   ].join(",");
   return [
     `--disable-extensions-except=${o.extensionDir}`,

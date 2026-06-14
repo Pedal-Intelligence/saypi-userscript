@@ -200,9 +200,12 @@ config as belt-and-suspenders).
 
 - The harness **never** loads `.env.production`: it builds with `-m development` and guards against a
   bare build. No production artifact is produced or submitted.
-- Hermetic: `--host-resolver-rules` sends every real host to local mocks, so there is zero real
-  network and zero secret. The mock api accepts-any auth (auth is separately unit-tested and is a
-  guardrail-3 domain this slice deliberately does not touch).
+- Hermetic, fail-closed: `--host-resolver-rules` sends every real host to local mocks, so there is
+  zero real network and zero secret. A trailing `MAP * ~NOTFOUND` sinkhole rule means any host *not*
+  explicitly redirected (pi.ai, api/www/app.saypi.ai, google-analytics.com) resolves to nothing
+  rather than escaping to the real internet, so a future spec touching an unmapped endpoint fails
+  loudly. The mock api accepts-any auth (auth is separately unit-tested and is a guardrail-3 domain
+  this slice deliberately does not touch).
 - **No manifest, permission, or content-script match-pattern change** — host redirection is at the
   browser's DNS layer, keeping production injection scope identical and this PR out of the
   multi-lens-+-founder-sign-off domain. It is additive test/CI infrastructure (normal gate).

@@ -14,14 +14,32 @@ describe("buildLaunchArgs", () => {
     expect(args).toContain("--load-extension=/abs/.output/chrome-mv3-dev");
   });
 
-  it("redirects pi.ai and the saypi api/auth hosts to local mocks", () => {
+  it("redirects pi.ai and the saypi api/auth/app + GA hosts to local mocks", () => {
     const rule = args.find((a) => a.startsWith("--host-resolver-rules="));
     expect(rule).toBeTruthy();
     expect(rule).toContain("MAP pi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP api.saypi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP www.saypi.ai 127.0.0.1:8443");
+    expect(rule).toContain("MAP app.saypi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP www.google-analytics.com 127.0.0.1:8443");
+    expect(rule).toContain("MAP google-analytics.com 127.0.0.1:8443");
     expect(rule).toContain("EXCLUDE localhost");
+  });
+
+  it("fails closed: a wildcard sinkhole is the LAST host-resolver rule", () => {
+    const rule = args.find((a) => a.startsWith("--host-resolver-rules="))!;
+    const rules = rule.replace("--host-resolver-rules=", "").split(",");
+    expect(rules.at(-1)).toBe("MAP * ~NOTFOUND");
+    // the sinkhole must come after the explicit MAPs so it doesn't shadow them
+    expect(rules.indexOf("MAP * ~NOTFOUND")).toBeGreaterThan(
+      rules.indexOf("MAP pi.ai 127.0.0.1:8443"),
+    );
+  });
+
+  it("includes the CI / sandbox / cert hardening flags", () => {
+    expect(args).toContain("--no-sandbox");
+    expect(args).toContain("--allow-insecure-localhost");
+    expect(args).toContain("--autoplay-policy=no-user-gesture-required");
   });
 
   it("bypasses cert validation (SNI stays the real host)", () => {

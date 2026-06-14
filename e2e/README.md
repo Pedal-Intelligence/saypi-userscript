@@ -63,7 +63,8 @@ mock servers and a fake-mic device per run, so the specs run serially.
   context fixture (e2e/fixtures/extension.ts + launch-args.ts)
         │  chromium.launchPersistentContext with:
         │    --load-extension / --disable-extensions-except  -> the dev build
-        │    --host-resolver-rules  MAP pi.ai/api.saypi.ai/... -> 127.0.0.1:<port>
+        │    --host-resolver-rules  MAP pi.ai/api|www|app.saypi.ai/google-analytics.com
+        │                           -> 127.0.0.1:<port>, then MAP * ~NOTFOUND (fail closed)
         │    --ignore-certificate-errors / --allow-insecure-localhost
         │    --use-fake-device-for-media-stream / --use-fake-ui-for-media-stream
         │    --use-file-for-fake-audio-capture=<speech-16k-mono.wav>
@@ -83,7 +84,11 @@ servers at DNS-resolution time. The mocks present self-signed TLS, which Chrome
 accepts because the browser is launched with `--ignore-certificate-errors`
 (Node-side fetches opt out via `NODE_TLS_REJECT_UNAUTHORIZED=0`). Nothing leaves
 the machine — the run is hermetic, even GA beacons are absorbed by the mock API's
-catch-all.
+catch-all. The redirect list **fails closed**: the explicit `MAP`s
+(`pi.ai`, `api`/`www`/`app.saypi.ai`, `google-analytics.com`) are followed by a
+trailing `MAP * ~NOTFOUND` sinkhole, so any host *not* explicitly mapped resolves
+to nothing — a future spec that reaches for an unmapped endpoint errors loudly
+instead of silently calling the real internet.
 
 ### Files
 
