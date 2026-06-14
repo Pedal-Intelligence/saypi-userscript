@@ -90,9 +90,10 @@ secret.
 
 1. **Edit** source in this checkout.
 2. **Wait for the rebuild.** WXT rebuilds (~1s) and pushes a reload over
-   `ws://localhost:3001`; the connected service worker re-registers the runtime
-   content script (SayPi's content scripts are runtime-registered — `content_scripts`
-   is absent from the manifest). Confirm the rebuild landed by polling the output
+   `ws://localhost:3001`; the connected service worker re-registers the content
+   script (in MV3 **dev** mode WXT registers content scripts dynamically via
+   `chrome.scripting` — the dev manifest has no `content_scripts`; production
+   declares them statically). Confirm the rebuild landed by polling the output
    dir's mtime (it advances on each rebuild):
 
    ```bash
@@ -100,12 +101,13 @@ secret.
    find .output/chrome-mv3-dev -type f -exec stat -f '%m' {} + | sort -n | tail -1
    ```
 
-   or re-read the rig's background-task log for its `✔ Reloaded` line.
-3. **Reload the test tab** via the MCP (`navigate` to the same URL). This is what
-   makes the re-registered content script take effect on the open page — verified
-   live: with the SW connected, an edit reaches the real pi.ai DOM after just a tab
-   reload, no per-edit extension reload. (If a change *doesn't* appear, the SW
-   likely slept or the rig restarted — reload the extension once, setup step 3.)
+   or re-read the rig's background-task log for its `✔ Reloaded:` line.
+3. **Reload the test tab** via the MCP (`navigate` to the same URL), then read the
+   DOM. With the SW connected WXT already reloads matching tabs itself; the MCP
+   reload is a reliable belt-and-suspenders step and gives a clean point to assert.
+   Verified live: with the SW connected, an edit reaches the real pi.ai DOM with no
+   per-edit extension reload. (If a change *doesn't* appear, the SW likely slept or
+   the rig restarted — reload the extension once, setup step 3.)
 4. **Assert** against the DOM (see the probe below).
 
 ## The verification probe (buffered MutationObserver)
