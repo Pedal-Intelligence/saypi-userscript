@@ -105,6 +105,11 @@ async function main() {
     stdio: ["pipe", "inherit", "inherit"],
     env: { ...process.env, WXT_DEV_PORT: String(PORT), WXT_DISABLE_RUNNER: "true" },
   });
+  // Forward termination to the child so stopping the rig (e.g. the background
+  // task is SIGTERM'd) tears down wxt dev instead of orphaning it on the port.
+  for (const sig of ["SIGTERM", "SIGINT"]) {
+    process.on(sig, () => child.kill(sig));
+  }
   child.on("exit", (code) => process.exit(code ?? 1)); // null code = signal-killed
 }
 

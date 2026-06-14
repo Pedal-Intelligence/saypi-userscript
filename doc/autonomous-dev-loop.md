@@ -126,7 +126,9 @@ snapshot.
 
 1. Inject `scripts/dom-capture/recorder.js` verbatim via `javascript_tool`
    (read the file, pass its contents).
-2. `window.__domCapture.start("<root selector>")` — e.g. the message list.
+2. `window.__domCapture.start("<root selector>")` — always pass a **tight**
+   selector (e.g. the message list or a single message). Omitting it captures the
+   whole `<body>` `outerHTML`, which is huge and noisy on real chat hosts.
 3. Trigger the behavior (type, send a prompt; the founder speaks for mic paths).
 4. `JSON.stringify(window.__domCapture.stop())` — read it back via the MCP.
 5. Write it to `test/fixtures/host-dom/<host>/<YYYY-MM-DD>/<scenario>.json`.
