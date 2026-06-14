@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /><title>Pi mock</title></head>
+  <body>
+    <main id="__next"><div id="mock-mount"></div></main>
+    <script>
+      // Mount AFTER load so the already-attached MutationObserver sees an added node
+      // whose DESCENDANT matches Pi's prompt selector (querySelector excludes the node itself).
+      // Nesting: controls (=> #saypi-prompt-controls-container)
+      //            > container (=> .saypi-prompt-container)
+      //              > textarea (=> #saypi-prompt)
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          var mount = document.getElementById("mock-mount");
+          var controls = document.createElement("div");
+          var container = document.createElement("div");
+          var ta = document.createElement("textarea");
+          ta.setAttribute("placeholder", "What's on your mind?");
+          ta.setAttribute("enterkeyhint", "enter");
+          container.appendChild(ta);
+          controls.appendChild(container);
+          mount.appendChild(controls);
+        }, 300);
+      });
+    </script>
+  </body>
+</html>
