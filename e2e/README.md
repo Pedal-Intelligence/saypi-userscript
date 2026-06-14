@@ -116,10 +116,10 @@ Mixing them up is the single most confusing failure mode here:
   `.env.development.local` with the *public, non-secret* dev URLs
   (`VITE_API_SERVER_URL=https://api.saypi.ai`, etc.) so the compiled content
   script calls the real hostnames — which `--host-resolver-rules` then redirects.
-  These are **build-time** values baked into the bundle by WXT/Vite. The GA_*
-  values are non-secret placeholders that exist only because
-  `SessionAnalyticsMachine` validates analytics config at module load and would
-  otherwise throw and abort bootstrap. **Never put a secret here.**
+  These are **build-time** values baked into the bundle by WXT/Vite. **Never put
+  a secret here.** GA_* are deliberately omitted: telemetry fails soft (#292), so
+  building GA-less makes `decoration.e2e.ts` a regression guard — bootstrap must
+  still decorate the page with no analytics config.
 - **Shell / process env vars → the harness runtime.** `SAYPI_E2E_PI_PORT` and
   `SAYPI_E2E_API_PORT` are exported by `global-setup` *after* the mock servers
   bind ephemeral ports, and consumed by `launch-args.ts` to build

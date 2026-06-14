@@ -1,5 +1,15 @@
 import { test, expect } from "../fixtures/extension";
 
+// This spec also guards #292: the e2e build ships NO GA_* config
+// (scripts/e2e-build.mjs), so a passing decoration here proves content-script
+// bootstrap survives absent telemetry config (analytics fails soft, not fatal).
+// If the SessionAnalyticsMachine module-load throw is ever reintroduced, the
+// bootstrap aborts before decoration and this spec goes red.
+// NOTE: this guard relies on SessionAnalyticsMachine being *eagerly* imported on
+// the bootstrap path (CallButton → StateMachineService → SessionAnalyticsMachine).
+// If that import ever becomes lazy/dynamic, a reintroduced throw could slip past
+// this spec — the unit-level module-load test in test/SessionAnalytics.spec.ts is
+// the backstop for that case.
 test("SayPi detects Pi and decorates the mock page", async ({ context, extensionId }) => {
   expect(extensionId).toMatch(/^[a-p]{32}$/);
   const page = await context.newPage();

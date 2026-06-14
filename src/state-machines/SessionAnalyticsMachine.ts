@@ -8,6 +8,7 @@ import {
   AudibleNotificationsModule,
 } from "../NotificationsModule";
 import EventBus from "../events/EventBus";
+import { logger } from "../LoggingModule";
 
 interface ValidatedConfig {
   GA_MEASUREMENT_ID: string;
@@ -15,31 +16,48 @@ interface ValidatedConfig {
   GA_ENDPOINT: string;
 }
 
-function validateConfig(
+const REQUIRED_ANALYTICS_KEYS = [
+  "GA_MEASUREMENT_ID",
+  "GA_API_SECRET",
+  "GA_ENDPOINT",
+] as const;
+
+/**
+ * Resolve the analytics (Google Analytics) config without ever throwing.
+ *
+ * Telemetry is a non-essential, fire-and-forget concern, so a missing or blank
+ * GA_* value must NEVER abort content-script bootstrap (#292). When any required
+ * value is absent we log a loud warning (useful in dev) and return null; the
+ * caller then runs with analytics disabled while the rest of the extension —
+ * decoration, call button, voice — keeps working (graceful degradation).
+ */
+export function resolveAnalyticsConfig(
   config: Record<string, string | undefined>
-): ValidatedConfig {
-  if (!config.GA_MEASUREMENT_ID) {
-    throw new Error("GA_MEASUREMENT_ID is not set");
-  }
-  if (!config.GA_API_SECRET) {
-    throw new Error("GA_API_SECRET is not set");
-  }
-  if (!config.GA_ENDPOINT) {
-    throw new Error("GA_ENDPOINT is not set");
+): ValidatedConfig | null {
+  const missing = REQUIRED_ANALYTICS_KEYS.filter((key) => !config[key]);
+  if (missing.length > 0) {
+    logger.warn(
+      `[SessionAnalytics] Analytics disabled — missing config: ${missing.join(
+        ", "
+      )}. The extension will run normally without telemetry.`
+    );
+    return null;
   }
   return {
-    GA_MEASUREMENT_ID: config.GA_MEASUREMENT_ID,
-    GA_API_SECRET: config.GA_API_SECRET,
-    GA_ENDPOINT: config.GA_ENDPOINT,
+    GA_MEASUREMENT_ID: config.GA_MEASUREMENT_ID!,
+    GA_API_SECRET: config.GA_API_SECRET!,
+    GA_ENDPOINT: config.GA_ENDPOINT!,
   };
 }
 
-const valid_config = validateConfig(config);
-const analytics = new AnalyticsService(
-  valid_config.GA_MEASUREMENT_ID,
-  valid_config.GA_API_SECRET,
-  valid_config.GA_ENDPOINT
-);
+const analyticsConfig = resolveAnalyticsConfig(config);
+const analytics = analyticsConfig
+  ? new AnalyticsService(
+      analyticsConfig.GA_MEASUREMENT_ID,
+      analyticsConfig.GA_API_SECRET,
+      analyticsConfig.GA_ENDPOINT
+    )
+  : null;
 const userPreferences = UserPreferenceModule.getInstance();
 
 const MESSAGE_COUNT_THRESHOLD = 50; // number of messages to trigger the long running session prompt
@@ -193,7 +211,7 @@ const machine = createMachine<SessionContext, SessionEvent, SessionTypestate>(
       notifyEndSession: (context: SessionContext, event: EndSessionEvent) => {
         const durationInMillis = Date.now() - context.session_start_time;
         const durationInMinutes = durationInMillis / 1000 / 60;
-        analytics.sendEvent("session_ended", {
+        analytics?.sendEvent("session_ended", {
           session_id: context.session_id,
           engagement_time_msec: durationInMillis,
           message_count: context.message_count,
@@ -214,7 +232,7 @@ const machine = createMachine<SessionContext, SessionEvent, SessionTypestate>(
           context.last_message.talk_time_seconds * 1000;
         const rtf = processing_time_ms / speech_duration_ms;
 
-        analytics.sendEvent("message_sent", {
+        analytics?.sendEvent("message_sent", {
           session_id: context.session_id,
           engagement_time_msec: Date.now() - context.session_start_time,
           delay_msec: event.delay_ms,
@@ -229,7 +247,7 @@ const machine = createMachine<SessionContext, SessionEvent, SessionTypestate>(
         const transcriptionMode = await userPreferences.getCachedTranscriptionMode();
         const language = await userPreferences.getLanguage();
         const elapsed_ms = 0;
-        analytics.sendEvent("session_started", {
+        analytics?.sendEvent("session_started", {
           session_id: context.session_id,
           engagement_time_msec: elapsed_ms,
           transcription_mode: transcriptionMode,
