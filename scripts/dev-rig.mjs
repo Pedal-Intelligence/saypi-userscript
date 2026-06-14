@@ -94,9 +94,15 @@ async function main() {
   log(`freshness: poll mtime of .output/chrome-mv3-dev after each edit`);
 
   const wxtBin = resolvePath(repoRoot, "node_modules/.bin/wxt");
+  // stdin must be an OPEN pipe, not "inherit"/"ignore". After the first file change
+  // WXT starts a readline interface on stdin (its "o + enter = reopen browser"
+  // shortcut). A non-TTY stdin at EOF makes readline close immediately and the
+  // process exits right after the first reload. We open a pipe and never write to
+  // or close it, so stdin never EOFs and the watcher stays alive. stdout/stderr
+  // still flow to the caller's log.
   const child = spawn(wxtBin, ["--browser", "chrome"], {
     cwd: repoRoot,
-    stdio: "inherit",
+    stdio: ["pipe", "inherit", "inherit"],
     env: { ...process.env, WXT_DEV_PORT: String(PORT), WXT_DISABLE_RUNNER: "true" },
   });
   child.on("exit", (code) => process.exit(code ?? 1)); // null code = signal-killed
