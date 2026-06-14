@@ -54,7 +54,9 @@
 			this.slider.value = String(index);
 			const v = this.values[index];
 			if (!v) return;
-			// label
+			// label — keep data-i18n in sync with the selected mode so a later
+			// re-localization pass (replaceI18n) doesn't revert it to the hard-coded key.
+			this.label.setAttribute('data-i18n', v.i18nLabelKey);
 			this.label.textContent = chrome.i18n.getMessage(v.i18nLabelKey);
 			// description visibility
 			const descriptions = this.container.querySelectorAll('.description');
