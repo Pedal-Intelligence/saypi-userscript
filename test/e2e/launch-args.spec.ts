@@ -20,6 +20,7 @@ describe("buildLaunchArgs", () => {
     expect(rule).toContain("MAP pi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP api.saypi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP www.saypi.ai 127.0.0.1:8443");
+    expect(rule).toContain("MAP www.google-analytics.com 127.0.0.1:8443");
     expect(rule).toContain("EXCLUDE localhost");
   });
 

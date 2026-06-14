@@ -52,6 +52,16 @@ export async function startMockServers(): Promise<MockServers> {
       res.end(JSON.stringify({ combined_transcript: "" }));
       return;
     }
+    // Catch-all: absorb any other POST (e.g. the GA beacon to /debug/mp/collect)
+    // so the harness stays hermetic. Drain the body, then return an empty 200.
+    if (req.method === "POST") {
+      req.on("data", () => {});
+      req.on("end", () => {
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end("{}");
+      });
+      return;
+    }
     res.writeHead(404).end();
   });
 

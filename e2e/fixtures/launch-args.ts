@@ -12,6 +12,8 @@ export function buildLaunchArgs(o: LaunchArgsOptions): string[] {
     `MAP api.saypi.ai 127.0.0.1:${o.apiPort}`,
     `MAP www.saypi.ai 127.0.0.1:${o.apiPort}`,
     `MAP app.saypi.ai 127.0.0.1:${o.apiPort}`,
+    `MAP www.google-analytics.com 127.0.0.1:${o.apiPort}`,
+    `MAP google-analytics.com 127.0.0.1:${o.apiPort}`,
     `EXCLUDE localhost`,
   ].join(",");
   return [
