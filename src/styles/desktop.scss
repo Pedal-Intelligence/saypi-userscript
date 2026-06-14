@@ -58,30 +58,36 @@ html.desktop-view {
     }
   }
 
+  // Anchor the ::after tooltip to the button so it centres on it (not on some
+  // distant positioned ancestor).
+  .tooltip[aria-label] {
+    position: relative;
+  }
+
   .tooltip[aria-label]::after {
     content: attr(aria-label);
     position: absolute;
     top: 120%; // position the tooltip below the button
-    transform: translateX(-70%); // center the tooltip relative to the button
+    left: 50%;
+    transform: translateX(-50%); // centre the tooltip under the button
     white-space: nowrap;
     background: #24381b; // Pi primary text color (dark green)
     color: white;
     padding: 5px 10px;
     border-radius: 4px;
-    margin-left: 10px;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
     font-size: 1.2rem;
+    z-index: 1000; // sit above host chrome (e.g. Pi's z-999 sidebar)
   }
 
   @include meta.load-css("./chatgpt.scss");
-  
+
   // Show on hover (desktop)
   @media (hover: hover) {
     .tooltip[aria-label]:hover::after {
         opacity: 1;
-        z-index: 101;
     }
   }
 
