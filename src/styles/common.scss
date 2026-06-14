@@ -39,6 +39,15 @@
   }
 }
 
+/* The dark-mode / theme switcher is a SayPi immersive-mode affordance: the chat
+   hosts ship their own native dark mode in the normal view, so the toggle belongs
+   in immersive mode only. Hide it explicitly outside immersive view rather than
+   relying on it collapsing to 0x0 — otherwise it reads as a broken/invisible
+   control in the normal control panel (e.g. on pi.ai). */
+html:not(.immersive-view) .theme-toggle-button {
+  display: none;
+}
+
 
 #saypi-lock-panel {
   /* lock panel is only displayed on mobile devices */
