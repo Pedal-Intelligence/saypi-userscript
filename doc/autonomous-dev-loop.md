@@ -132,6 +132,123 @@ obs.observe(document.body, { subtree: true, childList: true, attributes: true })
 JSON.stringify(window.__probe.slice(-50));
 ```
 
+## Observability: see SayPi's own logs, and probe pitfalls (learned 2026-06-14)
+
+The biggest time-sink on the first real run was assuming the harness was dead
+because **no SayPi logs appeared**. They were there — just suppressed.
+
+- **Turn SayPi's logs on.** The logger is quiet by default *even in a `wxt dev`
+  build*: `logger.debug`/`info` emit nothing until debug mode is enabled. Enable it
+  per tab and reload: `localStorage.setItem('saypi:debug', 'true')` (or open the
+  page with `?saypi_debug=1`). After that the MCP `read_console_messages` *does*
+  capture the content script's isolated-world logs (prefixed `[SayPi DEBUG]`,
+  sourced from `content-scripts/saypi.js`). Until you do this, expect zero SayPi
+  output — that is not a broken harness.
+- **Arm capture *before* you reload.** MCP console/network tracking starts on the
+  *first* `read_console_messages` / `read_network_requests` call for a tab, resets
+  on navigation, and the buffer is small + deduped. Early-init logs are missed
+  unless you call the read tool once (to arm) and *then* reload — or rely on the
+  in-page buffer below.
+- **`javascript_tool` results can be silently blocked.** A call whose executed
+  code emits console output containing long digit runs (e.g. `Date.now()`
+  timestamps) returns `[BLOCKED: Cookie/query string data]` — the whole result is
+  redacted by a privacy filter. Install probes *silently* (no `console.log` from
+  injected code) and keep long numbers out of returned strings; prefer
+  `performance.now()|0` over `Date.now()` inside probes.
+- **`offsetParent` lies for `position:fixed` elements.** The call button is
+  `fixed`, so an `offsetParent`-based "visible?" check reports it hidden when it is
+  actually on screen. Use `getBoundingClientRect()` (non-zero box) or
+  `el.checkVisibility()` instead.
+- **Tooling:** in this environment `rg`'s colored output can mangle matched words —
+  read files with the Read tool or use `grep` / `rg --color=never -N`. `fd` is not
+  installed; use `find` / `rg --files`.
+
+Paste-once probe that enables logs and records main-world console + errors +
+unhandled rejections + DOM mutations (read any back later via `window.__cap` /
+`window.__probe`):
+
+```js
+(() => {
+  localStorage.setItem('saypi:debug','true'); // reload after this to capture init logs
+  if (!window.__cap) {
+    window.__cap = [];
+    for (const lvl of ['log','info','warn','error','debug']) {
+      const orig = console[lvl].bind(console);
+      console[lvl] = (...a) => { try { window.__cap.push({ lvl, n: performance.now()|0,
+        msg: a.map(x => { try { return typeof x==='string'?x:JSON.stringify(x); } catch { return String(x); } }).join(' ').slice(0,300) }); } catch {} return orig(...a); };
+    }
+    addEventListener('error', e => window.__cap.push({ lvl:'uncaught', msg:(e.message+' @ '+e.filename+':'+e.lineno).slice(0,300) }));
+    addEventListener('unhandledrejection', e => window.__cap.push({ lvl:'rejection', msg:String(e.reason&&(e.reason.stack||e.reason.message||e.reason)).slice(0,300) }));
+  }
+  if (!window.__probe) {
+    window.__probe = [];
+    new MutationObserver(ms => { for (const m of ms) window.__probe.push({ n:performance.now()|0, type:m.type, target:(m.target&&(m.target.id||(m.target.className&&String(m.target.className).slice(0,50))))||'' }); })
+      .observe(document.body, { subtree:true, childList:true, attributes:true });
+  }
+  return 'probes installed';
+})()
+```
+
+> The content script (isolated world) and `javascript_tool` (page main world) are
+> different JS contexts: the main-world `__cap` hook only catches main-world logs;
+> for SayPi's own logs use `read_console_messages` *with* `saypi:debug` enabled.
+
+## What the MCP can't reach (test it at Layer 2 instead)
+
+The extension **Settings page opens in its own browser window**, outside the MCP
+tab group — `tabs_context_mcp` never lists it and `computer`/`javascript_tool`
+can't drive it. The founder can screenshot it on request, but treat Settings-tab
+behaviour (e.g. the Dictation / Submit-mode selectors) as **Layer 1–2 territory**:
+unit-test the controller plus a `replaceI18n()` re-localization pass rather than
+trying to drive the popup. That is how the 2026-06-14 dictation mode-label fix was
+verified (`test/settings/tabs/DictationModeSelector.spec.ts`).
+
+## Verifying UI parity (check position + states, not just the property you changed)
+
+A real miss on this run: after resizing an injected icon I checked its *size*
+numerically and eyeballed the *resting* state — and shipped it visibly
+off-centre. Two lessons: a change aimed at one property (size) can break another
+(alignment), and the resting state (transparent background) hides alignment
+problems that only the hover/active background reveals.
+
+When decorating or restyling a host control, verify it the way the user sees it:
+
+1. **Position, not just size.** Assert the icon's *centre* matches the button's
+   centre (via `getBoundingClientRect`, and the glyph's via `getBBox`) — not only
+   its dimensions. An icon larger than the padding box won't centre unless the
+   button explicitly flex-centres it.
+2. **All interactive states.** Resting *and* hover *and* active (*and* dark). The
+   hover/active background is what exposes alignment, padding, radius and size
+   mismatches; the resting transparent state hides them.
+3. **Diff the whole box model against the native reference** — size, centre-offset,
+   padding, border-radius, hover fill — not just the one property you touched.
+4. **Re-verify the whole component after *every* change.** Don't assume a property
+   you didn't touch is still fine (resizing the icon is what broke its centring).
+
+A reusable parity probe — compare a SayPi button to a native reference:
+
+```js
+(() => {
+  const box = (el) => {
+    if (!el) return null;
+    const r = el.getBoundingClientRect(); const cs = getComputedStyle(el);
+    const svg = el.querySelector('svg'); let iconCentreOffset = null;
+    if (svg) { const s = svg.getBoundingClientRect();
+      iconCentreOffset = { dx: Math.round((s.x+s.width/2-(r.x+r.width/2))*10)/10,
+                           dy: Math.round((s.y+s.height/2-(r.y+r.height/2))*10)/10 }; }
+    return { size: Math.round(r.width)+'x'+Math.round(r.height), display: cs.display,
+             padding: cs.padding, radius: cs.borderRadius, iconCentreOffset };
+  };
+  return JSON.stringify({
+    saypi: box(document.getElementById('saypi-settingsButton')),
+    native: box(document.querySelector('[data-testid="nav-new-chat"]')),
+  }, null, 1);
+})()
+```
+
+`iconCentreOffset` near `{dx:0, dy:0}` means the glyph is centred; anything else is
+the class of bug missed on 2026-06-14. Run the probe in the hover state too.
+
 ## Staged-vs-released identity check
 
 The founder versions the staged dev build one patch ahead of the store release

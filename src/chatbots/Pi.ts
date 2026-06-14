@@ -72,8 +72,10 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getAudioOutputButtonSelector(): string {
-    // audio button is the last button element in the audio controls container
-    return ".saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end > button";
+    // Voice on/off button is the first button inside Pi's audio controls.
+    // Pi moved the buttons into an `inline-flex` wrapper and the row container
+    // dropped `items-center` (now `z-10`), so match the wrapper generically.
+    return ".saypi-audio-controls > div > div.relative.flex.justify-end.self-end > div > button";
   }
 
   getControlPanelSelector(): string {

@@ -21,13 +21,15 @@ html body.pi {
       height: 36px;
     }
 
-    /* Match Pi's native brown icon color */
+    /* Match Pi's icon colour via its own design token so we follow Pi's theme
+       (incl. light/dark) automatically. The rgb fallback keeps light mode correct
+       if Pi ever renames the token. */
     .saypi-control-button svg {
-      color: rgb(107, 98, 85);
-      stroke: rgb(107, 98, 85);
+      color: var(--color-text-secondary, rgb(101, 94, 85));
+      stroke: var(--color-text-secondary, rgb(101, 94, 85));
 
       path, line, circle, rect, polyline {
-        stroke: rgb(107, 98, 85);
+        stroke: var(--color-text-secondary, rgb(101, 94, 85));
       }
     }
 
@@ -36,10 +38,51 @@ html body.pi {
       display: none;
     }
 
-    /* Give settings button visible background to match enter button */
+    /* Focus + Voice-settings: match Pi's standalone icon buttons — transparent
+       with a hover/tap fill (Pi's tokens, so it tracks light/dark), Pi's icon
+       size, and Pi's icon-button radius. Replaces the old cream circle so the two
+       buttons read as one consistent, native-looking pair. */
+    #saypi-enter-button,
     #saypi-settingsButton {
-      background-color: rgb(237, 225, 209); /* bg-cream-550 */
-      border-radius: 50%;
+      background-color: transparent;
+      border-radius: 10px; /* Pi's icon-button radius (rounded-[10px]) */
+      /* Center the icon regardless of its size — the icons are intentionally
+         sized differently (and can exceed the padding box), so rely on flex
+         centering, not the default top-left block flow. */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background-color: var(--color-button-fill-hover, rgb(233, 221, 205));
+      }
+
+      &:active {
+        background-color: var(--color-button-fill-tap, rgb(228, 215, 198));
+      }
+
+    }
+
+    /* Optical sizing — match the *visible* glyph to Pi's ~16px native icons, not
+       raw px. The source SVGs fill their viewBox very differently: the focus icon
+       fills ~75%, but the settings sliders fill only ~48% (its outer ring, hidden
+       on Pi, sets the 768 viewBox), so a uniform size makes settings look tiny.
+       Hence the deliberately different per-icon sizes. */
+    #saypi-enter-button svg {
+      width: 21px;
+      height: 21px;
+    }
+    #saypi-settingsButton svg {
+      width: 32px;
+      height: 32px;
+
+      /* The settings source SVG uses a light stroke relative to its large 768
+         viewBox; thicken the slider lines to match Pi's icon line weight. */
+      g {
+        stroke-width: 42;
+      }
     }
 
     /* Consistent spacing between SayPi buttons */
@@ -48,19 +91,10 @@ html body.pi {
     }
   }
 
-  /* Enter focus mode button specific sizing */
+  /* Enter focus mode button sizing (icon colour/size handled above) */
   #saypi-enter-button {
     width: 36px;
     height: 36px;
-
-    svg {
-      color: rgb(107, 98, 85);
-      stroke: rgb(107, 98, 85);
-
-      path, line, circle, rect, polyline {
-        stroke: rgb(107, 98, 85);
-      }
-    }
   }
 
   /* Message controls: size copy button to better match native thumbs up/down */
@@ -180,10 +214,11 @@ html body.pi {
       flex-shrink: 0; /* Prevent button from shrinking in flex container */
     }
 
-    /* Ensure SayPi toolbar buttons have visible background to match native neighbors */
+    /* Give SayPi toolbar buttons a visible resting background on mobile to match
+       native neighbours — via Pi's fill token so it tracks light/dark. */
     #saypi-enter-button,
     #saypi-settingsButton {
-      background-color: rgb(237, 225, 209); /* bg-cream-550 */
+      background-color: var(--color-fill-default, rgb(236, 225, 210));
     }
   }
 
@@ -233,3 +268,9 @@ html body.pi {
     }
   }
 }
+
+/* Dark mode is handled automatically: the SayPi control buttons above style
+   themselves with Pi's own design tokens (`--color-text-secondary`,
+   `--color-button-fill-*`, `--color-fill-default`), which Pi redefines under
+   `html.dark`. So SayPi's controls follow Pi's native light/dark theme with no
+   SayPi-specific dark rules. Verified live on pi.ai (light + dark) 2026-06-14. */
