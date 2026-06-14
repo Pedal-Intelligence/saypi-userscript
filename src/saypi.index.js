@@ -20,6 +20,7 @@ import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
 // Static imports for all modules (but conditionally execute)
 import { UniversalDictationModule } from "./UniversalDictationModule.ts";
 import { AIChatModule } from "./AIChatModule.ts";
+import { initTooltip } from "./ui/Tooltip.ts";
 
 // Conditional style imports
 import "./styles/claude.scss"; // scoped by chatbot flags, i.e. <body class="claude">
@@ -43,6 +44,9 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   logger.debug("Initializing compatibility notification UI");
   const { CompatibilityNotificationUI } = await import(/* webpackMode: "eager" */ "./compat/CompatibilityNotificationUI.ts");
   CompatibilityNotificationUI.getInstance().initialize();
+
+  // Body-portal tooltips for SayPi buttons (escape host overflow/stacking clipping)
+  initTooltip();
 
   // Initialize progressive authentication prompt system (for chatbot overlay prompts)
   logger.debug("Initializing auth prompt system");

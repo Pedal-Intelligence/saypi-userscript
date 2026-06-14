@@ -48,6 +48,31 @@ html:not(.immersive-view) .theme-toggle-button {
   display: none;
 }
 
+/* Portal tooltips for SayPi buttons — rendered on <body> and positioned with JS
+   (src/ui/Tooltip.ts) so they're never clipped by an overflow:hidden ancestor or
+   covered by host chrome (Pi's prompt box / z-[999] sidebar, ChatGPT's composer).
+   A CSS ::after tooltip can't escape its container; this can. Per-host colour is
+   overridden by `body.<host> .saypi-tooltip`. */
+.saypi-tooltip {
+  position: fixed;
+  z-index: 2147483000;
+  transform: translateX(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.12s ease-in-out;
+  background-color: #24381b;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+.saypi-tooltip.visible {
+  opacity: 1;
+}
+
 
 #saypi-lock-panel {
   /* lock panel is only displayed on mobile devices */
