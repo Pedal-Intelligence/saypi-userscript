@@ -164,7 +164,7 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
 @media (hover: none) {
   .tooltip[aria-label]:active::after {
       opacity: 1;
-      z-index: 101;
+      z-index: 1000; // sit above host chrome (match desktop)
   }
 }
 
