@@ -8,14 +8,28 @@ Claude, ChatGPT) with no per-iteration founder involvement. Design:
 > drive the microphone (see Boundaries). The headless harness with synthetic
 > audio is Layer 3 (separate spec).
 
-## One-time founder setup (already done)
+## Setup (order matters)
+
+**Verified live:** the rig must be running *before* the extension's MV3 service
+worker connects. With the wrong order the loaded extension stays bound to a dead
+server and **silently never hot-reloads** (edits rebuild on disk but never reach
+the page). So:
 
 1. Keep Chrome running with the Claude-in-Chrome extension.
-2. `chrome://extensions` → Developer mode → **Load unpacked** →
-   `<repo>/.output/chrome-mv3-dev`. Chrome remembers this by absolute path, so
-   it survives restarts — you only do it once.
-3. If the **store** build of SayPi is also installed, disable it while iterating
-   so two content scripts don't both run on the page (see Troubleshooting).
+2. **Start the rig first** (see "Starting the rig" below).
+3. `chrome://extensions` → Developer mode → **Load unpacked** →
+   `<repo>/.output/chrome-mv3-dev` (first time only — Chrome remembers the path),
+   then click **reload ⟲** on that unpacked card. The reload connects the
+   extension's service worker to the live `ws://localhost:3001`, where the open
+   socket keeps the SW alive to receive hot-reload signals. **Reload the extension
+   once after every rig (re)start** — that's the one recurring manual step.
+4. If a **store** build of SayPi is also installed, **disable it** so only the dev
+   build injects (otherwise two content scripts run and you can't tell which is live).
+5. **Tell dev builds apart by version.** The staged dev build is versioned one
+   patch ahead of the store release (store `x.y.z` → staged `x.y.z+1`, currently
+   `1.10.8`). Check the served version on disk:
+   `node -e "console.log(require('./.output/chrome-mv3-dev/manifest.json').version)"`
+   (and after an extension reload it shows at `chrome://extensions`).
 
 ## Starting the rig (agent)
 
@@ -27,9 +41,12 @@ node scripts/dev-rig.mjs
 
 It ensures `.env` is on remote servers (URLs only — never `.env.production`),
 runs predev, kills any stray `wxt dev` for this repo, confirms the port is free,
-and starts one server on port **3001** with WXT's throwaway browser disabled.
-Port 3001 matches the already-loaded extension's baked reload origin, so **no
-re-load is needed** — the loaded extension just reconnects.
+and starts one server on port **3001** (origin baked into the extension's reload
+client) with WXT's throwaway browser disabled. It stays alive across edits.
+
+> After the rig starts (or restarts), **reload the unpacked extension once**
+> (setup step 3). Until you do, edits rebuild on disk but won't reach the running
+> page — the SW is still bound to the previous server.
 
 ## Environment and the production boundary
 
@@ -47,19 +64,23 @@ secret.
 ## The iterate-verify loop
 
 1. **Edit** source in this checkout.
-2. **Wait for the rebuild.** WXT rebuilds and pushes a reload over
-   `ws://localhost:3001`; the extension and matching tabs reload themselves.
-   Confirm the rebuild landed by polling the output dir's mtime (it advances on
-   each rebuild):
+2. **Wait for the rebuild.** WXT rebuilds (~1s) and pushes a reload over
+   `ws://localhost:3001`; the connected service worker re-registers the runtime
+   content script (SayPi's content scripts are runtime-registered — `content_scripts`
+   is absent from the manifest). Confirm the rebuild landed by polling the output
+   dir's mtime (it advances on each rebuild):
 
    ```bash
    # most-recent mtime under the dev output, epoch seconds
    find .output/chrome-mv3-dev -type f -exec stat -f '%m' {} + | sort -n | tail -1
    ```
 
-   or re-read the rig's background-task log for its rebuild line.
-3. **Reload the test tab** via the MCP (`navigate` to the same URL) — belt and
-   suspenders in case WXT didn't reload that specific tab.
+   or re-read the rig's background-task log for its `✔ Reloaded` line.
+3. **Reload the test tab** via the MCP (`navigate` to the same URL). This is what
+   makes the re-registered content script take effect on the open page — verified
+   live: with the SW connected, an edit reaches the real pi.ai DOM after just a tab
+   reload, no per-edit extension reload. (If a change *doesn't* appear, the SW
+   likely slept or the rig restarted — reload the extension once, setup step 3.)
 4. **Assert** against the DOM (see the probe below).
 
 ## The verification probe (buffered MutationObserver)
