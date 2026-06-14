@@ -8,6 +8,31 @@ Claude, ChatGPT) with no per-iteration founder involvement. Design:
 > drive the microphone (see Boundaries). The headless harness with synthetic
 > audio is Layer 3 (separate spec).
 
+## Autonomy model — what's hands-off vs. needs the founder
+
+Read this first; it sets expectations for how the loop actually runs.
+
+- **Every code edit is hands-off.** Edit → rig rebuilds (~1s) → the connected
+  service worker re-registers the content script → the agent reloads the test tab
+  via the MCP → assert. No founder action per edit. (Verified end-to-end on real
+  pi.ai, both directions, 2026-06-14.)
+- **The founder reloads the extension exactly once per session** — right after the
+  agent (re)starts the rig (setup step 3). After that, every edit that session is
+  autonomous.
+- **The agent CANNOT reload the extension itself** (validated 2026-06-14, don't
+  re-attempt): the MCP `navigate` tool forces an `https://` prefix so it can't open
+  `chrome://extensions`, and the `computer` click/screenshot tool only sees the page
+  viewport (no address bar, no browser chrome). `chrome://extensions` is therefore
+  unreachable from automation. When a rig (re)start is unavoidable, ask the founder:
+  *"please click ⟲ on the Say, Pi `<version>` card."*
+- **Minimize rig restarts** to minimize that ask. Keep **one long-lived rig** — it's
+  stable across edits. You only restart it if you change `wxt.config.ts` or it dies.
+  A fresh agent session = a fresh rig = one founder reload at the start, then nothing.
+- **Layer 3 removes this entirely** (its own spec): Playwright launches a fresh,
+  dedicated Chromium per run via `--load-extension`, which it can reload/relaunch
+  itself — no `chrome://extensions`, no stale service worker — and can feed fake mic
+  audio for the VAD/STT paths this layer can't.
+
 ## Setup (order matters)
 
 **Verified live:** the rig must be running *before* the extension's MV3 service
