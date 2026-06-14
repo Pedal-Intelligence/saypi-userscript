@@ -724,7 +724,7 @@
     "description": "Text to show when TTS quota is exhausted."
   },
   "ttsQuotaProgress": {
-    "message": "$remaining$ of $total$ characters remaining",
+    "message": "$remaining$ of $total$ credits remaining",
     "description": "Tooltip for the TTS quota progress bar.",
     "placeholders": {
       "remaining": {
@@ -734,6 +734,16 @@
       "total": {
         "content": "$2",
         "example": "1000"
+      }
+    }
+  },
+  "ttsCreditsRemaining": {
+    "message": "$credits$ credits remaining",
+    "description": "Text showing remaining TTS quota as a per-voice credit pool (saypi-api #181 Stage 2), not raw characters.",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
       }
     }
   },
@@ -765,7 +775,7 @@
   },
   "ttsQuotaCharacters": {
     "message": "credits",
-    "description": "Unit for TTS quota (characters)."
+    "description": "Unit for the TTS quota (per-voice credits; key name retained for compatibility)."
   },
   "sttQuotaRemaining": {
     "message": "Speech Recognition",
