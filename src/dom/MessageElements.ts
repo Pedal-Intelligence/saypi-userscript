@@ -619,6 +619,13 @@ abstract class MessageControls {
   protected telemetryContainer: HTMLElement | null = null;
   private eventListeners: EventListener[] = []; // Added to track event listeners
 
+  // The last message is re-decorated on every token mutation while it streams,
+  // constructing a fresh MessageControls each time. Track which message elements
+  // already hold the telemetry listener so we register it at most once per element
+  // instead of leaking one listener per re-decoration.
+  private static elementsWithTelemetryListener = new WeakSet<HTMLElement>();
+  private addedTelemetryListener = false;
+
   constructor(
     protected message: AssistantResponse,
     protected ttsControls: TTSControlsModule
@@ -626,8 +633,13 @@ abstract class MessageControls {
     this.actionBar = this.messageControlsElement = null; // will be initialized in decorateControls()
     this.decorateControls(message);
 
-    if (this.message.isLastMessage()) {
-      // Listen for telemetry updates
+    if (
+      this.message.isLastMessage() &&
+      !MessageControls.elementsWithTelemetryListener.has(this.message.element)
+    ) {
+      // Listen for telemetry updates (once per message element)
+      MessageControls.elementsWithTelemetryListener.add(this.message.element);
+      this.addedTelemetryListener = true;
       EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
       this.eventListeners.push({ event: "telemetry:updated", listener: this.handleTelemetryUpdate });
     }
@@ -665,6 +677,10 @@ abstract class MessageControls {
       EventBus.off(event, listener);
     });
     this.eventListeners = [];
+    if (this.addedTelemetryListener) {
+      MessageControls.elementsWithTelemetryListener.delete(this.message.element);
+      this.addedTelemetryListener = false;
+    }
     // Add any other specific cleanup for MessageControls here
   }
 
