@@ -57,10 +57,25 @@ html body.pi {
         background-color: var(--color-button-fill-tap, rgb(228, 215, 198));
       }
 
-      /* Match Pi's 20px icon size (SayPi's source SVGs are 24px+). */
-      svg {
-        width: 20px;
-        height: 20px;
+    }
+
+    /* Optical sizing — match the *visible* glyph to Pi's ~16px native icons, not
+       raw px. The source SVGs fill their viewBox very differently: the focus icon
+       fills ~75%, but the settings sliders fill only ~48% (its outer ring, hidden
+       on Pi, sets the 768 viewBox), so a uniform size makes settings look tiny.
+       Hence the deliberately different per-icon sizes. */
+    #saypi-enter-button svg {
+      width: 21px;
+      height: 21px;
+    }
+    #saypi-settingsButton svg {
+      width: 32px;
+      height: 32px;
+
+      /* The settings source SVG uses a light stroke relative to its large 768
+         viewBox; thicken the slider lines to match Pi's icon line weight. */
+      g {
+        stroke-width: 42;
       }
     }
 
