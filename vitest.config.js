@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { defineConfig, configDefaults } from "vitest/config";
 
 export default defineConfig({
   resolve: {
@@ -10,6 +10,7 @@ export default defineConfig({
   },
   test: {
     include: ["**/*.spec.ts"],
+    exclude: [...configDefaults.exclude, "e2e/**"],
     globals: true,
     setupFiles: ["test/vitest.setup.js"],
   },

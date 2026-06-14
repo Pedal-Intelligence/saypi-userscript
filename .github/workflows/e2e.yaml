@@ -1,0 +1,69 @@
+# ADVISORY workflow: Layer 3 headless end-to-end harness.
+#
+# This is intentionally a SEPARATE workflow from test.yaml and is NOT a required
+# merge check. It runs the Playwright-driven E2E suite (build the static dev
+# extension, launch headless Chromium against local mock servers, drive the
+# fake-mic STT path) and reports pass/fail as advisory signal only. Promotion to
+# a required check is a deliberate, founder-signed gate change — do not add this
+# job to branch-protection required checks or to the `test` npm aggregate.
+#
+# See e2e/README.md for the architecture, the local-vs-CI risk split, and why
+# this stays advisory until it has proven itself stable on CI runners.
+name: e2e (advisory)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      # Mirror test.yaml's install reliability: prefer the committed lockfile,
+      # but fall back to regenerating it if the cached/offline install is flaky.
+      - name: Install dependencies
+        run: |
+          npm cache clean --force
+          npm install --no-fund --prefer-offline || (
+            echo "Initial install failed, regenerating package-lock.json..."
+            rm -f package-lock.json
+            npm install --no-fund
+          )
+        timeout-minutes: 10
+        env:
+          npm_config_fetch_retries: 5
+          npm_config_fetch_retry_factor: 2
+          npm_config_fetch_retry_mintimeout: 20000
+          npm_config_fetch_retry_maxtimeout: 120000
+
+      - name: Install Playwright Chromium + OS deps
+        run: npx playwright install --with-deps chromium
+
+      - name: Build static dev extension (development mode)
+        run: npm run e2e:build
+
+      - name: Run E2E suite
+        run: npm run test:e2e
+        env:
+          CI: "true"
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7

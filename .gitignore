@@ -86,3 +86,11 @@ test-csp-bypass.html
 public/.vite/
 doc/dom/chatgpt/sidebar.header.menu.html
 doc/dom/chatgpt/sidebar.header.menu-tiny.html
+
+# Git worktrees for isolated agent workspaces
+.worktrees/
+
+# Playwright (Layer 3 E2E) run artifacts
+/test-results/
+/playwright-report/
+/e2e/.cache/
