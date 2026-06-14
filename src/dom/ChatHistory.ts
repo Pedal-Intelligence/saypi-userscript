@@ -87,9 +87,10 @@ class ChatHistoryRootElementObserver extends BaseObserver {
       }
       this.oldMessageObserver = new ChatHistoryOldMessageObserver(
         this.chatHistoryElement,
-        `${pastMessagesContainer.tagName}.${Array.from(
-          pastMessagesContainer.classList
-        ).join(".")}`,
+        // Identify the container by the stable classes we just added — NOT the
+        // host's volatile Tailwind classes, which contain selector-invalid chars
+        // (e.g. `lg:pb-8`, `min-h-[calc(100%-60px)]`) that throw from .matches().
+        `${pastMessagesContainer.tagName.toLowerCase()}.chat-history.past-messages`,
         this.speechSynthesis,
         this.chatbot
       );
