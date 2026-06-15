@@ -9,6 +9,8 @@ export interface LaunchArgsOptions {
 export function buildLaunchArgs(o: LaunchArgsOptions): string[] {
   const hostRules = [
     `MAP pi.ai 127.0.0.1:${o.piPort}`,
+    // claude.ai shares the page server; it serves the Claude mock by Host header.
+    `MAP claude.ai 127.0.0.1:${o.piPort}`,
     `MAP api.saypi.ai 127.0.0.1:${o.apiPort}`,
     `MAP www.saypi.ai 127.0.0.1:${o.apiPort}`,
     `MAP app.saypi.ai 127.0.0.1:${o.apiPort}`,

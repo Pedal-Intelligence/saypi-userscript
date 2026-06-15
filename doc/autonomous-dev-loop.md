@@ -110,40 +110,43 @@ secret.
    the rig restarted — reload the extension once, setup step 3.)
 4. **Assert** against the DOM (see the probe below).
 
-### CSS-only (SCSS) edits don't hot-reload (learned 2026-06-15)
+### CSS changes don't hot-reload — verify styles at Layer 3, never by injection (learned 2026-06-15)
 
-The rig hot-reloads content-script **JS** live from the dev server (HMR — the
-`.output` bundle isn't even rewritten), but content-script **CSS** is registered
-once from the last full build and HMR does **not** refresh it. So a `.ts`/`.js`
-edit reaches the page on a tab reload, but an SCSS-only edit does **not** — the
-page keeps serving the stale rule. Tell them apart with the output-mtime poll
-(step 2): after a CSS-only edit it won't advance, and `grep` the rule in
-`.output/chrome-mv3-dev/content-scripts/saypi.css` will still show the old value
-(the dev server on `:3001` *does* serve the fresh compiled SCSS — `curl -s
-"http://localhost:3001/@fs$(pwd)/src/styles/<host>.scss?direct"` — but that's not
-what the registered content script injects).
+**`wxt dev` cannot hot-reload content-script CSS.** It hot-reloads content-script
+**JS** live from the dev server, but a changed `.scss` never reaches the loaded
+extension. This is structural, not a stale watcher: WXT's `detectDevChanges`
+maps a changed file to the content-script step only if the file is in a JS
+chunk's `moduleIds` (`findEffectedSteps`). Content-script CSS is emitted as an
+*asset*, so an `.scss` edit matches nothing → it's classified **`no-change`** →
+no rebuild, no reload. (JS hot-reloads because it *is* in `moduleIds`.) The dev
+server on `:3001` serves the freshly-compiled SCSS on demand, but that is not
+what the manifest-injected content script uses, so the page keeps the old rule.
+Restarting the rig only "works" because the *initial* build re-reads source.
 
-To verify a CSS fix at Layer 4 anyway:
+**Do not inject CSS into the page to "verify" a style.** A rule you paste into
+the tab (even via `<style>` + `!important`) tests *your* rule, not the artifact
+the build system produced — it's a false signal. We hit exactly this trap and it
+masked nothing real.
 
-- **Quick value/visual check — inject the fixed rule into the test tab.** The
-  stale rule has equal specificity (same `body.<host> .saypi-tooltip` selector),
-  so use `!important` to win, then probe computed styles / screenshot:
+Instead, **verify CSS/visual contracts at Layer 3 against the real build** — it
+loads the actual `wxt build` output via `--load-extension`, so the browser
+injects the extension's real content-script CSS, autonomously and in CI. The
+pattern: navigate to the host mock (so the manifest CSS injects), let SayPi tag
+the body by host, create the element the shipped stylesheet targets, and assert
+its **computed** style. See `e2e/specs/tooltip-contrast.e2e.ts` (regression guard
+for the Claude tooltip contrast bug — confirmed fail-first by reverting the fix
+and rebuilding). The Claude host mock is wired the same way as Pi
+(`e2e/support/mock-claude-page.html`, `MAP claude.ai` in `launch-args.ts`,
+Host-routed in `mock-servers.ts`).
 
-  ```js
-  // via MCP javascript_tool, in the test tab
-  const s = document.createElement('style'); s.id = 'saypi-fix-verify';
-  s.textContent =
-    'body.claude .saypi-tooltip{background-color:rgba(0,0,0,0.8)!important;color:#fff!important}';
-  document.head.appendChild(s); // remove it again when done
-  ```
+Layer 1/2 SCSS-text assertions (`test/ui/TooltipContrast.spec.ts`,
+`test/ui/TooltipPositioning.spec.ts`) remain a fast first guard on the source,
+but the Layer 3 spec is what proves the *built* CSS renders correctly.
 
-- **True pipeline check — restart the rig** (rebuilds + re-registers the CSS) and
-  have the founder reload the extension once (setup step 3).
-
-Because the live CSS loop is unreliable, **prefer guarding CSS contracts at
-Layer 1/2**: text assertions over the SCSS source (e.g.
-`test/ui/TooltipContrast.spec.ts`, `test/ui/TooltipPositioning.spec.ts`) catch
-regressions in CI without depending on the rig.
+If you must spot-check a style on the **real** host (Layer 4), there is no live
+loop: rebuild (`npm run e2e:build`, or restart the rig) and have the founder
+reload the unpacked extension once, then assert computed styles on the page — but
+prefer Layer 3, which needs neither the founder nor the real host.
 
 ## The verification probe (buffered MutationObserver)
 
@@ -330,9 +333,10 @@ re-capture, not a contract violation.
   extension's baked origin is `localhost:3001`
   (`grep -ro "localhost:3001" .output/chrome-mv3-dev | head`). If the baked port
   differs, reload the extension once at `chrome://extensions`.
-- **A CSS/SCSS change won't appear (but JS changes do):** expected — content-script
-  CSS doesn't hot-reload. See *CSS-only (SCSS) edits don't hot-reload* under the
-  iterate-verify loop for how to verify a style fix at Layer 4.
+- **A CSS/SCSS change won't appear (but JS changes do):** expected and structural —
+  `wxt dev` never hot-reloads content-script CSS. Don't inject CSS to work around
+  it; verify styles at Layer 3 against the real build. See *CSS changes don't
+  hot-reload — verify styles at Layer 3* under the iterate-verify loop.
 - **Duplicate SayPi controls:** the store build is also active — disable it.
 - **Port busy / two servers:** re-run `node scripts/dev-rig.mjs`; it clears
   strays and waits for :3001 (and aborts with guidance if something else holds it).
