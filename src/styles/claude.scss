@@ -44,10 +44,15 @@ html body.claude {
     white-space: nowrap;
   }
 
-  /* Claude colour for the portal tooltip (.saypi-tooltip lives on <body>). */
+  /* Claude colour for the portal tooltip (.saypi-tooltip lives on <body>).
+     Use a literal dark fill, not Claude's `--black` token: the portal sits on
+     <body>, outside Claude's themed subtrees, where `--black` is undefined — an
+     unresolved var() computes to `transparent`, leaving white text invisible on
+     the light theme. Black/80 + white reads on both light and dark Claude. */
   .saypi-tooltip {
     font-size: 0.75rem; /* text-xs */
-    background-color: hsl(var(--black) / 0.8); /* bg-black/80 */
+    background-color: rgba(0, 0, 0, 0.8); /* bg-black/80 */
+    color: #fff;
   }
 
   .message-action-bar .saypi-tts-controls, .message-hover-menu .saypi-tts-controls {
