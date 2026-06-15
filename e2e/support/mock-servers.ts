@@ -7,7 +7,8 @@ import { buildTranscribeResponse } from "./transcribe-response.ts";
 // selfsigned@5 exposes an async `generate`; resolve once at module load (top-level await, ESM).
 const pems = await selfsigned.generate([{ name: "commonName", value: "saypi-e2e" }], { days: 1 });
 const tls = { key: pems.private, cert: pems.cert };
-const PAGE = readFileSync(resolve(import.meta.dirname, "mock-pi-page.html"), "utf8");
+const PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-pi-page.html"), "utf8");
+const CLAUDE_PAGE = readFileSync(resolve(import.meta.dirname, "mock-claude-page.html"), "utf8");
 
 export interface MockServers {
   piPort: number;
@@ -25,9 +26,14 @@ function extractSequenceNumber(body: Buffer): number {
 export async function startMockServers(): Promise<MockServers> {
   let hits = 0;
 
-  const piServer = https.createServer(tls, (_req, res) => {
+  // One page server backs both decorated hosts; the Host header picks the page.
+  // claude.ai and pi.ai both resolve here via --host-resolver-rules, and the
+  // content script injects per the manifest match for whichever URL is loaded.
+  const piServer = https.createServer(tls, (req, res) => {
+    const host = (req.headers.host ?? "").toLowerCase();
+    const page = host.includes("claude.ai") ? CLAUDE_PAGE : PI_PAGE;
     res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-    res.end(PAGE);
+    res.end(page);
   });
 
   const apiServer = https.createServer(tls, (req, res) => {

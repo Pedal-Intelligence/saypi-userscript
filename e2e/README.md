@@ -63,7 +63,7 @@ mock servers and a fake-mic device per run, so the specs run serially.
   context fixture (e2e/fixtures/extension.ts + launch-args.ts)
         │  chromium.launchPersistentContext with:
         │    --load-extension / --disable-extensions-except  -> the dev build
-        │    --host-resolver-rules  MAP pi.ai/api|www|app.saypi.ai/google-analytics.com
+        │    --host-resolver-rules  MAP pi.ai/claude.ai/api|www|app.saypi.ai/google-analytics.com
         │                           -> 127.0.0.1:<port>, then MAP * ~NOTFOUND (fail closed)
         │    --ignore-certificate-errors / --allow-insecure-localhost
         │    --use-fake-device-for-media-stream / --use-fake-ui-for-media-stream
@@ -75,6 +75,9 @@ mock servers and a fake-mic device per run, so the specs run serially.
      dictation-stt.e2e.ts fake mic (WAV) -> getUserMedia -> offscreen Silero-v5 VAD
                           -> onSpeechEnd -> SW POSTs /transcribe (mock echoes a
                           transcript) -> draft written into #saypi-prompt.value
+     tooltip-contrast.e2e.ts page.goto(https://claude.ai/new) -> body.claude ->
+                          the real built CSS renders .saypi-tooltip as an opaque
+                          dark pill (guards the host-CSS-var contrast bug)
 ```
 
 The pivotal trick is **`--host-resolver-rules`**: the extension is built with the
@@ -100,8 +103,9 @@ instead of silently calling the real internet.
 | `fixtures/audio/` | the fake-mic WAV clip + its [README](fixtures/audio/README.md) |
 | `support/global-setup.ts` | build guard + start mock servers + export ports |
 | `support/global-teardown.ts` | close mock servers |
-| `support/mock-servers.ts` | self-signed HTTPS Pi page + saypi-api (`/transcribe`, `/merge`, GA catch-all) |
+| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, `/merge`, GA catch-all) |
 | `support/mock-pi-page.html` | minimal Pi.ai-shaped DOM the content script decorates |
+| `support/mock-claude-page.html` | minimal claude.ai stand-in (defines no `--black`) for the host-CSS contrast spec |
 | `support/transcribe-response.ts` | the STT contract: shape of the `/transcribe` response |
 | `support/manifest-guard.ts` | `assertDevManifest()` — refuses a non-static / production build |
 | `support/check-servers.mjs` | standalone sanity check for the mock servers |

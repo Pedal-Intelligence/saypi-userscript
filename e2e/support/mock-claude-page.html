@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /><title>Claude mock</title></head>
+  <!--
+    Minimal claude.ai stand-in for Layer 3. SayPi tags the body by host
+    (ChatbotService.addChatbotFlags → body.claude), so the host-scoped
+    content-script CSS (`html body.claude …`) applies here without needing full
+    decoration. Crucially this page defines NO `--black` custom property — that
+    mirrors real claude.ai (whose tokens are `--bg-*`, `--text-*`, …) and is the
+    exact condition under which `hsl(var(--black)/.8)` computed to `transparent`.
+  -->
+  <body>
+    <main id="mock-mount"></main>
+  </body>
+</html>
