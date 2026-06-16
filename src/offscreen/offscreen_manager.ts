@@ -113,13 +113,19 @@ class OffscreenManager {
     
     try {
       await browser.offscreen.closeDocument();
-      this.portMap.clear(); // Clear ports as the document is gone
+      // Do NOT clear portMap here. The content-script <-> service-worker ports are
+      // independent of the offscreen document's lifecycle and are still alive when
+      // the document is closed by the idle auto-shutdown (OFFSCREEN_AUTO_SHUTDOWN).
+      // They are removed per-tab by each port's onDisconnect handler when a tab
+      // actually disconnects. Clearing them here evicted live ports, so the next
+      // utterance's VAD_SPEECH_END could no longer be routed to the tab and was
+      // silently dropped until a full page reload.
       this.pendingAudioMessages.clear();
       logger.debug("[OffscreenManager] Offscreen document closed.");
     } catch (error) {
       logger.warn("[OffscreenManager] Error closing offscreen document:", error);
-      // Clear ports anyway since the document might be gone
-      this.portMap.clear();
+      // Same reasoning as above: the content-script ports outlive the offscreen
+      // document, so don't evict them here either.
       this.pendingAudioMessages.clear();
     }
   }
