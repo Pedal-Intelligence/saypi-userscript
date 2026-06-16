@@ -96,6 +96,36 @@ describe("OffscreenVADClient port disconnect", () => {
     expect(indicator.updateStatus).not.toHaveBeenCalledWith(...DISCONNECT_ERROR);
   });
 
+  it("treats a disconnect after a FAILED start() as idle (quiet), not an error", () => {
+    const client = new OffscreenVADClient();
+    const indicator = indicatorInstances[0];
+
+    client.start(); // optimistically marks the session active...
+    // ...but the offscreen reports the start failed, so it isn't really active.
+    const onMessage = ports[0].onMessage.addListener.mock.calls[0][0];
+    onMessage({
+      origin: "offscreen-document",
+      type: "OFFSCREEN_VAD_START_REQUEST_RESPONSE",
+      payload: { success: false, error: "mic denied" },
+    });
+    indicator.updateStatus.mockClear();
+    triggerDisconnect();
+
+    expect(indicator.updateStatus).not.toHaveBeenCalledWith(...DISCONNECT_ERROR);
+  });
+
+  it("treats a disconnect after destroy() as idle (quiet), not an error", () => {
+    const client = new OffscreenVADClient();
+    const indicator = indicatorInstances[0];
+
+    client.start();
+    client.destroy(); // session torn down
+    indicator.updateStatus.mockClear();
+    triggerDisconnect();
+
+    expect(indicator.updateStatus).not.toHaveBeenCalledWith(...DISCONNECT_ERROR);
+  });
+
   it("self-heals: initialize() re-establishes the port after a disconnect", () => {
     const client = new OffscreenVADClient();
     expect((global as any).chrome.runtime.connect).toHaveBeenCalledTimes(1);

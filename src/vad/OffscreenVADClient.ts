@@ -227,7 +227,12 @@ export class OffscreenVADClient implements VADClientInterface {
     this.isActive = true;
     this.statusIndicator.updateStatus(getMessage('vadStatusStarting'), getMessage('vadDetailActivatingMicrophone'));
     return new Promise((resolve) => {
-      this.callbacks.onStarted = (success, error) => resolve({ success, error });
+      this.callbacks.onStarted = (success, error) => {
+        // If the start never succeeded, the session isn't really active. Clear the
+        // flag so a later idle port recycle isn't misreported as a mid-call failure.
+        if (!success) this.isActive = false;
+        resolve({ success, error });
+      };
       this.sendMessage({ type: "VAD_START_REQUEST" });
     });
   }
