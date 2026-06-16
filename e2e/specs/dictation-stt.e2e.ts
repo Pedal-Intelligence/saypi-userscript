@@ -1,5 +1,10 @@
 import { test, expect } from "../fixtures/extension";
 import { DEFAULT_TRANSCRIPT } from "../support/transcribe-response";
+import {
+  seedAutoSubmitFalse,
+  openDecoratedPiPage,
+  getTranscribeHits,
+} from "../support/dictation";
 
 /**
  * Slice b: the full voice-input path, end to end, against the local mocks.
@@ -15,31 +20,10 @@ import { DEFAULT_TRANSCRIPT } from "../support/transcribe-response";
  * after decoration we click #saypi-callButton to start the call (which triggers
  * getUserMedia against the fake device the browser was launched with).
  */
-test("fake audio -> VAD -> mock STT -> transcript in prompt", async ({
-  context,
-  serviceWorker,
-}) => {
-  // Seed autoSubmit=false in extension storage BEFORE any page loads so the
-  // content-script PreferenceModule reads it during bootstrap (and its
-  // chrome.storage.onChanged listener keeps the cache in sync).
-  await serviceWorker.evaluate(async () => {
-    await chrome.storage.local.set({ autoSubmit: false });
-  });
+test("fake audio -> VAD -> mock STT -> transcript in prompt", async ({ context, serviceWorker }) => {
+  await seedAutoSubmitFalse(serviceWorker);
 
-  const page = await context.newPage();
-
-  // Diagnostics: surface page console errors so a CI-only failure is debuggable
-  // from the log. (The /transcribe hit count is read from the mock via the SW
-  // below — the upload is issued from the extension SW/offscreen context, which
-  // page.on("response") cannot observe.)
-  page.on("console", (msg) => {
-    if (msg.type() === "error") console.log(`[page-error] ${msg.text()}`);
-  });
-
-  await page.goto("https://pi.ai/talk", { waitUntil: "domcontentloaded" });
-
-  // Decoration is the prerequisite (proven independently by decoration.e2e.ts).
-  await page.waitForSelector("#saypi-callButton", { timeout: 20_000 });
+  const page = await openDecoratedPiPage(context);
 
   // Start the call: this sends saypi:call -> startRecording -> getUserMedia,
   // wiring the fake mic into the offscreen VAD. Without an active call the VAD
@@ -53,25 +37,17 @@ test("fake audio -> VAD -> mock STT -> transcript in prompt", async ({
   // BEFORE the prompt wait makes a CI failure self-localize: no hit ⇒ VAD/fake-
   // audio never fired; hit-but-no-prompt-text ⇒ transcript plumbing broke.
   await expect
-    .poll(
-      () =>
-        serviceWorker.evaluate(async () => {
-          const res = await fetch("https://api.saypi.ai/__transcribe-hits");
-          return ((await res.json()) as { hits: number }).hits;
-        }),
-      {
-        timeout: 30_000,
-        message: "mock /transcribe was never hit — VAD/fake-audio did not fire",
-      },
-    )
+    .poll(() => getTranscribeHits(serviceWorker), {
+      timeout: 30_000,
+      message: "mock /transcribe was never hit — VAD/fake-audio did not fire",
+    })
     .toBeGreaterThan(0);
 
   // Localizer #2 — transcript plumbing: with autoSubmit=false the merged
   // transcript is drafted into the prompt's value (not submitted and cleared).
   await page.waitForFunction(
     (expected) =>
-      (document.getElementById("saypi-prompt") as HTMLTextAreaElement | null)
-        ?.value?.includes(expected) ?? false,
+      (document.getElementById("saypi-prompt") as HTMLTextAreaElement | null)?.value?.includes(expected) ?? false,
     DEFAULT_TRANSCRIPT,
     { timeout: 30_000 },
   );
