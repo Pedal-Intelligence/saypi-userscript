@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseEnvVars, parseEnvMode, parseWxtPids } from "../../scripts/dev-rig-lib.mjs";
+import { parseEnvVars, parseEnvMode, parseWxtPids, isHotReloadStalled } from "../../scripts/dev-rig-lib.mjs";
 
 describe("parseEnvVars", () => {
   it("ignores comments and trims inline comments", () => {
@@ -77,5 +77,36 @@ describe("parseWxtPids", () => {
 
   it("returns [] when nothing matches", () => {
     expect(parseWxtPids("12345 node /x/y/z\n", "/Users/rosscado/SayPi/saypi-userscript")).toEqual([]);
+  });
+});
+
+describe("isHotReloadStalled", () => {
+  const grace = 8000;
+
+  it("flags a stall when src was edited after the last build and the grace window has passed", () => {
+    // edited at 1000, last build at 500 (older), now is 1000+grace+1 → stalled
+    expect(
+      isHotReloadStalled({ lastSrcEditMs: 1000, lastBuildMs: 500, nowMs: 1000 + grace + 1, graceMs: grace })
+    ).toBe(true);
+  });
+
+  it("does not flag a stall while the build is at least as new as the last edit", () => {
+    // build caught up (>= edit) → hot-reload worked
+    expect(
+      isHotReloadStalled({ lastSrcEditMs: 1000, lastBuildMs: 1000, nowMs: 99999, graceMs: grace })
+    ).toBe(false);
+    expect(
+      isHotReloadStalled({ lastSrcEditMs: 1000, lastBuildMs: 2000, nowMs: 99999, graceMs: grace })
+    ).toBe(false);
+  });
+
+  it("does not flag a stall until the grace window elapses (a rebuild may still be in flight)", () => {
+    expect(
+      isHotReloadStalled({ lastSrcEditMs: 1000, lastBuildMs: 500, nowMs: 1000 + grace - 1, graceMs: grace })
+    ).toBe(false);
+  });
+
+  it("does not flag a stall when no source edit has been observed", () => {
+    expect(isHotReloadStalled({ lastSrcEditMs: 0, lastBuildMs: 0, nowMs: 99999, graceMs: grace })).toBe(false);
   });
 });

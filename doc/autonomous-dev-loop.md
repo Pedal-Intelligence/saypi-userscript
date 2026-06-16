@@ -102,6 +102,26 @@ secret.
    ```
 
    or re-read the rig's background-task log for its `✔ Reloaded:` line.
+
+   **Confirm the *loaded* build, not just the on-disk one.** The content script
+   stamps the build identity onto `<html data-saypi-build="<sha>@<branch> <iso>">`
+   (`src/build-stamp.ts`, injected by a Vite `define` in `wxt.config.ts`). Read it
+   from the page's main world and compare to the current commit — this is the
+   **definitive** freshness check, because the on-disk mtime can be fresh while the
+   *page* still runs a stale build (e.g. its MV3 SW slept and never picked up the
+   reload):
+
+   ```js
+   document.documentElement.dataset.saypiBuild   // e.g. "0b65de4@main 2026-06-16T21:00:00Z"
+   ```
+   ```bash
+   git rev-parse --short HEAD                     # the sha it should match
+   ```
+
+   The rig also watches `src/` and prints a loud `⚠ hot-reload looks STALLED`
+   warning when an edit doesn't produce a rebuild within a few seconds — your cue
+   that the SW slept and the extension needs one reload (it can't reach the page to
+   know the SW is gone, so it flags the on-disk symptom).
 3. **Reload the test tab** via the MCP (`navigate` to the same URL), then read the
    DOM. With the SW connected WXT already reloads matching tabs itself; the MCP
    reload is a reliable belt-and-suspenders step and gives a clean point to assert.
@@ -328,11 +348,15 @@ re-capture, not a contract violation.
 
 ## Troubleshooting
 
-- **No hot-reload after an edit:** confirm the rig's background task is alive and
-  bound to :3001 (`lsof -nP -iTCP:3001 -sTCP:LISTEN`); confirm the loaded
-  extension's baked origin is `localhost:3001`
-  (`grep -ro "localhost:3001" .output/chrome-mv3-dev | head`). If the baked port
-  differs, reload the extension once at `chrome://extensions`.
+- **No hot-reload after an edit:** first check `<html data-saypi-build>` on the
+  page against `git rev-parse --short HEAD` — a mismatch (or a sha from an earlier
+  rig) means the *page* is stale even if `.output` looks fresh, so the SW slept;
+  reload the extension once at `chrome://extensions`. (The rig also prints a
+  `⚠ hot-reload looks STALLED` warning when an edit doesn't rebuild.) Then confirm
+  the rig's background task is alive and bound to :3001
+  (`lsof -nP -iTCP:3001 -sTCP:LISTEN`); confirm the loaded extension's baked origin
+  is `localhost:3001` (`grep -ro "localhost:3001" .output/chrome-mv3-dev | head`).
+  If the baked port differs, reload the extension once at `chrome://extensions`.
 - **A CSS/SCSS change won't appear (but JS changes do):** expected and structural —
   `wxt dev` never hot-reloads content-script CSS. Don't inject CSS to work around
   it; verify styles at Layer 3 against the real build. See *CSS changes don't
