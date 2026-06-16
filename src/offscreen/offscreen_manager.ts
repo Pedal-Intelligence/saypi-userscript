@@ -43,6 +43,17 @@ class OffscreenManager {
     return !!this.creating; // A proxy for "attempted to create"
   }
 
+  /**
+   * Number of live content-script <-> service-worker ports currently registered
+   * (one per connected tab). Read-only. Used by the Layer-3 #308 regression net
+   * to assert that an idle offscreen auto-shutdown closes the document WITHOUT
+   * evicting the live ports (routing of a subsequent VAD_SPEECH_END is
+   * portMap.get(tabId), so a surviving port is what keeps routing working).
+   */
+  public getConnectedTabCount(): number {
+    return this.portMap.size;
+  }
+
   private async setupOffscreenDocument(): Promise<void> {
     // Check if browser.offscreen is available
     if (!browser.offscreen) {

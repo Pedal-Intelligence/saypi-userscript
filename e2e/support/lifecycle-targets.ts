@@ -18,15 +18,6 @@ export function isExtensionServiceWorkerTarget(target: CdpTargetInfo, extensionI
   return target.type === "service_worker" && target.url.startsWith(`chrome-extension://${extensionId}/`);
 }
 
-/**
- * True iff `url` is THIS extension's offscreen document
- * (chrome-extension://<id>/offscreen.html — OFFSCREEN_DOCUMENT_PATH in
- * src/offscreen/offscreen_manager.ts). startsWith tolerates a trailing query.
- */
-export function isOffscreenDocumentUrl(url: string, extensionId: string): boolean {
-  return url.startsWith(`chrome-extension://${extensionId}/offscreen.html`);
-}
-
 /** The extension's service-worker target from a CDP getTargets() list, or undefined. */
 export function pickExtensionServiceWorkerTarget(
   targets: CdpTargetInfo[],

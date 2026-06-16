@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
   isExtensionServiceWorkerTarget,
-  isOffscreenDocumentUrl,
   pickExtensionServiceWorkerTarget,
   type CdpTargetInfo,
 } from "../../e2e/support/lifecycle-targets";
@@ -20,16 +19,6 @@ describe("isExtensionServiceWorkerTarget", () => {
   it("rejects a same-origin non-service-worker target (the offscreen page)", () => {
     const t: CdpTargetInfo = { targetId: "O", type: "page", url: `chrome-extension://${ID}/offscreen.html` };
     expect(isExtensionServiceWorkerTarget(t, ID)).toBe(false);
-  });
-});
-
-describe("isOffscreenDocumentUrl", () => {
-  it("matches the extension offscreen document", () => {
-    expect(isOffscreenDocumentUrl(`chrome-extension://${ID}/offscreen.html`, ID)).toBe(true);
-  });
-  it("rejects other extension pages and other extensions", () => {
-    expect(isOffscreenDocumentUrl(`chrome-extension://${ID}/settings.html`, ID)).toBe(false);
-    expect(isOffscreenDocumentUrl(`chrome-extension://otherotherotherotherotherother00/offscreen.html`, ID)).toBe(false);
   });
 });
 

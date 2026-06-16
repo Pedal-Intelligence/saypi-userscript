@@ -1,9 +1,5 @@
 import type { BrowserContext, Page, Worker } from "@playwright/test";
-import {
-  isOffscreenDocumentUrl,
-  pickExtensionServiceWorkerTarget,
-  type CdpTargetInfo,
-} from "./lifecycle-targets";
+import { pickExtensionServiceWorkerTarget, type CdpTargetInfo } from "./lifecycle-targets";
 
 /**
  * Evict THIS extension's MV3 service worker via CDP (Target.closeTarget) — the
@@ -57,45 +53,47 @@ export function reacquireServiceWorker(
   return context.waitForEvent("serviceworker", { timeout: timeoutMs });
 }
 
+type OffscreenTestHooks = {
+  closeOffscreenDocument: () => Promise<void>;
+  connectedTabCount: () => number;
+};
+
+const MISSING_HOOKS_MSG =
+  "__saypiOffscreenTestHooks missing — is this a development (DEV) build? " +
+  "(npm run e2e:build builds in development mode where import.meta.env.DEV is true)";
+
 /**
- * Get a handle on the live offscreen document as a Playwright Page. The offscreen
- * document is a real extension page (offscreen.html) and surfaces as a page
- * target once a media client (an active call) has created it. Polls because the
- * page may not exist immediately after the call starts.
+ * Trigger the offscreen idle auto-shutdown deterministically (no 30s wall-clock
+ * wait). The real trigger is a guarded message FROM the offscreen document, which
+ * a test cannot forge — and the offscreen document is a `background_page` CDP
+ * target Playwright cannot reach as a Page. So we invoke the exact method the
+ * OFFSCREEN_AUTO_SHUTDOWN handler calls (offscreenManager.closeOffscreenDocument)
+ * via the DEV-only hooks exposed in the service worker (src/svc/background.ts).
+ * This faithfully reproduces the #308 path: the bug lived in closeOffscreenDocument
+ * (it cleared portMap), not in the handler routing or the sender.url guard.
  */
-export async function getOffscreenPage(
-  context: BrowserContext,
-  extensionId: string,
-  timeoutMs = 15_000,
-): Promise<Page> {
-  const find = () => context.pages().find((p) => isOffscreenDocumentUrl(p.url(), extensionId)) ?? null;
-  const deadline = Date.now() + timeoutMs;
-  let p = find();
-  while (!p && Date.now() < deadline) {
-    await new Promise((r) => setTimeout(r, 200));
-    p = find();
-  }
-  if (!p) {
-    throw new Error(
-      `getOffscreenPage: offscreen.html never appeared for ${extensionId}; ` +
-        `pages=[${context.pages().map((pg) => pg.url()).join(", ")}]`,
-    );
-  }
-  return p;
+export async function triggerOffscreenShutdown(serviceWorker: Worker): Promise<void> {
+  await serviceWorker.evaluate(async (missingMsg) => {
+    const hooks = (self as unknown as { __saypiOffscreenTestHooks?: OffscreenTestHooks })
+      .__saypiOffscreenTestHooks;
+    if (!hooks?.closeOffscreenDocument) throw new Error(missingMsg);
+    await hooks.closeOffscreenDocument();
+  }, MISSING_HOOKS_MSG);
 }
 
 /**
- * Trigger the offscreen idle auto-shutdown deterministically — issue the exact
- * message the real 30s timer fires, FROM the offscreen page (the only sender the
- * background handler accepts: src/svc/background.ts:1053-1063). Invokes
- * offscreenManager.closeOffscreenDocument() with no 30s wait. NB: calling
- * chrome.offscreen.closeDocument() directly would NOT reproduce #308 — the bug
- * lived in the manager method the handler calls, not the browser API.
+ * The number of live content-script <-> service-worker ports the SW currently has
+ * registered (read via the DEV-only hooks). The #308 net asserts this stays > 0
+ * across an offscreen auto-shutdown — a surviving port is exactly what keeps the
+ * next VAD_SPEECH_END routable to the tab (routing is portMap.get(tabId)).
  */
-export async function triggerOffscreenShutdown(offscreenPage: Page): Promise<void> {
-  await offscreenPage.evaluate(() => {
-    chrome.runtime.sendMessage({ type: "OFFSCREEN_AUTO_SHUTDOWN", origin: "offscreen-document" });
-  });
+export async function getConnectedTabCount(serviceWorker: Worker): Promise<number> {
+  return serviceWorker.evaluate((missingMsg) => {
+    const hooks = (self as unknown as { __saypiOffscreenTestHooks?: OffscreenTestHooks })
+      .__saypiOffscreenTestHooks;
+    if (!hooks?.connectedTabCount) throw new Error(missingMsg);
+    return hooks.connectedTabCount();
+  }, MISSING_HOOKS_MSG);
 }
 
 /** Whether the extension currently has an offscreen document (read from the SW). */
