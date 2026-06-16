@@ -35,22 +35,45 @@ export async function evictServiceWorker(
 }
 
 /**
- * Resolve to a freshly-respawned service worker after an eviction. The OLD Worker
- * handle is dead (evaluate() throws "Target closed"); this returns a new one.
- * Call this to ARM the wait BEFORE triggering the wake event, then await it after:
- *
- *   const reacquire = reacquireServiceWorker(context, oldWorker);
- *   await page.click("#saypi-callButton");  // wakes the SW
- *   const sw = await reacquire;
+ * True iff a (possibly-evicted) service-worker handle is dead — evaluate() throws
+ * "Target closed" once Target.closeTarget has torn the worker down. Used to PROVE
+ * an eviction actually happened before asserting the absence of an error toast.
  */
-export function reacquireServiceWorker(
+export async function isWorkerDead(worker: Worker): Promise<boolean> {
+  try {
+    await worker.evaluate(() => true);
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Resolve to a LIVE service worker after an eviction + a wake event. Call this
+ * AFTER triggering the wake (e.g. a call-button click that drives initialize()'s
+ * lazy reconnect, which wakes the SW).
+ *
+ * Implementation note: when an evicted MV3 extension SW re-spawns, Playwright
+ * REUSES the same Worker object — it revives the old handle and does NOT emit a
+ * fresh `serviceworker` event (verified on the bundled Chromium). So we poll for
+ * the first worker whose evaluate() succeeds, which transparently covers both the
+ * revived-old-handle and the (rarer) brand-new-handle cases. `oldWorker` is kept
+ * in the signature for call-site clarity (the handle being recovered).
+ */
+export async function reacquireServiceWorker(
   context: BrowserContext,
   oldWorker: Worker,
-  timeoutMs = 15_000,
+  timeoutMs = 30_000,
 ): Promise<Worker> {
-  const already = context.serviceWorkers().find((w) => w !== oldWorker);
-  if (already) return Promise.resolve(already);
-  return context.waitForEvent("serviceworker", { timeout: timeoutMs });
+  void oldWorker;
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    for (const w of context.serviceWorkers()) {
+      if (!(await isWorkerDead(w))) return w;
+    }
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  throw new Error("reacquireServiceWorker: no live service worker re-spawned within timeout");
 }
 
 type OffscreenTestHooks = {
