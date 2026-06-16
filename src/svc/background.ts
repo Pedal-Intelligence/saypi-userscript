@@ -143,6 +143,23 @@ const jwtManager = getJwtManagerSync();
 // Expose instances globally for popup access
 (self as any).jwtManager = jwtManager;
 
+// Dev-only Layer-3 test hooks for the #308 offscreen-auto-shutdown regression net.
+// The idle auto-shutdown is normally triggered by a guarded message FROM the
+// offscreen document (the sender.url check in the message router below), which a
+// test cannot forge — and the offscreen document is a `background_page` CDP target
+// Playwright cannot reach as a Page. So we expose: (1) the exact method the
+// OFFSCREEN_AUTO_SHUTDOWN handler invokes, to drive the shutdown deterministically
+// (no 30s wall-clock wait); and (2) a read-only count of live content-script ports,
+// to assert the shutdown does NOT evict them (the #308 invariant). Dead-code-
+// eliminated from production builds (import.meta.env.DEV === false), mirroring the
+// build-stamp seam added in #312.
+if (import.meta.env.DEV) {
+  (self as any).__saypiOffscreenTestHooks = {
+    closeOffscreenDocument: () => offscreenManager.closeOffscreenDocument(),
+    connectedTabCount: () => offscreenManager.getConnectedTabCount(),
+  };
+}
+
 // Track dictation state across tabs
 const dictationStates = new Map<number, boolean>(); // tabId -> isDictationActive
 
