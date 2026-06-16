@@ -20,6 +20,11 @@ function makePort(tabId: number): any {
 
 describe("OffscreenManager — auto-shutdown vs. live content-script ports", () => {
   beforeEach(() => {
+    // offscreenManager is a module-level singleton; reset its internal state so each
+    // test is hermetic (no reliance on distinct tab IDs or test ordering).
+    (offscreenManager as any).portMap.clear();
+    (offscreenManager as any).lastVadEventByTab.clear();
+
     // The shared wxt/browser mock has no offscreen API; provide one that reports a
     // document exists and closes cleanly (the auto-shutdown path).
     (browser as any).offscreen = {
