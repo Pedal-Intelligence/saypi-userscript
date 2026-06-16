@@ -34,15 +34,18 @@ test("offscreen auto-shutdown closes the document but keeps the live content-scr
   await seedAutoSubmitFalse(serviceWorker);
   const page = await openDecoratedPiPage(context);
 
-  // Baseline: an active call registers a real CS<->SW port and creates the
-  // offscreen doc. Wait for a real transcribe hit so the call is genuinely live.
+  // Baseline: an active call registers a real CS<->SW port and creates the offscreen
+  // doc. Wait for a real transcribe hit so the call is genuinely live. The mock's hit
+  // counter is a shared, never-reset global, so assert a NEW hit (delta) rather than
+  // hits > 0, which earlier specs already satisfy in a full-suite run.
+  const hitsBefore = await getTranscribeHits(serviceWorker);
   await page.click("#saypi-callButton");
   await expect
     .poll(() => getTranscribeHits(serviceWorker), {
       timeout: 30_000,
       message: "baseline: mock /transcribe was never hit — VAD/fake-audio did not fire",
     })
-    .toBeGreaterThan(0);
+    .toBeGreaterThan(hitsBefore);
   expect(await hasOffscreenDocument(serviceWorker)).toBe(true);
   const portsBefore = await getConnectedTabCount(serviceWorker);
   expect(portsBefore).toBeGreaterThan(0);

@@ -87,28 +87,41 @@ Claude/ChatGPT mock pages; the TTS playback lifecycle.
 
 ## Architecture
 
+> The block below is **as-shipped** (reconciled with the final code; the original draft named a
+> `getOffscreenPage`/`isOffscreenDocumentUrl`/`driveDictationTurn` surface that the
+> **"As-built (implementation outcome)"** section explains was superseded).
+
 ```
 e2e/support/lifecycle.ts        ← NEW reusable capability (the issue's deliverable)
-  evictServiceWorker(context, page, extensionId)  -> Worker   (CDP Target.closeTarget + wake + re-acquire)
-  getOffscreenPage(context, extensionId)          -> Page     (poll/waitForEvent for offscreen.html)
-  triggerOffscreenShutdown(offscreenPage)         -> void     (the guarded OFFSCREEN_AUTO_SHUTDOWN msg)
-  isExtensionServiceWorkerTarget(target, id)      -> boolean  (PURE — unit-tested in the required gate)
-  isOffscreenDocumentUrl(url, id)                 -> boolean  (PURE — unit-tested in the required gate)
+  evictServiceWorker(context, page, extensionId)  -> Worker   (CDP Target.closeTarget)
+  reacquireServiceWorker(context)                 -> Worker   (poll for the revived live SW)
+  isWorkerDead(worker)                            -> boolean  (eviction observed?)
+  triggerOffscreenShutdown(serviceWorker)         -> void     (DEV-only SW hook → closeOffscreenDocument)
+  hasOffscreenDocument(serviceWorker)             -> boolean  (chrome.offscreen.hasDocument)
+  getConnectedTabCount(serviceWorker)             -> number   (live CS↔SW port count — the #308 invariant)
 
-e2e/support/dictation.ts        ← NEW shared drive-a-turn helper, extracted from dictation-stt.e2e.ts
-  driveDictationTurn(page, serviceWorker, {...})            (seed, goto, await decorate, start call,
-                                                             poll hits, await prompt draft)
+e2e/support/lifecycle-targets.ts  ← NEW pure predicates
+  isExtensionServiceWorkerTarget(target, id)      -> boolean  (PURE — unit-tested in the required gate)
+  pickExtensionServiceWorkerTarget(targets, id)   -> target?  (PURE — unit-tested in the required gate)
+
+e2e/support/dictation.ts        ← NEW shared drive-a-turn helpers, extracted from dictation-stt.e2e.ts
+  seedAutoSubmitFalse(serviceWorker) · openDecoratedPiPage(context) · getTranscribeHits(serviceWorker)
 
 e2e/specs/sw-recycle.e2e.ts          ← NEW (#307): quiet-on-idle-recycle + self-heal-on-next-use
-e2e/specs/offscreen-shutdown.e2e.ts  ← NEW (#308): baseline → forced shutdown → post-shutdown utterance lands
+e2e/specs/offscreen-shutdown.e2e.ts  ← NEW (#308): baseline → forced shutdown → live port survives
 
-test/e2e/lifecycle-helpers.spec.ts   ← NEW (Vitest, REQUIRED gate): pure-predicate unit tests
+test/e2e/lifecycle-targets.spec.ts   ← NEW (Vitest, REQUIRED gate): pure-predicate unit tests
 ```
 
-`dictation-stt.e2e.ts` is refactored to call `driveDictationTurn` (behaviour-preserving — the
+`dictation-stt.e2e.ts` is refactored to call the shared dictation helpers (behaviour-preserving — the
 existing assertions are unchanged), so the happy path and both lifecycle specs share one drive path.
 
 ## The two specs
+
+> **Superseded in places — see the "As-built (implementation outcome)" section.** This section
+> records the *originally-planned* shape; the #308 spec ships a port-survival **invariant** assertion
+> (not a literal second utterance), and the offscreen shutdown is driven via a DEV-only SW hook (not
+> an offscreen-page message). The #307 description is accurate.
 
 ### `sw-recycle.e2e.ts` (#307)
 

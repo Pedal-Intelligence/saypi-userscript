@@ -12,6 +12,12 @@ import { evictServiceWorker, reacquireServiceWorker } from "../support/lifecycle
  * suspend won't fire while Playwright's debugger is attached.
  */
 test("idle SW recycle is quiet and self-heals on next use", async ({ context, serviceWorker }) => {
+  // The self-heal step's poll budgets (reacquire 30s + transcribe 40s + prompt 30s)
+  // exist to absorb a slow/loaded Ubuntu runner — exactly when the 60s per-test cap
+  // would otherwise kill the test first with a generic timeout. Raise the cap so a
+  // slow self-heal yields the intended self-localizing message instead.
+  test.setTimeout(120_000);
+
   const extensionId = serviceWorker.url().split("/")[2];
   await seedAutoSubmitFalse(serviceWorker);
 
@@ -26,11 +32,21 @@ test("idle SW recycle is quiet and self-heals on next use", async ({ context, se
   // unconditional branch ("...disconnected during an active VAD session."), so it
   // proves the path ran without depending on whether the SW stays evicted (it can
   // re-spawn on any background event — alarms, pings — which made an
-  // "is the worker dead?" poll racy).
+  // "is the worker dead?" poll racy). NB: this relies on the idle-branch
+  // logger.debug emitting, which it does because scripts/e2e-build.mjs sets
+  // VITE_DEBUG_LOGS=true; if that ever changed, this poll would TIME OUT (a loud
+  // failure), not silently pass.
   const disconnectLogs: string[] = [];
   page.on("console", (m) => {
     if (/OffscreenVADClient].*[Pp]ort disconnected/.test(m.text())) disconnectLogs.push(m.text());
   });
+
+  // Snapshot the mock's transcribe-hit counter while the SW is still alive. It is a
+  // shared, never-reset global in the mock server (one instance across the whole
+  // suite), so the self-heal assertion below checks a NEW transcribe occurs (delta):
+  // a bare hits > 0 is already satisfied by earlier specs in a full-suite run, which
+  // would make the positive control vacuous.
+  const hitsBeforeRecycle = await getTranscribeHits(serviceWorker);
 
   // Force the idle recycle. Returns the closed targetId, proving an SW existed.
   const closedTargetId = await evictServiceWorker(context, page, extensionId);
@@ -66,14 +82,14 @@ test("idle SW recycle is quiet and self-heals on next use", async ({ context, se
   // Clicking the call button wakes the recycled SW and drives initialize()'s lazy
   // reconnect; re-acquire a live SW handle (the old one was dead) to read the mock.
   await page.click("#saypi-callButton");
-  const sw2 = await reacquireServiceWorker(context, serviceWorker);
+  const sw2 = await reacquireServiceWorker(context);
 
   await expect
     .poll(() => getTranscribeHits(sw2), {
       timeout: 40_000,
       message: "#307 self-heal: voice input did not recover after the SW recycle",
     })
-    .toBeGreaterThan(0);
+    .toBeGreaterThan(hitsBeforeRecycle);
   await page.waitForFunction(
     (expected) =>
       (document.getElementById("saypi-prompt") as HTMLTextAreaElement | null)?.value?.includes(expected) ?? false,

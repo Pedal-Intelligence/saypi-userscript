@@ -57,15 +57,12 @@ export async function isWorkerDead(worker: Worker): Promise<boolean> {
  * REUSES the same Worker object — it revives the old handle and does NOT emit a
  * fresh `serviceworker` event (verified on the bundled Chromium). So we poll for
  * the first worker whose evaluate() succeeds, which transparently covers both the
- * revived-old-handle and the (rarer) brand-new-handle cases. `oldWorker` is kept
- * in the signature for call-site clarity (the handle being recovered).
+ * revived-old-handle and the (rarer) brand-new-handle cases.
  */
 export async function reacquireServiceWorker(
   context: BrowserContext,
-  oldWorker: Worker,
   timeoutMs = 30_000,
 ): Promise<Worker> {
-  void oldWorker;
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     for (const w of context.serviceWorkers()) {
