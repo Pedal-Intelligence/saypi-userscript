@@ -1,7 +1,7 @@
 import { test, expect } from "../fixtures/extension";
 import { DEFAULT_TRANSCRIPT } from "../support/transcribe-response";
 import { seedAutoSubmitFalse, openDecoratedPiPage, getTranscribeHits } from "../support/dictation";
-import { evictServiceWorker, reacquireServiceWorker, isWorkerDead } from "../support/lifecycle";
+import { evictServiceWorker, reacquireServiceWorker } from "../support/lifecycle";
 
 /**
  * #307 regression net (real browser). Chrome recycles the idle MV3 service worker,
@@ -20,23 +20,34 @@ test("idle SW recycle is quiet and self-heals on next use", async ({ context, se
   // a live port to drop.
   const page = await openDecoratedPiPage(context);
 
+  // Capture the VAD client's port-disconnect log — the deterministic signal that the
+  // recycle dropped the content-script port and onDisconnect RAN. It fires in BOTH
+  // the quiet idle branch ("...disconnected while idle...") and the regressed
+  // unconditional branch ("...disconnected during an active VAD session."), so it
+  // proves the path ran without depending on whether the SW stays evicted (it can
+  // re-spawn on any background event — alarms, pings — which made an
+  // "is the worker dead?" poll racy).
+  const disconnectLogs: string[] = [];
+  page.on("console", (m) => {
+    if (/OffscreenVADClient].*[Pp]ort disconnected/.test(m.text())) disconnectLogs.push(m.text());
+  });
+
   // Force the idle recycle. Returns the closed targetId, proving an SW existed.
   const closedTargetId = await evictServiceWorker(context, page, extensionId);
   expect(closedTargetId).toBeTruthy();
 
-  // Prove the eviction actually happened (so the quiet assertion below is NOT
-  // vacuous): the old SW handle becomes dead. This also means the CS<->SW port has
-  // dropped, so the content-script onDisconnect handler has run (or is about to).
+  // Prove the recycle dropped the live port (so the quiet assertion below is NOT
+  // vacuous): the content-script onDisconnect handler must have run.
   await expect
-    .poll(() => isWorkerDead(serviceWorker), {
-      timeout: 10_000,
-      message: "service worker was not evicted by Target.closeTarget",
+    .poll(() => disconnectLogs.length, {
+      timeout: 15_000,
+      message: "the content-script VAD port never disconnected after the SW recycle",
     })
-    .toBe(true);
+    .toBeGreaterThan(0);
 
-  // Bounded settle so the page-side onDisconnect can render any (erroneous) toast
-  // before we assert its absence — a negative assertion needs a window to be real.
-  await page.waitForTimeout(1500);
+  // Small settle so the synchronous updateStatus() a regressed handler would call
+  // has rendered its toast before we assert the toast's absence.
+  await page.waitForTimeout(500);
 
   // --- Assertion 1: quiet on idle recycle (the core #307 guard) ---
   const status = await page.evaluate(() => {
