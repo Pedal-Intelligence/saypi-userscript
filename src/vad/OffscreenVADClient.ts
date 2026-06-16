@@ -26,6 +26,9 @@ export class OffscreenVADClient implements VADClientInterface {
   private port: chrome.runtime.Port;
   private callbacks: VADClientCallbacks = {};
   private isPortConnected: boolean = true;
+  // Whether a VAD session is currently active (between start() and stop()/destroy()).
+  // Used to tell a genuine mid-call port loss apart from a routine idle recycle.
+  private isActive: boolean = false;
   private statusIndicator: VADStatusIndicator;
 
   constructor() {
@@ -156,10 +159,24 @@ export class OffscreenVADClient implements VADClientInterface {
     });
 
     this.port.onDisconnect.addListener(() => {
-      logger.warn("[SayPi OffscreenVADClient] Port disconnected from background script.");
-      this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailVADServiceDisconnected'));
       this.isPortConnected = false;
-      this.callbacks.onError?.(getMessage('vadDetailVADServiceDisconnected'));
+      const wasActive = this.isActive;
+      this.isActive = false;
+
+      if (wasActive) {
+        // The port dropped mid-session (during a live call). This genuinely
+        // interrupts voice input, so surface it to the user and the error callback.
+        logger.warn("[SayPi OffscreenVADClient] Port disconnected during an active VAD session.");
+        this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailVADServiceDisconnected'));
+        this.callbacks.onError?.(getMessage('vadDetailVADServiceDisconnected'));
+      } else {
+        // Idle disconnect: Chrome recycled the MV3 service worker / offscreen
+        // document while no call was active. This is expected and self-healing —
+        // initialize() transparently re-establishes the port on the next call —
+        // so don't alarm the user with a persistent "Try reloading" error.
+        logger.debug("[SayPi OffscreenVADClient] Port disconnected while idle; will reconnect on next use.");
+        this.statusIndicator.hide();
+      }
     });
   }
 
@@ -207,14 +224,21 @@ export class OffscreenVADClient implements VADClientInterface {
   }
 
   public start(): Promise<{ success: boolean, error?: string }> {
+    this.isActive = true;
     this.statusIndicator.updateStatus(getMessage('vadStatusStarting'), getMessage('vadDetailActivatingMicrophone'));
     return new Promise((resolve) => {
-      this.callbacks.onStarted = (success, error) => resolve({ success, error });
+      this.callbacks.onStarted = (success, error) => {
+        // If the start never succeeded, the session isn't really active. Clear the
+        // flag so a later idle port recycle isn't misreported as a mid-call failure.
+        if (!success) this.isActive = false;
+        resolve({ success, error });
+      };
       this.sendMessage({ type: "VAD_START_REQUEST" });
     });
   }
 
   public stop(): Promise<{ success: boolean, error?: string }> {
+    this.isActive = false;
     this.statusIndicator.updateStatus(getMessage('vadStatusStopping'), getMessage('vadDetailDeactivatingMicrophone'));
     return new Promise((resolve) => {
       this.callbacks.onStopped = (success, error) => resolve({ success, error });
@@ -223,6 +247,7 @@ export class OffscreenVADClient implements VADClientInterface {
   }
 
   public destroy(): void {
+    this.isActive = false;
     this.statusIndicator.updateStatus(getMessage('vadStatusShuttingDown'), getMessage('vadDetailReleasingVADResources'));
     this.sendMessage({ type: "VAD_DESTROY_REQUEST" });
     if (this.isPortConnected && this.port) {
