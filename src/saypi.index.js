@@ -33,7 +33,8 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 
   // Record which build is injected on <html data-saypi-build="...">, readable
   // from the page's main world so a Layer-4 probe can detect a stale dev build.
-  stampBuildOnDocument();
+  // Dev/e2e builds only — no need to expose build identity on production pages.
+  if (import.meta.env.DEV) stampBuildOnDocument();
 
   // Determine the mode based on the centralized identifier helpers
   const chatbotType = ChatbotIdentifier.identifyChatbot();

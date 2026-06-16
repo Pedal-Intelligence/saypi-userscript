@@ -25,4 +25,13 @@ test("SayPi detects Pi and decorates the mock page", async ({ context, extension
   await expect(page.locator(".saypi-prompt-container")).toHaveCount(1);
   await expect(page.locator("#saypi-prompt-controls-container")).toHaveCount(1);
   await page.waitForFunction(() => document.body.classList.contains("pi"));
+
+  // Build-identity stamp (src/build-stamp.ts): the dev/e2e content script writes
+  // <html data-saypi-build="<sha>@<branch> <iso>">. Asserting it here proves the
+  // Vite `define` for __SAYPI_BUILD_STAMP__ actually replaced the token in a real
+  // build (not the "dev" fallback) — durable CI coverage for the define, which no
+  // unit test can exercise. "@" is present only on a fully-populated real stamp.
+  const buildStamp = await page.evaluate(() => document.documentElement.dataset.saypiBuild);
+  expect(buildStamp).toBeTruthy();
+  expect(buildStamp).toMatch(/@/);
 });

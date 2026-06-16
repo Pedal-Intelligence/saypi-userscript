@@ -13,6 +13,11 @@ describe("build-stamp", () => {
       const out = formatBuildStamp({ sha: "abc1234", branch: "feature/x", time: "2026-06-16T21:00:00Z" });
       expect(out).toContain("feature/x");
     });
+
+    it("collapses to the sha alone (no @branch, no trailing space) for the no-build fallback", () => {
+      // The fallback BUILD_STAMP is { sha: "dev", branch: "dev", time: "" }.
+      expect(formatBuildStamp({ sha: "dev", branch: "dev", time: "" })).toBe("dev");
+    });
   });
 
   describe("stampBuildOnDocument", () => {

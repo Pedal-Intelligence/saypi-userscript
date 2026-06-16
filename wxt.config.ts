@@ -9,8 +9,9 @@ import { defineConfig } from "wxt";
 // commit so a stale dev build is detectable rather than a guess. Computed once
 // at config load; falls back gracefully outside a git checkout.
 function computeBuildStamp(): { sha: string; branch: string; time: string } {
+  const cwd = fileURLToPath(new URL(".", import.meta.url));
   const git = (args: string[]) =>
-    execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
   try {
     return {
       sha: git(["rev-parse", "--short", "HEAD"]),
