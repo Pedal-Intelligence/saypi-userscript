@@ -78,6 +78,12 @@ mock servers and a fake-mic device per run, so the specs run serially.
      tooltip-contrast.e2e.ts page.goto(https://claude.ai/new) -> body.claude ->
                           the real built CSS renders .saypi-tooltip as an opaque
                           dark pill (guards the host-CSS-var contrast bug)
+     sw-recycle.e2e.ts    force an idle MV3 service-worker recycle (CDP
+                          Target.closeTarget) -> assert NO "VAD disconnected"
+                          alarm + voice input self-heals on next call (#307)
+     offscreen-shutdown.e2e.ts force the offscreen idle auto-shutdown -> assert
+                          the document closes but the live content-script port
+                          survives (so VAD_SPEECH_END stays routable) (#308)
 ```
 
 The pivotal trick is **`--host-resolver-rules`**: the extension is built with the
@@ -109,6 +115,9 @@ instead of silently calling the real internet.
 | `support/transcribe-response.ts` | the STT contract: shape of the `/transcribe` response |
 | `support/manifest-guard.ts` | `assertDevManifest()` — refuses a non-static / production build |
 | `support/check-servers.mjs` | standalone sanity check for the mock servers |
+| `support/dictation.ts` | shared drive-a-turn helpers (`seedAutoSubmitFalse`, `openDecoratedPiPage`, `getTranscribeHits`) used by the dictation + lifecycle specs |
+| `support/lifecycle.ts` | MV3 lifecycle drivers (`evictServiceWorker`, `reacquireServiceWorker`, `isWorkerDead`, `triggerOffscreenShutdown`, `hasOffscreenDocument`, `getConnectedTabCount`) — see the section below |
+| `support/lifecycle-targets.ts` | pure CDP-target predicates (`isExtensionServiceWorkerTarget`, `pickExtensionServiceWorkerTarget`); unit-tested in the **required** gate (`test/e2e/lifecycle-targets.spec.ts`) |
 | `specs/*.e2e.ts` | the tests |
 
 ## The dual-env gotcha (read this before editing launch/build config)
@@ -158,6 +167,49 @@ If the real saypi-api `/transcribe` response shape changes, update
 `transcribe-response.ts` to match — that's the one place the contract is encoded,
 and it has its own unit coverage (Task 3) so a drift is caught at Layer 1 too.
 Keep it minimal: only the fields the client genuinely reads belong here.
+
+## Driving the MV3 lifecycle (`support/lifecycle.ts`) — the #307/#308 nets
+
+`sw-recycle.e2e.ts` (#307) and `offscreen-shutdown.e2e.ts` (#308) exercise the
+**service-worker / offscreen-document / content-script-port lifecycle** where both
+of those bugs lived — the layer that was previously only reachable with hand-rolled
+`chrome.runtime` port mocks (L1). `support/lifecycle.ts` is the reusable capability;
+future lifecycle specs should build on it. Both events are driven by **explicit,
+deterministic triggers — never a wall-clock idle wait** (the single biggest flake
+trap here), and these specs are the most timing-sensitive in the suite, so they do
+**not** advance the e2e→required stability bar.
+
+Four facts make this work (each verified live against the bundled Chromium):
+
+- **SW recycle = CDP `Target.closeTarget`, not idle waiting.** An attached
+  debugger/CDP client (Playwright always is one) *suppresses* MV3 idle suspension,
+  so a natural 30s idle wait would never fire. `evictServiceWorker()` opens a CDP
+  session on the page, finds the `service_worker` target whose URL carries the
+  extension id, and closes it. The worker re-spawns on the **next** extension event
+  (the self-heal call-button click supplies it).
+- **A re-spawned extension SW REVIVES the same Playwright `Worker` handle** and emits
+  **no** new `serviceworker` event. So `reacquireServiceWorker()` polls for the first
+  *live* worker (via `isWorkerDead()`) rather than waiting for an event — covering both
+  the revived-handle and the rare brand-new-handle cases.
+- **The offscreen document is a `background_page` CDP target** that Playwright surfaces
+  in neither `context.pages()` nor `context.backgroundPages()`, and the real
+  `OFFSCREEN_AUTO_SHUTDOWN` message is hard-gated on `sender.url === offscreen.html`
+  (un-forgeable). So `triggerOffscreenShutdown()` invokes the exact method the handler
+  calls (`offscreenManager.closeOffscreenDocument()`) through a **DEV-only** hook
+  exposed on the service worker (`__saypiOffscreenTestHooks`, gated on
+  `import.meta.env.DEV` so it is dead-code-eliminated from production builds — the same
+  pattern as the #312 build-stamp). The bug lived in `closeOffscreenDocument` (it cleared
+  `portMap`), not in the handler routing, so this is a faithful reproduction.
+- **The #308 net asserts the invariant, not a literal second utterance.** The mock runs
+  one *continuous* VAD session (the looping mic streams utterances within a single
+  offscreen session) with no assistant turn to make the conversation stop and re-arm VAD;
+  once the offscreen doc is force-closed mid-call, nothing re-arms it, and the only
+  deterministic re-arm available (toggling the call) ends the call → reconnects the port →
+  repopulates `portMap` → **masks** the bug. So the spec asserts the exact invariant
+  directly — the document closes **and** the live port survives (`getConnectedTabCount`
+  stays > 0) — which *is* "the next VAD_SPEECH_END still routes to the tab", since routing
+  is `portMap.get(tabId)`. Both nets are proven fail-first by reverting the corresponding
+  production fix.
 
 ## Local-vs-CI risk split
 

@@ -177,3 +177,31 @@ change. This is test-only (plus, at most, a dev-only `import.meta.env.DEV`-gated
 offscreen-page fallback is needed). Per the mandate this is the "everything else" category:
 CI-green (`npm test`) + an independent reviewer-subagent verdict posted to the PR, no founder
 sign-off required.
+
+## As-built (implementation outcome)
+
+Two of the anticipated contingencies fired during the fail-first build; the final design differs
+from the primary path above and is recorded here for honesty:
+
+- **Offscreen trigger → DEV-only SW hook (not the offscreen-page message).** The offscreen document
+  is a `background_page` CDP target that Playwright surfaces in neither `context.pages()` nor
+  `context.backgroundPages()`, and the CDP flatten-attach child session is not reachable through any
+  stable Playwright accessor. So `triggerOffscreenShutdown()` invokes the exact method the
+  `OFFSCREEN_AUTO_SHUTDOWN` handler calls (`offscreenManager.closeOffscreenDocument()`) via a
+  DEV-only `__saypiOffscreenTestHooks` exposed on the service worker (gated on `import.meta.env.DEV`,
+  dead-code-eliminated from production — same pattern as #312's build-stamp). The bug lived in
+  `closeOffscreenDocument` (it cleared `portMap`), not in the handler/guard, so this is faithful.
+- **#308 asserts the invariant, not a literal second utterance.** Verified live: the mock runs one
+  continuous VAD session (no assistant turn to make the conversation stop/re-arm VAD), so once the
+  offscreen doc is force-closed nothing re-arms it; and the only deterministic re-arm (a call toggle)
+  ends the call → reconnects the port → repopulates `portMap` → *masks* the bug. So the net asserts
+  the exact invariant — the document closes **and** the live content-script port survives
+  (`getConnectedTabCount` > 0), which *is* "the next VAD_SPEECH_END still routes to the tab" (routing
+  is `portMap.get(tabId)`). A read-only `OffscreenManager.getConnectedTabCount()` accessor was added
+  for this. Fail-first proven by re-adding `portMap.clear()`.
+- **#307 self-heal re-acquire.** A re-spawned extension SW *revives the same* Playwright `Worker`
+  handle and emits no new `serviceworker` event, so `reacquireServiceWorker()` polls for the first
+  live worker (via `isWorkerDead()`) instead of awaiting the event.
+- **Net production change:** `src/svc/background.ts` (+ the DEV-only hook) and
+  `src/offscreen/offscreen_manager.ts` (+ the read-only `getConnectedTabCount()` accessor). Both
+  are innocuous and production-stripped/harmless; still the "everything else" gate.

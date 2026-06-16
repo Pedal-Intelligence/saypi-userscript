@@ -10,6 +10,12 @@
 
 **Reference spec:** `doc/specs/2026-06-16-issue-313-l3-sw-lifecycle-design.md`
 
+> **As-built note:** Tasks 4–5 diverged from this plan where headless-Chrome reality forced it
+> (offscreen page unreachable → DEV-only SW hook; #308 asserts the port-survival invariant rather
+> than a literal second utterance, because the mock can't re-arm VAD without masking the bug). The
+> reasons are recorded in the **"As-built (implementation outcome)"** section of the design spec and
+> in `e2e/README.md`. The fail-first protocol, file structure, and Tasks 1–3 are as written.
+
 ---
 
 ## File Structure
