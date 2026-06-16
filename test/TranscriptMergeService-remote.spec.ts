@@ -75,4 +75,20 @@ describe("TranscriptMergeService.mergeTranscriptsRemote", () => {
     expect(fetchMock).not.toHaveBeenCalled();
     expect(result).toBe("");
   });
+
+  it("judges continuity by the segment KEYS, not by numbers parsed from the text", async () => {
+    const service = new TranscriptMergeService("http://api.example", "en-US");
+
+    // Keys 1 and 5 are non-consecutive (segment missing), so this must NOT merge —
+    // even though the spoken text happens to start with consecutive numbers
+    // ("1 dog", "2 cats"). The old code parseInt()-ed the text → [1, 2] → wrongly
+    // continuous → POSTed. This pins the fix to read keys, not text.
+    const result = await service.mergeTranscriptsRemote(
+      { 1: "1 dog", 5: "2 cats" },
+      cutoff()
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(result).toBe("");
+  });
 });
