@@ -1,7 +1,33 @@
+import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "wxt";
+
+// Build-identity stamp injected into the bundle as `__SAYPI_BUILD_STAMP__`
+// (see src/build-stamp.ts). Lets a loaded build be matched against the current
+// commit so a stale dev build is detectable rather than a guess. Computed once
+// at config load; falls back gracefully outside a git checkout.
+function computeBuildStamp(): { sha: string; branch: string; time: string } {
+  const cwd = fileURLToPath(new URL(".", import.meta.url));
+  const git = (args: string[]) =>
+    execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  try {
+    return {
+      sha: git(["rev-parse", "--short", "HEAD"]),
+      branch: git(["rev-parse", "--abbrev-ref", "HEAD"]),
+      time: new Date().toISOString(),
+    };
+  } catch {
+    return { sha: "unknown", branch: "unknown", time: new Date().toISOString() };
+  }
+}
+const BUILD_STAMP = computeBuildStamp();
+
+const applyBuildStampDefine = (config: { define?: Record<string, any> }) => {
+  config.define ??= {};
+  config.define.__SAYPI_BUILD_STAMP__ = JSON.stringify(BUILD_STAMP);
+};
 
 // These constants are used for renaming CommonJS helper files generated during the build.
 // Chrome requires safe filenames for extension chunks, and specifically does not allow underscores in chunk names.
@@ -365,9 +391,11 @@ export default defineConfig((env) => {
     hooks: {
       "vite:build:extendConfig": (entrypoints, config) => {
         applyChunkFilePattern(config);
+        applyBuildStampDefine(config);
       },
       "vite:devServer:extendConfig": (config) => {
         applyChunkFilePattern(config);
+        applyBuildStampDefine(config);
       },
       "build:publicAssets": (_wxt: any, files: any[]) => {
         addLocalePublicAssets(files);

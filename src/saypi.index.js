@@ -4,6 +4,7 @@ import { logger } from "./LoggingModule.js";
 import { getJwtManager } from "./JwtManager.ts";
 import telemetryModule from "./TelemetryModule.ts";
 import { addUserAgentFlags } from "./UserAgentModule.ts";
+import { stampBuildOnDocument } from "./build-stamp.ts";
 
 // Import styles that are needed across all modes
 import "./styles/common.scss";
@@ -29,6 +30,11 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 
 (async function () {
   "use strict";
+
+  // Record which build is injected on <html data-saypi-build="...">, readable
+  // from the page's main world so a Layer-4 probe can detect a stale dev build.
+  // Dev/e2e builds only — no need to expose build identity on production pages.
+  if (import.meta.env.DEV) stampBuildOnDocument();
 
   // Determine the mode based on the centralized identifier helpers
   const chatbotType = ChatbotIdentifier.identifyChatbot();

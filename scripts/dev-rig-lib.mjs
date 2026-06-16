@@ -86,3 +86,21 @@ export function parseWxtPids(psOutput, repoPath) {
   }
   return pids;
 }
+
+/**
+ * Has hot-reload stalled? True when a source file was edited after the last
+ * build output, and more than `graceMs` has elapsed without the build catching
+ * up — the signature of a slept MV3 service worker that dropped its connection
+ * to the dev server (the build rebuilds on disk but never reaches the page, or
+ * doesn't rebuild at all). The grace window avoids false alarms while a normal
+ * rebuild (~1s) is still in flight.
+ *
+ * @param {{lastSrcEditMs:number, lastBuildMs:number, nowMs:number, graceMs?:number}} args
+ *   epoch-ms of the most recent src edit / build-output mtime / current time.
+ * @returns {boolean}
+ */
+export function isHotReloadStalled({ lastSrcEditMs, lastBuildMs, nowMs, graceMs = 8000 }) {
+  if (!lastSrcEditMs) return false; // no edit observed yet
+  if (lastBuildMs >= lastSrcEditMs) return false; // build caught up to the edit
+  return nowMs - lastSrcEditMs > graceMs; // edit is older than the grace window
+}
