@@ -201,6 +201,20 @@ html body.pi {
     align-self: center;
   }
 
+  /* In-call (active) state: keep the hangup disc clearly visible — its intended
+     grey (#776d6d, from hangup.svg) at full opacity. While Pi is responding the
+     button also gets the `disabled` class, and the shared rule
+     `#saypi-callButton.disabled svg path.background` (common.scss) paints the
+     disc bg-cream-550 = rgb(245 238 223), which on pi.ai's cream composer is the
+     page background — so the active button renders cream-on-cream (invisible).
+     This pins the active disc to its grey and outranks that disabled rule, so the
+     in-call button always reads as "in a call", even mid-response. Transcription
+     segment wedges still hide it via inline fill-opacity:0, which outranks this. */
+  #saypi-callButton.active svg path.background {
+    fill: #776d6d;
+    fill-opacity: 1;
+  }
+
   /* Mobile-specific button sizing to match Pi's native buttons */
   @media (max-width: 768px) {
     #saypi-callButton {
