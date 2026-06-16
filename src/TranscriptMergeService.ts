@@ -61,9 +61,13 @@ export class TranscriptMergeService {
     transcripts: Record<number, string>,
     cutoffTime: number
   ): Promise<string> {
-    const keys = this.sortTranscripts(transcripts).map((transcript) =>
-      parseInt(transcript)
-    );
+    // Continuity must be assessed over the segment SEQUENCE KEYS (1, 2, 3…), not
+    // the spoken text. Parsing the transcript text with parseInt() yields NaN for
+    // ordinary speech, which made isContinuous false for every multi-segment
+    // utterance and silently disabled the server /merge entirely.
+    const keys = Object.keys(transcripts)
+      .map(Number)
+      .sort((a, b) => a - b);
     const isContinuous = keys.every((value, index, array) => {
       // If it's the first element or keys are continuous
       return index === 0 || value === array[index - 1] + 1;
