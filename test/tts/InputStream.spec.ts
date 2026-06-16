@@ -98,7 +98,7 @@ test(
   "ElementTextStream emits text as it is added",
   async () => {
     const element = document.createElement("div");
-    const stream = new PiTextStream(element);
+    const stream = new PiTextStream(element, { streamTimeout: 150 });
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
     await addText(element, "Hello ");
@@ -115,7 +115,7 @@ test(
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new PiTextStream(element);
+    const stream = new PiTextStream(element, { streamTimeout: 150 });
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
@@ -144,7 +144,7 @@ test(
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new PiTextStream(element); // no delimiter by default
+    const stream = new PiTextStream(element, { streamTimeout: 150 }); // no delimiter by default
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
@@ -168,7 +168,7 @@ test(
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new PiTextStream(element);
+    const stream = new PiTextStream(element, { streamTimeout: 150 });
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
@@ -179,4 +179,49 @@ test(
     expect(values.join("")).toEqual(element.textContent);
   },
   timeoutCalc(2)
+);
+
+/**
+ * Regression guard for the "Pi is thinking…" stuck-placeholder bug.
+ *
+ * pi.ai's streamed-response DOM drifted: it still appends each word as a hidden
+ * `<span style="opacity:0">` but NO LONGER replaces those spans with bare text
+ * nodes (the `finishText` step above). The first word also arrives already
+ * nested inside an added container element. The old PiTextStream emitted only on
+ * bare-text-node additions and completed only when its hidden-span queue
+ * emptied, so against this markup it emitted nothing and never completed —
+ * `saypi:piWriting`/`saypi:piStoppedWriting` never fired and the conversation
+ * machine sat in `piThinking` forever.
+ *
+ * The stream must instead track the element's rendered text and complete on a
+ * stability timeout. `streamTimeout` keeps the test fast.
+ *
+ * Confirmed fail-first: against the pre-fix PiTextStream this never emits and
+ * never completes, so `promise` never resolves and the test times out.
+ */
+test(
+  "PiTextStream emits and completes for pi.ai's hidden-span stream with no text-node replacement (live model)",
+  async () => {
+    const element = document.createElement("div");
+    document.body.appendChild(element);
+    const stream = new PiTextStream(element, { streamTimeout: 150 });
+    const values: string[] = [];
+    const promise = collectStreamValues(stream, values);
+
+    // First word arrives already nested inside an added container (as on live
+    // pi.ai), the rest as standalone hidden spans — and NONE are ever replaced
+    // by bare text nodes.
+    await new Promise((r) => setTimeout(r, intervalMillis));
+    const firstChunk = document.createElement("div");
+    firstChunk.innerHTML = '<span style="opacity:0">I\'m </span>';
+    element.appendChild(firstChunk);
+    await addText(element, "here ");
+    await addText(element, "for ");
+    await addText(element, "you.");
+    // Deliberately NO finishText() — the step pi.ai dropped.
+
+    await promise; // must still complete, via the stability timeout
+    expect(values.join("")).toBe("I'm here for you.");
+  },
+  4000
 );
