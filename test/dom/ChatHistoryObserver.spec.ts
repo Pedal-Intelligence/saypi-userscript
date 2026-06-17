@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SpeechSynthesisModule } from "../../src/tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
-import { ChatHistoryMessageObserver } from "../../src/dom/ChatHistory";
+import {
+  ChatHistoryMessageObserver,
+  RootChatHistoryObserver,
+} from "../../src/dom/ChatHistory";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
@@ -235,6 +238,78 @@ describe("ChatHistoryMessageObserver", () => {
           assistantResponseSelector
         );
       expect(withoutJustifyEnd.found).toBe(true); // should match without "justify-end"
+    });
+  });
+
+  describe("recent/present container reactive decoration (#309)", () => {
+    // Reproduces the live pi.ai thread-load layout: #saypi-chat-history has a
+    // spacer (1st child), a past-messages container (2nd), and a present/recent
+    // container (3rd) holding the most-recent turn. On a real thread the present
+    // container mounts AFTER the chat history is decorated, so the one-shot present
+    // setup misses it and the most-recent message is left undecorated. The
+    // RootChatHistoryObserver must pick it up reactively.
+    let saypiChatHistory: HTMLElement;
+    let chatbot: PiAIChatbot;
+    let observer: RootChatHistoryObserver;
+
+    beforeEach(() => {
+      chatbot = new PiAIChatbot();
+      saypiChatHistory = document.createElement("div");
+      saypiChatHistory.id = "saypi-chat-history";
+      saypiChatHistory.classList.add("chat-history");
+      document.body.appendChild(saypiChatHistory);
+    });
+
+    afterEach(() => {
+      observer?.disconnect();
+      saypiChatHistory?.remove();
+    });
+
+    it("decorates the most-recent message when the present container appears after the observer attaches", async () => {
+      // Keep the test focused on decoration: a non-SayPi provider skips the
+      // incomplete-speech branch (which reaches the real UserPreferenceModule
+      // singleton, unrelated to this behaviour) — same approach as the TTS
+      // resilience tests below.
+      vi.spyOn(speechSynthesisModule, "getActiveAudioProvider").mockResolvedValue(
+        audioProviders.None
+      );
+
+      observer = new RootChatHistoryObserver(
+        saypiChatHistory,
+        "#saypi-chat-history",
+        speechSynthesisModule,
+        chatbot,
+        false // don't auto-run; we drive the mutation sequence explicitly
+      );
+      observer.observe({ childList: true, subtree: false });
+
+      // Mount sequence AFTER observe() — mirrors pi.ai's deferred layout.
+      const spacer = document.createElement("div");
+      spacer.className = "relative shrink-0 h-1 z-30";
+      saypiChatHistory.appendChild(spacer);
+
+      const pastContainer = document.createElement("div");
+      pastContainer.className = "space-y-6";
+      pastContainer.appendChild(createAssistantMessage("an older message"));
+      saypiChatHistory.appendChild(pastContainer);
+
+      const presentContainer = document.createElement("div");
+      presentContainer.className = "pb-6 lg:pb-8";
+      const recentMessage = createAssistantMessage("the most recent message");
+      presentContainer.appendChild(recentMessage);
+      saypiChatHistory.appendChild(presentContainer);
+
+      // Allow the MutationObserver callbacks + async decoration to settle.
+      await new Promise((r) => setTimeout(r, 50));
+
+      // The most-recent message (in the present container) must be decorated.
+      expect(recentMessage.classList.contains("assistant-message")).toBe(true);
+      // And the past message must still be decorated (no regression to the past path).
+      expect(
+        pastContainer
+          .querySelector("div.break-anywhere")
+          ?.classList.contains("assistant-message")
+      ).toBe(true);
     });
   });
 
