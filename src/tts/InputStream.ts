@@ -11,6 +11,12 @@ export function getNestedText(node: HTMLElement): string {
 export interface InputStreamOptions {
   includeInitialText?: boolean;
   delimiter?: string;
+  /**
+   * Endpointing window (ms): complete the stream when the rendered text has been
+   * stable for this long. Defaults to STREAM_TIMEOUT. Mainly used to keep tests
+   * fast; production uses the default.
+   */
+  streamTimeout?: number;
 }
 interface TextContent {
   text: string;

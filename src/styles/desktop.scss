@@ -24,6 +24,18 @@ html.desktop-view {
     margin-right: 0;
   }
 
+  /* Pi puts Tailwind `m-2` (0.5rem all sides) on the call button. On desktop the
+     button is in-flow (position:relative above), so its 8px top+bottom margin
+     makes it the tallest item in Pi's `items-center` prompt-controls row and
+     inflates the composer by 16px vs native (Pi's own submit button has margin
+     0). Zero the vertical margin so the box keeps Pi's native height. Scoped to
+     body.pi (m-2 is Pi-only) and to desktop-view (mobile keeps its own
+     position:fixed / margin:auto centering). Horizontal margin is left intact. */
+  body.pi #saypi-callButton {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
   .saypi-prompt-container {
     /* make room in the prompt text area for the call button */
     padding-right: 0;

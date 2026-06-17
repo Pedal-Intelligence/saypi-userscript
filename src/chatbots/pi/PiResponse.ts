@@ -6,6 +6,8 @@ import {
   Completion,
   ElementTextStream,
   InputStreamOptions,
+  STREAM_TIMEOUT,
+  getNestedText,
 } from "../../tts/InputStream";
 import { UserPreferenceModule } from "../../prefs/PreferenceModule";
 import { TTSControlsModule } from "../../tts/TTSControlsModule";
@@ -107,96 +109,84 @@ export class PiMessageControls extends MessageControls {
 }
 
 export class PiTextStream extends ElementTextStream {
-  hiddenTextQueue: Queue<string> = new Queue();
-  additionalDelay: number = 0;
-  lastContentChange: number = Date.now();
+  // Endpointing window: complete once the rendered text stops changing.
+  private streamTimeoutMs: number | undefined;
+  // Extra endpointing delay accumulated from "saypi:tts:text:delay" events.
+  private additionalDelay: number = 0;
+  // The full rendered text already emitted, diffed against on each mutation.
+  private lastFullText: string = "";
+  private firstTokenEmitted: boolean = false;
 
   constructor(element: HTMLElement, options?: InputStreamOptions) {
     super(element, options);
-    EventBus.on("saypi:tts:text:delay", this.handleDelayEvent);
-  }
-
-  // Helper to check if a span is hidden
-  private isSpanHidden(span: HTMLSpanElement): boolean {
-    try {
-      if (span.style.display === "none" || span.style.opacity === "0") {
-        return true;
-      }
-      if (typeof window !== 'undefined' && window.getComputedStyle) {
-        const style = window.getComputedStyle(span);
-        return style.display === "none" || parseFloat(style.opacity) === 0;
-      }
-      return false;
-    } catch (e) {
-      console.error("Error checking if span is hidden", e);
-      return false;
+    this.streamTimeoutMs = options?.streamTimeout ?? STREAM_TIMEOUT;
+    // If the base already emitted the element's initial text, seed lastFullText
+    // so we don't re-emit it on the first mutation.
+    if (options?.includeInitialText) {
+      this.lastFullText = getNestedText(this.element);
     }
+    EventBus.on("saypi:tts:text:delay", this.handleDelayEvent);
+    // Re-arm the completion timer now that streamTimeoutMs is set (the base
+    // constructor armed it with the default before this ran).
+    this.resetStreamTimeout();
   }
 
-  /** Extend the stream timeout when a delay event is received. */
+  /** Endpointing window, extended by any received delay events. */
+  protected calculateStreamTimeout(): number {
+    return (this.streamTimeoutMs ?? STREAM_TIMEOUT) + (this.additionalDelay || 0);
+  }
+
+  /**
+   * pi.ai gives no explicit end-of-response marker, so complete the stream once
+   * the rendered text has been stable for the endpointing window. The base
+   * subscription re-arms this on every emitted chunk, so it fires only after
+   * streaming actually stops.
+   */
+  protected resetStreamTimeout(): void {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout(() => {
+      this.complete({ type: "eod", time: Date.now() });
+    }, this.calculateStreamTimeout());
+  }
+
+  /** Extend the endpointing window when a delay event is received. */
   handleDelayEvent = () => {
-    const delay = 1500;
-    this.additionalDelay += delay;
-    console.debug(`Received delay event. Adding ${delay}ms to timeout. Total additional delay: ${this.additionalDelay}ms`);
+    this.additionalDelay += 1500;
     this.resetStreamTimeout();
   };
 
-  private updateLastContentChange(): void {
-    this.lastContentChange = Date.now();
-  }
-
-  handleMutationEvent = (mutation: MutationRecord) => {
+  /**
+   * pi.ai streams a response by appending hidden `<span style="opacity:0">`
+   * word chunks (revealed later) and tweaking them via characterData — it does
+   * NOT append bare text nodes, and the first chunk arrives already nested in a
+   * container element. Rather than interpret each node mutation (the old, now
+   * broken approach), read the element's full rendered text on every mutation
+   * and emit the delta. This is robust to however the host nests or streams the
+   * text, and naturally handles appends, in-place edits, and nested containers.
+   */
+  handleMutationEvent = (_mutation: MutationRecord) => {
     if (this.closed()) {
       return;
     }
-
-    this.updateLastContentChange();
-
-    if (mutation.type === "childList") {
-      for (let i = 0; i < mutation.addedNodes.length; i++) {
-        const node = mutation.addedNodes[i];
-
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          const element = node as HTMLElement;
-          if (element.tagName === "SPAN") {
-            const isHidden = this.isSpanHidden(element as HTMLSpanElement);
-            if (isHidden) {
-              if (this.hiddenTextQueue.isEmpty()) {
-                EventBus.emit("saypi:llm:first-token", { text: element.textContent || "", time: Date.now() });
-              }
-              this.hiddenTextQueue.enqueue(element.textContent || "");
-            }
-          }
-        } else if (node.nodeType === Node.TEXT_NODE) {
-          const textNode = node as Text;
-          const content = textNode.textContent || "";
-
-          const head = this.hiddenTextQueue.peek();
-          if (head) {
-            if (head.trim() === content.trim()) {
-              this.hiddenTextQueue.dequeue();
-            }
-          }
-          this.next(new AddedText(content || ""));
-
-          if (this.hiddenTextQueue.isEmpty()) {
-            console.debug("Stream completion detected - all hidden text has been added");
-            this.complete({ type: "eod", time: Date.now() });
-          }
-        }
+    const full = getNestedText(this.element);
+    if (full === this.lastFullText) {
+      return;
+    }
+    if (full.startsWith(this.lastFullText)) {
+      const delta = full.slice(this.lastFullText.length);
+      this.lastFullText = full;
+      if (!this.firstTokenEmitted && delta.trim().length > 0) {
+        this.firstTokenEmitted = true;
+        EventBus.emit("saypi:llm:first-token", { text: delta, time: Date.now() });
       }
-    } else if (mutation.type === "characterData") {
-      const textNode = mutation.target as Text;
-      const content = textNode.textContent || "";
-      const oldValue = mutation.oldValue || "";
-
-      const alreadyEmitted = this.emittedValues.some((value) => value.text === oldValue);
-      if (alreadyEmitted) {
-        this.next(new ChangedText(content, oldValue));
-        console.debug(`Text changed from "${oldValue}" to "${content}"`);
-      } else {
-        console.debug(`Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`);
-      }
+      this.next(new AddedText(delta));
+    } else {
+      // Rare: earlier text was rewritten rather than appended to.
+      const previous = this.lastFullText;
+      this.lastFullText = full;
+      this.next(new ChangedText(full, previous));
     }
   };
 
@@ -204,13 +194,4 @@ export class PiTextStream extends ElementTextStream {
     super.complete(reason);
     EventBus.off("saypi:tts:text:delay", this.handleDelayEvent);
   }
-}
-
-class Queue<T> {
-  private items: T[] = [];
-  enqueue(item: T): void { this.items.push(item); }
-  dequeue(): T | undefined { return this.items.shift(); }
-  peek(): T | undefined { return this.items[0]; }
-  get size(): number { return this.items.length; }
-  isEmpty(): boolean { return this.items.length === 0; }
 }
