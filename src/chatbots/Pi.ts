@@ -115,11 +115,19 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getPastChatHistorySelector(): string {
-    return "#saypi-chat-history :nth-child(2)"; // second child of the chat history container
+    // Direct-child combinator (`>`): the 2nd DIRECT child of the chat history
+    // container. Without `>`, the descendant combinator matches the first nested
+    // 2nd-child anywhere (e.g. an icon SVG element), not the container (#309).
+    return "#saypi-chat-history > :nth-child(2)";
   }
 
   getRecentChatHistorySelector(): string {
-    return "#saypi-chat-history :nth-child(3)"; // third child of the chat history container
+    // Direct-child combinator (`>`): the 3rd DIRECT child (the present/recent
+    // container holding the most-recent turn). The old descendant form
+    // ("#saypi-chat-history :nth-child(3)") matched an action-bar icon's
+    // <circle> SVG instead, so the recent container was never observed and the
+    // most-recent message went undecorated (#309).
+    return "#saypi-chat-history > :nth-child(3)";
   }
 
   getDiscoveryPanelSelector(): string {
