@@ -621,6 +621,22 @@
       }
     }
   },
+  "errorVoiceRecordingUnavailable": {
+    "message": "Voice recording not available",
+    "description": "Error toast shown when the voice-detection (VAD) client is unavailable, so recording cannot start."
+  },
+  "errorVadInitFailed": {
+    "message": "Failed to initialize voice detection",
+    "description": "Error toast shown when voice-activity detection fails to initialize."
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "message": "Failed to set up voice recording",
+    "description": "Error toast shown when an unexpected error occurs while setting up voice recording."
+  },
+  "errorVoiceRecordingStartFailed": {
+    "message": "Failed to start voice recording",
+    "description": "Error toast shown when the voice-detection client fails to start recording."
+  },
   "submitModeControl": {
     "message": "Select when to submit your messages",
     "description": "The title (tooltip) of the control to select when messages should be submitted."
