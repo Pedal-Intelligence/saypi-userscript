@@ -311,6 +311,53 @@ describe("ChatHistoryMessageObserver", () => {
           ?.classList.contains("assistant-message")
       ).toBe(true);
     });
+
+    it("decorates a message swapped deep into a REUSED present container (SPA thread switch)", async () => {
+      vi.spyOn(speechSynthesisModule, "getActiveAudioProvider").mockResolvedValue(
+        audioProviders.None
+      );
+
+      observer = new RootChatHistoryObserver(
+        saypiChatHistory,
+        "#saypi-chat-history",
+        speechSynthesisModule,
+        chatbot,
+        false
+      );
+      observer.observe({ childList: true, subtree: false });
+
+      // Initial layout from a prior thread: the present container already exists
+      // (and is set up) with an inner wrapper, but no current-turn message yet.
+      const spacer = document.createElement("div");
+      spacer.className = "relative shrink-0 h-1 z-30";
+      saypiChatHistory.appendChild(spacer);
+
+      const pastContainer = document.createElement("div");
+      pastContainer.className = "space-y-6";
+      saypiChatHistory.appendChild(pastContainer);
+
+      const presentContainer = document.createElement("div");
+      presentContainer.className = "pb-6 lg:pb-8";
+      const innerWrapper = document.createElement("div"); // persists across SPA nav
+      innerWrapper.className = "space-y-6";
+      presentContainer.appendChild(innerWrapper);
+      saypiChatHistory.appendChild(presentContainer);
+
+      // Let ensureRecentMessages set up the recent observer on presentContainer.
+      await new Promise((r) => setTimeout(r, 30));
+
+      // SPA navigation to another thread: pi.ai REUSES the same presentContainer
+      // (so a re-runOnce is skipped) and swaps the new thread's most-recent message
+      // in NESTED inside the existing wrapper — i.e. the mutation target is the
+      // wrapper, not a direct child of presentContainer. A subtree:false observer
+      // never sees it.
+      const recentMessage = createAssistantMessage("most recent after SPA nav");
+      innerWrapper.appendChild(recentMessage);
+
+      await new Promise((r) => setTimeout(r, 50));
+
+      expect(recentMessage.classList.contains("assistant-message")).toBe(true);
+    });
   });
 
   describe("resilience to TTS failures (#268 / #241)", () => {
