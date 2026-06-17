@@ -637,6 +637,24 @@
     "message": "Failed to start voice recording",
     "description": "Error toast shown when the voice-detection client fails to start recording."
   },
+  "webAssemblyMemoryUnavailable": {
+    "message": "Voice detection can't start: WebAssembly memory is unavailable in this browser.",
+    "description": "Error thrown when the browser does not expose initial WebAssembly memory needed to run the voice-detection model."
+  },
+  "webAssemblyInsufficientMemory": {
+    "message": "Voice detection can't start: not enough WebAssembly memory for the voice model. $detail$",
+    "description": "Error thrown when the browser cannot allocate enough WebAssembly memory for the voice-detection model.",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "microphonePermissionDeniedError": {
+    "message": "Microphone permission was not granted. Please ensure you've allowed access in the prompt and in extension settings.",
+    "description": "Error toast shown when microphone permission was denied after the permission prompt flow."
+  },
   "submitModeControl": {
     "message": "Select when to submit your messages",
     "description": "The title (tooltip) of the control to select when messages should be submitted."

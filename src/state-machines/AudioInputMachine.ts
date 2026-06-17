@@ -335,7 +335,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       const permissionGranted = await checkAndRequestMicrophonePermissionViaBackground();
 
       if (!permissionGranted) {
-        const errorMsg = getMessage("microphonePermissionDeniedError") || "Microphone permission was not granted. Please ensure you've allowed access in the prompt and in extension settings.";
+        const errorMsg = getMessage("microphonePermissionDeniedError");
         console.error("[AudioInputMachine] Microphone permission not granted after prompt flow.");
         EventBus.emit("saypi:ui:show-notification", {
           message: errorMsg,
