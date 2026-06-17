@@ -708,7 +708,8 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                 description: "The system is not exhibiting any errors.",
               },
               errors: {
-                description: `Non-fatal transcription or recording errors.`,
+                description: `Non-fatal transcription or recording errors. A compound (NOT parallel) state so the two error leaves are mutually exclusive — a /transcribe failure must not also trigger the mic-error hint, and vice-versa (#311). Every transition into this state targets a leaf explicitly, so 'initial' is only a formal requirement.`,
+                initial: "transcribeFailed",
                 entry: {
                   type: "callHasErrors",
                 },
@@ -754,7 +755,6 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                     type: "final",
                   },
                 },
-                type: "parallel",
               },
             },
           },
