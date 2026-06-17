@@ -45,6 +45,8 @@ type Observer = {
 class ChatHistoryRootElementObserver extends BaseObserver {
   speechSynthesis: SpeechSynthesisModule;
   oldMessageObserver: ChatHistoryOldMessageObserver | null = null;
+  recentMessageObserver: ChatHistoryOldMessageObserver | null = null;
+  private decoratedRecentContainer: Element | null = null;
   /* This class adds an id to the 2nd child of the element under observeration, whenever children are added to the element */
   constructor(
     private chatHistoryElement: HTMLElement,
@@ -108,6 +110,69 @@ class ChatHistoryRootElementObserver extends BaseObserver {
     }
   }
 
+  /**
+   * Ensure the most-recent / present-messages container is decorated and observed.
+   *
+   * Unlike the past container (which, once it becomes a direct child, keeps its
+   * slot), pi.ai mounts/repositions the present container AFTER the chat history
+   * is first decorated — and it transiently passes through the 2nd-child slot. The
+   * one-shot present setup in ChatHistorySpeechManager.registerPresentChatHistoryListener
+   * therefore resolves nothing at construction time and dies silently (its
+   * BaseObserver target is null), so the most-recent assistant message never gets
+   * its TTS/copy controls on thread load (#309).
+   *
+   * This re-resolves the recent container on every chat-history mutation and sets
+   * it up idempotently when it appears (or is replaced), symmetric with how the
+   * past container is handled reactively. No-op for chatbots whose recent selector
+   * is the whole chat-history element (Claude/ChatGPT), which decorate through the
+   * past path.
+   */
+  private ensureRecentMessages(): void {
+    const recentSelector = this.chatbot.getRecentChatHistorySelector();
+    if (!recentSelector) return;
+
+    const rootAncestor = findRootAncestor(this.chatHistoryElement);
+    let recentContainer: Element | null = null;
+    try {
+      recentContainer = rootAncestor.querySelector(recentSelector);
+    } catch (e) {
+      // Tolerate selector-invalid host classes (same defensiveness as BaseObserver).
+      return;
+    }
+    if (!recentContainer) return;
+    // Claude/ChatGPT: the recent selector resolves to the whole chat-history
+    // element, which is already handled via the past path — nothing to do here.
+    if (recentContainer === this.chatHistoryElement) return;
+    // Already set up for this exact element.
+    if (recentContainer === this.decoratedRecentContainer) return;
+
+    this.decoratedRecentContainer = recentContainer;
+    // The present container can transiently pass through the past slot and pick up
+    // a stray `past-messages` class; clear it so the two observers stay distinct.
+    recentContainer.classList.remove("past-messages");
+    recentContainer.classList.add("chat-history", "present-messages");
+    if (this.recentMessageObserver) {
+      this.recentMessageObserver.disconnect();
+    }
+    this.recentMessageObserver = new ChatHistoryOldMessageObserver(
+      this.chatHistoryElement,
+      `${recentContainer.tagName.toLowerCase()}.chat-history.present-messages`,
+      this.speechSynthesis,
+      this.chatbot
+    );
+    this.recentMessageObserver
+      .runOnce(recentContainer)
+      .then((messages) => {
+        if (messages.length > 0) {
+          logger.debug(`Found ${messages.length} recent assistant message(s)`);
+        }
+      });
+    this.recentMessageObserver.observe({
+      childList: true,
+      subtree: false,
+    });
+  }
+
   public async runOnce(): Promise<void> {
     // run once on the direct children of the root element
     for (const node of [...this.chatHistoryElement.children]) {
@@ -116,6 +181,7 @@ class ChatHistoryRootElementObserver extends BaseObserver {
         this.handleChatHistoryChild(child);
       }
     }
+    this.ensureRecentMessages();
   }
 
   protected async callback(mutations: MutationRecord[]): Promise<void> {
@@ -127,6 +193,14 @@ class ChatHistoryRootElementObserver extends BaseObserver {
         }
       }
     }
+    this.ensureRecentMessages();
+  }
+
+  public disconnect(): void {
+    super.disconnect();
+    // Also release the per-container child observers this root observer owns.
+    this.oldMessageObserver?.disconnect();
+    this.recentMessageObserver?.disconnect();
   }
 }
 

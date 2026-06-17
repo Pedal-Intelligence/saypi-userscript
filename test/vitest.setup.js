@@ -29,6 +29,7 @@ Object.defineProperties(global, {
   MutationObserver: { value: dom.window.MutationObserver },
   Node: { value: dom.window.Node },
   NodeList: { value: dom.window.NodeList },
+  Document: { value: dom.window.Document },
   Element: { value: dom.window.Element },
   HTMLElement: { value: dom.window.HTMLElement },
   HTMLInputElement: { value: dom.window.HTMLInputElement },
