@@ -145,7 +145,7 @@ describe('ConversationMachine #311: transcribe vs mic errors are mutually exclus
     driveToTranscribing(service);
     expect(service.state.matches({ listening: { errorStatus: 'normal' } })).toBe(true);
 
-    service.send({ type: 'saypi:transcribeFailed', sequenceNumber: 1 });
+    service.send({ type: 'saypi:transcribeFailed' });
 
     expect(service.state.matches(transcribeFailedLeaf)).toBe(true);
     // The sibling mic-error must NOT be active (it was, under type:"parallel").
@@ -156,7 +156,7 @@ describe('ConversationMachine #311: transcribe vs mic errors are mutually exclus
     driveToTranscribing(service);
     expect(service.state.matches({ listening: { errorStatus: 'normal' } })).toBe(true);
 
-    service.send({ type: 'saypi:transcribedEmpty', sequenceNumber: 1 });
+    service.send({ type: 'saypi:transcribedEmpty' });
 
     expect(service.state.matches(micErrorLeaf)).toBe(true);
     expect(service.state.matches(transcribeFailedLeaf)).toBe(false);
