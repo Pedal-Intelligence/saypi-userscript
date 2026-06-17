@@ -318,7 +318,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       const errorMsg = "VAD client not available - this should not happen";
       console.error("[AudioInputMachine]", errorMsg);
       EventBus.emit("saypi:ui:show-notification", {
-        message: "Voice recording not available",
+        message: getMessage("errorVoiceRecordingUnavailable"),
         type: "text",
         seconds: 10,
         icon: "microphone-muted",
@@ -362,7 +362,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       console.error("[AudioInputMachine] VAD initialization failed:", detailedErrorMsg);
       
       // Use short error message for notification (if available), otherwise fall back to detailed
-      const notificationMessage = initResult.error ? errorMsg : "Failed to initialize voice detection";
+      const notificationMessage = initResult.error ? errorMsg : getMessage("errorVadInitFailed");
       
       EventBus.emit("saypi:ui:show-notification", {
         message: notificationMessage,
@@ -381,7 +381,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
     const errorMsg = error.message || "Unknown error during recording setup";
     console.error("[AudioInputMachine] Error in setupRecording:", error);
     EventBus.emit("saypi:ui:show-notification", {
-      message: "Failed to set up voice recording",
+      message: getMessage("errorVoiceRecordingSetupFailed"),
       type: "text",
       seconds: 10,
       icon: "microphone-muted",
@@ -568,7 +568,7 @@ export const audioInputMachine = createMachine<
         if (!vadClient) {
           console.error("[AudioInputMachine] VAD client not available - cannot start recording");
           EventBus.emit("saypi:ui:show-notification", {
-            message: "Voice recording not available",
+            message: getMessage("errorVoiceRecordingUnavailable"),
             type: "text",
             seconds: 10,
             icon: "microphone-muted",
@@ -582,7 +582,7 @@ export const audioInputMachine = createMachine<
         if (!result.success) {
           console.error("[AudioInputMachine] Failed to start VAD:", result.error);
           EventBus.emit("saypi:ui:show-notification", {
-            message: "Failed to start voice recording",
+            message: getMessage("errorVoiceRecordingStartFailed"),
             type: "text",
             seconds: 10,
             icon: "microphone-muted",
