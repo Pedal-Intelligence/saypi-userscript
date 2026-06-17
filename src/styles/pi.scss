@@ -95,16 +95,55 @@ html body.pi {
     height: 36px;
   }
 
-  /* Message controls: size copy button to better match native thumbs up/down */
+  /* Message-action controls: make SayPi's injected buttons visually identical to
+     pi.ai's own action-bar buttons (Copy / 👍 / 👎 / …). Native buttons are
+     `size-8 rounded-[0.625rem] p-1.5`, transparent at rest, `text-text-secondary`
+     coloured, with `hover:bg-fill-hover` / `active:bg-fill-tap` fills and 16px
+     icons. We reuse pi's own theme variables so it tracks light/dark too. */
   .message-action-bar,
   .message-hover-menu {
+    /* Seamless: drop the grouping "pill" so our controls sit inline with the
+       native buttons instead of inside a tinted rounded box. */
+    .saypi-tts-controls {
+      background-color: transparent;
+      border-radius: 0;
+      padding: 0;
+      margin-top: 0;
+    }
+
+    /* pi.ai now has its own native Copy button — hide ours (also catches any left
+       on messages decorated by an older build; new ones aren't created). */
     .saypi-copy-button {
+      display: none;
+    }
+
+    .saypi-telemetry-button {
       width: 32px;
       height: 32px;
+      margin: 0;
+      padding: 6px;
+      border: 1px solid transparent;
+      border-radius: 10px; /* native rounded-[0.625rem] */
+      background-color: transparent;
+      color: var(--color-text-secondary, #655e55);
+      opacity: 1; /* native buttons are full-strength, not faded */
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        opacity: 1;
+        transform: none; /* native buttons don't scale */
+        background-color: var(--color-fill-hover, #e9ddcd);
+      }
+      &:active {
+        background-color: var(--color-fill-tap, #e4d7c6);
+      }
 
       svg {
-        width: 18px;
-        height: 18px;
+        width: 16px; /* native icons are 16px */
+        height: 16px;
+        path {
+          fill: var(--color-text-secondary, #655e55);
+        }
       }
     }
   }

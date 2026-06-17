@@ -85,11 +85,10 @@ export class PiMessageControls extends MessageControls {
         }
         this.messageControlsElement = msgCtrlsElement;
 
-        const copyButtonElement =
-          msgCtrlsElement.querySelector(".saypi-copy-button");
-        if (!copyButtonElement) {
-          this.ttsControls.addCopyButton(this.message, msgCtrlsElement);
-        }
+        // No copy button on Pi: pi.ai ships its own native "Copy message" button
+        // in the action bar, so ours would be redundant. (Other chatbots still
+        // get theirs via the shared MessageControls path.) pi.scss also hides any
+        // copy button left on messages decorated by an older build.
 
         // Add telemetry button at the end
         const telemetryButtonElement =
