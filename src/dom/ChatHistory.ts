@@ -167,9 +167,17 @@ class ChatHistoryRootElementObserver extends BaseObserver {
           logger.debug(`Found ${messages.length} recent assistant message(s)`);
         }
       });
+    // subtree:true is required for SPA thread-switching: pi.ai REUSES the present
+    // container element across threads (so the `decoratedRecentContainer` guard
+    // above skips a re-`runOnce`) and swaps the new thread's message in nested
+    // several levels deep. A direct-children-only (subtree:false) observer misses
+    // that deep content swap, leaving the most-recent message undecorated after an
+    // in-app navigation (it only worked on a full page load, where the container is
+    // a fresh element and `runOnce` fires). Decoration is idempotent, so the extra
+    // mutation traffic during streaming is a cheap no-op once a message is decorated.
     this.recentMessageObserver.observe({
       childList: true,
-      subtree: false,
+      subtree: true,
     });
   }
 
