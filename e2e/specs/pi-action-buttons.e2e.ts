@@ -30,6 +30,12 @@ test("SayPi's Pi action buttons are seamless with native (copy hidden, telemetry
   });
 
   const result = await page.evaluate(() => {
+    // The base telemetry CSS is scoped under html.desktop-view (SayPi adds this
+    // on desktop; the mock host doesn't). It MUST be present, otherwise the base
+    // rule never applies and this test would false-pass without exercising the
+    // real cascade (where the base 24px rule must be out-specified by pi.scss).
+    document.documentElement.classList.add("desktop-view");
+
     // pi.ai defines these theme variables; the mock host doesn't, so recreate
     // them so the extension's `var(--color-…)` references resolve to pi's values.
     document.documentElement.style.setProperty("--color-text-secondary", "#655E55");

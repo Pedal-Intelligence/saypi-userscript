@@ -8,6 +8,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 import { logger } from "../LoggingModule";
+import telemetryModule from "../TelemetryModule";
 import { AgentModeNoticeModule } from "../ui/AgentModeNoticeModule";
 import { IconModule } from "../icons/IconModule";
 import { openSettings } from "../popup/popupopener";
@@ -119,7 +120,13 @@ export class DOMObserver {
       if (currentUrl !== lastUrl) {
         logger.debug('Route changed:', lastUrl, '->', currentUrl);
         lastUrl = currentUrl;
-        
+
+        // New thread / new chat = no active voice turn for the incoming view, so
+        // clear the current-turn telemetry (and its global marker). Without this,
+        // navigating from a thread that recorded telemetry into a new chat would
+        // leave the marker set and show a telemetry button on the greeting.
+        telemetryModule.resetTelemetry();
+
         // Start/stop observation based on whether the new path is chatable
         if (this.chatbot.isChatablePath(window.location.pathname)) {
           this.startObservingDom();
