@@ -103,12 +103,17 @@ html body.pi {
   .message-action-bar,
   .message-hover-menu {
     /* Seamless: drop the grouping "pill" so our controls sit inline with the
-       native buttons instead of inside a tinted rounded box. */
+       native buttons instead of inside a tinted rounded box. Zeroing the padding
+       also removes the `pt-4` top-offset that used to bottom-align us with the
+       native buttons (which sit at the bottom of the ~48px action bar via their
+       own pt-4), so bottom-align the controls explicitly to line our button up
+       with theirs. */
     .saypi-tts-controls {
       background-color: transparent;
       border-radius: 0;
       padding: 0;
       margin-top: 0;
+      align-self: flex-end;
     }
 
     /* pi.ai now has its own native Copy button — hide ours (also catches any left
