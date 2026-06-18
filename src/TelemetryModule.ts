@@ -40,6 +40,42 @@ export interface TelemetryData {
 }
 
 /**
+ * Whether a voice turn has actually recorded performance metrics worth showing.
+ *
+ * The empty/initial telemetry — and the reset emitted at the very start of a turn
+ * (`speechStart` only) — does NOT count: there's nothing to visualise yet. A
+ * non-call response (e.g. the greeting on a new-chat page) never progresses past
+ * that, so it must not surface a telemetry button. We treat the turn as having
+ * recorded metrics once any duration metric is set, or any timestamp beyond the
+ * initial speech-start milestone exists.
+ */
+export function hasRecordedTelemetry(data: TelemetryData | null | undefined): boolean {
+  if (!data) return false;
+  if (
+    data.gracePeriod != null ||
+    data.transcriptionTime != null ||
+    data.transcriptionDelay != null ||
+    data.promptSubmission != null ||
+    data.completionResponse != null ||
+    data.streamingDuration != null ||
+    data.timeToTalk != null
+  ) {
+    return true;
+  }
+  const ts = data.timestamps || {};
+  // `speechStart` alone marks turn-start/reset; require a later milestone.
+  return !!(
+    ts.speechEnd ||
+    ts.transcriptionStart ||
+    ts.transcriptionEnd ||
+    ts.promptSubmission ||
+    ts.completionStart ||
+    ts.completionEnd ||
+    ts.audioPlaybackStart
+  );
+}
+
+/**
  * Module for collecting and storing performance telemetry data
  * Simplified to only track one message at a time (the current/most recent one)
  */
