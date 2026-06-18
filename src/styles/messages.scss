@@ -84,12 +84,19 @@
   }
 }
 
-// Hide telemetry button on all assistant messages except the last one
+// Telemetry button is hidden by default, and shown ONLY on the most-recent
+// message AND only once a voice turn has recorded metrics for it (the
+// `.has-telemetry` marker, set in MessageControls.handleTelemetryUpdate). A
+// non-call response (e.g. a greeting on a new chat) records no metrics, so it
+// never gets the marker and never shows a telemetry button.
+// (Mobile: these rules live under html.desktop-view; on mobile the whole
+// .saypi-tts-controls bar is hidden via mobile.scss, so no separate telemetry
+// hide rule is needed there.)
 .chat-history .assistant-message .saypi-telemetry-button
 {
   display: none;
 }
-.present-messages .assistant-message:last-of-type .saypi-telemetry-button:has(svg)
+.present-messages .assistant-message:last-of-type.has-telemetry .saypi-telemetry-button:has(svg)
 {
   display: flex;
 }
