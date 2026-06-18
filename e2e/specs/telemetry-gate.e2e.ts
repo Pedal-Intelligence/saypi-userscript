@@ -45,15 +45,19 @@ test("telemetry button is hidden on the last message until it has recorded metri
     history.appendChild(msg);
     document.body.appendChild(history);
 
-    // Without recorded metrics (no marker) — must be hidden.
+    // Without recorded metrics (no global marker) — must be hidden.
     const hiddenDisplay = getComputedStyle(tel).display;
 
-    // Once a voice turn records metrics, MessageControls marks the message; the
-    // button then shows.
-    msg.classList.add("has-telemetry");
+    // Once a voice turn records metrics, TelemetryModule sets the global body
+    // marker; the latest message's telemetry button then shows.
+    document.body.classList.add("saypi-recent-telemetry");
     const shownDisplay = getComputedStyle(tel).display;
 
-    return { hiddenDisplay, shownDisplay };
+    // Clearing the marker (turn reset / route change) hides it again.
+    document.body.classList.remove("saypi-recent-telemetry");
+    const reHiddenDisplay = getComputedStyle(tel).display;
+
+    return { hiddenDisplay, shownDisplay, reHiddenDisplay };
   });
 
   expect(
@@ -62,6 +66,10 @@ test("telemetry button is hidden on the last message until it has recorded metri
   ).toBe("none");
   expect(
     result.shownDisplay,
-    "telemetry button must show once the message has recorded metrics"
+    "telemetry button must show on the latest message while the turn has recorded metrics"
   ).toBe("flex");
+  expect(
+    result.reHiddenDisplay,
+    "telemetry button must hide again when the marker is cleared"
+  ).toBe("none");
 });

@@ -117,7 +117,12 @@ html body.pi {
       display: none;
     }
 
-    .saypi-telemetry-button {
+    /* `.saypi-tts-controls` ancestor included on purpose: the base telemetry
+       rule is `html.desktop-view .message-action-bar .saypi-tts-controls
+       .saypi-telemetry-button` (4 classes); without this ancestor our Pi rule
+       has fewer classes and LOSES the cascade (the button renders at the base
+       24px/0.6). With it, this rule outranks the base. */
+    .saypi-tts-controls .saypi-telemetry-button {
       width: 32px;
       height: 32px;
       margin: 0;

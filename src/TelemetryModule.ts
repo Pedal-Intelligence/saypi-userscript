@@ -280,6 +280,20 @@ export class TelemetryModule {
    * Emit an update event with the current telemetry data
    */
   private emitUpdate(): void {
+    // Reflect "the current voice turn has recorded metrics" as a single global
+    // body class. The telemetry button's show rule (messages.scss) gates on this
+    // marker + `:last-of-type`, so the button appears only on the most-recent
+    // message AND only after a voice turn recorded metrics — and never on a
+    // non-call response (greeting), which never emits a real telemetry update.
+    // A global marker (vs a per-message class) is immune to pi.ai's
+    // present-container re-render churn: the CSS `:last-of-type` always resolves
+    // to the live latest message, no matter how often it is re-decorated.
+    if (typeof document !== "undefined" && document.body) {
+      document.body.classList.toggle(
+        "saypi-recent-telemetry",
+        hasRecordedTelemetry(this.currentTelemetry)
+      );
+    }
     EventBus.emit("telemetry:updated", { data: this.currentTelemetry });
   }
 }

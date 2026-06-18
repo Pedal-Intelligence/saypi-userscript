@@ -17,7 +17,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { regenerateSpeech } from "./regenerateSpeech";
 import { MessageState } from "../tts/MessageHistoryModule";
-import telemetryModule, { TelemetryData, hasRecordedTelemetry } from "../TelemetryModule";
+import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
 import { FailedSpeechUtterance } from "../tts/FailedSpeechUtterance";
 import { config } from "../ConfigModule";
@@ -933,16 +933,10 @@ abstract class MessageControls {
    * Handle telemetry updates from the TelemetryModule
    */
   private handleTelemetryUpdate = (event: { data: TelemetryData }): void => {
-    // Only reveal the telemetry button once a voice turn has actually recorded
-    // metrics for this (last) message. A non-call response — e.g. the greeting on
-    // a new-chat page — never emits a telemetry update with real data, so it never
-    // gets `has-telemetry` and its button stays hidden (the CSS show rule for the
-    // telemetry button requires `.assistant-message.has-telemetry`).
-    if (hasRecordedTelemetry(event.data)) {
-      this.safeAddClass("has-telemetry");
-    }
-
-    // Update visualization if it's currently shown
+    // Telemetry-button visibility is driven by a single global body marker
+    // (`saypi-recent-telemetry`, toggled in TelemetryModule.emitUpdate) gated on
+    // `:last-of-type` in CSS — immune to pi.ai's present-container re-render churn.
+    // Here we only need to refresh an already-open visualization.
     const container = this.message.element.querySelector(".saypi-telemetry-container") as HTMLElement;
     if (container && container.style.display !== "none") {
       container.remove();

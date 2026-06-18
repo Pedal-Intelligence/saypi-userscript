@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { hasRecordedTelemetry } from "../src/TelemetryModule";
+import { describe, it, expect, beforeEach } from "vitest";
+import telemetryModule, { hasRecordedTelemetry } from "../src/TelemetryModule";
 
 /**
  * Guards the gate that keeps the telemetry button off non-call responses
@@ -37,5 +37,27 @@ describe("hasRecordedTelemetry", () => {
     expect(
       hasRecordedTelemetry({ timestamps: { completionStart: 2500 } })
     ).toBe(true);
+  });
+});
+
+describe("TelemetryModule global telemetry marker (body.saypi-recent-telemetry)", () => {
+  const MARKER = "saypi-recent-telemetry";
+
+  beforeEach(() => {
+    telemetryModule.resetTelemetry();
+    document.body.classList.remove(MARKER);
+  });
+
+  it("is absent when there are no recorded metrics (reset state)", () => {
+    telemetryModule.resetTelemetry();
+    expect(document.body.classList.contains(MARKER)).toBe(false);
+  });
+
+  it("is set once the current turn records metrics, and cleared on reset", () => {
+    telemetryModule.updateTelemetryData({ completionResponse: 600 });
+    expect(document.body.classList.contains(MARKER)).toBe(true);
+
+    telemetryModule.resetTelemetry();
+    expect(document.body.classList.contains(MARKER)).toBe(false);
   });
 });
