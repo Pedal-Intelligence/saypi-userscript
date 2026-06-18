@@ -20,6 +20,7 @@ describe("hasRecordedTelemetry", () => {
   });
 
   it("is true once a duration metric is recorded", () => {
+    expect(hasRecordedTelemetry({ transcriptionTime: 400 })).toBe(true);
     expect(hasRecordedTelemetry({ transcriptionDelay: 250 })).toBe(true);
     expect(hasRecordedTelemetry({ completionResponse: 800 })).toBe(true);
     expect(hasRecordedTelemetry({ streamingDuration: 1200 })).toBe(true);

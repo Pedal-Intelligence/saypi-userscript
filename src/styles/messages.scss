@@ -89,6 +89,9 @@
 // `.has-telemetry` marker, set in MessageControls.handleTelemetryUpdate). A
 // non-call response (e.g. a greeting on a new chat) records no metrics, so it
 // never gets the marker and never shows a telemetry button.
+// (Mobile: these rules live under html.desktop-view; on mobile the whole
+// .saypi-tts-controls bar is hidden via mobile.scss, so no separate telemetry
+// hide rule is needed there.)
 .chat-history .assistant-message .saypi-telemetry-button
 {
   display: none;
