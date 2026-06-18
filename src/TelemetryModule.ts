@@ -288,6 +288,13 @@ export class TelemetryModule {
     // A global marker (vs a per-message class) is immune to pi.ai's
     // present-container re-render churn: the CSS `:last-of-type` always resolves
     // to the live latest message, no matter how often it is re-decorated.
+    //
+    // Cleared on turn start (saypi:userSpeaking -> resetTelemetry) and on route
+    // change (new chat / thread switch). Accepted tradeoff: a TYPED follow-up
+    // right after a voice turn fires no reset, so the marker persists and the
+    // (telemetry-less) text response would briefly show the button until the next
+    // voice turn or navigation. Pi is voice-first, so this is acceptable; the old
+    // per-message scheme avoided it but was unreliable against the churn above.
     if (typeof document !== "undefined" && document.body) {
       document.body.classList.toggle(
         "saypi-recent-telemetry",

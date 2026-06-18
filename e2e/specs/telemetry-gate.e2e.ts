@@ -2,15 +2,17 @@ import { test, expect } from "../fixtures/extension";
 
 /**
  * Layer 3 guard (real built CSS): the telemetry button must NOT appear on the
- * most-recent message unless that message recorded voice-turn metrics — i.e. it
- * carries the `.has-telemetry` marker (set by MessageControls when a real
- * `telemetry:updated` arrives). A non-call response (e.g. the greeting on a new
- * chat) never gets the marker, so its telemetry button stays hidden — which also
- * removes the awkward far-right positioning on the sparse greeting action bar.
+ * most-recent message unless the current voice turn recorded metrics — gated on
+ * the global `body.saypi-recent-telemetry` marker (toggled by
+ * TelemetryModule.emitUpdate when a real `telemetry:updated` carries recorded
+ * metrics). A non-call response (e.g. the greeting on a new chat) never triggers
+ * that marker, so its telemetry button stays hidden — which also removes the
+ * awkward far-right positioning on the sparse greeting action bar.
  *
- * Pre-fix the show rule was `.present-messages .assistant-message:last-of-type
- * .saypi-telemetry-button:has(svg) { display:flex }` — no marker required — so a
- * last-of-type greeting showed it.
+ * A global marker + CSS `:last-of-type` (rather than a per-message class) is
+ * immune to pi.ai's present-container re-render churn. Pre-fix the show rule was
+ * `.present-messages .assistant-message:last-of-type .saypi-telemetry-button:has(svg)`
+ * — no marker required — so a last-of-type greeting showed it.
  */
 test("telemetry button is hidden on the last message until it has recorded metrics (real build)", async ({
   context,
