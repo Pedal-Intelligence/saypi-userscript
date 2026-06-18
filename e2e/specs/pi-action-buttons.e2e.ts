@@ -68,6 +68,7 @@ test("SayPi's Pi action buttons are seamless with native (copy hidden, telemetry
 
     return {
       containerBg: csCtrls.backgroundColor,
+      ctrlsAlignSelf: csCtrls.alignSelf,
       copyDisplay: csCopy.display,
       telWidth: csTel.width,
       telHeight: csTel.height,
@@ -90,6 +91,15 @@ test("SayPi's Pi action buttons are seamless with native (copy hidden, telemetry
     result.containerBg,
     `controls container must be transparent (was ${result.containerBg})`
   ).toBe("rgba(0, 0, 0, 0)");
+
+  // Vertical alignment: the native action-bar buttons sit at the BOTTOM of the
+  // ~48px bar (their pt-4 top offset). Our controls zero that padding, so they
+  // must bottom-align explicitly to line the telemetry button up with native —
+  // otherwise it floats ~16px too high.
+  expect(
+    result.ctrlsAlignSelf,
+    `controls must bottom-align with native buttons (was ${result.ctrlsAlignSelf})`
+  ).toBe("flex-end");
 
   // Telemetry button: native size / radius / padding / full strength.
   expect(result.telWidth, "telemetry width must match native 32px").toBe("32px");
