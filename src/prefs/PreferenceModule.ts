@@ -1,5 +1,4 @@
 import { config } from "../ConfigModule";
-import { callApi } from "../ApiClient";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
@@ -212,11 +211,6 @@ class UserPreferenceModule {
     });
 
     // keepSegments removed (dev-only via env)
-
-    // Network-dependent settings (not in chrome.storage)
-    this.isTTSBetaPaused().then((value) => {
-      this.cache.setCachedValue("isTTSBetaPaused", value);
-    });
   }
 
   private sanitizeVoicePreferences(preferences?: VoicePreferenceMap): VoicePreferenceMap {
@@ -916,32 +910,16 @@ class UserPreferenceModule {
 
   // --- Methods primarily using cache or other logic ---
 
-  public async isTTSBetaPaused(): Promise<boolean> { // This hits a network endpoint, not chrome.storage
-    const defaultStatus = false;
-    const statusEndpoint = `${config.apiServerUrl}/status/tts`;
-    try {
-      // Use ApiClient to encapsulate background routing and response handling
-      const response = await callApi(statusEndpoint, { method: 'GET', responseType: 'json' } as any);
-      const data = await response.json();
-      return data.beta.status === "paused";
-    } catch (error) {
-      console.warn("Unable to check TTS beta status. API server may be unavailable.", error);
-      return defaultStatus;
-    }
-  }
-
-  public getCachedIsTTSBetaPaused(): boolean {
-    return this.cache.getCachedValue("isTTSBetaPaused", false);
-  }
-
   public async getTextToSpeechEnabled(): Promise<boolean> {
     if (isSafari()) {
       return Promise.resolve(false);
     }
-    return Promise.all([
-      this.getStoredValue("enableTTS", true, 'local'), // Changed to 'local'
-      this.getCachedIsTTSBetaPaused(), 
-    ]).then(([enableTTS, ttsBetaPaused]) => enableTTS && !ttsBetaPaused);
+    // TTS is gated solely by the user's enableTTS preference. The historical
+    // "TTS beta paused" network check (GET /status/tts) was removed in #325: the
+    // beta ended over a year ago and the server no longer reports status "paused"
+    // (it can only return "active" or "unavailable"), so the gate had become a
+    // permanent no-op that polled the API on every page load.
+    return this.getStoredValue("enableTTS", true, 'local');
   }
   
   public setEnableTTS(enabled: boolean): Promise<void> {
