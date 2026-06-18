@@ -15,8 +15,6 @@ vi.mock("../../src/prefs/PreferenceModule", () => {
       getInstance: () => ({
         reloadCache: vi.fn(),
         getLanguage: vi.fn().mockResolvedValue("en-US"),
-        isTTSBetaPaused: vi.fn().mockResolvedValue(false),
-        getCachedIsTTSBetaPaused: vi.fn().mockReturnValue(false),
         getCachedAutoSubmit: vi.fn().mockReturnValue(true),
         getCachedAllowInterruptions: vi.fn().mockReturnValue(true),
         getStoredValue: vi.fn().mockImplementation((key, defaultValue) => Promise.resolve(defaultValue)),

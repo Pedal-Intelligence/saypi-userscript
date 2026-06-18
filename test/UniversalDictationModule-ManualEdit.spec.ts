@@ -19,7 +19,6 @@ vi.mock('../src/prefs/PreferenceModule', () => ({
   UserPreferenceModule: {
     getInstance: () => ({
       getLanguage: vi.fn(() => Promise.resolve('en')),
-      isTTSBetaPaused: vi.fn(() => Promise.resolve(false)),
       getDiscretionaryMode: vi.fn(() => Promise.resolve(false)),
       getCachedDiscretionaryMode: vi.fn(() => false),
     }),
