@@ -963,7 +963,7 @@ abstract class MessageControls {
         key: 'voiceActivityDetection',
         label: 'Grace Period',
         value: telemetryData.transcriptionDelay,
-        color: '#2979FF', // Brighter blue to make it more noticeable
+        color: '#83996a', // Brighter blue to make it more noticeable
         explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
       });
     } else {
@@ -977,7 +977,7 @@ abstract class MessageControls {
           key: 'voiceActivityDetection',
           label: 'Grace Period',
           value: calculatedGracePeriod,
-          color: '#2979FF', // Brighter blue to make it more noticeable
+          color: '#83996a', // Brighter blue to make it more noticeable
           explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
         });
       } else {
@@ -987,7 +987,7 @@ abstract class MessageControls {
           key: 'voiceActivityDetection',
           label: 'Grace Period',
           value: 0,
-          color: '#2979FF', // Brighter blue to make it more noticeable
+          color: '#83996a', // Brighter blue to make it more noticeable
           explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
         });
       }
@@ -1000,7 +1000,7 @@ abstract class MessageControls {
         key: 'transcriptionDuration',
         label: 'Transcription',
         value: telemetryData.transcriptionTime,
-        color: '#DB4437', // Red
+        color: '#bd6b52', // Red
         explanation: 'Time taken to transcribe speech to text'
       });
     } else if (timestamps.transcriptionStart && timestamps.transcriptionEnd) {
@@ -1011,7 +1011,7 @@ abstract class MessageControls {
         key: 'transcriptionDuration',
         label: 'Transcription',
         value: calculatedTranscriptionTime,
-        color: '#DB4437', // Red
+        color: '#bd6b52', // Red
         explanation: 'Time taken to transcribe speech to text (calculated from timestamps)'
       });
     }
@@ -1022,7 +1022,7 @@ abstract class MessageControls {
         key: 'streamingDuration',
         label: 'Pi writes',
         value: telemetryData.streamingDuration,
-        color: '#F4B400', // Yellow/Gold
+        color: '#6a82a3', // Yellow/Gold
         explanation: 'Time taken to stream the text response'
       });
     }
@@ -1034,7 +1034,7 @@ abstract class MessageControls {
         key: 'speechPlayback',
         label: 'Pi Speaks: 5+s',
         value: 5000, // Just a small duration to make it visible - this is just a marker
-        color: '#0F9D58', // Green
+        color: '#9a7aa0', // Green
         explanation: 'Point when Pi begins speaking the response (continues beyond timeline)'
       });
     }
@@ -1045,7 +1045,7 @@ abstract class MessageControls {
         key: 'completionResponse',
         label: 'LLM Wait Time',
         value: telemetryData.completionResponse,
-        color: '#673AB7', // Purple
+        color: '#4f8a8b', // Purple
         explanation: 'Time waiting for Pi to formulate a response'
       });
     }
@@ -1056,7 +1056,7 @@ abstract class MessageControls {
         key: 'timeToTalk',
         label: 'Time to Talk',
         value: telemetryData.timeToTalk,
-        color: '#3F51B5', // Indigo
+        color: '#c2a14d', // Indigo
         explanation: 'Time from start of response to start of audio playback'
       });
     }
@@ -1080,7 +1080,7 @@ abstract class MessageControls {
       key: 'totalTime',
       label: 'Speech to Speech',
       value: totalTime,
-      color: '#9E9E9E', // Gray
+      color: '#857a6e', // Gray
       explanation: 'Total time from end of user speech to beginning of Pi\'s audio response'
     });
     
@@ -1103,13 +1103,21 @@ abstract class MessageControls {
     const container = document.createElement("div");
     container.className = "saypi-telemetry-container";
     
-    // Add title
-    const title = document.createElement("h4");
-    title.textContent = "Performance Metrics";
-    title.style.margin = "0 0 10px 0";
-    title.style.fontSize = "14px";
-    title.style.fontWeight = "bold";
-    container.appendChild(title);
+    // Header: "Performance" title + the total turn time as a subtle pill.
+    const header = document.createElement("div");
+    header.className = "saypi-telemetry-header";
+    const title = document.createElement("span");
+    title.className = "saypi-telemetry-title";
+    title.textContent = "Performance";
+    header.appendChild(title);
+    if (totalTime > 0) {
+      const total = document.createElement("span");
+      total.className = "saypi-telemetry-total";
+      total.textContent = `${(totalTime / 1000).toFixed(2)}s`;
+      total.title = "Total voice-turn time (you stopped speaking → Pi responds)";
+      header.appendChild(total);
+    }
+    container.appendChild(header);
 
     // Create chart container
     const chartContainer = document.createElement("div");
@@ -1166,7 +1174,7 @@ abstract class MessageControls {
     timeScale.style.height = "24px";
     timeScale.style.marginLeft = "160px"; // Space for labels
     timeScale.style.marginBottom = "5px";
-    timeScale.style.borderBottom = "1px solid #ccc";
+    timeScale.style.borderBottom = "1px solid rgba(0, 0, 0, 0.12)";
     
     // Determine appropriate tick interval based on timeline length
     let tickInterval = 1; // Default: show every second
@@ -1187,7 +1195,7 @@ abstract class MessageControls {
       tickMark.style.bottom = "0";
       tickMark.style.width = "1px";
       tickMark.style.height = "6px";
-      tickMark.style.backgroundColor = "#888";
+      tickMark.style.backgroundColor = "rgba(0, 0, 0, 0.35)";
       
       const tickLabel = document.createElement("div");
       tickLabel.className = "tick-label";
@@ -1288,8 +1296,8 @@ abstract class MessageControls {
       timelineColumn.style.flex = "1";
       timelineColumn.style.position = "relative";
       timelineColumn.style.height = "100%";
-      timelineColumn.style.backgroundColor = "#f5f5f5";
-      timelineColumn.style.border = "1px solid #e0e0e0";
+      timelineColumn.style.backgroundColor = "rgba(0, 0, 0, 0.04)";
+      timelineColumn.style.border = "1px solid rgba(0, 0, 0, 0.08)";
       timelineColumn.style.borderRadius = "4px";
       
       // Add segments within this row
@@ -1423,8 +1431,8 @@ abstract class MessageControls {
       timelineColumn.style.flex = "1";
       timelineColumn.style.position = "relative";
       timelineColumn.style.height = "100%";
-      timelineColumn.style.backgroundColor = "#f5f5f5";
-      timelineColumn.style.border = "1px solid #e0e0e0";
+      timelineColumn.style.backgroundColor = "rgba(0, 0, 0, 0.04)";
+      timelineColumn.style.border = "1px solid rgba(0, 0, 0, 0.08)";
       timelineColumn.style.borderRadius = "4px";
       
       // Add gap segments
@@ -1534,7 +1542,7 @@ abstract class MessageControls {
       const colorBox = document.createElement("div");
       colorBox.style.width = "12px";
       colorBox.style.height = "12px";
-      colorBox.style.backgroundColor = "#E0E0E0";
+      colorBox.style.backgroundColor = "#dcd3c7";
       colorBox.style.marginRight = "5px";
       colorBox.style.borderRadius = "2px";
       colorBox.style.border = "1px dashed #aaa";
@@ -1834,7 +1842,7 @@ abstract class MessageControls {
           start: currentSegment.end,
           end: nextSegment.start,
           duration: nextSegment.start - currentSegment.end,
-          color: '#E0E0E0', // Light gray
+          color: '#dcd3c7', // Light gray
           explanation: `Time between end of ${currentProcess.label} and start of ${nextProcess.label}`
         };
         
