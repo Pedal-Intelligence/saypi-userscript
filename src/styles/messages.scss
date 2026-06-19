@@ -137,28 +137,59 @@ body.saypi-recent-telemetry .present-messages .assistant-message:last-of-type .s
 
 // Telemetry visualization styles
 .saypi-telemetry-container {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 5px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  // Theme-neutral translucent surface: a soft raised card that reads on both
+  // pi's warm cream and Claude/ChatGPT's darker surfaces without clashing. This
+  // is a debugging view, so it stays understated rather than fully host-styled.
+  background-color: rgba(127, 127, 127, 0.07);
+  border: 1px solid rgba(127, 127, 127, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   width: 100%;
-  border: 1px solid #ddd;
   box-sizing: border-box;
-  
+  // Pi-native text colour where available (tracks light/dark), neutral elsewhere.
+  color: var(--color-text-secondary, #6b6255);
+
+  // Header: title on the left, total turn time as a subtle pill on the right.
+  .saypi-telemetry-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+
+    .saypi-telemetry-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .saypi-telemetry-total {
+      font-size: 13px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background-color: rgba(127, 127, 127, 0.12);
+    }
+  }
+
   button {
     padding: 3px 8px;
     border: none;
-    border-radius: 4px;
-    background-color: #ddd;
+    border-radius: 6px;
+    background-color: rgba(127, 127, 127, 0.15);
     cursor: pointer;
     transition: background-color 0.2s;
-    
+
     &:hover {
-      background-color: #ccc;
+      background-color: rgba(127, 127, 127, 0.25);
     }
-    
+
     &.active {
-      background-color: #0078d7;
+      background-color: var(--color-text-secondary, #776d6d);
       color: white;
     }
   }
@@ -322,11 +353,15 @@ body.saypi-recent-telemetry .present-messages .assistant-message:last-of-type .s
 }
 
 // Dark mode support
-.dark-mode, [data-theme="dark"] {
+// `html.dark` covers Claude/ChatGPT's dark themes (they don't use .dark-mode /
+// [data-theme]); the translucent base already degrades fine on dark, but this
+// gives those hosts the intended explicit dark card + legible text.
+.dark-mode, [data-theme="dark"], html.dark {
   .saypi-telemetry-container {
     background-color: #2a2a2a;
     border-color: #444;
-    
+    color: #ddd;
+
     button {
       background-color: #444;
       color: #ddd;
