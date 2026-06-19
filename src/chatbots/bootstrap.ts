@@ -14,6 +14,7 @@ import { IconModule } from "../icons/IconModule";
 import { openSettings } from "../popup/popupopener";
 import { addChild } from "../dom/DOMModule";
 import getMessage from "../i18n";
+import { isPiNavigationAwayFromConversation } from "./piRouteUtils";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -119,13 +120,30 @@ export class DOMObserver {
       const currentUrl = window.location.href;
       if (currentUrl !== lastUrl) {
         logger.debug('Route changed:', lastUrl, '->', currentUrl);
+        const prevUrl = lastUrl;
         lastUrl = currentUrl;
 
-        // New thread / new chat = no active voice turn for the incoming view, so
-        // clear the current-turn telemetry (and its global marker). Without this,
-        // navigating from a thread that recorded telemetry into a new chat would
-        // leave the marker set and show a telemetry button on the greeting.
-        telemetryModule.resetTelemetry();
+        // Navigating AWAY from the current conversation (new chat or a different
+        // thread) = no active voice turn for the incoming view, so clear the
+        // current-turn telemetry (and its global marker); otherwise the greeting
+        // on a new chat would inherit the previous thread's telemetry button.
+        // But do NOT reset when the current conversation is merely assigned its
+        // thread id on first message (/talk -> /talk/<id>) — that would wipe the
+        // first turn's just-recorded metrics so its telemetry never shows.
+        // Safe on non-Pi hosts: any path outside /talk/<id> returns true here
+        // (i.e. reset as before), so this is a no-op change for Claude/ChatGPT.
+        try {
+          if (
+            isPiNavigationAwayFromConversation(
+              new URL(prevUrl).pathname,
+              new URL(currentUrl).pathname
+            )
+          ) {
+            telemetryModule.resetTelemetry();
+          }
+        } catch {
+          telemetryModule.resetTelemetry();
+        }
 
         // Start/stop observation based on whether the new path is chatable
         if (this.chatbot.isChatablePath(window.location.pathname)) {
