@@ -130,6 +130,8 @@ export class DOMObserver {
         // But do NOT reset when the current conversation is merely assigned its
         // thread id on first message (/talk -> /talk/<id>) — that would wipe the
         // first turn's just-recorded metrics so its telemetry never shows.
+        // Safe on non-Pi hosts: any path outside /talk/<id> returns true here
+        // (i.e. reset as before), so this is a no-op change for Claude/ChatGPT.
         try {
           if (
             isPiNavigationAwayFromConversation(
