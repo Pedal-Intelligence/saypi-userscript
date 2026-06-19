@@ -1,5 +1,6 @@
 import EventBus from "./events/EventBus";
 import { logger } from "./LoggingModule";
+import { ServerTimingMetric } from "./telemetry/serverTiming";
 
 /**
  * Telemetry data for a single speech/chat message
@@ -25,7 +26,13 @@ export interface TelemetryData {
   
   // Time from start of chat completion to start of audio playback
   timeToTalk?: number;
-  
+
+  // Server-side latency breakdown for the transcription request, parsed from the
+  // `/transcribe` response's `Server-Timing` header (queue / recv / stt / filters
+  // / transformers / decorators / total). Present only when the API annotated the
+  // response; used to break out *where* transcription time went (usually STT).
+  serverTiming?: ServerTimingMetric[];
+
   // Absolute timestamps for key events (in milliseconds since epoch)
   timestamps?: {
     speechStart?: number;
@@ -161,6 +168,18 @@ export class TelemetryModule {
         logger.debug(`Transcription received and lastTranscriptionTime updated: ${this.lastTranscriptionTime}`);
         this.emitUpdate();
       }
+    });
+
+    // Server-side latency breakdown for the transcription request, parsed by
+    // TranscriptionModule from the `/transcribe` response's `Server-Timing`
+    // header. Stored on the current turn so the telemetry viz can show where the
+    // transcription time actually went (queue / recv / stt / filters / ...).
+    EventBus.on("saypi:transcription:serverTiming", (event: any) => {
+      const metrics: ServerTimingMetric[] | undefined = event?.metrics;
+      if (!metrics || !metrics.length) return;
+      this.currentTelemetry.serverTiming = metrics;
+      logger.debug("Recorded transcription Server-Timing breakdown", metrics);
+      this.emitUpdate();
     });
 
     // Listen for chat completion events

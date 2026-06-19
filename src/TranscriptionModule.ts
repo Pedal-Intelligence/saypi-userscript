@@ -7,6 +7,30 @@ import EventBus from "./events/EventBus";
 import { ChatbotService } from "./chatbots/ChatbotService";
 import { buildUsageMetadata } from "./usage/UsageMetadata";
 import { constructTranscriptionFormData } from "./TranscriptionForm";
+import { parseServerTiming } from "./telemetry/serverTiming";
+
+/**
+ * Parse the `/transcribe` response's `Server-Timing` header (saypi-api#258) and
+ * publish the per-phase server latency breakdown (queue / recv / stt / filters /
+ * transformers / decorators / total) for the telemetry viz. Best-effort: an
+ * absent header yields nothing and the viz simply falls back to the single
+ * transcription bar. The header can be absent for several harmless reasons: an
+ * older API deploy that doesn't set it; or the `callApi` direct-fetch fallback
+ * (when background routing fails) reading it from a content-script context, where
+ * the browser hides `Server-Timing` unless the response carries `Timing-Allow-
+ * Origin` — the privileged background service-worker fetch (the normal path) has
+ * no such restriction and forwards the header verbatim.
+ */
+function emitTranscriptionServerTiming(response: Response): void {
+  try {
+    const metrics = parseServerTiming(response.headers.get("Server-Timing"));
+    if (metrics.length) {
+      EventBus.emit("saypi:transcription:serverTiming", { metrics });
+    }
+  } catch (e) {
+    logger.debug("Failed to parse transcription Server-Timing header", e);
+  }
+}
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -610,6 +634,8 @@ async function uploadAudio(
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
+
+    emitTranscriptionServerTiming(response);
 
     const responseJson: TranscriptionResponse = await response.json();
     const seq = responseJson.sequenceNumber;

@@ -299,9 +299,91 @@ body.saypi-recent-telemetry .present-messages .assistant-message:last-of-type .s
       color: #666;
       margin-top: 10px;
       text-align: center;
-      
+
       i {
         font-style: italic;
+      }
+    }
+  }
+
+  // Server-side transcription latency breakdown (Server-Timing header,
+  // saypi-api#258). A compact stacked bar + legend below the timeline; present
+  // only when the API supplies the header. STT usually dominates, so this
+  // attributes slow turns to the right phase (and STT provider).
+  .saypi-server-timing {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(127, 127, 127, 0.18);
+
+    .saypi-server-timing-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+
+      .saypi-server-timing-title {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        opacity: 0.7;
+      }
+      .saypi-server-timing-total {
+        font-size: 12px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        opacity: 0.7;
+      }
+    }
+
+    .saypi-server-timing-bar {
+      display: flex;
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background-color: rgba(127, 127, 127, 0.12);
+
+      .saypi-server-timing-seg {
+        height: 100%;
+        min-width: 1px;
+        transition: filter 0.2s ease;
+
+        &:hover {
+          filter: brightness(1.1);
+        }
+      }
+    }
+
+    .saypi-server-timing-legend {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+
+      .saypi-server-timing-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+
+        .saypi-server-timing-swatch {
+          width: 10px;
+          height: 10px;
+          border-radius: 2px;
+          flex: none;
+        }
+        .saypi-server-timing-label {
+          opacity: 0.85;
+        }
+        .saypi-server-timing-value {
+          font-variant-numeric: tabular-nums;
+          font-weight: 600;
+          opacity: 0.95;
+        }
       }
     }
   }
