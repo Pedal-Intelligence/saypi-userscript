@@ -17,6 +17,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { regenerateSpeech } from "./regenerateSpeech";
 import { readableSegmentLabel } from "./colorUtils";
+import { ServerTimingMetric } from "../telemetry/serverTiming";
 import { MessageState } from "../tts/MessageHistoryModule";
 import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
@@ -1128,9 +1129,114 @@ abstract class MessageControls {
     // Create the timeline chart (Gantt chart)
     this.createTimelineChart(chartContainer, metrics);
 
+    // If the API annotated the transcription with a server-side latency breakdown
+    // (Server-Timing header, saypi-api#258), render it as a dedicated panel below
+    // the timeline so the dominant cost (almost always speech-to-text) is visible.
+    const serverTiming = telemetryModule.getCurrentTelemetry().serverTiming;
+    if (serverTiming && serverTiming.length) {
+      this.createServerTimingBreakdown(container, serverTiming);
+    }
+
     // Insert the telemetry visualization into the DOM
     this.message.element.appendChild(container);
     this.telemetryContainer = container;
+  }
+
+  /**
+   * Render the transcription's server-side latency breakdown (from the
+   * `Server-Timing` header) as a compact stacked bar + legend. Additive and
+   * no-op-safe: it sits below the main timeline and only appears when the API
+   * supplied the header, so it never disturbs the timestamp-based Gantt above.
+   */
+  private createServerTimingBreakdown(
+    container: HTMLElement,
+    metrics: ServerTimingMetric[]
+  ): void {
+    // Muted palette consistent with the main timeline; STT (the usual culprit)
+    // gets the terracotta the single Transcription bar uses.
+    const PHASE_META: Record<string, { label: string; color: string }> = {
+      queue: { label: "Queue", color: "#857a6e" },
+      recv: { label: "Audio upload", color: "#c2a14d" },
+      stt: { label: "Speech-to-text", color: "#bd6b52" },
+      filters: { label: "Filters", color: "#83996a" },
+      transformers: { label: "Transformers", color: "#6a82a3" },
+      decorators: { label: "Decorators", color: "#9a7aa0" },
+    };
+    const fallback = (name: string) => ({ label: name, color: "#857a6e" });
+
+    const totalMetric = metrics.find((m) => m.name === "total");
+    const phases = metrics.filter(
+      (m) => m.name !== "total" && (m.duration ?? 0) > 0
+    );
+    if (!phases.length) return;
+
+    const sumPhases = phases.reduce((sum, m) => sum + (m.duration || 0), 0);
+    const scale = Math.max(totalMetric?.duration ?? 0, sumPhases);
+    if (scale <= 0) return;
+
+    const panel = document.createElement("div");
+    panel.className = "saypi-server-timing";
+
+    const header = document.createElement("div");
+    header.className = "saypi-server-timing-header";
+    const title = document.createElement("span");
+    title.className = "saypi-server-timing-title";
+    title.textContent = "Transcription breakdown";
+    header.appendChild(title);
+    if (totalMetric?.duration) {
+      const total = document.createElement("span");
+      total.className = "saypi-server-timing-total";
+      total.textContent = `${(totalMetric.duration / 1000).toFixed(2)}s server`;
+      total.title = "Total time spent server-side transcribing this turn";
+      header.appendChild(total);
+    }
+    panel.appendChild(header);
+
+    const bar = document.createElement("div");
+    bar.className = "saypi-server-timing-bar";
+    phases.forEach((m) => {
+      const meta = PHASE_META[m.name] || fallback(m.name);
+      const seg = document.createElement("div");
+      seg.className = "saypi-server-timing-seg";
+      seg.style.width = `${((m.duration || 0) / scale) * 100}%`;
+      seg.style.backgroundColor = meta.color;
+      seg.title = `${meta.label}: ${m.duration || 0}ms`;
+      bar.appendChild(seg);
+    });
+    panel.appendChild(bar);
+
+    const legend = document.createElement("ul");
+    legend.className = "saypi-server-timing-legend";
+    phases.forEach((m) => {
+      const meta = PHASE_META[m.name] || fallback(m.name);
+      const item = document.createElement("li");
+      item.className = "saypi-server-timing-item";
+
+      const swatch = document.createElement("span");
+      swatch.className = "saypi-server-timing-swatch";
+      swatch.style.backgroundColor = meta.color;
+
+      const label = document.createElement("span");
+      label.className = "saypi-server-timing-label";
+      // Surface the STT provider (the header's `desc`) so slow turns are
+      // attributable, e.g. "Speech-to-text · fal-wizper".
+      label.textContent =
+        m.name === "stt" && m.description
+          ? `${meta.label} · ${m.description}`
+          : meta.label;
+
+      const value = document.createElement("span");
+      value.className = "saypi-server-timing-value";
+      const ms = m.duration || 0;
+      value.textContent =
+        ms >= 1000 ? `${(ms / 1000).toFixed(2)}s` : `${ms}ms`;
+
+      item.append(swatch, label, value);
+      legend.appendChild(item);
+    });
+    panel.appendChild(legend);
+
+    container.appendChild(panel);
   }
 
   /**
