@@ -353,11 +353,15 @@ body.saypi-recent-telemetry .present-messages .assistant-message:last-of-type .s
 }
 
 // Dark mode support
-.dark-mode, [data-theme="dark"] {
+// `html.dark` covers Claude/ChatGPT's dark themes (they don't use .dark-mode /
+// [data-theme]); the translucent base already degrades fine on dark, but this
+// gives those hosts the intended explicit dark card + legible text.
+.dark-mode, [data-theme="dark"], html.dark {
   .saypi-telemetry-container {
     background-color: #2a2a2a;
     border-color: #444;
-    
+    color: #ddd;
+
     button {
       background-color: #444;
       color: #ddd;

@@ -16,6 +16,7 @@ import { isMobileDevice } from "../UserAgentModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { regenerateSpeech } from "./regenerateSpeech";
+import { readableSegmentLabel } from "./colorUtils";
 import { MessageState } from "../tts/MessageHistoryModule";
 import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
@@ -1312,7 +1313,9 @@ abstract class MessageControls {
         segmentElem.style.backgroundColor = segment.color;
         segmentElem.style.borderRadius = "3px";
         segmentElem.style.boxShadow = "0 1px 2px rgba(0,0,0,0.1)";
-        
+        // Legible time labels regardless of how light the segment colour is.
+        const lbl = readableSegmentLabel(segment.color);
+
         // For Pi Speaks segment, extend to the right edge
         if (segment.metricKey === 'speechPlayback') {
           // Make the segment extend to the right edge of the chart
@@ -1331,8 +1334,8 @@ abstract class MessageControls {
             endTimeLabel.style.top = "50%";
             endTimeLabel.style.transform = "translateY(-50%)";
             endTimeLabel.style.fontSize = "9px";
-            endTimeLabel.style.color = "#fff";
-            endTimeLabel.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+            endTimeLabel.style.color = lbl.color;
+            endTimeLabel.style.textShadow = lbl.textShadow;
             segmentElem.appendChild(endTimeLabel);
           } else {
             // For regular segments, check if there's enough width for both labels
@@ -1346,8 +1349,8 @@ abstract class MessageControls {
               middleLabel.style.top = "50%";
               middleLabel.style.transform = "translate(-50%, -50%)";
               middleLabel.style.fontSize = "9px";
-              middleLabel.style.color = "#fff";
-              middleLabel.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+              middleLabel.style.color = lbl.color;
+              middleLabel.style.textShadow = lbl.textShadow;
               middleLabel.style.whiteSpace = "nowrap"; // Prevent text wrapping
               
               // For very small segments, show label outside the segment instead of inside
@@ -1368,8 +1371,8 @@ abstract class MessageControls {
               startTime.style.top = "50%";
               startTime.style.transform = "translateY(-50%)";
               startTime.style.fontSize = "9px";
-              startTime.style.color = "#fff";
-              startTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+              startTime.style.color = lbl.color;
+              startTime.style.textShadow = lbl.textShadow;
               startTime.style.whiteSpace = "nowrap"; // Prevent text wrapping
               segmentElem.appendChild(startTime);
               
@@ -1381,8 +1384,8 @@ abstract class MessageControls {
               endTime.style.top = "50%";
               endTime.style.transform = "translateY(-50%)";
               endTime.style.fontSize = "9px";
-              endTime.style.color = "#fff";
-              endTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+              endTime.style.color = lbl.color;
+              endTime.style.textShadow = lbl.textShadow;
               endTime.style.whiteSpace = "nowrap"; // Prevent text wrapping
               segmentElem.appendChild(endTime);
             }
