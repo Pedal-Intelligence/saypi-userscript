@@ -56,8 +56,8 @@ export function enterFullscreen() {
 }
 
 export function exitFullscreen() {
-  // Check if the API is available
-  if (document.fullscreenEnabled) {
+  // Only exit if actually in fullscreen mode
+  if (document.fullscreenEnabled && document.fullscreenElement) {
     // Request full-screen mode
     document
       .exitFullscreen()
