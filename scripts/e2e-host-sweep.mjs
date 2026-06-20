@@ -138,9 +138,12 @@ async function selectClaudeModel(page, host, modelPref) {
   // Read the (possibly updated) model label; close any open menu by pressing Escape.
   await page.keyboard.press("Escape").catch(() => {});
   if (!picked) return null;
-  return page
+  const label = await page
     .evaluate(() => document.querySelector("[data-testid='model-selector-dropdown']")?.getAttribute("aria-label") || null)
     .catch(() => null);
+  // Fall back to the picked radio's label if the trigger has no aria-label, so a
+  // successful switch is never mislabelled "could not select".
+  return label || picked;
 }
 
 /**
