@@ -83,10 +83,17 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getSidebarSelector(): string {
-    // Matches Pi.ai's redesigned sidebar (Oct 2025) - works across all viewport sizes
-    // Key classes: z-[999] (stacking), h-screen (full height), border-r (right border)
-    // Works for both collapsed (w-0 md:w-16) and expanded (w-[280px]) states
-    return "div.z-\\[999\\].flex.h-screen.flex-col.border-r.border-neutral-300.bg-neutral-50";
+    // Pi.ai redesigned the sidebar (verified live 2026-06-20): it is now a
+    // <nav data-testid="side-navbar" aria-label="Side menu"> (was a <div>) whose
+    // colour tokens changed too — `h-screen`→`h-[100dvh]`, `border-neutral-300`→
+    // `border-divider-stroke`, `bg-neutral-50`→`bg-background-alt` — so the old
+    // class-literal selector matched 0 and the settings button was never added (#350).
+    //
+    // Anchor primarily on the stable `data-testid="side-navbar"`. Fall back to a
+    // tag-agnostic STRUCTURAL match (`z-[999]` + a bordered flex column) that survives
+    // both the colour-token churn and the tag change, in case the test id is dropped.
+    // (getSidebarConfig's inner header/menu anchors are unchanged and still resolve.)
+    return 'nav[data-testid="side-navbar"], [class~="z-[999]"][class~="flex-col"][class~="overflow-hidden"][class~="border-r"]';
   }
 
   getChatPath(): string {
