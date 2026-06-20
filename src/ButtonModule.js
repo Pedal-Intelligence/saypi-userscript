@@ -265,9 +265,13 @@ class ButtonModule {
   createMenuButton(options) {
     const { label, icon, iconElement, onClick, className = '' } = options;
 
-    // Create button container matching Pi's structure
+    // Create button container matching Pi's structure. Height uses the standard
+    // `h-10` utility (= 2.5rem) that the host compiles for its OWN nav items — the
+    // arbitrary `h-[2.5rem]` we used before is never emitted by the host's Tailwind,
+    // so it was a no-op and the button collapsed to ~22px content height, sitting
+    // cramped against the 40px native rows. (#350 follow-up)
     const button = createElement("div", {
-      className: `${className} flex cursor-pointer flex-nowrap items-center rounded-lg text-left h-[2.5rem] gap-3 px-3 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900`,
+      className: `${className} flex cursor-pointer flex-nowrap items-center rounded-lg text-left h-10 gap-3 px-3 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900`,
       role: "button",
       tabindex: 0,
       ariaLabel: label,

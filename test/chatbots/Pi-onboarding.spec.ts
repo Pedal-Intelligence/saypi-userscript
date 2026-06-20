@@ -29,10 +29,14 @@ vi.mock("../../src/ButtonModule.js", () => ({
   }
 }));
 
+// Stable spy so we can assert the theme toggle is/was created across a decorate call.
+const { createThemeToggleButtonMock } = vi.hoisted(() => ({
+  createThemeToggleButtonMock: vi.fn(),
+}));
 vi.mock("../../src/themes/ThemeManagerModule", () => ({
   ThemeManager: {
     getInstance: () => ({
-      createThemeToggleButton: vi.fn(),
+      createThemeToggleButton: createThemeToggleButtonMock,
     })
   }
 }));
@@ -59,7 +63,36 @@ describe('DOMObserver Path-based Decoration', () => {
   beforeEach(() => {
     // Clear the DOM
     document.body.innerHTML = '';
+    // Reset button-creation call history between tests so .not.toHaveBeenCalled() is reliable
+    vi.clearAllMocks();
     chatbot = new PiAIChatbot();
+  });
+
+  it("does not duplicate the sidebar's Focus / Voice-settings buttons in Pi's main control panel", async () => {
+    const { DOMObserver } = await import("../../src/chatbots/bootstrap");
+    const { buttonModule } = await import("../../src/ButtonModule.js");
+
+    const domObserver = new DOMObserver(chatbot);
+    vi.spyOn(domObserver as any, 'shouldDecorateUI').mockReturnValue(true);
+
+    const controlPanel = document.createElement('div');
+    controlPanel.className = 'flex items-center grow';
+    document.body.appendChild(controlPanel);
+
+    const obs = domObserver.findAndDecorateControlPanel(document.body);
+    expect(obs.decorated).toBe(true);
+
+    // Focus (enter) and Voice settings (mini settings) live in Pi's sidebar menu,
+    // so they must NOT be duplicated onto the main content control panel.
+    expect(buttonModule.createEnterButton).not.toHaveBeenCalled();
+    expect(buttonModule.createMiniSettingsButton).not.toHaveBeenCalled();
+
+    // Exit + theme toggle MUST stay: in immersive mode the sidebar is hidden and the
+    // main control panel is the only visible SayPi surface, so the exit button is Pi's
+    // sole way out of focus mode (and the theme toggle is the only theme control). Both
+    // are hidden by CSS in standard view, so they don't reappear as stray main-area icons.
+    expect(buttonModule.createExitButton).toHaveBeenCalled();
+    expect(createThemeToggleButtonMock).toHaveBeenCalled();
   });
 
   it('should respect the shouldDecorateUI method result', async () => {

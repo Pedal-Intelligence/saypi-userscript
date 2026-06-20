@@ -257,7 +257,12 @@ class PiAIChatbot extends AbstractChatbot {
     return {
       buttonContainer: menu as HTMLElement,
       buttonStyle: 'menu',  // Use menu-style buttons to match Pi's sidebar
-      insertPosition: 2     // Insert after second nav button (Discover)
+      // Group SayPi's Focus + Voice settings at the TOP of the menu. Pi streams its
+      // nav items in after the <nav> mounts, so an index like 2 ("after Discover")
+      // was non-deterministic — when decoration ran before the native items rendered
+      // the buttons landed at the top anyway, and interleaved the native group on
+      // fresh loads. Position 0 pins them above the native items consistently.
+      insertPosition: 0
     };
   }
 }
