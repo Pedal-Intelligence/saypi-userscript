@@ -1,0 +1,103 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+vi.mock("../../src/ConfigModule", () => ({
+  config: { appServerUrl: "https://app.example.com", apiServerUrl: "https://api.saypi.ai" },
+}));
+
+// Break the VoiceMenu -> Pi -> PiVoiceMenu -> VoiceMenu import cycle.
+vi.mock("../../src/chatbots/Pi", () => ({ PiAIChatbot: class {} }));
+
+vi.mock("../../src/JwtManager", () => ({
+  getJwtManagerSync: () => ({ isAuthenticated: () => true, getClaims: () => null }),
+}));
+
+// No recent assistant message → introduceVoice falls back to the per-voice intro string.
+vi.mock("../../src/dom/ChatHistory", () => ({ getMostRecentAssistantMessage: () => undefined }));
+const getMessageMock = vi.fn((key: string, _subs?: string[]) => `intro:${key}`);
+vi.mock("../../src/i18n", () => ({ default: (key: string, subs?: string[]) => getMessageMock(key, subs) }));
+
+const createCompletedSpeechStreamMock = vi.fn();
+const createSpeechMock = vi.fn();
+const speakMock = vi.fn();
+vi.mock("../../src/tts/SpeechSynthesisModule", () => ({
+  SpeechSynthesisModule: {
+    getInstance: () => ({
+      createCompletedSpeechStream: createCompletedSpeechStreamMock,
+      createSpeech: createSpeechMock,
+      speak: speakMock,
+    }),
+  },
+}));
+
+import { VoiceSelector } from "../../src/tts/VoiceMenu";
+
+class TestVoiceSelector extends VoiceSelector {
+  getId(): string {
+    return "test-voice-selector";
+  }
+  getButtonClasses(): string[] {
+    return [];
+  }
+}
+
+/**
+ * #375: introducing a SayPi custom voice must request a STREAMING speech source.
+ * The non-streaming `createSpeech(text, false)` builds a `…/speak/<id>` URL (no
+ * `/stream` segment), which the audio-output source parser rejects with
+ * "is not a streaming speech URL" → the intro is silent + an error is logged.
+ */
+describe("VoiceSelector.introduceVoice — streaming source (#375)", () => {
+  let selector: TestVoiceSelector;
+  const customVoice: any = { id: "vabc", name: "Jarnathan", default: false, powered_by: "inflection.ai" };
+
+  beforeEach(() => {
+    createCompletedSpeechStreamMock.mockReset().mockResolvedValue({ voice: null });
+    createSpeechMock.mockReset().mockResolvedValue({ voice: null });
+    speakMock.mockReset();
+    getMessageMock.mockReset().mockImplementation((key: string) => `intro:${key}`);
+    const el = document.createElement("div");
+    // A non-Pi chatbot so introduceVoice takes the custom-voice branch.
+    const chatbot: any = { getID: () => "claude" };
+    selector = new TestVoiceSelector(chatbot, {} as any, el);
+  });
+
+  it("introduces the custom voice via a finalized streaming source, not non-streaming createSpeech", async () => {
+    selector.introduceVoice(customVoice);
+    // allow the createCompletedSpeechStream promise chain to settle
+    await new Promise((r) => setTimeout(r, 0));
+
+    // The finalized-streaming path (open → send text → finalize) is what produces a
+    // playable `…/speak/<id>/stream` source; the non-streaming createSpeech is not used.
+    expect(createCompletedSpeechStreamMock).toHaveBeenCalledTimes(1);
+    expect(createSpeechMock).not.toHaveBeenCalled();
+    const [textArg] = createCompletedSpeechStreamMock.mock.calls[0];
+    expect(textArg).toBe(`intro:voiceIntroduction_jarnathan`);
+    expect(speakMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("falls back to the generic introduction when the voice has no voice-specific script", async () => {
+    // chrome.i18n returns "" for a missing voiceIntroduction_<name> key.
+    getMessageMock.mockImplementation((key: string, subs?: string[]) =>
+      key === "voiceIntroductionGeneric" ? `Hi, I'm ${subs?.[0]}.` : ""
+    );
+
+    selector.introduceVoice(customVoice);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(createCompletedSpeechStreamMock).toHaveBeenCalledTimes(1);
+    const [textArg] = createCompletedSpeechStreamMock.mock.calls[0];
+    expect(textArg).toBe("Hi, I'm Jarnathan."); // non-empty → something to synthesize
+    expect(speakMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("does NOT synthesize an empty intro (no blank stream / 405) when there is no text at all", async () => {
+    getMessageMock.mockImplementation(() => ""); // every i18n lookup empty
+
+    selector.introduceVoice(customVoice);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(createCompletedSpeechStreamMock).not.toHaveBeenCalled();
+    expect(createSpeechMock).not.toHaveBeenCalled();
+    expect(speakMock).not.toHaveBeenCalled();
+  });
+});

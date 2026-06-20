@@ -279,8 +279,16 @@ export abstract class VoiceSelector {
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
     const lastMessage = getMostRecentAssistantMessage(this.chatbot);
     const name = voice.name.toLowerCase().replace(" ", "_");
+    // Most SayPi voices have no voice-specific `voiceIntroduction_<name>` script
+    // (only a couple do). On a fresh chat (no recent message to read back),
+    // chrome.i18n.getMessage returns "" for the missing key, leaving the intro text
+    // EMPTY — which synthesizes nothing (a blank stream the server 405s) and was a
+    // root cause of the silent intro alongside the non-streaming URL (#375). Fall
+    // back to a generic spoken introduction so every voice actually says something.
     const introduction =
-      lastMessage?.text || getMessage(`voiceIntroduction_${name}`);
+      lastMessage?.text ||
+      getMessage(`voiceIntroduction_${name}`) ||
+      getMessage("voiceIntroductionGeneric", [voice.name]);
     if (voice.default && isBuiltInVoiceProvider(this.chatbot)) {
       const introductionUrl = this.chatbot.getVoiceIntroductionUrl(voice.id);
       if (introductionUrl) {
@@ -288,11 +296,20 @@ export abstract class VoiceSelector {
         EventBus.emit("audio:load", { url: introductionUrl });
       }
     } else {
-      // introduce the custom voice
+      // Introduce the custom voice through the SAME finalized streaming path the
+      // conversation-turn TTS uses (open → send text → finalize), so the resulting
+      // `…/speak/<id>/stream` source plays. A plain non-streaming createSpeech yields
+      // a `…/speak/<id>` URL the audio-output parser rejects ("is not a streaming
+      // speech URL"); an un-finalized stream 405s on playback — both left the intro
+      // silent (#375). introduceVoice runs after setVoice persists, so the stream's
+      // preferred voice is the just-selected voice.
+      if (!introduction || !introduction.trim()) {
+        // Nothing to say — don't synthesize an empty stream (no audio + a 405).
+        return;
+      }
       const speechSynthesis = SpeechSynthesisModule.getInstance();
-      const notEnglish = "";
       speechSynthesis
-        .createSpeech(introduction, false, notEnglish)
+        .createCompletedSpeechStream(introduction, this.chatbot)
         .then((utterance) => {
           utterance.voice = voice;
           speechSynthesis.speak(utterance);
