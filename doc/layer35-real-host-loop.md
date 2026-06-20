@@ -1,9 +1,10 @@
 # Layer 3.5 — agent-launched real-host loop
 
 A standalone verify loop that launches its **own** Chrome against the **real**
-hosts (pi.ai, Claude, ChatGPT) and runs **fully unattended** after a one-time
-founder login. It sits between Layer 3 (hermetic, mock hosts, in CI) and Layer 4
-(the founder's browser via the Claude-in-Chrome MCP).
+**pi.ai** (and other non-Cloudflare hosts) and runs **fully unattended** after a
+one-time founder login. It sits between Layer 3 (hermetic, mock hosts, in CI) and
+Layer 4 (the founder's browser via the Claude-in-Chrome MCP). **Claude and ChatGPT
+are out of scope — they're behind Cloudflare; use Layer 4** (see "Supported hosts").
 
 Design: `doc/specs/2026-06-20-autonomous-loop-self-reload-and-synthetic-audio-design.md`.
 Runner: `scripts/layer35.mjs` (pure helpers in `scripts/layer35-lib.mjs`).
@@ -19,25 +20,50 @@ points at the *real* hosts (real DNS, real auth, real network).
 It builds directly on Sub-project A's in-extension synthetic audio source — the mic
 is supplied in-process, no human speaking.
 
+## Supported hosts: pi.ai (and other non-Cloudflare hosts) only
+
+**Layer 3.5 supports pi.ai and any host NOT behind Cloudflare bot management.
+Claude (claude.ai) and ChatGPT (chatgpt.com) are out of scope — use Layer 4 for
+those.** This is a hard constraint, not a TODO:
+
+- Loading the unpacked extension needs Playwright's **bundled Chromium** —
+  `--load-extension` was restricted in **stable Chrome** in 2025, so
+  `channel: "chrome"` launches but never registers the extension's service worker
+  (verified).
+- But bundled Chromium is **fingerprinted and blocked by Cloudflare** — claude.ai /
+  chatgpt.com serve the "Verify you are human" interstitial and the checkbox loops.
+
+So "load the extension" and "pass Cloudflare" can't both hold in one
+Playwright-launched browser. `seed`/`verify` therefore **refuse Cloudflare-gated
+hosts with a pointer to Layer 4** (`isUnsupportedCloudflareHost`). We deliberately
+do **not** use stealth/evasion plugins (an arms race, and ToS-sensitive).
+
+For Claude/ChatGPT, **Layer 4** is the path: the extension is installed normally,
+your real browser is already past Cloudflare and logged in, and Sub-project A's
+in-extension hooks (`saypi:dev-feed-speech`, `saypi:dev-reload`) make those turns
+hands-off without the mic or `chrome://extensions`.
+
 ## What it is and isn't
 
-- **Is:** an on-demand, agent-runnable real-host spot-check. Self-reloads (relaunch),
-  drives the mic (synthetic source), carries real auth (seeded profile).
+- **Is:** an on-demand, agent-runnable real-host spot-check **for pi.ai**.
+  Self-reloads (relaunch), drives the mic (synthetic source), carries real auth
+  (seeded profile).
 - **Isn't:** part of CI or the required `npm run test:e2e` gate. It reaches the real
   internet, and real hosts are flaky/rate-limited — a red run can be the host, not us.
-  Keep it out of the hermetic suite.
+  Keep it out of the hermetic suite. Not for Cloudflare-gated hosts (above).
 
 ## One-time founder setup (seed the profile)
 
 ```bash
 npm run e2e:build          # build the dev extension into .output/chrome-mv3-dev
-npm run layer35:seed       # opens a headed browser using the persistent profile
+npm run layer35:seed       # opens a headed browser (login only, no extension)
 ```
 
-In that browser, log into each host you want to verify (pi.ai, claude.ai,
-chatgpt.com), then press Ctrl-C. The session persists in the profile directory and
-is reused by every later run — the "one founder action per session → one founder
-action, ever" win, mirrored from Layer 4.
+In that browser, log into **pi.ai**, then press Ctrl-C. The session persists in the
+profile directory and is reused by every later run — the "one founder action per
+session → one founder action, ever" win, mirrored from Layer 4. (`seed` uses bundled Chromium with the
+`--enable-automation` flag stripped and does not load the extension — seeding is
+just login.)
 
 The profile defaults to `~/.config/saypi-e2e-profile` (override with
 `SAYPI_L35_PROFILE_DIR`). **It holds real session cookies — it lives OUTSIDE the
@@ -48,9 +74,9 @@ repo, is never committed, and is never uploaded as a CI/test artifact.**
 ```bash
 npm run e2e:build                                   # after any source change
 npm run layer35:verify                              # defaults to https://pi.ai/talk
-node scripts/layer35.mjs verify https://claude.ai/new
 node scripts/layer35.mjs verify https://pi.ai/talk --no-turn   # decoration only
 node scripts/layer35.mjs verify https://pi.ai/talk --headed    # watch it run
+# claude.ai / chatgpt.com are refused with a Layer-4 pointer (see "Supported hosts").
 ```
 
 `verify` loads the extension, navigates to the real host, asserts SayPi decorated

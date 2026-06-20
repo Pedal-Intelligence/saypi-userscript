@@ -3,6 +3,8 @@ import {
   parseLayer35Args,
   resolveProfileDir,
   buildRealHostChromeArgs,
+  buildSeedChromeArgs,
+  isUnsupportedCloudflareHost,
 } from "../../scripts/layer35-lib.mjs";
 
 describe("parseLayer35Args", () => {
@@ -57,5 +59,40 @@ describe("buildRealHostChromeArgs", () => {
   it("omits --headless when headed", () => {
     const headed = buildRealHostChromeArgs({ extensionDir: "/x", wavPath: "/w", headless: false });
     expect(headed).not.toContain("--headless=new");
+  });
+  it("disables the AutomationControlled tell so Cloudflare doesn't hard-block", () => {
+    expect(args).toContain("--disable-blink-features=AutomationControlled");
+  });
+});
+
+describe("buildSeedChromeArgs", () => {
+  const args = buildSeedChromeArgs();
+  it("does NOT load the extension (login only — fewer bot tells)", () => {
+    expect(args.some((a) => a.startsWith("--load-extension="))).toBe(false);
+    expect(args.some((a) => a.startsWith("--disable-extensions-except="))).toBe(false);
+  });
+  it("does NOT pass fake-audio flags (seeding is just login)", () => {
+    expect(args.some((a) => a.startsWith("--use-file-for-fake-audio-capture="))).toBe(false);
+  });
+  it("disables the AutomationControlled tell", () => {
+    expect(args).toContain("--disable-blink-features=AutomationControlled");
+  });
+  it("is always headed (never headless) so the founder can solve the challenge", () => {
+    expect(args).not.toContain("--headless=new");
+  });
+});
+
+describe("isUnsupportedCloudflareHost", () => {
+  it("flags claude.ai and chatgpt.com (and subdomains)", () => {
+    expect(isUnsupportedCloudflareHost("https://claude.ai/new")).toBe(true);
+    expect(isUnsupportedCloudflareHost("https://chatgpt.com/")).toBe(true);
+    expect(isUnsupportedCloudflareHost("https://www.chatgpt.com/")).toBe(true);
+    expect(isUnsupportedCloudflareHost("https://chat.openai.com/")).toBe(true);
+  });
+  it("does NOT flag pi.ai (no Cloudflare gate — Layer 3.5's supported host)", () => {
+    expect(isUnsupportedCloudflareHost("https://pi.ai/talk")).toBe(false);
+  });
+  it("is false for a malformed url rather than throwing", () => {
+    expect(isUnsupportedCloudflareHost("not a url")).toBe(false);
   });
 });
