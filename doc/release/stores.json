@@ -1,0 +1,119 @@
+{
+  "_comment": "Single source of truth for store identity + per-store submission facts. Consumed by scripts/release.mjs (renderPacket) and any future browser-driver / publishing-API path. Update when a store changes its flow or when the Edge product ID is captured. Facts verified 2026-06-20 — see references/*.md for sources.",
+  "order": ["chrome", "edge", "firefox"],
+  "stores": {
+    "chrome": {
+      "displayName": "🟢 Chrome Web Store",
+      "id": "glhhgglpalmjjkoiigojligncepccdei",
+      "dashboardUrl": "https://chrome.google.com/webstore/devconsole",
+      "listingUrl": "https://chromewebstore.google.com/detail/say-pi/glhhgglpalmjjkoiigojligncepccdei",
+      "packageFile": "dist/saypi.chrome.zip",
+      "hasReleaseNotesField": false,
+      "releaseNotesFallback": "Chrome has no changelog field. Optionally fold highlights into the detailed description; otherwise the version simply ships.",
+      "autoPublishOnApproval": true,
+      "reviewEta": "usually a few days; occasionally up to ~3 weeks (submission-surge notice as of 2026-04)",
+      "declarations": [
+        "Remote code: select \"No, I am not using remote code\".",
+        "Per-permission justifications (storage, cookies, offscreen, tabs, audio, contextMenus) — canonical text in doc/WEB_STORE_PERMISSIONS.md.",
+        "Host-permission justification (https://api.saypi.ai/*, https://www.saypi.ai/*).",
+        "Data-usage disclosures + certifications (not sold; used only for the extension's single purpose).",
+        "Privacy policy URL: https://saypi.ai/legal/privacy."
+      ],
+      "checklist": [
+        "Sign in at the Developer Dashboard (2-Step Verification required on the publishing account).",
+        "Open the Say, Pi item → Package tab.",
+        "Upload New Package → dist/saypi.chrome.zip.",
+        "Confirm the manifest version incremented (rejected otherwise).",
+        "Re-confirm the Privacy practices tab (declarations above).",
+        "Submit for review (leave \"Publish automatically after approval\" checked unless you want to defer go-live)."
+      ],
+      "gotchas": [
+        "No \"what's new\" field — users do not see the changelog on Chrome.",
+        "Package = the CONTENTS of .output/chrome-mv3 zipped with manifest.json at the root (package-extension.sh already does this)."
+      ],
+      "api": {
+        "exists": true,
+        "version": "V2 (V1 sunsets 2026-10-15)",
+        "auth": "OAuth2 refresh token (or V2 service account); scope https://www.googleapis.com/auth/chromewebstore",
+        "note": "V2 base https://chromewebstore.googleapis.com — :upload then :publish; cannot create items or change visibility. See references/chrome-web-store.md."
+      }
+    },
+    "edge": {
+      "displayName": "🔵 Microsoft Edge Add-ons",
+      "idTodo": "capture the Product ID from Partner Center → Extension overview → Extension identity on first run, then record it here as \"id\"",
+      "dashboardUrl": "https://partner.microsoft.com/dashboard/microsoftedge/",
+      "packageFile": "dist/saypi.edge.zip",
+      "hasReleaseNotesField": false,
+      "releaseNotesFallback": "Edge has no changelog field; put a short summary of what changed into \"Notes for certification\".",
+      "reviewerNotesField": true,
+      "reviewerNotes": "\"Notes for certification\" — optional but recommended for updates; describe what changed to speed certification.",
+      "autoPublishOnApproval": true,
+      "reviewEta": "up to 7 business days",
+      "declarations": [
+        "Remote code: No (MV3).",
+        "Per-permission justifications (same set as Chrome).",
+        "Data-usage certifications + privacy policy URL (https://saypi.ai/legal/privacy).",
+        "Privacy fields may still live under Properties if the May-2026 Privacy-page rollout hasn't reached the account."
+      ],
+      "checklist": [
+        "Sign in at Partner Center → Edge program.",
+        "Open Say, Pi → Packages → upload dist/saypi.edge.zip.",
+        "Confirm the manifest version incremented.",
+        "Publish → on the Submit page, add Notes for certification (what changed).",
+        "Publish (starts certification)."
+      ],
+      "gotchas": [
+        "Name / Short description / Description are READ-ONLY on Edge — pulled from the manifest. To change them you re-upload a package.",
+        "The listing must not say \"Chrome\" (certification requirement). Our name/description come from _locales/en/messages.json (appName/appDescription) — grep them if unsure.",
+        "No deferred publish: submitting to certification is the irreversible commit point; it auto-publishes on approval (no separate go-live gate).",
+        "update_url must be absent from the manifest (it is in our build)."
+      ],
+      "api": {
+        "exists": true,
+        "version": "v1.1 (v1 Entra/OAuth model ended 2024-12-31)",
+        "auth": "API key + Client ID (headers Authorization: ApiKey …, X-ClientID: …); create under Partner Center → Edge → Publish API",
+        "note": "Base https://api.addons.microsoftedge.microsoft.com — upload package → poll → publish → poll. Updates only; cannot create products or edit listing metadata. See references/edge-addons.md."
+      }
+    },
+    "firefox": {
+      "displayName": "🟠 Firefox Add-ons (AMO)",
+      "id": "gecko@saypi.ai",
+      "dashboardUrl": "https://addons.mozilla.org/developers/",
+      "listingUrl": "https://addons.mozilla.org/firefox/addon/say-pi/",
+      "packageFile": "dist/saypi.firefox.xpi",
+      "sourceArchiveFile": "source-code.zip",
+      "hasReleaseNotesField": true,
+      "releaseNotesLocation": "the \"Release Notes for this Version\" field (shown to users)",
+      "reviewerNotesField": true,
+      "reviewerNotes": "\"Notes for Reviewers\": point to source-code.zip and restate the build (Node ≥22 / npm ≥10, `npm ci && npm run build:firefox`); note the onnxruntime eval() warning is third-party, tree-shaken, never executed.",
+      "autoPublishOnApproval": true,
+      "reviewEta": "signed & published within ~24h; longer (a few days) if selected for manual review",
+      "declarations": [
+        "Distribution: Listed.",
+        "Source code: Yes (minified/bundled build) → upload source-code.zip.",
+        "Compatible application: Firefox (MV2 build)."
+      ],
+      "checklist": [
+        "Sign in at the AMO Developer Hub.",
+        "Open the Say, Pi add-on → Upload New Version → dist/saypi.firefox.xpi.",
+        "Let addons-linter validate (warnings are OK and won't block; errors block).",
+        "Distribution = Listed.",
+        "Source-code prompt = Yes → upload source-code.zip.",
+        "Paste the \"What's new\" text into Release Notes for this Version.",
+        "Paste the build steps + eval note into Notes for Reviewers.",
+        "Submit."
+      ],
+      "gotchas": [
+        "Source archive is MANDATORY for our minified build — the reviewer rebuilds from it and diffs against the shipped package; it must match. Include build instructions.",
+        "Reproducibility caveat: .env.production values are baked into the build, so a reviewer cannot reproduce byte-for-byte without them — confirm how AMO source review is handled if the reviewer queries it.",
+        "The onnxruntime eval() warning is a non-blocking warning (not an error)."
+      ],
+      "api": {
+        "exists": true,
+        "tool": "web-ext sign --channel=listed (web-ext@^8.5.0 already a devDependency)",
+        "auth": "AMO JWT issuer + secret from addons.mozilla.org/developers/addon/api/key (env WEB_EXT_API_KEY / WEB_EXT_API_SECRET)",
+        "note": "Supports --upload-source-code=source-code.zip and release notes via --amo-metadata. gecko id gecko@saypi.ai maps the upload to the say-pi listing. See references/firefox-amo.md."
+      }
+    }
+  }
+}
