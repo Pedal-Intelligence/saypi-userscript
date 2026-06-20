@@ -7,7 +7,14 @@
 import { logger } from "../LoggingModule.js";
 
 export interface SyntheticStreamOptions {
-  /** Loop the clip for a continuous VAD session (default true). */
+  /**
+   * Loop the clip continuously (default FALSE = one-shot). One-shot is what you want
+   * for a voice TURN: the clip plays once, then silence, so the VAD sees an
+   * end-of-speech gap and `userStoppedSpeaking` fires → STT submits. With loop:true
+   * the clip replays back-to-back with no trailing silence, so end-of-speech never
+   * fires and nothing is transcribed (#349). Only set true for a continuous VAD
+   * session that doesn't need a transcript.
+   */
   loop?: boolean;
   /** Injectable for unit tests; defaults to the global AudioContext. */
   AudioContextClass?: typeof AudioContext;
@@ -32,7 +39,7 @@ export async function createSyntheticSpeechStream(
   const buffer = await ctx.decodeAudioData(encoded);
   const source = ctx.createBufferSource();
   source.buffer = buffer;
-  source.loop = opts.loop ?? true;
+  source.loop = opts.loop ?? false;
   const destination = ctx.createMediaStreamDestination();
   source.connect(destination);
   // A freshly created AudioContext can be 'suspended' when there's no user gesture

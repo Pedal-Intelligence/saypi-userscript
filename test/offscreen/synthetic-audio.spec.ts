@@ -9,7 +9,7 @@ function fakeAudioContextClass(captured: any) {
   return class {
     destinationStream = { id: "synthetic-stream" };
     createBufferSource() {
-      return {
+      const source = {
         buffer: null as any,
         loop: false,
         connect: vi.fn(),
@@ -20,6 +20,8 @@ function fakeAudioContextClass(captured: any) {
           captured.startedBeforeResume = !captured.resumed;
         }),
       };
+      captured.source = source;
+      return source;
     }
     createMediaStreamDestination() {
       return { stream: this.destinationStream };
@@ -53,7 +55,18 @@ describe("createSyntheticSpeechStream", () => {
     // no user gesture — e.g. the real Layer-4 browser — which would yield silence).
     expect(captured.resumed).toBe(true);
     expect(captured.startedBeforeResume).toBe(false);
+    expect(captured.source.loop).toBe(true);
     expect((stream as any).id).toBe("synthetic-stream");
+  });
+
+  it("defaults to ONE-SHOT (loop:false) so end-of-speech fires → STT submits (#349)", async () => {
+    const captured: any = {};
+    await createSyntheticSpeechStream("blob:clip", {
+      // loop omitted → default
+      AudioContextClass: fakeAudioContextClass(captured) as any,
+      fetchImpl: vi.fn().mockResolvedValue({ arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)) }) as any,
+    });
+    expect(captured.source.loop).toBe(false);
   });
 });
 

@@ -34,9 +34,12 @@ test("in-extension synthetic audio -> VAD -> mock STT -> transcript in prompt", 
 
   // Arm the synthetic source via the page bridge (the exact path the Layer-4 MCP
   // loop uses): main-world CustomEvent -> content script -> SW -> offscreen latch.
+  // One-shot (loop:false, the default) — a single utterance + trailing silence so
+  // the VAD sees end-of-speech and STT submits; loop:true never fires end-of-speech
+  // (#349). Omitting the detail entirely would also default to one-shot.
   await page.evaluate(() => {
     window.dispatchEvent(
-      new CustomEvent("saypi:dev-feed-speech", { detail: { loop: true } }),
+      new CustomEvent("saypi:dev-feed-speech", { detail: { loop: false } }),
     );
   });
 
