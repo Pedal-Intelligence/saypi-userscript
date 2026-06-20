@@ -1,7 +1,7 @@
 // Pure predicates over CDP Target.TargetInfo records. No Playwright runtime
 // import (type-only imports would be erased anyway), so this module is unit-
-// testable under Vitest in the REQUIRED gate even though the browser specs that
-// consume it are advisory.
+// testable under Vitest in the `test` gate, independent of the browser specs
+// that consume it (which run in the now-required e2e job).
 
 /** The subset of CDP `Target.TargetInfo` these predicates read. */
 export interface CdpTargetInfo {

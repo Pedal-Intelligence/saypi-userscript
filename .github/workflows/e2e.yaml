@@ -1,15 +1,15 @@
-# ADVISORY workflow: Layer 3 headless end-to-end harness.
+# REQUIRED check: Layer 3 headless end-to-end harness.
 #
-# This is intentionally a SEPARATE workflow from test.yaml and is NOT a required
-# merge check. It runs the Playwright-driven E2E suite (build the static dev
+# This is intentionally a SEPARATE workflow from test.yaml (it is NOT part of the
+# `npm test` aggregate), but it IS a required status check on `main`: a red run
+# blocks merge. It runs the Playwright-driven E2E suite (build the static dev
 # extension, launch headless Chromium against local mock servers, drive the
-# fake-mic STT path) and reports pass/fail as advisory signal only. Promotion to
-# a required check is a deliberate, founder-signed gate change — do not add this
-# job to branch-protection required checks or to the `test` npm aggregate.
+# fake-mic STT path). Promoted from advisory to required (2026-06-20) after a
+# stable green streak on CI runners — five consecutive first-attempt-green runs
+# across distinct, non-docs-only PRs (#289, #294, #295, #328, #335).
 #
-# See e2e/README.md for the architecture, the local-vs-CI risk split, and why
-# this stays advisory until it has proven itself stable on CI runners.
-name: e2e (advisory)
+# See e2e/README.md for the architecture and the local-vs-CI risk split.
+name: e2e
 
 on:
   pull_request:
