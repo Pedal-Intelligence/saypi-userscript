@@ -17,7 +17,9 @@ SayPi UI is migrating from imperative DOM mutation to Preact components
 - **Host-injected widgets borrow the host's *compiled* utility classes only**
   (e.g. `h-10`, never arbitrary `h-[2.5rem]` — hosts compile only their own
   utilities, so arbitrary values resolve to nothing).
-- **Test under Vitest** (`*.spec.tsx`) with `@testing-library/preact`. Never
-  Jest for JSX: Jest matches `*.test.js` only and has no JSX transform.
+- **Test under Vitest** (`*.spec.tsx`); component tests use
+  `@testing-library/preact` (added with the first component in PR3 — the mount
+  registry itself uses raw Preact). Never Jest for JSX: Jest matches `*.test.js`
+  only and has no JSX transform.
 - **Never import Preact into the offscreen document** (`entrypoints/offscreen/`),
   which renders no user-visible UI.
