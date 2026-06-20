@@ -106,6 +106,16 @@ it does, `verify` exits 3 ("re-seed") — re-run `layer4cdp:seed`, pass the chec
 Cmd-Q. If that cadence is too high for your taste, **Path 1 (interactive MCP)** is
 the zero-upkeep alternative.
 
+## Clean shutdown (no "Restore pages?" prompt)
+
+The runner closes Chrome **gracefully** (CDP `Browser.close`, fire-and-forget, then
+polls the debug port) and, as a guarantee, marks the profile's `exit_type=Normal`
+before exiting — plus launches with `--hide-crash-restore-bubble`. So a `verify` /
+`diagnose` / `self-test` run never leaves the profile looking "crashed", and your
+next manual launch won't show the "Restore pages? Chrome didn't shut down correctly"
+dialog. (The earlier `SIGKILL` teardown was the cause of that dialog — fixed.) When
+running `seed`, **Ctrl-C** now shuts Chrome down gracefully too.
+
 ## Boundaries
 
 - **Headed only** for Cloudflare hosts → a visible window; the machine must be

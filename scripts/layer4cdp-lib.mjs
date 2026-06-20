@@ -55,6 +55,11 @@ export function buildCdpChromeArgs({ extensionDir, port, profileDir, headless = 
     `--user-data-dir=${profileDir}`,
     "--no-first-run",
     "--no-default-browser-check",
+    // Suppress the "Restore pages? Chrome didn't shut down correctly" bubble on the
+    // runner's own launches (belt-and-suspenders alongside the graceful shutdown +
+    // markCleanExit; Chrome's own exit_type bookkeeping is unreliable on a synced,
+    // many-extension profile).
+    "--hide-crash-restore-bubble",
   ];
   // Only command-line-load the extension on a FRESH profile (self-test). On the
   // seeded profile the extension is already profile-installed (Developer mode +

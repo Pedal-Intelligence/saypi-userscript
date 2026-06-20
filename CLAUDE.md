@@ -132,11 +132,30 @@ The testability net has four layers — reach for the cheapest one that can actu
 - **Layer 0 — type-check** (`tsc --noEmit`, run first by `npm test` via the `typecheck` script). The whole TS surface (`src`, `entrypoints`, `test`, `scripts`, `wxt.config.ts`) must be error-free; a type regression fails the **required** gate before Jest/Vitest even run. CI generates the WXT-typed `.wxt/` (via `wxt prepare`) before type-checking — see `.github/workflows/test.yaml`.
 - **Layers 1–2 — unit / contract** (`npm test`; Jest + Vitest, JSDOM). Pure logic, XState machines, and `src/chatbots/` adapter contract tests against recorded DOM fixtures. The **required** merge gate (type-check + both runners). Default for any change with extractable logic. Can't catch real-browser or cross-context behavior.
 - **Layer 3 — headless E2E** (`npm run e2e:build && npm run test:e2e`; Playwright + real headless Chrome). Use when a change touches content-script **bootstrap/decoration**, the **offscreen ↔ service-worker ↔ VAD/STT** wiring, CSP, or anything needing a *real browser* but verifiable against a DOM you control. Fast, deterministic, **hermetic**, a **required** CI check, and it **can drive the mic** via fake audio. Can't: real-host DOM fidelity, real auth, real network. See **[e2e/README.md](e2e/README.md)**.
-- **Layer 3.5 — agent-launched real-host loop** (`npm run layer35:verify`; Playwright `launchPersistentContext` against the *real* host). Use to confirm a change against **live pi.ai** (and other non-Cloudflare hosts) **without the founder** — the agent owns the browser, so it self-reloads by relaunch and feeds the in-extension synthetic mic. Needs a one-time founder login (`npm run layer35:seed`) into a git-ignored persistent profile. **Claude/ChatGPT are out of scope (behind Cloudflare; bundled Chromium is blocked and stable Chrome won't load the extension) — use Layer 4 for those.** On-demand, **not** CI (hits the real internet). See **[doc/layer35-real-host-loop.md](doc/layer35-real-host-loop.md)**.
+- **Layer 3.5 — agent-launched bundled-Chromium loop** (`npm run layer35:verify`; Playwright `launchPersistentContext`). ⚠️ **Cloudflare-fragile against real hosts — pi.ai/claude.ai/chatgpt.com ALL serve "Just a moment…" to headless bundled Chromium** (the earlier "pi.ai is Cloudflare-free" claim was wrong — only ever confirmed *headed*). Treat Layer 3.5 as hermetic-mock-grade; for real-host turns use **Layer 4 (CDP)** instead (real Chrome, headed — works for every host incl. pi.ai). See **[doc/layer35-real-host-loop.md](doc/layer35-real-host-loop.md)**.
 - **Layer 4 — real-site spot-check** (`node scripts/dev-rig.mjs` + Claude-in-Chrome). Use when you need fidelity to the *actual* pi.ai/Claude/ChatGPT DOM (which drifts and is **not** an API contract) or to confirm a fix on the live host. On-demand, **not** CI; needs the founder's browser. Mic-gated and reload-gated paths now have DEV-only in-extension hooks (`saypi:dev-feed-speech`, `saypi:dev-reload`) so most turns are hands-off — incl. **Claude/ChatGPT** (real browser is already past Cloudflare; recipe in the dev-loop doc). Reach for it **after** Layer 3 is green, for real-host confirmation. See **[doc/autonomous-dev-loop.md](doc/autonomous-dev-loop.md)** (details below).
-- **Layer 4 (CDP) — agent-launched Claude/ChatGPT, HEADED** (`npm run layer4cdp:verify`). Spawns the founder's **real Chrome** directly + attaches over CDP, so it loads the extension AND passes Cloudflare (the combo Layer 3.5 can't) for **claude.ai/chatgpt.com** with no per-run founder/MCP — **verified working headed (2026-06-20)**. Headless is Cloudflare-blocked, so it's a visible window, not silent cron. One-time setup: `layer4cdp:seed` (login) + enable Developer mode & Load unpacked in the dedicated profile; `layer4cdp:diagnose` confirms usable. On-demand, **not** CI. See **[doc/layer4-cdp-real-host-loop.md](doc/layer4-cdp-real-host-loop.md)**.
+- **Layer 4 (CDP) — agent-launched real-host loop, HEADED** (`npm run layer4cdp:verify`). Spawns the founder's **real Chrome** directly + attaches over CDP, so it loads the extension AND passes Cloudflare for **pi.ai, claude.ai, and chatgpt.com** with no per-run founder/MCP — **verified working headed (2026-06-20)**. The robust real-host path (use it for pi.ai too). Headless is Cloudflare-blocked, so it's a visible window, not silent cron. One-time setup: `layer4cdp:seed <url>` (login) + enable Developer mode & Load unpacked in the dedicated profile; `layer4cdp:diagnose <url>` confirms usable. On-demand, **not** CI. See **[doc/layer4-cdp-real-host-loop.md](doc/layer4-cdp-real-host-loop.md)**.
 
-Rule of thumb: if a controlled DOM can reproduce it, it belongs in Layer 3 (repeatable, in CI); reserve Layer 4 for what only the real host can show.
+Rule of thumb: if a controlled DOM can reproduce it, it belongs in Layer 3 (repeatable, in CI); reserve the real-host loops for what only the real host can show.
+
+#### Driving a synthetic voice turn (no mic, any host) — START HERE for voice work
+
+To exercise the voice path (VAD → STT → transcript) **without a microphone**, DEV
+builds expose two page events. The full primitive:
+
+```js
+window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: true } })); // arm synthetic mic
+document.querySelector("#saypi-callButton").click();                                          // start the call
+// transcript lands in the composer: pi.ai → #saypi-prompt.value ; Claude/ChatGPT → contenteditable .textContent
+window.dispatchEvent(new CustomEvent("saypi:dev-reload"));                                     // reload ext (no chrome://extensions)
+```
+
+Getting a page in front of those events: **hermetic/CI** → Layer 3 (copy
+`e2e/specs/synthetic-audio-stt.e2e.ts`); **real host, one command** →
+`node scripts/layer4cdp.mjs verify <url>` (claude.ai / chatgpt.com / pi.ai — does the
+whole turn); **interactive** → fire the events via the Claude-in-Chrome `javascript_tool`.
+**Real hosts require Layer 4 (CDP)'s headed real Chrome (Cloudflare blocks headless).**
+**Full guide: [doc/synthetic-voice-turn.md](doc/synthetic-voice-turn.md).**
 
 #### Real-site verification (Layer 4 dev-verify loop)
 

@@ -1,10 +1,17 @@
-# Layer 3.5 — agent-launched real-host loop
+# Layer 3.5 — agent-launched bundled-Chromium loop
 
-A standalone verify loop that launches its **own** Chrome against the **real**
-**pi.ai** (and other non-Cloudflare hosts) and runs **fully unattended** after a
-one-time founder login. It sits between Layer 3 (hermetic, mock hosts, in CI) and
-Layer 4 (the founder's browser via the Claude-in-Chrome MCP). **Claude and ChatGPT
-are out of scope — they're behind Cloudflare; use Layer 4** (see "Supported hosts").
+> **⚠️ Cloudflare reality (corrected 2026-06-20): this loop is NOT reliable against
+> real hosts. pi.ai, claude.ai, AND chatgpt.com all serve "Just a moment…" to
+> headless bundled Chromium** (the original "pi.ai is Cloudflare-free" assumption was
+> never tested for the *verify* path — only the *headed* seed, which passes). **For
+> real-host turns use Layer 4 (CDP)** — `doc/layer4-cdp-real-host-loop.md` — which
+> drives real Chrome (headed) and passes Cloudflare for *every* host including pi.ai.
+> Layer 3.5 remains useful as a bundled-Chromium driver, but expect Cloudflare to
+> block it headless.
+
+A standalone verify loop that launches its **own** bundled-Chromium against real
+hosts. It sits between Layer 3 (hermetic, mock hosts, in CI) and Layer 4 (the
+founder's browser via the Claude-in-Chrome MCP).
 
 Design: `doc/specs/2026-06-20-autonomous-loop-self-reload-and-synthetic-audio-design.md`.
 Runner: `scripts/layer35.mjs` (pure helpers in `scripts/layer35-lib.mjs`).
@@ -20,28 +27,28 @@ points at the *real* hosts (real DNS, real auth, real network).
 It builds directly on Sub-project A's in-extension synthetic audio source — the mic
 is supplied in-process, no human speaking.
 
-## Supported hosts: pi.ai (and other non-Cloudflare hosts) only
+## The Cloudflare constraint (why Layer 4 CDP is preferred for real hosts)
 
-**Layer 3.5 supports pi.ai and any host NOT behind Cloudflare bot management.
-Claude (claude.ai) and ChatGPT (chatgpt.com) are out of scope — use Layer 4 for
-those.** This is a hard constraint, not a TODO:
+The bind that shapes this loop:
 
 - Loading the unpacked extension needs Playwright's **bundled Chromium** —
-  `--load-extension` was restricted in **stable Chrome** in 2025, so
-  `channel: "chrome"` launches but never registers the extension's service worker
-  (verified).
-- But bundled Chromium is **fingerprinted and blocked by Cloudflare** — claude.ai /
-  chatgpt.com serve the "Verify you are human" interstitial and the checkbox loops.
+  `--load-extension` was restricted in **stable Chrome** in 2025, so Playwright
+  *launching* `channel: "chrome"` never registers the extension's service worker
+  (verified). So Layer 3.5 must use bundled Chromium.
+- But bundled Chromium is **fingerprinted by Cloudflare**, which blocks it **headless
+  on every real host — pi.ai, claude.ai, chatgpt.com alike** ("Just a moment…").
+  Headed bundled Chromium sometimes squeaks past, but it's fragile.
 
-So "load the extension" and "pass Cloudflare" can't both hold in one
-Playwright-launched browser. `seed`/`verify` therefore **refuse Cloudflare-gated
-hosts with a pointer to Layer 4** (`isUnsupportedCloudflareHost`). We deliberately
-do **not** use stealth/evasion plugins (an arms race, and ToS-sensitive).
+**Layer 4 (CDP) solves this** by *spawning real Chrome directly* (not via Playwright's
+launcher) and attaching over CDP — real Chrome loads the extension AND passes
+Cloudflare (headed). **Use Layer 4 (CDP) for real-host turns on any host, including
+pi.ai** (`doc/layer4-cdp-real-host-loop.md`).
 
-For Claude/ChatGPT, **Layer 4** is the path: the extension is installed normally,
-your real browser is already past Cloudflare and logged in, and Sub-project A's
-in-extension hooks (`saypi:dev-feed-speech`, `saypi:dev-reload`) make those turns
-hands-off without the mic or `chrome://extensions`.
+`isUnsupportedCloudflareHost` (in `scripts/layer35-lib.mjs`) currently only refuses
+claude.ai/chatgpt.com and still lets pi.ai through — that's a **known stale guard**
+(pi.ai is also Cloudflare-gated headless); prefer Layer 4 CDP rather than relying on
+this list. We deliberately do **not** use stealth/evasion plugins (an arms race, and
+ToS-sensitive).
 
 ## What it is and isn't
 

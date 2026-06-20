@@ -67,6 +67,9 @@ describe("buildCdpChromeArgs", () => {
   it("never announces automation (no --enable-automation)", () => {
     expect(args).not.toContain("--enable-automation");
   });
+  it("hides the crash-restore bubble (no 'Restore pages?' on the runner's launches)", () => {
+    expect(args).toContain("--hide-crash-restore-bubble");
+  });
   it("omits --headless when headed", () => {
     const headed = buildCdpChromeArgs({ extensionDir: "/e", port: 1, profileDir: "/p", headless: false });
     expect(headed).not.toContain("--headless=new");

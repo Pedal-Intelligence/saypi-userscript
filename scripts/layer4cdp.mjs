@@ -18,7 +18,7 @@
  */
 import { chromium } from "playwright";
 import { spawn } from "node:child_process";
-import { existsSync, mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir, homedir } from "node:os";
 import { createServer } from "node:net";
 import { fileURLToPath } from "node:url";
@@ -57,6 +57,26 @@ function assertBuilt() {
   }
 }
 
+/**
+ * Guarantee the profile's NEXT launch won't show "Restore pages?". Call only after
+ * the browser is confirmed gone. Chrome's own exit_type bookkeeping is unreliable on
+ * a synced, many-extension profile (graceful close doesn't always flip it to Normal),
+ * so we set it ourselves — minimal, safe (Chrome rewrites these keys every run).
+ */
+function markCleanExit(profileDir) {
+  try {
+    const pref = join(profileDir, "Default", "Preferences");
+    if (!existsSync(pref)) return;
+    const p = JSON.parse(readFileSync(pref, "utf8"));
+    p.profile = p.profile || {};
+    p.profile.exit_type = "Normal";
+    p.profile.exited_cleanly = true;
+    writeFileSync(pref, JSON.stringify(p));
+  } catch (err) {
+    log(`note: could not mark clean exit (${err.message})`);
+  }
+}
+
 function freePort() {
   return new Promise((resolve, reject) => {
     const srv = createServer();
@@ -81,18 +101,48 @@ async function waitForCdp(port, ms = 15000) {
   throw new Error("CDP endpoint never came up");
 }
 
-/** Spawn real Chrome and attach over CDP. Returns { browser, child, kill }. */
+/** Spawn real Chrome and attach over CDP. Returns { browser, child, shutdown }. */
 async function launchAttached({ profileDir, headless, loadExtension = false }) {
   const port = await freePort();
   const args = buildCdpChromeArgs({ extensionDir: EXT_DIR, port, profileDir, headless, loadExtension });
   const child = spawn(chromePath(), args, { stdio: "ignore", detached: false });
-  const kill = () => { try { child.kill("SIGKILL"); } catch {} };
+  const hardKill = () => { try { child.kill("SIGKILL"); } catch {} };
+  const portDead = async () => {
+    try { await fetch(`http://127.0.0.1:${port}/json/version`); return false; } catch { return true; }
+  };
+  let browser;
+  // Shut Chrome down GRACEFULLY so it records exit_type=Normal. SIGKILL can't be
+  // trapped, so a SIGKILL'd Chrome shows a "Restore pages? Chrome didn't shut down
+  // correctly" prompt on the NEXT launch of the profile (verified). Use the CDP
+  // `Browser.close` graceful path — FIRE-AND-FORGET: the command's own response never
+  // returns because Chrome exits first, so awaiting it would hang. Confirm shutdown by
+  // polling the debug port (robust to macOS's launcher/PID split); SIGTERM then SIGKILL
+  // only as fallbacks.
+  const shutdown = async () => {
+    try {
+      const session = await browser.newBrowserCDPSession();
+      session.send("Browser.close").catch(() => {});
+    } catch {
+      try { child.kill("SIGTERM"); } catch {}
+    }
+    const deadline = Date.now() + 6000;
+    while (Date.now() < deadline) {
+      if (await portDead()) { markCleanExit(profileDir); return; }
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    try { child.kill("SIGTERM"); } catch {}
+    await new Promise((r) => setTimeout(r, 1500));
+    if (!(await portDead())) hardKill();
+    await new Promise((r) => setTimeout(r, 500));
+    markCleanExit(profileDir);
+  };
   try {
     await waitForCdp(port);
-    const browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
-    return { browser, child, kill };
+    browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
+    return { browser, child, shutdown };
   } catch (err) {
-    kill();
+    try { child.kill("SIGTERM"); } catch {}
+    setTimeout(hardKill, 3000).unref?.();
     throw err;
   }
 }
@@ -122,7 +172,17 @@ async function seed(opts) {
   const profileDir = resolveCdpProfileDir(process.env, homedir());
   log(`seeding CDP profile at ${profileDir} (real Chrome, headed)`);
   log(`log into ${new URL(opts.url).hostname} (solve the Cloudflare checkbox), then Ctrl-C.`);
-  const { browser } = await launchAttached({ profileDir, headless: false });
+  const { browser, shutdown } = await launchAttached({ profileDir, headless: false });
+  // Ctrl-C must close Chrome GRACEFULLY (else the next launch shows "Restore pages?").
+  let closing = false;
+  for (const sig of ["SIGINT", "SIGTERM"]) {
+    process.on(sig, () => {
+      if (closing) return;
+      closing = true;
+      log("shutting down Chrome gracefully…");
+      shutdown().finally(() => process.exit(0));
+    });
+  }
   const ctx = browser.contexts()[0];
   const page = ctx.pages()[0] ?? (await ctx.newPage());
   await page.goto(opts.url, { waitUntil: "domcontentloaded" }).catch(() => {});
@@ -137,7 +197,7 @@ async function diagnose(opts) {
     process.exit(1);
   }
   log(`diagnose ${opts.url} (${opts.headed ? "headed" : "headless"} CDP, seeded profile) — measuring the keystones`);
-  const { browser, kill } = await launchAttached({ profileDir, headless: !opts.headed });
+  const { browser, shutdown } = await launchAttached({ profileDir, headless: !opts.headed });
   try {
     const ctx = browser.contexts()[0];
     const extOk = await waitForExtension(ctx);
@@ -161,8 +221,7 @@ async function diagnose(opts) {
       ? "VERDICT: past Cloudflare + extension loaded, but no decoration — check login / selectors."
       : "VERDICT: extension didn't load — ensure Developer mode is ON + the dev build is loaded in the seeded profile (see doc/layer4-cdp-real-host-loop.md).");
   } finally {
-    await browser.close().catch(() => {});
-    kill();
+    await shutdown();
   }
   process.exit(0);
 }
@@ -175,7 +234,7 @@ async function verify(opts) {
     process.exit(1);
   }
   log(`verify ${opts.url} (CDP, ${opts.headed ? "headed" : "headless"})`);
-  const { browser, kill } = await launchAttached({ profileDir, headless: !opts.headed });
+  const { browser, shutdown } = await launchAttached({ profileDir, headless: !opts.headed });
   let code = 1;
   try {
     const ctx = browser.contexts()[0];
@@ -213,8 +272,7 @@ async function verify(opts) {
   } catch (err) {
     log(`FAIL: ${err.message}`);
   } finally {
-    await browser.close().catch(() => {});
-    kill();
+    await shutdown();
   }
   process.exit(code);
 }
@@ -223,15 +281,14 @@ async function selfTest() {
   assertBuilt();
   const profileDir = mkdtempSync(join(tmpdir(), "saypi-l4cdp-selftest-"));
   log(`self-test (hermetic): temp profile ${profileDir}, about:blank`);
-  const { browser, kill } = await launchAttached({ profileDir, headless: true, loadExtension: true });
+  const { browser, shutdown } = await launchAttached({ profileDir, headless: true, loadExtension: true });
   let ok = false;
   try {
     const ctx = browser.contexts()[0];
     ok = await waitForExtension(ctx);
     log(ok ? "OK: extension service worker loaded over CDP" : "FAIL: no extension SW");
   } finally {
-    await browser.close().catch(() => {});
-    kill();
+    await shutdown();
   }
   process.exit(ok ? 0 : 1);
 }
