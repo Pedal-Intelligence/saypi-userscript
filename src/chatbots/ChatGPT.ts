@@ -186,8 +186,29 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
-    const menuContainer = sidebar.querySelector('aside');
+    // ChatGPT removed the <aside> menu wrapper (verified live 2026-06-20), so the old
+    // `sidebar.querySelector('aside')` matched nothing and the settings button was never
+    // added (#352). Re-anchor on the stable "New chat" menu item instead.
+    //
+    // There are two copies of the New-chat item: the always-present collapsed rail
+    // (#stage-sidebar-tiny-bar, which is opacity-0/pointer-events-none) and the expanded
+    // sidebar. Pick the one NOT inside the tiny bar so our button is visible.
+    const newChats = Array.from(
+      sidebar.querySelectorAll('[data-testid="create-new-chat-button"]')
+    ) as HTMLElement[];
+    const newChat =
+      newChats.find((b) => !b.closest('#stage-sidebar-tiny-bar')) || newChats[0];
+    if (!newChat) {
+      console.warn('[ChatGPT] sidebar: Could not find New chat menu item');
+      return null;
+    }
 
+    // The primary nav menu is the list holding New chat + Search — a <ul> of
+    // <li.list-none> rows on the expanded sidebar (fall back to the item's wrapper
+    // parent if the markup changes). createChatGPTMenuButton returns an <li> so it
+    // slots in natively.
+    const menuContainer = (newChat.closest('ul') ||
+      newChat.parentElement?.parentElement) as HTMLElement | null;
     if (!menuContainer) {
       console.warn('[ChatGPT] sidebar: Could not find menu container');
       return null;
@@ -202,7 +223,9 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   /**
-   * Creates a menu button matching ChatGPT's native sidebar button structure
+   * Creates a menu button matching ChatGPT's native sidebar button structure,
+   * wrapped in an <li class="list-none"> so it slots natively into the sidebar's
+   * <ul> menu list (#352).
    */
   private createChatGPTMenuButton(options: { label: string; icon: string | SVGElement; onClick: () => void }): HTMLElement {
     const { label, icon, onClick } = options;
@@ -263,7 +286,14 @@ class ChatGPTChatbot extends AbstractChatbot {
     button.appendChild(iconContainer);
     button.appendChild(labelContainer);
 
-    return button;
+    // ChatGPT's expanded sidebar nests each menu item in <li class="list-none">
+    // inside the <ul> list; wrap our button to match (#352). The interactive
+    // element (classes/handlers/aria) remains the inner div.
+    const listItem = document.createElement('li');
+    listItem.className = 'list-none';
+    listItem.appendChild(button);
+
+    return listItem;
   }
 
   private findChatGPTSubmitButton(): HTMLElement | null {
