@@ -100,6 +100,9 @@ button {
 .justify-center {
   justify-content: center;
 }
+.flex-grow {
+  flex-grow: 1;
+}
 
 /* sizing */
 .w-full {
@@ -124,6 +127,12 @@ button {
 }
 .mt-2 {
   margin-top: 0.5rem;
+}
+.ml-2 {
+  margin-left: 0.5rem;
+}
+.mr-2 {
+  margin-right: 0.5rem;
 }
 .px-2 {
   padding-left: 0.5rem;
@@ -157,6 +166,9 @@ button {
 }
 
 /* backgrounds */
+.bg-blue-500 {
+  background-color: #3b82f6;
+}
 .bg-blue-600 {
   background-color: #2563eb;
 }
@@ -173,6 +185,9 @@ button {
 }
 .text-gray-500 {
   color: #6b7280;
+}
+.text-gray-600 {
+  color: #4b5563;
 }
 .text-gray-700 {
   color: #374151;
