@@ -54,6 +54,37 @@ export function classifyConsoleLine(text = "") {
 }
 
 /**
+ * SayPi's own TTS engine (synthesis served from the SayPi domain) reports this
+ * provider name in the "Speech provided by …" log (src/tts/SpeechModel.ts). It is
+ * the ONLY value that means SayPi's synthesis/playback path actually ran. By
+ * contrast "Pi" is pi.ai's NATIVE voice (SayPi just relays Pi's own audio), "None"
+ * is voice-off, and ChatGPT uses its native Read Aloud — none of those exercise
+ * SayPi's TTS engine. Lenient about case/whitespace.
+ */
+export const SAYPI_TTS_PROVIDER = "Say, Pi";
+export function isSaypiTtsProvider(name) {
+  return typeof name === "string" && name.trim().toLowerCase() === SAYPI_TTS_PROVIDER.toLowerCase();
+}
+
+/**
+ * Decide, across a run's per-host summaries, whether the sweep actually exercised
+ * SayPi's TTS engine, and whether it was authenticated. Pure. Drives the honest
+ * end-of-run coverage warnings — a native "Pi" voice must NOT read as TTS-covered.
+ */
+export function ttsCoverage(summaries = []) {
+  const perHost = summaries.map((s) => ({
+    host: s.host ?? null,
+    voiceProvider: s.voiceProvider ?? null,
+    saypiTtsExercised: isSaypiTtsProvider(s.voiceProvider),
+  }));
+  return {
+    perHost,
+    anySaypiTts: perHost.some((h) => h.saypiTtsExercised),
+    anyAuthed: summaries.some((s) => s.authStatus === true),
+  };
+}
+
+/**
  * Reduce a captured evidence object to a flat, comparable summary. Pure — takes
  * the shape the harness writes (console[], pageErrors[], requestFailed[], ...).
  */

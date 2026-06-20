@@ -26,7 +26,10 @@ conversation, and screenshots.
 3. **Dev build at HEAD:** `npm run e2e:build` (the profile-installed unpacked extension
    re-reads `.output/chrome-mv3-dev` from disk on each launch, so rebuilding at HEAD =
    the sweep tests current `main`; confirm via the `data-saypi-build` stamp the sweep
-   logs).
+   logs). **If the build fails with `Rollup failed to resolve import "<pkg>"` (e.g.
+   `preact`), your local `node_modules` is stale after a recent merge — run `npm install`
+   and rebuild.** A stale build that loads but doesn't decorate shows up as
+   `layer4cdp:diagnose` reporting "extension loaded YES, no decoration".
 4. **`cf_clearance` fresh:** `npm run layer4cdp:diagnose` must say **VERDICT: usable**.
    If it says blocked, re-seed (`npm run layer4cdp:seed`, pass the Cloudflare checkbox,
    Cmd-Q).
@@ -39,11 +42,19 @@ silently skips. To cover it, once, in the seeded profile's headed window
 (`npm run layer4cdp:seed`):
 
 - **Sign into your SayPi account** (saypi.ai) so the extension has a JWT.
-- **Select a voice** in the SayPi voice menu on one host.
+- **Select a _SayPi_ voice on claude.ai** (e.g. an ElevenLabs voice) — **not** pi.ai's
+  native voice. This is the key nuance: the sweep only counts SayPi's TTS engine as
+  exercised when the active provider is **`Say, Pi`** (`isSaypiTtsProvider`). A pi.ai
+  turn logs `Speech provided by Pi` (pi.ai's *native* voice — SayPi just relays it),
+  `None` is voice-off, and ChatGPT uses native Read Aloud — none of those run SayPi's
+  synthesis/playback path. claude.ai has no native voice, so selecting a SayPi voice
+  there is the clean way to exercise the engine (offscreen audio under CSP, credits, the
+  #238/#241/#268 cluster).
 
 Then Cmd-Q. The sweep logs `auth=` and `voice=` per host and prints a loud ⚠️ if it
-detects the account is unauthenticated or no voice is selected — so a run always tells
-you whether it actually covered TTS. (Caveat: auth/voice state is read from SayPi's
+detects the account is unauthenticated **or that SayPi's TTS engine (`Say, Pi`) was never
+the active provider** (a native `Pi`/`None`/Read-Aloud run does NOT satisfy it) — so a
+run always tells you, honestly, whether it actually covered SayPi TTS. (Caveat: auth/voice state is read from SayPi's
 **debug** console logs, which the dev build emits — `npm run e2e:build` sets
 `VITE_DEBUG_LOGS=true`. If debug logging is off, both stay `null` and the warning may
 fire even when authed; treat the warning as "couldn't confirm coverage", and corroborate
