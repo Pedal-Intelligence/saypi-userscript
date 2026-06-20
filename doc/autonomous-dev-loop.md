@@ -377,6 +377,30 @@ from the page main world, which the MCP `javascript_tool` *can* reach. Source:
   `__saypiOffscreenTestHooks.feedSyntheticSpeech(tabId)`
   (`e2e/specs/synthetic-audio-stt.e2e.ts`).
 
+## Driving Claude / ChatGPT turns autonomously (Path 1 — interactive, via this MCP)
+
+The two hooks above make **Claude and ChatGPT** drivable without the founder right
+here in the MCP loop — and unlike Layer 3.5, there is **no Cloudflare or
+`--load-extension` problem**, because this is your real, already-authenticated
+browser with the extension installed normally. Recipe, per Claude/ChatGPT tab:
+
+1. Ensure the dev build is loaded (version stamp on `<html data-saypi-build>` matches
+   HEAD) and you're logged in. Open the chat tab in the MCP tab group.
+2. **Reload after an edit:** `javascript_tool` →
+   `window.dispatchEvent(new CustomEvent("saypi:dev-reload"))`, then reconfirm the
+   build stamp.
+3. **Drive a voice turn (no mic):** `javascript_tool` →
+   `window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", {detail:{loop:true}}))`,
+   then click `#saypi-callButton`.
+4. **Assert** via DOM reads / the `__cap`/`__probe` buffers. Note Claude's composer is
+   contenteditable (ProseMirror), not a textarea — assert against the contenteditable's
+   text, not a `.value`.
+
+For **unattended/cron** Claude/ChatGPT runs (no MCP), use **Layer 4 (CDP)** —
+`doc/layer4-cdp-real-host-loop.md` — which spawns real Chrome over CDP and drives the
+same hooks. Its only caveat is Cloudflare `cf_clearance` upkeep (measured by
+`npm run layer4cdp:diagnose`); this interactive path has none.
+
 ## Boundaries
 
 - **Mic: synthetic source covers VAD→STT autonomously** (the `saypi:dev-feed-speech`
