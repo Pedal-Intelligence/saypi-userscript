@@ -10,12 +10,12 @@ It proves the bits unit tests can't: that the bundled content script actually
 decorates a chatbot page, and that a spoken clip travels the full voice-input
 pipeline (fake mic → VAD → STT → prompt) end to end.
 
-> **Status: ADVISORY.** The CI job ([.github/workflows/e2e.yaml](../.github/workflows/e2e.yaml))
-> runs on every PR and push to `main` but is **not** a required merge check and is
-> **not** part of the `npm test` aggregate. Treat a red E2E run as a signal to
-> investigate, not as a merge blocker. Promotion to a required check is a
-> deliberate, founder-signed gate change once the suite has proven stable on CI
-> runners.
+> **Status: REQUIRED.** The CI job ([.github/workflows/e2e.yaml](../.github/workflows/e2e.yaml))
+> runs on every PR and push to `main` and is a **required** status check — a red
+> E2E run blocks merge. It is still **not** part of the `npm test` aggregate (it
+> stays a separate workflow). Promoted from advisory to required on 2026-06-20
+> after the suite proved stable on CI runners (five consecutive first-attempt-green
+> runs across distinct, non-docs-only PRs: #289, #294, #295, #328, #335).
 
 ## Run it locally
 
@@ -176,8 +176,9 @@ of those bugs lived — the layer that was previously only reachable with hand-r
 `chrome.runtime` port mocks (L1). `support/lifecycle.ts` is the reusable capability;
 future lifecycle specs should build on it. Both events are driven by **explicit,
 deterministic triggers — never a wall-clock idle wait** (the single biggest flake
-trap here), and these specs are the most timing-sensitive in the suite, so they do
-**not** advance the e2e→required stability bar.
+trap here), and these specs are the most timing-sensitive in the suite, so they were
+intentionally kept out of the e2e→required stability-bar count (that bar has since
+been reached and e2e is now a required check).
 
 Four facts make this work (each verified live against the bundled Chromium):
 
@@ -224,13 +225,13 @@ tests, but it also carries risk that unit tests don't:
   (`npx playwright install chromium`); the WAV regeneration tooling (`say`,
   `ffmpeg`) is macOS-flavoured; ephemeral-port binding and self-signed TLS can
   collide with aggressive local firewalls/VPNs.
-- **CI risk (why it stays advisory):** headless Chromium + fake-audio + WASM-VAD
+- **CI risk (now a required check):** headless Chromium + fake-audio + WASM-VAD
   on shared Ubuntu runners is inherently timing-sensitive — the VAD's
   speech-end detection and the SW upload race can flake under load. CI runs with
-  2 retries and uploads the trace on failure, but until the suite shows a stable
-  green streak on CI runners it stays **advisory** rather than required. Promote
-  it only with founder sign-off, not by quietly adding it to required checks or
-  the `test` aggregate.
+  2 retries and uploads the trace on failure. The suite earned promotion to a
+  **required** check (2026-06-20) after a stable green streak on CI runners; it
+  remains a separate workflow rather than part of the `npm test` aggregate. If
+  it starts flaking under load, fix the flake — don't silently demote it.
 
 When this suite is red, first reproduce locally with `npm run e2e:build &&
 npm run test:e2e`; if it's green locally but red on CI, suspect timing/flake and
