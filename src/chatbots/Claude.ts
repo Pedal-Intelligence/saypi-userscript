@@ -297,7 +297,10 @@ class ClaudeChatbot extends AbstractChatbot {
 
 // Claude response parsing moved to ./claude/ClaudeResponse.ts
 
-function findAndDecorateCustomPlaceholderElement(
+// Exported for contract testing (#351): tests assert the clone is inserted as the
+// next sibling of #saypi-prompt — the adjacency claude.scss keys its native-placeholder
+// suppression off.
+export function findAndDecorateCustomPlaceholderElement(
   prompt: HTMLElement
 ): Observation {
   const existing = prompt.parentElement?.querySelector("#claude-placeholder");
