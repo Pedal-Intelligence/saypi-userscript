@@ -17,6 +17,7 @@ declare module "wxt/browser" {
     | "/audio/startup-synth.mp3"
     | "/audio/switch-off.mp3"
     | "/audio/switch-on.mp3"
+    | "/audio/synthetic-speech.wav"
     | "/audio/test-tone.mp3"
     | "/audio/turn-off.mp3"
     | "/background.js"
