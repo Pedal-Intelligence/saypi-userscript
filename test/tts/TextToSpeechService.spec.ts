@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
-import type { SpyInstance } from "vitest";
+import type { MockInstance } from "vitest";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { mockVoices } from "../data/Voices";
 import { audioProviders } from "../../src/tts/SpeechModel";
@@ -21,7 +21,7 @@ vi.mock("../../src/usage/VersionManager");
 describe("TextToSpeechService", () => {
   let textToSpeechService: TextToSpeechService;
   const mockVoice = mockVoices[0];
-  let getAppIdSpy: SpyInstance;
+  let getAppIdSpy: MockInstance;
 
   beforeEach(async () => {
     // Ensure ChatbotIdentifier returns 'pi' for these tests regardless of host
@@ -217,7 +217,7 @@ describe("TextToSpeechService", () => {
 
     textToSpeechService = new TextToSpeechService("http://example.com");
     (textToSpeechService as any).keepAliveRateLimiter = new KeepAliveRateLimiter({
-      warn: warnSpy,
+      warn: warnSpy as unknown as (message?: any, ...optionalParams: any[]) => void,
       now: () => Date.now(),
     });
 

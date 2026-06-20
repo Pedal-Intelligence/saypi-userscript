@@ -314,7 +314,7 @@ class OffscreenManager {
       pendingAudio: this.pendingAudioMessages.size
     });
 
-    port.onMessage.addListener(async (message) => {
+    port.onMessage.addListener(async (message: any) => {
       // Add specific logging for audio messages
       if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
         logger.debug(`[OffscreenManager] Port received audio message: ${message.type}`, {

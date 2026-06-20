@@ -63,7 +63,7 @@ export class DictationTab implements TabController {
       const select = pickerElement.querySelector('select');
       if (select) {
         select.addEventListener('change', function() {
-          chrome.storage.local.set({ language: (this as HTMLSelectElement).value }, function() {
+          chrome.storage.local.set({ language: (this as HTMLSelectElement).value }, function(this: any) {
             console.log('Preference saved: Language is set to ' + (this as any).value);
           });
         });

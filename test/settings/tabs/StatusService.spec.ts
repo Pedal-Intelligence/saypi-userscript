@@ -93,7 +93,7 @@ describe('StatusService', () => {
       expect(result.message).toBe('All clear');
       expect(result.incidents).toHaveLength(1);
 
-      const ttsComponent = result.components?.find((component) => component.name === 'Text-to-Speech');
+      const ttsComponent = result.components?.find((component: any) => component.name === 'Text-to-Speech');
       expect(ttsComponent?.providers?.elevenlabs?.errors).toBe(2);
       expect(ttsComponent?.providers?.elevenlabs?.quota?.remaining_pct).toBe(12.5);
       expect(ttsComponent?.providers?.elevenlabs?.quota_extend_enabled).toBe(true);

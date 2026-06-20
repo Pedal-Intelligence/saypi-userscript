@@ -15,7 +15,7 @@
  * 7. Close the auth tab
  */
 
-import { browser } from 'wxt/browser';
+import { browser, Browser } from 'wxt/browser';
 import { config } from '../ConfigModule';
 import { logger } from '../LoggingModule';
 import {
@@ -186,8 +186,8 @@ export async function authenticateWithTabBasedPKCE(): Promise<OAuthResult> {
   let authTabId: number | undefined;
   let tabListener: ((
     tabId: number,
-    changeInfo: browser.Tabs.OnUpdatedChangeInfoType,
-    tab: browser.Tabs.Tab
+    changeInfo: Browser.tabs.OnUpdatedInfo,
+    tab: Browser.tabs.Tab
   ) => void) | undefined;
   let removeListener: ((tabId: number) => void) | undefined;
   let timeoutId: ReturnType<typeof setTimeout> | undefined;

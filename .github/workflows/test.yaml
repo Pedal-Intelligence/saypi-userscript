@@ -38,6 +38,17 @@ jobs:
         npm_config_fetch_retry_mintimeout: 20000
         npm_config_fetch_retry_maxtimeout: 120000
     
+    # The type-check (`tsc --noEmit`, now run first by `npm test` via the
+    # `typecheck` script) depends on WXT's generated types in .wxt/: the typed
+    # `browser.runtime.getURL` augmentation, i18n keys, and the `.wxt/tsconfig.json`
+    # the root tsconfig extends. .wxt/ is committed, but this step regenerates it to
+    # match the CURRENT wxt.config.ts/entrypoints, so the gate can't pass against a
+    # stale committed snapshot. CI-safe: `wxt prepare` resolves config in production
+    # mode, but `.env.production` is gitignored (founder-only) and absent in CI, so
+    # dotenv injects 0 vars — no secrets are read.
+    - name: Refresh WXT types (.wxt) for type-checking
+      run: npx wxt prepare
+
     - name: Run tests
       run: npm test
 

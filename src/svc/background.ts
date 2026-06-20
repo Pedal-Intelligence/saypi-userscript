@@ -1,4 +1,4 @@
-import { browser } from "wxt/browser";
+import { browser, Browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
@@ -71,7 +71,7 @@ async function openSettingsWindow() {
 /**
  * Find an existing settings tab if one is already open
  */
-async function findExistingSettingsTab(settingsUrl: string): Promise<browser.Tabs.Tab | null> {
+async function findExistingSettingsTab(settingsUrl: string): Promise<Browser.tabs.Tab | null> {
   try {
     // Query all tabs for our settings URL
     const tabs = await browser.tabs.query({ url: settingsUrl });

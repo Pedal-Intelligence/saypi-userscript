@@ -60,7 +60,7 @@ describe('Background API Request Handler', () => {
       headers: init?.headers || new Headers(),
       text: vi.fn().mockResolvedValue(body || ''),
       json: vi.fn().mockResolvedValue(JSON.parse(body || '{}'))
-    }));
+    })) as unknown as typeof Response;
   });
 
   afterEach(() => {

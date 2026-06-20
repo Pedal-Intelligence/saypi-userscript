@@ -5,12 +5,13 @@
 
 import { JSDOM } from 'jsdom';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 
 // Mock chrome APIs
 global.chrome = {
   i18n: {
-    getMessage: vi.fn((key, placeholders) => {
-      const messages = {
+    getMessage: vi.fn((key: string, placeholders?: any) => {
+      const messages: Record<string, string> = {
         'submit_mode_auto': 'auto',
         'submit_mode_agent': 'agent',
         'submit_mode_off': 'off',
@@ -30,11 +31,11 @@ global.chrome = {
   runtime: {
     sendMessage: vi.fn()
   }
-};
+} as unknown as typeof chrome;
 
 describe('Agent Mode Label Initialization', () => {
-  let document;
-  let window;
+  let document: Document;
+  let window: Window;
   
   beforeEach(() => {
     const dom = new JSDOM(`
@@ -65,14 +66,14 @@ describe('Agent Mode Label Initialization', () => {
       </html>
     `);
     document = dom.window.document;
-    window = dom.window;
+    window = dom.window as unknown as Window;
 
     // Set up DOM context (no need to assign to globals in test)
   });
 
   it('should initialize with correct label when submit mode is "agent"', async () => {
     // Mock storage to return "agent" mode
-    chrome.storage.local.get.mockImplementation((keys, callback) => {
+    (chrome.storage.local.get as unknown as Mock).mockImplementation((keys: any, callback: any) => {
       if (keys.includes('submitMode') || keys === 'submitMode') {
         callback({ submitMode: 'agent' });
       } else {
@@ -81,7 +82,7 @@ describe('Agent Mode Label Initialization', () => {
     });
 
     // Mock entitlement check to return true
-    chrome.runtime.sendMessage.mockImplementation((message, callback) => {
+    (chrome.runtime.sendMessage as unknown as Mock).mockImplementation((message: any, callback: any) => {
       if (message.type === 'CHECK_FEATURE_ENTITLEMENT') {
         callback({ hasEntitlement: true });
       }
@@ -94,17 +95,17 @@ describe('Agent Mode Label Initialization', () => {
       2: "off",
     };
 
-    const submitModeSlider = document.getElementById("submitModeRange");
-    const submitModeOutput = document.getElementById("submitModeValue");
+    const submitModeSlider = document.getElementById("submitModeRange") as HTMLInputElement;
+    const submitModeOutput = document.getElementById("submitModeValue") as HTMLElement;
 
     // Simulate getting stored value
     const submitMode = "agent";
     const selectedValue = Object.keys(submitModeIcons).find(
-      (key) => submitModeIcons[key] === submitMode
+      (key) => submitModeIcons[key as unknown as keyof typeof submitModeIcons] === submitMode
     );
     
     // Apply the fix: set slider value and label
-    submitModeSlider.value = selectedValue;
+    submitModeSlider.value = selectedValue as string;
     const messageKey = "submit_mode_" + submitMode;
     submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
 
@@ -117,7 +118,7 @@ describe('Agent Mode Label Initialization', () => {
 
   it('should set active icon state for agent mode', async () => {
     // Mock storage to return "agent" mode
-    chrome.storage.local.get.mockImplementation((keys, callback) => {
+    (chrome.storage.local.get as unknown as Mock).mockImplementation((keys: any, callback: any) => {
       if (keys.includes('submitMode') || keys === 'submitMode') {
         callback({ submitMode: 'agent' });
       } else {
@@ -134,19 +135,19 @@ describe('Agent Mode Label Initialization', () => {
     // Simulate the setActiveSubmitModeIcon function
     const submitMode = "agent";
     Object.keys(submitModeIcons).forEach((key) => {
-      const iconId = submitModeIcons[key];
+      const iconId = submitModeIcons[key as unknown as keyof typeof submitModeIcons];
       const iconElement = document.getElementById(iconId);
       if (iconId === submitMode) {
-        iconElement.classList.add("active");
+        iconElement!.classList.add("active");
       } else {
-        iconElement.classList.remove("active");
+        iconElement!.classList.remove("active");
       }
     });
 
     // Verify that only the agent icon is active
-    expect(document.getElementById("auto").classList.contains("active")).toBe(false);
-    expect(document.getElementById("agent").classList.contains("active")).toBe(true);
-    expect(document.getElementById("off").classList.contains("active")).toBe(false);
+    expect(document.getElementById("auto")!.classList.contains("active")).toBe(false);
+    expect(document.getElementById("agent")!.classList.contains("active")).toBe(true);
+    expect(document.getElementById("off")!.classList.contains("active")).toBe(false);
   });
 
   it('should show correct description for agent mode', async () => {
@@ -154,7 +155,7 @@ describe('Agent Mode Label Initialization', () => {
     
     // Simulate the showSubmitModeDescription function
     const descriptions = document.querySelectorAll("#submit-mode-selector .description");
-    descriptions.forEach((description) => {
+    descriptions.forEach((description: Element) => {
       if (
         description.getAttribute("data-i18n") ===
         `submit_mode_${submitMode}_description`
@@ -170,8 +171,8 @@ describe('Agent Mode Label Initialization', () => {
     const agentDesc = document.querySelector('[data-i18n="submit_mode_agent_description"]');
     const offDesc = document.querySelector('[data-i18n="submit_mode_off_description"]');
 
-    expect(autoDesc.classList.contains("selected")).toBe(false);
-    expect(agentDesc.classList.contains("selected")).toBe(true);
-    expect(offDesc.classList.contains("selected")).toBe(false);
+    expect(autoDesc!.classList.contains("selected")).toBe(false);
+    expect(agentDesc!.classList.contains("selected")).toBe(true);
+    expect(offDesc!.classList.contains("selected")).toBe(false);
   });
 });

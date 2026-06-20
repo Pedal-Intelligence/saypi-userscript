@@ -144,7 +144,7 @@ describe('DictationMachine', () => {
       expect(service.state.value).toEqual({ errors: 'micError' });
     });
 
-    it('should return to idle from error states after timeout', (done) => {
+    it('should return to idle from error states after timeout', (done: () => void) => {
       service.send('saypi:startDictation', { targetElement: inputElement1 });
       service.send('saypi:callFailed');
       

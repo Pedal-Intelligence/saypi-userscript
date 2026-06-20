@@ -1,4 +1,5 @@
 import { browser } from "wxt/browser";
+import type { PublicPath } from "wxt/browser";
 import { createIcons, icons } from "lucide";
 import { initIcons, refreshIcons } from "./components/icons";
 import { SettingsHeader } from "./components/header";
@@ -33,7 +34,7 @@ const setStaticIcons = () => {
   document.querySelectorAll<HTMLImageElement>("[data-icon]").forEach((img) => {
     const asset = img.dataset.icon;
     if (!asset) return;
-    img.src = browser.runtime.getURL(`icons/${asset}`);
+    img.src = browser.runtime.getURL(`icons/${asset}` as PublicPath);
   });
 };
 

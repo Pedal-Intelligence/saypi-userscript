@@ -55,7 +55,7 @@ export class BillingModule {
   }
 
   registerEventListeners() {
-    EventBus.on("saypi:piStoppedWriting", ({ utterance, text }) => {
+    EventBus.on("saypi:piStoppedWriting", ({ utterance, text }: { utterance: SpeechUtterance; text: string }) => {
       if (isPlaceholderUtterance(utterance)) {
         // we do not charge for placeholder utterances because we didn't generate their TTS audio
         return;
