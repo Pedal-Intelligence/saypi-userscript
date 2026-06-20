@@ -17,6 +17,9 @@ import getMessage from "../i18n";
 import { logger } from "../LoggingModule";
 import { IconModule } from "../icons/IconModule";
 import { ChatbotService } from "../chatbots/ChatbotService";
+import { h, render } from "preact";
+import { Notice } from "../ui/Notice";
+import { findNoticeInjectionPoint } from "../ui/notice/findNoticeInjectionPoint";
 import type { Chatbot } from "../chatbots/Chatbot";
 import type { CompatibilityIssue } from "./BrowserCompatibilityModule";
 
@@ -149,52 +152,41 @@ export class CompatibilityNotificationUI {
   private async showTTSUnavailableNotice(issue: CompatibilityIssue): Promise<void> {
     await this.hideNotice(); // Remove any existing notice
 
-    const notice = document.createElement("div");
-    notice.className = "saypi-compat-notice";
-    notice.setAttribute("data-issue-key", this.getIssueKey(issue));
-
-    // Notice content
-    const content = document.createElement("div");
-    content.className = "saypi-compat-notice-content";
-
-    // Icon (Lucide info)
-    const iconContainer = document.createElement("div");
-    iconContainer.className = "saypi-compat-notice-icon";
-
+    // Build the info icon as raw SVG (carrying its class + size), emoji fallback.
+    let iconSvg: string | null = null;
     try {
       const infoIcon = IconModule.info.cloneNode(true) as SVGElement;
       infoIcon.setAttribute("class", "saypi-compat-notice-info-icon");
       infoIcon.setAttribute("width", "20");
       infoIcon.setAttribute("height", "20");
-      iconContainer.appendChild(infoIcon);
+      iconSvg = infoIcon.outerHTML;
     } catch (error) {
       logger.warn("Failed to load info icon for compat notice", error);
-      iconContainer.innerHTML = "ℹ️";
+      iconSvg = null;
     }
-
-    content.appendChild(iconContainer);
-
-    // Text content
-    const textContainer = document.createElement("div");
-    textContainer.className = "saypi-compat-notice-text";
 
     const message = getMessage('ttsUnavailableBrowserChatbot', [
       issue.browserName,
       issue.chatbotName
     ]);
-    textContainer.textContent = message;
 
-    content.appendChild(textContainer);
-
-    // Close button
-    const closeButton = document.createElement("button");
-    closeButton.className = "saypi-compat-notice-close";
-    closeButton.setAttribute("aria-label", getMessage("dismissNotice") || "Dismiss");
-    closeButton.innerHTML = "×";
-    closeButton.addEventListener("click", () => this.dismissNotice(issue));
-
-    content.appendChild(closeButton);
-    notice.appendChild(content);
+    // Render the shared <Notice> component into a detached host, then take its
+    // root element. Injection + show/hide animation + dismissal stay below,
+    // unchanged, operating on that element.
+    const host = document.createElement("div");
+    render(
+      h(Notice, {
+        variant: "compat",
+        dataAttr: { name: "data-issue-key", value: this.getIssueKey(issue) },
+        iconSvg,
+        iconFallback: "ℹ️",
+        bodyText: message,
+        dismissLabel: getMessage("dismissNotice") || "Dismiss",
+        onDismiss: () => this.dismissNotice(issue),
+      }),
+      host,
+    );
+    const notice = host.firstElementChild as HTMLElement;
 
     // Inject into DOM
     await this.injectNotice(notice);
@@ -231,30 +223,9 @@ export class CompatibilityNotificationUI {
    * Same logic as AgentModeNoticeModule
    */
   private findInjectionPoint(chatbotId: string): HTMLElement | null {
-    // Primary approach: Use universal #saypi-chat-ancestor if available
-    const chatAncestor = document.querySelector("#saypi-chat-ancestor") as HTMLElement;
-    if (chatAncestor) {
-      return chatAncestor;
-    }
-
-    // Fallback to chatbot-specific selectors
-    switch (chatbotId) {
-      case "chatgpt":
-        return document.querySelector('form[data-type="unified-composer"]') as HTMLElement;
-
-      case "claude":
-        return document.querySelector("fieldset.w-full") as HTMLElement;
-
-      case "pi":
-        return document.querySelector("#saypi-prompt-controls-container")?.parentElement as HTMLElement ||
-               document.querySelector(".saypi-prompt-container") as HTMLElement;
-
-      default:
-        // Generic fallback
-        return document.querySelector("#saypi-prompt-controls-container")?.parentElement as HTMLElement ||
-               document.querySelector(".saypi-prompt-container") as HTMLElement ||
-               document.querySelector('form[data-type="unified-composer"]') as HTMLElement;
-    }
+    // Delegates to the shared helper (formerly duplicated byte-for-byte in
+    // AgentModeNoticeModule).
+    return findNoticeInjectionPoint(chatbotId);
   }
 
   /**
