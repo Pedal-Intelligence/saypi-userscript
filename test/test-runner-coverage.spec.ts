@@ -29,7 +29,7 @@ const TEST_FILE = /\.(test|spec)\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/;
 // These MUST mirror the runner configs:
 const RUNNERS = [
   { name: "Jest (**/*.test.js)", match: /\.test\.js$/ }, // package.json -> jest.testMatch
-  { name: "Vitest (**/*.spec.ts)", match: /\.spec\.ts$/ }, // vitest.config.js -> test.include
+  { name: "Vitest (**/*.spec.{ts,tsx})", match: /\.spec\.tsx?$/ }, // vitest.config.js -> test.include
 ];
 
 function trackedTestFiles(): string[] {
