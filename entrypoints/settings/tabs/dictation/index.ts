@@ -1,7 +1,9 @@
+import { h } from 'preact';
 import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
 import { sendMessageToActiveTab } from '../../shared/messaging';
-import dictationHTML from './dictation.html?raw';
+import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
+import { DictationPanel } from './DictationPanel';
 import './dictation.css';
 
 declare global {
@@ -17,22 +19,24 @@ export class DictationTab implements TabController {
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
-    console.info('[DictationTab] Initializing...', { 
-      hasContainer: !!this.container,
-      htmlLength: dictationHTML?.length || 0,
-      htmlType: typeof dictationHTML
-    });
-    
-    this.container.innerHTML = dictationHTML;
-    
-    console.info('[DictationTab] HTML injected');
-    
+    // Render the panel with Preact, then wire the controls imperatively —
+    // behaviour unchanged: ModeSelector / LanguagePicker and the toggle setup
+    // methods operate on the rendered DOM by id/selector.
+    mountInto(this.container, h(DictationPanel, {}));
+
     await this.setupModeSelector();
     await this.setupLanguagePicker();
     await this.setupVADIndicator();
     await this.setupFillerWords();
+  }
 
-    console.info('[DictationTab] ✅ Initialized');
+  /**
+   * Clean up when the tab is destroyed. Defensive — the orchestrator keeps tabs
+   * mounted (init runs once), but unmount the Preact tree if it is ever called.
+   */
+  destroy(): void {
+    this.modeSelector = null;
+    unmountFrom(this.container);
   }
   
   private async setupModeSelector(): Promise<void> {
