@@ -275,3 +275,90 @@ test("keeps tool-use active while tool content updates and stops when removed", 
   subscription.unsubscribe();
   message.remove();
 });
+
+// Faithful reproduction of claude.ai's extended-thinking disclosure (captured
+// live 2026-06-20, see issue #383). The visible headline lives in a
+// `transition-colors` button (already filtered), but a *sibling* `span.sr-only`
+// mirrors the same headline and—prior to the fix—leaked through the text filter.
+function buildClaudeThinkingDisclosure(headline: string): HTMLElement {
+  const block = document.createElement("div");
+  block.className = "min-w-0 pl-2 py-1.5";
+
+  const row = document.createElement("div");
+  row.className = "flex items-center gap-2";
+  const button = document.createElement("button");
+  // The collapse toggle carries `transition-colors`, so extractClaudeReadableText
+  // drops everything inside it (including the visible summary label).
+  button.className =
+    "group/status flex items-center gap-2 py-1 text-sm transition-colors cursor-pointer text-left text-text-500";
+  const labelWrap = document.createElement("div");
+  labelWrap.className = "inline-flex items-center gap-1 min-w-0";
+  const label = document.createElement("span");
+  label.className = "truncate font-base";
+  label.textContent = headline;
+  labelWrap.appendChild(label);
+  button.appendChild(labelWrap);
+  row.appendChild(button);
+  block.appendChild(row);
+
+  // The screen-reader announcer sits OUTSIDE the transition-colors button.
+  const srOnly = document.createElement("span");
+  srOnly.className = "sr-only";
+  srOnly.textContent = headline;
+  block.appendChild(srOnly);
+
+  // Collapsed thinking body (empty when settled, present throughout).
+  const collapsible = document.createElement("div");
+  collapsible.className = "grid transition-[grid-template-rows] duration-300 ease-out";
+  const inner = document.createElement("div");
+  inner.className = "overflow-hidden min-w-0";
+  collapsible.appendChild(inner);
+  block.appendChild(collapsible);
+
+  return block;
+}
+
+test("getNestedText excludes the extended-thinking sr-only summary preamble (#383)", async () => {
+  const { ClaudeTextStream } = await importClaude();
+
+  const root = document.createElement("div");
+  root.appendChild(buildClaudeThinkingDisclosure("Thinking about voice activity detection"));
+  const answer = document.createElement("p");
+  answer.textContent = "The answer is 408.";
+  root.appendChild(answer);
+
+  const stream = new ClaudeTextStream(root, { includeInitialText: false });
+  const extracted = stream.getNestedText(root).replace(/\s+/g, " ").trim();
+
+  // Only the answer is read aloud — not the thinking preamble (sr-only or label).
+  expect(extracted).toBe("The answer is 408.");
+  expect(extracted.includes("Thinking about voice activity detection")).toBe(false);
+});
+
+test("getNestedText stays stable as the thinking preamble cycles, so streamed text matches the message text (#383)", async () => {
+  const { ClaudeTextStream } = await importClaude();
+
+  const root = document.createElement("div");
+  const disclosure = buildClaudeThinkingDisclosure("Thinking about the question");
+  root.appendChild(disclosure);
+  const answer = document.createElement("p");
+  answer.textContent = "The answer is 408.";
+  root.appendChild(answer);
+
+  const stream = new ClaudeTextStream(root, { includeInitialText: false });
+  const first = stream.getNestedText(root).replace(/\s+/g, " ").trim();
+
+  // While Claude streams, the summary headline cycles through a sequence; the
+  // hash mismatch arises because the spoken stream accumulates every headline
+  // while the settled message text keeps only the last. After the fix the
+  // extracted text ignores the preamble entirely, so it never changes.
+  const label = disclosure.querySelector("span.truncate") as HTMLElement;
+  const srOnly = disclosure.querySelector("span.sr-only") as HTMLElement;
+  label.textContent = "Deciphering the details";
+  srOnly.textContent = "Deciphering the details";
+  const second = stream.getNestedText(root).replace(/\s+/g, " ").trim();
+
+  expect(first).toBe("The answer is 408.");
+  expect(second).toBe("The answer is 408.");
+  expect(first).toBe(second);
+});
