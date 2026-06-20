@@ -14,7 +14,12 @@
  *   - screenshots before / at-transcript / during-observe / final
  * Writes a JSON evidence file + PNGs per host under .output/e2e-host-sweep/<run>/.
  *
- *   node scripts/e2e-host-sweep.mjs [host ...] [--observe=<ms>] [--no-turn] [--headless]
+ * To actually exercise SayPi's TTS engine, the sweep AUTO-SELECTS a SayPi voice on
+ * claude.ai before the turn (default on; --no-select-voice opts out) — no founder
+ * pre-seed needed. pi.ai uses its native voice and chatgpt.com uses native Read
+ * Aloud, so SayPi-TTS self-selection only applies to claude.ai.
+ *
+ *   node scripts/e2e-host-sweep.mjs [host ...] [--observe=<ms>] [--no-turn] [--headless] [--no-select-voice]
  *   npm run e2e-host-sweep            # all three hosts, headed (the working mode)
  *
  * Real Chrome over CDP on the SEEDED profile (extension profile-installed). HEADED
@@ -100,11 +105,46 @@ const DIAGS = {
   }),
 };
 
+/**
+ * Auto-select a SayPi voice so the turn exercises SayPi's TTS engine (provider
+ * "Say, Pi"), removing the need to pre-seed a voice by hand. claude.ai is the clean
+ * target (no native voice → SayPi synthesis takes over). Drives the REAL selection
+ * path: open the menu, click the first real voice item (which fires setVoice). Other
+ * hosts: pi.ai defaults to its own native voice and chatgpt.com uses native Read
+ * Aloud, so there's nothing to select for SayPi-TTS purposes — returns null.
+ * Returns the selected voice name, or null if none was selected.
+ */
+async function selectSaypiVoice(page, host) {
+  if (host !== "claude") return null;
+  // Open the voice menu (toggle lives inside #claude-voice-selector); items portal
+  // to document.body as div[role="menuitem"][data-voice-name].
+  await page.evaluate(() => {
+    const toggle = document.querySelector(
+      "#claude-voice-selector button[aria-expanded], #claude-voice-selector button[aria-haspopup], #claude-voice-selector button"
+    );
+    if (toggle) toggle.click();
+  }).catch(() => {});
+  await page
+    .waitForFunction(() => document.querySelectorAll("[role='menuitem'][data-voice-name]").length > 0, undefined, { timeout: 12_000 })
+    .catch(() => {});
+  return page.evaluate(() => {
+    const item = [...document.querySelectorAll("[role='menuitem'][data-voice-name]")].find(
+      (i) => i.dataset.voiceName && i.dataset.voiceName !== "voice-off" && !i.dataset.action
+    );
+    if (!item) return null; // only voice-off / sign-in / upgrade items → no SayPi voice available
+    item.click(); // real path: handleVoiceSelection → setVoice (persists + applies)
+    // close the menu so it doesn't overlay the call button
+    const toggle = document.querySelector("#claude-voice-selector button[aria-expanded]");
+    if (toggle && toggle.getAttribute("aria-expanded") === "true") toggle.click();
+    return item.dataset.voiceName;
+  }).catch(() => null);
+}
+
 async function sweepHost(ctx, host, url, opts, outDir) {
   const ev = {
     host, url, decorated: false, cloudflareBlocked: false, build: null,
     transcript: null, autoSubmitted: false, assistantReplied: false,
-    authStatus: null, voiceProvider: null,
+    authStatus: null, voiceProvider: null, selectedVoice: null,
     console: [], pageErrors: [], network: [], requestFailed: [],
     domDiagnostics: {}, errorToasts: [], notes: [],
   };
@@ -144,6 +184,17 @@ async function sweepHost(ctx, host, url, opts, outDir) {
     ev.domDiagnostics = await page.evaluate(DIAGS[host]).catch((e) => ({ error: e.message }));
 
     if (!ev.decorated) { ev.notes.push("not decorated — selector drift or logged out"); return ev; }
+
+    // Auto-select a SayPi voice (default on) so the turn exercises SayPi's TTS engine.
+    if (opts.selectVoice && !opts.noTurn) {
+      ev.selectedVoice = await selectSaypiVoice(page, host);
+      if (ev.selectedVoice) {
+        log(`${host}: selected SayPi voice "${ev.selectedVoice}"`);
+        await new Promise((r) => setTimeout(r, 2000)); // let setVoice persist + changeVoice propagate
+      } else if (host === "claude") {
+        ev.notes.push("no SayPi voice available to select (TTS quota / sign-in?) — SayPi TTS engine not exercised");
+      }
+    }
 
     if (!opts.noTurn) {
       await page.evaluate(() => window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: false } })));
@@ -225,7 +276,7 @@ async function main() {
       const ev = await sweepHost(ctx, key, url, opts, outDir);
       const s = summarize(ev);
       summaries.push(s);
-      log(`${key}: decorated=${s.decorated} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
+      log(`${key}: decorated=${s.decorated} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
     }
   } finally {
     writeFileSync(join(outDir, "summary.json"), JSON.stringify(summaries, null, 2));

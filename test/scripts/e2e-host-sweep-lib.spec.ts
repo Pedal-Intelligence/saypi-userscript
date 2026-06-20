@@ -21,12 +21,16 @@ describe("HOSTS registry", () => {
 });
 
 describe("parseSweepArgs", () => {
-  it("defaults to all hosts, headed, with the default observe window and a turn", () => {
+  it("defaults to all hosts, headed, with the default observe window, a turn, and voice self-selection", () => {
     const a = parseSweepArgs([]);
     expect(a.hosts).toEqual(["pi", "claude", "chatgpt"]);
     expect(a.headed).toBe(true);
     expect(a.noTurn).toBe(false);
     expect(a.observeMs).toBe(DEFAULT_OBSERVE_MS);
+    expect(a.selectVoice).toBe(true); // auto-select a SayPi voice by default → TTS covered
+  });
+  it("--no-select-voice opts out of voice self-selection (to test the voice-off path)", () => {
+    expect(parseSweepArgs(["--no-select-voice"]).selectVoice).toBe(false);
   });
   it("selects a subset by host key, preserving the requested set", () => {
     expect(parseSweepArgs(["chatgpt", "pi"]).hosts).toEqual(["chatgpt", "pi"]);
