@@ -50,7 +50,7 @@ WXT discovers entry points in **`entrypoints/`**; each is a thin shim that impor
 - **entrypoints/saypi-universal.content.ts** - Content script for universal dictation on all other sites
 - **entrypoints/background.ts → src/svc/background.ts** - Service worker handling extension lifecycle, auth, and message routing
 - **entrypoints/offscreen/ → src/offscreen/** - Single offscreen document for audio/VAD processing under strict CSP (Chrome/Edge only)
-- **entrypoints/settings/** - Extension settings page UI (shared styles/helpers in `src/popup/`)
+- **entrypoints/settings/** - Extension settings page UI: each tab is a Preact `*Panel.tsx` paired with an imperative controller (`index.ts`) that wires it by `id`; shared popup styles/helpers in `src/popup/`. See the **UI Component Layer** pattern below.
 
 #### Core Systems
 
@@ -208,6 +208,7 @@ npm run test:vitest:watch  # Run Vitest in watch mode
 3. **State Machines** - XState for managing complex UI/audio flows
 4. **Progressive Enhancement** - Graceful degradation when features unavailable
 5. **Cross-browser Compatibility** - Firefox/Chrome-specific handling where needed
+6. **UI Component Layer (Preact)** - SayPi-owned UI (settings tabs/header, notices, auth prompts) is built as **light-DOM Preact `.tsx`** components mounted via the `src/ui/preact/mount.ts` registry (`mountInto`/`unmountFrom`). Host-injected widgets (call button, voice menus) stay imperative — extract pure logic into testable modules instead of rewriting (e.g. `src/buttons/callButtonGeometry.ts`). **Read [doc/preact-component-conventions.md](doc/preact-component-conventions.md) before touching any UI** — it carries the render-vs-registry rule, the host-specific Tailwind rule, and the add-a-tab / add-a-notice recipes.
 
 ### Development Notes
 

@@ -4,6 +4,8 @@
 **Status:** Approved (design); implementation staged across PRs
 **Author:** Autonomous engineering session (Claude)
 
+> **⚠️ POST-IMPLEMENTATION STATUS (2026-06-20): read this as design rationale, not a record of what shipped.** PR1–PR4g shipped (Preact foundation + mount registry, tokens, `<Notice>`, all four settings tabs + header, auth prompts, Tailwind retirement). **The CallButton + voice-menu Preact rewrite and XState→props bridge (the design's PR5/PR6) were DEFERRED** — the founder chose to keep those widgets imperative for now (full rewrite = "Path A", revisited later). Their stated justifications were instead met imperatively: pure geometry extraction (`src/buttons/callButtonGeometry.ts`, #385) and a structural capability guard (`src/tts/VoiceMenu.ts`, #386). Other drift from this doc: the toolchain shipped as **esbuild's automatic JSX runtime, not `@preact/preset-vite` (Babel)**; the shared helper is **`findNoticeInjectionPoint`** (find-only), not `injectNotice(host, vnode)`; the notices render raw into a detached host rather than through the registry; and `AuthPromptUI` was **not** refactored to compose `<Notice>`. **The current, accurate conventions live in [`doc/preact-component-conventions.md`](../preact-component-conventions.md).**
+
 ## Why
 
 The extension's UI is built entirely by imperative DOM mutation — **0 `.tsx/.jsx`
