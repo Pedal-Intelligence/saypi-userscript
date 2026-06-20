@@ -192,3 +192,4 @@ npm run test:vitest:watch  # Run Vitest in watch mode
 - Offscreen documents required for audio processing due to host page CSP restrictions
 - Authentication system handles both direct JWT tokens and cookie-based fallback
 - Progressive search patterns handle dynamic content loading in modern SPAs
+- **Concurrent agents:** this repo is maintained autonomously by multiple Claude sessions at once. Isolate every change in its own git worktree under the gitignored `.worktrees/` directory (not the shared `main` checkout, not an out-of-repo location), and never touch another agent's worktree or branch. The canonical rule lives in `AGENTS.md` (Hard guardrails).

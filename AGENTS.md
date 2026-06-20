@@ -10,7 +10,7 @@ Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered
 - Explore the codebase; bring `AGENTS.md`/`CLAUDE.md` to verified reality; remove dead cruft coherently.
 - Build the testability layers and their CI wiring — *additive* test/CI changes are explicitly yours to make.
 - Triage the backlog with adversarially-verified evidence; file issues per the Issue Authoring Standard.
-- Fix issues via fail-first TDD (see Testing Guidelines) in **isolated git worktrees**; open small, blast-radius-scoped PRs with full provenance (narrative why/what/verification, `Fixes #N`, Claude Code attribution).
+- Fix issues via fail-first TDD (see Testing Guidelines) in **isolated git worktrees** under `.worktrees/` (see Hard guardrails — sibling agents run concurrently); open small, blast-radius-scoped PRs with full provenance (narrative why/what/verification, `Fixes #N`, Claude Code attribution).
 - Review every PR with independent subagent reviewers before merge (multi-lens for the high-blast-radius domains below). GitHub disallows self-approval, so post verdicts as PR comments.
 - Merge when gates pass; keep persistent operational memory across sessions.
 
@@ -23,6 +23,7 @@ Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered
 
 **Hard guardrails (defense-in-depth):**
 - All changes via PR. Never push to `main`, force-push shared branches, or touch branches/issues/PRs that aren't yours.
+- **Concurrent agents — isolate in `.worktrees/`.** Sibling Claude sessions work this repo at the same time (you may see live peers as sibling directories under the gitignored `.worktrees/`). Run every fix in its **own per-task git worktree under `.worktrees/`** — e.g. `git worktree add .worktrees/<task> -b <branch>` — never the shared `main` checkout and never an out-of-repo location (it must stay gitignored and discoverable to peers). Treat another agent's worktree, branch, and uncommitted files as off-limits: never edit, commit to, rebase, or `git worktree remove` them.
 - Begin every commit/push command with `[ "$(git rev-parse --abbrev-ref HEAD)" = "<expected-branch>" ] || exit 1` in the same shell invocation. After `gh pr merge`, confirm `gh pr view --json state` is `MERGED`.
 - Never hand-edit generated artifacts: `.output/`, `dist/`, `public/` build output, `.wxt/`. Fix the generator or env input instead.
 - **Credentials (permanent boundary):** never read, copy, load, or echo `.env.production` or any secret; never run `npm run env:pull` against production. Copy only non-production env files into worktrees; never commit them.
