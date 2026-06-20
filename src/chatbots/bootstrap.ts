@@ -300,16 +300,31 @@ export class DOMObserver {
     controlPanel.classList.add("saypi-control-panel");
 
     // Skip decorating control panel buttons for ChatGPT (Phase 1/2)
-    if ((this.chatbot as any).getID && (this.chatbot as any).getID() === 'chatgpt') {
+    const chatbotId = (this.chatbot as any).getID?.();
+    if (chatbotId === 'chatgpt') {
       return;
     }
 
+    // Pi surfaces Focus + Voice settings in its sidebar menu, so the standard-view
+    // duplicates (the enter/focus button and the mini settings button) are omitted
+    // from the main control panel. The Exit button and theme toggle still go in:
+    // they are hidden by CSS in standard view, and in immersive mode — when the
+    // sidebar is hidden — the main control panel is the only visible SayPi surface,
+    // so the exit button is Pi's sole way out of focus mode and the theme toggle is
+    // the only theme control. (A blanket early-return like ChatGPT's would trap the
+    // user in focus mode, since Pi has no emergency-exit / Escape fallback.)
+    const sidebarOwnsStandardControls = chatbotId === 'pi';
+
     const toggleModeBtnPos = 1;
-    buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
+    if (!sidebarOwnsStandardControls) {
+      buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
+    }
     buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
     const themeManager = ThemeManager.getInstance();
     themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
-    buttonModule.createMiniSettingsButton(controlPanel, toggleModeBtnPos + 3);
+    if (!sidebarOwnsStandardControls) {
+      buttonModule.createMiniSettingsButton(controlPanel, toggleModeBtnPos + 3);
+    }
   }
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {

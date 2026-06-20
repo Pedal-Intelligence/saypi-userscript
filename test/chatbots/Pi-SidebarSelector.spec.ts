@@ -84,7 +84,12 @@ describe("Pi Sidebar Selector (#350 — div→nav redesign)", () => {
       const config = chatbot.getSidebarConfig(sidebar);
       expect(config).not.toBeNull();
       expect(config?.buttonStyle).toBe("menu");
-      expect(config?.insertPosition).toBe(2); // after Discover
+      // Grouped at the TOP of the menu. insertPosition:2 ("after Discover") was
+      // non-deterministic: Pi streams its nav items in after the <nav> mounts, so
+      // when decoration ran before they rendered the buttons landed at the top
+      // anyway (and interleaved the native group on fresh loads). Position 0 pins
+      // them above the native items consistently. (#350 follow-up)
+      expect(config?.insertPosition).toBe(0);
       // The button container is the inner menu column (div.flex.flex-col.items-start).
       expect(config?.buttonContainer.classList.contains("items-start")).toBe(true);
       expect(config?.buttonContainer.children.length).toBe(3);
