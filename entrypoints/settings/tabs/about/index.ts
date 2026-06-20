@@ -1,6 +1,8 @@
+import { h } from 'preact';
 import { TabController } from '../../shared/types';
 import { StatusService } from './status-service';
-import aboutHTML from './about.html?raw';
+import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
+import { AboutPanel } from './AboutPanel';
 import './about.css';
 
 export class AboutTab implements TabController {
@@ -9,21 +11,12 @@ export class AboutTab implements TabController {
   constructor(public container: HTMLElement) {}
 
   async init(): Promise<void> {
-    console.info('[AboutTab] Initializing...', {
-      hasContainer: !!this.container,
-      htmlLength: aboutHTML?.length || 0,
-      htmlType: typeof aboutHTML
-    });
+    // Render the panel with Preact, then let StatusService poll the
+    // #application-status elements it produces (behaviour unchanged).
+    mountInto(this.container, h(AboutPanel, {}));
 
-    this.container.innerHTML = aboutHTML;
-
-    console.info('[AboutTab] HTML injected');
-
-    // Initialize status service
     this.statusService = new StatusService();
     this.statusService.setupPolling();
-
-    console.info('[AboutTab] ✅ Initialized');
   }
 
   /**
@@ -32,7 +25,9 @@ export class AboutTab implements TabController {
   destroy(): void {
     if (this.statusService) {
       this.statusService.stopPolling();
+      this.statusService = null;
     }
+    unmountFrom(this.container);
   }
 }
 
