@@ -83,12 +83,12 @@ async function verify(opts) {
     process.exit(1);
   }
   if (isUnsupportedCloudflareHost(opts.url)) {
-    log(`${new URL(opts.url).hostname} is behind Cloudflare — Layer 3.5 can't drive it.`);
-    log("Bundled Chromium (the only channel that loads the extension) is blocked by");
-    log("Cloudflare; stable Chrome (which Cloudflare accepts) refuses --load-extension.");
-    log("Use Layer 4 for Claude/ChatGPT (real browser, extension installed normally,");
-    log("already past Cloudflare + the saypi:dev-feed-speech/dev-reload hooks). See");
-    log("doc/layer35-real-host-loop.md.");
+    log(`${new URL(opts.url).hostname} is behind Cloudflare — Layer 3.5 (bundled Chromium) can't drive it.`);
+    log("Bundled Chromium is fingerprinted and served a 'Just a moment…' challenge,");
+    log("so it never reaches the chat UI. This applies to pi.ai too (#348).");
+    log("Use Layer 4 (CDP) instead — real Chrome passes Cloudflare on every host:");
+    log(`  node scripts/layer4cdp.mjs verify ${opts.url}`);
+    log("See doc/layer4-cdp-real-host-loop.md.");
     process.exit(2);
   }
   log(`verify ${opts.url} (profile ${profileDir}, ${opts.headed ? "headed" : "headless"})`);

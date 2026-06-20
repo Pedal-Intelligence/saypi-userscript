@@ -71,11 +71,11 @@ export function buildSeedChromeArgs() {
 }
 
 // Hosts behind Cloudflare bot management that Layer 3.5 cannot drive: bundled
-// Chromium (the only channel that loads the unpacked extension) is fingerprinted
-// and blocked, and stable Chrome (which Cloudflare accepts) refuses
-// --load-extension. These belong to Layer 4 (real browser, extension installed
-// normally, already past Cloudflare). pi.ai is NOT here — it has no such gate.
-const CLOUDFLARE_GATED_HOSTS = ["claude.ai", "chatgpt.com", "chat.openai.com"];
+// Chromium is fingerprinted and served a "Just a moment…" challenge, so it never
+// reaches the chat UI. pi.ai joined this list 2026-06-20 (#348) — it is NOT an
+// exception (the old "pi.ai is ungated" assumption was only ever true headed). Use
+// Layer 4 (CDP, real Chrome) for these — it passes Cloudflare on every host.
+const CLOUDFLARE_GATED_HOSTS = ["pi.ai", "claude.ai", "chatgpt.com", "chat.openai.com"];
 
 export function isUnsupportedCloudflareHost(url) {
   try {

@@ -44,11 +44,10 @@ launcher) and attaching over CDP — real Chrome loads the extension AND passes
 Cloudflare (headed). **Use Layer 4 (CDP) for real-host turns on any host, including
 pi.ai** (`doc/layer4-cdp-real-host-loop.md`).
 
-`isUnsupportedCloudflareHost` (in `scripts/layer35-lib.mjs`) currently only refuses
-claude.ai/chatgpt.com and still lets pi.ai through — that's a **known stale guard**
-(pi.ai is also Cloudflare-gated headless); prefer Layer 4 CDP rather than relying on
-this list. We deliberately do **not** use stealth/evasion plugins (an arms race, and
-ToS-sensitive).
+`isUnsupportedCloudflareHost` (in `scripts/layer35-lib.mjs`) now refuses **pi.ai**,
+claude.ai and chatgpt.com (#348) — so `layer35:verify`/`seed` give an honest "use
+Layer 4 (CDP)" pointer instead of a 25s decoration timeout. We deliberately do
+**not** use stealth/evasion plugins (an arms race, and ToS-sensitive).
 
 ## What it is and isn't
 
