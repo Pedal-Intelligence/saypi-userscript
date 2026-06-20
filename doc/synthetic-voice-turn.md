@@ -58,6 +58,20 @@ Cloudflare checkbox) → in that window enable **Developer mode** + **Load unpac
 must say **VERDICT: usable** before `verify`. Full guide:
 `doc/layer4-cdp-real-host-loop.md`.
 
+## Known limitations (#364)
+
+- **One synthetic utterance per call.** The synthetic audio source is one-shot — the
+  clip plays from a non-restartable `AudioBufferSourceNode` (`src/offscreen/synthetic-audio.ts`).
+  Re-dispatching `saypi:dev-feed-speech` **mid-call does not drive a second
+  transcribed turn**. Sanctioned workaround: drive **one** synthetic turn per call,
+  then relaunch the call (toggle `#saypi-callButton`) — or just re-run
+  `layer4cdp verify` — for the next turn. Multi-turn-in-one-call is not supported.
+- **`verify()` turn confirmation is composer-clear-safe.** On auto-submit hosts
+  (chatgpt.com / claude.ai) the composer is cleared on submit, so `verify()` confirms
+  a turn by EITHER a transcript in the composer (pi.ai) OR a new message appearing in
+  the thread (`confirmTurn` in `scripts/layer4cdp-lib.mjs`). It no longer false-reports
+  "WARN: no transcript" for a turn that actually submitted.
+
 ## Where the pieces live
 
 - **Hooks:** `src/dev/devReload.ts` (`saypi:dev-feed-speech`, `saypi:dev-reload`).

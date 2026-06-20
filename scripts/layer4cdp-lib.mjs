@@ -89,3 +89,44 @@ export function isCloudflareChallenge({ title = "", url = "", html = "" } = {}) 
     h.includes("verify you are human")
   );
 }
+
+/**
+ * Generic, host-agnostic selector for conversation messages — used to detect that a
+ * synthetic voice turn was submitted on hosts that CLEAR the composer on submit
+ * (chatgpt.com / claude.ai). Covers pi.ai / Claude / ChatGPT message markers.
+ */
+export const TURN_MESSAGE_SELECTOR = [
+  "[data-message-author-role]",
+  "[data-testid='user-message']",
+  ".font-claude-message",
+  ".assistant-message",
+  "[data-turn='user']",
+  "[data-turn='assistant']",
+].join(", ");
+
+/**
+ * Decide whether a synthetic voice turn was confirmed, robust to auto-submit hosts
+ * that CLEAR the composer on submit (#364). A composer-only check false-negatives
+ * there ("WARN: no transcript") even when the turn actually submitted and the
+ * assistant replied.
+ *
+ * A turn is confirmed if EITHER a transcript is currently sitting in the composer
+ * (pi.ai retains it) OR the conversation thread has grown by at least one message
+ * since the pre-turn baseline (the transcript was submitted and cleared).
+ *
+ * @param {{composer?: string, messageCount?: number, baselineMessageCount?: number}} state
+ * @returns {{confirmed: boolean, reason: string}}
+ */
+export function confirmTurn({ composer = "", messageCount = 0, baselineMessageCount = 0 } = {}) {
+  const text = (composer || "").trim();
+  if (text.length > 0) {
+    return { confirmed: true, reason: "transcript drafted into the composer" };
+  }
+  if (messageCount > baselineMessageCount) {
+    return {
+      confirmed: true,
+      reason: "turn submitted (composer cleared on auto-submit host)",
+    };
+  }
+  return { confirmed: false, reason: "no transcript and no new message" };
+}

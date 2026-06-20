@@ -28,6 +28,8 @@ import {
   resolveCdpProfileDir,
   buildCdpChromeArgs,
   isCloudflareChallenge,
+  confirmTurn,
+  TURN_MESSAGE_SELECTOR,
 } from "./layer4cdp-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -256,18 +258,45 @@ async function verify(opts) {
     const build = await page.evaluate(() => document.documentElement.dataset.saypiBuild ?? "(none)");
     log(`loaded build: ${build}`);
     if (!opts.noTurn) {
+      // Baseline the thread BEFORE the turn so we can detect a submitted message on
+      // auto-submit hosts that clear the composer (#364) — a composer-only check
+      // false-negatives there ("WARN: no transcript") even when the turn succeeded.
+      const baselineMessageCount = await page
+        .evaluate((sel) => document.querySelectorAll(sel).length, TURN_MESSAGE_SELECTOR)
+        .catch(() => 0);
       // One-shot (#349): loop:true never produces an end-of-speech gap → no transcript.
       await page.evaluate(() =>
         window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: false } })));
       await page.click("#saypi-callButton").catch(() => log("could not click call button"));
-      log("armed synthetic speech + started a call; watching the prompt…");
-      const got = await page
-        .waitForFunction(() => {
-          const el = document.querySelector("#saypi-prompt, [contenteditable='true'], textarea");
-          return !!(el && (el.value ?? el.textContent ?? "").trim().length > 0);
-        }, undefined, { timeout: 30_000 })
-        .then(() => true).catch(() => false);
-      log(got ? "OK: transcript drafted into the composer" : "WARN: no transcript (real STT/host may differ; decoration verified)");
+      log("armed synthetic speech + started a call; watching for a transcript or a submitted turn…");
+      // Poll for EITHER a transcript in the composer (pi.ai retains it) OR a new
+      // message in the thread (auto-submit hosts clear the composer on submit).
+      let verdict = { confirmed: false, reason: "no transcript and no new message" };
+      const deadline = Date.now() + 30_000;
+      while (Date.now() < deadline) {
+        const state = await page
+          .evaluate((sel) => {
+            const el = document.querySelector("#saypi-prompt, [contenteditable='true'], textarea");
+            return {
+              composer: el ? (el.value ?? el.textContent ?? "") : "",
+              messageCount: document.querySelectorAll(sel).length,
+            };
+          }, TURN_MESSAGE_SELECTOR)
+          .catch(() => ({ composer: "", messageCount: baselineMessageCount }));
+        verdict = confirmTurn({ ...state, baselineMessageCount });
+        if (verdict.confirmed) break;
+        await new Promise((r) => setTimeout(r, 300));
+      }
+      log(
+        verdict.confirmed
+          ? `OK: ${verdict.reason}`
+          : "WARN: no transcript (real STT/host may differ; decoration verified)"
+      );
+      // KNOWN LIMITATION (#364): the synthetic audio source is one-shot — a second
+      // `saypi:dev-feed-speech` mid-call does NOT drive another transcribed turn
+      // (src/offscreen/synthetic-audio.ts builds a non-restartable AudioBufferSourceNode).
+      // Drive ONE synthetic turn per call; relaunch the call (or re-run verify) for
+      // another. See doc/synthetic-voice-turn.md.
     }
     code = 0;
   } catch (err) {

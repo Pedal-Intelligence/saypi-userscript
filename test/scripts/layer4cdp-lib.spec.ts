@@ -4,7 +4,40 @@ import {
   resolveCdpProfileDir,
   buildCdpChromeArgs,
   isCloudflareChallenge,
+  confirmTurn,
+  TURN_MESSAGE_SELECTOR,
 } from "../../scripts/layer4cdp-lib.mjs";
+
+describe("confirmTurn (#364 — composer-clear-safe turn confirmation)", () => {
+  it("confirms when a transcript is in the composer (pi.ai retains it)", () => {
+    const r = confirmTurn({ composer: "  hello there ", messageCount: 0, baselineMessageCount: 0 });
+    expect(r.confirmed).toBe(true);
+    expect(r.reason).toMatch(/composer/i);
+  });
+
+  it("confirms on auto-submit hosts where the composer is cleared but the thread grew", () => {
+    // The bug: composer is empty (cleared on submit) yet the turn DID submit.
+    const r = confirmTurn({ composer: "", messageCount: 1, baselineMessageCount: 0 });
+    expect(r.confirmed).toBe(true);
+    expect(r.reason).toMatch(/submitted/i);
+  });
+
+  it("does NOT false-positive on pre-existing messages (no growth, empty composer)", () => {
+    const r = confirmTurn({ composer: "   ", messageCount: 4, baselineMessageCount: 4 });
+    expect(r.confirmed).toBe(false);
+  });
+
+  it("is not confirmed when nothing happened", () => {
+    expect(confirmTurn({ composer: "", messageCount: 0, baselineMessageCount: 0 }).confirmed).toBe(false);
+    expect(confirmTurn().confirmed).toBe(false);
+  });
+
+  it("exposes a host-agnostic message selector covering pi/claude/chatgpt markers", () => {
+    expect(TURN_MESSAGE_SELECTOR).toContain("[data-message-author-role]");
+    expect(TURN_MESSAGE_SELECTOR).toContain(".font-claude-message");
+    expect(TURN_MESSAGE_SELECTOR).toContain("[data-turn='assistant']");
+  });
+});
 
 describe("parseLayer4CdpArgs", () => {
   it("parses seed / diagnose / self-test", () => {
