@@ -284,7 +284,60 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
   }
 }
 
-async function startVAD(tabId: number) {
+/**
+ * Decide whether starting VAD for `newTabId` should preempt a different tab that
+ * currently owns the single shared VAD instance. Returns the tab to notify, or
+ * null. Pure (no side effects) so the routing-overwrite contract is unit-testable. (#320)
+ */
+export function computePreemption(
+  previousTabId: number | null,
+  newTabId: number,
+  instanceActive: boolean
+): { targetTabId: number } | null {
+  if (previousTabId !== null && previousTabId !== newTabId && instanceActive) {
+    return { targetTabId: previousTabId };
+  }
+  return null;
+}
+
+/**
+ * A stop/destroy of the single shared VAD should be honored only when it comes
+ * from the tab that currently owns it. A request from a preempted (non-owner) tab
+ * must NOT tear down the instance the new owner is using. When there is no current
+ * owner (or no source tab id) there is no ambiguity, so honor it (legacy behavior). (#320)
+ */
+export function isTeardownFromOwner(
+  sourceTabId: number | undefined,
+  currentOwner: number | null
+): boolean {
+  if (sourceTabId === undefined || currentOwner === null) {
+    return true;
+  }
+  return sourceTabId === currentOwner;
+}
+
+export async function startVAD(tabId: number) {
+  // Last-tab-wins: if a DIFFERENT tab currently owns the shared VAD, it is being
+  // displaced. Notify it (VAD_PREEMPTED) so it can cleanly exit its call instead
+  // of silently losing voice input. (#320)
+  //
+  // Usage-counting note: this takeover still increments below, while the displaced
+  // tab's owner-guarded stop/destroy no-op (no matching decrement) — a deliberate
+  // asymmetry. It is safe: the count can only stay too HIGH (which never triggers
+  // auto-shutdown early), and the new owner's destroyVAD resetUsageCounter('vad')
+  // zeroes it, so the imbalance can't accumulate across calls.
+  const preemption = computePreemption(currentVadTabId, tabId, vadInstance !== null);
+  if (preemption) {
+    logger.log(
+      `[SayPi VAD Handler] Tab ${tabId} is taking over voice input from tab ${preemption.targetTabId}; notifying the displaced tab.`
+    );
+    chrome.runtime.sendMessage({
+      type: "VAD_PREEMPTED",
+      targetTabId: preemption.targetTabId,
+      origin: "offscreen-document",
+    });
+  }
+
   currentVadTabId = tabId;
   incrementUsage('vad');
   
@@ -310,7 +363,14 @@ async function startVAD(tabId: number) {
   }
 }
 
-async function stopVAD() {
+export async function stopVAD(sourceTabId?: number) {
+  // A preempted (non-owner) tab must not stop the shared VAD the new owner uses. (#320)
+  if (!isTeardownFromOwner(sourceTabId, currentVadTabId)) {
+    logger.debug(
+      `[SayPi VAD Handler] Ignoring VAD_STOP_REQUEST from non-owner tab ${sourceTabId} (current owner: ${currentVadTabId}).`
+    );
+    return { success: true, ignored: true };
+  }
   if (vadInstance) {
     try {
       logger.log("[SayPi VAD Handler] Stopping VAD...");
@@ -325,7 +385,14 @@ async function stopVAD() {
   return { success: false, error: "VAD not initialized or already stopped." };
 }
 
-function destroyVAD() {
+export function destroyVAD(sourceTabId?: number) {
+  // A preempted (non-owner) tab must not destroy the shared VAD the new owner uses. (#320)
+  if (!isTeardownFromOwner(sourceTabId, currentVadTabId)) {
+    logger.debug(
+      `[SayPi VAD Handler] Ignoring VAD_DESTROY_REQUEST from non-owner tab ${sourceTabId} (current owner: ${currentVadTabId}).`
+    );
+    return { success: true, ignored: true };
+  }
   logger.log("[SayPi VAD Handler] Destroying VAD...");
   if (vadInstance) {
     vadInstance.destroy();
@@ -355,12 +422,12 @@ function registerVadHandlersOnce() {
     return startVAD(sourceTabId);
   });
 
-  registerMessageHandler("VAD_STOP_REQUEST", () => {
-    return stopVAD();
+  registerMessageHandler("VAD_STOP_REQUEST", (message, sourceTabId) => {
+    return stopVAD(sourceTabId);
   });
 
-  registerMessageHandler("VAD_DESTROY_REQUEST", () => {
-    return destroyVAD();
+  registerMessageHandler("VAD_DESTROY_REQUEST", (message, sourceTabId) => {
+    return destroyVAD(sourceTabId);
   });
 
   // DEV-only: arm/disarm the synthetic audio source. Drops any mic-bound VAD

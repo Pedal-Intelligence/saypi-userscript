@@ -13,6 +13,9 @@ export interface VADClientCallbacks {
   }) => void;
   onVADMisfire?: () => void;
   onError?: (error: string) => void;
+  // Fired when another tab claims the single shared offscreen mic, displacing
+  // this tab's VAD session. Offscreen VAD only — onscreen VAD is per-tab. (#320)
+  onPreempted?: () => void;
   onFrameProcessed?: (probabilities: { isSpeech: number; notSpeech: number }) => void;
   onInitialized?: (success: boolean, error?: string, mode?: string) => void;
   onStarted?: (success: boolean, error?: string) => void;

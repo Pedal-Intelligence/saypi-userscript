@@ -100,6 +100,14 @@ function setupVADEventListeners() {
   vadClient.on('onFrameProcessed', (probabilities: { isSpeech: number; notSpeech: number }) => {
     EventBus.emit("saypi:vadFrameProcessed", probabilities);
   });
+
+  vadClient.on('onPreempted', () => {
+    // Another tab took over the single shared microphone (#320). End this tab's
+    // call cleanly via the normal hang-up path rather than letting it sit there
+    // with dead voice input. (Offscreen VAD only; the onscreen client never fires this.)
+    logger.info("[AudioInputMachine] Voice input was taken over by another tab; ending this tab's call.");
+    EventBus.emit("saypi:hangup");
+  });
 }
 
 // Initialize the appropriate VAD client based on browser support
