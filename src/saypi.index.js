@@ -52,27 +52,43 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   // Initialize common modules needed by both modes
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
 
+  // Non-essential early init (compat notice + auth prompts). These are isolated in
+  // their own try/catch because they `await import(...)` extension chunks, and a
+  // chunk-load rejection — e.g. when the service worker is updating/restarting at
+  // reload time ("Extension context invalidated") — would otherwise abort the whole
+  // bootstrap before `initializeChatMode()` runs, leaving the page looking like
+  // vanilla Claude with no call button. The core decoration must NOT depend on these
+  // succeeding, so a failure here is logged and swallowed rather than propagated.
+
   // Initialize compatibility notification UI early to catch all compatibility events
   logger.debug("Initializing compatibility notification UI");
-  const { CompatibilityNotificationUI } = await import(/* webpackMode: "eager" */ "./compat/CompatibilityNotificationUI.ts");
-  CompatibilityNotificationUI.getInstance().initialize();
+  try {
+    const { CompatibilityNotificationUI } = await import(/* webpackMode: "eager" */ "./compat/CompatibilityNotificationUI.ts");
+    CompatibilityNotificationUI.getInstance().initialize();
+  } catch (error) {
+    logger.error("Compatibility notification UI failed to initialize (non-fatal):", error);
+  }
 
   // Body-portal tooltips for SayPi buttons (escape host overflow/stacking clipping)
   initTooltip();
 
   // Initialize progressive authentication prompt system (for chatbot overlay prompts)
   logger.debug("Initializing auth prompt system");
-  const { getAuthPromptController } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptController.ts");
-  const { getAuthPromptUI } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptUI.ts");
-  const { getUsageTracker } = await import(/* webpackMode: "eager" */ "./auth/UsageTracker.ts");
-  await getAuthPromptController().initialize();
-  getAuthPromptUI().initialize();
+  try {
+    const { getAuthPromptController } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptController.ts");
+    const { getAuthPromptUI } = await import(/* webpackMode: "eager" */ "./auth/AuthPromptUI.ts");
+    const { getUsageTracker } = await import(/* webpackMode: "eager" */ "./auth/UsageTracker.ts");
+    await getAuthPromptController().initialize();
+    getAuthPromptUI().initialize();
 
-  // Expose debug method for resetting auth prompt tracking
-  window.saypiResetAuthPrompts = async () => {
-    await getUsageTracker().resetStats();
-    console.log("[SayPi] Auth prompt tracking reset. Reload page to take effect.");
-  };
+    // Expose debug method for resetting auth prompt tracking
+    window.saypiResetAuthPrompts = async () => {
+      await getUsageTracker().resetStats();
+      console.log("[SayPi] Auth prompt tracking reset. Reload page to take effect.");
+    };
+  } catch (error) {
+    logger.error("Auth prompt system failed to initialize (non-fatal):", error);
+  }
 
   // Initialize telemetry module
   logger.debug("Initializing telemetry module");
