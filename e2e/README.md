@@ -4,7 +4,9 @@ This directory holds the **Layer 3** test harness: a headless-Chromium,
 Playwright-driven suite that loads the *real* built extension into a *real*
 browser and drives it against *local mock* servers and a *fake* microphone. It
 sits above the unit/integration tests (Jest + Vitest, Layer 1/2) and below the
-live-host dev-verify loop (Layer 4, see [doc/autonomous-dev-loop.md](../doc/autonomous-dev-loop.md)).
+real-host loops: the agent-launched **Layer 3.5** (real hosts, founder-seeded auth,
+see [doc/layer35-real-host-loop.md](../doc/layer35-real-host-loop.md)) and the
+live-host **Layer 4** dev-verify loop (see [doc/autonomous-dev-loop.md](../doc/autonomous-dev-loop.md)).
 
 It proves the bits unit tests can't: that the bundled content script actually
 decorates a chatbot page, and that a spoken clip travels the full voice-input
