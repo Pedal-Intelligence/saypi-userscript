@@ -2,7 +2,6 @@
 // This file now contains only the generic/abstract base for voice controls.
 import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
-import { PiAIChatbot } from "../chatbots/Pi";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
@@ -12,6 +11,28 @@ import { audioProviders, SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import { getJwtManagerSync } from "../JwtManager";
 
+/**
+ * A chatbot that ships its own set of built-in voices, with introduction audio
+ * for the default voice (currently only Pi.ai). Declared structurally so the
+ * generic {@link VoiceSelector} base class can detect the capability without
+ * importing the concrete `PiAIChatbot` — that import created a
+ * `VoiceMenu -> Pi -> PiVoiceMenu -> VoiceMenu` cycle.
+ */
+export interface BuiltInVoiceProvider {
+  getExtraVoices(): SpeechSynthesisVoiceRemote[];
+  getVoiceIntroductionUrl(voiceId: string): string;
+}
+
+/** Structural type guard for {@link BuiltInVoiceProvider}. */
+export function isBuiltInVoiceProvider(
+  chatbot: Chatbot
+): chatbot is Chatbot & BuiltInVoiceProvider {
+  const candidate = chatbot as Partial<BuiltInVoiceProvider>;
+  return (
+    typeof candidate.getExtraVoices === "function" &&
+    typeof candidate.getVoiceIntroductionUrl === "function"
+  );
+}
 
 export abstract class VoiceSelector {
   protected chatbot: Chatbot;
@@ -260,9 +281,8 @@ export abstract class VoiceSelector {
     const name = voice.name.toLowerCase().replace(" ", "_");
     const introduction =
       lastMessage?.text || getMessage(`voiceIntroduction_${name}`);
-    if (voice.default && this.chatbot instanceof PiAIChatbot) {
-      const pi = this.chatbot as PiAIChatbot;
-      const introductionUrl = pi.getVoiceIntroductionUrl(voice.id);
+    if (voice.default && isBuiltInVoiceProvider(this.chatbot)) {
+      const introductionUrl = this.chatbot.getVoiceIntroductionUrl(voice.id);
       if (introductionUrl) {
         // play the introduction audio
         EventBus.emit("audio:load", { url: introductionUrl });
@@ -327,11 +347,10 @@ export abstract class VoiceSelector {
   }
 
   addMissingPiVoices(voiceSelector: HTMLElement) {
-    // only for Pi.ai
-    if (!(this.chatbot instanceof PiAIChatbot)) {
+    // only for chatbots that ship their own built-in voices (Pi.ai)
+    if (!isBuiltInVoiceProvider(this.chatbot)) {
       return;
     }
-    const pi = this.chatbot as PiAIChatbot;
     // count the number of original Pi voices in the menu
     let piVoices = 0;
     const voiceButtons = Array.from(voiceSelector.querySelectorAll("button"));
@@ -342,7 +361,7 @@ export abstract class VoiceSelector {
     });
     // if fewer than 8 Pi voices, add the missing Pi voices to the menu
     if (piVoices < 8) {
-      this.populateVoices(pi.getExtraVoices(), voiceSelector);
+      this.populateVoices(this.chatbot.getExtraVoices(), voiceSelector);
     }
   }
 
