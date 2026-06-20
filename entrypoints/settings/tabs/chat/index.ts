@@ -1,8 +1,10 @@
+import { h } from 'preact';
 import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
 import { sendMessageToActiveTab } from '../../shared/messaging';
 import { SubmitModeController } from './submit-mode-controller';
-import chatHTML from './chat.html?raw';
+import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
+import { ChatPanel } from './ChatPanel';
 import './chat.css';
 
 export class ChatTab implements TabController {
@@ -11,23 +13,24 @@ export class ChatTab implements TabController {
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
-    console.info('[ChatTab] Initializing...', { 
-      hasContainer: !!this.container,
-      htmlLength: chatHTML?.length || 0,
-      htmlType: typeof chatHTML,
-      htmlPreview: chatHTML?.substring(0, 100)
-    });
-    
-    this.container.innerHTML = chatHTML;
-    
-    console.info('[ChatTab] HTML injected');
-    
+    // Render the panel with Preact, then wire the controls imperatively —
+    // behaviour unchanged: the setup methods and SubmitModeController operate
+    // on the rendered DOM by id.
+    mountInto(this.container, h(ChatPanel, {}));
+
     await this.setupNickname();
     await this.setupInterruptions();
     await this.setupAutoReadAloud();
     await this.setupSubmitMode();
-    
-    console.info('[ChatTab] ✅ Initialized');
+  }
+
+  /**
+   * Clean up when the tab is destroyed. Defensive — the orchestrator keeps tabs
+   * mounted (init runs once), but unmount the Preact tree if it is ever called.
+   */
+  destroy(): void {
+    this.submitModeController = null;
+    unmountFrom(this.container);
   }
   
   private async setupNickname(): Promise<void> {
