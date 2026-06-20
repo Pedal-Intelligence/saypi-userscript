@@ -198,6 +198,43 @@ export class DOMObserver {
     // Start observing immediately only if current page is chatable
     if (this.shouldDecorateUI()) {
       this.startObservingDom();
+      // Decorate whatever is ALREADY in the DOM. The MutationObserver only reacts
+      // to nodes added *after* it attaches, and monitorForRouteChanges only fires
+      // on a URL change — so on a full page reload of an existing thread (e.g.
+      // claude.ai/chat/<uuid>), where the composer is already present when we
+      // attach and the URL never changes, neither path would ever decorate the
+      // prompt. Without this scan the call button (and the rest of the
+      // content-loaded chain) never appears. Idempotent and safe to retry.
+      this.bootstrapInitialDecoration();
+    }
+  }
+
+  /**
+   * Decorates the prompt that is already present in the DOM at startup, emitting
+   * "saypi:ui:content-loaded" once it is ready to kick off the rest of the
+   * bootstrap chain. Mirrors startChatHistoryProgressiveSearch's backoff so a
+   * composer that hydrates slightly after document_idle is still caught even if
+   * its insertion doesn't surface to the MutationObserver as an added node.
+   */
+  private bootstrapInitialDecoration(attempt = 1, maxAttempts = 10): void {
+    if (!this.shouldDecorateUI()) {
+      return;
+    }
+    const promptObs = this.findAndDecoratePrompt(document.body);
+    if (promptObs.isReady()) {
+      EventBus.emit("saypi:ui:content-loaded");
+      return;
+    }
+    // Already decorated by another path → the chain has already started; stop.
+    if (promptObs.found) {
+      return;
+    }
+    if (attempt < maxAttempts) {
+      const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 3000);
+      setTimeout(
+        () => this.bootstrapInitialDecoration(attempt + 1, maxAttempts),
+        delay
+      );
     }
   }
 
