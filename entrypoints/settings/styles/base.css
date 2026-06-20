@@ -217,7 +217,10 @@ button {
   --saypi-ring-offset-width: 2px;
 }
 .focus\:ring-blue-500:focus {
-  --saypi-ring-color: rgba(59, 130, 246, 0.5);
+  /* Tailwind v2 ring-blue-500 renders solid (ring-opacity 1); a solid focus
+     ring is also more visible for keyboard users. The .focus:ring-2 fallback
+     below keeps the TW default (50%) for a bare ring with no colour class. */
+  --saypi-ring-color: rgb(59, 130, 246);
 }
 .focus\:ring-2:focus {
   box-shadow: 0 0 0 var(--saypi-ring-offset-width, 0px)
