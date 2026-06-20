@@ -162,6 +162,11 @@ export class OffscreenVADClient implements VADClientInterface {
           this.statusIndicator.updateStatus(getMessage('vadStatusDestroyed'), getMessage('vadDetailVADServiceShutdown'));
           logger.info("[SayPi OffscreenVADClient] VAD destroyed in offscreen:", message.payload);
           break;
+        case "OFFSCREEN_VAD_USE_SYNTHETIC_AUDIO_RESPONSE":
+        case "OFFSCREEN_VAD_USE_SYNTHETIC_AUDIO_ERROR":
+          // DEV-only synthetic-audio arm ack relayed here; nothing for the client to
+          // do — swallow quietly so it doesn't log as an unknown message type (#349).
+          break;
         default:
           logger.warn("[SayPi OffscreenVADClient] Received unknown message type:", message.type);
       }

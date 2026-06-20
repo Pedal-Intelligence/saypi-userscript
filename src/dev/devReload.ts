@@ -50,7 +50,9 @@ export function installDevReloadBridge(): void {
  */
 export function installDevFeedSpeechBridge(): void {
   window.addEventListener(DEV_FEED_SPEECH_EVENT, (e) => {
-    const loop = (e as CustomEvent)?.detail?.loop !== false;
+    // Default ONE-SHOT (#349): a single utterance → trailing silence → end-of-speech
+    // → STT submits. loop:true plays back-to-back with no gap → no transcript.
+    const loop = (e as CustomEvent)?.detail?.loop === true;
     chrome.runtime.sendMessage({ type: DEV_FEED_SPEECH_MESSAGE, loop });
   });
   logger.debug("[SayPi dev-feed-speech] bridge installed");

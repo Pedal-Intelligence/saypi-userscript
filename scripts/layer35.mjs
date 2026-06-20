@@ -111,9 +111,10 @@ async function verify(opts) {
     log(`loaded build: ${build}`);
 
     if (!opts.noTurn) {
-      // Arm the in-extension synthetic source via the page bridge, then start a call.
+      // Arm the in-extension synthetic source (one-shot — loop:true yields no
+      // end-of-speech gap → no transcript, #349), then start a call.
       await page.evaluate(() =>
-        window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: true } })));
+        window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: false } })));
       await page.click("#saypi-callButton").catch(() => log("could not click call button"));
       log("armed synthetic speech + started a call; watching the prompt for a transcript…");
       const got = await page

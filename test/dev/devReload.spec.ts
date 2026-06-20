@@ -49,12 +49,16 @@ describe("dev self-reload bridge", () => {
     expect(chrome.runtime.reload).not.toHaveBeenCalled();
   });
 
-  it("feed-speech bridge relays the DOM event to a synthetic-audio message", () => {
+  it("feed-speech bridge defaults to one-shot (loop:false) — loop:true never transcribes (#349)", () => {
     installDevFeedSpeechBridge();
-    window.dispatchEvent(
-      new window.CustomEvent(DEV_FEED_SPEECH_EVENT, { detail: { loop: true } }),
+    // No detail → one-shot.
+    window.dispatchEvent(new window.CustomEvent(DEV_FEED_SPEECH_EVENT));
+    expect(chrome.runtime.sendMessage).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: DEV_FEED_SPEECH_MESSAGE, loop: false }),
     );
-    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith(
+    // Only an explicit loop:true opts into continuous looping.
+    window.dispatchEvent(new window.CustomEvent(DEV_FEED_SPEECH_EVENT, { detail: { loop: true } }));
+    expect(chrome.runtime.sendMessage).toHaveBeenLastCalledWith(
       expect.objectContaining({ type: DEV_FEED_SPEECH_MESSAGE, loop: true }),
     );
   });

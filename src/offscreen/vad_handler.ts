@@ -60,7 +60,7 @@ let activePreset: VADPreset = "none";
 // DEV-only: when armed (via VAD_USE_SYNTHETIC_AUDIO), the next VAD init is fed a
 // bundled WAV instead of the live mic, so the agent can drive a voice turn with
 // no human speaking. See src/offscreen/synthetic-audio.ts.
-let syntheticAudioLatch: SyntheticAudioLatch = { enabled: false, clipUrl: "", loop: true };
+let syntheticAudioLatch: SyntheticAudioLatch = { enabled: false, clipUrl: "", loop: false };
 
 // Debounced sender for VAD frame events, max once per 100ms
 const debouncedSendFrameProcessed = debounce(
@@ -436,7 +436,7 @@ function registerVadHandlersOnce() {
     syntheticAudioLatch = {
       enabled: message.enabled !== false,
       clipUrl: message.clipUrl,
-      loop: message.loop !== false,
+      loop: message.loop === true, // default one-shot (#349); loop:true never yields a transcript
     };
     if (vadInstance) {
       destroyVAD();

@@ -163,7 +163,7 @@ if (import.meta.env.DEV) {
       {
         type: "VAD_USE_SYNTHETIC_AUDIO",
         enabled: true,
-        loop: opts.loop !== false,
+        loop: opts.loop === true, // default one-shot (#349) so end-of-speech fires → STT submits
         clipUrl: getExtensionURL("audio/synthetic-speech.wav"),
         origin: "background",
       },

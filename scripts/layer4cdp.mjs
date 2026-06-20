@@ -256,8 +256,9 @@ async function verify(opts) {
     const build = await page.evaluate(() => document.documentElement.dataset.saypiBuild ?? "(none)");
     log(`loaded build: ${build}`);
     if (!opts.noTurn) {
+      // One-shot (#349): loop:true never produces an end-of-speech gap → no transcript.
       await page.evaluate(() =>
-        window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: true } })));
+        window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: false } })));
       await page.click("#saypi-callButton").catch(() => log("could not click call button"));
       log("armed synthetic speech + started a call; watching the prompt…");
       const got = await page
