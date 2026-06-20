@@ -7,7 +7,7 @@ html.immersive-view.mobile-device {
     border: 0;
     z-index: 60;
     svg path.inner {
-      color: rgb(13 60 38); /* text-primary-700 */
+      color: var(--saypi-ink); /* text-primary-700 */
     }
   }
 

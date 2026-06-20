@@ -2,7 +2,7 @@
 @use "sass:meta";
 
 #saypi-callButton.disabled svg path.background {
-  fill: rgb(245 238 223); /* bg-cream-550 */
+  fill: var(--saypi-cream); /* bg-cream-550 */
 }
 
 #saypi-enter-button {
@@ -17,13 +17,13 @@
   z-index: 60;
   svg {
     path.outer {
-      fill: rgb(237 225 209); /* bg-cream-550 */
+      fill: var(--saypi-cream-dark); /* bg-cream-550 */
     }
     path.inner {
-      color: rgb(13 60 38); /* text-primary-700 */
+      color: var(--saypi-ink); /* text-primary-700 */
     }
     circle.outer-circle-bg {
-      fill: rgb(237 225 209); /* bg-cream-550 */
+      fill: var(--saypi-cream-dark); /* bg-cream-550 */
     }
   }
 }
@@ -61,7 +61,7 @@ html:not(.immersive-view) .theme-toggle-button {
   white-space: nowrap;
   opacity: 0;
   transition: opacity 0.12s ease-in-out;
-  background-color: #24381b;
+  background-color: var(--saypi-green-dark, #24381b); /* fallback: body-portal sits outside host-themed scope */
   color: #fff;
   padding: 5px 10px;
   border-radius: 6px;
