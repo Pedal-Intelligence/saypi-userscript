@@ -104,6 +104,15 @@ export class OffscreenVADClient implements VADClientInterface {
           this.statusIndicator.updateStatus(getMessage('vadStatusError'), message.error || getMessage('vadDetailUnknownVADError'));
           this.callbacks.onError?.(message.error || getMessage('vadDetailUnknownVADError'));
           break;
+        case "VAD_PREEMPTED":
+          // Another tab claimed the single shared offscreen mic (#320). This is an
+          // orderly handoff, NOT an error: show a calm "voice moved" status and let
+          // the call tear down cleanly via onPreempted. Clear isActive so a later
+          // idle port recycle isn't misreported as a mid-call failure.
+          this.isActive = false;
+          this.statusIndicator.updateStatus(getMessage('vadStatusPreempted'), getMessage('vadDetailVoiceMovedToOtherTab'));
+          this.callbacks.onPreempted?.();
+          break;
         case "OFFSCREEN_VAD_INITIALIZE_REQUEST_RESPONSE":
           if (message.payload.success) {
             const mode = message.payload.mode;

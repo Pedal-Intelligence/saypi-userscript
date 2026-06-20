@@ -1054,6 +1054,14 @@
     "message": "VAD processing stopped.",
     "description": "VAD detail indicating VAD processing has stopped."
   },
+  "vadStatusPreempted": {
+    "message": "Paused",
+    "description": "VAD status shown on a tab whose voice input was taken over by another tab."
+  },
+  "vadDetailVoiceMovedToOtherTab": {
+    "message": "Voice input moved to another tab",
+    "description": "VAD detail explaining the call ended because the microphone was claimed by a newer tab."
+  },
   "vadDetailStopError": {
     "message": "Stop Error: $error$",
     "description": "VAD detail for a stop error, with specific error message.",
