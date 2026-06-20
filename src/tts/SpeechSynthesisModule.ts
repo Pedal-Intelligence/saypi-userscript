@@ -292,6 +292,36 @@ class SpeechSynthesisModule {
     EventBus.emit("saypi:tts:speechStreamEnded", utterance);
   }
 
+  /**
+   * Synthesize a known-complete string (e.g. a voice-selection introduction) as a
+   * single, fully-finalized speech stream, ready to hand to `speak()`.
+   *
+   * Uses the SAME streaming contract as conversation-turn TTS — open the stream
+   * (POST), send the full text (PUT), finalize (PUT final-chunk) — so the resulting
+   * `…/speak/<id>/stream` source plays through the audio-output path. (#375)
+   *
+   * Why not the simpler calls: `createSpeech(text, false)` yields a non-streaming
+   * `…/speak/<id>` URL that the source parser rejects ("is not a streaming speech
+   * URL"); `createSpeech(text, true)` opens a stream URL the parser accepts but never
+   * sends the text via the PUT-chunk protocol, so the audio GET returns 405 and
+   * nothing plays. Both leave the intro silent.
+   *
+   * Returns a silent placeholder/failed utterance unchanged when voice is off or
+   * synthesis can't start (no text is sent, nothing to finalize).
+   */
+  async createCompletedSpeechStream(
+    text: string,
+    chatbot?: Chatbot
+  ): Promise<SpeechUtterance> {
+    const utterance = await this.createSpeechStream(chatbot);
+    if (isPlaceholderUtterance(utterance) || isFailedUtterance(utterance)) {
+      return utterance;
+    }
+    await this.addSpeechToStream(utterance.id, text);
+    await this.endSpeechStream(utterance);
+    return utterance;
+  }
+
   speak(speech: SpeechUtterance, chatbot?: Chatbot): void {
     if (isPlaceholderUtterance(speech)) {
       // Expected whenever voice is off (the auto-TTS path yields a placeholder):

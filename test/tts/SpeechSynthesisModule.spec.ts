@@ -137,6 +137,46 @@ describe("SpeechSynthesisModule", () => {
     expect(audioStreamManagerMock.createStream).toHaveBeenCalled();
   });
 
+  it("createCompletedSpeechStream opens, sends the full text, and finalizes a one-shot stream (#375)", async () => {
+    const mockUtterance = {
+      id: "intro-uuid",
+      text: " ",
+      lang: "en-US",
+      voice: mockVoices[0],
+      uri: "https://api.saypi.ai/speak/intro-uuid/stream?voice_id=x",
+      provider: audioProviders.SayPi,
+    };
+    (audioStreamManagerMock.createStream as Mock).mockResolvedValue(mockUtterance);
+
+    const utterance = await speechSynthesisModule.createCompletedSpeechStream(
+      "Hi, I'm Jarnathan.",
+      { getID: () => "claude" } as any
+    );
+
+    expect(audioStreamManagerMock.createStream).toHaveBeenCalled();
+    // Full text sent via the PUT-chunk protocol, then finalized — so the stream's
+    // `…/speak/<id>/stream` GET returns audio (a bare createSpeech 405s).
+    expect(audioStreamManagerMock.addSpeechToStream).toHaveBeenCalledWith(
+      "intro-uuid",
+      "Hi, I'm Jarnathan."
+    );
+    expect(audioStreamManagerMock.endStream).toHaveBeenCalledWith("intro-uuid");
+    expect(utterance).toBe(mockUtterance);
+  });
+
+  it("createCompletedSpeechStream sends no text and finalizes nothing when voice is off (#375)", async () => {
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+
+    const utterance = await speechSynthesisModule.createCompletedSpeechStream(
+      "Hi.",
+      { getID: () => "claude" } as any
+    );
+
+    expect(isPlaceholderUtterance(utterance)).toBe(true);
+    expect(audioStreamManagerMock.addSpeechToStream).not.toHaveBeenCalled();
+    expect(audioStreamManagerMock.endStream).not.toHaveBeenCalled();
+  });
+
   it("reuses an open stream when the same messageId is provided", async () => {
     const mockVoice = mockVoices[0];
     const mockUtterance = {

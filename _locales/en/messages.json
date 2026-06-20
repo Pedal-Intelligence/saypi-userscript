@@ -556,6 +556,16 @@
     "message": "Hola! Привет! 你好! I'm Pi, your polyglot AI assistant. With 32 languages at my command, we can explore ideas and cultures from around the world. What do you think of this voice?",
     "description": "Introduction for the Joey voice."
   },
+  "voiceIntroductionGeneric": {
+    "message": "Hi, I'm $voice$. This is how I sound. I hope you like this voice!",
+    "description": "Generic spoken introduction played when a selected SayPi voice has no voice-specific introduction script (and there is no recent message to read back).",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "soundEffectsFirefoxDisabled": {
     "message": "Sound effects are disabled in Firefox to prevent audio feedback issues."
   },
