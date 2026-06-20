@@ -40,8 +40,9 @@
     },
     "edge": {
       "displayName": "🔵 Microsoft Edge Add-ons",
-      "idTodo": "capture the Product ID from Partner Center → Extension overview → Extension identity on first run, then record it here as \"id\"",
-      "dashboardUrl": "https://partner.microsoft.com/dashboard/microsoftedge/",
+      "id": "824c36fe-fd03-4656-8d32-67b0ae2cbdad",
+      "dashboardUrl": "https://partner.microsoft.com/dashboard/microsoftedge/824c36fe-fd03-4656-8d32-67b0ae2cbdad/packages",
+      "listingUrl": "https://microsoftedge.microsoft.com/addons/detail/jabjanmkommeachipnbiggdohahbfgpj",
       "packageFile": "dist/saypi.edge.zip",
       "hasReleaseNotesField": false,
       "releaseNotesFallback": "Edge has no changelog field; put a short summary of what changed into \"Notes for certification\".",
