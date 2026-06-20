@@ -41,3 +41,26 @@ export async function createSyntheticSpeechStream(
   });
   return destination.stream;
 }
+
+/**
+ * Latch the offscreen VAD reads when (re)initializing. When `enabled`, the VAD is
+ * fed `clipUrl` instead of the live microphone. Lives here (not in vad_handler) so
+ * the decision stays unit-testable without importing onnxruntime-web.
+ */
+export interface SyntheticAudioLatch {
+  enabled: boolean;
+  clipUrl: string;
+  loop: boolean;
+}
+
+/**
+ * Pure decision used by `initializeVAD`: when the latch is on, build a synthetic
+ * stream from its clip; otherwise return undefined so vad-web opens the mic.
+ */
+export async function resolveVadStream(
+  latch: SyntheticAudioLatch,
+  factory: typeof createSyntheticSpeechStream = createSyntheticSpeechStream,
+): Promise<MediaStream | undefined> {
+  if (!latch.enabled) return undefined;
+  return factory(latch.clipUrl, { loop: latch.loop });
+}

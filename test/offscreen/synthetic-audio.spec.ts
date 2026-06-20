@@ -1,5 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { createSyntheticSpeechStream } from "../../src/offscreen/synthetic-audio";
+import {
+  createSyntheticSpeechStream,
+  resolveVadStream,
+  type SyntheticAudioLatch,
+} from "../../src/offscreen/synthetic-audio";
 
 function fakeAudioContextClass(captured: any) {
   return class {
@@ -39,5 +43,22 @@ describe("createSyntheticSpeechStream", () => {
     expect(captured.decoded).toBe(true);
     expect(captured.started).toBe(true);
     expect((stream as any).id).toBe("synthetic-stream");
+  });
+});
+
+describe("resolveVadStream", () => {
+  it("returns undefined when the latch is disabled (mic path)", async () => {
+    const latch: SyntheticAudioLatch = { enabled: false, clipUrl: "x", loop: true };
+    const factory = vi.fn();
+    expect(await resolveVadStream(latch, factory as any)).toBeUndefined();
+    expect(factory).not.toHaveBeenCalled();
+  });
+
+  it("returns the synthetic stream when the latch is enabled", async () => {
+    const latch: SyntheticAudioLatch = { enabled: true, clipUrl: "blob:x", loop: true };
+    const factory = vi.fn().mockResolvedValue({ id: "s" });
+    const stream = await resolveVadStream(latch, factory as any);
+    expect(factory).toHaveBeenCalledWith("blob:x", { loop: true });
+    expect((stream as any).id).toBe("s");
   });
 });

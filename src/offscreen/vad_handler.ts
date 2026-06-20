@@ -4,6 +4,7 @@ import { logger } from "../LoggingModule.js";
 import { debounce } from "../utils/debounce";
 import { incrementUsage, decrementUsage, resetUsageCounter, registerMessageHandler } from "./media_coordinator";
 import { VAD_CONFIGS, VADPreset } from "../vad/VADConfigs";
+import { resolveVadStream, type SyntheticAudioLatch } from "./synthetic-audio";
 
 const globalScope = globalThis as Record<PropertyKey, unknown>;
 const ORT_LOG_CONFIGURED = Symbol.for("saypi.vad.ortLogConfigured");
@@ -55,6 +56,11 @@ let stream: MediaStream | null = null;
 let speechStartTime = 0;
 let lastFrameProbabilities: { isSpeech: number; notSpeech: number } | null = null;
 let activePreset: VADPreset = "none";
+
+// DEV-only: when armed (via VAD_USE_SYNTHETIC_AUDIO), the next VAD init is fed a
+// bundled WAV instead of the live mic, so the agent can drive a voice turn with
+// no human speaking. See src/offscreen/synthetic-audio.ts.
+let syntheticAudioLatch: SyntheticAudioLatch = { enabled: false, clipUrl: "", loop: true };
 
 // Debounced sender for VAD frame events, max once per 100ms
 const debouncedSendFrameProcessed = debounce(
@@ -245,6 +251,13 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
       configureOrtRuntime(runtime, existingOrtConfig);
     };
 
+    // DEV-only: when armed, feed a synthetic stream so MicVAD.new skips getUserMedia.
+    const syntheticStream = await resolveVadStream(syntheticAudioLatch);
+    if (syntheticStream) {
+      (mergedOptions as Partial<RealTimeVADOptions>).stream = syntheticStream;
+      logger.log("[SayPi VAD Handler] Using synthetic audio stream (DEV — no live mic)");
+    }
+
     const optionSummary = Object.fromEntries(
       Object.entries({
         preset,
@@ -348,6 +361,21 @@ function registerVadHandlersOnce() {
 
   registerMessageHandler("VAD_DESTROY_REQUEST", () => {
     return destroyVAD();
+  });
+
+  // DEV-only: arm/disarm the synthetic audio source. Drops any mic-bound VAD
+  // instance so the next start() rebuilds with (or without) the synthetic stream.
+  registerMessageHandler("VAD_USE_SYNTHETIC_AUDIO", (message) => {
+    syntheticAudioLatch = {
+      enabled: message.enabled !== false,
+      clipUrl: message.clipUrl,
+      loop: message.loop !== false,
+    };
+    if (vadInstance) {
+      destroyVAD();
+    }
+    logger.log(`[SayPi VAD Handler] Synthetic audio ${syntheticAudioLatch.enabled ? "armed" : "disarmed"}`);
+    return { success: true, armed: syntheticAudioLatch.enabled };
   });
 
   globalScope[HANDLERS_REGISTERED] = true;
