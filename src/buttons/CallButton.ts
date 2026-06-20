@@ -6,6 +6,7 @@ import AnimationModule from "../AnimationModule";
 import { GlowColorUpdater } from "./GlowColorUpdater";
 import { addChild, createSVGElement } from "../dom/DOMModule"; // Assuming createSVGElement is okay for full SVGs now, or stick to createElementNS
 import getMessage from "../i18n";
+import { computeGeometry, computeSegmentPaths, type SegmentStatus } from "./callButtonGeometry";
 import callIconSVG from "../icons/call.svg?raw";
 import callStartingIconSVG from "../icons/call-starting.svg?raw";
 import hangupIconSVG from "../icons/hangup.svg?raw";
@@ -16,7 +17,7 @@ import { logger } from "../LoggingModule";
 
 interface Segment {
     seqNum: number;
-    status: 'capturing' | 'processing' | 'completed-success' | 'completed-error';
+    status: SegmentStatus;
     startTime: number;
     endTime?: number;
     errorType?: string;
@@ -266,13 +267,6 @@ export class CallButton {
             segmentsGroup.removeChild(segmentsGroup.firstChild);
         }
 
-        const statusColors = {
-          capturing: '#808080',
-          processing: '#42a5f5',
-          'completed-success': '#66bb6a',
-          'completed-error': '#ef5350',
-        };
-
         const allSegmentsData = [...this.segments];
         if (this.currentSegment) {
             allSegmentsData.push(this.currentSegment);
@@ -282,7 +276,7 @@ export class CallButton {
 
         // Always ensure background is visible by default, then hide only if needed
         this.ensureBackgroundVisible(originalBackground);
-        
+
         if (totalSegments === 0) {
             // No segments to draw, background should already be visible
             return; // Exit early
@@ -297,78 +291,21 @@ export class CallButton {
         const viewBox = svg.getAttribute('viewBox')?.split(' ').map(Number);
         const svgWidth = viewBox ? viewBox[2] : 80; // Default guess
         const svgHeight = viewBox ? viewBox[3] : 80; // Default guess
-        const center = svgWidth / 2; // Use width for center X assuming square/circular
-        const radius = Math.min(svgWidth, svgHeight) / 2 * 0.9; // Outer radius factor for the pie wedges
-        const segmentRadius = radius; // For filled wedges, use the full radius
 
-        const gap = 1.5; // Gap between segments in degrees
+        // Pure angle/arc geometry lives in callButtonGeometry; this method keeps
+        // the DOM application + the #progress-ring/background preservation above.
+        const geometry = computeGeometry(svgWidth, svgHeight);
+        const segmentPaths = computeSegmentPaths(
+            allSegmentsData.map((segmentData) => segmentData.status),
+            geometry,
+        );
 
-        let anglePerSegment = 0;
-        if (totalSegments > 0) {
-            if (totalSegments === 1) {
-                anglePerSegment = 360; // Single segment covers the whole circle
-            } else {
-                const totalGap = totalSegments * gap;
-                if (totalGap < 360) {
-                    anglePerSegment = (360 - totalGap) / totalSegments;
-                } else {
-                    anglePerSegment = 0;
-                    console.warn("Too many segments for the given gap size.");
-                }
-            }
-        }
-        if (anglePerSegment <= 0 && totalSegments > 1) { // Allow anglePerSegment to be 0 if totalSegments is 1 and it becomes 360, then gets reset by gap logic for >1 scenario
-            console.warn("Angle per segment is zero or negative with multiple segments.");
-            return;
-        }
-        if (totalSegments === 1 && anglePerSegment !== 360) {
-            // This case should ideally not be hit if logic above is correct for totalSegments = 1
-            // but as a fallback, ensure a single segment is 360 if it wasn't set already.
-            anglePerSegment = 360;
-        }
-
-        let startAngle = -90; // Start from the top
-
-        allSegmentsData.forEach((segmentData, index) => {
-            const endAngle = startAngle + anglePerSegment;
-            const color = statusColors[segmentData.status] || '#cccccc';
-
+        segmentPaths.forEach((spec) => {
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const wedgePath = this.describeWedge(center, center, segmentRadius, startAngle, endAngle);
-
-            path.setAttribute('d', wedgePath);
-            path.setAttribute('fill', color);
+            path.setAttribute('d', spec.d);
+            path.setAttribute('fill', spec.fill);
             segmentsGroup!.appendChild(path);
-
-            startAngle = endAngle + gap;
         });
-    }
-
-    private describeWedge(x: number, y: number, radius: number, startAngle: number, endAngle: number): string {
-        // Handle full circle case by slightly adjusting endAngle to ensure the arc is drawn
-        // For a wedge, if it's a full circle, it's just a circle path, but our segment logic shouldn't produce this for a wedge.
-        if (endAngle - startAngle >= 359.99) {
-            endAngle = startAngle + 359.99; // Prevent full overlap that might cause rendering issues for an arc
-        }
-
-        const startRad = ((startAngle - 90) * Math.PI) / 180; // -90 to make 0 degrees at the top
-        const endRad = ((endAngle - 90) * Math.PI) / 180;   // -90 to make 0 degrees at the top
-
-        const arcStartX = x + radius * Math.cos(startRad);
-        const arcStartY = y + radius * Math.sin(startRad);
-        const arcEndX = x + radius * Math.cos(endRad);
-        const arcEndY = y + radius * Math.sin(endRad);
-
-        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-
-        const d = [
-            "M", x.toFixed(3), y.toFixed(3), // Move to Center
-            "L", arcStartX.toFixed(3), arcStartY.toFixed(3), // Line to Arc Start
-            "A", radius.toFixed(3), radius.toFixed(3), 0, largeArcFlag, 1, arcEndX.toFixed(3), arcEndY.toFixed(3), // Arc
-            "Z" // Close Path (line back to center)
-        ].join(" ");
-
-        return d;
     }
 
      // --- Glow Handling ---
