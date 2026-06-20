@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "Aktif Beta"
-  },
-  "previewStatusCompleted": {
-    "message": "Beta Selesai"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "Beta Ditangguhkan sehingga $resetDate$",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "Tidak dapat menyambung..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"

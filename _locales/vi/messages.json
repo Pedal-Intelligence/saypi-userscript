@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "Hoạt động Beta"
-  },
-  "previewStatusCompleted": {
-    "message": "Beta Hoàn Thành"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "Beta Tạm dừng cho đến $resetDate$",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "Không thể kết nối..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Hồ sơ"

@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "베타 활성"
-  },
-  "previewStatusCompleted": {
-    "message": "베타 완료"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "베타 일시 중지, $resetDate$까지",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "연결할 수 없습니다..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "윤곽"

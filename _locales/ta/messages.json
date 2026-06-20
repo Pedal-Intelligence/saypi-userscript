@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "பீட்டா செயலிழப்பு"
-  },
-  "previewStatusCompleted": {
-    "message": "பீட்டா முடிந்தது"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "பீட்டா $resetDate$ வரை நிறுத்தியுள்ளது",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "இணைக்க முடியவில்லை..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "சுயவிவரம்"
