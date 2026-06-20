@@ -1,6 +1,8 @@
+import { h } from 'preact';
 import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
-import generalHTML from './general.html?raw';
+import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
+import { GeneralPanel } from './GeneralPanel';
 import dataSharingPortraitUrl from '../../../../src/popup/data-sharing-portrait.jpg';
 import './general.css';
 
@@ -8,8 +10,9 @@ export class GeneralTab implements TabController {
   constructor(public container: HTMLElement) {}
   
   async init(): Promise<void> {
-    // Inject HTML template
-    this.container.innerHTML = generalHTML;
+    // Render the panel with Preact, then wire the controls imperatively —
+    // behaviour unchanged: the setup methods operate on the rendered DOM by id.
+    mountInto(this.container, h(GeneralPanel, {}));
 
     // Resolve consent imagery before user may see it
     this.setConsentHeroImage();
@@ -19,6 +22,14 @@ export class GeneralTab implements TabController {
     await this.setupAnalytics();
     await this.setupConsent();
     this.setupClearPreferences();
+  }
+
+  /**
+   * Clean up when the tab is destroyed. Defensive — the orchestrator keeps tabs
+   * mounted (init runs once), but unmount the Preact tree if it is ever called.
+   */
+  destroy(): void {
+    unmountFrom(this.container);
   }
 
   private setConsentHeroImage(): void {
