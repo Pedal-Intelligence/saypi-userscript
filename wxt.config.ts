@@ -511,6 +511,12 @@ const configFactory = (
           },
         },
       },
+      // Preact JSX via esbuild's automatic runtime. Affects only files that
+      // contain JSX (i.e. .tsx); the existing .ts/.js sources are untouched.
+      esbuild: {
+        jsx: "automatic",
+        jsxImportSource: "preact",
+      },
     }),
   };
 };

@@ -2,6 +2,8 @@
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "types": ["node", "chrome", "firefox-webext-browser", "vitest/globals"]
   },
   "include": [

@@ -8,8 +8,12 @@ export default defineConfig({
       "~/": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "preact",
+  },
   test: {
-    include: ["**/*.spec.ts"],
+    include: ["**/*.spec.ts", "**/*.spec.tsx"],
     exclude: [...configDefaults.exclude, "e2e/**"],
     globals: true,
     setupFiles: ["test/vitest.setup.js"],
