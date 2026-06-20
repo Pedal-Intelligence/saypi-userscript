@@ -43,7 +43,11 @@ silently skips. To cover it, once, in the seeded profile's headed window
 
 Then Cmd-Q. The sweep logs `auth=` and `voice=` per host and prints a loud ⚠️ if it
 detects the account is unauthenticated or no voice is selected — so a run always tells
-you whether it actually covered TTS. (You can still run anonymous/voice-off for a quick
+you whether it actually covered TTS. (Caveat: auth/voice state is read from SayPi's
+**debug** console logs, which the dev build emits — `npm run e2e:build` sets
+`VITE_DEBUG_LOGS=true`. If debug logging is off, both stay `null` and the warning may
+fire even when authed; treat the warning as "couldn't confirm coverage", and corroborate
+with the on-page voice menu / sign-in state if in doubt.) (You can still run anonymous/voice-off for a quick
 input-path-only check; the warning just flags the gap.)
 
 ## Run it

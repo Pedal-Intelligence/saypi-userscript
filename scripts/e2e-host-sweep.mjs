@@ -24,7 +24,7 @@
  */
 import { chromium } from "playwright";
 import { spawn } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { createServer } from "node:net";
 import { dirname, join, resolve as resolvePath } from "node:path";
@@ -53,6 +53,26 @@ const freePort = () =>
     s.listen(0, "127.0.0.1", () => { const { port } = s.address(); s.close(() => res(port)); });
   });
 const portDead = async (p) => { try { await fetch(`http://127.0.0.1:${p}/json/version`); return false; } catch { return true; } };
+
+/**
+ * Guarantee the seeded profile's NEXT launch won't show "Restore pages?". Same
+ * gotcha + fix as scripts/layer4cdp.mjs (Chrome's exit_type bookkeeping is
+ * unreliable on a synced, many-extension profile) — this harness shares that
+ * profile, so it must mark a clean exit too. Call only after Chrome is gone.
+ */
+function markCleanExit(profileDir) {
+  try {
+    const pref = join(profileDir, "Default", "Preferences");
+    if (!existsSync(pref)) return;
+    const p = JSON.parse(readFileSync(pref, "utf8"));
+    p.profile = p.profile || {};
+    p.profile.exit_type = "Normal";
+    p.profile.exited_cleanly = true;
+    writeFileSync(pref, JSON.stringify(p));
+  } catch (err) {
+    log(`note: could not mark clean exit (${err.message})`);
+  }
+}
 
 // Per-host DOM/selector diagnostics, evaluated in page context. These mirror the
 // selectors SayPi's adapters depend on, so a sweep surfaces drift directly.
@@ -96,8 +116,8 @@ async function sweepHost(ctx, host, url, opts, outDir) {
     ev.console.push({ t: m.type(), text: text.slice(0, 600) });
     const auth = text.match(/Auth status refreshed:\s*(true|false)/i);
     if (auth) ev.authStatus = auth[1].toLowerCase() === "true";
-    const voice = text.match(/Speech provided by\s+(\S+)/i);
-    if (voice) ev.voiceProvider = voice[1];
+    const voice = text.match(/Speech provided by\s+(.+)/i);
+    if (voice) ev.voiceProvider = voice[1].trim(); // capture full (possibly multi-word) provider/voice name
   });
   page.on("pageerror", (e) => ev.pageErrors.push({ message: e.message, stack: (e.stack || "").slice(0, 800) }));
   page.on("requestfailed", (r) => {
@@ -182,11 +202,12 @@ async function main() {
   const shutdown = async () => {
     try { const s = await browser.newBrowserCDPSession(); s.send("Browser.close").catch(() => {}); } catch { try { child.kill("SIGTERM"); } catch {} }
     const dl = Date.now() + 6000;
-    while (Date.now() < dl) { if (await portDead(port)) return; await new Promise((r) => setTimeout(r, 200)); }
+    while (Date.now() < dl) { if (await portDead(port)) { markCleanExit(profileDir); return; } await new Promise((r) => setTimeout(r, 200)); }
     try { child.kill("SIGTERM"); } catch {}
     await new Promise((r) => setTimeout(r, 1500));
     if (!(await portDead(port))) { try { child.kill("SIGKILL"); } catch {} }
     await new Promise((r) => setTimeout(r, 500));
+    markCleanExit(profileDir);
   };
 
   const summaries = [];
