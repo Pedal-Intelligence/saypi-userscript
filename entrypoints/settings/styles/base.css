@@ -1,0 +1,230 @@
+/**
+ * Settings-page base styles.
+ *
+ * Replaces the 2.9 MB vendored Tailwind v2 dump (`src/popup/tailwind.min.css`)
+ * with a small, maintained stylesheet: a modern reset mirroring the
+ * preflight behaviours the settings UI relies on, plus only the ~38 utility
+ * classes the settings templates actually use, at Tailwind v2's values.
+ *
+ * The settings page is SayPi's own chrome (not host-injected), so this owns its
+ * full styling. Values match Tailwind v2 so the existing look is preserved.
+ */
+
+/* ---- Reset (preflight essentials) ---------------------------------------- */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ---- Utilities (only the classes the settings templates use) ------------- */
+
+/* layout */
+.flex {
+  display: flex;
+}
+.hidden {
+  display: none;
+}
+.items-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-center {
+  justify-content: center;
+}
+
+/* sizing */
+.w-full {
+  width: 100%;
+}
+.w-20 {
+  width: 5rem;
+}
+.max-w-lg {
+  max-width: 32rem;
+}
+.h-2 {
+  height: 0.5rem;
+}
+
+/* spacing */
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mt-1 {
+  margin-top: 0.25rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
+}
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.py-1\.5 {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+/* borders */
+.border {
+  border: 1px solid #e5e7eb;
+}
+.rounded {
+  border-radius: 0.25rem;
+}
+.rounded-md {
+  border-radius: 0.375rem;
+}
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* backgrounds */
+.bg-blue-600 {
+  background-color: #2563eb;
+}
+.bg-gray-300 {
+  background-color: #d1d5db;
+}
+.hover\:bg-blue-700:hover {
+  background-color: #1d4ed8;
+}
+
+/* typography */
+.text-white {
+  color: #fff;
+}
+.text-gray-500 {
+  color: #6b7280;
+}
+.text-gray-700 {
+  color: #374151;
+}
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.text-right {
+  text-align: right;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+
+/* misc */
+.appearance-none {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* focus */
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.focus\:ring-offset-2:focus {
+  --saypi-ring-offset-width: 2px;
+}
+.focus\:ring-blue-500:focus {
+  /* Tailwind v2 ring-blue-500 renders solid (ring-opacity 1); a solid focus
+     ring is also more visible for keyboard users. The .focus:ring-2 fallback
+     below keeps the TW default (50%) for a bare ring with no colour class. */
+  --saypi-ring-color: rgb(59, 130, 246);
+}
+.focus\:ring-2:focus {
+  box-shadow: 0 0 0 var(--saypi-ring-offset-width, 0px)
+      var(--saypi-ring-offset-color, #fff),
+    0 0 0 calc(2px + var(--saypi-ring-offset-width, 0px))
+      var(--saypi-ring-color, rgba(59, 130, 246, 0.5));
+}

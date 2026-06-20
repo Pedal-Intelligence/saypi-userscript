@@ -12,7 +12,7 @@ import { replaceI18n } from "./shared/i18n";
 import type { TabController } from "./shared/types";
 
 // Styles
-import "../../src/popup/tailwind.min.css";
+import "./styles/base.css"; // reset + utilities (replaces the 2.9 MB Tailwind v2 dump)
 import "../../src/popup/toggle.css";
 import "../../src/popup/language-picker.css";
 import "../../src/popup/status.css";
