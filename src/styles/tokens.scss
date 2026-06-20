@@ -1,0 +1,22 @@
+/**
+ * SayPi design tokens — the single source of truth for brand colors.
+ *
+ * Declared on :root so they cascade to every injected widget in the host's
+ * light DOM. Each value is byte-identical to the literal it consolidated, so
+ * referencing it via var() is a no-visual-change refactor. This file is also
+ * the artifact a future Claude Design sync consumes.
+ *
+ * NOTE: this is NOT for host-borrowed Tailwind classes (e.g. bg-cream-550) —
+ * those stay as host classes so injected widgets keep inheriting host styling.
+ * These tokens are for SayPi's own CSS rules only.
+ */
+:root {
+  /* SayPi brand greens */
+  --saypi-green: #418a2f;
+  --saypi-green-dark: #24381b;
+
+  /* Pi-surface palette SayPi mirrors in its own CSS (cream composer + ink text) */
+  --saypi-cream: rgb(245 238 223);
+  --saypi-cream-dark: rgb(237 225 209);
+  --saypi-ink: rgb(13 60 38);
+}

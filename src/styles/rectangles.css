@@ -412,7 +412,7 @@
   }
   50% {
     opacity: 0.5;
-    fill: rgb(245 238 223); /* bg-cream-550 */
+    fill: var(--saypi-cream); /* bg-cream-550 */
   }
 }
 

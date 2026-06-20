@@ -8,6 +8,7 @@ import { stampBuildOnDocument } from "./build-stamp.ts";
 import { installDevReloadBridge, installDevFeedSpeechBridge } from "./dev/devReload.ts";
 
 // Import styles that are needed across all modes
+import "./styles/tokens.scss"; // SayPi design tokens (--saypi-*) on :root
 import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";

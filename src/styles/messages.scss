@@ -535,7 +535,7 @@ body.saypi-recent-telemetry .present-messages .assistant-message:last-of-type .s
     padding: 0.8rem;
 }
 .assistant-message.speech-enabled {
-    border-color:#24381b;
+    border-color: var(--saypi-green-dark);
 }
 .assistant-message .popup-menu {
     background-color: #f0f9f4;
