@@ -21,6 +21,10 @@ import { ChatbotService } from "../chatbots/ChatbotService";
 import type { Chatbot } from "../chatbots/Chatbot";
 import type { PromptLevel } from "./AuthPromptController";
 import { getAuthPromptController } from "./AuthPromptController";
+import { h } from "preact";
+import { mountInto, unmountFrom } from "../ui/preact/mount";
+import { AuthToastContent } from "./AuthToastContent";
+import { AuthModalContent } from "./AuthModalContent";
 
 /**
  * Event data for showing auth prompts
@@ -117,8 +121,19 @@ export class AuthPromptUI {
     toast.setAttribute("role", "alert");
     toast.setAttribute("aria-live", "polite");
 
-    const content = this.createToastContent(event);
-    toast.appendChild(content);
+    mountInto(
+      toast,
+      h(AuthToastContent, {
+        iconSvg: this.brandIconSvg(24),
+        text:
+          getMessage("authPromptToast") ||
+          "Sign in to track your voice usage and sync settings",
+        signInLabel: getMessage("signIn") || "Sign In",
+        dismissLabel: getMessage("dismissNotice") || "Dismiss",
+        onSignIn: () => this.handleSignIn(),
+        onDismiss: () => this.handleDismiss(),
+      }),
+    );
 
     document.body.appendChild(toast);
     this.currentPrompt = toast;
@@ -155,8 +170,7 @@ export class AuthPromptUI {
     modal.setAttribute("aria-labelledby", "saypi-auth-title");
     modal.addEventListener("click", (e) => e.stopPropagation());
 
-    const content = this.createModalContent(event, "soft");
-    modal.appendChild(content);
+    mountInto(modal, this.modalContentVnode(event, "soft"));
 
     document.body.appendChild(overlay);
     document.body.appendChild(modal);
@@ -190,8 +204,7 @@ export class AuthPromptUI {
     modal.setAttribute("aria-labelledby", "saypi-auth-title");
     modal.addEventListener("click", (e) => e.stopPropagation());
 
-    const content = this.createModalContent(event, "full");
-    modal.appendChild(content);
+    mountInto(modal, this.modalContentVnode(event, "full"));
 
     document.body.appendChild(overlay);
     document.body.appendChild(modal);
@@ -212,146 +225,60 @@ export class AuthPromptUI {
   }
 
   /**
-   * Create toast content
+   * Build the SayPi brand icon as raw SVG at the given size (or null on failure).
    */
-  private createToastContent(event: AuthPromptShowEvent): HTMLElement {
-    const content = document.createElement("div");
-    content.className = "saypi-auth-prompt-content";
-
-    // Icon - use SayPi bubble logo for brand recognition
-    const iconContainer = document.createElement("div");
-    iconContainer.className = "saypi-auth-prompt-icon saypi-brand-icon";
+  private brandIconSvg(size: number): string | null {
     try {
       const icon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
-      icon.setAttribute("width", "24");
-      icon.setAttribute("height", "24");
-      iconContainer.appendChild(icon);
+      icon.setAttribute("width", String(size));
+      icon.setAttribute("height", String(size));
+      return icon.outerHTML;
     } catch {
-      iconContainer.textContent = "🗣️";
+      return null;
     }
-    content.appendChild(iconContainer);
-
-    // Text
-    const textContainer = document.createElement("div");
-    textContainer.className = "saypi-auth-prompt-text";
-    textContainer.textContent = getMessage("authPromptToast") ||
-      "Sign in to track your voice usage and sync settings";
-    content.appendChild(textContainer);
-
-    // Sign in button
-    const signInButton = document.createElement("button");
-    signInButton.className = "saypi-auth-prompt-signin";
-    signInButton.textContent = getMessage("signIn") || "Sign In";
-    signInButton.addEventListener("click", () => this.handleSignIn());
-    content.appendChild(signInButton);
-
-    // Close button
-    const closeButton = document.createElement("button");
-    closeButton.className = "saypi-auth-prompt-close";
-    closeButton.setAttribute("aria-label", getMessage("dismissNotice") || "Dismiss");
-    closeButton.innerHTML = "×";
-    closeButton.addEventListener("click", () => this.handleDismiss());
-    content.appendChild(closeButton);
-
-    return content;
   }
 
   /**
-   * Create modal content
+   * Build the modal content vnode for the given variant. Faithful to the prior
+   * createModalContent (same title / description / benefits / button labels).
    */
-  private createModalContent(event: AuthPromptShowEvent, variant: "soft" | "full"): HTMLElement {
-    const content = document.createElement("div");
-    content.className = "saypi-auth-modal-content";
+  private modalContentVnode(
+    event: AuthPromptShowEvent,
+    variant: "soft" | "full",
+  ) {
+    const description =
+      variant === "full"
+        ? getMessage("authPromptModalFull") ||
+          "You've used SayPi for " +
+            event.transcriptionCount +
+            " voice messages! Sign in to unlock usage tracking, sync your settings across devices, and get personalized voice features."
+        : getMessage("authPromptModalSoft") ||
+          "Sign in to track your voice usage and sync your settings across all your devices.";
 
-    // Close button (top right)
-    const closeButton = document.createElement("button");
-    closeButton.className = "saypi-auth-modal-close";
-    closeButton.setAttribute("aria-label", getMessage("dismissNotice") || "Dismiss");
-    closeButton.innerHTML = "×";
-    closeButton.addEventListener("click", () => this.handleDismiss());
-    content.appendChild(closeButton);
+    const benefits =
+      variant === "full"
+        ? [
+            getMessage("authBenefitLimits") ||
+              "Higher usage limits with free account",
+            getMessage("authBenefitTTS") ||
+              "Text-to-speech voices (paid plans)",
+            getMessage("authBenefitPremium") ||
+              "Premium features & chatbot support",
+          ]
+        : [];
 
-    // Brand header - SayPi identification
-    const brandHeader = document.createElement("div");
-    brandHeader.className = "saypi-auth-modal-brand";
-    brandHeader.textContent = "Say, Pi";
-    content.appendChild(brandHeader);
-
-    // Icon - use SayPi bubble logo for brand recognition
-    const iconContainer = document.createElement("div");
-    iconContainer.className = "saypi-auth-modal-icon saypi-brand-icon";
-    try {
-      const icon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
-      icon.setAttribute("width", "56");
-      icon.setAttribute("height", "56");
-      iconContainer.appendChild(icon);
-    } catch {
-      iconContainer.textContent = "🗣️";
-    }
-    content.appendChild(iconContainer);
-
-    // Title
-    const title = document.createElement("h2");
-    title.id = "saypi-auth-title";
-    title.className = "saypi-auth-modal-title";
-    title.textContent = getMessage("authPromptTitle") ||
-      "Unlock More Voice Features";
-    content.appendChild(title);
-
-    // Description
-    const description = document.createElement("p");
-    description.className = "saypi-auth-modal-description";
-
-    if (variant === "full") {
-      description.textContent = getMessage("authPromptModalFull") ||
-        "You've used SayPi for " + event.transcriptionCount + " voice messages! Sign in to unlock usage tracking, sync your settings across devices, and get personalized voice features.";
-    } else {
-      description.textContent = getMessage("authPromptModalSoft") ||
-        "Sign in to track your voice usage and sync your settings across all your devices.";
-    }
-    content.appendChild(description);
-
-    // Benefits list (only for full modal)
-    if (variant === "full") {
-      const benefitsList = document.createElement("ul");
-      benefitsList.className = "saypi-auth-modal-benefits";
-
-      const benefits = [
-        getMessage("authBenefitLimits") || "Higher usage limits with free account",
-        getMessage("authBenefitTTS") || "Text-to-speech voices (paid plans)",
-        getMessage("authBenefitPremium") || "Premium features & chatbot support"
-      ];
-
-      benefits.forEach(benefit => {
-        const li = document.createElement("li");
-        li.textContent = benefit;
-        benefitsList.appendChild(li);
-      });
-
-      content.appendChild(benefitsList);
-    }
-
-    // Buttons container
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.className = "saypi-auth-modal-buttons";
-
-    // Sign in button (primary)
-    const signInButton = document.createElement("button");
-    signInButton.className = "saypi-auth-modal-signin";
-    signInButton.textContent = getMessage("signIn") || "Sign In";
-    signInButton.addEventListener("click", () => this.handleSignIn());
-    buttonsContainer.appendChild(signInButton);
-
-    // Maybe later button (secondary)
-    const laterButton = document.createElement("button");
-    laterButton.className = "saypi-auth-modal-later";
-    laterButton.textContent = getMessage("maybeLater") || "Maybe Later";
-    laterButton.addEventListener("click", () => this.handleDismiss());
-    buttonsContainer.appendChild(laterButton);
-
-    content.appendChild(buttonsContainer);
-
-    return content;
+    return h(AuthModalContent, {
+      variant,
+      iconSvg: this.brandIconSvg(56),
+      title: getMessage("authPromptTitle") || "Unlock More Voice Features",
+      description,
+      benefits,
+      signInLabel: getMessage("signIn") || "Sign In",
+      laterLabel: getMessage("maybeLater") || "Maybe Later",
+      dismissLabel: getMessage("dismissNotice") || "Dismiss",
+      onSignIn: () => this.handleSignIn(),
+      onDismiss: () => this.handleDismiss(),
+    });
   }
 
   /**
@@ -390,6 +317,9 @@ export class AuthPromptUI {
     // Remove from DOM after animation
     await new Promise<void>(resolve => {
       setTimeout(() => {
+        if (promptToRemove) {
+          unmountFrom(promptToRemove);
+        }
         if (promptToRemove?.parentNode) {
           promptToRemove.parentNode.removeChild(promptToRemove);
         }
