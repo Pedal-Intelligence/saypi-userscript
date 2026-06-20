@@ -15,6 +15,9 @@ function fakeAudioContextClass(captured: any) {
         connect: vi.fn(),
         start: vi.fn(function (this: any) {
           captured.started = true;
+          // start() before resume() would queue against a suspended context and
+          // produce silence — assert resume happened first.
+          captured.startedBeforeResume = !captured.resumed;
         }),
       };
     }
@@ -24,6 +27,10 @@ function fakeAudioContextClass(captured: any) {
     decodeAudioData(_buf: ArrayBuffer) {
       captured.decoded = true;
       return Promise.resolve({ duration: 1 });
+    }
+    resume() {
+      captured.resumed = true;
+      return Promise.resolve();
     }
   };
 }
@@ -42,6 +49,10 @@ describe("createSyntheticSpeechStream", () => {
     expect(fetchImpl).toHaveBeenCalledWith("blob:clip");
     expect(captured.decoded).toBe(true);
     expect(captured.started).toBe(true);
+    // The context must be resumed (it can start suspended in an offscreen doc with
+    // no user gesture — e.g. the real Layer-4 browser — which would yield silence).
+    expect(captured.resumed).toBe(true);
+    expect(captured.startedBeforeResume).toBe(false);
     expect((stream as any).id).toBe("synthetic-stream");
   });
 });

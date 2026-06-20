@@ -35,6 +35,11 @@ export async function createSyntheticSpeechStream(
   source.loop = opts.loop ?? true;
   const destination = ctx.createMediaStreamDestination();
   source.connect(destination);
+  // A freshly created AudioContext can be 'suspended' when there's no user gesture
+  // (the offscreen document, and notably the real Layer-4 browser, which has no
+  // --autoplay-policy override). Without resuming, the graph runs silently and the
+  // VAD never fires. Resume before starting so the synthetic clip actually plays.
+  await ctx.resume();
   source.start();
   logger.debug("[SayPi synthetic-audio] synthetic speech stream created", {
     loop: source.loop,
