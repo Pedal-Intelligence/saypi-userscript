@@ -10,19 +10,27 @@ html body.claude {
     height: 32px;
   }
 
-  /* hide Claude's original placeholder when custom placeholder is present and non-empty */
-  #saypi-prompt-container:has(+ .custom-placeholder) #saypi-prompt {
-    // this selector may not be working?
-    p[data-placeholder].is-empty {
-      visibility: hidden; // display: none doesn't work, causes it to reappear
-    }
-  }
+  /* Suppress Claude's native placeholder while SayPi's custom placeholder is present,
+     so the two don't render on top of each other (#351).
 
-  #saypi-prompt p.is-empty.is-editor-empty::before {
-    // hide Claude's original placeholder, but somehow keep the caret visible
-    // display: none doesn't work, and causes the placeholder to reappear
-    // visibility: hidden doesn't work, and causes the caret to disappear
-    --tw-text-opacity: 0 !important; // hide the text while keeping the caret visible
+     SayPi inserts its clone (`#claude-placeholder.custom-placeholder`) as the *next
+     sibling of `#saypi-prompt`* (see findAndDecorateCustomPlaceholderElement —
+     `prompt.insertAdjacentElement("afterend", …)`). The old rule keyed off
+     `#saypi-prompt-container:has(+ .custom-placeholder)`, which never matched on two
+     counts: (1) `#saypi-prompt-container` is an *id* selector, but the container only
+     ever gets the `.saypi-prompt-container` *class*; (2) the clone is a sibling of
+     `#saypi-prompt`, not of the container. So the suppression never applied and both
+     placeholders showed.
+
+     Claude renders its placeholder via `::before { content: attr(data-placeholder) }`
+     (Tailwind `before:content-[attr(data-placeholder)]`) coloured with an *!important*
+     utility (`before:!text-text-500`). The old `--tw-text-opacity: 0` fallback couldn't
+     win against that colour, so override `content` itself (also `!important`) to drop the
+     duplicate text — Claude's `content` is not `!important`, so this wins — while leaving
+     the contenteditable `<p>` (and the caret) intact. Scoped to when our clone exists, so
+     a normal Claude composer (no SayPi clone) is untouched. */
+  #saypi-prompt:has(+ .custom-placeholder) p[data-placeholder]::before {
+    content: "" !important;
   }
 
   /* shift the custom placeholder up to Claude's standard placeholder position */
