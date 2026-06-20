@@ -39,7 +39,7 @@ describe("SpeechHistoryModule", () => {
       const theUtterance = new PiSpeech(
         "utterance1",
         "en-GB",
-        PiSpeech.voice1,
+        PiSpeech.voices.voice1,
         "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance1"
       );
 
@@ -63,7 +63,7 @@ describe("SpeechHistoryModule", () => {
       const theUtterance = new PiSpeech(
         "utterance2",
         "en-GB",
-        PiSpeech.voice1,
+        PiSpeech.voices.voice1,
         "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance2"
       );
       const theHash = md5(theContent);
@@ -99,7 +99,7 @@ describe("SpeechHistoryModule", () => {
       const theUtterance = new PiSpeech(
         "utterance3",
         "en-GB",
-        PiSpeech.voice1,
+        PiSpeech.voices.voice1,
         "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance3"
       );
       const theHash = md5(theContent);
@@ -122,7 +122,7 @@ describe("SpeechHistoryModule", () => {
         const expectedUtterance = new PiSpeech(
           "utterance1",
           "en-GB",
-          PiSpeech.voice1,
+          PiSpeech.voices.voice1,
           "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance1"
         );
         const expectedCharge = new UtteranceCharge(expectedUtterance, 50, hash);
@@ -155,7 +155,7 @@ describe("SpeechHistoryModule", () => {
       const theUtterance = new PiSpeech(
         "utterance4",
         "en-GB",
-        PiSpeech.voice1,
+        PiSpeech.voices.voice1,
         "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance4"
       );
       const theHash = md5(theContent);

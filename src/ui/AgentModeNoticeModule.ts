@@ -50,14 +50,14 @@ export class AgentModeNoticeModule {
 
   private setupEventListeners(): void {
     // Listen for preference changes that affect agent mode
-    EventBus.on("userPreferenceChanged", (changes) => {
+    EventBus.on("userPreferenceChanged", (changes: { discretionaryMode?: boolean; nickname?: string | null }) => {
       if ("discretionaryMode" in changes) {
-        this.handleAgentModeChange(changes.discretionaryMode);
+        this.handleAgentModeChange(changes.discretionaryMode!);
       }
-      
+
       // Handle nickname changes - refresh the notice if it's currently shown
       if ("nickname" in changes) {
-        this.handleNicknameChange(changes.nickname);
+        this.handleNicknameChange(changes.nickname!);
       }
     });
   }

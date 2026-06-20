@@ -14,7 +14,7 @@ Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered
 - Review every PR with independent subagent reviewers before merge (multi-lens for the high-blast-radius domains below). GitHub disallows self-approval, so post verdicts as PR comments.
 - Merge when gates pass; keep persistent operational memory across sessions.
 
-**Merge gate (default):** CI green (`npm test` — Jest **and** Vitest) **plus** a reviewer-subagent verdict on the PR. No flake exceptions until a specific chronic flake is documented in an issue with its exact signature.
+**Merge gate (default):** CI green (`npm test` — `tsc --noEmit` type-check, **then** Jest **and** Vitest; plus the required `e2e` check) **plus** a reviewer-subagent verdict on the PR. No flake exceptions until a specific chronic flake is documented in an issue with its exact signature.
 
 **High-blast-radius changes — multi-lens adversarial review + founder sign-off before merge:**
 - Auth / JWT (`src/JwtManager.ts`, OAuth/PKCE in `src/auth/`).
@@ -56,7 +56,7 @@ Keep issues factual; exclude speculative root-cause or solution ideas from the b
 - `npm run dev:firefox` — Launches WXT’s Firefox MV2 dev session in a temporary private profile (`wxt --browser firefox --mv2`).
 - `npm start` — Serves `public/` at `http://localhost:8080` (HTTPS if `CERT_DIR` is set).
 - `npm run build` — Production build (validates i18n, copies ONNX/VAD assets).
-- `npm test` — Runs Jest and Vitest. Use `npm run test:vitest:watch` for watch mode.
+- `npm test` — Type-checks (`tsc --noEmit`), then runs Jest and Vitest. `npm run typecheck` type-checks only (needs the generated `.wxt/`). Use `npm run test:vitest:watch` for watch mode.
 - `npm run build:firefox` — Build + package for Firefox. Utilities: `npm run copy-onnx`, `npm run translate`, `npm run translate:check`.
 - `npm run validate:env` — Check `.env` and `.env.production` for required values (runs automatically before dev/build).
 

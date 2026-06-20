@@ -23,7 +23,7 @@ describe('AudioModule - OffscreenAudioBridge Integration', () => {
     eventListeners = new Map();
     
     // Mock EventBus.on to track registered listeners
-    const originalOn = EventBus.on;
+    const originalOn = EventBus.on as (...args: any[]) => any;
     vi.spyOn(EventBus, 'on').mockImplementation((event: string, handler: Function, context?: any) => {
       eventListeners.set(event, handler);
       return originalOn.call(EventBus, event, handler, context);
@@ -60,21 +60,21 @@ describe('AudioModule - OffscreenAudioBridge Integration', () => {
     
     // Register listeners for standard events
     standardEvents.forEach((event) => {
-      EventBus.on(`audio:offscreen:${event}`, (detail) => {
+      EventBus.on(`audio:offscreen:${event}`, (detail: any) => {
         outputActor.send(event);
       });
     });
     
     // Register listeners for sourced events  
     sourcedEvents.forEach((event) => {
-      EventBus.on(`audio:offscreen:${event}`, (detail) => {
+      EventBus.on(`audio:offscreen:${event}`, (detail: any) => {
         const eventDetail = { source: detail?.source || 'offscreen' };
         outputActor.send(event, eventDetail);
       });
     });
     
     // Handle special case for 'playing' event which maps to 'play' 
-    EventBus.on("audio:offscreen:playing", (detail) => {
+    EventBus.on("audio:offscreen:playing", (detail: any) => {
       const eventDetail = { source: detail?.source || 'offscreen' };
       outputActor.send("play", eventDetail);
     });

@@ -20,16 +20,16 @@ const testMachine = sessionAnalyticsMachine.withConfig({
 });
 
 const sessionAnalyticsModel = createModel(testMachine).withEvents({
-  start_session: {} as StartSessionEvent,
+  start_session: {} as StartSessionEvent as any,
   transcribing: {
     audio_duration_seconds: 10,
     speech_start_time: Date.now() - 10000,
     speech_end_time: Date.now(),
-  } as TranscriptionEvent,
+  } as TranscriptionEvent as any,
   send_message: {
     delay_ms: 5000,
-  } as SendMessageEvent,
-  end_session: {} as EndSessionEvent,
+  } as SendMessageEvent as any,
+  end_session: {} as EndSessionEvent as any,
 });
 
 describe("session analytics machine", () => {

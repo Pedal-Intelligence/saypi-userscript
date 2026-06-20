@@ -1048,7 +1048,7 @@ export class UniversalDictationModule {
       EventBus.on(eventName, (detail: Omit<DictationSpeechStoppedEvent, 'type'> | Omit<DictationAudioConnectedEvent, 'type'> | Omit<DictationSessionAssignedEvent, 'type'>) => {
         if (detail) {
           // sanitise the detail object to replace any `frames` property with `[REDACTED]`
-          const sanitisedDetail = { ...detail };
+          const sanitisedDetail: any = { ...detail };
           if (sanitisedDetail.frames) {
             sanitisedDetail.frames = "[REDACTED]";
           }

@@ -151,10 +151,10 @@ test("handleTextAddition emits only the new suffix when Claude streams cumulativ
 
   expect(nextSpy).toHaveBeenCalledTimes(2);
   expect(nextSpy.mock.calls[0][0]).toBeInstanceOf(AddedText);
-  expect(nextSpy.mock.calls[0][0].text).toBe(firstChunk);
+  expect((nextSpy.mock.calls[0][0] as any).text).toBe(firstChunk);
 
   expect(nextSpy.mock.calls[1][0]).toBeInstanceOf(AddedText);
-  expect(nextSpy.mock.calls[1][0].text).toBe("ey! What's on your mind today?");
+  expect((nextSpy.mock.calls[1][0] as any).text).toBe("ey! What's on your mind today?");
 });
 
 test("it preserves the first streamed chunk when constructor emits before subclass init", async () => {
@@ -181,7 +181,7 @@ test("it preserves the first streamed chunk when constructor emits before subcla
 
   expect(nextSpy).toHaveBeenCalledTimes(1);
   expect(nextSpy.mock.calls[0][0]).toBeInstanceOf(AddedText);
-  expect(nextSpy.mock.calls[0][0].text.startsWith(" sound compelling"))
+  expect((nextSpy.mock.calls[0][0] as any).text.startsWith(" sound compelling"))
     .toBe(true);
 });
 

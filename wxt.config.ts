@@ -3,6 +3,8 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "wxt";
+import type { ConfigEnv, Entrypoint, UserConfig } from "wxt";
+import type { InlineConfig as ViteInlineConfig } from "vite";
 
 // Build-identity stamp injected into the bundle as `__SAYPI_BUILD_STAMP__`
 // (see src/build-stamp.ts). Lets a loaded build be matched against the current
@@ -359,7 +361,17 @@ const HOST_PERMISSIONS = Array.from(
   ),
 );
 
-export default defineConfig((env) => {
+// WXT's loader (c12) supports a config factory `(env) => UserConfig`, but the
+// published `defineConfig` overload only types the plain-object form. Type the
+// factory's env/return explicitly and cast it through to satisfy the narrow
+// overload — the cast is erased at runtime, so behavior is unchanged.
+// `$schema` is a WXT-accepted IDE/JSON-schema hint and `optimizeDeps` is an
+// extra key not present in this WXT version's typed `UserConfig`; widen the
+// return type to permit both (values preserved verbatim) while still
+// type-checking every real `UserConfig` member.
+const configFactory = (
+  env: ConfigEnv,
+): UserConfig & { $schema?: string; optimizeDeps?: Record<string, unknown> } => {
   const browser =
     (typeof process.env.WXT_BROWSER === "string" && process.env.WXT_BROWSER.length > 0
       ? process.env.WXT_BROWSER
@@ -389,11 +401,11 @@ export default defineConfig((env) => {
       disabled: process.env.WXT_DISABLE_RUNNER === "true",
     },
     hooks: {
-      "vite:build:extendConfig": (entrypoints, config) => {
+      "vite:build:extendConfig": (entrypoints: readonly Entrypoint[], config: ViteInlineConfig) => {
         applyChunkFilePattern(config);
         applyBuildStampDefine(config);
       },
-      "vite:devServer:extendConfig": (config) => {
+      "vite:devServer:extendConfig": (config: ViteInlineConfig) => {
         applyChunkFilePattern(config);
         applyBuildStampDefine(config);
       },
@@ -432,7 +444,10 @@ export default defineConfig((env) => {
       name: "__MSG_appName__",
       description: "__MSG_appDescription__",
       default_locale: "en",
-      author: "Ross Cadogan",
+      // WXT/web-ext normalizes a string author at build time, but the MV3
+      // manifest type only permits `{ email: string }`. Cast to keep the string
+      // value (erased at runtime, so behavior is unchanged).
+      author: "Ross Cadogan" as unknown as { email: string },
       homepage_url: "https://www.saypi.ai",
       action: {
         default_title: "Say, Pi",
@@ -498,4 +513,6 @@ export default defineConfig((env) => {
       },
     }),
   };
-});
+};
+
+export default defineConfig(configFactory as unknown as UserConfig);

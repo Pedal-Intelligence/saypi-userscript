@@ -16,8 +16,13 @@ import EventBus from "../events/EventBus";
 import { logger } from "../LoggingModule";
 import { UsageTracker, getUsageTracker } from "./UsageTracker";
 
-// Cross-browser runtime API
-const browserAPI = typeof browser !== "undefined" ? browser : chrome;
+// Cross-browser runtime API.
+// `browser` (WXT) and `chrome` have structurally-different generated types, so the
+// ternary widens to a union that TS can't call uniformly. We use the chrome-style
+// API surface here (callback-based sendMessage, runtime.lastError), so type the
+// handle as `typeof chrome`. This is a type-only assertion; the runtime value is
+// unchanged (still the polyfilled `browser` when present).
+const browserAPI = (typeof browser !== "undefined" ? browser : chrome) as typeof chrome;
 
 /**
  * Prompt levels from least to most intrusive
@@ -148,7 +153,9 @@ export class AuthPromptController {
       const response = await browserAPI.runtime.sendMessage({ type: "GET_AUTH_STATUS" });
       this.cachedAuthStatus = response?.isAuthenticated ?? false;
       logger.debug("[AuthPromptController] Auth status refreshed:", this.cachedAuthStatus);
-      return this.cachedAuthStatus;
+      // The assignment above always yields a boolean (`?? false`), so this is a
+      // boolean at runtime despite the field's wider `boolean | null` declared type.
+      return this.cachedAuthStatus as boolean;
     } catch (error) {
       logger.debug("[AuthPromptController] Failed to get auth status:", error);
       this.cachedAuthStatus = false;

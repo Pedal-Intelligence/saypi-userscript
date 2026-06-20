@@ -2,14 +2,15 @@
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "types": ["node", "chrome", "firefox-webext-browser"]
+    "types": ["node", "chrome", "firefox-webext-browser", "vitest/globals"]
   },
   "include": [
     "src/**/*",
     "entrypoints/**/*",
     "test/**/*",
     "scripts/**/*",
-    "wxt.config.ts"
+    "wxt.config.ts",
+    ".wxt/wxt.d.ts"
   ],
   "exclude": ["public", "dist"]
 }

@@ -8,7 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run dev:firefox` - Firefox MV2 dev session (`wxt --browser firefox --mv2`; opens a temporary private profile)
 - `npm run build` - Production build via `wxt build` (`prebuild` validates env + i18n and copies ONNX; WXT generates the manifest)
 - `npm run build:firefox` - Build and package for Firefox
-- `npm test` - Run all tests (Jest + Vitest)
+- `npm test` - Type-check + run all tests (`tsc --noEmit`, then Jest + Vitest)
+- `npm run typecheck` - Type-check only (`tsc --noEmit`); needs the generated `.wxt/` dir (run `npm run dev`/`build` once, or `wxt prepare`, to create it)
 - `npm run test:jest` - Run Jest tests only
 - `npm run test:vitest` - Run Vitest tests only  
 - `npm run test:vitest:watch` - Run Vitest in watch mode
@@ -128,7 +129,8 @@ WXT discovers entry points in **`entrypoints/`**; each is a thin shim that impor
 
 The testability net has four layers — reach for the cheapest one that can actually catch the bug:
 
-- **Layers 1–2 — unit / contract** (`npm test`; Jest + Vitest, JSDOM). Pure logic, XState machines, and `src/chatbots/` adapter contract tests against recorded DOM fixtures. The **required** merge gate. Default for any change with extractable logic. Can't catch real-browser or cross-context behavior.
+- **Layer 0 — type-check** (`tsc --noEmit`, run first by `npm test` via the `typecheck` script). The whole TS surface (`src`, `entrypoints`, `test`, `scripts`, `wxt.config.ts`) must be error-free; a type regression fails the **required** gate before Jest/Vitest even run. CI generates the WXT-typed `.wxt/` (via `wxt prepare`) before type-checking — see `.github/workflows/test.yaml`.
+- **Layers 1–2 — unit / contract** (`npm test`; Jest + Vitest, JSDOM). Pure logic, XState machines, and `src/chatbots/` adapter contract tests against recorded DOM fixtures. The **required** merge gate (type-check + both runners). Default for any change with extractable logic. Can't catch real-browser or cross-context behavior.
 - **Layer 3 — headless E2E** (`npm run e2e:build && npm run test:e2e`; Playwright + real headless Chrome). Use when a change touches content-script **bootstrap/decoration**, the **offscreen ↔ service-worker ↔ VAD/STT** wiring, CSP, or anything needing a *real browser* but verifiable against a DOM you control. Fast, deterministic, **hermetic**, a **required** CI check, and it **can drive the mic** via fake audio. Can't: real-host DOM fidelity, real auth, real network. See **[e2e/README.md](e2e/README.md)**.
 - **Layer 3.5 — agent-launched real-host loop** (`npm run layer35:verify`; Playwright `launchPersistentContext` against the *real* host). Use to confirm a change against **live pi.ai** (and other non-Cloudflare hosts) **without the founder** — the agent owns the browser, so it self-reloads by relaunch and feeds the in-extension synthetic mic. Needs a one-time founder login (`npm run layer35:seed`) into a git-ignored persistent profile. **Claude/ChatGPT are out of scope (behind Cloudflare; bundled Chromium is blocked and stable Chrome won't load the extension) — use Layer 4 for those.** On-demand, **not** CI (hits the real internet). See **[doc/layer35-real-host-loop.md](doc/layer35-real-host-loop.md)**.
 - **Layer 4 — real-site spot-check** (`node scripts/dev-rig.mjs` + Claude-in-Chrome). Use when you need fidelity to the *actual* pi.ai/Claude/ChatGPT DOM (which drifts and is **not** an API contract) or to confirm a fix on the live host. On-demand, **not** CI; needs the founder's browser. Mic-gated and reload-gated paths now have DEV-only in-extension hooks (`saypi:dev-feed-speech`, `saypi:dev-reload`) so most turns are hands-off — incl. **Claude/ChatGPT** (real browser is already past Cloudflare; recipe in the dev-loop doc). Reach for it **after** Layer 3 is green, for real-host confirmation. See **[doc/autonomous-dev-loop.md](doc/autonomous-dev-loop.md)** (details below).

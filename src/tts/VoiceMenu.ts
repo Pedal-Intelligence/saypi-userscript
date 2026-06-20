@@ -38,7 +38,7 @@ export abstract class VoiceSelector {
    * This allows the voice menu to update dynamically when a user signs in.
    */
   protected registerAuthenticationChangeHandler(): void {
-    EventBus.on('saypi:auth:status-changed', (isAuthenticated) => {
+    EventBus.on('saypi:auth:status-changed', (isAuthenticated: boolean) => {
       // Authentication status changed, refresh the voice selector
       console.log(`User has logged ${isAuthenticated ? "in" : "out"}, refreshing voice selector`);
       const id = this.getId();

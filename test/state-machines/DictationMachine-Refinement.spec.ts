@@ -909,7 +909,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       const targetId = `${inputElement.id || inputElement.name}`;
       const segmentsAfterFirstRefinement = service.getSnapshot().context.audioSegmentsByTarget[targetId];
       expect(segmentsAfterFirstRefinement.length).toBe(2);
-      expect(segmentsAfterFirstRefinement.every(seg => seg.refined === true)).toBe(true);
+      expect(segmentsAfterFirstRefinement.every((seg: any) => seg.refined === true)).toBe(true);
 
       // Add one more segment (this one should be unrefined)
       service.send({ type: 'saypi:userSpeaking' });
@@ -957,7 +957,7 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       // All 3 segments should now be marked as refined
       const segmentsAfterSecondRefinement = service.getSnapshot().context.audioSegmentsByTarget[targetId];
       expect(segmentsAfterSecondRefinement.length).toBe(3);
-      expect(segmentsAfterSecondRefinement.every(seg => seg.refined === true)).toBe(true);
+      expect(segmentsAfterSecondRefinement.every((seg: any) => seg.refined === true)).toBe(true);
 
       // Check final state after second refinement completes
       const state = service.getSnapshot();

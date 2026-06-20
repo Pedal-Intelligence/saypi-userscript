@@ -84,7 +84,7 @@ describe('ChatGPTChatbot unified composer detection', () => {
     const container = findControlsContainerInComposer(root);
     expect(container).toBeTruthy();
     // Should be the ms-auto group
-    expect(container.classList.contains('ms-auto')).toBe(true);
+    expect(container!.classList.contains('ms-auto')).toBe(true);
   });
 
   it('submit button selector is scoped and matches the send button only', () => {

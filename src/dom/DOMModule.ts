@@ -114,7 +114,7 @@ export function createSVGElement(svgString: string): SVGElement {
   if (svgElement.tagName.toLowerCase() === "svg") {
     const currentDocument = typeof document !== "undefined" ? document : null;
     if (currentDocument?.importNode) {
-      return currentDocument.importNode(svgElement, true) as SVGElement;
+      return currentDocument.importNode(svgElement, true) as unknown as SVGElement;
     }
     return svgElement as unknown as SVGElement;
   }

@@ -257,7 +257,7 @@ describe('SubmitModeController', () => {
     });
 
     it('should initialize toggle with stored autoSubmit value', async () => {
-      chromeMock.storage.get.mockImplementation((keys) => {
+      chromeMock.storage.get.mockImplementation((keys: any) => {
         return Promise.resolve({ autoSubmit: false });
       });
 
@@ -291,7 +291,7 @@ describe('SubmitModeController', () => {
 
     it('should update checked class on toggle', async () => {
       // Mock storage to return false for autoSubmit
-      chromeMock.storage.get.mockImplementation((keys) => {
+      chromeMock.storage.get.mockImplementation((keys: any) => {
         return Promise.resolve({ autoSubmit: false });
       });
       
@@ -346,7 +346,7 @@ describe('SubmitModeController', () => {
     });
 
     it('should return current submit mode state', async () => {
-      chromeMock.storage.get.mockImplementation((keys) => {
+      chromeMock.storage.get.mockImplementation((keys: any) => {
         return Promise.resolve({
           submitMode: 'agent',
           autoSubmit: true,
@@ -364,7 +364,7 @@ describe('SubmitModeController', () => {
     });
 
     it('should return defaults if no state stored', async () => {
-      chromeMock.storage.get.mockImplementation((keys) => {
+      chromeMock.storage.get.mockImplementation((keys: any) => {
         return Promise.resolve({});
       });
 

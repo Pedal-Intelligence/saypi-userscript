@@ -6,7 +6,7 @@ import { JSDOM } from 'jsdom';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Popup DOM Manipulation', () => {
-  let document;
+  let document: Document;
   
   beforeEach(() => {
     const dom = new JSDOM(`
@@ -60,23 +60,23 @@ describe('Popup DOM Manipulation', () => {
     // Test label element
     const labelElement = autoSubmitToggle.querySelector('label.wraper');
     expect(labelElement).toBeTruthy();
-    expect(labelElement.getAttribute('for')).toBe('auto-submit');
+    expect(labelElement!.getAttribute('for')).toBe('auto-submit');
     
     // Test span element
     const spanElement = autoSubmitToggle.querySelector('span.label-text');
     expect(spanElement).toBeTruthy();
-    expect(spanElement.getAttribute('data-i18n')).toBe('autoSubmit');
-    expect(spanElement.textContent).toBe('Auto-submit');
+    expect(spanElement!.getAttribute('data-i18n')).toBe('autoSubmit');
+    expect(spanElement!.textContent).toBe('Auto-submit');
     
     // Test switch wrapper
     const switchWrapElement = autoSubmitToggle.querySelector('div.switch-wrap.control');
     expect(switchWrapElement).toBeTruthy();
     
     // Test input element
-    const inputElement = autoSubmitToggle.querySelector('input[type="checkbox"]');
+    const inputElement = autoSubmitToggle.querySelector<HTMLInputElement>('input[type="checkbox"]');
     expect(inputElement).toBeTruthy();
-    expect(inputElement.id).toBe('auto-submit');
-    expect(inputElement.name).toBe('autoSubmit');
+    expect(inputElement!.id).toBe('auto-submit');
+    expect(inputElement!.name).toBe('autoSubmit');
     
     // Test switch div
     const switchDivElement = autoSubmitToggle.querySelector('div.switch');

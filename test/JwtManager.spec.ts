@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { Mock, MockInstance } from 'vitest';
 vi.mock('wxt/browser', () => {
   const createMockFn = () => vi.fn();
   return {
@@ -27,17 +28,17 @@ import * as ApiRequestSerializer from '../src/utils/ApiRequestSerializer';
 
 describe('JwtManager', () => {
   let jwtManager: JwtManager;
-  let shouldRouteSpy: ReturnType<typeof vi.spyOn>;
-  let serializeRequestSpy: ReturnType<typeof vi.spyOn>;
+  let shouldRouteSpy: MockInstance<typeof ApiRequestSerializer.shouldRouteViaBackground>;
+  let serializeRequestSpy: MockInstance<typeof ApiRequestSerializer.serializeApiRequest>;
   
   beforeEach(() => {
     // Reset browser mocks
-    (browser.storage.local.get as unknown as vi.Mock).mockReset().mockResolvedValue({});
-    (browser.storage.local.set as unknown as vi.Mock).mockReset().mockResolvedValue(undefined);
-    (browser.storage.local.remove as unknown as vi.Mock).mockReset().mockResolvedValue(undefined);
-    (browser.cookies.get as unknown as vi.Mock).mockReset().mockResolvedValue(null);
-    (browser.runtime.getURL as unknown as vi.Mock).mockReset().mockReturnValue('chrome-extension://id');
-    (browser.runtime.sendMessage as unknown as vi.Mock).mockReset().mockResolvedValue(undefined);
+    (browser.storage.local.get as unknown as Mock).mockReset().mockResolvedValue({});
+    (browser.storage.local.set as unknown as Mock).mockReset().mockResolvedValue(undefined);
+    (browser.storage.local.remove as unknown as Mock).mockReset().mockResolvedValue(undefined);
+    (browser.cookies.get as unknown as Mock).mockReset().mockResolvedValue(null);
+    (browser.runtime.getURL as unknown as Mock).mockReset().mockReturnValue('chrome-extension://id');
+    (browser.runtime.sendMessage as unknown as Mock).mockReset().mockResolvedValue(undefined);
 
     // Provide chrome alias for legacy fallbacks
     (global as any).chrome = browser;

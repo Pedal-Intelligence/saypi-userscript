@@ -10,6 +10,7 @@
  */
 
 import { browser } from 'wxt/browser';
+import type { PublicPath } from 'wxt/browser';
 import { config } from '../ConfigModule';
 import { logger } from '../LoggingModule';
 import {
@@ -339,7 +340,7 @@ async function authenticateWithTabFlow(): Promise<OAuthResult> {
   logger.info('[OAuthService] Using tab-based auth flow (Firefox)');
 
   // Store return URL for after authentication
-  const returnUrl = browser.runtime.getURL('settings.html');
+  const returnUrl = browser.runtime.getURL('settings.html' as PublicPath);
   await browser.storage.local.set({ authReturnUrl: returnUrl });
 
   // Open login page in a new tab

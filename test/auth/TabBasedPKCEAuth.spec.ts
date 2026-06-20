@@ -3,6 +3,9 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { OAuthResult } from '../../src/auth/OAuthService';
+
+type OAuthFailure = Extract<OAuthResult, { success: false }>;
 
 // Mock wxt/browser before importing
 const mockStorage: Record<string, any> = {};
@@ -192,7 +195,7 @@ describe('TabBasedPKCEAuth', () => {
 
       const result = await authPromise;
       expect(result.success).toBe(false);
-      expect(result.error).toBe('auth_timeout');
+      expect((result as OAuthFailure).error).toBe('auth_timeout');
     });
 
     it('stores PKCE state before opening tab', async () => {
@@ -279,8 +282,8 @@ describe('TabBasedPKCEAuth', () => {
       const result = await authPromise;
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('access_denied');
-      expect(result.errorDescription).toBe('User denied access');
+      expect((result as OAuthFailure).error).toBe('access_denied');
+      expect((result as OAuthFailure).errorDescription).toBe('User denied access');
     });
 
     it('handles state mismatch (CSRF protection)', async () => {
@@ -301,7 +304,7 @@ describe('TabBasedPKCEAuth', () => {
       const result = await authPromise;
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('state_mismatch');
+      expect((result as OAuthFailure).error).toBe('state_mismatch');
     });
 
     it('handles token exchange failure', async () => {
@@ -332,7 +335,7 @@ describe('TabBasedPKCEAuth', () => {
       const result = await authPromise;
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('token_exchange_failed');
+      expect((result as OAuthFailure).error).toBe('token_exchange_failed');
     });
 
     it('handles timeout', async () => {
@@ -348,7 +351,7 @@ describe('TabBasedPKCEAuth', () => {
       const result = await authPromise;
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('auth_timeout');
+      expect((result as OAuthFailure).error).toBe('auth_timeout');
     });
 
     it('cleans up listeners and closes tab after success', async () => {
@@ -428,8 +431,8 @@ describe('TabBasedPKCEAuth', () => {
 
       // Second call should fail immediately with auth_in_progress
       expect(result2.success).toBe(false);
-      expect(result2.error).toBe('auth_in_progress');
-      expect(result2.errorDescription).toBe('Authentication already in progress');
+      expect((result2 as OAuthFailure).error).toBe('auth_in_progress');
+      expect((result2 as OAuthFailure).errorDescription).toBe('Authentication already in progress');
 
       // Clean up first auth by advancing past timeout
       vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
@@ -455,8 +458,8 @@ describe('TabBasedPKCEAuth', () => {
 
       // Should return auth_cancelled error
       expect(result.success).toBe(false);
-      expect(result.error).toBe('auth_cancelled');
-      expect(result.errorDescription).toContain('closed by user');
+      expect((result as OAuthFailure).error).toBe('auth_cancelled');
+      expect((result as OAuthFailure).errorDescription).toContain('closed by user');
     });
 
     it('cleans up removeListener on success', async () => {
@@ -499,7 +502,7 @@ describe('TabBasedPKCEAuth', () => {
       vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
       await vi.runAllTimersAsync();
       const result1 = await authPromise1;
-      expect(result1.error).toBe('auth_timeout');
+      expect((result1 as OAuthFailure).error).toBe('auth_timeout');
 
       // Second auth should be allowed after first completes
       const authPromise2 = authenticateWithTabBasedPKCE();
@@ -509,7 +512,7 @@ describe('TabBasedPKCEAuth', () => {
       vi.advanceTimersByTime(5 * 60 * 1000 + 1000);
       await vi.runAllTimersAsync();
       const result2 = await authPromise2;
-      expect(result2.error).toBe('auth_timeout'); // Expected - we didn't simulate a redirect
+      expect((result2 as OAuthFailure).error).toBe('auth_timeout'); // Expected - we didn't simulate a redirect
     });
 
     it('registers listeners only after tab is created', async () => {

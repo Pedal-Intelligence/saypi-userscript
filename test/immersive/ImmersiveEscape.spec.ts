@@ -38,7 +38,7 @@ vi.mock("../../src/themes/ThemeManagerModule.ts", () => ({
 }));
 
 import { ImmersionService } from "../../src/ImmersionService.js";
-import { ImmersionStateChecker } from "../../src/ImmersionServiceLite.ts";
+import { ImmersionStateChecker } from "../../src/ImmersionServiceLite";
 
 function setHost(host: string) {
   (globalThis as any).__SAYPI_HOST_OVERRIDE__ = host;
@@ -70,7 +70,7 @@ describe("Immersive emergency escape", () => {
       clear: vi.fn(() => {
         storage.clear();
       }),
-    } as Storage;
+    } as unknown as Storage;
     Object.defineProperty(window, "localStorage", {
       value: localStorageMock,
       configurable: true,

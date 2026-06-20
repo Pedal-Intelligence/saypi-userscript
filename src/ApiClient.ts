@@ -8,7 +8,7 @@ interface ApiRequestOptions extends RequestInit {
 }
 
 // Listen for authentication status changes
-EventBus.on('saypi:auth:status-changed', (isAuthenticated) => {
+EventBus.on('saypi:auth:status-changed', (isAuthenticated: boolean) => {
   logger.debug('ApiClient detected auth status change:', isAuthenticated);
 });
 

@@ -372,8 +372,8 @@ export class StatusService {
 
         const meta = document.createElement('div');
         meta.className = 'incident-meta';
-        const statusText = this.formatIncidentStatus(incident.status);
-        const lastUpdated = this.formatTimestamp(incident.updated_at || incident.started_at);
+        const statusText = this.formatIncidentStatus(incident.status ?? '');
+        const lastUpdated = this.formatTimestamp(incident.updated_at || incident.started_at || '');
         meta.textContent = lastUpdated
           ? `${statusText} • Updated ${lastUpdated}`
           : statusText;

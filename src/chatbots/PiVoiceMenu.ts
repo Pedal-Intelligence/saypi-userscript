@@ -58,7 +58,7 @@ export class PiVoiceMenu extends VoiceSelector {
         voiceProvidedBySayPi = true;
       }
     });
-    EventBus.on("userPreferenceChanged", (detail) => {
+    EventBus.on("userPreferenceChanged", (detail: { audioProvider?: typeof audioProviders.SayPi }) => {
       if (detail.audioProvider) {
         if (detail.audioProvider === audioProviders.SayPi) {
           voiceMenuControls.classList.add("saypi-provided-voice");

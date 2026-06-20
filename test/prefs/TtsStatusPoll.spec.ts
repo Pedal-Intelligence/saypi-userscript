@@ -90,7 +90,7 @@ describe('TTS status poll (#325): no vestigial /status/tts on load', () => {
     // (so the absence of the poll below is meaningful, not a too-early read).
     await vi.waitFor(() => expect(reloadCacheRan).toBe(true));
 
-    const polledUrls = callApiMock.mock.calls.map((c) => String(c[0]));
+    const polledUrls = callApiMock.mock.calls.map((c) => String((c as any[])[0]));
     expect(polledUrls.some((u) => u.includes('/status/tts'))).toBe(false);
   });
 
@@ -106,7 +106,7 @@ describe('TTS status poll (#325): no vestigial /status/tts on load', () => {
     expect(await prefs.getTextToSpeechEnabled()).toBe(false);
 
     // And it never consulted /status/tts to decide.
-    const polledUrls = callApiMock.mock.calls.map((c) => String(c[0]));
+    const polledUrls = callApiMock.mock.calls.map((c) => String((c as any[])[0]));
     expect(polledUrls.some((u) => u.includes('/status/tts'))).toBe(false);
   });
 });

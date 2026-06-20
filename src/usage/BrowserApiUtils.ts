@@ -53,7 +53,7 @@ export function getExtensionManifest(): chrome.runtime.Manifest | null {
   }
 
   try {
-    return extensionApi!.runtime!.getManifest();
+    return extensionApi!.runtime!.getManifest() as chrome.runtime.Manifest;
   } catch (error) {
     console.warn('[BrowserApiUtils] Failed to get extension manifest:', error);
     return null;
