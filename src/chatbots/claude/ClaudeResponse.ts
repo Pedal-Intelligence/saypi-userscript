@@ -10,9 +10,24 @@ import { logger } from "../../LoggingModule";
  * logic cohesive and easy to test in isolation.
  */
 
-// Reusable text extractor so all Claude entry points share filters
+// Reusable text extractor so all Claude entry points share filters.
+//
+// `sr-only` is Tailwind's visually-hidden utility: text present only for screen
+// readers. SayPi reads the *visible* response aloud, so sr-only content must be
+// skipped. Critically, claude.ai's extended-thinking disclosure mirrors its
+// streaming summary headline ("Thinking about…", "Deciphering…") into a sibling
+// `span.sr-only` that sits OUTSIDE the `transition-colors` toggle button. Without
+// this filter that announcer leaks into the spoken stream — read aloud and
+// charged — and, because it cycles through a sequence of headlines while only the
+// final one survives into the settled message text, the streamed-vs-message hash
+// never matches and the speech is never cached (issue #383).
 export function extractClaudeReadableText(node: Node): string {
-  const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors", "code-block__code"]);
+  const BLOCKED_CLASSES = new Set([
+    "transition-all",
+    "transition-colors",
+    "code-block__code",
+    "sr-only",
+  ]);
   const BLOCKED_CLASS_COMBINATIONS = [["ease-out", "border-border-300"]];
   const SKIPPED_ELEMENTS = new Set(["pre"]);
 
