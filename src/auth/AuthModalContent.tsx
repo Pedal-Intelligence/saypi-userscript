@@ -52,7 +52,7 @@ export function AuthModalContent(props: AuthModalContentProps) {
       {props.variant === "full" && (
         <ul class="saypi-auth-modal-benefits">
           {props.benefits.map((benefit) => (
-            <li>{benefit}</li>
+            <li key={benefit}>{benefit}</li>
           ))}
         </ul>
       )}
