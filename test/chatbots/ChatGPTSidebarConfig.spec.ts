@@ -118,6 +118,46 @@ describe("ChatGPT sidebar integration (#352 — <aside> removed)", () => {
     expect(clicked).toBe(1);
   });
 
+  it("returns null when the only New-chat item is in the hidden collapsed rail", () => {
+    // Collapsed-only state: a New-chat exists, but only inside #stage-sidebar-tiny-bar
+    // (opacity-0). We must NOT insert into the hidden rail — bail so the observer retries.
+    const html = `
+      <div id="stage-slideover-sidebar">
+        <div class="relative flex h-full flex-col">
+          <nav id="stage-sidebar-tiny-bar" aria-label="Sidebar" class="opacity-0 pointer-events-none">
+            <div class="mt-(--sidebar-section-first-margin-top)">
+              <div data-state="closed">
+                <a data-testid="create-new-chat-button" class="group __menu-item hoverable" href="/"><span class="sr-only">New chat</span></a>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>`;
+    const dom = new JSDOM(html);
+    const sidebar = dom.window.document.querySelector(chatbot.getSidebarSelector()) as HTMLElement;
+    expect(sidebar).not.toBeNull();
+    expect(chatbot.getSidebarConfig(sidebar)).toBeNull();
+  });
+
+  it("returns null when the New-chat item is not inside a <ul> menu list", () => {
+    // Defensive: if ChatGPT moves New chat out of a <ul>, bail rather than guess a
+    // container/index that would mis-place the button.
+    const html = `
+      <div id="stage-slideover-sidebar">
+        <div class="relative flex h-full flex-col">
+          <nav aria-label="Chat history">
+            <div class="some-section">
+              <a data-testid="create-new-chat-button" class="group __menu-item hoverable" href="/">New chat</a>
+            </div>
+          </nav>
+        </div>
+      </div>`;
+    const dom = new JSDOM(html);
+    const sidebar = dom.window.document.querySelector(chatbot.getSidebarSelector()) as HTMLElement;
+    expect(sidebar).not.toBeNull();
+    expect(chatbot.getSidebarConfig(sidebar)).toBeNull();
+  });
+
   it("returns null configuration when no New-chat menu item is present", () => {
     const html = `
       <div id="stage-slideover-sidebar">

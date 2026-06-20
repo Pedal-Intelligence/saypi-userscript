@@ -196,21 +196,22 @@ class ChatGPTChatbot extends AbstractChatbot {
     const newChats = Array.from(
       sidebar.querySelectorAll('[data-testid="create-new-chat-button"]')
     ) as HTMLElement[];
-    const newChat =
-      newChats.find((b) => !b.closest('#stage-sidebar-tiny-bar')) || newChats[0];
+    // Use the EXPANDED copy only — never the collapsed rail's (it's hidden). If the only
+    // New-chat is in the tiny bar (collapsed-only state), bail and let the observer retry
+    // when the expanded sidebar mounts, rather than inserting into a hidden element.
+    const newChat = newChats.find((b) => !b.closest('#stage-sidebar-tiny-bar'));
     if (!newChat) {
-      console.warn('[ChatGPT] sidebar: Could not find New chat menu item');
+      console.warn('[ChatGPT] sidebar: no visible New chat menu item (collapsed sidebar?)');
       return null;
     }
 
-    // The primary nav menu is the list holding New chat + Search — a <ul> of
-    // <li.list-none> rows on the expanded sidebar (fall back to the item's wrapper
-    // parent if the markup changes). createChatGPTMenuButton returns an <li> so it
-    // slots in natively.
-    const menuContainer = (newChat.closest('ul') ||
-      newChat.parentElement?.parentElement) as HTMLElement | null;
+    // The primary nav menu is the <ul> of <li.list-none> rows holding New chat + Search.
+    // Anchor strictly on it (createChatGPTMenuButton returns an <li> to slot in natively);
+    // if the markup ever moves New chat out of a <ul>, bail rather than guess a container
+    // + index that would mis-place the button.
+    const menuContainer = newChat.closest('ul') as HTMLElement | null;
     if (!menuContainer) {
-      console.warn('[ChatGPT] sidebar: Could not find menu container');
+      console.warn('[ChatGPT] sidebar: New chat item is not inside a menu list');
       return null;
     }
 
