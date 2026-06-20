@@ -74,8 +74,19 @@ npm run e2e-host-sweep            # 3. sweep all three hosts (headed)
 node scripts/e2e-host-sweep.mjs chatgpt pi          # subset of hosts
 node scripts/e2e-host-sweep.mjs --no-turn           # decoration-only (fast)
 node scripts/e2e-host-sweep.mjs --observe=40000     # watch the conversation longer
+node scripts/e2e-host-sweep.mjs --claude-model=keep # leave Claude's current model (verify Max/slow settings)
+node scripts/e2e-host-sweep.mjs --claude-model=opus # force a specific model
 node scripts/e2e-host-sweep.mjs --headless          # re-test headless (Cloudflare-walled; expect blocks)
 ```
+
+**Model selection (claude.ai):** by default the sweep picks **Haiku 4.5** (fastest) on
+claude.ai before the turn, so the reply + TTS readback finish inside the observe window.
+Opus-Max extended-thinking can exceed it, leaving the turn stuck in `piThinking` until
+its 15s safety-net — a *latency* artifact, not a SayPi defect. SayPi's code path
+(decoration, readback) is model-independent, so this is purely a faster-iteration choice.
+**SayPi must still work on the slowest/Max settings** — verify that explicitly with
+`--claude-model=keep` (uses whatever the profile is set to) or `--claude-model=opus`,
+accepting longer turns / a possible `piThinking` timeout window.
 
 Per host the harness writes to `.output/e2e-host-sweep/<run>/<host>/`:
 `evidence.json` (console / pageErrors / network / requestFailed / domDiagnostics /

@@ -28,9 +28,18 @@ describe("parseSweepArgs", () => {
     expect(a.noTurn).toBe(false);
     expect(a.observeMs).toBe(DEFAULT_OBSERVE_MS);
     expect(a.selectVoice).toBe(true); // auto-select a SayPi voice by default → TTS covered
+    expect(a.claudeModel).toBe("haiku"); // fastest model by default → reply + readback finish in-window
   });
   it("--no-select-voice opts out of voice self-selection (to test the voice-off path)", () => {
     expect(parseSweepArgs(["--no-select-voice"]).selectVoice).toBe(false);
+  });
+  it("honors --claude-model= (haiku/sonnet/opus/keep), defaulting/falling back to haiku", () => {
+    expect(parseSweepArgs(["--claude-model=sonnet"]).claudeModel).toBe("sonnet");
+    expect(parseSweepArgs(["--claude-model=opus"]).claudeModel).toBe("opus");
+    expect(parseSweepArgs(["--claude-model=keep"]).claudeModel).toBe("keep"); // test the Max/current model
+    expect(parseSweepArgs(["--claude-model=KEEP"]).claudeModel).toBe("keep"); // case-insensitive
+    expect(parseSweepArgs(["--claude-model=bogus"]).claudeModel).toBe("haiku"); // unknown → default
+    expect(parseSweepArgs([]).claudeModel).toBe("haiku");
   });
   it("selects a subset by host key, preserving the requested set", () => {
     expect(parseSweepArgs(["chatgpt", "pi"]).hosts).toEqual(["chatgpt", "pi"]);

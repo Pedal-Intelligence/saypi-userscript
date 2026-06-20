@@ -17,9 +17,13 @@
  * To actually exercise SayPi's TTS engine, the sweep AUTO-SELECTS a SayPi voice on
  * claude.ai before the turn (default on; --no-select-voice opts out) — no founder
  * pre-seed needed. pi.ai uses its native voice and chatgpt.com uses native Read
- * Aloud, so SayPi-TTS self-selection only applies to claude.ai.
+ * Aloud, so SayPi-TTS self-selection only applies to claude.ai. It also selects a
+ * FAST claude.ai model (default Haiku; --claude-model=keep|opus|sonnet) so the reply
+ * + TTS readback finish within the observe window (Opus-Max extended-thinking can
+ * time the turn out) — SayPi's code path is model-independent, so this is a latency
+ * convenience, not a correctness compromise (use --claude-model=keep to test Max).
  *
- *   node scripts/e2e-host-sweep.mjs [host ...] [--observe=<ms>] [--no-turn] [--headless] [--no-select-voice]
+ *   node scripts/e2e-host-sweep.mjs [host ...] [--observe=<ms>] [--no-turn] [--headless] [--no-select-voice] [--claude-model=<m>]
  *   npm run e2e-host-sweep            # all three hosts, headed (the working mode)
  *
  * Real Chrome over CDP on the SEEDED profile (extension profile-installed). HEADED
@@ -106,6 +110,40 @@ const DIAGS = {
 };
 
 /**
+ * Select a faster claude.ai model (Claude-native UI) before the turn so the reply +
+ * TTS readback complete within the observe window — Opus-Max extended-thinking can
+ * exceed it (the turn then times out in piThinking). NOT a correctness compromise:
+ * SayPi's code path (decoration, readback) is the same regardless of model; this only
+ * removes host latency as a test obstacle. modelPref "keep" leaves the current model
+ * (use it to verify SayPi works on the slow/Max settings). claude.ai only.
+ * Returns the model label now shown, or null if unchanged/not applicable.
+ */
+async function selectClaudeModel(page, host, modelPref) {
+  if (host !== "claude" || modelPref === "keep") return null;
+  await page.evaluate(() => {
+    const trigger = document.querySelector("button[data-testid='model-selector-dropdown']");
+    if (trigger) trigger.click();
+  }).catch(() => {});
+  await page
+    .waitForFunction(() => document.querySelectorAll("[role='menuitemradio']").length > 0, undefined, { timeout: 8_000 })
+    .catch(() => {});
+  const picked = await page.evaluate((pref) => {
+    const radios = [...document.querySelectorAll("[role='menuitemradio']")]
+      .filter((r) => !/currently unavailable/i.test(r.textContent || ""));
+    const match = radios.find((r) => new RegExp(pref, "i").test(r.textContent || ""));
+    if (!match) return null;
+    match.click(); // real path: switches the conversation model
+    return (match.textContent || "").trim().slice(0, 40);
+  }, modelPref).catch(() => null);
+  // Read the (possibly updated) model label; close any open menu by pressing Escape.
+  await page.keyboard.press("Escape").catch(() => {});
+  if (!picked) return null;
+  return page
+    .evaluate(() => document.querySelector("[data-testid='model-selector-dropdown']")?.getAttribute("aria-label") || null)
+    .catch(() => null);
+}
+
+/**
  * Auto-select a SayPi voice so the turn exercises SayPi's TTS engine (provider
  * "Say, Pi"), removing the need to pre-seed a voice by hand. claude.ai is the clean
  * target (no native voice → SayPi synthesis takes over). Drives the REAL selection
@@ -144,7 +182,7 @@ async function sweepHost(ctx, host, url, opts, outDir) {
   const ev = {
     host, url, decorated: false, cloudflareBlocked: false, build: null,
     transcript: null, autoSubmitted: false, assistantReplied: false,
-    authStatus: null, voiceProvider: null, selectedVoice: null,
+    authStatus: null, voiceProvider: null, selectedVoice: null, selectedModel: null,
     console: [], pageErrors: [], network: [], requestFailed: [],
     domDiagnostics: {}, errorToasts: [], notes: [],
   };
@@ -184,6 +222,13 @@ async function sweepHost(ctx, host, url, opts, outDir) {
     ev.domDiagnostics = await page.evaluate(DIAGS[host]).catch((e) => ({ error: e.message }));
 
     if (!ev.decorated) { ev.notes.push("not decorated — selector drift or logged out"); return ev; }
+
+    // Select a faster claude.ai model (default) so the reply + readback finish in-window.
+    if (!opts.noTurn && host === "claude" && opts.claudeModel !== "keep") {
+      ev.selectedModel = await selectClaudeModel(page, host, opts.claudeModel);
+      if (ev.selectedModel) log(`${host}: model → ${ev.selectedModel} (pref: ${opts.claudeModel})`);
+      else ev.notes.push(`could not select claude model "${opts.claudeModel}" (selector drift / unavailable) — using current`);
+    }
 
     // Auto-select a SayPi voice (default on) so the turn exercises SayPi's TTS engine.
     if (opts.selectVoice && !opts.noTurn) {
@@ -276,7 +321,7 @@ async function main() {
       const ev = await sweepHost(ctx, key, url, opts, outDir);
       const s = summarize(ev);
       summaries.push(s);
-      log(`${key}: decorated=${s.decorated} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
+      log(`${key}: decorated=${s.decorated} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""}${ev.selectedModel ? ` model=${ev.selectedModel}` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
     }
   } finally {
     writeFileSync(join(outDir, "summary.json"), JSON.stringify(summaries, null, 2));

@@ -19,7 +19,13 @@ export const DEFAULT_OBSERVE_MS = 28_000;
  *   --no-turn             decoration-only (don't drive a voice turn)
  *   --headless            opt-in headless (Cloudflare-walled on real hosts; for re-testing only)
  *   --no-select-voice     skip auto-selecting a SayPi voice (test the voice-off path instead)
+ *   --claude-model=<m>    claude.ai model to select before the turn: haiku (default, fastest —
+ *                         avoids Opus-Max extended-thinking latency that times the turn out),
+ *                         sonnet, opus, or keep (leave the profile's current model — use this
+ *                         to verify SayPi works on the slow/Max settings too)
  */
+export const CLAUDE_MODELS = ["haiku", "sonnet", "opus", "keep"];
+export const DEFAULT_CLAUDE_MODEL = "haiku";
 export function parseSweepArgs(argv = []) {
   const positional = argv.filter((a) => !a.startsWith("--"));
   const flags = argv.filter((a) => a.startsWith("--"));
@@ -28,6 +34,9 @@ export function parseSweepArgs(argv = []) {
   const unknown = positional.filter((p) => !known.includes(p));
   const observeFlag = flags.find((f) => f.startsWith("--observe="));
   const observeMs = observeFlag ? Math.max(0, Number(observeFlag.split("=")[1]) || 0) : DEFAULT_OBSERVE_MS;
+  const modelFlag = flags.find((f) => f.startsWith("--claude-model="));
+  const requestedModel = modelFlag ? modelFlag.split("=")[1]?.trim().toLowerCase() : DEFAULT_CLAUDE_MODEL;
+  const claudeModel = CLAUDE_MODELS.includes(requestedModel) ? requestedModel : DEFAULT_CLAUDE_MODEL;
   return {
     hosts: requested.length ? requested : known,
     unknownHosts: unknown,
@@ -38,6 +47,11 @@ export function parseSweepArgs(argv = []) {
     // turn so the sweep actually exercises SayPi's TTS engine. --no-select-voice
     // opts out (e.g. to test the voice-off / unauthenticated-degradation path).
     selectVoice: !flags.includes("--no-select-voice"),
+    // claude.ai model to pick before the turn. Default 'haiku' so the assistant
+    // replies fast enough for the turn + TTS readback to complete within the observe
+    // window (Opus-Max extended-thinking can exceed it). 'keep' = test the current
+    // (possibly Max) model. Unknown values fall back to the default.
+    claudeModel,
   };
 }
 
