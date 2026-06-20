@@ -2,6 +2,7 @@ import { browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
+import { registerDevReloadHandler } from "../dev/devReload";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -158,6 +159,9 @@ if (import.meta.env.DEV) {
     closeOffscreenDocument: () => offscreenManager.closeOffscreenDocument(),
     connectedTabCount: () => offscreenManager.getConnectedTabCount(),
   };
+  // Let the autonomous Layer-4 loop reload the unpacked extension without the
+  // founder visiting chrome://extensions (the MCP cannot reach browser chrome).
+  registerDevReloadHandler();
 }
 
 // Track dictation state across tabs
