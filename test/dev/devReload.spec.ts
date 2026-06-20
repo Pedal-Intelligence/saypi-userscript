@@ -2,7 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   DEV_RELOAD_EVENT,
   DEV_RELOAD_MESSAGE,
+  DEV_FEED_SPEECH_EVENT,
+  DEV_FEED_SPEECH_MESSAGE,
   installDevReloadBridge,
+  installDevFeedSpeechBridge,
   registerDevReloadHandler,
 } from "../../src/dev/devReload";
 
@@ -44,5 +47,15 @@ describe("dev self-reload bridge", () => {
     const handler = registerDevReloadHandler();
     expect(handler({ type: "SOMETHING_ELSE" }, {}, vi.fn())).toBe(false);
     expect(chrome.runtime.reload).not.toHaveBeenCalled();
+  });
+
+  it("feed-speech bridge relays the DOM event to a synthetic-audio message", () => {
+    installDevFeedSpeechBridge();
+    window.dispatchEvent(
+      new window.CustomEvent(DEV_FEED_SPEECH_EVENT, { detail: { loop: true } }),
+    );
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ type: DEV_FEED_SPEECH_MESSAGE, loop: true }),
+    );
   });
 });

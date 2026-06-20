@@ -5,7 +5,7 @@ import { getJwtManager } from "./JwtManager.ts";
 import telemetryModule from "./TelemetryModule.ts";
 import { addUserAgentFlags } from "./UserAgentModule.ts";
 import { stampBuildOnDocument } from "./build-stamp.ts";
-import { installDevReloadBridge } from "./dev/devReload.ts";
+import { installDevReloadBridge, installDevFeedSpeechBridge } from "./dev/devReload.ts";
 
 // Import styles that are needed across all modes
 import "./styles/common.scss";
@@ -38,6 +38,7 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   if (import.meta.env.DEV) {
     stampBuildOnDocument();
     installDevReloadBridge();
+    installDevFeedSpeechBridge();
   }
 
   // Determine the mode based on the centralized identifier helpers
