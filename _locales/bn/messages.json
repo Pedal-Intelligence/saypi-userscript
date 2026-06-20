@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "বেটা সক্রিয়"
-  },
-  "previewStatusCompleted": {
-    "message": "বেটা সম্পন্ন হয়েছে"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "বেটা বন্ধ রাখা হয়েছে $resetDate$ পর্যন্ত",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "সংযোগ করতে অক্ষম..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "প্রোফাইল"

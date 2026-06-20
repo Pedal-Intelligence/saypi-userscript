@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "Beta Aktif"
-  },
-  "previewStatusCompleted": {
-    "message": "Beta Tamamlandı"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "Beta, $resetDate$ tarihine kadar duraklatıldı.",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "Bağlanılamıyor..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"

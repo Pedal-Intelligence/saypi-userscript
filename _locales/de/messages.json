@@ -722,25 +722,6 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "Beta Aktiv"
-  },
-  "previewStatusCompleted": {
-    "message": "Beta Abgeschlossen"
-  },
-  "previewStatusPaused": {
-    "description": "The message to display when the user is previewing a feature that has been paused.",
-    "message": "Beta pausiert bis $resetDate$",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
-  "previewStatusUnknown": {
-    "message": "Verbindung nicht möglich..."
-  },
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
