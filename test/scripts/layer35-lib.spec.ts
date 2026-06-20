@@ -83,14 +83,15 @@ describe("buildSeedChromeArgs", () => {
 });
 
 describe("isUnsupportedCloudflareHost", () => {
-  it("flags claude.ai and chatgpt.com (and subdomains)", () => {
+  it("flags pi.ai, claude.ai and chatgpt.com (and subdomains)", () => {
+    expect(isUnsupportedCloudflareHost("https://pi.ai/talk")).toBe(true); // #348: now Cloudflare-gated
     expect(isUnsupportedCloudflareHost("https://claude.ai/new")).toBe(true);
     expect(isUnsupportedCloudflareHost("https://chatgpt.com/")).toBe(true);
     expect(isUnsupportedCloudflareHost("https://www.chatgpt.com/")).toBe(true);
     expect(isUnsupportedCloudflareHost("https://chat.openai.com/")).toBe(true);
   });
-  it("does NOT flag pi.ai (no Cloudflare gate — Layer 3.5's supported host)", () => {
-    expect(isUnsupportedCloudflareHost("https://pi.ai/talk")).toBe(false);
+  it("does not flag an unrelated host", () => {
+    expect(isUnsupportedCloudflareHost("https://example.com/")).toBe(false);
   });
   it("is false for a malformed url rather than throwing", () => {
     expect(isUnsupportedCloudflareHost("not a url")).toBe(false);
