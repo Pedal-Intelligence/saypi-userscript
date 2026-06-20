@@ -338,10 +338,51 @@ snapshot.
 Refresh deliberately when a host redesigns — a stale fixture is a signal to
 re-capture, not a contract violation.
 
+## Reloading and driving the mic without the founder (DEV-only hooks)
+
+Two of the loop's recurring founder asks now have in-extension, DEV-only escape
+hatches (gated on `import.meta.env.DEV`, stripped from production). Both are driven
+from the page main world, which the MCP `javascript_tool` *can* reach. Source:
+`src/dev/devReload.ts`; design:
+`doc/specs/2026-06-20-autonomous-loop-self-reload-and-synthetic-audio-design.md`.
+
+- **Self-reload — no `chrome://extensions`.** Dispatch the page event and the
+  content script relays it to the SW, which calls `chrome.runtime.reload()`
+  (re-reads the unpacked build from disk):
+
+  ```js
+  window.dispatchEvent(new CustomEvent("saypi:dev-reload"));
+  ```
+
+  After firing it, confirm the reload landed by comparing `<html data-saypi-build>`
+  to `git rev-parse --short HEAD` (the same freshness check used elsewhere).
+  **Best-effort:** it recovers config changes, routine reloads, and a *slept* SW
+  (the message wakes it). A truly *wedged* SW that won't wake still needs the
+  founder's one click on the unpacked card — now a rare fallback, not per-session.
+
+- **Synthetic voice turn — no human at the mic.** Arm the in-extension synthetic
+  audio source, then start a call as usual; the offscreen VAD is fed a bundled WAV
+  (`public/audio/synthetic-speech.wav`) instead of the microphone, so the full
+  VAD → onSpeechEnd → STT → draft path runs autonomously:
+
+  ```js
+  window.dispatchEvent(new CustomEvent("saypi:dev-feed-speech", { detail: { loop: true } }));
+  // then click the call button (#saypi-callButton) to start the VAD
+  ```
+
+  Under the hood the content bridge forwards to the SW, which arms the offscreen
+  `VAD_USE_SYNTHETIC_AUDIO` latch for the tab; `initializeVAD` then passes the
+  synthetic `MediaStream` to `MicVAD.new({ stream })`, bypassing `getUserMedia`.
+  Layer 3 calls the same mechanism on the SW directly via
+  `__saypiOffscreenTestHooks.feedSyntheticSpeech(tabId)`
+  (`e2e/specs/synthetic-audio-stt.e2e.ts`).
+
 ## Boundaries
 
-- **No mic.** Can't inject audio into the running Chrome; VAD/STT paths that need
-  *speaking* require the founder, or Layer 3 (fake audio at launch).
+- **Mic: synthetic source covers VAD→STT autonomously** (the `saypi:dev-feed-speech`
+  hook above). It bypasses the real `getUserMedia`/device-permission path, which
+  rarely changes and stays covered by Layer 3's flag-based real-`getUserMedia` path
+  and occasional founder spot-checks.
 - **Real auth/login** must be provided by the founder's session.
 - **Not CI.** Bound to the founder's browser + the MCP connection.
 - **Real sites are flaky/rate-limited** — a failure can be the host, not us.

@@ -2,6 +2,7 @@ import { browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
+import { registerDevReloadHandler, DEV_FEED_SPEECH_MESSAGE } from "../dev/devReload";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -154,10 +155,43 @@ const jwtManager = getJwtManagerSync();
 // eliminated from production builds (import.meta.env.DEV === false), mirroring the
 // build-stamp seam added in #312.
 if (import.meta.env.DEV) {
+  // Arm the offscreen synthetic audio source for a tab, so a voice turn runs with
+  // no human at the mic. sendMessageToOffscreenDocument ensures the offscreen doc
+  // exists and stamps the tab id before forwarding.
+  const armSyntheticSpeech = (tabId: number, opts: { loop?: boolean } = {}) =>
+    offscreenManager.sendMessageToOffscreenDocument(
+      {
+        type: "VAD_USE_SYNTHETIC_AUDIO",
+        enabled: true,
+        loop: opts.loop !== false,
+        clipUrl: getExtensionURL("audio/synthetic-speech.wav"),
+        origin: "background",
+      },
+      tabId,
+    );
+
   (self as any).__saypiOffscreenTestHooks = {
     closeOffscreenDocument: () => offscreenManager.closeOffscreenDocument(),
     connectedTabCount: () => offscreenManager.getConnectedTabCount(),
+    // Layer 3 (Playwright) calls this on the SW directly with a known tab id.
+    feedSyntheticSpeech: (tabId: number, opts: { loop?: boolean } = {}) => {
+      armSyntheticSpeech(tabId, opts);
+      return { ok: true };
+    },
   };
+  // Let the autonomous Layer-4 loop reload the unpacked extension without the
+  // founder visiting chrome://extensions (the MCP cannot reach browser chrome).
+  registerDevReloadHandler();
+  // Layer 4 (MCP) page bridge: the content script forwards saypi:dev-feed-speech;
+  // here we know the sender's tab id and arm synthetic speech for it.
+  chrome.runtime.onMessage.addListener((message, sender) => {
+    if (message?.type !== DEV_FEED_SPEECH_MESSAGE) return false;
+    const tabId = sender?.tab?.id;
+    if (typeof tabId === "number") {
+      armSyntheticSpeech(tabId, { loop: message.loop });
+    }
+    return false;
+  });
 }
 
 // Track dictation state across tabs
