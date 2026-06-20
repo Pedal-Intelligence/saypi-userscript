@@ -657,7 +657,7 @@ export class ChatGPTTextBlockCapture extends ElementTextStream {
 
   private findTurnContainer(start: HTMLElement): HTMLElement | null {
     return (
-      start.closest('article[data-turn="assistant"]') as HTMLElement | null ||
+      start.closest('[data-turn="assistant"]') as HTMLElement | null ||
       start.closest('[data-message-author-role="assistant"]') as HTMLElement | null ||
       start.closest('.assistant-message') as HTMLElement | null ||
       start.parentElement
@@ -682,7 +682,7 @@ export class ChatGPTTextBlockCapture extends ElementTextStream {
         replacement = document.querySelector(`[data-testid="${testId}"]`);
       }
       if (!replacement && turnAttr) {
-        replacement = document.querySelector(`article[data-turn="${turnAttr}"]`);
+        replacement = document.querySelector(`[data-turn="${turnAttr}"]`);
       }
       if (replacement && replacement !== this.turnContainer) {
         text = (replacement.textContent || "").trimEnd();

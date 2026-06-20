@@ -111,26 +111,69 @@ class ChatGPTChatbot extends AbstractChatbot {
   getChatHistory(searchRoot: HTMLElement): HTMLElement {
     const thread = findThreadRoot(searchRoot) as HTMLElement | null;
     const scope: ParentNode = (thread as ParentNode) || (searchRoot as ParentNode) || document;
-    const firstTurn = (scope as Element | Document).querySelector?.(
-      'article[data-testid^="conversation-turn"], article[data-testid^="conversation-turn-"]'
+    const scopeEl = scope as Element | Document;
+    // Tag-agnostic: chatgpt.com changed the turn container from <article> to
+    // <section> (2026-06) while keeping data-testid="conversation-turn-N". Anchoring
+    // on the stable data attribute is robust to that tag change (#362).
+    const firstTurn = scopeEl.querySelector?.(
+      '[data-testid^="conversation-turn"]'
     ) as HTMLElement | null;
-    if (firstTurn && firstTurn.parentElement) {
-      return firstTurn.parentElement as HTMLElement;
+    if (!firstTurn || !firstTurn.parentElement) {
+      return null as unknown as HTMLElement;
     }
-    return null as unknown as HTMLElement;
+    // ChatGPT wraps each conversation turn in its own <div> under a shared list
+    // container. Return that shared container — NOT a single turn's wrapper — so the
+    // subtree message observer (ChatHistoryAdditionsObserver, registered on
+    // #saypi-chat-history with subtree:true) sees every existing turn AND future
+    // turns appended to the list. Returning firstTurn.parentElement (the old
+    // behavior) only observes the first turn's wrapper, so later turns (e.g. the
+    // assistant reply) are never detected → no saypi:piWriting → 15s piThinking hang.
+    const turns = Array.from(
+      scopeEl.querySelectorAll('[data-testid^="conversation-turn"]')
+    );
+    const containsAll = (el: Element | null) =>
+      !!el && turns.every((t) => el.contains(t));
+    let container: HTMLElement | null = firstTurn.parentElement;
+    let guard = 0;
+    while (
+      container &&
+      (container as Node) !== (scope as Node) &&
+      !containsAll(container) &&
+      guard++ < 8
+    ) {
+      container = container.parentElement;
+    }
+    // With a single turn, climb one extra level past its wrapper to the shared list
+    // container the next turn (e.g. the assistant reply) will be appended into.
+    if (
+      turns.length <= 1 &&
+      container &&
+      container.parentElement &&
+      (container.parentElement as Node) !== (scope as Node)
+    ) {
+      container = container.parentElement;
+    }
+    return (container || firstTurn.parentElement) as HTMLElement;
   }
 
   getChatHistorySelector(): string {
-    const listByArticles = 'div:has(> article[data-testid^="conversation-turn"])';
-    return ['#thread ' + listByArticles, listByArticles].join(', ');
+    // Tag-agnostic (see getChatHistory): the turn container is a <section> as of
+    // 2026-06 (was <article>); match the stable data-testid regardless of tag.
+    const listByTurns = 'div:has(> [data-testid^="conversation-turn"])';
+    return ['#thread ' + listByTurns, listByTurns].join(', ');
   }
 
   getPastChatHistorySelector(): string {
-    return this.getChatHistorySelector();
+    // Mirror Claude: the chat-history element itself is the past/recent container,
+    // decorated via the subtree ChatHistoryAdditionsObserver on #saypi-chat-history.
+    // (getChatHistory now returns the shared turn-list container, so the per-turn
+    // wrappers must NOT be treated as separate past/recent containers — that would
+    // attach the observer to a single turn and miss the rest.)
+    return "#saypi-chat-history";
   }
 
   getRecentChatHistorySelector(): string {
-    return this.getChatHistorySelector();
+    return "#saypi-chat-history";
   }
 
   getDiscoveryPanelSelector(): string {
@@ -138,7 +181,7 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getAssistantResponseSelector(): string {
-    const sel = 'article[data-turn="assistant"]';
+    const sel = '[data-turn="assistant"]';
     return ['#thread ' + sel, sel].join(', ');
   }
 
@@ -147,7 +190,7 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getUserPromptSelector(): string {
-    return 'article[data-turn="user"]';
+    return '[data-turn="user"]';
   }
 
   getUserMessageContentSelector(): string {
@@ -322,8 +365,7 @@ class ChatGPTChatbot extends AbstractChatbot {
 
   protected createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse {
     const container = (element.closest('[data-message-author-role="assistant"]') ||
-      element.closest('article[data-testid^="conversation-turn-"]') ||
-      element.closest('article[data-testid^="conversation-turn"]') ||
+      element.closest('[data-testid^="conversation-turn"]') ||
       element) as HTMLElement;
     try {
       const nodes = Array.from(document.querySelectorAll('[data-saypi-shielded]')) as HTMLElement[];
