@@ -5,6 +5,9 @@ import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { ChatbotService } from "../chatbots/ChatbotService";
 import { IconModule } from "../icons/IconModule";
+import { h, render } from "preact";
+import { Notice } from "./Notice";
+import { findNoticeInjectionPoint } from "./notice/findNoticeInjectionPoint";
 
 export class AgentModeNoticeModule {
   private static instance: AgentModeNoticeModule;
@@ -130,52 +133,40 @@ export class AgentModeNoticeModule {
   private async createAndShowNotice(chatbotId: string, chatbotName: string): Promise<void> {
     await this.hideNotice(); // Remove any existing notice
 
-    const notice = document.createElement("div");
-    notice.className = "saypi-agent-notice";
-    notice.setAttribute("data-chatbot", chatbotId);
-
-    // Notice content
-    const content = document.createElement("div");
-    content.className = "saypi-agent-notice-content";
-
-    // Icon
-    const iconContainer = document.createElement("div");
-    iconContainer.className = "saypi-agent-notice-icon";
-    
-    // Use bot icon from IconModule (Lucide bot icon)
+    // Build the icon as raw SVG (carrying its class + size) with an emoji
+    // fallback — same Lucide bot icon as before.
+    let iconSvg: string | null = null;
     try {
       const botIcon = IconModule.bot.cloneNode(true) as SVGElement;
       botIcon.setAttribute("class", "saypi-agent-notice-robot-icon");
       botIcon.setAttribute("width", "20");
       botIcon.setAttribute("height", "20");
-      iconContainer.appendChild(botIcon);
+      iconSvg = botIcon.outerHTML;
     } catch {
-      // Fallback to simple emoji or text
-      iconContainer.innerHTML = "🤖";
+      iconSvg = null;
     }
-    
-    content.appendChild(iconContainer);
-
-    // Text content
-    const textContainer = document.createElement("div");
-    textContainer.className = "saypi-agent-notice-text";
 
     // Escape HTML in chatbot name to prevent injection attacks
     const escapedChatbotName = this.escapeHtml(chatbotName);
     const rawMessage = getMessage("agentModeNoticeMessage", [escapedChatbotName]);
-    textContainer.innerHTML = this.formatNoticeMessage(rawMessage);
 
-    content.appendChild(textContainer);
-
-    // Close button
-    const closeButton = document.createElement("button");
-    closeButton.className = "saypi-agent-notice-close";
-    closeButton.setAttribute("aria-label", getMessage("dismissNotice") || "Dismiss");
-    closeButton.innerHTML = "×";
-    closeButton.addEventListener("click", () => this.dismissNotice(chatbotId));
-
-    content.appendChild(closeButton);
-    notice.appendChild(content);
+    // Render the shared <Notice> component into a detached host, then take its
+    // root element. Injection + show/hide animation + dismissal stay below,
+    // unchanged, operating on that element.
+    const host = document.createElement("div");
+    render(
+      h(Notice, {
+        variant: "agent",
+        dataAttr: { name: "data-chatbot", value: chatbotId },
+        iconSvg,
+        iconFallback: "🤖",
+        bodyHtml: this.formatNoticeMessage(rawMessage),
+        dismissLabel: getMessage("dismissNotice") || "Dismiss",
+        onDismiss: () => this.dismissNotice(chatbotId),
+      }),
+      host,
+    );
+    const notice = host.firstElementChild as HTMLElement;
 
     // Inject into appropriate location
     this.injectNotice(notice, chatbotId);
@@ -221,33 +212,10 @@ export class AgentModeNoticeModule {
   }
 
   private findInjectionPoint(chatbotId: string): HTMLElement | null {
-    // Primary approach: Use universal #saypi-chat-ancestor if available
-    const chatAncestor = document.querySelector("#saypi-chat-ancestor") as HTMLElement;
-    if (chatAncestor) {
-      return chatAncestor;
-    }
-
-    // Fallback to chatbot-specific selectors if chat ancestor isn't found
-    switch (chatbotId) {
-      case "chatgpt":
-        // Look for ChatGPT's unified composer form
-        return document.querySelector('form[data-type="unified-composer"]') as HTMLElement;
-        
-      case "claude":
-        // Look for Claude's prompt container fieldset
-        return document.querySelector("fieldset.w-full") as HTMLElement;
-        
-      case "pi":
-        // Look for Pi's prompt controls container
-        return document.querySelector("#saypi-prompt-controls-container")?.parentElement as HTMLElement ||
-               document.querySelector(".saypi-prompt-container") as HTMLElement;
-        
-      default:
-        // Generic fallback - look for any prompt container
-        return document.querySelector("#saypi-prompt-controls-container")?.parentElement as HTMLElement ||
-               document.querySelector(".saypi-prompt-container") as HTMLElement ||
-               document.querySelector('form[data-type="unified-composer"]') as HTMLElement;
-    }
+    // Delegates to the shared helper (formerly duplicated byte-for-byte in
+    // CompatibilityNotificationUI). Kept as a thin private method so existing
+    // tests that call it directly continue to work.
+    return findNoticeInjectionPoint(chatbotId);
   }
 
   private dismissNotice(chatbotId: string): void {
