@@ -132,18 +132,33 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     const completedHash = md5(normalizedCompletedText);
     const messageHash = assistantMessage.hash;
     if (completedHash !== messageHash) {
-      console.error(`Hash mismatch: ${completedHash} vs ${assistantMessage.hash}`);
-      if (completedHash === ChatHistorySpeechManager.MD5_OF_NOTHING) {
-        console.error(
-          "Hash is md5 of nothing - stable text failed to resolve."
+      // Try stripping extended thinking preamble (e.g. "Thinking...", "thought", etc.)
+      const strippedText = normalizedCompletedText.replace(
+        /^(?:<thinking[^>]*>[\s\S]*?<\/thinking>|Thinking\.\.\.|thought)[\s]*/i,
+        ''
+      );
+      const strippedHash = md5(strippedText);
+      if (strippedHash === messageHash) {
+        logger.debug(
+          `Hash match after stripping thinking preamble. Using hash: ${strippedHash}`
         );
-      } else if (completedHash === ChatHistorySpeechManager.MD5_OF_SPACE) {
-        console.error("Hash is md5 of ' ' - text stream may be empty.");
+      } else {
+        console.error(`Hash mismatch: ${completedHash} vs ${assistantMessage.hash}`);
+        if (completedHash === ChatHistorySpeechManager.MD5_OF_NOTHING) {
+          console.error(
+            "Hash is md5 of nothing - stable text failed to resolve."
+          );
+        } else if (completedHash === ChatHistorySpeechManager.MD5_OF_SPACE) {
+          console.error("Hash is md5 of ' ' - text stream may be empty.");
+        }
+        logger.debug(`Completed text: "${event.text}"`);
+        logger.debug(`Normalized completed text: "${normalizedCompletedText}"`);
+        logger.debug(`Assistant text: "${assistantMessage.text}"`);
+        // Fallback: store speech with message hash anyway
+        logger.debug(`Fallback: storing speech with message hash ${messageHash}`);
+        manager.speechHistory.addSpeechToHistory(messageHash, speech);
+        return;
       }
-      logger.debug(`Completed text: "${event.text}"`);
-      logger.debug(`Normalized completed text: "${normalizedCompletedText}"`);
-      logger.debug(`Assistant text: "${assistantMessage.text}"`);
-      return;
     }
 
     logger.debug(
