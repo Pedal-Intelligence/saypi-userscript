@@ -15,18 +15,20 @@ describe("parseLayer4CdpArgs", () => {
     expect(typeof d.url).toBe("string"); // defaults to a Cloudflare host
   });
   it("parses verify with url + flags", () => {
-    expect(parseLayer4CdpArgs(["verify", "https://chatgpt.com/", "--headed", "--no-turn"])).toMatchObject({
+    expect(parseLayer4CdpArgs(["verify", "https://chatgpt.com/", "--no-turn"])).toMatchObject({
       command: "verify",
       url: "https://chatgpt.com/",
       headed: true,
       noTurn: true,
     });
   });
-  it("defaults verify to headless with a url", () => {
-    const v = parseLayer4CdpArgs(["verify"]);
-    expect(v.command).toBe("verify");
-    expect(v.headed).toBe(false);
-    expect(typeof v.url).toBe("string");
+  it("defaults verify + diagnose to HEADED (headless is Cloudflare-blocked for these hosts)", () => {
+    expect(parseLayer4CdpArgs(["verify"]).headed).toBe(true);
+    expect(parseLayer4CdpArgs(["diagnose"]).headed).toBe(true);
+  });
+  it("--headless is an explicit opt-in", () => {
+    expect(parseLayer4CdpArgs(["verify", "--headless"]).headed).toBe(false);
+    expect(parseLayer4CdpArgs(["diagnose", "--headless"]).headed).toBe(false);
   });
   it("flags unknown", () => {
     expect(parseLayer4CdpArgs(["nope"]).command).toBe("unknown");
@@ -53,9 +55,14 @@ describe("buildCdpChromeArgs", () => {
     expect(args).toContain("--remote-debugging-port=9333");
     expect(args).toContain("--user-data-dir=/abs/profile");
   });
-  it("loads exactly the one unpacked extension (raw launch — this works in real Chrome)", () => {
-    expect(args).toContain("--load-extension=/abs/ext");
+  it("command-line-loads the extension only when asked (fresh-profile self-test)", () => {
+    expect(args).toContain("--load-extension=/abs/ext"); // default loadExtension:true
     expect(args).toContain("--disable-extensions-except=/abs/ext");
+  });
+  it("omits --load-extension for a seeded profile (extension is profile-installed)", () => {
+    const seeded = buildCdpChromeArgs({ extensionDir: "/e", port: 1, profileDir: "/p", headless: true, loadExtension: false });
+    expect(seeded.some((a) => a.startsWith("--load-extension="))).toBe(false);
+    expect(seeded.some((a) => a.startsWith("--disable-extensions-except="))).toBe(false);
   });
   it("never announces automation (no --enable-automation)", () => {
     expect(args).not.toContain("--enable-automation");

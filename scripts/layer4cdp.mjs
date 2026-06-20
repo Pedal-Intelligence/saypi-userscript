@@ -82,9 +82,9 @@ async function waitForCdp(port, ms = 15000) {
 }
 
 /** Spawn real Chrome and attach over CDP. Returns { browser, child, kill }. */
-async function launchAttached({ profileDir, headless }) {
+async function launchAttached({ profileDir, headless, loadExtension = false }) {
   const port = await freePort();
-  const args = buildCdpChromeArgs({ extensionDir: EXT_DIR, port, profileDir, headless });
+  const args = buildCdpChromeArgs({ extensionDir: EXT_DIR, port, profileDir, headless, loadExtension });
   const child = spawn(chromePath(), args, { stdio: "ignore", detached: false });
   const kill = () => { try { child.kill("SIGKILL"); } catch {} };
   try {
@@ -99,6 +99,16 @@ async function launchAttached({ profileDir, headless }) {
 
 function extensionLoaded(context) {
   return context.serviceWorkers().length > 0 || context.backgroundPages().length > 0;
+}
+
+/** MV3 service workers register lazily after attach — poll instead of checking once. */
+async function waitForExtension(context, ms = 12000) {
+  const deadline = Date.now() + ms;
+  while (Date.now() < deadline) {
+    if (extensionLoaded(context)) return true;
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return extensionLoaded(context);
 }
 
 async function pageSignals(page) {
@@ -126,11 +136,11 @@ async function diagnose(opts) {
     log(`no seeded profile at ${profileDir} — run: npm run layer4cdp:seed first`);
     process.exit(1);
   }
-  log(`diagnose ${opts.url} (headless CDP, seeded profile) — measuring the keystones`);
-  const { browser, kill } = await launchAttached({ profileDir, headless: true });
+  log(`diagnose ${opts.url} (${opts.headed ? "headed" : "headless"} CDP, seeded profile) — measuring the keystones`);
+  const { browser, kill } = await launchAttached({ profileDir, headless: !opts.headed });
   try {
     const ctx = browser.contexts()[0];
-    const extOk = extensionLoaded(ctx);
+    const extOk = await waitForExtension(ctx);
     log(`extension loaded over CDP: ${extOk ? "YES" : "NO"}`);
     const page = await ctx.newPage();
     await page.goto(opts.url, { waitUntil: "domcontentloaded", timeout: 30_000 }).catch(() => {});
@@ -138,15 +148,18 @@ async function diagnose(opts) {
     const blocked = isCloudflareChallenge(sig);
     log(`page title: ${JSON.stringify(sig.title)}`);
     log(`past Cloudflare: ${blocked ? "NO — challenge interstitial (re-seed / cf_clearance expired)" : "YES"}`);
+    let decorated = false;
     if (!blocked) {
-      const decorated = await page.$("#saypi-callButton").then(Boolean).catch(() => false);
+      decorated = await page.waitForSelector("#saypi-callButton", { timeout: 20_000 }).then(() => true).catch(() => false);
       log(`SayPi decorated the app: ${decorated ? "YES" : "no (logged out, or selector drift)"}`);
     }
     log(blocked
-      ? "VERDICT: blocked — Path 2 not usable until re-seeded; use Path 1 (MCP) meanwhile."
+      ? "VERDICT: blocked — Cloudflare challenge. If headless, that's expected — re-run headed; else re-seed (cf_clearance expired)."
+      : decorated
+      ? "VERDICT: usable — extension loaded, Cloudflare passed, SayPi decorated the host. Re-run periodically to gauge upkeep."
       : extOk
-      ? "VERDICT: usable — extension + Cloudflare both OK. Re-run periodically to gauge upkeep."
-      : "VERDICT: extension didn't load — check the dev build / Chrome version.");
+      ? "VERDICT: past Cloudflare + extension loaded, but no decoration — check login / selectors."
+      : "VERDICT: extension didn't load — ensure Developer mode is ON + the dev build is loaded in the seeded profile (see doc/layer4-cdp-real-host-loop.md).");
   } finally {
     await browser.close().catch(() => {});
     kill();
@@ -166,7 +179,7 @@ async function verify(opts) {
   let code = 1;
   try {
     const ctx = browser.contexts()[0];
-    if (!extensionLoaded(ctx)) {
+    if (!(await waitForExtension(ctx))) {
       log("FAIL: extension did not load over CDP (run self-test / check the build)");
       return;
     }
@@ -210,13 +223,11 @@ async function selfTest() {
   assertBuilt();
   const profileDir = mkdtempSync(join(tmpdir(), "saypi-l4cdp-selftest-"));
   log(`self-test (hermetic): temp profile ${profileDir}, about:blank`);
-  const { browser, kill } = await launchAttached({ profileDir, headless: true });
+  const { browser, kill } = await launchAttached({ profileDir, headless: true, loadExtension: true });
   let ok = false;
   try {
-    // give the SW a moment to register after attach
-    await new Promise((r) => setTimeout(r, 2500));
     const ctx = browser.contexts()[0];
-    ok = extensionLoaded(ctx);
+    ok = await waitForExtension(ctx);
     log(ok ? "OK: extension service worker loaded over CDP" : "FAIL: no extension SW");
   } finally {
     await browser.close().catch(() => {});

@@ -12,16 +12,20 @@ export function parseLayer4CdpArgs(argv) {
   const [command, ...rest] = argv;
   const positional = rest.filter((a) => !a.startsWith("--"));
   const flags = new Set(rest.filter((a) => a.startsWith("--")));
+  // Cloudflare-gated hosts reject HEADLESS Chrome (verified 2026-06-20), so the
+  // working mode for Claude/ChatGPT is HEADED. Default to headed; --headless is an
+  // explicit opt-in for re-testing whether headless ever starts passing.
+  const headed = !flags.has("--headless");
   switch (command) {
     case "seed":
       return { command: "seed", url: positional[0] ?? DEFAULT_URL };
     case "diagnose":
-      return { command: "diagnose", url: positional[0] ?? DEFAULT_URL };
+      return { command: "diagnose", url: positional[0] ?? DEFAULT_URL, headed };
     case "verify":
       return {
         command: "verify",
         url: positional[0] ?? DEFAULT_URL,
-        headed: flags.has("--headed"),
+        headed,
         noTurn: flags.has("--no-turn"),
       };
     case "self-test":
@@ -45,15 +49,20 @@ export function resolveCdpProfileDir(env = {}, home = "") {
  * can't take (Google's --load-extension restriction fires there). No
  * --enable-automation (we never want navigator.webdriver set, for Cloudflare).
  */
-export function buildCdpChromeArgs({ extensionDir, port, profileDir, headless = true }) {
+export function buildCdpChromeArgs({ extensionDir, port, profileDir, headless = true, loadExtension = true }) {
   const args = [
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${profileDir}`,
-    `--load-extension=${extensionDir}`,
-    `--disable-extensions-except=${extensionDir}`,
     "--no-first-run",
     "--no-default-browser-check",
   ];
+  // Only command-line-load the extension on a FRESH profile (self-test). On the
+  // seeded profile the extension is already profile-installed (Developer mode +
+  // Load unpacked) — adding --load-extension/--disable-extensions-except there
+  // conflicts with the installed copy and the extension fails to load.
+  if (loadExtension) {
+    args.push(`--load-extension=${extensionDir}`, `--disable-extensions-except=${extensionDir}`);
+  }
   if (headless) args.push("--headless=new");
   return args;
 }
@@ -65,12 +74,13 @@ export function buildCdpChromeArgs({ extensionDir, port, profileDir, headless = 
 export function isCloudflareChallenge({ title = "", url = "", html = "" } = {}) {
   const t = title.toLowerCase();
   const h = html.toLowerCase();
+  // Title + url are the reliable signals. Do NOT match Cloudflare's
+  // `challenge-platform` script tag — it's embedded on PASSED pages too, so it
+  // false-positives on the real app. Keep only the interstitial's own phrase.
   return (
     t.includes("just a moment") ||
     t.includes("attention required") ||
     url.includes("/cdn-cgi/challenge") ||
-    h.includes("challenge-platform") ||
-    h.includes("cf-challenge") ||
     h.includes("verify you are human")
   );
 }
