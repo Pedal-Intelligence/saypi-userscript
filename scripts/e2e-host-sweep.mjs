@@ -30,7 +30,7 @@ import { createServer } from "node:net";
 import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveCdpProfileDir, buildCdpChromeArgs, isCloudflareChallenge } from "./layer4cdp-lib.mjs";
-import { HOSTS, parseSweepArgs, summarize } from "./e2e-host-sweep-lib.mjs";
+import { HOSTS, parseSweepArgs, summarize, ttsCoverage, SAYPI_TTS_PROVIDER } from "./e2e-host-sweep-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const EXT_DIR = join(repoRoot, ".output", "chrome-mv3-dev");
@@ -232,10 +232,12 @@ async function main() {
     log(`wrote ${join(outDir, "summary.json")}`);
     await shutdown();
   }
-  const anyAuthed = summaries.some((s) => s.authStatus === true);
-  const anyVoice = summaries.some((s) => s.voiceProvider && s.voiceProvider !== "None");
-  if (!anyAuthed) log("⚠️  SayPi account is UNAUTHENTICATED in this profile — the TTS/voice-output path was NOT exercised. Sign in (saypi.ai) in the seeded profile to cover it.");
-  if (!anyVoice) log("⚠️  No voice selected (Speech provided by None) — TTS readback NOT exercised. Pick a voice in the seeded profile to cover it.");
+  const cov = ttsCoverage(summaries);
+  if (!cov.anyAuthed) log("⚠️  SayPi account is UNAUTHENTICATED in this profile — sign in (saypi.ai) in the seeded profile to cover the authenticated + TTS path.");
+  if (!cov.anySaypiTts) {
+    const perHost = cov.perHost.map((h) => `${h.host}=${h.voiceProvider ?? "?"}`).join(", ");
+    log(`⚠️  SayPi's TTS engine (provider "${SAYPI_TTS_PROVIDER}") was NOT exercised — voice providers this run: ${perHost}. "Pi" is pi.ai's NATIVE voice, "None" is voice-off, and ChatGPT uses native Read Aloud — none run SayPi synthesis. To cover SayPi TTS, select a SayPi voice (e.g. an ElevenLabs voice) on claude.ai and re-run.`);
+  }
   log(`SWEEP DONE — evidence under ${outDir}`);
   process.exit(0);
 }

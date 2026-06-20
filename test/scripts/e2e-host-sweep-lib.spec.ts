@@ -5,6 +5,9 @@ import {
   parseSweepArgs,
   classifyConsoleLine,
   summarize,
+  isSaypiTtsProvider,
+  ttsCoverage,
+  SAYPI_TTS_PROVIDER,
 } from "../../scripts/e2e-host-sweep-lib.mjs";
 
 describe("HOSTS registry", () => {
@@ -93,5 +96,43 @@ describe("summarize", () => {
     expect(s.saypiErrors).toBe(0);
     expect(s.decorated).toBe(false);
     expect(s.transcript).toBeNull();
+  });
+});
+
+describe("isSaypiTtsProvider", () => {
+  it("recognizes only SayPi's own TTS engine — NOT the native Pi voice or None", () => {
+    expect(isSaypiTtsProvider(SAYPI_TTS_PROVIDER)).toBe(true); // "Say, Pi"
+    expect(isSaypiTtsProvider("say, pi")).toBe(true); // lenient case/whitespace
+    expect(isSaypiTtsProvider("  Say, Pi  ")).toBe(true);
+    expect(isSaypiTtsProvider("Pi")).toBe(false); // pi.ai NATIVE voice — must not count
+    expect(isSaypiTtsProvider("None")).toBe(false);
+    expect(isSaypiTtsProvider(null)).toBe(false);
+    expect(isSaypiTtsProvider(undefined)).toBe(false);
+  });
+});
+
+describe("ttsCoverage", () => {
+  it("reports SayPi TTS as NOT exercised when only a native Pi voice / None / null are present", () => {
+    const cov = ttsCoverage([
+      { host: "pi", voiceProvider: "Pi", authStatus: true },
+      { host: "claude", voiceProvider: "None", authStatus: true },
+      { host: "chatgpt", voiceProvider: null, authStatus: true },
+    ]);
+    expect(cov.anyAuthed).toBe(true);
+    expect(cov.anySaypiTts).toBe(false); // the bug this fixes: "Pi" must not read as covered
+    expect(cov.perHost.map((h) => h.saypiTtsExercised)).toEqual([false, false, false]);
+  });
+  it("reports SayPi TTS as exercised when its provider is active on some host", () => {
+    const cov = ttsCoverage([
+      { host: "claude", voiceProvider: "Say, Pi", authStatus: true },
+      { host: "pi", voiceProvider: "Pi", authStatus: true },
+    ]);
+    expect(cov.anySaypiTts).toBe(true);
+    expect(cov.perHost.find((h) => h.host === "claude")?.saypiTtsExercised).toBe(true);
+    expect(cov.perHost.find((h) => h.host === "pi")?.saypiTtsExercised).toBe(false);
+  });
+  it("flags unauthenticated runs", () => {
+    expect(ttsCoverage([{ host: "pi", voiceProvider: "None", authStatus: false }]).anyAuthed).toBe(false);
+    expect(ttsCoverage([]).anyAuthed).toBe(false);
   });
 });
