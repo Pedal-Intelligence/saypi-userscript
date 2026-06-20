@@ -45,6 +45,24 @@ export class VoiceMenuUIManager {
       return Observation.foundAndDecorated(obs);
     }
 
+    // Idempotency guard (#321): a menu we created on a previous call carries its
+    // assigned id (e.g. "saypi-voice-menu") but NOT the host's
+    // getVoiceMenuSelector() class, so the query above can never re-find it.
+    // bootstrap re-invokes findAndDecorateVoiceMenu on every ready audio-controls
+    // mutation, so without this guard the create branch below would insert a
+    // SECOND menu each time. Re-find our own element by its id and report it as
+    // already decorated rather than creating a duplicate. Keyed on the live
+    // instance's getId() so it stays correct across chatbots (Pi, Claude, …).
+    if (this.voiceMenuInstance) {
+      const existing = document.getElementById(this.voiceMenuInstance.getId());
+      if (existing && audioControlsContainer.contains(existing)) {
+        return Observation.foundAlreadyDecorated(
+          this.voiceMenuInstance.getId(),
+          existing
+        );
+      }
+    }
+
     // --- Element not found, create it ---
     console.debug("Voice menu element not found via selector, creating...");
     voiceMenuElement = document.createElement("div");
