@@ -56,8 +56,12 @@ export function enterFullscreen() {
 }
 
 export function exitFullscreen() {
-  // Check if the API is available
-  if (document.fullscreenEnabled) {
+  // Only exit when the API is available AND the document is actually in
+  // fullscreen. Without the fullscreenElement guard, the load-time
+  // exitImmersiveMode() path (ImmersionService) calls this on every page load,
+  // which on a non-active document rejects with "Document not active" (#363).
+  // Mirrors the already-guarded Escape-key path in ImmersionService.
+  if (document.fullscreenEnabled && document.fullscreenElement) {
     // Request full-screen mode
     document
       .exitFullscreen()
