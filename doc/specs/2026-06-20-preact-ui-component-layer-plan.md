@@ -1,5 +1,7 @@
 # Preact UI Component Layer Implementation Plan
 
+> **⚠️ POST-IMPLEMENTATION STATUS (2026-06-20): PR1–PR4g shipped; the CallButton + voice-menu Preact rewrite (PR5/PR6 here) was DEFERRED.** Those widgets stayed imperative; their goals were met instead by extracting pure logic (`src/buttons/callButtonGeometry.ts`, #385) and a capability guard (`src/tts/VoiceMenu.ts`, #386). The `injectNotice(host, vnode)` helper described below was **not** built — the shipped helper is `findNoticeInjectionPoint` (find-only) and notices render raw into a detached host. For current conventions (not this plan's staging), see [`doc/preact-component-conventions.md`](../preact-component-conventions.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Introduce Preact (light-DOM) as the extension's UI component primitive and migrate the SayPi-owned UI onto it, in independently-shippable PRs, for maintainability + testability (and a future-cheap Claude Design sync).
