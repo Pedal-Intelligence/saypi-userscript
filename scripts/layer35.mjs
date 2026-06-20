@@ -20,7 +20,22 @@ import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir, homedir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve as resolvePath } from "node:path";
-import { parseLayer35Args, resolveProfileDir, buildRealHostChromeArgs } from "./layer35-lib.mjs";
+import {
+  parseLayer35Args,
+  resolveProfileDir,
+  buildRealHostChromeArgs,
+  buildSeedChromeArgs,
+  isUnsupportedCloudflareHost,
+} from "./layer35-lib.mjs";
+
+// Layer 3.5 runs the BUNDLED Chromium: it's the only channel that loads an unpacked
+// extension via --load-extension (Google restricted that flag in stable Chrome in
+// 2025 — channel:"chrome" launches but never registers the extension SW, verified).
+// The trade-off: bundled Chromium is fingerprinted by Cloudflare, so Cloudflare-
+// gated hosts (claude.ai, chatgpt.com) can't be driven here — use Layer 4 for those
+// (real browser, extension installed normally, already past Cloudflare). See
+// isUnsupportedCloudflareHost + doc/layer35-real-host-loop.md.
+const BUNDLED = { channel: "chromium", ignoreDefaultArgs: ["--enable-automation"] };
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const EXT_DIR = join(repoRoot, ".output", "chrome-mv3-dev");
@@ -41,17 +56,22 @@ async function waitForServiceWorker(context) {
 }
 
 async function seed(opts) {
-  assertBuilt();
+  // No assertBuilt(): seeding is login-only and does not load the extension.
   const profileDir = resolveProfileDir(process.env, homedir());
-  log(`seeding profile at ${profileDir}`);
-  log("a browser will open — log into pi.ai / claude.ai / chatgpt.com, then press Ctrl-C.");
+  const url = opts.url ?? "https://pi.ai/talk";
+  log(`seeding profile at ${profileDir} (login only, no extension)`);
+  log("a browser opens — log into the host, then press Ctrl-C.");
+  if (isUnsupportedCloudflareHost(url)) {
+    log(`NOTE: ${new URL(url).hostname} is behind Cloudflare — Layer 3.5 can't drive it`);
+    log("(bundled Chromium is blocked; real Chrome won't load the extension). Use Layer 4.");
+  }
   const context = await chromium.launchPersistentContext(profileDir, {
-    channel: "chromium",
+    ...BUNDLED,
     headless: false,
-    args: buildRealHostChromeArgs({ extensionDir: EXT_DIR, wavPath: WAV, headless: false }),
+    args: buildSeedChromeArgs(),
   });
   const page = context.pages()[0] ?? (await context.newPage());
-  await page.goto(opts.url ?? "https://pi.ai/talk", { waitUntil: "domcontentloaded" }).catch(() => {});
+  await page.goto(url, { waitUntil: "domcontentloaded" }).catch(() => {});
   await new Promise(() => {}); // hold open until the founder Ctrl-Cs
 }
 
@@ -62,9 +82,18 @@ async function verify(opts) {
     log(`no seeded profile at ${profileDir} — run: npm run layer35:seed (founder logs in once)`);
     process.exit(1);
   }
+  if (isUnsupportedCloudflareHost(opts.url)) {
+    log(`${new URL(opts.url).hostname} is behind Cloudflare — Layer 3.5 can't drive it.`);
+    log("Bundled Chromium (the only channel that loads the extension) is blocked by");
+    log("Cloudflare; stable Chrome (which Cloudflare accepts) refuses --load-extension.");
+    log("Use Layer 4 for Claude/ChatGPT (real browser, extension installed normally,");
+    log("already past Cloudflare + the saypi:dev-feed-speech/dev-reload hooks). See");
+    log("doc/layer35-real-host-loop.md.");
+    process.exit(2);
+  }
   log(`verify ${opts.url} (profile ${profileDir}, ${opts.headed ? "headed" : "headless"})`);
   const context = await chromium.launchPersistentContext(profileDir, {
-    channel: "chromium",
+    ...BUNDLED,
     headless: !opts.headed,
     args: buildRealHostChromeArgs({ extensionDir: EXT_DIR, wavPath: WAV, headless: !opts.headed }),
   });
@@ -113,7 +142,7 @@ async function selfTest() {
   const tmpProfile = mkdtempSync(join(tmpdir(), "saypi-l35-selftest-"));
   log(`self-test (hermetic): temp profile ${tmpProfile}, about:blank`);
   const context = await chromium.launchPersistentContext(tmpProfile, {
-    channel: "chromium",
+    ...BUNDLED,
     headless: true,
     args: buildRealHostChromeArgs({ extensionDir: EXT_DIR, wavPath: WAV, headless: true }),
   });
