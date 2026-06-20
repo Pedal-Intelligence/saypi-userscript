@@ -18,6 +18,7 @@ export const DEFAULT_OBSERVE_MS = 28_000;
  *   --observe=<ms>        how long to watch the conversation after the transcript lands
  *   --no-turn             decoration-only (don't drive a voice turn)
  *   --headless            opt-in headless (Cloudflare-walled on real hosts; for re-testing only)
+ *   --no-select-voice     skip auto-selecting a SayPi voice (test the voice-off path instead)
  */
 export function parseSweepArgs(argv = []) {
   const positional = argv.filter((a) => !a.startsWith("--"));
@@ -33,6 +34,10 @@ export function parseSweepArgs(argv = []) {
     observeMs,
     noTurn: flags.includes("--no-turn"),
     headed: !flags.includes("--headless"),
+    // Default ON: auto-select a SayPi voice (on hosts that support one) before the
+    // turn so the sweep actually exercises SayPi's TTS engine. --no-select-voice
+    // opts out (e.g. to test the voice-off / unauthenticated-degradation path).
+    selectVoice: !flags.includes("--no-select-voice"),
   };
 }
 

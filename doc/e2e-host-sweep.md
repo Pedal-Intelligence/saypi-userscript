@@ -34,22 +34,24 @@ conversation, and screenshots.
    If it says blocked, re-seed (`npm run layer4cdp:seed`, pass the Cloudflare checkbox,
    Cmd-Q).
 
-### One-time seed for the TTS/voice-output path (recommended)
+### One-time seed for the TTS/voice-output path
 
-By default the sweep wants to exercise the **output** path too (TTS readback, voice
-menu, credits) — the half of the product that an unauthenticated/voice-off profile
-silently skips. To cover it, once, in the seeded profile's headed window
-(`npm run layer4cdp:seed`):
+To exercise the **output** path (TTS readback, voice menu, credits) — the half of the
+product an unauthenticated/voice-off profile silently skips — the only manual step is,
+once, in the seeded profile's headed window (`npm run layer4cdp:seed`):
 
-- **Sign into your SayPi account** (saypi.ai) so the extension has a JWT.
-- **Select a _SayPi_ voice on claude.ai** (e.g. an ElevenLabs voice) — **not** pi.ai's
-  native voice. This is the key nuance: the sweep only counts SayPi's TTS engine as
-  exercised when the active provider is **`Say, Pi`** (`isSaypiTtsProvider`). A pi.ai
-  turn logs `Speech provided by Pi` (pi.ai's *native* voice — SayPi just relays it),
-  `None` is voice-off, and ChatGPT uses native Read Aloud — none of those run SayPi's
-  synthesis/playback path. claude.ai has no native voice, so selecting a SayPi voice
-  there is the clean way to exercise the engine (offscreen audio under CSP, credits, the
-  #238/#241/#268 cluster).
+- **Sign into your SayPi account** (saypi.ai) so the extension has a JWT (interactive
+  login — can't be automated). The account needs TTS voices/quota available.
+
+You do **not** need to pick a voice by hand: the sweep **auto-selects a SayPi voice on
+claude.ai** before the turn (default on; `--no-select-voice` opts out), driving the real
+voice-menu → `setVoice` path so the active provider becomes **`Say, Pi`**. This is the
+key nuance the coverage check enforces — only `Say, Pi` counts as SayPi-TTS-exercised
+(`isSaypiTtsProvider`); pi.ai's `Speech provided by Pi` is its *native* voice (SayPi
+just relays it), `None` is voice-off, and ChatGPT uses native Read Aloud. claude.ai has
+no native voice, so it's the clean host to exercise the engine (offscreen audio under
+CSP, credits, the #238/#241/#268 cluster). If the account has no voices/quota, the
+auto-select finds nothing and the sweep notes "no SayPi voice available".
 
 Then Cmd-Q. The sweep logs `auth=` and `voice=` per host and prints a loud ⚠️ if it
 detects the account is unauthenticated **or that SayPi's TTS engine (`Say, Pi`) was never
