@@ -30,6 +30,8 @@
     "test": "npm-run-all -s typecheck test:jest test:vitest",
     "e2e:build": "node --experimental-strip-types scripts/e2e-build.mjs",
     "test:e2e": "playwright test --config e2e/playwright.config.ts",
+    "test:e2e:visual": "playwright test --config e2e/playwright.visual.config.ts",
+    "test:e2e:visual:update": "playwright test --config e2e/playwright.visual.config.ts --update-snapshots",
     "layer35:seed": "node scripts/layer35.mjs seed",
     "layer35:verify": "node scripts/layer35.mjs verify",
     "layer35:self-test": "node scripts/layer35.mjs self-test",

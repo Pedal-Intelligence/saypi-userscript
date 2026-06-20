@@ -51,6 +51,43 @@ Retries are `0` locally and `2` on CI; a Playwright trace is captured
 `on-first-retry`. `workers: 1` / `fullyParallel: false` — the harness binds
 mock servers and a fake-mic device per run, so the specs run serially.
 
+## Settings page (Preact migration)
+
+The settings UI (`entrypoints/settings/**`) was migrated from imperative HTML
+strings to Preact components. Two specs cover it — they load the real
+`settings.html` over `chrome-extension://<id>/…`, so the *full* bootstrap runs
+with the extension runtime live (`browser.runtime.getURL`, chunk loading, the
+Preact mounts, and the imperative controllers that wire them by id). That's the
+thing a static file server can't show and unit tests can't reach: a page that
+mounts but renders wrong (e.g. the PR4f header that lost a CSS utility) or a
+panel left empty by a chunk/import break.
+
+- **`specs/settings.e2e.ts` — REQUIRED (in the CI gate).** Asserts the header
+  mounts, every tab panel renders content on selection, and there are **no
+  uncaught page errors**. Robust and deterministic: it keys on DOM presence, not
+  pixels, and treats network 404s (the hermetic env has no auth/status backend)
+  as expected — only `pageerror` (a thrown mount/controller) fails it. It seeds
+  `chrome.storage.local` with a consent decision so the General tab renders its
+  steady state rather than the first-run consent gate (whose hero overlays the
+  sidebar).
+
+- **`specs/settings.visual.ts` — ON-DEMAND (NOT in the CI gate).** Pixel
+  baselines per tab via `toHaveScreenshot`, with auth/quota/status regions
+  masked. Run via its own config (`playwright.visual.config.ts`, `testMatch:
+  **/*.visual.ts`) so the default `npm run test:e2e` never picks it up:
+
+  ```bash
+  npm run test:e2e:visual          # compare against committed baselines
+  npm run test:e2e:visual:update   # regenerate after an intended UI change
+  ```
+
+  Baselines (`specs/settings.visual.ts-snapshots/*.png`) are **committed** and
+  **platform-specific** (Playwright suffixes them `-<platform>`, e.g.
+  `-darwin`). That platform-specificity is exactly why this is a local
+  pre-flight tool, not a cross-platform CI check — a baseline captured on macOS
+  would spuriously fail the Linux CI runner. Regenerate baselines on the same
+  platform you'll compare on, and eyeball the new PNGs before committing.
+
 ## Architecture
 
 ```
