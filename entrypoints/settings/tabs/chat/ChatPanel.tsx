@@ -1,3 +1,5 @@
+import { setSliderValue } from "../../shared/setSliderValue";
+
 /**
  * Chat-tab panel (Preact).
  *
@@ -11,14 +13,8 @@
  * orchestrator's i18n + lucide passes run post-mount.
  *
  * `slider-value` is a non-standard attribute (not typed by Preact JSX); it is
- * applied via a ref to keep the markup byte-faithful.
+ * applied via a shared ref helper to keep the markup byte-faithful.
  */
-function setSliderValue(value: string) {
-  return (el: HTMLSpanElement | null) => {
-    if (el) el.setAttribute("slider-value", value);
-  };
-}
-
 export function ChatPanel() {
   return (
     <>
