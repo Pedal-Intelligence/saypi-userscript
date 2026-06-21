@@ -108,8 +108,15 @@ After all stores are submitted: `node scripts/release.mjs tag <version> --yes` t
 `finalize <version> --yes` (pushes the release commit + tag from main). Optionally
 `gh release create v<x> -F dist/release-notes-draft-v<x>.md`.
 
-## Future: browser-driving & publishing APIs
-`stores.json` + the packet are the contract a later phase consumes: (a) a Claude-in-Chrome
-driver that fills the dashboards (Chrome first; dry run → wet run), and (b) optional API
-automation (CWS V2 OAuth, Edge v1.1 API-key, AMO `web-ext sign --channel=listed`). Each
-store's API + auth model is documented in its per-store file.
+## Future: one-click automation via publishing APIs (#412)
+The 1.11.0 wet run established that **browser-driving is a dead end for releases:**
+- **Chrome's dev console can't be scripted by an extension at all** (extensions-gallery block —
+  *"The extensions gallery cannot be scripted"*). Edge Partner Center / AMO aren't on the gallery,
+  so they *could* be driven from Chrome, but —
+- the package upload is a **native OS file-picker** and the build is ~18 MB (over the in-browser
+  10 MB cap), so the actual upload isn't automatable from the browser on **any** store.
+
+So the real path to a (near) one-click, headless release is the **publishing APIs**, consuming the
+same `stores.json` + built artifacts: **CWS V2** (OAuth refresh token), **Edge v1.1** (API key +
+Client ID), **AMO** `web-ext sign --channel=listed` (JWT, `--upload-source-code`). Each store's API
++ auth model is in its per-store file. Tracked in **#412**.

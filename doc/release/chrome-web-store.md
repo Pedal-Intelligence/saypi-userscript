@@ -35,6 +35,17 @@ Canonical answers live in `doc/WEB_STORE_PERMISSIONS.md`. The tab is sticky but 
 - Usually a **few days**; occasionally up to **~3 weeks** (a 2026-04 submission-surge notice is posted). Broad host permissions / sensitive permissions slow it. Contact developer support if pending >3 weeks.
 - Default **auto-publishes on approval** (unless you unchecked it).
 
+## ⚠️ The dev console cannot be browser-automated
+Chrome **blocks all extensions from scripting the extensions-gallery domain**
+(`chrome.google.com/webstore/*`, incl. the dev console). Navigating Claude-in-Chrome there
+returns *"The extensions gallery cannot be scripted."* — this is categorical, not a setup
+issue. So the Chrome submission is **either manual (from the packet) or via the API below** —
+there is no browser-driving path for Chrome (unlike Edge/AMO, whose dashboards aren't on the
+gallery, though those are still gated by the native file-picker / 10 MB upload limit). The
+package upload is also a native OS file-picker and the build is ~18 MB, so the upload step
+isn't automatable from the browser on any store. Confirmed in the 1.11.0 wet run (2026-06-22).
+**API is the only real automation path for Chrome — tracked in #412.**
+
 ## Publishing API (future automation phase)
 - **V2 API** (`https://chromewebstore.googleapis.com`). **V1 sunsets 2026-10-15** — build on V2.
 - **Auth:** OAuth2 — classic client id/secret + refresh token, or a V2 **service account**. Token at `https://oauth2.googleapis.com/token`. Scope `https://www.googleapis.com/auth/chromewebstore`. 2SV required on the account.
