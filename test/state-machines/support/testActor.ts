@@ -1,62 +1,42 @@
-import { interpret, type AnyStateMachine } from "xstate";
+import { createActor, type AnyStateMachine } from "xstate";
 
 /**
  * Migration-resilient test harness for the XState machines.
  *
- * Today this wraps XState v4's `interpret()` and exposes a small facade that
- * mirrors the v4 interpreter surface the specs actually use:
- *   `.start()`, `.stop()`, `.send()`, `.state`, `.getSnapshot()`, `.subscribe()`.
+ * This is the single seam between the specs and the XState runtime. It wraps
+ * XState v5's `createActor()` and exposes a small facade mirroring the surface
+ * the specs use: `.start()`, `.stop()`, `.send()`, `.state`, `.getSnapshot()`,
+ * `.subscribe()`. (Before the v4 -> v5 upgrade this wrapped `interpret()` and a
+ * v4 `State`; keeping the facade meant the upgrade touched only this file.)
  *
- * Why a facade instead of returning the raw interpreter? So that the v4 -> v5
- * upgrade touches a SINGLE file. When the codebase moves to XState v5 this is
- * the only place that changes:
- *   - `interpret(machine)`        -> `createActor(machine)`
- *   - the `state` getter          -> returns `actor.getSnapshot()`
- *   - `getSnapshot()`             -> `actor.getSnapshot()`
- * The ~400 call sites across `test/state-machines/*.spec.ts` keep working
- * unchanged, because the facade contract is identical on both versions.
+ * It normalizes events so the specs' existing call styles keep working:
+ *  - string events  `send('saypi:call')`            -> `{ type: 'saypi:call' }`
+ *  - the v4 two-arg  `send('x', { foo: 1 })`         -> `{ type: 'x', foo: 1 }`
+ * v5's `actor.send` only accepts a single event object, so this normalization is
+ * what lets the pre-existing specs run unchanged on v5.
  *
- * It also normalizes string events (`send('saypi:call')`) into event objects
- * (`send({ type: 'saypi:call' })`). v4 accepts both; v5 accepts only objects.
- * Normalizing here means the specs' existing string sends survive the upgrade.
+ * `.state` returns the current snapshot (`actor.getSnapshot()`), which carries
+ * `.value`, `.context`, and `.matches()` — the same shape the specs read.
  *
- * Types are intentionally loose (`any` on the snapshot) to avoid coupling the
- * test surface to v4-vs-v5 type shapes; the assertions in the specs do the real
- * type-checking work.
- *
- * The optional `context` seed (v4: `machine.withContext`) keeps the one v4-only
- * isolation idiom inside this single seam too. It exists because several machines
- * export a singleton whose actions currently mutate the shared context object in
- * place (a real bug, tracked for the migration), so tests that need a pristine
- * starting context reseed per-test. Once those actions move to `assign` in v5,
- * actors no longer leak and this seed becomes unnecessary — at the v5 flip it maps
- * to `createActor(machine, { input })` or is simply dropped.
+ * Types are intentionally loose (`any` on the snapshot) so the test surface is
+ * not coupled to exact snapshot generics; the assertions do the real checking.
  */
 
 type SendableEvent = string | { type: string; [key: string]: unknown };
 
-export interface TestActorOptions {
-  /** Seed the actor's starting context (v4 `withContext`); see file header. */
-  context?: Record<string, unknown>;
-}
-
 export interface TestActor {
-  /** Start the actor. Returns the facade for chaining (matches v4 `interpret().start()`). */
+  /** Start the actor. Returns the facade for chaining. */
   start(): TestActor;
   /** Stop the actor. */
   stop(): void;
   /**
-   * Send an event. Accepts:
-   *  - a full event object: `send({ type: 'x', foo: 1 })`
-   *  - a bare type string: `send('x')`
-   *  - the v4 two-arg form: `send('x', { foo: 1 })` (merged into `{ type: 'x', foo: 1 }`)
-   * The two-arg form does not exist in v5; normalizing here lets the existing
-   * specs survive the upgrade untouched.
+   * Send an event. Accepts a full event object, a bare type string, or the
+   * legacy two-arg form `send('x', { foo: 1 })` (merged into `{ type: 'x', foo: 1 }`).
    */
   send(event: SendableEvent, payload?: Record<string, unknown>): void;
   /** Current snapshot. Has `.value`, `.context`, and `.matches()`. */
   readonly state: any;
-  /** Current snapshot (alias of `state`, for specs that call `getSnapshot()`). */
+  /** Current snapshot (alias of `state`). */
   getSnapshot(): any;
   /** Subscribe to snapshot changes. */
   subscribe(observer: (snapshot: any) => void): { unsubscribe(): void };
@@ -70,34 +50,27 @@ const normalize = (
   return payload ? { ...base, ...payload } : base;
 };
 
-export function createTestActor(
-  machine: AnyStateMachine,
-  options?: TestActorOptions,
-): TestActor {
-  const configured =
-    options?.context !== undefined
-      ? machine.withContext(options.context as any)
-      : machine;
-  const service = interpret(configured);
+export function createTestActor(machine: AnyStateMachine): TestActor {
+  const actor = createActor(machine);
   const facade: TestActor = {
     start() {
-      service.start();
+      actor.start();
       return facade;
     },
     stop() {
-      service.stop();
+      actor.stop();
     },
     send(event, payload) {
-      service.send(normalize(event, payload) as any);
+      actor.send(normalize(event, payload) as any);
     },
     get state() {
-      return service.state;
+      return actor.getSnapshot();
     },
     getSnapshot() {
-      return service.getSnapshot();
+      return actor.getSnapshot();
     },
     subscribe(observer) {
-      return service.subscribe(observer as any);
+      return actor.subscribe(observer as any);
     },
   };
   return facade;

@@ -80,8 +80,6 @@
   },
   "dependencies": {
     "@ricky0123/vad-web": "^0.0.24",
-    "@xstate/fsm": "^2.1.0",
-    "@xstate/test": "^0.5.1",
     "axios": "^1.4.0",
     "chai": "^4.3.10",
     "cheerio": "^1.0.0-rc.12",
@@ -96,7 +94,7 @@
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",
     "wasm-feature-detect": "^1.8.0",
-    "xstate": "^4.38.2"
+    "xstate": "^5.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
