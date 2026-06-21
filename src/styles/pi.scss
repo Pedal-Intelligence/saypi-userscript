@@ -289,6 +289,22 @@ html body.pi {
     /* Match Pi's sidebar menu button text styling */
     .immersive-mode-button,
     .settings-button {
+      /* Hover/press fill to match Pi's native nav rows (New chat, My stuff, …),
+         which use `hover:bg-secondary-hover active:bg-fill-default transition-colors`.
+         We can't lean on the `hover:bg-neutral-100` utility createMenuButton sets:
+         Pi's Tailwind build never compiles that hover variant (verified: no
+         `.hover\:bg-neutral-100:hover` rule on the page), so it's a silent no-op.
+         Reusing Pi's own tokens here also tracks light/dark automatically. */
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background-color: var(--color-secondary-hover, #e9ddcd);
+      }
+
+      &:active {
+        background-color: var(--color-fill-default, #ece1d2);
+      }
+
       span {
         font-family: var(--font-oracle), ui-sans-serif, system-ui, -apple-system,
           BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
