@@ -229,11 +229,24 @@ html body.claude {
         width: 20px;
         height: 20px;
         color: currentColor;
+        transform-origin: center;
 
         path[fill="#000000"],
         path[fill="#000"],
         path[fill="#000000ff"] {
           fill: currentColor;
+        }
+      }
+
+      /* A quick, springy one-shot "kick" on the icon when the row is hovered or
+         keyboard-focused — echoes Claude's own playful sidebar-icon micro-motions
+         (their native icons morph on hover; our π is a fixed mark, so it gets a
+         tilt-and-settle instead). It replays each time hover is re-entered, which
+         matches the native feel. Skipped under prefers-reduced-motion. */
+      @media (prefers-reduced-motion: no-preference) {
+        &:hover svg,
+        &:focus-visible svg {
+          animation: saypi-claude-icon-kick 0.45s ease-out;
         }
       }
 
@@ -243,6 +256,24 @@ html body.claude {
         letter-spacing: normal;
       }
     }
+  }
+}
+
+/* One-shot hover "kick" for the SayPi sidebar icon (see .settings-button above).
+   Top-level @keyframes (names are global); only the Claude-scoped rule above
+   references it, so it's inert on other hosts. */
+@keyframes saypi-claude-icon-kick {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  30% {
+    transform: rotate(-15deg) scale(1.08);
+  }
+  60% {
+    transform: rotate(7deg) scale(1.03);
+  }
+  100% {
+    transform: rotate(0) scale(1);
   }
 }
 
