@@ -628,9 +628,9 @@ export class ChatGPTTextBlockCapture extends ElementTextStream {
   // So on the first non-empty content mutation we emit a one-shot, EMPTY
   // "writing started" marker. It triggers onStart -> saypi:piWriting at the true
   // start of writing, but contributes no text to the captured block ("" + final
-  // text === final text), so emitFinalAndClose, billing, and TTS text stay
-  // exactly as before. The marker fires before speak() opens any audio stream,
-  // so it is a no-op for TTS.
+  // text === final text), so emitFinalAndClose and billing are unchanged. The
+  // empty chunk never reaches the TTS input stream: SpeechSynthesisModule drops
+  // an empty saypi:tts:text:added so it can't be mistaken for end-of-speech (#399).
   handleMutationEvent(_mutation: MutationRecord): void {
     if (this.firstTokenEmitted || this.closed()) return;
     const hasContent = (this.element.textContent || "").trim().length > 0;

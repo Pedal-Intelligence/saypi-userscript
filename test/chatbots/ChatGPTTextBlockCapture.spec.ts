@@ -116,11 +116,42 @@ describe('ChatGPT piWriting window (#399)', () => {
 
     expect(completed).toBe(true);
 
+    // The writing-started marker is the FIRST chunk (so onStart -> piWriting
+    // fires before the real text) and is emitted exactly ONCE across the many
+    // content mutations of a streaming reply.
+    expect(chunks[0]).toBe('');
+    expect(chunks.filter((c) => c === '').length).toBe(1);
+
     // Billing/TTS integrity: the captured transcript is the full final text,
     // uncorrupted by the writing-started marker (the marker contributes nothing).
     expect(chunks.join('')).toBe(
       'Not a whole lot on my end — just here and ready to help.'
     );
+
+    subscription.unsubscribe();
+  });
+
+  it('opens the window when content arrives via an in-place characterData re-render', async () => {
+    const { ChatGPTTextBlockCapture } = await importChatGPTStream();
+    const { content } = buildStreamingAssistantTurn();
+
+    // Seed an empty text node so the first token lands as a characterData
+    // mutation (ChatGPT re-renders markdown in place) rather than a childList
+    // insertion — the base observer watches both.
+    const textNode = document.createTextNode('');
+    content.appendChild(textNode);
+
+    const stream = new ChatGPTTextBlockCapture(content, { includeInitialText: false });
+    const chunks: string[] = [];
+    const subscription = stream.getStream().subscribe({
+      next: (value: any) => chunks.push(value.text),
+    });
+
+    textNode.data = 'first streamed token';
+    await flushMutations();
+
+    expect(chunks.length).toBeGreaterThanOrEqual(1);
+    expect(chunks[0]).toBe('');
 
     subscription.unsubscribe();
   });
