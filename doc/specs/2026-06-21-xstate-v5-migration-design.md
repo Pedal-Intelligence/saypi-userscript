@@ -1,7 +1,7 @@
 # XState characterization net + v4→v5 migration
 
 **Date:** 2026-06-21
-**Status:** IN PROGRESS (see Progress Tracker at the bottom — this doc is the resumable source of truth for the `/loop` driving this work)
+**Status:** COMPLETE — #401 (safety net) and #402 (v5 cutover) merged; verified e2e (CI + local 11/11). Deferred follow-ups: bugs in #403, model-based path testing in #404. Conventions now live in `src/state-machines/README.md`.
 **Author:** autonomous session (founder-requested + approved)
 
 ## Why
@@ -118,13 +118,14 @@ CI green + mergeable.
 - [x] Characterization tests: DictationMachine (harden) — 45 tests.
 - [x] Characterization tests: SessionAnalyticsMachine (harden) — 24 tests.
 - [x] Full suite green together: 21 files / 383 tests; tsc clean. Committed (fffb14b).
-- [ ] Bug triage (15 suspected bugs surfaced — see Bug Triage section below).
-- [ ] PR A opened, reviewed, CI green, merged.
-- [ ] PR B: package.json bump + machine conversions + consumer conversions + helper flip.
-- [ ] PR B: `npm test` green on v5.
-- [ ] PR B: `e2e` green on v5.
-- [ ] PR B opened, reviewed, CI green, merged.
-- [ ] Loop done: migration complete + verified e2e. PushNotification sent.
+- [x] Bug triage (15 suspected bugs surfaced — see Bug Triage section below). Deferred items → #403.
+- [x] PR A opened, reviewed, CI green, merged (#401).
+- [x] PR B: package.json bump + machine conversions + consumer conversions + helper flip.
+- [x] PR B: `npm test` green on v5 (tsc + Jest + Vitest; 1349 passed).
+- [x] PR B: `e2e` green on v5 (CI + local 11/11).
+- [x] PR B opened, reviewed, CI green, merged (#402).
+- [x] Loop done: migration complete + verified e2e. PushNotification sent.
+- [x] Conventions doc (`src/state-machines/README.md`) + stale-ref cleanup shipped; model-based testing tracked in #404.
 
 ## Bug Triage (15 suspected bugs from the characterization pass)
 

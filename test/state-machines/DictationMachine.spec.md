@@ -60,11 +60,11 @@ This comprehensive test suite validates the DictationMachine state machine, focu
 
 ## Key Testing Patterns
 
-### XState v4 Best Practices
-- Uses `interpret()` for service creation and management
+### XState v5 test practices
+- Creates actors via the `createTestActor` seam (`test/state-machines/support/testActor.ts`), never raw `interpret()`/`createActor()` — see [`src/state-machines/README.md`](../../src/state-machines/README.md) for the conventions
 - Tests state values using nested object notation for parallel states
-- Validates context mutations and state persistence
-- Proper service lifecycle management with start/stop
+- Validates context (set via `assign`) and state persistence
+- Proper actor lifecycle management with start/stop
 
 ### Mock Strategy
 - **Comprehensive dependency mocking** for all external modules

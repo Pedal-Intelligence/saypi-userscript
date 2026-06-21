@@ -62,7 +62,7 @@ WXT discovers entry points in **`entrypoints/`**; each is a thin shim that impor
 2. **Audio Pipeline** (`src/audio/`)
    - `AudioModule.js` - Main audio coordination and state management (interprets the audio XState actors)
    - `OffscreenAudioBridge.js` - Communication bridge between content script and offscreen audio processing
-   - **State machines** live in `src/state-machines/` (not `src/audio/`): `AudioInputMachine.ts`, `AudioOutputMachine.ts`, `AudioRetryMachine.ts`, plus `ConversationMachine.ts`, `DictationMachine.ts`, and others
+   - **State machines** live in `src/state-machines/` (not `src/audio/`): `AudioInputMachine.ts`, `AudioOutputMachine.ts`, `AudioRetryMachine.ts`, plus `ConversationMachine.ts`, `DictationMachine.ts`, and others. These are **XState v5** — **read [src/state-machines/README.md](src/state-machines/README.md) before authoring/wiring/testing a machine** (the `createTestActor` test seam, `setup().createMachine()`, `assign`-not-mutate, object-only events).
    - **Dictation transcription**: Uses dual-phase approach (live streaming + refinement) - see [doc/DUAL_PHASE_TRANSCRIPTION.md](doc/DUAL_PHASE_TRANSCRIPTION.md)
 
 3. **Voice Activity Detection** (`src/vad/`)
@@ -205,7 +205,7 @@ npm run test:vitest:watch  # Run Vitest in watch mode
 
 1. **Singleton Services** - Many core services use getInstance() pattern
 2. **Observer Pattern** - DOM observation with decoration tracking
-3. **State Machines** - XState for managing complex UI/audio flows
+3. **State Machines** - XState **v5** for complex UI/audio flows; conventions + the `createTestActor` test seam are in [src/state-machines/README.md](src/state-machines/README.md)
 4. **Progressive Enhancement** - Graceful degradation when features unavailable
 5. **Cross-browser Compatibility** - Firefox/Chrome-specific handling where needed
 6. **UI Component Layer (Preact)** - SayPi-owned UI (settings tabs/header, notices, auth prompts) is built as **light-DOM Preact `.tsx`** components mounted via the `src/ui/preact/mount.ts` registry (`mountInto`/`unmountFrom`). Host-injected widgets (call button, voice menus) stay imperative — extract pure logic into testable modules instead of rewriting (e.g. `src/buttons/callButtonGeometry.ts`). **Read [doc/preact-component-conventions.md](doc/preact-component-conventions.md) before touching any UI** — it carries the render-vs-registry rule, the host-specific Tailwind rule, and the add-a-tab / add-a-notice recipes.
