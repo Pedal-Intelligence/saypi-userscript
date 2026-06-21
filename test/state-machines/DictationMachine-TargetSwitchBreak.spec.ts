@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './support/testActor';
 import EventBus from '../../src/events/EventBus.js';
 
 // Mock dependencies
@@ -89,7 +89,7 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
     
     // Create fresh machine for each test
     const machine = createDictationMachine();
-    service = interpret(machine);
+    service = createTestActor(machine);
   });
 
   afterEach(() => {

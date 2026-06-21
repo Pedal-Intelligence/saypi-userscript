@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './support/testActor';
 import EventBus from '../../src/events/EventBus.js';
 
 // Mock dependencies (mirrors DictationMachine-OutOfOrder.spec.ts so the machine
@@ -98,7 +98,7 @@ describe('DictationMachine - Insert at Caret (#178)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     const machine = createDictationMachine();
-    service = interpret(machine);
+    service = createTestActor(machine);
   });
 
   afterEach(() => {

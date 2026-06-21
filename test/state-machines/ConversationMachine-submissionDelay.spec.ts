@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './support/testActor';
 
 // Mocks needed by ConversationMachine
 vi.mock('../../src/ConfigModule', () => ({
@@ -105,7 +105,7 @@ describe('ConversationMachine submissionDelay scheduling', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(1_000_000));
     const machine = createConversationMachine(StubChatbot as any);
-    service = interpret(machine);
+    service = createTestActor(machine);
     service.start();
     // Start call and begin recording
     service.send('saypi:call');

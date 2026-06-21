@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './support/testActor';
 import EventBus from '../../src/events/EventBus.js';
 
 // Mock dependencies
@@ -73,7 +73,7 @@ describe('PRD Requirements - Dictation Text Merging', () => {
     
     // Create fresh machine for each test
     const machine = createDictationMachine(inputElement);
-    service = interpret(machine);
+    service = createTestActor(machine);
   });
 
   afterEach(() => {
@@ -339,7 +339,7 @@ describe('PRD Requirements - Dictation Text Merging', () => {
       document.body.appendChild(editableDiv);
       
       const machine = createDictationMachine(editableDiv);
-      const editableService = interpret(machine);
+      const editableService = createTestActor(machine);
       editableService.start();
       
       editableService.send({ type: 'saypi:startDictation', targetElement: editableDiv });
