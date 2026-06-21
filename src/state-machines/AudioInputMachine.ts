@@ -522,13 +522,16 @@ export const audioInputMachine = setup({
     sendData: ({ event }) => {
       if (event.type !== "dataAvailable") return;
       const { frames, blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
-      const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+      const sizeInKb = (blob.size / 1024).toFixed(2); // for logging only
       logger.debug(`Uploading ${sizeInKb}kb of audio data`);
 
       // Use the duration directly from the event
       const speechDuration = duration;
 
-      if (Number(sizeInKb) > 0) {
+      // Gate on actual emptiness, not 2-decimal kB rounding (#403): a small
+      // non-empty blob (e.g. a few bytes) rounds to "0.00" kB but is still real
+      // audio and must be forwarded.
+      if (blob.size > 0) {
         // Upload the audio to the server for transcription
         //
         // TODO: the VAD emits `saypi:userStoppedSpeaking` events with raw frames when the user stops speaking.
@@ -571,41 +574,14 @@ export const audioInputMachine = setup({
     logMicrophoneAcquisitionError: ({ event }) => {
       // onError surfaces the rejection reason as `event.error` in v5.
       const error = (event as { type: string; error?: unknown }).error;
-      let messageKey = "microphoneErrorUnknown";
-      let detail = "";
-
-      if (isOverconstrainedError(error)) {
-        messageKey = "microphoneErrorConstraints";
-      } else if (error instanceof DOMException) {
-        switch (error.name) {
-          case "NotAllowedError":
-            messageKey = "microphoneErrorPermissionDenied";
-            break;
-          case "NotFoundError":
-            messageKey = "microphoneErrorNotFound";
-            break;
-          case "NotReadableError":
-            messageKey = "microphoneErrorInUse";
-            break;
-          default:
-            messageKey = "microphoneErrorUnexpected";
-            detail = error.message;
-        }
-      } else if (error instanceof Error) {
-        messageKey = "microphoneErrorGeneric";
-        detail = error.message;
-      }
-
-      const message = getMessage(messageKey, detail);
-
-      console.error(`Microphone error: ${message}`, error);
-
-      EventBus.emit("saypi:ui:show-notification", {
-        message: message,
-        type: "text",
-        seconds: 20,
-        icon: "microphone-muted",
-      });
+      // setupRecording already shows a specific, user-facing notification for
+      // every failure path (permission denied, VAD init failed, etc.) BEFORE
+      // rejecting, and it flattens the cause to a string — so the original
+      // DOMException never reaches this action (the NotAllowed/NotFound/InUse/
+      // OverconstrainedError branches were dead) and a second notification here
+      // would only override setupRecording's specific message with a generic one
+      // (#403). Keep diagnostics only; setupRecording owns the user-facing notice.
+      console.error("[AudioInputMachine] Microphone acquisition failed:", error);
     },
   },
   guards: {
@@ -754,17 +730,5 @@ export const audioInputMachine = setup({
     },
   },
 });
-
-interface OverconstrainedError extends DOMException {
-  constraint: string;
-  message: string;
-}
-function isOverconstrainedError(error: any): error is OverconstrainedError {
-  return (
-    error instanceof DOMException &&
-    (error.name === "OverconstrainedError" ||
-      error.name === "ConstraintNotSatisfiedError")
-  );
-}
 
 export { setupRecording };

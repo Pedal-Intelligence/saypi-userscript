@@ -340,9 +340,8 @@ describe("audioInputMachine characterization", () => {
     await vi.runAllTimersAsync();
     emitMock.mockClear();
 
-    // sendData drops anything whose size rounds to "0.00" kB. (blob.size/1024)
-    // .toFixed(2) must be > 0, so the blob needs ~>=6 bytes. See "drops tiny
-    // blob" test below for the lower-bound boundary characterization.
+    // sendData forwards any non-empty blob (gates on blob.size > 0). See the
+    // "tiny but non-empty blob" test below for the lower-bound boundary.
     const blob = new Blob(["x".repeat(64)], { type: "audio/wav" });
     const frames = new Float32Array([0.1, 0.2]);
     service.send({
@@ -391,9 +390,11 @@ describe("audioInputMachine characterization", () => {
     expect(stoppedEmits.length).toBe(0);
   });
 
-  it("CHARACTERIZATION: sendData drops a tiny (non-empty) blob whose size rounds to 0.00 kB", async () => {
-    // 4 bytes -> (4/1024).toFixed(2) === "0.00" -> Number(...) === 0 -> not > 0.
-    // So a real-but-tiny segment is silently dropped (no userStoppedSpeaking).
+  it("sendData forwards a tiny but non-empty blob (gates on blob.size, not kB rounding)", async () => {
+    // Regression for #403: sendData previously gated on
+    // (blob.size / 1024).toFixed(2) > 0, so a 4-byte blob rounded to "0.00" kB and
+    // was silently dropped. It now gates on blob.size > 0, so any real (non-empty)
+    // segment is forwarded as saypi:userStoppedSpeaking.
     await acquire(service);
     service.send("start");
     await vi.runAllTimersAsync();
@@ -412,7 +413,7 @@ describe("audioInputMachine characterization", () => {
     const stoppedEmits = emitMock.mock.calls.filter(
       (c) => c[0] === "saypi:userStoppedSpeaking"
     );
-    expect(stoppedEmits.length).toBe(0);
+    expect(stoppedEmits.length).toBe(1);
   });
 
   it("recording + stopRequested -> pendingStop, calling vadClient.stop and setting waitingToStop", async () => {
@@ -572,33 +573,33 @@ describe("audioInputMachine characterization", () => {
     expect(initializeMock).toHaveBeenCalledTimes(1);
   });
 
-  it("CHARACTERIZATION: onError event.data is always a plain Error (string-wrapped) -> microphoneErrorGeneric branch (DOMException branches are unreachable via the service)", async () => {
-    // setupRecording swallows any real DOMException and only forwards a string
-    // via completion_callback; acquireMicrophone then rejects with `new Error(string)`.
-    // So logMicrophoneAcquisitionError always sees a generic Error, never a
-    // DOMException -> the NotAllowedError/NotFoundError/etc. branches are dead.
+  it("on acquisition failure, only setupRecording's specific notification fires (no redundant generic one)", async () => {
+    // #403: logMicrophoneAcquisitionError used to emit a SECOND, generic
+    // notification (microphoneErrorGeneric, seconds:20) on top of the specific one
+    // setupRecording already shows — and its DOMException-named branches were dead
+    // (the service flattens the cause to a string). The onError action now only
+    // logs; setupRecording owns the single user-facing notification.
     vadBehavior.initializeResult = { success: false, error: "perm-denied-real" };
     service.send("acquire");
     await vi.runAllTimersAsync();
     expect(service.state.value).toBe("released");
 
-    // Two notifications fire: first from setupRecording (short VAD error,
-    // seconds:10), then from logMicrophoneAcquisitionError (the onError action,
-    // seconds:20). The LAST one is the machine action under test.
     const notifs = emitMock.mock.calls.filter(
       (c) => c[0] === "saypi:ui:show-notification"
     );
-    expect(notifs.length).toBeGreaterThanOrEqual(2);
-    const actionNotif = notifs[notifs.length - 1];
-    // getMessage is mocked to echo the i18n key; the generic Error branch is used
-    // (proving DOMException-named branches are never reached via the service).
-    expect(actionNotif[1]).toEqual(
+    // Exactly one notification — setupRecording's, carrying the specific VAD error.
+    expect(notifs.length).toBe(1);
+    expect(notifs[0][1]).toEqual(
       expect.objectContaining({
-        message: "microphoneErrorGeneric",
+        message: "perm-denied-real",
         icon: "microphone-muted",
-        seconds: 20,
       })
     );
+    // The generic onError notification is gone.
+    const generic = notifs.filter(
+      (c) => (c[1] as { message?: string })?.message === "microphoneErrorGeneric"
+    );
+    expect(generic.length).toBe(0);
   });
 
   it("after a failed acquisition the machine can be re-acquired successfully", async () => {
