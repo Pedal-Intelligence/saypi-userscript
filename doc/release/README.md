@@ -42,7 +42,20 @@ node scripts/release.mjs tag [version] --yes    # founder: create the release ta
 node scripts/release.mjs finalize [version] --yes  # founder: push commit + tag (main only)
 ```
 
-(`npm run release:preflight` / `release:plan` / `release:packet` alias the safe three.)
+Every command has a first-class npm alias (`npm run release:<cmd>`) for discoverability —
+`npm run` lists them. The safe three run directly; the gated four need the `--yes` flag
+passed through, e.g. `npm run release:bump -- 1.11.0 --yes`, `npm run release:build -- --yes`
+(running them without `--yes` just prints the founder-only gate notice):
+
+```
+npm run release:preflight                  # = node scripts/release.mjs preflight
+npm run release:plan                       # = … plan
+npm run release:packet                     # = … packet
+npm run release:bump -- <version> --yes    # = … bump <version> --yes
+npm run release:build -- --yes             # = … build --yes
+npm run release:tag -- <version> --yes     # = … tag <version> --yes
+npm run release:finalize -- <version> --yes  # = … finalize <version> --yes
+```
 
 Run from the **main checkout on `main`** — a real release is cut from main and the build
 needs `.env.production`, which is never copied into a worktree.
