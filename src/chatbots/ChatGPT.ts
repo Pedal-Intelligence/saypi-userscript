@@ -9,6 +9,7 @@ import { findControlsContainerInComposer, findPromptInputInComposer, getScopedSu
 import { getAssistantContentSelector } from "./chatgpt/MessageSelectors";
 import { findThreadRoot } from "./chatgpt/HistorySelectors";
 import { ChatGPTResponse } from "./chatgpt/ChatGPTResponse";
+import { initCallStartTracking } from "./chatgpt/readAloudGating";
 
 export const CHATGPT_FEATURES = {
   enableControlPanel: false,
@@ -16,6 +17,14 @@ export const CHATGPT_FEATURES = {
 
 class ChatGPTChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ChatGPTPrompt> = new Map();
+
+  constructor() {
+    super();
+    // Snapshot which messages exist when a call starts so auto-read-aloud can tell
+    // a genuinely new reply (#200/#408) from one already on screen (#245). Wiring is
+    // idempotent, so repeated construction (host detection) registers it just once.
+    initCallStartTracking();
+  }
 
   getName(): string {
     return "ChatGPT";

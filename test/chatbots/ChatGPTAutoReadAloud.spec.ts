@@ -43,11 +43,16 @@ vi.mock('../../src/chatbots/Pi', () => ({
 
 // Import after mocks so they take effect
 import ChatGPTChatbot from '../../src/chatbots/ChatGPT';
+import {
+  captureMessagesPresentAtCallStart,
+  clearMessagesPresentAtCallStart,
+} from '../../src/chatbots/chatgpt/readAloudGating';
 
 
 describe('ChatGPT auto Read Aloud', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
+    clearMessagesPresentAtCallStart();
     setCallActive();
   });
 
@@ -303,6 +308,77 @@ describe('ChatGPT auto Read Aloud', () => {
     expect(readAloudClickSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
     expect(overflowClickSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
     expect(switchClickSpy).not.toHaveBeenCalled();
+  });
+
+  it('auto-clicks a new-chat reply decorated via the old-message path during a call (#408/#200)', async () => {
+    // New chat: no assistant turns exist when the call starts → empty snapshot.
+    captureMessagesPresentAtCallStart();
+    setCallActive();
+
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    // The reply streamed in *after* the call started and is discovered late, so it
+    // is decorated through the OLD-message path (isStreaming omitted/false) — the
+    // exact #408 race. It carries a fresh turn id absent from the call-start snapshot.
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    msg.setAttribute('data-turn-id', 'turn-new-reply');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true, false); // old-message path
+
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const btn = document.createElement('button');
+    btn.setAttribute('data-testid', 'voice-play-turn-action-button');
+    const clickSpy = vi.spyOn(btn, 'click');
+    actionBar.appendChild(btn);
+
+    await new Promise((r) => setTimeout(r, 10));
+
+    // It must be read aloud even though it arrived via the old-message path.
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('does NOT auto-click a message already present when the call started (#245 not regressed)', async () => {
+    const list = document.createElement('div');
+    list.className = 'present-messages';
+    document.body.appendChild(list);
+
+    // Existing reply already on screen *before* the user starts the call.
+    const msg = document.createElement('article');
+    msg.setAttribute('data-turn', 'assistant');
+    msg.setAttribute('data-turn-id', 'turn-existing');
+    const content = document.createElement('div');
+    content.className = 'markdown';
+    msg.appendChild(content);
+    list.appendChild(msg);
+
+    // Call starts now → snapshot includes the existing turn.
+    captureMessagesPresentAtCallStart();
+    setCallActive();
+
+    // Decorated via the old-message path during the active call.
+    const chatbot = new ChatGPTChatbot();
+    chatbot.getAssistantResponse(msg as HTMLElement, true, false);
+
+    const actionBar = document.createElement('div');
+    msg.appendChild(actionBar);
+    const btn = document.createElement('button');
+    btn.setAttribute('data-testid', 'voice-play-turn-action-button');
+    const clickSpy = vi.spyOn(btn, 'click');
+    actionBar.appendChild(btn);
+
+    await new Promise((r) => setTimeout(r, 10));
+
+    // A message present at call start must stay silent.
+    expect(clickSpy).toHaveBeenCalledTimes(0);
   });
 
   it.skip('cleans up/shuts down prior shielded menu when a newer message starts playback', async () => {
