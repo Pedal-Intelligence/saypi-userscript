@@ -14,7 +14,7 @@
       "reviewEta": "usually a few days; occasionally up to ~3 weeks (submission-surge notice as of 2026-04)",
       "declarations": [
         "Remote code: select \"No, I am not using remote code\".",
-        "Per-permission justifications (storage, cookies, offscreen, tabs, audio, contextMenus) — canonical text in doc/WEB_STORE_PERMISSIONS.md.",
+        "Per-permission justifications (storage, cookies, tabs, contextMenus, alarms, offscreen, audio, identity) — canonical text in doc/WEB_STORE_PERMISSIONS.md.",
         "Host-permission justification (https://api.saypi.ai/*, https://www.saypi.ai/*).",
         "Data-usage disclosures + certifications (not sold; used only for the extension's single purpose).",
         "Privacy policy URL: https://saypi.ai/legal/privacy."
@@ -86,7 +86,7 @@
       "hasReleaseNotesField": true,
       "releaseNotesLocation": "the \"Release Notes for this Version\" field (shown to users)",
       "reviewerNotesField": true,
-      "reviewerNotes": "\"Notes for Reviewers\": point to source-code.zip and restate the build (Node ≥22 / npm ≥10, `npm ci && npm run build:firefox`); note the onnxruntime eval() warning is third-party, tree-shaken, never executed.",
+      "reviewerNotes": "\"Notes for Reviewers\": all code is bundled (no remotely-hosted code). The eval() flagged by the linter is in the vendored onnxruntime-web library's fallback path for environments without WebAssembly — we use the WASM backend exclusively, so that path is never executed. Build with Node ≥22 / npm ≥10: `npm ci && npm run build:firefox`; full source in source-code.zip (includes package-lock.json).",
       "autoPublishOnApproval": true,
       "reviewEta": "signed & published within ~24h; longer (a few days) if selected for manual review",
       "declarations": [
