@@ -1845,7 +1845,15 @@ export const machine = setup({
       hasAudio: ({ event }: GuardArgs) => {
         if (event.type === "saypi:userStoppedSpeaking") {
           const speechEvent = event as DictationSpeechStoppedEvent;
-          return speechEvent.blob !== undefined && speechEvent.duration > 0;
+          // A zero-size blob is not real audio — require blob.size > 0 so this
+          // guard is the exact complement of hasNoAudio (#403). Otherwise a
+          // zero-byte blob with duration > 0 satisfies both guards and hasAudio
+          // (listed first) wins, uploading an empty segment.
+          return (
+            speechEvent.blob !== undefined &&
+            speechEvent.blob.size > 0 &&
+            speechEvent.duration > 0
+          );
         }
         return false;
       },

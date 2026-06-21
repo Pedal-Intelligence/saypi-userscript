@@ -366,10 +366,16 @@ const machine = setup({
       }
     },
     callStartingPrompt: () => {
+      // Show the "call starting" placeholder. (#403) Previously this also tried to
+      // back up the user's draft into defaultPlaceholderText via a discarded
+      // assign() — which never ran, and would have been wrong anyway:
+      // defaultPlaceholderText is the PLACEHOLDER (restored via setMessage in
+      // clearPrompt), so a backed-up draft would have reappeared as greyed-out
+      // placeholder text rather than editable content. Removed the dead code; a
+      // real "preserve draft across a call" feature would need its own field +
+      // setDraft restore, not this path.
       const message = getMessage("callStarting");
       if (message) {
-        const initialText = getPromptOrNull()?.getDraft();
-        assign({ defaultPlaceholderText: initialText });
         getPromptOrNull()?.setMessage(message);
       }
     },
@@ -550,12 +556,10 @@ const machine = setup({
         logger.debug("Skipping speech due to this being a maintainance message");
       }
     },
-    // NOTE: this is a deliberate no-op. In v4 it called assign(...) imperatively
-    // and discarded the result, so it never cleared the flag. Preserved as-is to
-    // keep production behavior identical (see characterization spec).
-    clearMaintainanceFlag: () => {
-      assign({ isMaintainanceMessage: () => false });
-    },
+    // Reset the maintenance-message flag on exit of `responding` (#403). Previously
+    // this built an assign() and discarded it, so the flag was never cleared here
+    // and only got recomputed on the next submit via setMaintainanceFlag.
+    clearMaintainanceFlag: assign({ isMaintainanceMessage: false }),
     pauseAudio: () => {
       logger.debug("[ConversationMachine] [pauseAudio] Pausing audio for user interruption");
       EventBus.emit("audio:output:pause");
