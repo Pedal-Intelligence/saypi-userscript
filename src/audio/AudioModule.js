@@ -486,7 +486,8 @@ export default class AudioModule {
       }
 
       // Check if the microphone is acquired before starting?
-      inputActor.send(["acquire", "start"]);
+      inputActor.send({ type: "acquire" });
+      inputActor.send({ type: "start" });
     });
     EventBus.on("audio:stopRecording", function (e) {
       // soft stop recording
@@ -502,7 +503,8 @@ export default class AudioModule {
     });
     EventBus.on("audio:input:reconnect", function (e) {
       inputActor.send({ type: "release" });
-      inputActor.send(["acquire", "start"]);
+      inputActor.send({ type: "acquire" });
+      inputActor.send({ type: "start" });
     });
 
     // audio output (playback) commands
