@@ -97,8 +97,8 @@ This extension embodies enterprise development standards applied to browser exte
 
 | Layer | Technologies |
 |-------|-------------|
-| **Build System** | Webpack 5, WXT (Web Extension Tooling), TypeScript 5.2+ |
-| **State Management** | XState v4 (FSM), RxJS (reactive streams) |
+| **Build System** | WXT (Web Extension Tooling; Vite/Rollup under the hood), TypeScript 5.2+ |
+| **State Management** | XState v5 (state machines; see `src/state-machines/README.md`), RxJS (reactive streams) |
 | **Audio Processing** | Web Audio API, AudioWorklet, ONNX Runtime Web |
 | **Machine Learning** | Silero VAD models (ONNX), WASM acceleration |
 | **Browser APIs** | Offscreen Documents (MV3), Service Workers, chrome.* APIs |
