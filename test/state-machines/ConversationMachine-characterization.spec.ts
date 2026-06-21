@@ -804,7 +804,7 @@ describe('ConversationMachine characterization', () => {
       expect(service.state.context.isMaintainanceMessage).toBe(true);
     });
 
-    it('CHARACTERIZATION: clearMaintainanceFlag on responding-exit does NOT clear the flag (suspected no-op bug, see report)', () => {
+    it('clearMaintainanceFlag clears the maintenance flag on responding-exit (#403)', () => {
       prefs.discretionary = true;
       service.send({ type: 'userPreferenceChanged', discretionaryMode: true });
       driveToTranscribing(service);
@@ -812,14 +812,11 @@ describe('ConversationMachine characterization', () => {
       vi.advanceTimersByTime(USER_STOPPED_TIMEOUT_MS_LOCAL + 5);
       expect(service.state.context.isMaintainanceMessage).toBe(true);
 
-      // Exit responding via hangup. clearMaintainanceFlag (responding.exit) is a
-      // plain action that builds assign(...) and discards it -> no-op.
+      // Exit responding via hangup. clearMaintainanceFlag (responding.exit) now
+      // resets the flag — previously it built an assign() and discarded it (no-op).
       service.send('saypi:hangup');
       expect(service.state.matches('inactive')).toBe(true);
-      // CHARACTERIZATION: current behavior; the flag is NOT cleared by
-      // clearMaintainanceFlag because the assign() result is thrown away.
-      // (ConversationMachine.ts:1438-1440 — suspected bug.)
-      expect(service.state.context.isMaintainanceMessage).toBe(true);
+      expect(service.state.context.isMaintainanceMessage).toBe(false);
     });
 
     it('maintainance message emits suppression events (tts:skipCurrent on responding entry)', () => {
@@ -838,22 +835,23 @@ describe('ConversationMachine characterization', () => {
   // -------------------------------------------------------------------------
   // CHARACTERIZATION: callStartingPrompt drops its assign() (suspected no-op)
   // -------------------------------------------------------------------------
-  describe('callStarting placeholder backup', () => {
-    it('CHARACTERIZATION: callStartingPrompt does NOT persist a draft backup into defaultPlaceholderText (suspected no-op bug)', () => {
-      // Make a non-empty in-progress draft visible to callStartingPrompt's
-      // getDraft() call. If the action's assign() actually applied, the draft
-      // would be backed up into context.defaultPlaceholderText.
+  describe('callStarting placeholder', () => {
+    it('callStartingPrompt shows the placeholder and does not touch defaultPlaceholderText (#403)', () => {
+      // callStartingPrompt only sets the "call starting" placeholder message. The
+      // dead draft-backup code (a discarded assign into defaultPlaceholderText) was
+      // removed in #403 — defaultPlaceholderText is the PLACEHOLDER restored via
+      // setMessage, not a draft store, so backing a draft into it was wrong.
       const originalGetDraft = spyPrompt.getDraft;
       spyPrompt.getDraft = () => 'WORK_IN_PROGRESS';
       try {
-        // defaultPlaceholderText starts as "" and is only driven by saypi:promptReady.
+        // defaultPlaceholderText is only driven by saypi:promptReady; callStarting
+        // must leave it untouched.
         expect(service.state.context.defaultPlaceholderText).toBe('');
-        service.send('saypi:call'); // entry: callStartingPrompt runs (and discards its assign)
+        service.send('saypi:call'); // entry: callStartingPrompt runs
         expect(service.state.matches('callStarting')).toBe(true);
-        // CHARACTERIZATION: despite a real draft being present, the backup never
-        // lands in context because the assign() result is discarded.
-        // (ConversationMachine.ts:1253-1260 — suspected bug.)
         expect(service.state.context.defaultPlaceholderText).toBe('');
+        // It does set the call-starting placeholder message.
+        expect(spyPrompt.setMessage).toHaveBeenCalledWith('callStarting');
       } finally {
         spyPrompt.getDraft = originalGetDraft;
       }
