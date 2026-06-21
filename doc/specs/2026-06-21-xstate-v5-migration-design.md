@@ -143,6 +143,14 @@ bundled into the net).
    → These are inseparable from the v5 `assign` conversion; fixing them there removes the
    leak and the relevant characterization tests flip from "pins leak" to "asserts isolation".
 
+**PR B test-helper flip checklist (from PR A review):** when flipping `testActor.ts` to v5,
+also (a) swap `interpret()`→`createActor()` and the `state` getter/`getSnapshot()`→`actor.getSnapshot()`;
+(b) map (or drop) the `createTestActor` `context` option — once the leak bugs become `assign`,
+actors start fresh so the per-test reseed is unnecessary; (c) remove the direct snapshot-context
+mutations in specs (`service.state.context.X = …`, ~13 in the AudioRetry char spec, 1 in Dictation
+char, ~7 pre-existing in `DictationMachine.spec.ts`) — v5 freezes snapshots, so these break; they
+coincide with the leak-bug fixes and the "pins leak"→"asserts isolation" test flips.
+
 **Clear-cut independent bugs — fix via fail-first TDD (scoped follow-up PRs after migration):**
 4. `ConversationMachine.clearMaintainanceFlag` — builds an `assign(...)` but discards it
    (no-op); flag never reset on `responding` exit. **LOW.**

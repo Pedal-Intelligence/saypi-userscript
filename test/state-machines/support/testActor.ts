@@ -23,9 +23,22 @@ import { interpret, type AnyStateMachine } from "xstate";
  * Types are intentionally loose (`any` on the snapshot) to avoid coupling the
  * test surface to v4-vs-v5 type shapes; the assertions in the specs do the real
  * type-checking work.
+ *
+ * The optional `context` seed (v4: `machine.withContext`) keeps the one v4-only
+ * isolation idiom inside this single seam too. It exists because several machines
+ * export a singleton whose actions currently mutate the shared context object in
+ * place (a real bug, tracked for the migration), so tests that need a pristine
+ * starting context reseed per-test. Once those actions move to `assign` in v5,
+ * actors no longer leak and this seed becomes unnecessary — at the v5 flip it maps
+ * to `createActor(machine, { input })` or is simply dropped.
  */
 
 type SendableEvent = string | { type: string; [key: string]: unknown };
+
+export interface TestActorOptions {
+  /** Seed the actor's starting context (v4 `withContext`); see file header. */
+  context?: Record<string, unknown>;
+}
 
 export interface TestActor {
   /** Start the actor. Returns the facade for chaining (matches v4 `interpret().start()`). */
@@ -57,8 +70,15 @@ const normalize = (
   return payload ? { ...base, ...payload } : base;
 };
 
-export function createTestActor(machine: AnyStateMachine): TestActor {
-  const service = interpret(machine);
+export function createTestActor(
+  machine: AnyStateMachine,
+  options?: TestActorOptions,
+): TestActor {
+  const configured =
+    options?.context !== undefined
+      ? machine.withContext(options.context as any)
+      : machine;
+  const service = interpret(configured);
   const facade: TestActor = {
     start() {
       service.start();

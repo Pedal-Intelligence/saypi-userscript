@@ -154,6 +154,13 @@ beforeEach(() => {
 // System under test (imported after mocks are declared).
 import { audioInputMachine } from "../../src/state-machines/AudioInputMachine";
 
+// audioInputMachine is a singleton whose actions mutate the shared definition
+// context in place (a real bug, pinned by the leak test below + tracked for the
+// v5 migration). Capture the pristine defaults ONCE, before any test runs, so
+// every test reseeds a clean starting context and the suite is order-/shuffle-
+// independent. The leak test deliberately opts out (uses the raw singleton).
+const DEFAULT_CONTEXT = structuredClone((audioInputMachine as any).context);
+
 /**
  * Drives the actor from `released` to the `acquired.idle` state by sending
  * `acquire` and flushing the async acquireMicrophone service. Returns the actor.
@@ -180,7 +187,9 @@ describe("audioInputMachine characterization", () => {
     vadBehavior.startResult = { success: true };
     vadBehavior.stopResult = { success: true };
 
-    service = createTestActor(audioInputMachine);
+    service = createTestActor(audioInputMachine, {
+      context: structuredClone(DEFAULT_CONTEXT),
+    });
     service.start();
   });
 
@@ -257,18 +266,26 @@ describe("audioInputMachine characterization", () => {
     // using assign(). Two observable consequences, both pinned here:
     //   1. entering recording sets recordingStartTime to Date.now()
     //   2. a freshly-created actor inherits the previous actor's value (leak)
-    await acquire(service);
+    //
+    // This test deliberately uses the RAW singleton (no context reseed) to expose
+    // the cross-actor leak; every other test in this suite reseeds in beforeEach.
+    const actor1 = createTestActor(audioInputMachine);
+    actor1.start();
+    await acquire(actor1);
     vi.setSystemTime(new Date(1_700_000_000_000));
-    service.send("start");
+    actor1.send("start");
     await vi.runAllTimersAsync();
-    expect(service.state.matches({ acquired: "recording" })).toBe(true);
-    expect(service.state.context.recordingStartTime).toBe(1_700_000_000_000);
+    expect(actor1.state.matches({ acquired: "recording" })).toBe(true);
+    expect(actor1.state.context.recordingStartTime).toBe(1_700_000_000_000);
 
-    // A brand-new actor inherits the mutated initial context (suspected bug).
-    const fresh = createTestActor(audioInputMachine);
-    fresh.start();
-    expect(fresh.state.context.recordingStartTime).toBe(1_700_000_000_000);
-    fresh.stop();
+    // A brand-new actor off the same singleton inherits the mutated initial
+    // context (suspected bug).
+    const actor2 = createTestActor(audioInputMachine);
+    actor2.start();
+    expect(actor2.state.context.recordingStartTime).toBe(1_700_000_000_000);
+
+    actor1.stop();
+    actor2.stop();
   });
 
   it("CHARACTERIZATION: start still transitions to recording even when vadClient.start() fails (state is independent of VAD start result)", async () => {
