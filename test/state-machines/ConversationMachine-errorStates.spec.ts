@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './support/testActor';
 
 // ---------------------------------------------------------------------------
 // Regression guard for #311: the two non-fatal in-call error conditions must be
@@ -132,7 +132,7 @@ describe('ConversationMachine #311: transcribe vs mic errors are mutually exclus
     vi.useFakeTimers();
     vi.setSystemTime(new Date(1_000_000));
     const machine = createConversationMachine(StubChatbot as any);
-    service = interpret(machine);
+    service = createTestActor(machine);
     service.start();
   });
 

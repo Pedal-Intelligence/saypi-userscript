@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './support/testActor';
 
 // ---------------------------------------------------------------------------
 // Regression guard for the "Pi is thinking…" STUCK PLACEHOLDER bug.
@@ -146,7 +146,7 @@ describe('ConversationMachine: piThinking never gets stuck (stuck-placeholder gu
     vi.useFakeTimers();
     vi.setSystemTime(new Date(1_000_000));
     const machine = createConversationMachine(StubChatbot as any);
-    service = interpret(machine);
+    service = createTestActor(machine);
     service.start();
   });
 
