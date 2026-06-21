@@ -2,10 +2,6 @@ import { setup, assign, fromPromise } from "xstate";
 import AnalyticsService from "../AnalyticsModule";
 import { config } from "../ConfigModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import {
-  UserPromptModule,
-  AudibleNotificationsModule,
-} from "../NotificationsModule";
 import EventBus from "../events/EventBus";
 import { logger } from "../LoggingModule";
 
@@ -58,10 +54,6 @@ const analytics = analyticsConfig
     )
   : null;
 const userPreferences = UserPreferenceModule.getInstance();
-
-const MESSAGE_COUNT_THRESHOLD = 50; // number of messages to trigger the long running session prompt
-const userPrompts = new UserPromptModule();
-const audibleNotifications = AudibleNotificationsModule.getInstance();
 
 interface SessionContext {
   session_id: string;
@@ -124,10 +116,13 @@ const machine = setup({
       const transcriptionMode =
         await userPreferences.getCachedTranscriptionMode();
 
-      // calculate the real-time factor (RTF)
+      // calculate the real-time factor (RTF). With no prior transcription
+      // speech_duration_ms is 0, which would yield Infinity — emit null instead
+      // so the analytics value stays meaningful (#403).
       const processing_time_ms = sendEvent.delay_ms;
       const speech_duration_ms = context.last_message.talk_time_seconds * 1000;
-      const rtf = processing_time_ms / speech_duration_ms;
+      const rtf =
+        speech_duration_ms > 0 ? processing_time_ms / speech_duration_ms : null;
 
       analytics?.sendEvent("message_sent", {
         session_id: context.session_id,
@@ -202,25 +197,17 @@ const machine = setup({
         if (context.last_message.speech_start_time === 0) {
           updated_last_message.speech_start_time = tx.speech_start_time;
         }
-        updated_last_message.talk_time_seconds =
+        // Clamp to 0: a later transcription's end can precede the preserved
+        // start, but a turn can't have negative talk time (#403).
+        updated_last_message.talk_time_seconds = Math.max(
+          0,
           (updated_last_message.speech_end_time -
             updated_last_message.speech_start_time) /
-          1000;
+            1000
+        );
         return updated_last_message;
       },
     }),
-    promptForSessionContinuation: () => {
-      // Prompt the user to confirm that the long running session is not headless
-      // This action can be used to trigger a notification or a dialog
-      console.log("Prompting user to continue the session");
-      const countdown = 60; // duration in seconds
-      userPrompts.activityCheck(countdown);
-      audibleNotifications.activityCheck(countdown);
-    },
-  },
-  guards: {
-    longRunningSession: ({ context }) =>
-      context.message_count > MESSAGE_COUNT_THRESHOLD,
   },
 }).createMachine({
   context: {
@@ -278,15 +265,6 @@ const machine = setup({
         end_session: {
           target: "Idle",
           actions: "notifyEndSession",
-        },
-      },
-      after: {
-        "7200000": {
-          target: "Active",
-          guard: "longRunningSession",
-          description:
-            "Prompt the user to confirm that the long running session is not headless.",
-          actions: "promptForSessionContinuation",
         },
       },
     },

@@ -10,10 +10,9 @@
  * This suite covers the Idle/Active state graph, the assign() reducers, and the
  * analytics/EventBus/notification side-effects.
  *
- * NOTE: the machine wires `analytics`, `userPreferences`, `userPrompts` and
- * `audibleNotifications` as module-level singletons constructed at import time
- * from the (mocked) config. We mock those external modules so we can observe
- * the calls those singletons receive.
+ * NOTE: the machine wires `analytics` and `userPreferences` as module-level
+ * singletons constructed at import time from the (mocked) config. We mock those
+ * external modules so we can observe the calls those singletons receive.
  */
 import {
   describe,
@@ -42,8 +41,6 @@ const {
   analyticsInstances,
   getCachedTranscriptionMode,
   getLanguage,
-  userPromptActivityCheck,
-  audibleActivityCheck,
   emit,
 } = vi.hoisted(() => ({
   analyticsInstances: [] as Array<{
@@ -54,8 +51,6 @@ const {
   }>,
   getCachedTranscriptionMode: vi.fn(() => "online"),
   getLanguage: vi.fn(() => Promise.resolve("en")),
-  userPromptActivityCheck: vi.fn(),
-  audibleActivityCheck: vi.fn(),
   emit: vi.fn(),
 }));
 
@@ -84,29 +79,6 @@ vi.mock("../../src/prefs/PreferenceModule", () => ({
     }),
   },
 }));
-
-// Notifications: UserPromptModule is `new`-ed; AudibleNotificationsModule is a
-// singleton via getInstance(). Both expose `activityCheck`.
-vi.mock("../../src/NotificationsModule", () => {
-  class MockUserPromptModule {
-    activityCheck = userPromptActivityCheck;
-  }
-  class MockAudibleNotificationsModule {
-    static instance: MockAudibleNotificationsModule | null = null;
-    static getInstance() {
-      if (!MockAudibleNotificationsModule.instance) {
-        MockAudibleNotificationsModule.instance =
-          new MockAudibleNotificationsModule();
-      }
-      return MockAudibleNotificationsModule.instance;
-    }
-    activityCheck = audibleActivityCheck;
-  }
-  return {
-    UserPromptModule: MockUserPromptModule,
-    AudibleNotificationsModule: MockAudibleNotificationsModule,
-  };
-});
 
 // EventBus singleton — observe emits.
 vi.mock("../../src/events/EventBus", () => ({
@@ -299,11 +271,11 @@ describe("SessionAnalyticsMachine — Active: transcribing (rollupTranscription)
     expect(getAnalytics().sendEvent).not.toHaveBeenCalled();
   });
 
-  it("CHARACTERIZATION: talk_time goes NEGATIVE when a later transcription's speech_end_time precedes the preserved speech_start_time", () => {
+  it("clamps talk_time to 0 when a later transcription's speech_end_time precedes the preserved speech_start_time", () => {
     // The rollup keeps the first event's speech_start_time but always adopts the
-    // latest event's speech_end_time, computing talk = (end - start)/1000 with no
-    // clamp. A later end-time earlier than the start yields a negative talk time.
-    // Suspected bug: see report (unguarded subtraction in rollupTranscription).
+    // latest event's speech_end_time. A later end-time earlier than the start
+    // would compute a negative talk = (end - start)/1000; the rollup clamps it
+    // to 0 because a turn can't have negative talk time (#403, bug #8).
     startActive();
     service.send({
       type: "transcribing",
@@ -320,8 +292,8 @@ describe("SessionAnalyticsMachine — Active: transcribing (rollupTranscription)
     const ctx = service.state.context;
     expect(ctx.last_message.speech_start_time).toBe(5000);
     expect(ctx.last_message.speech_end_time).toBe(2000);
-    // (2000 - 5000) / 1000 = -3
-    expect(ctx.last_message.talk_time_seconds).toBe(-3);
+    // (2000 - 5000) / 1000 = -3, clamped to 0
+    expect(ctx.last_message.talk_time_seconds).toBe(0);
   });
 
   it("CHARACTERIZATION: speech_start_time of 0 in the first event is treated as 'unset' so it is overwritten by itself, yielding talk_time = speech_end/1000", () => {
@@ -404,7 +376,9 @@ describe("SessionAnalyticsMachine — Active: send_message", () => {
     dateSpy.mockRestore();
   });
 
-  it("CHARACTERIZATION: with no prior transcription, RTF is Infinity (delay/0) and talk/audio are 0", async () => {
+  it("with no prior transcription, RTF is null (not Infinity) and talk/audio are 0", async () => {
+    // speech_duration_ms is 0 with no transcription; rtf must be null rather
+    // than delay/0 === Infinity (#403, bug #6).
     startActive();
     getAnalytics().sendEvent.mockClear();
 
@@ -417,7 +391,7 @@ describe("SessionAnalyticsMachine — Active: send_message", () => {
     );
     expect(call).toBeTruthy();
     const params = call![1] as Record<string, unknown>;
-    expect(params.rtf).toBe(Infinity); // 500 / 0
+    expect(params.rtf).toBeNull(); // 500 / 0 would be Infinity; clamped to null
     expect(params.talk_time_seconds).toBe(0);
     expect(params.audio_duration_seconds).toBe(0);
   });
@@ -612,105 +586,5 @@ describe("SessionAnalyticsMachine — Active: invoked 30-minute timeout", () => 
     expect(service.state.matches("Idle")).toBe(true);
 
     dateSpy.mockRestore();
-  });
-});
-
-describe("SessionAnalyticsMachine — Active: long-running-session prompt (after + guard)", () => {
-  it("CHARACTERIZATION: the 30-min invoke ends the session before the 2-hour `after` can fire, so the activity-check prompt never runs", async () => {
-    vi.useFakeTimers();
-    const dateSpy = vi.spyOn(Date, "now").mockReturnValue(0);
-
-    service = createTestActor(machine);
-    service.start();
-    service.send("start_session");
-
-    // Push message_count over the threshold so the guard WOULD pass.
-    for (let i = 0; i < 51; i++) {
-      service.send({ type: "send_message", delay_ms: 1, wait_time_ms: 0 });
-    }
-    expect(service.state.context.message_count).toBe(51);
-
-    // Advance only to the 30-min invoke boundary: it resolves first and moves
-    // the machine to Idle (cancelling the 2-hour `after`).
-    await vi.advanceTimersByTimeAsync(1_800_000);
-    expect(service.state.matches("Idle")).toBe(true);
-
-    // Now advance well past the 2-hour mark; the `after` is gone, no prompt.
-    await vi.advanceTimersByTimeAsync(7_200_000);
-    expect(userPromptActivityCheck).not.toHaveBeenCalled();
-    expect(audibleActivityCheck).not.toHaveBeenCalled();
-
-    dateSpy.mockRestore();
-  });
-
-  it("CHARACTERIZATION: when the 30-min invoke's onDone microtask is NOT flushed, the machine is still Active at 2h so the guarded `after` fires the activity-check prompt (countdown 60)", () => {
-    // This exercises the guarded `after`+promptForSessionContinuation action,
-    // which is otherwise unreachable in real operation: `after` is 2h but the
-    // invoke is 30min, so the invoke normally ends the session first.
-    //
-    // The reachability hinges on a subtle timer/microtask interleaving:
-    // synchronous `advanceTimersByTime` runs the invoke's setTimeout (resolving
-    // the promise) but DOES NOT flush the resulting onDone microtask, leaving
-    // the machine in Active when the 2h `after` callback runs — so the guarded
-    // prompt fires. (Compare the async test above, where microtasks ARE flushed
-    // and the prompt never runs.)
-    vi.useFakeTimers();
-    const dateSpy = vi.spyOn(Date, "now").mockReturnValue(0);
-    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    service = createTestActor(machine);
-    service.start();
-    service.send("start_session");
-    for (let i = 0; i < 51; i++) {
-      service.send({ type: "send_message", delay_ms: 1, wait_time_ms: 0 });
-    }
-    expect(service.state.context.message_count).toBe(51); // guard passes
-
-    vi.advanceTimersByTime(7_200_000); // sync: no microtask flush
-
-    // internal `after` transition keeps us in Active and fires the prompt
-    expect(service.state.matches("Active")).toBe(true);
-    expect(userPromptActivityCheck).toHaveBeenCalledWith(60);
-    expect(audibleActivityCheck).toHaveBeenCalledWith(60);
-
-    logSpy.mockRestore();
-    dateSpy.mockRestore();
-  });
-
-  it("CHARACTERIZATION: below the message-count threshold the guard blocks the `after` prompt even under the no-flush timing", () => {
-    // longRunningSession guard: message_count > 50. With 50 messages the guard
-    // is false (50 > 50 === false), so the prompt action does not run.
-    vi.useFakeTimers();
-    const dateSpy = vi.spyOn(Date, "now").mockReturnValue(0);
-    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    service = createTestActor(machine);
-    service.start();
-    service.send("start_session");
-    for (let i = 0; i < 50; i++) {
-      service.send({ type: "send_message", delay_ms: 1, wait_time_ms: 0 });
-    }
-    expect(service.state.context.message_count).toBe(50);
-
-    vi.advanceTimersByTime(7_200_000);
-
-    expect(userPromptActivityCheck).not.toHaveBeenCalled();
-    expect(audibleActivityCheck).not.toHaveBeenCalled();
-
-    logSpy.mockRestore();
-    dateSpy.mockRestore();
-  });
-
-  it("longRunningSession guard threshold: message_count > 50 (51 trips, 50 does not) — verified via context", () => {
-    // We can't easily isolate the `after` from the invoke (it never wins), so
-    // pin the guard's threshold semantics indirectly: message_count is what the
-    // guard reads, and send_message increments it by exactly 1 each time.
-    startActive();
-    for (let i = 0; i < 50; i++) {
-      service.send({ type: "send_message", delay_ms: 1, wait_time_ms: 0 });
-    }
-    expect(service.state.context.message_count).toBe(50); // guard 50 > 50 === false
-    service.send({ type: "send_message", delay_ms: 1, wait_time_ms: 0 });
-    expect(service.state.context.message_count).toBe(51); // guard 51 > 50 === true
   });
 });
