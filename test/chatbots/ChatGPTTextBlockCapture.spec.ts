@@ -1,5 +1,190 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
+// Mock TTSControlsModule early to avoid the SpeechSynthesisModule/config chain
+// when we import the real ChatGPTResponse module (mirrors ChatGPTAutoReadAloud.spec).
+vi.mock('../../src/tts/TTSControlsModule', () => ({
+  TTSControlsModule: {
+    getInstance: () => ({
+      createGenerateSpeechButton: () => document.createElement('button'),
+      createCopyButton: () => document.createElement('button'),
+      addCostBasis: () => undefined,
+      updateCostBasis: () => undefined,
+    }),
+  },
+}));
+
+// Avoid the VoiceMenu -> Pi circular import pulled in via MessageElements.
+vi.mock('../../src/chatbots/Pi', () => ({
+  PiAIChatbot: class {},
+  PiTextStream: class {},
+}));
+
+// Keep ElementTextStream's constructor (getLanguage) off the network.
+vi.mock('../../src/prefs/PreferenceModule', () => ({
+  UserPreferenceModule: {
+    getInstance: () => ({
+      getLanguage: () => Promise.resolve('en-US'),
+      reloadCache: () => undefined,
+      getStoredValue: (_key: string, defaultValue: unknown) => Promise.resolve(defaultValue),
+    }),
+  },
+}));
+
+// Import the real classes lazily so the mocks above take effect first.
+async function importChatGPTStream() {
+  const responseModule = await import('../../src/chatbots/chatgpt/ChatGPTResponse');
+  const inputModule = await import('../../src/tts/InputStream');
+  return {
+    ChatGPTTextBlockCapture: (responseModule as any).ChatGPTTextBlockCapture,
+    AddedText: (inputModule as any).AddedText,
+  };
+}
+
+// A streaming ChatGPT assistant turn: the .markdown content node fills with
+// tokens *before* the post-turn action bar appears (live DOM per #362/#384).
+function buildStreamingAssistantTurn() {
+  const list = document.createElement('div');
+  list.className = 'present-messages';
+  const turn = document.createElement('section');
+  turn.setAttribute('data-turn', 'assistant');
+  turn.setAttribute('data-testid', 'conversation-turn-2');
+  const content = document.createElement('div');
+  content.className = 'markdown';
+  turn.appendChild(content);
+  list.appendChild(turn);
+  document.body.appendChild(list);
+  return { turn, content };
+}
+
+// The signal block-capture waits for: ChatGPT's post-completion action bar.
+function appendActionBar(turn: HTMLElement) {
+  const bar = document.createElement('div');
+  const copy = document.createElement('button');
+  copy.setAttribute('data-testid', 'copy-turn-action-button');
+  bar.appendChild(copy);
+  turn.appendChild(bar);
+}
+
+const flushMutations = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+describe('ChatGPT piWriting window (#399)', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.spyOn(console, 'debug').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('signals writing-started on the first streamed content, before the response completes', async () => {
+    const { ChatGPTTextBlockCapture } = await importChatGPTStream();
+    const { turn, content } = buildStreamingAssistantTurn();
+
+    // Construct while still streaming (no action bar yet) -> block-capture
+    // registers its action-bar observer and otherwise stays quiet.
+    const stream = new ChatGPTTextBlockCapture(content, { includeInitialText: false });
+
+    const chunks: string[] = [];
+    let completed = false;
+    const subscription = stream.getStream().subscribe({
+      next: (value: any) => chunks.push(value.text),
+      complete: () => {
+        completed = true;
+      },
+    });
+
+    // ChatGPT streams tokens into the .markdown node over several seconds,
+    // long before the action bar appears.
+    content.textContent = 'Not a whole lot on my end —';
+    await flushMutations();
+
+    // The conversation machine derives saypi:piWriting from the stream's first
+    // chunk (ChatHistory.observeChatMessageElement). It must learn the assistant
+    // started writing NOW so it leaves piThinking and isn't bailed out by the
+    // 15s piThinking timeout on long replies. Before the fix, block-capture
+    // emits nothing until the action bar, so no chunk has arrived here yet.
+    expect(chunks.length).toBeGreaterThanOrEqual(1);
+    expect(completed).toBe(false);
+
+    // Streaming finishes and the action bar appears -> block-capture emits the
+    // authoritative full text and completes (saypi:piStoppedWriting).
+    content.textContent = 'Not a whole lot on my end — just here and ready to help.';
+    appendActionBar(turn);
+    await flushMutations();
+
+    expect(completed).toBe(true);
+
+    // The writing-started marker is the FIRST chunk (so onStart -> piWriting
+    // fires before the real text) and is emitted exactly ONCE across the many
+    // content mutations of a streaming reply.
+    expect(chunks[0]).toBe('');
+    expect(chunks.filter((c) => c === '').length).toBe(1);
+
+    // Billing/TTS integrity: the captured transcript is the full final text,
+    // uncorrupted by the writing-started marker (the marker contributes nothing).
+    expect(chunks.join('')).toBe(
+      'Not a whole lot on my end — just here and ready to help.'
+    );
+
+    subscription.unsubscribe();
+  });
+
+  it('opens the window when content arrives via an in-place characterData re-render', async () => {
+    const { ChatGPTTextBlockCapture } = await importChatGPTStream();
+    const { content } = buildStreamingAssistantTurn();
+
+    // Seed an empty text node so the first token lands as a characterData
+    // mutation (ChatGPT re-renders markdown in place) rather than a childList
+    // insertion — the base observer watches both.
+    const textNode = document.createTextNode('');
+    content.appendChild(textNode);
+
+    const stream = new ChatGPTTextBlockCapture(content, { includeInitialText: false });
+    const chunks: string[] = [];
+    const subscription = stream.getStream().subscribe({
+      next: (value: any) => chunks.push(value.text),
+    });
+
+    textNode.data = 'first streamed token';
+    await flushMutations();
+
+    expect(chunks.length).toBeGreaterThanOrEqual(1);
+    expect(chunks[0]).toBe('');
+
+    subscription.unsubscribe();
+  });
+
+  it('keeps the collapsed window for an already-complete turn (no false writing window)', async () => {
+    const { ChatGPTTextBlockCapture } = await importChatGPTStream();
+    const { turn, content } = buildStreamingAssistantTurn();
+
+    // A turn that is already finished at decoration time (history / pre-rendered):
+    // text present AND action bar present. The window *should* collapse here —
+    // nothing is being written live.
+    content.textContent = 'Already finished reply.';
+    appendActionBar(turn);
+
+    const stream = new ChatGPTTextBlockCapture(content, { includeInitialText: false });
+
+    const chunks: string[] = [];
+    let completed = false;
+    const subscription = stream.getStream().subscribe({
+      next: (value: any) => chunks.push(value.text),
+      complete: () => {
+        completed = true;
+      },
+    });
+    await flushMutations();
+
+    expect(completed).toBe(true);
+    expect(chunks.join('')).toBe('Already finished reply.');
+
+    subscription.unsubscribe();
+  });
+});
+
 describe('ChatGPT Text Block Capture Logic', () => {
   beforeEach(() => {
     // Clear the DOM before each test

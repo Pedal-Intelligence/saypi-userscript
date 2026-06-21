@@ -624,13 +624,29 @@ export class ChatGPTMessageControls extends MessageControls {
 export class ChatGPTTextBlockCapture extends ElementTextStream {
   private turnContainer: HTMLElement | null = null;
   private barObserver: MutationObserver | null = null;
-  private streamingStarted = false;
   private firstTokenEmitted = false;
 
-  // ElementTextStream requires a per-mutation handler; block-capture doesn't need it
-  // because it listens for action-bar completion instead.
+  // Block-capture extracts the authoritative final text once, when the action
+  // bar appears (emitFinalAndClose). It does NOT accumulate per-token deltas the
+  // way Pi/Claude do — ChatGPT re-renders its streaming DOM, which made delta
+  // accumulation unreliable. But the conversation machine derives
+  // saypi:piWriting from the stream's FIRST chunk (ChatHistory.observeChatMessageElement),
+  // so with no early chunk it sits in `piThinking` for the entire multi-second
+  // write — and any reply that takes >15s to finish trips the piThinking timeout
+  // and bails the call back to `listening` mid-write, re-opening the mic (#399).
+  //
+  // So on the first non-empty content mutation we emit a one-shot, EMPTY
+  // "writing started" marker. It triggers onStart -> saypi:piWriting at the true
+  // start of writing, but contributes no text to the captured block ("" + final
+  // text === final text), so emitFinalAndClose and billing are unchanged. The
+  // empty chunk never reaches the TTS input stream: SpeechSynthesisModule drops
+  // an empty saypi:tts:text:added so it can't be mistaken for end-of-speech (#399).
   handleMutationEvent(_mutation: MutationRecord): void {
-    // no-op
+    if (this.firstTokenEmitted || this.closed()) return;
+    const hasContent = (this.element.textContent || "").trim().length > 0;
+    if (!hasContent) return;
+    this.firstTokenEmitted = true;
+    this.next(new AddedText(""));
   }
 
   constructor(element: HTMLElement, options?: InputStreamOptions) {

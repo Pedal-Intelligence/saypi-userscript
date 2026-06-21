@@ -7,6 +7,7 @@ import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { BillingModule } from "../../src/billing/BillingModule";
 import { audioProviders, isPlaceholderUtterance } from "../../src/tts/SpeechModel";
+import EventBus from "../../src/events/EventBus";
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
@@ -295,6 +296,35 @@ describe("SpeechSynthesisModule", () => {
 
     expect(provider).toEqual(
       audioProviders.getDefaultForChatbot("chatgpt")
+    );
+  });
+
+  // "" is InputBuffer's end-of-speech sentinel (END_OF_SPEECH_MARKER). ChatGPT's
+  // writing-started marker (#399) emits an empty stream chunk to open the
+  // piWriting window at the true start of the response. If that empty chunk were
+  // appended to an already-open SayPi stream (a SayPi-voice-on-ChatGPT user) it
+  // would be read as end-of-speech and silently close the stream, dropping the
+  // rest of the reply's audio. A non-final empty text:added is never legitimate
+  // — real end-of-speech flows through endSpeechStream — so it must be a no-op.
+  it("does not forward an empty saypi:tts:text:added chunk to an open stream (#399)", () => {
+    (audioStreamManagerMock.isOpen as Mock).mockReturnValue(true);
+
+    EventBus.emit("saypi:tts:text:added", {
+      utterance: { id: "utterance-1" },
+      text: "",
+    } as any);
+
+    expect(audioStreamManagerMock.addSpeechToStream).not.toHaveBeenCalled();
+
+    // Real reply text still flows to the (still-open) stream.
+    EventBus.emit("saypi:tts:text:added", {
+      utterance: { id: "utterance-1" },
+      text: "Real reply text.",
+    } as any);
+
+    expect(audioStreamManagerMock.addSpeechToStream).toHaveBeenCalledWith(
+      "utterance-1",
+      "Real reply text."
     );
   });
 });

@@ -391,6 +391,13 @@ class SpeechSynthesisModule {
   }
 
   private addSpeechToStreamIfOpen(utteranceId: string, text: string): void {
+    // An empty string is InputBuffer's end-of-speech sentinel
+    // (END_OF_SPEECH_MARKER): appending it to an open stream closes the stream.
+    // A non-final empty text:added is never legitimate (real end-of-speech flows
+    // through endSpeechStream), so drop it here — otherwise ChatGPT's empty
+    // writing-started marker (#399) would silently end the stream and swallow
+    // the rest of the reply for a SayPi-voice-on-ChatGPT user.
+    if (!text) return;
     if (this.isStreamOpen(utteranceId)) {
       this.addSpeechToStream(utteranceId, text);
     }
