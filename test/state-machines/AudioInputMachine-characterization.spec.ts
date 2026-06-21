@@ -154,12 +154,11 @@ beforeEach(() => {
 // System under test (imported after mocks are declared).
 import { audioInputMachine } from "../../src/state-machines/AudioInputMachine";
 
-// audioInputMachine is a singleton whose actions mutate the shared definition
-// context in place (a real bug, pinned by the leak test below + tracked for the
-// v5 migration). Capture the pristine defaults ONCE, before any test runs, so
-// every test reseeds a clean starting context and the suite is order-/shuffle-
-// independent. The leak test deliberately opts out (uses the raw singleton).
-const DEFAULT_CONTEXT = structuredClone((audioInputMachine as any).context);
+// v5: the machine updates context via assign(...), so each interpreted actor
+// starts from the declared defaults and never leaks state into a sibling actor.
+// (Pre-v5 the actions mutated the shared definition context in place, requiring
+// per-test reseeding; that's no longer necessary — see the isolation test below,
+// which was flipped from pinning the leak to asserting isolation.)
 
 /**
  * Drives the actor from `released` to the `acquired.idle` state by sending
@@ -187,9 +186,7 @@ describe("audioInputMachine characterization", () => {
     vadBehavior.startResult = { success: true };
     vadBehavior.stopResult = { success: true };
 
-    service = createTestActor(audioInputMachine, {
-      context: structuredClone(DEFAULT_CONTEXT),
-    });
+    service = createTestActor(audioInputMachine);
     service.start();
   });
 
@@ -260,15 +257,13 @@ describe("audioInputMachine characterization", () => {
     expect(startMock).toHaveBeenCalledTimes(1);
   });
 
-  it("CHARACTERIZATION: recording entry stamps recordingStartTime via direct context mutation (not assign), which leaks across actor instances", async () => {
-    // startRecording does `context.recordingStartTime = Date.now()` directly,
-    // mutating the SHARED machine-definition initial-context object rather than
-    // using assign(). Two observable consequences, both pinned here:
-    //   1. entering recording sets recordingStartTime to Date.now()
-    //   2. a freshly-created actor inherits the previous actor's value (leak)
-    //
-    // This test deliberately uses the RAW singleton (no context reseed) to expose
-    // the cross-actor leak; every other test in this suite reseeds in beforeEach.
+  it("recording entry stamps recordingStartTime via assign, isolated per actor (no cross-actor leak)", async () => {
+    // BUG FLIP (v5 migration): startRecording now uses assign() to set
+    // recordingStartTime instead of mutating the shared definition context in
+    // place. Two observable consequences, both asserted here:
+    //   1. entering recording sets recordingStartTime to Date.now() on THIS actor
+    //   2. a freshly-created actor starts from the declared default (0), proving
+    //      the per-actor isolation the assign conversion restores (was a leak).
     const actor1 = createTestActor(audioInputMachine);
     actor1.start();
     await acquire(actor1);
@@ -278,11 +273,11 @@ describe("audioInputMachine characterization", () => {
     expect(actor1.state.matches({ acquired: "recording" })).toBe(true);
     expect(actor1.state.context.recordingStartTime).toBe(1_700_000_000_000);
 
-    // A brand-new actor off the same singleton inherits the mutated initial
-    // context (suspected bug).
+    // A brand-new actor off the same machine starts from the declared default,
+    // NOT actor1's stamped value — actors no longer leak context (#bug fixed).
     const actor2 = createTestActor(audioInputMachine);
     actor2.start();
-    expect(actor2.state.context.recordingStartTime).toBe(1_700_000_000_000);
+    expect(actor2.state.context.recordingStartTime).toBe(0);
 
     actor1.stop();
     actor2.stop();

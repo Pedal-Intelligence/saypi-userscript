@@ -1,4 +1,4 @@
-import { createMachine, assign } from "xstate";
+import { setup, assign } from "xstate";
 
 export function enterFocusMode() {
   // add focus class to the body
@@ -17,79 +17,77 @@ type FocusContext = {
 };
 type TickEvent = { type: "tick"; time_ms: number };
 type BlurEvent = { type: "blur" };
+type FocusEvent = BlurEvent | TickEvent;
 
-export const machine = createMachine<FocusContext>(
-  {
-    context: {
-      inactivityTime: 0,
-    },
-    id: "focusMachine",
-    initial: "Idle",
-    states: {
-      Idle: {
-        description:
-          "The machine is not in focus mode and is waiting for user inactivity.",
-        after: {
-          "11000": {
-            target: "#focusMachine.Focused",
-            cond: "isInactiveLongEnough",
-            actions: [],
-          },
-        },
-        exit: "resetInactivityTime",
-        on: {
-          blur: {
-            target: "Idle",
-            actions: "resetInactivityTime",
-          },
-          tick: {
-            actions: "incrementInactivityTime",
-          },
-        },
-      },
-      Focused: {
-        description:
-          "The machine is in focus mode, not responding to user inputs except to exit focus mode.",
-        entry: "focusAction",
-        exit: ["blurAction"],
-        on: {
-          blur: {
-            target: "Idle",
-            actions: "resetInactivityTime",
-          },
-        },
-      },
-    },
-    schema: {
-      events: {} as BlurEvent | TickEvent,
-      context: {} as FocusContext,
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
+export const machine = setup({
+  types: {
+    context: {} as FocusContext,
+    events: {} as FocusEvent,
   },
-  {
-    actions: {
-      resetInactivityTime: assign({
-        inactivityTime: 0,
-      }),
-      incrementInactivityTime: assign({
-        inactivityTime: (context: FocusContext, event: TickEvent) => {
-          return (context.inactivityTime += event.time_ms);
+  actions: {
+    resetInactivityTime: assign({
+      inactivityTime: 0,
+    }),
+    // v5: update context immutably via assign rather than mutating the shared
+    // definition context in place (the old `context.inactivityTime += ...`
+    // leaked across interpreted actors). Each actor is now isolated.
+    incrementInactivityTime: assign({
+      inactivityTime: ({ context, event }) => {
+        const tick = event as TickEvent;
+        return context.inactivityTime + tick.time_ms;
+      },
+    }),
+    focusAction: () => {
+      enterFocusMode();
+    },
+    blurAction: () => {
+      exitFocusMode();
+    },
+  },
+  guards: {
+    isInactiveLongEnough: ({ context }) => {
+      return context.inactivityTime >= THRESHOLD_INACTIVITY_TIME_MS;
+    },
+  },
+}).createMachine({
+  context: {
+    inactivityTime: 0,
+  },
+  id: "focusMachine",
+  initial: "Idle",
+  states: {
+    Idle: {
+      description:
+        "The machine is not in focus mode and is waiting for user inactivity.",
+      after: {
+        "11000": {
+          target: "#focusMachine.Focused",
+          guard: "isInactiveLongEnough",
+          actions: [],
         },
-      }),
-      focusAction: () => {
-        enterFocusMode();
       },
-      blurAction: () => {
-        exitFocusMode();
-      },
-    },
-    services: {},
-    guards: {
-      isInactiveLongEnough: (context: FocusContext, event) => {
-        return context.inactivityTime >= THRESHOLD_INACTIVITY_TIME_MS;
+      exit: "resetInactivityTime",
+      on: {
+        blur: {
+          target: "Idle",
+          actions: "resetInactivityTime",
+        },
+        tick: {
+          actions: "incrementInactivityTime",
+        },
       },
     },
-    delays: {},
-  }
-);
+    Focused: {
+      description:
+        "The machine is in focus mode, not responding to user inputs except to exit focus mode.",
+      entry: "focusAction",
+      exit: ["blurAction"],
+      on: {
+        blur: {
+          target: "Idle",
+          actions: "resetInactivityTime",
+        },
+      },
+    },
+  },
+});

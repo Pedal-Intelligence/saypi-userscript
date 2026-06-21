@@ -173,22 +173,11 @@ describe('ConversationMachine characterization', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(1_000_000));
     const machine = createConversationMachine(StubChatbot as any);
-    // createConversationMachine returns a module-level SINGLETON whose initial
-    // context object is mutated in place by handleTranscriptionResponse (it does
-    // `context.transcriptions[seq] = ...` directly). Without resetting it, leftover
-    // transcriptions bleed across tests and make submission-gating order-dependent.
-    const freshCtx = (machine as any).context;
-    if (freshCtx) {
-      freshCtx.transcriptions = {};
-      freshCtx.isMaintainanceMessage = false;
-      freshCtx.shouldRespond = !prefs.discretionary;
-      freshCtx.timeUserStoppedSpeaking = 0;
-      freshCtx.userIsSpeaking = false;
-      freshCtx.isTranscribing = false;
-      freshCtx.lastState = 'inactive';
-      freshCtx.defaultPlaceholderText = '';
-      freshCtx.sessionId = undefined;
-    }
+    // v5: handleTranscriptionResponse now updates context via assign(...) instead
+    // of mutating the singleton machine.context in place, so a fresh actor always
+    // starts from the declared defaults and no per-test context reseeding is
+    // needed (the v4 cross-test transcription leak is gone). See the
+    // "fresh actor starts from declared defaults" isolation test below.
     service = createTestActor(machine);
     service.start();
   });
@@ -231,6 +220,26 @@ describe('ConversationMachine characterization', () => {
     it('saypi:piSpeaking from inactive jumps straight to responding.piSpeaking', () => {
       service.send('saypi:piSpeaking');
       expect(service.state.matches({ responding: 'piSpeaking' })).toBe(true);
+    });
+
+    it('a fresh actor starts from declared defaults (no transcription leak across runs)', () => {
+      // Bug-flip: in v4, handleTranscriptionResponse mutated the singleton
+      // machine.context in place, so transcriptions recorded by one interpreted
+      // actor leaked into the next fresh actor (the spec used to reseed
+      // machine.context in beforeEach to mask this). v5 records them via assign,
+      // so a second actor built from the SAME machine definition is isolated.
+      driveToTranscribing(service);
+      service.send({ type: 'saypi:transcribed', text: 'leaky', sequenceNumber: 9 });
+      expect(service.state.context.transcriptions[9]).toBe('leaky');
+      service.stop();
+
+      const machine = createConversationMachine(StubChatbot as any);
+      const fresh = createTestActor(machine).start();
+      try {
+        expect(fresh.state.context.transcriptions).toEqual({});
+      } finally {
+        fresh.stop();
+      }
     });
   });
 
@@ -666,6 +675,12 @@ describe('ConversationMachine characterization', () => {
       prefs.autoSubmit = false; // stay in accumulating
       driveToTranscribing(service);
       service.send({ type: 'saypi:transcribed', text: 'one', sequenceNumber: 1 });
+      // Let the first (single-transcript) mergeOptimistic actor settle before the
+      // second transcript arrives. In v5 the invoked fromPromise resolves on a
+      // microtask; flushing here keeps the two invocations from racing.
+      await vi.runOnlyPendingTimersAsync?.();
+      await Promise.resolve();
+      await Promise.resolve();
       // second transcript re-enters accumulating, re-invoking mergeOptimistic with 2 entries
       service.send({ type: 'saypi:transcribed', text: 'two', sequenceNumber: 2 });
       // The mocked mergeTranscriptsRemote resolves 'merged'; flush microtasks.

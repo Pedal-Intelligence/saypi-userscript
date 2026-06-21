@@ -1,10 +1,10 @@
 // import state machines for audio input and output
-import { interpret } from "xstate";
+import { createActor } from "xstate";
 import { audioInputMachine } from "../state-machines/AudioInputMachine.ts";
 import { voiceConverterMachine } from "../state-machines/VoiceConverter.ts";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
-import { logger, serializeStateValue } from "../LoggingModule.js";
+import { logger, logStateTransitions } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.ts";
 // SlowResponseHandler and adapter are imported dynamically for Pi.ai only
@@ -42,46 +42,16 @@ export default class AudioModule {
       this.initializeAudioOutputMachine();
     }
 
-    this.audioInputActor = interpret(audioInputMachine);
-    this.audioInputActor.onTransition((state) => {
-      if (state.changed) {
-        const fromState = state.history
-          ? serializeStateValue(state.history.value)
-          : "N/A";
-        const toState = serializeStateValue(state.value);
-        logger.debug(
-          `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-        );
-      }
-    });
+    this.audioInputActor = createActor(audioInputMachine);
+    logStateTransitions(this.audioInputActor, "Audio Input Machine");
 
-    this.voiceConverter = interpret(voiceConverterMachine);
-    this.voiceConverter.onTransition((state) => {
-      if (state.changed) {
-        const fromState = state.history
-          ? serializeStateValue(state.history.value)
-          : "N/A";
-        const toState = serializeStateValue(state.value);
-        logger.debug(
-          `Voice Converter Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-        );
-      }
-    });
+    this.voiceConverter = createActor(voiceConverterMachine);
+    logStateTransitions(this.voiceConverter, "Voice Converter Machine");
 
     // Safari audio error handling logic (known issue in at least Safari <= 17.4)
     if (isSafari()) {
-      this.audioRetryActor = interpret(audioRetryMachine);
-      this.audioRetryActor.onTransition((state) => {
-        if (state.changed) {
-          const fromState = state.history
-            ? serializeStateValue(state.history.value)
-            : "N/A";
-          const toState = serializeStateValue(state.value);
-          logger.debug(
-            `Audio Retry Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-          );
-        }
-      });
+      this.audioRetryActor = createActor(audioRetryMachine);
+      logStateTransitions(this.audioRetryActor, "Audio Retry Machine");
     }
 
     this.registerOfflineAudioCommands();
@@ -104,18 +74,8 @@ export default class AudioModule {
         /* webpackMode: "eager" */ "../state-machines/AudioOutputMachine.ts"
       );
       
-      this.audioOutputActor = interpret(audioOutputMachine);
-      this.audioOutputActor.onTransition((state) => {
-        if (state.changed) {
-          const fromState = state.history
-            ? serializeStateValue(state.history.value)
-            : "N/A";
-          const toState = serializeStateValue(state.value);
-          logger.debug(
-            `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-          );
-        }
-      });
+      this.audioOutputActor = createActor(audioOutputMachine);
+      logStateTransitions(this.audioOutputActor, "Audio Output Machine");
     } catch (error) {
       logger.error("[AudioModule] Failed to initialize audio output machine:", error);
       this.needsAudioOutput = false;
@@ -437,18 +397,18 @@ export default class AudioModule {
     sourcedEvents.forEach((event) => {
       audio.addEventListener(event, (e) => {
         const detail = { source: audio.currentSrc };
-        actor.send(event, detail);
+        actor.send({ type: event, ...detail });
       });
     });
 
     events.forEach((event) => {
       audio.addEventListener(event, () => {
-        actor.send(event);
+        actor.send({ type: event });
       });
     });
 
     audio.addEventListener("playing", () => {
-      actor.send("play", { source: audio.currentSrc });
+      actor.send({ type: "play", source: audio.currentSrc });
     });
   }
 
@@ -456,7 +416,7 @@ export default class AudioModule {
     this.lastSource = audio.src;
     audio.addEventListener("loadstart", () => {
       if (audio.currentSrc !== this.lastSource) {
-        actor.send("sourceChanged");
+        actor.send({ type: "sourceChanged" });
         this.lastSource = audio.currentSrc;
       }
     });
@@ -512,17 +472,17 @@ export default class AudioModule {
   registerAudioCommands(inputActor, outputActor, voiceConverter) {
     // audio input (recording) commands
     EventBus.on("audio:setupRecording", function (e) {
-      inputActor.send("acquire");
+      inputActor.send({ type: "acquire" });
     });
 
     EventBus.on("audio:tearDownRecording", function (e) {
-      inputActor.send("release");
+      inputActor.send({ type: "release" });
     });
 
     EventBus.on("audio:startRecording", function (e) {
       // Check if Pi is currently speaking and stop her audio
       if (outputActor) {
-        outputActor.send("pause");
+        outputActor.send({ type: "pause" });
       }
 
       // Check if the microphone is acquired before starting?
@@ -530,7 +490,7 @@ export default class AudioModule {
     });
     EventBus.on("audio:stopRecording", function (e) {
       // soft stop recording
-      inputActor.send("stopRequested");
+      inputActor.send({ type: "stopRequested" });
     });
     // audio input (recording) events (pass media recorder events -> audio input machine actor)
     EventBus.on("audio:dataavailable", (detail) => {
@@ -538,10 +498,10 @@ export default class AudioModule {
     });
     EventBus.on("audio:input:stop", function (e) {
       // hard stop recording
-      inputActor.send("stop");
+      inputActor.send({ type: "stop" });
     });
     EventBus.on("audio:input:reconnect", function (e) {
-      inputActor.send("release");
+      inputActor.send({ type: "release" });
       inputActor.send(["acquire", "start"]);
     });
 
@@ -560,7 +520,7 @@ export default class AudioModule {
     EventBus.on("audio:skipNext", (e) => {
       logger.debug("Skipping next audio");
       if (outputActor) {
-        outputActor.send("skipNext");
+        outputActor.send({ type: "skipNext" });
       }
     });
     EventBus.on("audio:skipCurrent", async (e) => {
@@ -596,7 +556,7 @@ export default class AudioModule {
     EventBus.on("saypi:tts:replaying", (e) => {
       // notify the audio output machine that the next audio is a replay
       if (outputActor) {
-        outputActor.send("replaying");
+        outputActor.send({ type: "replaying" });
       }
     });
   }
@@ -920,9 +880,10 @@ export default class AudioModule {
     
     // Handle explicit errors
     audio.addEventListener("error", (event) => {
-      actor.send("error", { 
+      actor.send({
+        type: "error",
         source: audio.currentSrc,
-        error: audio.error 
+        error: audio.error
       });
     });
 
@@ -936,7 +897,8 @@ export default class AudioModule {
 
       if (isPotentialRangeRequestFailure && isSafari()) {
         logger.debug('[audio lifecycle] Detected Safari range request failure, triggering retry');
-        actor.send("error", { 
+        actor.send({
+          type: "error",
           source: audio.currentSrc,
           detail: "Safari range request failure detected",
           error: audio.error
@@ -973,7 +935,7 @@ export default class AudioModule {
     standardEvents.forEach((event) => {
       EventBus.on(`audio:offscreen:${event}`, (detail) => {
         logger.debug(`[AudioModule] Forwarding offscreen event to audio output actor: ${event}`);
-        outputActor.send(event);
+        outputActor.send({ type: event });
       }, this);
     });
     
@@ -982,7 +944,7 @@ export default class AudioModule {
       EventBus.on(`audio:offscreen:${event}`, (detail) => {
         logger.debug(`[AudioModule] Forwarding offscreen sourced event to audio output actor: ${event}`, detail);
         const eventDetail = { source: detail?.source || 'offscreen' };
-        outputActor.send(event, eventDetail);
+        outputActor.send({ type: event, ...eventDetail });
       }, this);
     });
     
@@ -990,7 +952,7 @@ export default class AudioModule {
     EventBus.on("audio:offscreen:playing", (detail) => {
       logger.debug("[AudioModule] Forwarding offscreen 'playing' event as 'play' to audio output actor", detail);
       const eventDetail = { source: detail?.source || 'offscreen' };
-      outputActor.send("play", eventDetail);
+      outputActor.send({ type: "play", ...eventDetail });
     }, this);
   }
 }

@@ -1,17 +1,9 @@
-import { createMachine, assign } from "xstate";
+import { setup, assign } from "xstate";
 import EventBus from "../events/EventBus";
-import {
-  MatchableVoice,
-  PiAIVoice,
-  PiSpeech,
-  VoiceFactory,
-} from "../tts/SpeechModel";
+import { MatchableVoice, PiSpeech } from "../tts/SpeechModel";
 import { PiAIChatbot } from "../chatbots/Pi";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
-import {
-  UserPreferenceModule,
-  VoicePreference,
-} from "../prefs/PreferenceModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 type ConversionContext = {
   voice: MatchableVoice | null;
@@ -28,68 +20,13 @@ type VoiceConverterEvent = ChangeVoiceEvent | LoadstartEvent;
 const pi: PiAIChatbot = new PiAIChatbot();
 const prefs = UserPreferenceModule.getInstance();
 
-export const voiceConverterMachine = createMachine({
-  context: {
-    voice: null,
-  },
-  id: "voiceConverter",
-  initial: "idle",
-  description:
-    'This machine loads audio in a "restored" voice (i.e. Pi 7 or Pi 8) when the user has requested one of those voices but Pi starts to load a different voice (i.e. Pi 1-6) instead.',
-  schema: {
+export const voiceConverterMachine = setup({
+  types: {
     context: {} as ConversionContext,
     events: {} as VoiceConverterEvent,
   },
-  states: {
-    idle: {
-      on: {
-        changeVoice: {
-          target: "voiceSelected",
-          actions: "assignVoice",
-          cond: {
-            type: "restoredVoice",
-          },
-        },
-      },
-      description:
-        "The initial state where the machine waits for user actions.",
-    },
-    voiceSelected: {
-      on: {
-        changeVoice: [
-          {
-            target: "voiceSelected",
-            cond: "restoredVoice",
-            actions: "assignVoice",
-          },
-          {
-            target: "idle",
-          },
-        ],
-        loadstart: {
-          target: "voiceSelected",
-          actions: {
-            type: "convertSpeechToSelectedVoice",
-          },
-          cond: {
-            type: "voiceMismatch",
-          },
-          description:
-            "Speech starts to load, but the speaker's voice does not match the selected voice.",
-        },
-      },
-      description:
-        "State where a restored voice has been selected by the user.",
-    },
-  },
-  predictableActionArguments: true,
-  preserveActionOrder: true,
-}).withConfig({
   actions: {
-    convertSpeechToSelectedVoice: function (
-      context: ConversionContext,
-      event: VoiceConverterEvent
-    ) {
+    convertSpeechToSelectedVoice: ({ event }) => {
       const parser = new PiSpeechSourceParser();
       if (event.type === "loadstart" && parser.matches(event.source)) {
         const speechSource = event.source;
@@ -107,8 +44,10 @@ export const voiceConverterMachine = createMachine({
         });
       }
     },
+    // v5: context is updated via assign (immutably) rather than mutating the
+    // shared definition context in place, so each interpreted actor is isolated.
     assignVoice: assign({
-      voice: function (context: ConversionContext, event: VoiceConverterEvent) {
+      voice: ({ event }) => {
         if (event.type === "changeVoice") {
           return event.voice;
         }
@@ -117,10 +56,7 @@ export const voiceConverterMachine = createMachine({
     }),
   },
   guards: {
-    restoredVoice: function (
-      context: ConversionContext,
-      event: VoiceConverterEvent
-    ) {
+    restoredVoice: ({ event }) => {
       if (event.type === "changeVoice") {
         const selectedVoice = event.voice; // The voice selected by the user - may be null if the user has selected a default voice
         const restoredVoices = pi.getExtraVoices();
@@ -133,10 +69,7 @@ export const voiceConverterMachine = createMachine({
       }
       return false;
     },
-    voiceMismatch: function (
-      context: ConversionContext,
-      event: VoiceConverterEvent
-    ) {
+    voiceMismatch: ({ context, event }) => {
       if (event.type !== "loadstart") {
         return false;
       }
@@ -149,6 +82,48 @@ export const voiceConverterMachine = createMachine({
       }
 
       return !isVoiceMatch(context.voice, speechSource);
+    },
+  },
+}).createMachine({
+  context: {
+    voice: null,
+  },
+  id: "voiceConverter",
+  initial: "idle",
+  description:
+    'This machine loads audio in a "restored" voice (i.e. Pi 7 or Pi 8) when the user has requested one of those voices but Pi starts to load a different voice (i.e. Pi 1-6) instead.',
+  states: {
+    idle: {
+      on: {
+        changeVoice: {
+          target: "voiceSelected",
+          actions: "assignVoice",
+          guard: "restoredVoice",
+        },
+      },
+      description: "The initial state where the machine waits for user actions.",
+    },
+    voiceSelected: {
+      on: {
+        changeVoice: [
+          {
+            target: "voiceSelected",
+            guard: "restoredVoice",
+            actions: "assignVoice",
+          },
+          {
+            target: "idle",
+          },
+        ],
+        loadstart: {
+          target: "voiceSelected",
+          actions: "convertSpeechToSelectedVoice",
+          guard: "voiceMismatch",
+          description:
+            "Speech starts to load, but the speaker's voice does not match the selected voice.",
+        },
+      },
+      description: "State where a restored voice has been selected by the user.",
     },
   },
 });

@@ -156,6 +156,30 @@ class Logger {
 // Export a single instance of the logger
 export const logger = new Logger("SayPi");
 
+/**
+ * Subscribe to an XState actor and debug-log its state-value transitions.
+ *
+ * Replaces the per-consumer v4 logging that read `state.changed`, `state.history`,
+ * and `state.event` — none of which exist on a v5 snapshot. A v5 actor subscriber
+ * receives only the snapshot, so we track the previous serialized value in a
+ * closure and log when it changes.
+ *
+ * @param {{ subscribe: Function }} actor - a started-or-startable XState v5 actor
+ * @param {string} label - human-readable machine name for the log line
+ */
+export function logStateTransitions(actor, label) {
+  let previous;
+  actor.subscribe((snapshot) => {
+    const toState = serializeStateValue(snapshot.value);
+    if (toState !== previous) {
+      logger.debug(
+        `${label} transitioned from ${previous ?? "N/A"} to ${toState}`
+      );
+      previous = toState;
+    }
+  });
+}
+
 // Example usage (optional, for testing):
 // logger.setDebugMode(true);
 // logger.debug("This is a debug message", { a: 1 });

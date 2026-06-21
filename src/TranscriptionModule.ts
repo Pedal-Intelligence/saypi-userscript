@@ -307,8 +307,10 @@ export async function uploadAudioWithRetry(
       } else {
         console.error("Unexpected error: ", error);
         // Notify both conversation and dictation flows of the failure
-        StateMachineService.conversationActor.send("saypi:transcribeFailed", {
-          detail: error,
+        // (the error is already logged above; the machine's transcribeFailed
+        // event carries no payload)
+        StateMachineService.conversationActor.send({
+          type: "saypi:transcribeFailed",
         });
         // Emit a specific failure event that UniversalDictationModule forwards to DictationMachine
         EventBus.emit("saypi:transcribeFailed");
@@ -321,8 +323,8 @@ export async function uploadAudioWithRetry(
   }
 
   logger.error("Max retries reached. Giving up.");
-  StateMachineService.conversationActor.send("saypi:transcribeFailed", {
-    detail: new Error("Max retries reached"),
+  StateMachineService.conversationActor.send({
+    type: "saypi:transcribeFailed",
   });
   // Ensure DictationMachine leaves transcribing state on terminal failure
   EventBus.emit("saypi:transcribeFailed");
@@ -679,13 +681,13 @@ async function uploadAudio(
     }
 
     if (responseJson.text.length === 0) {
-      StateMachineService.conversationActor.send("saypi:transcribedEmpty");
+      StateMachineService.conversationActor.send({ type: "saypi:transcribedEmpty" });
       EventBus.emit("saypi:transcribedEmpty");
       EventBus.emit("saypi:transcription:empty", {
         sequenceNumber: seq,
       });
     } else {
-      StateMachineService.conversationActor.send("saypi:transcribed", payload);
+      StateMachineService.conversationActor.send({ type: "saypi:transcribed", ...payload });
       EventBus.emit("saypi:transcription:completed", payload);
       // no need to emit transcription:received event here, it's handled by transcriptionReceived function
     }
