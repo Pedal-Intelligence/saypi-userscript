@@ -52,23 +52,28 @@ You can verify no remote code by examining the built extension:
 # Build the extension
 npm run build
 
-# Verify no eval() in final bundle
-grep -r "eval" .output/chrome-mv3/ --include="*.js"
-# Result: 0 matches
+# No remotely-fetched code: no external <script src>, no dynamic import() of URLs
+grep -rE "import\\(['\"]https?:" .output/chrome-mv3/ --include="*.js"   # → no matches
 
-# Verify all WASM/ONNX files are local
-ls .output/chrome-mv3/*.{wasm,onnx}
-# Result: All 7 files present
+# All WASM/ONNX files are local
+ls .output/chrome-mv3/*.{wasm,onnx}   # → all local
 ```
+
+> **Note on `eval`:** the vendored **onnxruntime-web** library does contain an `eval()`
+> (a fallback for environments without WebAssembly), so `grep -r "eval(" .output/chrome-mv3`
+> is **not** zero — it appears in the VAD-bearing bundles. This is **local, bundled** code,
+> not remote code, and it is **never executed**: we use the WASM backend exclusively, so the
+> fallback path is unreachable. (A prior version of this doc incorrectly claimed it was
+> tree-shaken to zero — it is present but inert.)
 
 ### Justification Text for Web Store
 ```
 This extension does not use remote code. All JavaScript, WASM files, and ONNX models
-are bundled locally within the extension package. The build warning about eval() in
-onnxruntime-web is a false positive - the code path containing eval() is tree-shaken
-out during the build process and does not appear in the final bundle. The CSP directive
-'wasm-unsafe-eval' is used for local WebAssembly execution only, not for evaluating
-remote code.
+are bundled locally within the extension package. The eval() the linter flags lives in
+the vendored onnxruntime-web library's fallback path for environments without WebAssembly;
+we use the WASM backend exclusively, so that path is never executed. The CSP directive
+'wasm-unsafe-eval' enables local WebAssembly execution only, not the evaluation of any
+remotely-hosted code.
 ```
 
 ---
@@ -112,6 +117,16 @@ remote code.
 - Microphone access for voice input (Speech-to-Text)
 - Audio playback for Text-to-Speech output
 - Voice Activity Detection (VAD) processing
+
+#### `alarms`
+**Purpose:** Reliable scheduling in the MV3 service worker
+- Schedule periodic background work (e.g. auth/session token refresh) that must survive the
+  service worker being suspended and restarted — `setTimeout` does not, `chrome.alarms` does
+
+#### `identity` (Chrome/Edge only)
+**Purpose:** Sign-in to the Say, Pi account
+- Used for the OAuth sign-in flow via `chrome.identity` so users can authenticate with their
+  Say, Pi account; only our own auth endpoints are involved
 
 ### Development-Only Permissions
 
@@ -197,23 +212,23 @@ node_modules/onnxruntime-web/dist/ort-web.min.js (6:62546): Use of eval in
 it poses security risks and may cause issues with minification.
 ```
 
-**Status:** ✅ **Not a security concern** - This code is tree-shaken out
+**Status:** ✅ **Not a security concern** - bundled, local, and never executed
 
 **Explanation:**
-1. The warning occurs during the build process when Rollup analyzes the onnxruntime-web library
-2. The `eval()` code path is **never executed** in our extension
-3. The code is **tree-shaken out** during the build process
-4. Verification: `grep -r "eval" .output/chrome-mv3/ --include="*.js"` returns **0 results**
+1. The warning occurs during the build when Rollup analyzes the onnxruntime-web library
+2. The `eval()` code path is **never executed** in our extension (we use the WASM backend)
+3. The code is **bundled locally** — it is *not* remote code
+4. It is **present in the final bundle** (it is not tree-shaken out): `grep -rl "eval(" .output/chrome-mv3 --include="*.js"` lists the VAD-bearing chunks. Present but inert.
 
 **Why the warning appears:**
 - ONNX Runtime includes an `eval()`-based fallback for environments that don't support WebAssembly
-- Our extension uses WebAssembly exclusively
-- The eval() fallback code path is unused and removed during tree-shaking
+- Our extension uses WebAssembly exclusively, so the fallback path is unreachable at runtime
+- Rollup keeps the fallback code in the bundle (it is not provably dead), but it never runs
 
 **Build system configuration:**
 - Production builds use minification and tree-shaking (Rollup/Vite)
-- Unused code paths are eliminated
-- Final bundle is verified to contain no `eval()` calls
+- The build is reproducible from source (`source-code.zip` + `package-lock.json`)
+- The only `eval()` in the bundle is onnxruntime-web's inert WASM fallback (see above); no remotely-hosted code is loaded
 
 ---
 
@@ -233,7 +248,7 @@ it poses security risks and may cause issues with minification.
 ### Security Auditing
 For security audits, reviewers can:
 1. Build from source: `npm run build`
-2. Verify no remote code: `grep -r "eval\|fetch\|XMLHttpRequest" .output/chrome-mv3/ --include="*.js"`
+2. Verify no remotely-hosted code: `grep -rE "import\(['\"]https?:|<script[^>]+src=[\"']https?:" .output/chrome-mv3/` → no matches (`fetch`/XHR are used, but only against `api.saypi.ai`/`www.saypi.ai`)
 3. Check CSP: Review `manifest.json` for content_security_policy
 4. Inspect WASM files: All WASM files are local and listed in `web_accessible_resources`
 
