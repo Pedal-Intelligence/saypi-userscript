@@ -297,18 +297,22 @@ describe('DictationMachine - characterization (uncovered transitions)', () => {
     });
 
     it('userStoppedSpeaking with zero-size blob is treated as no audio (hasNoAudio)', () => {
+      // A zero-size blob is not real audio even with a positive duration: it must
+      // follow the VAD-misfire path (hasNoAudio) — stay notSpeaking, no upload —
+      // and agree with hasNoAudio (which already checks blob.size === 0).
+      // Regression test for #403: hasAudio previously ignored blob.size, so this
+      // event satisfied BOTH guards and hasAudio (listed first) wrongly won,
+      // uploading a zero-byte segment.
       const emptyBlob = new Blob([], { type: 'audio/wav' });
       service.send({
         type: 'saypi:userStoppedSpeaking',
         duration: 1000,
         blob: emptyBlob,
       });
-      // duration > 0 but the hasAudio guard only checks blob !== undefined && duration > 0,
-      // so a zero-size blob with positive duration actually satisfies hasAudio.
-      // CHARACTERIZATION: hasAudio passes here, so it transitions into transcribing.
       expect(service.state.value).toEqual({
-        listening: { recording: 'notSpeaking', converting: 'transcribing' },
+        listening: { recording: 'notSpeaking', converting: 'ready' },
       });
+      expect(TranscriptionModule.uploadAudioWithRetry).not.toHaveBeenCalled();
     });
 
     it('userStoppedSpeaking with blob but zero duration is hasNoAudio -> stays notSpeaking', () => {
