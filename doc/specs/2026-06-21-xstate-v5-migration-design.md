@@ -111,13 +111,14 @@ CI green + mergeable.
 - [x] Design doc + tracker written.
 - [x] `createTestActor` helper written (`test/state-machines/support/testActor.ts`) — v4-interpreter-compatible facade that absorbs the v5 send-signature changes (string events, two-arg `send(type, payload)`).
 - [x] Existing 11 interpret-using specs retrofitted onto the helper; full state-machine suite green (15 files / 152 tests) + `tsc` clean.
-- [ ] Characterization tests: AudioOutputMachine (fill).
-- [ ] Characterization tests: AudioRetryMachine (fill).
-- [ ] Characterization tests: AudioInputMachine (harden).
-- [ ] Characterization tests: ConversationMachine (harden).
-- [ ] Characterization tests: DictationMachine (harden).
-- [ ] Characterization tests: SessionAnalyticsMachine (harden).
-- [ ] Bug fixes found during char-testing (fail-first), each noted here with issue #.
+- [x] Characterization tests: AudioOutputMachine (fill) — 43 tests.
+- [x] Characterization tests: AudioRetryMachine (fill) — 34 tests.
+- [x] Characterization tests: AudioInputMachine (harden) — 27 tests.
+- [x] Characterization tests: ConversationMachine (harden) — 58 tests.
+- [x] Characterization tests: DictationMachine (harden) — 45 tests.
+- [x] Characterization tests: SessionAnalyticsMachine (harden) — 24 tests.
+- [x] Full suite green together: 21 files / 383 tests; tsc clean. Committed (fffb14b).
+- [ ] Bug triage (15 suspected bugs surfaced — see Bug Triage section below).
 - [ ] PR A opened, reviewed, CI green, merged.
 - [ ] PR B: package.json bump + machine conversions + consumer conversions + helper flip.
 - [ ] PR B: `npm test` green on v5.
@@ -125,9 +126,54 @@ CI green + mergeable.
 - [ ] PR B opened, reviewed, CI green, merged.
 - [ ] Loop done: migration complete + verified e2e. PushNotification sent.
 
+## Bug Triage (15 suspected bugs from the characterization pass)
+
+All pinned as current behavior in the safety net (commented `// CHARACTERIZATION`).
+Disposition honors the "fix bugs as found" decision while respecting the autonomous
+mandate (taste/product calls are escalated, not auto-decided; fixes are scoped, not
+bundled into the net).
+
+**Fix during PR B (v5 forces `assign`; behavior-preserving in production):**
+1. `AudioRetryMachine` — actions mutate the shared singleton context in place
+   (`context.retries++`, `context.delay *= 2`, …) → leaks across actors. **HIGH.**
+2. `AudioInputMachine` — `startRecording`/`prepareStop` mutate context directly
+   (`recordingStartTime`, `waitingToStop`) → leaks across actors. **MEDIUM.**
+3. `ConversationMachine` — `handleTranscriptionResponse` mutates the singleton context
+   directly instead of via `assign`. **LOW.**
+   → These are inseparable from the v5 `assign` conversion; fixing them there removes the
+   leak and the relevant characterization tests flip from "pins leak" to "asserts isolation".
+
+**Clear-cut independent bugs — fix via fail-first TDD (scoped follow-up PRs after migration):**
+4. `ConversationMachine.clearMaintainanceFlag` — builds an `assign(...)` but discards it
+   (no-op); flag never reset on `responding` exit. **LOW.**
+6. `DictationMachine.hasAudio` — ignores `blob.size`, so a 0-byte blob with `duration>0`
+   is treated as real audio and uploaded (disagrees with `hasNoAudio`). **LOW.**
+7. `AudioInputMachine.sendData` — gates on kB rounded to 2dp (`>0`), dropping sub-~6-byte
+   non-empty blobs. **LOW** (near-zero practical impact).
+
+**Product / UX / metric taste calls — file + escalate to founder, do NOT auto-fix:**
+5. `ConversationMachine.callStartingPrompt` — discarded `assign` means the pre-call draft is
+   never backed up; "fixing" changes placeholder-restore UX.
+8. `AudioInputMachine` — DOMException-specific mic-error messages are unreachable (service
+   flattens the error to a string), so users always get the generic message.
+9. `SessionAnalyticsMachine` — `message_sent` RTF is `Infinity` when no prior transcription.
+10. `SessionAnalyticsMachine` — long-running-session activity prompt is unreachable (2h
+    `after` > 30-min auto-end invoke, and every `send_message` restarts the invoke).
+11. `SessionAnalyticsMachine` — `rollupTranscription` yields negative talk-time (unclamped)
+    and conflates a `0` sentinel with a legitimate `0` timestamp.
+
+**Quirks / vestigial / likely-intentional — note only (no fix, no issue):**
+- `AudioOutputMachine` — `paused.play` skip branch self-transitions (swallows resume); skip
+  flag consumed only inside the taken branch (self-consistent today).
+- `AudioRetryMachine` — `Idle.sourceChanged` / `Playing.ended` reset-asymmetry vs siblings.
+- `AudioInputMachine` — `microphoneAcquired` guard is a hardcoded `return true` (vestigial).
+
 ### Iteration log
 
 - **2026-06-21 (iter 1):** Brainstormed + locked decisions; created worktree; wrote this doc;
   built `createTestActor` facade; retrofitted 11 specs (suite green, tsc clean). Committed
-  foundation checkpoint. Next: write new characterization tests for the 6 in-scope machines,
-  starting with the untested-medium ones (AudioOutput, AudioRetry).
+  foundation checkpoint (c280d20).
+- **2026-06-21 (iter 2):** Ran the characterization workflow (12 agents) → +231 tests across 6
+  new spec files; full suite green (21 files / 383), tsc clean. Committed net (fffb14b). Triaged
+  the 15 surfaced bugs (see Bug Triage). Next: open PR A (net), reviewer verdict, merge; then
+  PR B = the v5 cutover (fixing the context-mutation leaks via `assign` en route).
