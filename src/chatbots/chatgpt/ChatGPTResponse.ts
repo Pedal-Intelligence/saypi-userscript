@@ -84,8 +84,11 @@ export class ChatGPTMessageControls extends MessageControls {
   protected getExtraControlClasses(): string[] { return ["chatgpt-controls"]; }
 
   getActionBarSelector(): string {
+    // Tag-agnostic on the read-aloud testid: chatgpt.com (verified live 2026-06-21)
+    // renders the read-aloud control as a <div role="menuitem"> rather than a <button>.
+    // Anchor on the stable data-testid regardless of tag, matching findReadAloudMenuItemNear.
     return [
-      'div:has(> button[data-testid="voice-play-turn-action-button"])',
+      'div:has(> [data-testid="voice-play-turn-action-button"])',
       'div:has(> button[data-testid="copy-turn-action-button"])',
       'div:has(> button[aria-label*="Copy" i])',
       'div:has(> button[title*="Copy" i])',
@@ -93,14 +96,21 @@ export class ChatGPTMessageControls extends MessageControls {
     ].join(', ');
   }
 
-  getReadAloudButton(): HTMLButtonElement | null {
+  // Locate any direct (non-overflow-menu) read-aloud control inside the turn.
+  // Tag-agnostic: chatgpt.com no longer renders this as a <button> — the live
+  // control is a <div role="menuitem" data-testid="voice-play-turn-action-button">
+  // (verified 2026-06-21). On the current DOM the control lives only in the portaled
+  // overflow menu, so this returns null and the menu path takes over; the tag-agnostic
+  // match keeps us robust if ChatGPT ever surfaces it inline again.
+  getReadAloudButton(): HTMLElement | null {
     const byTestId = this.message.element.querySelector(
-      'button[data-testid="voice-play-turn-action-button"]'
-    ) as HTMLButtonElement | null;
+      '[data-testid="voice-play-turn-action-button"]'
+    ) as HTMLElement | null;
     if (byTestId) return byTestId;
+    // Legacy "Read aloud"/"Replay" controls were (and remain) <button> elements.
     return this.message.element.querySelector(
       'button[aria-label*="Read aloud" i], button[title*="Read aloud" i], button[aria-label*="Replay" i], button[title*="Replay" i]'
-    ) as HTMLButtonElement | null;
+    ) as HTMLElement | null;
   }
 
   getCopyButton(): HTMLButtonElement | null {
@@ -207,7 +217,7 @@ export class ChatGPTMessageControls extends MessageControls {
     }
 
     const direct = this.getReadAloudButton();
-    if (direct && !direct.disabled) {
+    if (direct && !(direct as Partial<HTMLButtonElement>).disabled) {
       if ((direct as any)._saypiClicked) return;
       (direct as any)._saypiClicked = true;
       // Clear the unread flag since we're now reading it
@@ -647,7 +657,8 @@ export class ChatGPTTextBlockCapture extends ElementTextStream {
     const sel = [
       '.message-action-bar',
       'button[data-testid="copy-turn-action-button"]',
-      'button[data-testid="voice-play-turn-action-button"]',
+      // Tag-agnostic: read-aloud is a <div role="menuitem"> on current chatgpt.com.
+      '[data-testid="voice-play-turn-action-button"]',
       'button[aria-haspopup="menu"]',
       'button[aria-label*="Copy" i]',
       'button[title*="Copy" i]'
