@@ -65,10 +65,10 @@ describe('TranscriptionModule forwards tempo and pFinishedSpeaking', () => {
 
     await uploadAudioWithRetry(audioBlob, 1500, {});
 
-    // Find the call that sent the transcribed event
-    const calls = sendMock.mock.calls.filter((c) => c[0] === 'saypi:transcribed');
+    // Find the call that sent the transcribed event (v5: single event object)
+    const calls = sendMock.mock.calls.filter((c) => c[0]?.type === 'saypi:transcribed');
     expect(calls.length).toBe(1);
-    const payload = calls[0][1];
+    const payload = calls[0][0];
     expect(payload).toMatchObject({
       text: responseJson.text,
       sequenceNumber: responseJson.sequenceNumber,

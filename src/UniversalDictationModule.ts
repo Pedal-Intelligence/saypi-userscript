@@ -7,10 +7,10 @@ import {
   DictationAudioConnectedEvent,
   DictationSessionAssignedEvent,
 } from "./state-machines/DictationMachine";
-import { interpret } from "xstate";
+import { createActor } from "xstate";
 import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
-import { logger, serializeStateValue } from "./LoggingModule.js";
+import { logger, logStateTransitions } from "./LoggingModule.js";
 import getMessage from "./i18n";
 import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier";
 
@@ -465,22 +465,14 @@ export class UniversalDictationModule {
 
     // Create and start state machine
     const machine = createDictationMachine(element);
-    const service = interpret(machine).onTransition((state) => {
-      if (state.changed) {
-        const fromState = state.history
-          ? serializeStateValue(state.history.value)
-          : "N/A";
-        const toState = serializeStateValue(state.value);
-        logger.debug(
-          `Dictation Machine [${element.tagName}] transitioned from ${fromState} to ${toState} with ${state.event.type}`
-        );
-        
-        // Update button appearance and placeholder text based on state machine state
-        this.updateButtonForState(target, state);
-        this.updatePlaceholderForState(target, state);
-      }
+    const service = createActor(machine);
+    logStateTransitions(service, `Dictation Machine [${element.tagName}]`);
+    service.subscribe((snapshot) => {
+      // Update button appearance and placeholder text based on state machine state
+      this.updateButtonForState(target, snapshot);
+      this.updatePlaceholderForState(target, snapshot);
     });
-    
+
     target.machine = service;
     this.currentActiveTarget = target;
 
@@ -1039,7 +1031,7 @@ export class UniversalDictationModule {
     [CALL_READY, USER_SPEAKING, USER_FINISHED_SPEAKING].forEach((eventName) => {
       EventBus.on(eventName, () => {
         logger.debug(`[UniversalDictationModule] Forwarding ${eventName} to dictation machine`);
-        dictationService.send(eventName);
+        dictationService.send({ type: eventName });
       });
     });
 
@@ -1068,7 +1060,7 @@ export class UniversalDictationModule {
 
     EventBus.on("saypi:transcribeFailed", () => {
       logger.debug(`[UniversalDictationModule] Forwarding transcription failure to dictation machine`);
-      dictationService.send("saypi:transcribeFailed");
+      dictationService.send({ type: "saypi:transcribeFailed" });
     });
 
     // Listen for refinement events (Phase 2 dual-phase transcription)
@@ -1084,13 +1076,13 @@ export class UniversalDictationModule {
 
     EventBus.on("saypi:transcribedEmpty", () => {
       logger.debug(`[UniversalDictationModule] Forwarding empty transcription to dictation machine`);
-      dictationService.send("saypi:transcribedEmpty");
+      dictationService.send({ type: "saypi:transcribedEmpty" });
     });
 
     // Handle call failures
     EventBus.on("saypi:callFailed", () => {
       logger.debug(`[UniversalDictationModule] Forwarding call failure to dictation machine`);
-      dictationService.send("saypi:callFailed");
+      dictationService.send({ type: "saypi:callFailed" });
     });
   }
 

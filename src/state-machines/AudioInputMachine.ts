@@ -1,6 +1,6 @@
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
-import { createMachine, assign } from "xstate";
+import { setup, assign, fromPromise } from "xstate";
 import EventBus from "../events/EventBus.js";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
@@ -419,160 +419,36 @@ type AudioInputEvent =
   | { type: "release" }
   | { type: "start" }
   | { type: "stopRequested" }
-  | { type: "dataAvailable"; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
-  | { type: "stop" }
-  | { type: "error.platform"; data: any };
+  | { type: "dataAvailable"; frames: Float32Array; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
+  | { type: "stop" };
 
-export const audioInputMachine = createMachine<
-  AudioInputContext,
-  AudioInputEvent
->(
-  {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jU7V04ddwK3JYLoIG6LOwiNxKhTRDVsStS31Csaq1BRK0S5kfwO9RjF8Bi8CwCA4CkZqckdBa5QAWjpRAab2oaVuhA6Ebcf6wPFegIApoS5R5QNvM-MEKpMSNErJPGmrSs7FiiHm8uwn97xo0YvPcdk5GZQNp0UlxuihQxNZ5BR2ZA+XbsBSNSCGJwgXJJw7zkQNRnsWznErIxYWGU3WpTMBzcht5wXvG2qQpDlVad8rK1W4N0aUfoJaXKXRvS1iwIgqCA8Wt5XDwoaXAmdkJghCcdC-bQeCGRd+gVH3xsC3T92zuVuhZUk7Bqtk72hYky-sFkwycGwEqUev07Bq6W+vRRBiqj31rdTxb3IrzSFrQtdB0ZlIzkfHvCAA */
-    id: "audioInput",
-    initial: "released",
-    context: {
-      waitingToStop: false,
-      waitingToStart: false,
-      recordingStartTime: 0,
-    },
-    states: {
-      released: {
-        on: {
-          acquire: {
-            target: "acquiring",
-          },
-        },
-      },
-      acquiring: {
-        description:
-          "Acquiring the microphone. Waits until asynchronous call has completed.",
-        invoke: {
-          src: "acquireMicrophone",
-          onDone: {
-            target: "acquired",
-          },
-          onError: {
-            target: "released",
-            actions: {
-              type: "logMicrophoneAcquisitionError",
-            },
-          },
-        },
-        on: {
-          start: {
-            actions: assign({ waitingToStart: true }),
-            internal: true,
-          },
-        },
-      },
-      acquired: {
-        description: "Microphone acquired and ready to start recording.",
-        initial: "idle",
-        entry: [
-          {
-            type: "notifyMicrophoneAcquired",
-          },
-        ],
-        states: {
-          idle: {
-            on: {
-              start: {
-                target: "recording",
-                cond: "microphoneAcquired",
-              },
-              acquire: {
-                description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
-                actions: {
-                  type: "notifyMicrophoneAcquired",
-                },
-              },
-            },
-            always: {
-              target: "recording",
-              cond: "pendingStart",
-            },
-          },
-
-          recording: {
-            entry: ["startRecording", assign({ waitingToStart: false })],
-            on: {
-              stopRequested: {
-                target: "pendingStop",
-                description: "Stop gracefully.",
-              },
-
-              stop: {
-                target: "#audioInput.acquired.stopped",
-                description: "Stop immediately",
-                actions: ["prepareStop", "stopIfWaiting"],
-              },
-
-              dataAvailable: {
-                actions: {
-                  type: "sendData",
-                },
-                internal: true,
-              },
-            },
-          },
-
-          pendingStop: {
-            description:
-              "Waiting for the media recording device to stop recording.",
-            entry: {
-              type: "prepareStop",
-            },
-            after: {
-              "5000": [
-                {
-                  target: "#audioInput.acquired.stopped",
-                  actions: ["stopIfWaiting"],
-                  description: "Stop eventually",
-                },
-                {
-                  internal: false,
-                },
-              ],
-            },
-            on: {
-              stop: {
-                target: "stopped",
-                description: "Stop immediately",
-              },
-              dataAvailable: {
-                target: "stopped",
-                actions: ["stopIfWaiting", "sendData"],
-                description: "Stop after final audio data collected",
-              },
-            },
-          },
-
-          stopped: {
-            entry: assign({ waitingToStop: false }),
-            always: {
-              target: "idle",
-            },
-          },
-        },
-        on: {
-          release: {
-            target: "released",
-            actions: {
-              type: "releaseMicrophone",
-            },
-          },
-        },
-      },
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
+export const audioInputMachine = setup({
+  types: {
+    context: {} as AudioInputContext,
+    events: {} as AudioInputEvent,
   },
-  {
-    actions: {
-      startRecording: async (context, event) => {
-        context.recordingStartTime = Date.now();
-        
+  actors: {
+    acquireMicrophone: fromPromise<void>(() => {
+      return new Promise<void>((resolve, reject) => {
+        setupRecording((success, error) => {
+          if (success) {
+            resolve();
+          } else {
+            reject(new Error(error || "Failed to acquire microphone resource via offscreen VAD."));
+          }
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    }),
+  },
+  actions: {
+    // v5: recordingStartTime is updated via assign (immutably) rather than
+    // mutating the shared definition context in place, so each interpreted
+    // actor is isolated (no cross-actor leak). The VAD side-effect (starting
+    // the client + surfacing notifications) is kept as a fire-and-forget call.
+    startRecording: assign({
+      recordingStartTime: () => {
         if (!vadClient) {
           console.error("[AudioInputMachine] VAD client not available - cannot start recording");
           EventBus.emit("saypi:ui:show-notification", {
@@ -581,180 +457,303 @@ export const audioInputMachine = createMachine<
             seconds: 10,
             icon: "microphone-muted",
           });
-          return;
+          return Date.now();
         }
-        
+
         logger.debug("[AudioInputMachine] Starting VAD client...");
-        const result = await vadClient.start();
-        
-        if (!result.success) {
-          console.error("[AudioInputMachine] Failed to start VAD:", result.error);
-          EventBus.emit("saypi:ui:show-notification", {
-            message: getMessage("errorVoiceRecordingStartFailed"),
-            type: "text",
-            seconds: 10,
-            icon: "microphone-muted",
-          });
-          return;
-        }
-        
-        logger.debug("[AudioInputMachine] VAD started successfully");
+        void vadClient.start().then((result) => {
+          if (!result.success) {
+            console.error("[AudioInputMachine] Failed to start VAD:", result.error);
+            EventBus.emit("saypi:ui:show-notification", {
+              message: getMessage("errorVoiceRecordingStartFailed"),
+              type: "text",
+              seconds: 10,
+              icon: "microphone-muted",
+            });
+            return;
+          }
+          logger.debug("[AudioInputMachine] VAD started successfully");
+        });
+
+        return Date.now();
       },
-      
-      stopRecording: async (context, event) => {
-        if (!vadClient) {
-          console.error("[AudioInputMachine] VAD client not available - cannot stop recording");
-          return;
-        }
-        
-        logger.debug("[AudioInputMachine] Stopping VAD client...");
-        const result = await vadClient.stop();
-        
+    }),
+
+    stopRecording: () => {
+      if (!vadClient) {
+        console.error("[AudioInputMachine] VAD client not available - cannot stop recording");
+        return;
+      }
+
+      logger.debug("[AudioInputMachine] Stopping VAD client...");
+      void vadClient.stop().then((result) => {
         if (!result.success) {
           console.error("[AudioInputMachine] Failed to stop VAD:", result.error);
           return;
         }
-        
         logger.debug("[AudioInputMachine] VAD stopped successfully");
-      },
+      });
+    },
 
-      prepareStop: async (context, event) => {
+    // v5: waitingToStop is flipped via assign rather than mutating context in
+    // place. The VAD stop request remains a fire-and-forget side-effect.
+    prepareStop: assign({
+      waitingToStop: () => {
         // If there's an explicit action needed before onSpeechEnd, send a stop request here.
         // Otherwise, onSpeechEnd from the offscreen VAD will trigger dataAvailable.
         logger.debug("[AudioInputMachine] Requesting VAD stop via client (prepareStop)...");
-        context.waitingToStop = true; // Still useful for local state if needed
         if (!vadClient) {
           console.warn("[AudioInputMachine] VAD client not available - cannot stop recording");
-          return;
+          return true;
         }
-        const result = await vadClient.stop(); // This tells the offscreen VAD to stop listening
-        if (!result.success) {
-          console.error("[AudioInputMachine] Failed to stop VAD via client:", result.error);
-        }
-      },
-
-      sendData: (
-        context,
-        event: { type: "dataAvailable"; frames: Float32Array; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
-      ) => {
-        const { frames, blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
-        const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-        logger.debug(`Uploading ${sizeInKb}kb of audio data`);
-
-        // Use the duration directly from the event
-        const speechDuration = duration;
-
-        if (Number(sizeInKb) > 0) {
-          // Upload the audio to the server for transcription
-          //
-          // TODO: the VAD emits `saypi:userStoppedSpeaking` events with raw frames when the user stops speaking.
-          // These are converted to `audio:dataavailable` events by the audio input machine, which transforms the raw frames into a WAV blob,
-          // and sends them through the audio module back to itself (this function - `sendData`),
-          // where they are then converted back to `saypi:userStoppedSpeaking` events again, but with the WAV blob,
-          // and forwared to the dictation or conversation machines.
-          // This results in the dictation or conversation machines receiving `saypi:userStoppedSpeaking` events twice - 
-          // once with the raw frames only, and once with the WAV blob.
-          EventBus.emit("saypi:userStoppedSpeaking", {
-            duration: speechDuration,
-            frames,
-            blob,
-            captureTimestamp,
-            clientReceiveTimestamp,
-            handlerTimestamp
-          });
-        }
-      },
-
-      stopIfWaiting: (SayPiContext) => {
-        // This action might become less relevant as stop is handled by prepareStop/vadClient.stop()
-        // and speech end is an event from the offscreen document.
-        // However, if we maintain waitingToStop for UI or other logic, it can stay.
-        if (SayPiContext.waitingToStop === true) {
-            logger.debug("[AudioInputMachine] stopIfWaiting: VAD stop was already requested.");
-            // No direct mic.pause() here, already handled by vadClient.stop() in prepareStop
-        }
-      },
-
-      notifyMicrophoneAcquired: (context, event) => {
-        monitorAudioInputDevices();
-        EventBus.emit("saypi:callReady");
-      },
-
-      releaseMicrophone: (context, event) => {
-        tearDownRecording();
-      },
-
-      logMicrophoneAcquisitionError: (
-        context,
-        event: {
-          type: "error.platform";
-          data: any;
-        }
-      ) => {
-        let messageKey = "microphoneErrorUnknown";
-        let detail = "";
-
-        if (isOverconstrainedError(event.data)) {
-          messageKey = "microphoneErrorConstraints";
-        } else if (event.data instanceof DOMException) {
-          switch (event.data.name) {
-            case "NotAllowedError":
-              messageKey = "microphoneErrorPermissionDenied";
-              break;
-            case "NotFoundError":
-              messageKey = "microphoneErrorNotFound";
-              break;
-            case "NotReadableError":
-              messageKey = "microphoneErrorInUse";
-              break;
-            default:
-              messageKey = "microphoneErrorUnexpected";
-              detail = event.data.message;
+        void vadClient.stop().then((result) => {
+          if (!result.success) {
+            console.error("[AudioInputMachine] Failed to stop VAD via client:", result.error);
           }
-        } else if (event.data instanceof Error) {
-          messageKey = "microphoneErrorGeneric";
-          detail = event.data.message;
+        });
+        return true;
+      },
+    }),
+
+    setWaitingToStart: assign({ waitingToStart: true }),
+    clearWaitingToStart: assign({ waitingToStart: false }),
+    clearWaitingToStop: assign({ waitingToStop: false }),
+
+    sendData: ({ event }) => {
+      if (event.type !== "dataAvailable") return;
+      const { frames, blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
+      const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+      logger.debug(`Uploading ${sizeInKb}kb of audio data`);
+
+      // Use the duration directly from the event
+      const speechDuration = duration;
+
+      if (Number(sizeInKb) > 0) {
+        // Upload the audio to the server for transcription
+        //
+        // TODO: the VAD emits `saypi:userStoppedSpeaking` events with raw frames when the user stops speaking.
+        // These are converted to `audio:dataavailable` events by the audio input machine, which transforms the raw frames into a WAV blob,
+        // and sends them through the audio module back to itself (this function - `sendData`),
+        // where they are then converted back to `saypi:userStoppedSpeaking` events again, but with the WAV blob,
+        // and forwared to the dictation or conversation machines.
+        // This results in the dictation or conversation machines receiving `saypi:userStoppedSpeaking` events twice -
+        // once with the raw frames only, and once with the WAV blob.
+        EventBus.emit("saypi:userStoppedSpeaking", {
+          duration: speechDuration,
+          frames,
+          blob,
+          captureTimestamp,
+          clientReceiveTimestamp,
+          handlerTimestamp
+        });
+      }
+    },
+
+    stopIfWaiting: ({ context }) => {
+      // This action might become less relevant as stop is handled by prepareStop/vadClient.stop()
+      // and speech end is an event from the offscreen document.
+      // However, if we maintain waitingToStop for UI or other logic, it can stay.
+      if (context.waitingToStop === true) {
+          logger.debug("[AudioInputMachine] stopIfWaiting: VAD stop was already requested.");
+          // No direct mic.pause() here, already handled by vadClient.stop() in prepareStop
+      }
+    },
+
+    notifyMicrophoneAcquired: () => {
+      monitorAudioInputDevices();
+      EventBus.emit("saypi:callReady");
+    },
+
+    releaseMicrophone: () => {
+      tearDownRecording();
+    },
+
+    logMicrophoneAcquisitionError: ({ event }) => {
+      // onError surfaces the rejection reason as `event.error` in v5.
+      const error = (event as { type: string; error?: unknown }).error;
+      let messageKey = "microphoneErrorUnknown";
+      let detail = "";
+
+      if (isOverconstrainedError(error)) {
+        messageKey = "microphoneErrorConstraints";
+      } else if (error instanceof DOMException) {
+        switch (error.name) {
+          case "NotAllowedError":
+            messageKey = "microphoneErrorPermissionDenied";
+            break;
+          case "NotFoundError":
+            messageKey = "microphoneErrorNotFound";
+            break;
+          case "NotReadableError":
+            messageKey = "microphoneErrorInUse";
+            break;
+          default:
+            messageKey = "microphoneErrorUnexpected";
+            detail = error.message;
         }
+      } else if (error instanceof Error) {
+        messageKey = "microphoneErrorGeneric";
+        detail = error.message;
+      }
 
-        const message = getMessage(messageKey, detail);
+      const message = getMessage(messageKey, detail);
 
-        console.error(`Microphone error: ${message}`, event.data);
+      console.error(`Microphone error: ${message}`, error);
 
-        EventBus.emit("saypi:ui:show-notification", {
-          message: message,
-          type: "text",
-          seconds: 20,
-          icon: "microphone-muted",
-        });
+      EventBus.emit("saypi:ui:show-notification", {
+        message: message,
+        type: "text",
+        seconds: 20,
+        icon: "microphone-muted",
+      });
+    },
+  },
+  guards: {
+    microphoneAcquired: () => {
+      // This guard now checks if the offscreen VAD client reported successful initialization
+      return true; // Since initialization happens in setupRecording which resolves only on success
+    },
+    pendingStart: ({ context }) => {
+      return context.waitingToStart === true;
+    },
+  },
+}).createMachine({
+  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jU7V04ddwK3JYLoIG6LOwiNxKhTRDVsStS31Csaq1BRK0S5kfwO9RjF8Bi8CwCA4CkZqckdBa5QAWjpRAab2oaVuhA6Ebcf6wPFegIApoS5R5QNvM-MEKpMSNErJPGmrSs7FiiHm8uwn97xo0YvPcdk5GZQNp0UlxuihQxNZ5BR2ZA+XbsBSNSCGJwgXJJw7zkQNRnsWznErIxYWGU3WpTMBzcht5wXvG2qQpDlVad8rK1W4N0aUfoJaXKXRvS1iwIgqCA8Wt5XDwoaXAmdkJghCcdC-bQeCGRd+gVH3xsC3T92zuVuhZUk7Bqtk72hYky-sFkwycGwEqUev07Bq6W+vRRBiqj31rdTxb3IrzSFrQtdB0ZlIzkfHvCAA */
+  id: "audioInput",
+  initial: "released",
+  context: {
+    waitingToStop: false,
+    waitingToStart: false,
+    recordingStartTime: 0,
+  },
+  states: {
+    released: {
+      on: {
+        acquire: {
+          target: "acquiring",
+        },
       },
     },
-    services: {
-      acquireMicrophone: (context, event) => {
-        return new Promise<void>((resolve, reject) => {
-          setupRecording((success, error) => {
-            if (success) {
-              resolve();
-            } else {
-              reject(new Error(error || "Failed to acquire microphone resource via offscreen VAD."));
-            }
-          }).catch((err) => {
-            reject(err);
-          });
-        });
+    acquiring: {
+      description:
+        "Acquiring the microphone. Waits until asynchronous call has completed.",
+      invoke: {
+        src: "acquireMicrophone",
+        onDone: {
+          target: "acquired",
+        },
+        onError: {
+          target: "released",
+          actions: {
+            type: "logMicrophoneAcquisitionError",
+          },
+        },
+      },
+      on: {
+        start: {
+          actions: "setWaitingToStart",
+        },
       },
     },
-    guards: {
-      microphoneAcquired: (context, event) => {
-        // This guard now checks if the offscreen VAD client reported successful initialization
-        return true; // Since initialization happens in setupRecording which resolves only on success
+    acquired: {
+      description: "Microphone acquired and ready to start recording.",
+      initial: "idle",
+      entry: [
+        {
+          type: "notifyMicrophoneAcquired",
+        },
+      ],
+      states: {
+        idle: {
+          on: {
+            start: {
+              target: "recording",
+              guard: "microphoneAcquired",
+            },
+            acquire: {
+              description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+              actions: {
+                type: "notifyMicrophoneAcquired",
+              },
+            },
+          },
+          always: {
+            target: "recording",
+            guard: "pendingStart",
+          },
+        },
+
+        recording: {
+          entry: ["startRecording", "clearWaitingToStart"],
+          on: {
+            stopRequested: {
+              target: "pendingStop",
+              description: "Stop gracefully.",
+            },
+
+            stop: {
+              target: "#audioInput.acquired.stopped",
+              description: "Stop immediately",
+              actions: ["prepareStop", "stopIfWaiting"],
+            },
+
+            dataAvailable: {
+              actions: {
+                type: "sendData",
+              },
+            },
+          },
+        },
+
+        pendingStop: {
+          description:
+            "Waiting for the media recording device to stop recording.",
+          entry: {
+            type: "prepareStop",
+          },
+          after: {
+            "5000": [
+              {
+                target: "#audioInput.acquired.stopped",
+                actions: ["stopIfWaiting"],
+                description: "Stop eventually",
+              },
+              {
+                reenter: true,
+              },
+            ],
+          },
+          on: {
+            stop: {
+              target: "stopped",
+              description: "Stop immediately",
+            },
+            dataAvailable: {
+              target: "stopped",
+              actions: ["stopIfWaiting", "sendData"],
+              description: "Stop after final audio data collected",
+            },
+          },
+        },
+
+        stopped: {
+          entry: "clearWaitingToStop",
+          always: {
+            target: "idle",
+          },
+        },
       },
-      pendingStart: (context, event) => {
-        return context.waitingToStart === true;
+      on: {
+        release: {
+          target: "released",
+          actions: {
+            type: "releaseMicrophone",
+          },
+        },
       },
     },
-    delays: {},
-  }
-);
+  },
+});
 
 interface OverconstrainedError extends DOMException {
   constraint: string;

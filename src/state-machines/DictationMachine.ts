@@ -1,11 +1,4 @@
-import {
-  createMachine,
-  Typestate,
-  assign,
-  log,
-  DoneInvokeEvent,
-  State,
-} from "xstate";
+import { setup, assign } from "xstate";
 import {
   uploadAudioWithRetry,
   uploadAudioForRefinement,
@@ -162,42 +155,6 @@ interface DictationContext {
   // Accumulated refined text per target for incremental refinement (O(n) optimization)
   // Used as initial_prompt context when refining only new segments
   refinedTextByTarget: Record<string, string>;
-}
-
-// Define the state schema
-type DictationStateSchema = {
-  states: {
-    idle: {};
-    errors: {
-      states: {
-        transcribeFailed: {};
-        micError: {};
-      };
-    };
-    starting: {};
-    listening: {
-      states: {
-        recording: {
-          states: {
-            userSpeaking: {};
-            notSpeaking: {};
-          };
-        };
-        converting: {
-          states: {
-            transcribing: {};
-            accumulating: {};
-            refining: {};
-          };
-        };
-      };
-    };
-  };
-};
-
-interface DictationTypestate extends Typestate<DictationContext> {
-  value: "idle" | "starting" | "listening" | "errors";
-  context: DictationContext;
 }
 
 function getHighestKey(transcriptions: Record<number, string>): number {
@@ -1270,429 +1227,35 @@ export function computeFinalText(
   );
 }
 
-const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
-  {
-    /** @xstate-layout N4IgpgJg5mDOIC5QQJYGMAuBDDKD2AdgMSxYCeADigrHLPgQlrPVAZANoAMAuoqBTz1chfiAAeiAIxcpAJgB0AdgAscuSoBs2gBwBOOQFYANCDLS5AX0unUmHAwUoIAGzAlyVGtgBOGACLo2CIE3HxIIILCDGKSCFIqUkoKOppKcgYqhnqaCabm8TqKeoYAzFIVpVlcsjrWtkEOhAqwvrgEUB6U1GhYLi4ASmBYEGRhYlEoIbGIhkr5iHJSmgqGZfIqXGVKFXP1IHbBjq1YfigdXV6teBSB9iHjEZPTEXEJSSlpGRrZuSoLCFKmkMCk2miM6SSaxUen2hyaBBabXOnVI3QQvX6ADEsCg3BBHgIhFMYq9pKU9MlUulMr88mZELlFFJDOD5BSuKUlJo6jYDo0QkjTu1OuIThgwAosAAzCU+AAUMhqXAAlER4YKTmcOoTIsSXqA3psqV9aTl6QUVCpkmCfiodDolFwlIY4QLHC4UK0wAQUZdqNdbu7CLrnqTDdI1CaaT9zf8GfEuBoFDy5EUWVI9HpylY+RqPV6Jb6OgofGA0HgfKgLmirhgbncjiHeBN9eGJJHnZ8Y1k4wCpFyuKt9FxNFzNKPcm77gXvcWoKXy5XqwuCHgMABlCjDADWftr1AArrQfFjzl6ABaQLe7lGhtuiMnxCnR769v79wxGUElUqjmoDnoo7Tk2iKenOKKLhWVaQWum7blge41p4R4njeiF3i2TwPgQMwIC6ijOpyOicjCSayP2A4gnoRRFJyqjaIYvINDOzTgUWkFltBK4KMeYA+OhSGoihCB8QJ9YUNuECCZh4REtEj4RggZSlAopRFEoTpMS6QJSP2chAgoNFplwlIGF+3IgQiCjsT6nFLjBJZiTJyHos5ElSS5UAcFIcl6gpuFPipakaVpjplLklGpKCtEslwOilL8ShWYKtnzgoFYEAAbvxIpSmgaCHgAtoeLgOK5XgYD4WAELAaA+CgABGnBYfJJKKR2+FVEZSQJako6lAZ8YFKoijWpSsiGFw9oJclebBmBhZ2SWmU5dqC5YAVxWleVwnolVNV1Q1zU4niLV+WGHVGly3ZvnSw2IHoagprRpSDfamk6K682sYtEErYQa15ZthUlWVIr+ggB21fVTWQAAokVFAYGMrX+e1gVKQkN3UndfYJv1L1plalLckYzH8r9NlLelq25ZBIPbeDfpisEkoynK8pTTUar5mxNOQXT635aDO0iveAV4WkAIGeoRm-uo2jLFRKWzhxAPZfTJbQ0dTX7iJOuw81BJo5dmOdYNKxMUx2hKFm1qGA9CBpEOX4TdkahqFIqv8-9C5C3lhvHfr+3VTDx1gKd+ISxjeGW8ONtpPbLpO3bOgxcT2RTWs00+396v+4DWsLkHesVdQpfG4jyOoxdOFx3IVtfakSdPSnAIOkO9pplU6hJJy3s-aBCj8T4lawAoleR7i+JEKzODs7K-Hyn+PPqgtI8+GPPgT1PUfna2ktPppMtbMUv4VDySUqHnm-bxPRXoPDW+VnP4qL5zq+quvVOj+PCiPzQM-beMcDSdUdP2SkqksxlBqDsTkSxeR8jXBAOAYg+bmzNnhAAtOoAEJRQTrFljCHIShUi32cG4Q+scnxZGSFmLMwIyjvhdKfdSCgtjxRKAOB0jtb5ahFNQsBcRBwKCGolWoStUgy2WKsDIXxHTAmzKUW+aUURCPbHERuAI3p6A4fIp6WxNLciqKogWJYuLLnUdhI+Sk7b9hqNA166QvoGTMX7KCViSxwS8hoq6j05gvRdAkcEtROSUTSGIwaOgkgGW5DoLI7iC6eMcguZyCEhJ+PNm8OQ8wEwVASS9bIuis7yE0Ek5ahdNbrSyXhVQAImKqSTJSXq1p1JzRYsPNRGsgYMy2mDXatTj4fGtglAyVRnR4IJi6UE0TEiGAHLIN6FTaZF2FpXaxbVhEWDkACMmGcEpZh2CZDplNh5-x3kMrGmkQS4zmPbJY8UAT2mgaOIwVFyg5lORgu+-894z0gFczqUgiiqTuXbJ6jydB7JBUZN5pl5DvIpj8i5D8n4vx8ECt4oLbr3MhTIaFCZcjUTeSCyEZNynWEsEAA */
-    context: {
-      transcriptions: {},
-      transcriptionsByTarget: {},
-      initialTextByTarget: {},
-      caretRangeByTarget: {},
-      isTranscribing: false,
-      userIsSpeaking: false,
-      timeUserStoppedSpeaking: 0,
-      timeUserStartedSpeaking: 0,
-      timeLastTranscriptionReceived: 0,
-      accumulatedText: "",
-      transcriptionTargets: {},
-      provisionalTranscriptionTarget: undefined,
-      targetSwitchesDuringSpeech: undefined,
-      speechStartTarget: undefined,
-      audioSegmentsByTarget: {},
-      refinementPendingForTargets: new Set<string>(),
-      pendingRefinements: new Map(),
-      refinedTextByTarget: {},
-    },
-    id: "dictation",
-    initial: "idle",
-    states: {
-      idle: {
-        description: "Idle state, not listening. Ready to start dictation.",
-        entry: [
-          {
-            type: "resetDictationState",
-          },
-        ],
-        on: {
-          "saypi:startDictation": {
-            target: "starting",
-            description: "Start dictation for the focused input field",
-            actions: [
-              assign({
-                targetElement: (context, event: DictationStartEvent) => event.targetElement,
-                accumulatedText: "",
-                initialTextByTarget: (context, event: DictationStartEvent) => {
-                  if (event.targetElement) {
-                    const targetId = getTargetElementId(event.targetElement);
-                    const initialText = getTextInTarget(event.targetElement);
-                    
-                    // For contenteditable elements, distinguish between DOM formatting whitespace vs user-entered content
-                    let cleanedInitialText = initialText;
-                    if (event.targetElement.contentEditable === "true" && initialText.trim() === "") {
-                      // Check if this is just DOM formatting whitespace (spaces, tabs, newlines without <br> tags)
-                      // vs user-entered whitespace (which would contain <br> tags or other HTML)
-                      const innerHTML = event.targetElement.innerHTML || '';
-                      const hasUserEnteredContent = innerHTML.includes('<br') || innerHTML.includes('<div') || innerHTML.includes('&nbsp;');
-                      
-                      if (!hasUserEnteredContent) {
-                        // This is just DOM formatting whitespace, treat as empty
-                        cleanedInitialText = "";
-                      }
-                      // Otherwise preserve the whitespace as it represents user-entered content
-                    }
-                      
-                    const updated = { ...context.initialTextByTarget };
-                    updated[targetId] = cleanedInitialText;
-                    console.log(`Captured initial text for target ${targetId} on start:`, JSON.stringify(cleanedInitialText));
-                    return updated;
-                  }
-                  return context.initialTextByTarget;
-                },
-                caretRangeByTarget: (context, event: DictationStartEvent) => {
-                  // Capture the caret/selection at dictation start so transcribed
-                  // text is inserted there rather than appended at the end (#178).
-                  if (event.targetElement) {
-                    const targetId = getTargetElementId(event.targetElement);
-                    const caretRange = captureCaretRange(event.targetElement);
-                    const updated = { ...context.caretRangeByTarget };
-                    if (caretRange) {
-                      updated[targetId] = caretRange;
-                    } else {
-                      delete updated[targetId];
-                    }
-                    return updated;
-                  }
-                  return context.caretRangeByTarget;
-                },
-              }),
-            ],
-          },
-        },
-      },
+type ActionArgs = { context: DictationContext; event: DictationEvent };
+type GuardArgs = { context: DictationContext; event: DictationEvent };
+type DelayArgs = { context: DictationContext; event: DictationEvent };
 
-      starting: {
-        description: "Dictation is starting. Waiting for microphone to be acquired.",
-        entry: [
-          {
-            type: "setupRecording",
-          },
-        ],
-        on: {
-          "saypi:callReady": {
-            target: "listening.recording",
-            actions: [
-              {
-                type: "startRecording",
-              },
-            ],
-            description: "VAD microphone is ready. Start recording.",
-          },
-          "saypi:stopDictation": {
-            target: "idle",
-            description: "Dictation was cancelled before it started.",
-          },
-          "saypi:callFailed": {
-            target: "errors.micError",
-            description: "VAD microphone failed to start. Audio device not available.",
-          },
-        },
-        after: {
-          "10000": {
-            target: "errors.micError",
-            description: "Dictation failed to start after 10 seconds.",
-          },
-        },
-      },
-
-      listening: {
-        description: "Actively listening for user input and transcribing speech.",
-        entry: [
-          {
-            type: "acquireMicrophone",
-          },
-          assign({ 
-            timeUserStoppedSpeaking: 0
-          }),
-        ],
-        exit: [
-          {
-            type: "clearTranscriptsAction",
-          },
-          {
-            type: "clearPendingTranscriptionsAction",
-          },
-        ],
-        states: {
-          recording: {
-            description: "Microphone is on and VAD is actively listening for user speech.",
-            initial: "notSpeaking",
-            states: {
-              notSpeaking: {
-                description: "Microphone is recording but no speech is detected.",
-                on: {
-                  "saypi:userFinishedSpeaking": {
-                    target: "#dictation.idle",
-                  },
-                  "saypi:userSpeaking": {
-                    target: "userSpeaking",
-                  },
-                },
-              },
-              userSpeaking: {
-                description: "User is speaking and being recorded by the microphone.",
-                entry: [
-                  assign({ 
-                    userIsSpeaking: true,
-                    timeUserStoppedSpeaking: 0,
-                    timeUserStartedSpeaking: () => Date.now(),
-                    speechStartTarget: (context) => context.targetElement,
-                  }),
-                  {
-                    type: "recordProvisionalTranscriptionTarget",
-                  },
-                ],
-                exit: [
-                  assign({ userIsSpeaking: false }),
-                ],
-                on: {
-                  "saypi:switchTarget": {
-                    actions: [
-                      {
-                        type: "recordTargetSwitchDuringSpeech",
-                      },
-                      {
-                        type: "switchTargetElement",
-                      },
-                    ],
-                    description: "Record target switch timing during speech and switch target",
-                  },
-                  "saypi:userStoppedSpeaking": [
-                    {
-                      target: [
-                        "notSpeaking",
-                        "#dictation.listening.converting.transcribing",
-                      ],
-                      cond: "hasAudio",
-                      actions: [
-                        assign({
-                          timeUserStoppedSpeaking: () => new Date().getTime(),
-                        }),
-                        {
-                          type: "handleAudioStopped",
-                        },
-                      ],
-                    },
-                    {
-                      target: "notSpeaking",
-                      cond: "hasNoAudio",
-                      actions: [
-                        {
-                          type: "discardProvisionalTranscriptionTarget",
-                        },
-                        {
-                          type: "clearTargetSwitchInfo",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              },
-            },
-            on: {
-              "saypi:stopDictation": {
-                target: "#dictation.idle",
-                actions: [
-                  {
-                    type: "stopRecording",
-                  },
-                  {
-                    type: "finalizeDictation",
-                  },
-                ],
-                description: "Stop dictation and return to idle state.",
-              },
-            },
-          },
-
-          converting: {
-            initial: "ready",
-            states: {
-              ready: {
-                description: "Ready to process transcriptions, but no timeout yet.",
-                on: {
-                  "saypi:transcribed": {
-                    target: "accumulating",
-                    actions: {
-                      type: "handleTranscriptionResponse",
-                    },
-                    description: "First transcription received. Start accumulating.",
-                  },
-                  "saypi:transcribeFailed": {
-                    target: "#dictation.errors.transcribeFailed",
-                    description: "Error response from the /transcribe API",
-                  },
-                  "saypi:transcribedEmpty": {
-                    target: "#dictation.errors.micError",
-                    description: "Empty response from the /transcribe API",
-                  },
-                },
-              },
-              accumulating: {
-                description: "Accumulating transcriptions and streaming to target field.",
-                after: {
-                  refinementDelay: {
-                    target: "refining",
-                    cond: "refinementConditionsMet",
-                    description: "Trigger refinement after endpoint (EOS) detected",
-                  },
-                },
-                on: {
-                  "saypi:transcribed": {
-                    target: "accumulating",
-                    actions: {
-                      type: "handleTranscriptionResponse",
-                    },
-                    description: "Additional transcriptions received.",
-                  },
-                  "saypi:refineTranscription": {
-                    target: "refining",
-                    cond: "hasSegmentsForRefinement",
-                    description: "Explicit refinement request (e.g., from field blur)",
-                  },
-                  "saypi:transcribeFailed": {
-                    target: "#dictation.errors.transcribeFailed",
-                    description: "Error response from the /transcribe API",
-                  },
-                  "saypi:transcribedEmpty": {
-                    target: "#dictation.errors.micError",
-                    description: "Empty response from the /transcribe API",
-                  },
-                },
-              },
-              refining: {
-                description: "Phase 2 refinement: re-transcribing with full audio context",
-                entry: [
-                  {
-                    type: "performContextualRefinement",
-                  },
-                ],
-                on: {
-                  "saypi:transcribed": {
-                    target: "accumulating",
-                    actions: {
-                      type: "handleTranscriptionResponse",
-                    },
-                    description: "Refinement transcription received.",
-                  },
-                  "saypi:transcribeFailed": {
-                    target: "accumulating",
-                    description: "Refinement failed, continue with Phase 1 text",
-                  },
-                },
-              },
-              transcribing: {
-                description: "Transcribing audio to text.",
-                entry: [
-                  assign({ isTranscribing: true }),
-                ],
-                exit: [
-                  assign({ isTranscribing: false }),
-                ],
-                on: {
-                  "saypi:transcribed": {
-                    target: "accumulating",
-                    actions: {
-                      type: "handleTranscriptionResponse",
-                    },
-                    description: "Successfully transcribed user audio to text.",
-                  },
-                  "saypi:transcribeFailed": {
-                    target: "ready",
-                    description: "Transcription failed, return to ready state",
-                  },
-                  "saypi:transcribedEmpty": {
-                    target: "ready",
-                    description: "Empty transcription, return to ready state",
-                  },
-                },
-              },
-            },
-          },
-        },
-        on: {
-          "saypi:stopDictation": {
-            target: "idle",
-            actions: [
-              {
-                type: "stopRecording",
-              },
-              {
-                type: "finalizeDictation",
-              },
-            ],
-            description: "Stop dictation manually.",
-          },
-        },
-        type: "parallel",
-      },
-
-      errors: {
-        description: "Error states for dictation failures.",
-        states: {
-          transcribeFailed: {
-            description: "The /transcribe API responded with an error.",
-            after: {
-              "3000": {
-                target: "#dictation.listening.recording.notSpeaking",
-                description: "Return to listening after showing error briefly.",
-              },
-            },
-          },
-          micError: {
-            description: "Microphone error or no audio input detected",
-            after: {
-              "3000": {
-                target: "#dictation.listening.recording.notSpeaking",
-                description: "Return to listening after showing error briefly.",
-              },
-            },
-          },
-        },
-      },
-    },
-    on: {
-      "saypi:session:assigned": {
-        actions: assign({
-          sessionId: (context, event: DictationSessionAssignedEvent) =>
-            event.session_id,
-        }),
-      },
-      "saypi:switchTarget": {
-        actions: "switchTargetElement",
-      },
-      "saypi:manualEdit": {
-        target: "idle",
-        actions: "handleManualEdit",
-        description: "Manual edit detected - terminate dictation for predictable behavior"
-      },
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
+export const machine = setup({
+  types: {
+    context: {} as DictationContext,
+    events: {} as DictationEvent,
   },
-  {
-    actions: {
-      setupRecording: (context, event) => {
+  actions: {
+      setupRecording: () => {
         EventBus.emit("audio:setupRecording");
       },
 
-      startRecording: (context, event) => {
+      startRecording: () => {
         EventBus.emit("audio:startRecording");
       },
 
-      stopRecording: (context, event) => {
+      stopRecording: () => {
         EventBus.emit("audio:stopRecording");
         EventBus.emit("audio:tearDownRecording");
       },
 
-      acquireMicrophone: (context, event) => {
+      acquireMicrophone: () => {
         // Setup microphone for dictation
         EventBus.emit("audio:setupRecording");
       },
 
-      recordProvisionalTranscriptionTarget: (
-        context: DictationContext,
-        event: any
-      ) => {
+      recordProvisionalTranscriptionTarget: ({ context }: ActionArgs) => {
         // Provisionally record which target element this transcription will originate from
         // We use +1 because the transcription request hasn't been sent yet
         const provisionalSequenceNum = getCurrentSequenceNumber() + 1;
@@ -1705,10 +1268,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
       },
 
-      discardProvisionalTranscriptionTarget: (
-        context: DictationContext,
-        event: any
-      ) => {
+      discardProvisionalTranscriptionTarget: ({ context }: ActionArgs) => {
         // Discard provisional target on VAD misfire (user stopped speaking without audio)
         if (context.provisionalTranscriptionTarget) {
           console.debug(`Discarding provisional transcription target for sequence ${context.provisionalTranscriptionTarget.sequenceNumber} due to VAD misfire`);
@@ -1716,16 +1276,14 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
       },
 
-      handleTranscriptionResponse: (
-        context: DictationContext,
-        event: DictationTranscribedEvent
-      ) => {
+      handleTranscriptionResponse: ({ context, event }: ActionArgs) => {
+        const transcribedEvent = event as DictationTranscribedEvent;
         // Update the timestamp for endpoint detection
         context.timeLastTranscriptionReceived = Date.now();
 
-        let transcription = event.text;
-        const sequenceNumber = event.sequenceNumber;
-        const mergedSequences = event.merged || [];
+        let transcription = transcribedEvent.text;
+        const sequenceNumber = transcribedEvent.sequenceNumber;
+        const mergedSequences = transcribedEvent.merged || [];
 
         // NOTE: Refinement responses bypass event bus (handled in performContextualRefinement).
         // This handler ONLY processes Phase 1 (live streaming) transcriptions.
@@ -1875,7 +1433,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         refinedTextByTarget: () => ({}),
       }),
 
-      finalizeDictation: (context: DictationContext) => {
+      finalizeDictation: ({ context }: ActionArgs) => {
         // Generate final merged text from current target's transcriptions
         let finalText = context.accumulatedText;
 
@@ -1896,23 +1454,24 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         console.log("Dictation completed for target:", context.targetElement, "with text:", finalText);
       },
 
-      switchTargetElement: (context: DictationContext, event: any) => {
+      switchTargetElement: ({ context, event }: ActionArgs) => {
+        const switchEvent = event as { type: string; targetElement: HTMLElement };
         // Update the module-level targetInputElement to point to the new target
-        targetInputElement = event.targetElement;
-        
+        targetInputElement = switchEvent.targetElement;
+
         // Also update the context for consistency
-        context.targetElement = event.targetElement;
-        
+        context.targetElement = switchEvent.targetElement;
+
         // Capture the pre-existing text in the new target element
-        const targetId = getTargetElementId(event.targetElement);
-        const initialText = getTextInTarget(event.targetElement);
-        
+        const targetId = getTargetElementId(switchEvent.targetElement);
+        const initialText = getTextInTarget(switchEvent.targetElement);
+
         // For contenteditable elements, distinguish between DOM formatting whitespace vs user-entered content
         let cleanedInitialText = initialText;
-        if (event.targetElement.contentEditable === "true" && initialText.trim() === "") {
+        if (switchEvent.targetElement.contentEditable === "true" && initialText.trim() === "") {
           // Check if this is just DOM formatting whitespace (spaces, tabs, newlines without <br> tags)
           // vs user-entered whitespace (which would contain <br> tags or other HTML)
-          const innerHTML = event.targetElement.innerHTML || '';
+          const innerHTML = switchEvent.targetElement.innerHTML || '';
           const hasUserEnteredContent = innerHTML.includes('<br') || innerHTML.includes('<div') || innerHTML.includes('&nbsp;');
           
           if (!hasUserEnteredContent) {
@@ -1926,7 +1485,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
         // Capture the caret/selection in the new target so transcribed text is
         // inserted at that position rather than appended at the end (#178).
-        const caretRange = captureCaretRange(event.targetElement);
+        const caretRange = captureCaretRange(switchEvent.targetElement);
         if (caretRange) {
           context.caretRangeByTarget[targetId] = caretRange;
         } else {
@@ -1934,24 +1493,22 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
 
         console.log(`Captured initial text for target ${targetId}:`, JSON.stringify(cleanedInitialText));
-        
+
         // Clear only global transcriptions, preserve target-specific mappings
         // This allows in-flight transcriptions to complete for their original targets
         context.transcriptions = {};
         context.accumulatedText = "";
-        
+
         // NOTE: Do NOT clear transcriptionTargets, transcriptionsByTarget, or provisionalTranscriptionTarget here
         // In-flight transcriptions (both confirmed and provisional) need their target mappings preserved
         // These should only be cleared when the dictation session actually ends
-        
-        console.log("Dictation target element switched to:", event.targetElement);
+
+        console.log("Dictation target element switched to:", switchEvent.targetElement);
         console.log("Cleared global transcriptions context, preserved target-specific mappings");
       },
 
-      recordTargetSwitchDuringSpeech: (
-        context: DictationContext,
-        event: { type: "saypi:switchTarget"; targetElement: HTMLElement }
-      ) => {
+      recordTargetSwitchDuringSpeech: ({ context, event }: ActionArgs) => {
+        const switchEvent = event as { type: "saypi:switchTarget"; targetElement: HTMLElement };
         // Lazily initialise the array if this is the first switch for this speech
         if (!context.targetSwitchesDuringSpeech) {
           context.targetSwitchesDuringSpeech = [];
@@ -1959,7 +1516,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
         context.targetSwitchesDuringSpeech.push({
           timestamp: Date.now(),
-          target: event.targetElement,
+          target: switchEvent.targetElement,
         });
 
         console.debug(
@@ -1967,17 +1524,15 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           context.targetSwitchesDuringSpeech.length,
           {
             timestamp: context.targetSwitchesDuringSpeech.at(-1)?.timestamp,
-            newTarget: event.targetElement,
+            newTarget: switchEvent.targetElement,
           }
         );
       },
 
-      handleAudioStopped: (
-        context: DictationContext,
-        event: DictationSpeechStoppedEvent
-      ) => {
+      handleAudioStopped: ({ context, event }: ActionArgs) => {
+        const speechEvent = event as DictationSpeechStoppedEvent;
         // If there's no audio blob, nothing to process
-        if (!event.blob) {
+        if (!speechEvent.blob) {
           return;
         }
 
@@ -1994,11 +1549,11 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
           const blob = convertToWavBlob(audioData);
           const duration = (audioData.length / SAMPLE_RATE) * 1000;
-          const captureTs = event.captureTimestamp
-            ? event.captureTimestamp + offsetMs
+          const captureTs = speechEvent.captureTimestamp
+            ? speechEvent.captureTimestamp + offsetMs
             : undefined;
-          const clientReceiveTs = event.clientReceiveTimestamp
-            ? event.clientReceiveTimestamp + offsetMs
+          const clientReceiveTs = speechEvent.clientReceiveTimestamp
+            ? speechEvent.clientReceiveTimestamp + offsetMs
             : undefined;
 
           uploadAudioSegment(
@@ -2015,12 +1570,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         };
 
         // If there were one or more target switches during the speech, split the audio accordingly
-        if (context.targetSwitchesDuringSpeech && context.targetSwitchesDuringSpeech.length > 0 && event.frames) {
+        if (context.targetSwitchesDuringSpeech && context.targetSwitchesDuringSpeech.length > 0 && speechEvent.frames) {
           const switches = [...context.targetSwitchesDuringSpeech].sort((a, b) => a.timestamp - b.timestamp);
 
-          const audioStartTs = (event.captureTimestamp || Date.now()) - event.duration;
+          const audioStartTs = (speechEvent.captureTimestamp || Date.now()) - speechEvent.duration;
 
-          const raw = new Float32Array(event.frames);
+          const raw = new Float32Array(speechEvent.frames);
 
           let prevOffset = 0; // in samples
           let prevTarget: HTMLElement | undefined = context.speechStartTarget || context.targetElement;
@@ -2029,7 +1584,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             const splitTimeMs = sw.timestamp - audioStartTs;
 
             // Ignore switch events that are out of audio bounds
-            if (splitTimeMs <= 0 || splitTimeMs >= event.duration) {
+            if (splitTimeMs <= 0 || splitTimeMs >= speechEvent.duration) {
               return;
             }
 
@@ -2064,23 +1619,21 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         if (context.targetElement) {
           uploadAudioSegment(
             context,
-            event.blob,
-            event.duration,
+            speechEvent.blob,
+            speechEvent.duration,
             context.targetElement,
             context.sessionId,
             MAX_RETRIES,
-            event.captureTimestamp,
-            event.clientReceiveTimestamp,
-            event.frames  // Pass frames for buffering
+            speechEvent.captureTimestamp,
+            speechEvent.clientReceiveTimestamp,
+            speechEvent.frames  // Pass frames for buffering
           );
         } else {
           console.warn("No target element set for transcription");
         }
       },
 
-      clearTargetSwitchInfo: (
-        context: DictationContext
-      ) => {
+      clearTargetSwitchInfo: ({ context }: ActionArgs) => {
         // Clear any accumulated switch info (used when VAD misfire occurs)
         if (context.targetSwitchesDuringSpeech && context.targetSwitchesDuringSpeech.length > 0) {
           console.debug("Clearing target switch info due to audio processing failure");
@@ -2088,42 +1641,40 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
       },
 
-      handleManualEdit: (
-        context: DictationContext,
-        event: DictationManualEditEvent
-      ) => {
+      handleManualEdit: ({ context, event }: ActionArgs) => {
+        const editEvent = event as DictationManualEditEvent;
         console.debug("Manual edit detected, terminating dictation", {
-          targetElement: event.targetElement,
-          newContent: event.newContent,
-          oldContent: event.oldContent
+          targetElement: editEvent.targetElement,
+          newContent: editEvent.newContent,
+          oldContent: editEvent.oldContent
         });
 
         // SIMPLIFIED APPROACH: Terminate dictation on manual edit
         // This is cleaner and more predictable than trying to reconcile changes
-        
+
         // Clear transcription state for the edited target
-        const targetId = getTargetElementId(event.targetElement);
+        const targetId = getTargetElementId(editEvent.targetElement);
         const targetTranscriptions = context.transcriptionsByTarget[targetId];
-        
+
         if (targetTranscriptions) {
           // Clear transcriptions for this target from global context
           // but preserve transcriptions for other targets
           Object.keys(targetTranscriptions).forEach(key => {
             const seq = parseInt(key, 10);
             // Only delete from global if this sequence belongs to the edited target
-            if (context.transcriptionTargets[seq] === event.targetElement) {
+            if (context.transcriptionTargets[seq] === editEvent.targetElement) {
               delete context.transcriptions[seq];
             }
           });
           delete context.transcriptionsByTarget[targetId];
         }
-        
+
         // Clear initial text (and the now-stale caret offset) for this target
         delete context.initialTextByTarget[targetId];
         delete context.caretRangeByTarget[targetId];
 
         // Reset accumulated text if this is the current target
-        if (event.targetElement === context.targetElement) {
+        if (editEvent.targetElement === context.targetElement) {
           context.accumulatedText = "";
         }
 
@@ -2133,7 +1684,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
         // Emit event to notify that dictation was terminated due to manual edit
         EventBus.emit("dictation:terminatedByManualEdit", {
-          targetElement: event.targetElement,
+          targetElement: editEvent.targetElement,
           reason: "manual-edit"
         });
 
@@ -2142,10 +1693,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         EventBus.emit("audio:tearDownRecording");
       },
 
-      performContextualRefinement: (
-        context: DictationContext,
-        event: DictationEvent
-      ) => {
+      performContextualRefinement: ({ context, event }: ActionArgs) => {
         console.debug("[DictationMachine] performContextualRefinement triggered");
 
         // Determine which target(s) to refine
@@ -2292,32 +1840,31 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           });
         } // end for loop over targetsToRefine
       },
-    },
-    services: {},
-    guards: {
-      hasAudio: (_, event: DictationEvent) => {
+  },
+  guards: {
+      hasAudio: ({ event }: GuardArgs) => {
         if (event.type === "saypi:userStoppedSpeaking") {
-          event = event as DictationSpeechStoppedEvent;
-          return event.blob !== undefined && event.duration > 0;
+          const speechEvent = event as DictationSpeechStoppedEvent;
+          return speechEvent.blob !== undefined && speechEvent.duration > 0;
         }
         return false;
       },
-      hasNoAudio: (_, event: DictationEvent) => {
+      hasNoAudio: ({ event }: GuardArgs) => {
         if (event.type === "saypi:userStoppedSpeaking") {
-          event = event as DictationSpeechStoppedEvent;
+          const speechEvent = event as DictationSpeechStoppedEvent;
           return (
-            event.blob === undefined ||
-            event.blob.size === 0 ||
-            event.duration === 0
+            speechEvent.blob === undefined ||
+            speechEvent.blob.size === 0 ||
+            speechEvent.duration === 0
           );
         }
         return false;
       },
-      refinementConditionsMet: (context: DictationContext) => {
+      refinementConditionsMet: ({ context }: GuardArgs) => {
         // Check if we have pending refinements and not currently transcribing
         return context.refinementPendingForTargets.size > 0 && !context.isTranscribing;
       },
-      hasSegmentsForRefinement: (context: DictationContext, event: DictationEvent) => {
+      hasSegmentsForRefinement: ({ context, event }: GuardArgs) => {
         if (event.type !== "saypi:refineTranscription") {
           return false;
         }
@@ -2330,9 +1877,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const segments = context.audioSegmentsByTarget[targetId];
         return Array.isArray(segments) && segments.length > 0;
       },
-    },
-    delays: {
-      refinementDelay: (context: DictationContext, event: DictationEvent) => {
+  },
+  delays: {
+      refinementDelay: ({ context, event }: DelayArgs) => {
         // Only calculate delay for transcription events
         if (event.type !== "saypi:transcribed") {
           return 0;
@@ -2375,9 +1922,411 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
         return finalDelay;
       },
+  },
+}).createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QQJYGMAuBDDKD2AdgMSxYCeADigrHLPgQlrPVAZANoAMAuoqBTz1chfiAAeiAIxcpAJgB0AdgAscuSoBs2gBwBOOQFYANCDLS5AX0unUmHAwUoIAGzAlyVGtgBOGACLo2CIE3HxIIILCDGKSCFIqUkoKOppKcgYqhnqaCabm8TqKeoYAzFIVpVlcsjrWtkEOhAqwvrgEUB6U1GhYLi4ASmBYEGRhYlEoIbGIhkr5iHJSmgqGZfIqXGVKFXP1IHbBjq1YfigdXV6teBSB9iHjEZPTEXEJSSlpGRrZuSoLCFKmkMCk2miM6SSaxUen2hyaBBabXOnVI3QQvX6ADEsCg3BBHgIhFMYq9pKU9MlUulMr88mZELlFFJDOD5BSuKUlJo6jYDo0QkjTu1OuIThgwAosAAzCU+AAUMhqXAAlER4YKTmcOoTIsSXqA3psqV9aTl6QUVCpkmCfiodDolFwlIY4QLHC4UK0wAQUZdqNdbu7CLrnqTDdI1CaaT9zf8GfEuBoFDy5EUWVI9HpylY+RqPV6Jb6OgofGA0HgfKgLmirhgbncjiHeBN9eGJJHnZ8Y1k4wCpFyuKt9FxNFzNKPcm77gXvcWoKXy5XqwuCHgMABlCjDADWftr1AArrQfFjzl6ABaQLe7lGhtuiMnxCnR769v79wxGUElUqjmoDnoo7Tk2iKenOKKLhWVaQWum7blge41p4R4njeiF3i2TwPgQMwIC6ijOpyOicjCSayP2A4gnoRRFJyqjaIYvINDOzTgUWkFltBK4KMeYA+OhSGoihCB8QJ9YUNuECCZh4REtEj4RggZSlAopRFEoTpMS6QJSP2chAgoNFplwlIGF+3IgQiCjsT6nFLjBJZiTJyHos5ElSS5UAcFIcl6gpuFPipakaVpjplLklGpKCtEslwOilL8ShWYKtnzgoFYEAAbvxIpSmgaCHgAtoeLgOK5XgYD4WAELAaA+CgABGnBYfJJKKR2+FVEZSQJako6lAZ8YFKoijWpSsiGFw9oJclebBmBhZ2SWmU5dqC5YAVxWleVwnolVNV1Q1zU4niLV+WGHVGly3ZvnSw2IHoagprRpSDfamk6K682sYtEErYQa15ZthUlWVIr+ggB21fVTWQAAokVFAYGMrX+e1gVKQkN3UndfYJv1L1plalLckYzH8r9NlLelq25ZBIPbeDfpisEkoynK8pTTUar5mxNOQXT635aDO0iveAV4WkAIGeoRm-uo2jLFRKWzhxAPZfTJbQ0dTX7iJOuw81BJo5dmOdYNKxMUx2hKFm1qGA9CBpEOX4TdkahqFIqv8-9C5C3lhvHfr+3VTDx1gKd+ISxjeGW8ONtpPbLpO3bOgxcT2RTWs00+396v+4DWsLkHesVdQpfG4jyOoxdOFx3IVtfakSdPSnAIOkO9pplU6hJJy3s-aBCj8T4lawAoleR7i+JEKzODs7K-Hyn+PPqgtI8+GPPgT1PUfna2ktPppMtbMUv4VDySUqHnm-bxPRXoPDW+VnP4qL5zq+quvVOj+PCiPzQM-beMcDSdUdP2SkqksxlBqDsTkSxeR8jXBAOAYg+bmzNnhAAtOoAEJRQTrFljCHIShUi32cG4Q+scnxZGSFmLMwIyjvhdKfdSCgtjxRKAOB0jtb5ahFNQsBcRBwKCGolWoStUgy2WKsDIXxHTAmzKUW+aUURCPbHERuAI3p6A4fIp6WxNLciqKogWJYuLLnUdhI+Sk7b9hqNA166QvoGTMX7KCViSxwS8hoq6j05gvRdAkcEtROSUTSGIwaOgkgGW5DoLI7iC6eMcguZyCEhJ+PNm8OQ8wEwVASS9bIuis7yE0Ek5ahdNbrSyXhVQAImKqSTJSXq1p1JzRYsPNRGsgYMy2mDXatTj4fGtglAyVRnR4IJi6UE0TEiGAHLIN6FTaZF2FpXaxbVhEWDkACMmGcEpZh2CZDplNh5-x3kMrGmkQS4zmPbJY8UAT2mgaOIwVFyg5lORgu+-894z0gFczqUgiiqTuXbJ6jydB7JBUZN5pl5DvIpj8i5D8n4vx8ECt4oLbr3MhTIaFCZcjUTeSCyEZNynWEsEAA */
+    context: () => ({
+      transcriptions: {},
+      transcriptionsByTarget: {},
+      initialTextByTarget: {},
+      caretRangeByTarget: {},
+      isTranscribing: false,
+      userIsSpeaking: false,
+      timeUserStoppedSpeaking: 0,
+      timeUserStartedSpeaking: 0,
+      timeLastTranscriptionReceived: 0,
+      accumulatedText: "",
+      transcriptionTargets: {},
+      provisionalTranscriptionTarget: undefined,
+      targetSwitchesDuringSpeech: undefined,
+      speechStartTarget: undefined,
+      audioSegmentsByTarget: {},
+      refinementPendingForTargets: new Set<string>(),
+      pendingRefinements: new Map(),
+      refinedTextByTarget: {},
+    }),
+    id: "dictation",
+    initial: "idle",
+    states: {
+      idle: {
+        description: "Idle state, not listening. Ready to start dictation.",
+        entry: [
+          {
+            type: "resetDictationState",
+          },
+        ],
+        on: {
+          "saypi:startDictation": {
+            target: "starting",
+            description: "Start dictation for the focused input field",
+            actions: [
+              assign({
+                targetElement: ({ event }) =>
+                  (event as DictationStartEvent).targetElement,
+                accumulatedText: "",
+                initialTextByTarget: ({ context, event }) => {
+                  const startEvent = event as DictationStartEvent;
+                  if (startEvent.targetElement) {
+                    const targetId = getTargetElementId(startEvent.targetElement);
+                    const initialText = getTextInTarget(startEvent.targetElement);
+
+                    // For contenteditable elements, distinguish between DOM formatting whitespace vs user-entered content
+                    let cleanedInitialText = initialText;
+                    if (startEvent.targetElement.contentEditable === "true" && initialText.trim() === "") {
+                      // Check if this is just DOM formatting whitespace (spaces, tabs, newlines without <br> tags)
+                      // vs user-entered whitespace (which would contain <br> tags or other HTML)
+                      const innerHTML = startEvent.targetElement.innerHTML || '';
+                      const hasUserEnteredContent = innerHTML.includes('<br') || innerHTML.includes('<div') || innerHTML.includes('&nbsp;');
+                      
+                      if (!hasUserEnteredContent) {
+                        // This is just DOM formatting whitespace, treat as empty
+                        cleanedInitialText = "";
+                      }
+                      // Otherwise preserve the whitespace as it represents user-entered content
+                    }
+                      
+                    const updated = { ...context.initialTextByTarget };
+                    updated[targetId] = cleanedInitialText;
+                    console.log(`Captured initial text for target ${targetId} on start:`, JSON.stringify(cleanedInitialText));
+                    return updated;
+                  }
+                  return context.initialTextByTarget;
+                },
+                caretRangeByTarget: ({ context, event }) => {
+                  const startEvent = event as DictationStartEvent;
+                  // Capture the caret/selection at dictation start so transcribed
+                  // text is inserted there rather than appended at the end (#178).
+                  if (startEvent.targetElement) {
+                    const targetId = getTargetElementId(startEvent.targetElement);
+                    const caretRange = captureCaretRange(startEvent.targetElement);
+                    const updated = { ...context.caretRangeByTarget };
+                    if (caretRange) {
+                      updated[targetId] = caretRange;
+                    } else {
+                      delete updated[targetId];
+                    }
+                    return updated;
+                  }
+                  return context.caretRangeByTarget;
+                },
+              }),
+            ],
+          },
+        },
+      },
+
+      starting: {
+        description: "Dictation is starting. Waiting for microphone to be acquired.",
+        entry: [
+          {
+            type: "setupRecording",
+          },
+        ],
+        on: {
+          "saypi:callReady": {
+            target: "listening.recording",
+            actions: [
+              {
+                type: "startRecording",
+              },
+            ],
+            description: "VAD microphone is ready. Start recording.",
+          },
+          "saypi:stopDictation": {
+            target: "idle",
+            description: "Dictation was cancelled before it started.",
+          },
+          "saypi:callFailed": {
+            target: "errors.micError",
+            description: "VAD microphone failed to start. Audio device not available.",
+          },
+        },
+        after: {
+          "10000": {
+            target: "errors.micError",
+            description: "Dictation failed to start after 10 seconds.",
+          },
+        },
+      },
+
+      listening: {
+        description: "Actively listening for user input and transcribing speech.",
+        entry: [
+          {
+            type: "acquireMicrophone",
+          },
+          assign({ 
+            timeUserStoppedSpeaking: 0
+          }),
+        ],
+        exit: [
+          {
+            type: "clearTranscriptsAction",
+          },
+          {
+            type: "clearPendingTranscriptionsAction",
+          },
+        ],
+        states: {
+          recording: {
+            description: "Microphone is on and VAD is actively listening for user speech.",
+            initial: "notSpeaking",
+            states: {
+              notSpeaking: {
+                description: "Microphone is recording but no speech is detected.",
+                on: {
+                  "saypi:userFinishedSpeaking": {
+                    target: "#dictation.idle",
+                  },
+                  "saypi:userSpeaking": {
+                    target: "userSpeaking",
+                  },
+                },
+              },
+              userSpeaking: {
+                description: "User is speaking and being recorded by the microphone.",
+                entry: [
+                  assign({
+                    userIsSpeaking: true,
+                    timeUserStoppedSpeaking: 0,
+                    timeUserStartedSpeaking: () => Date.now(),
+                    speechStartTarget: ({ context }) => context.targetElement,
+                  }),
+                  {
+                    type: "recordProvisionalTranscriptionTarget",
+                  },
+                ],
+                exit: [
+                  assign({ userIsSpeaking: false }),
+                ],
+                on: {
+                  "saypi:switchTarget": {
+                    actions: [
+                      {
+                        type: "recordTargetSwitchDuringSpeech",
+                      },
+                      {
+                        type: "switchTargetElement",
+                      },
+                    ],
+                    description: "Record target switch timing during speech and switch target",
+                  },
+                  "saypi:userStoppedSpeaking": [
+                    {
+                      target: [
+                        "notSpeaking",
+                        "#dictation.listening.converting.transcribing",
+                      ],
+                      guard: "hasAudio",
+                      actions: [
+                        assign({
+                          timeUserStoppedSpeaking: () => new Date().getTime(),
+                        }),
+                        {
+                          type: "handleAudioStopped",
+                        },
+                      ],
+                    },
+                    {
+                      target: "notSpeaking",
+                      guard: "hasNoAudio",
+                      actions: [
+                        {
+                          type: "discardProvisionalTranscriptionTarget",
+                        },
+                        {
+                          type: "clearTargetSwitchInfo",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+            on: {
+              "saypi:stopDictation": {
+                target: "#dictation.idle",
+                actions: [
+                  {
+                    type: "stopRecording",
+                  },
+                  {
+                    type: "finalizeDictation",
+                  },
+                ],
+                description: "Stop dictation and return to idle state.",
+              },
+            },
+          },
+
+          converting: {
+            initial: "ready",
+            states: {
+              ready: {
+                description: "Ready to process transcriptions, but no timeout yet.",
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description: "First transcription received. Start accumulating.",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "#dictation.errors.transcribeFailed",
+                    description: "Error response from the /transcribe API",
+                  },
+                  "saypi:transcribedEmpty": {
+                    target: "#dictation.errors.micError",
+                    description: "Empty response from the /transcribe API",
+                  },
+                },
+              },
+              accumulating: {
+                description: "Accumulating transcriptions and streaming to target field.",
+                after: {
+                  refinementDelay: {
+                    target: "refining",
+                    guard: "refinementConditionsMet",
+                    description: "Trigger refinement after endpoint (EOS) detected",
+                  },
+                },
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description: "Additional transcriptions received.",
+                  },
+                  "saypi:refineTranscription": {
+                    target: "refining",
+                    guard: "hasSegmentsForRefinement",
+                    description: "Explicit refinement request (e.g., from field blur)",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "#dictation.errors.transcribeFailed",
+                    description: "Error response from the /transcribe API",
+                  },
+                  "saypi:transcribedEmpty": {
+                    target: "#dictation.errors.micError",
+                    description: "Empty response from the /transcribe API",
+                  },
+                },
+              },
+              refining: {
+                description: "Phase 2 refinement: re-transcribing with full audio context",
+                entry: [
+                  {
+                    type: "performContextualRefinement",
+                  },
+                ],
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description: "Refinement transcription received.",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "accumulating",
+                    description: "Refinement failed, continue with Phase 1 text",
+                  },
+                },
+              },
+              transcribing: {
+                description: "Transcribing audio to text.",
+                entry: [
+                  assign({ isTranscribing: true }),
+                ],
+                exit: [
+                  assign({ isTranscribing: false }),
+                ],
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description: "Successfully transcribed user audio to text.",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "ready",
+                    description: "Transcription failed, return to ready state",
+                  },
+                  "saypi:transcribedEmpty": {
+                    target: "ready",
+                    description: "Empty transcription, return to ready state",
+                  },
+                },
+              },
+            },
+          },
+        },
+        on: {
+          "saypi:stopDictation": {
+            target: "idle",
+            actions: [
+              {
+                type: "stopRecording",
+              },
+              {
+                type: "finalizeDictation",
+              },
+            ],
+            description: "Stop dictation manually.",
+          },
+        },
+        type: "parallel",
+      },
+
+      errors: {
+        description: "Error states for dictation failures.",
+        // v5 requires an explicit initial for compound states. The machine only
+        // ever targets errors.micError / errors.transcribeFailed directly, so this
+        // default is never reached in practice and is behavior-neutral.
+        initial: "transcribeFailed",
+        states: {
+          transcribeFailed: {
+            description: "The /transcribe API responded with an error.",
+            after: {
+              "3000": {
+                target: "#dictation.listening.recording.notSpeaking",
+                description: "Return to listening after showing error briefly.",
+              },
+            },
+          },
+          micError: {
+            description: "Microphone error or no audio input detected",
+            after: {
+              "3000": {
+                target: "#dictation.listening.recording.notSpeaking",
+                description: "Return to listening after showing error briefly.",
+              },
+            },
+          },
+        },
+      },
     },
-  }
-);
+    on: {
+      "saypi:session:assigned": {
+        actions: assign({
+          sessionId: ({ event }) =>
+            (event as DictationSessionAssignedEvent).session_id,
+        }),
+      },
+      "saypi:switchTarget": {
+        actions: "switchTargetElement",
+      },
+      "saypi:manualEdit": {
+        target: "#dictation.idle",
+        actions: "handleManualEdit",
+        description: "Manual edit detected - terminate dictation for predictable behavior"
+      },
+    },
+});
+
 
 export function createDictationMachine(targetElement?: HTMLElement) {
   targetInputElement = targetElement || null;

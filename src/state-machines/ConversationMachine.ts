@@ -1,10 +1,8 @@
 import {
-  createMachine,
-  Typestate,
+  setup,
   assign,
   log,
-  DoneInvokeEvent,
-  State,
+  fromPromise,
 } from "xstate";
 import AnimationModule from "../AnimationModule.js";
 import {
@@ -111,49 +109,6 @@ interface ConversationContext {
   isMaintainanceMessage?: boolean; // is the current message a maintainance message?
 }
 
-// Define the state schema
-type ConversationStateSchema = {
-  states: {
-    inactive: {};
-    errors: {
-      states: {
-        transcribeFailed: {};
-        micError: {};
-      };
-    };
-    callStarting: {};
-    listening: {
-      states: {
-        recording: {
-          states: {
-            userSpeaking: {};
-            notSpeaking: {};
-          };
-        };
-        converting: {
-          states: {
-            transcribing: {};
-            accumulating: {};
-            submitting: {};
-          };
-        };
-      };
-    };
-    responding: {
-      states: {
-        piThinking: {};
-        piWriting: {};
-        piSpeaking: {};
-      };
-    };
-  };
-};
-
-interface ConversationTypestate extends Typestate<ConversationContext> {
-  value: "listening" | "inactive" | "callStarting" | "errors" | "responding";
-  context: ConversationContext;
-}
-
 function getHighestKey(transcriptions: Record<number, string>): number {
   // Find the highest existing key in the transcriptions
   const highestKey = Object.keys(transcriptions).reduce(
@@ -251,7 +206,568 @@ const USER_STOPPED_TIMEOUT_MS = 10000;
 // promptly-detected response — it only rescues a genuine detection miss.
 const PI_THINKING_TIMEOUT_MS = 15000;
 
-const machine = createMachine<ConversationContext, ConversationEvent, ConversationTypestate>(
+const machine = setup({
+  types: {
+    context: {} as ConversationContext,
+    events: {} as ConversationEvent,
+  },
+  actions: {
+    stopAllAnimations: () => {
+      AnimationModule.stopAllAnimations();
+    },
+
+    startAnimation: (_, params: { animation: string }) => {
+      AnimationModule.startAnimation(params.animation);
+    },
+
+    stopAnimation: (_, params: { animation: string }) => {
+      AnimationModule.stopAnimation(params.animation);
+    },
+
+    transcribeAudio: ({ context, event }) => {
+      const e = event as ConversationSpeechStoppedEvent;
+      const audioBlob = e.blob;
+      if (audioBlob) {
+        uploadAudioWithRetry(
+          audioBlob,
+          e.duration,
+          context.transcriptions,
+          context.sessionId,
+          3, // default maxRetries
+          e.captureTimestamp,
+          e.clientReceiveTimestamp,
+          undefined, // inputType - not used in conversation mode
+          undefined, // inputLabel - not used in conversation mode
+          undefined  // onSequenceNumber - no target switching in conversation mode
+        );
+        EventBus.emit("session:transcribing", {
+          audio_duration_seconds: e.duration / 1000,
+          speech_end_time: Date.now(), // bit hacky, as it assumes the audio is transcribed immediately
+          speech_start_time: Date.now() - e.duration,
+          captureTimestamp: e.captureTimestamp,
+          clientReceiveTimestamp: e.clientReceiveTimestamp,
+          handlerTimestamp: e.handlerTimestamp
+        });
+      }
+    },
+
+    // v5: context is updated via assign (immutably) rather than mutating the
+    // shared definition context in place. In v4 this action mutated the singleton
+    // context object directly (context.transcriptions[seq] = ...), which leaked
+    // across interpreted actors. The assign form keeps each actor isolated.
+    handleTranscriptionResponse: assign(({ context, event }) => {
+      const e = event as ConversationTranscribedEvent;
+      const transcription = e.text;
+      const sequenceNumber = e.sequenceNumber;
+      const shouldRespondToThis = e.responseAnalysis?.shouldRespond;
+      logger.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\\'t respond"}]`);
+
+      const transcriptions = { ...context.transcriptions };
+
+      if (transcription && transcription.trim() !== "") {
+        transcriptions[sequenceNumber] = transcription;
+        TranscriptionErrorManager.recordAttempt(true); // Record success
+      } else {
+        // This case should ideally be handled by saypi:transcribedEmpty if the API guarantees it,
+        // but as a fallback, we can record a failure here if text is empty.
+        // However, the primary failure recording for empty will be on the saypi:transcribedEmpty event transition.
+      }
+
+      if (e.merged) {
+        e.merged.forEach((mergedSequenceNumber) => {
+          delete transcriptions[mergedSequenceNumber];
+        });
+      }
+
+      return {
+        transcriptions,
+        shouldRespond: shouldRespondToThis ?? shouldAlwaysRespond(),
+      };
+    }),
+
+    acquireMicrophone: () => {
+      // warmup the microphone on idle in mobile view,
+      // since there's no mouseover event to trigger it
+      if (ImmersionStateChecker.isViewImmersive()) {
+        EventBus.emit("audio:setupRecording");
+      }
+    },
+
+    setupRecording: () => {
+      // differs from acquireMicrophone in that it's user-initiated
+      EventBus.emit("audio:setupRecording");
+    },
+
+    startRecording: () => {
+      EventBus.emit("audio:startRecording");
+    },
+
+    pauseRecording: () => {
+      EventBus.emit("audio:input:stop");
+    },
+
+    pauseRecordingIfInterruptionsNotAllowed: () => {
+      const handsFreeInterrupt =
+        userPreferences.getCachedAllowInterruptions();
+      if (!handsFreeInterrupt) {
+        EventBus.emit("audio:input:stop");
+      }
+    },
+
+    resumeRecording: ({ context }) => {
+      if (context.lastState === "listening") {
+        // only resume recording if we were already listening
+        EventBus.emit("audio:startRecording");
+      }
+    },
+
+    stopRecording: () => {
+      EventBus.emit("audio:stopRecording");
+      EventBus.emit("audio:tearDownRecording");
+    },
+
+    reconnectAudio: () => {
+      EventBus.emit("audio:input:reconnect");
+    },
+
+    dismissNotification: () => {
+      textualNotifications.hideNotification();
+    },
+
+    showNotification: (_, params: { icon: string; message: string }) => {
+      textualNotifications.showNotification(params.message, params.icon);
+    },
+
+    notifyAudioConnected: ({ event }) => {
+      const e = event as ConversationAudioConnectedEvent;
+      const deviceLabel = e.deviceLabel;
+      const message = getMessage("audioConnected", deviceLabel);
+      textualNotifications.showNotification(message, "microphone");
+    },
+
+    notifyAudioReconnecting: ({ event }) => {
+      const e = event as ConversationAudioReconnectEvent;
+      const deviceLabel = e.deviceLabel;
+      const message = getMessage("audioReconnecting", deviceLabel);
+      textualNotifications.showNotification(message, "microphone-switch");
+    },
+
+    acknowledgeUserInput: () => {
+      visualNotifications.listeningStopped();
+      audibleNotifications.listeningStopped();
+    },
+
+    listenPrompt: () => {
+      const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+      const normalMode = shouldAlwaysRespond();
+      const message = getMessage(normalMode ? "assistantIsListening" : "assistantIsListeningAttentively", nickname);
+      if (message) {
+        getPromptOrNull()?.setMessage(message);
+      }
+    },
+    callStartingPrompt: () => {
+      const message = getMessage("callStarting");
+      if (message) {
+        const initialText = getPromptOrNull()?.getDraft();
+        assign({ defaultPlaceholderText: initialText });
+        getPromptOrNull()?.setMessage(message);
+      }
+    },
+    thinkingPrompt: () => {
+      const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+      const message = getMessage("assistantIsThinking", nickname);
+      if (message) {
+        const promptEditor = getPromptOrNull();
+        if (promptEditor) {
+          promptEditor.setMessage(message);
+        } else {
+          logger.warn("[ConversationMachine] [thinkingPrompt] no prompt editor found");
+        }
+      }
+    },
+    writingPrompt: () => {
+      const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+      const message = getMessage("assistantIsWriting", nickname);
+      if (message) {
+        getPromptOrNull()?.setMessage(message);
+      }
+    },
+    speakingPrompt: () => {
+      const handsFreeInterrupt =
+        userPreferences.getCachedAllowInterruptions();
+
+      const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+      const message = handsFreeInterrupt
+        ? getMessage("assistantIsSpeaking", nickname)
+        : getMessage(
+            "assistantIsSpeakingWithManualInterrupt",
+            nickname
+          );
+      if (message) {
+        getPromptOrNull()?.setMessage(message);
+      }
+    },
+    interruptingPiPrompt: () => {
+      const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+      const message = getMessage(
+        "userStartedInterrupting",
+        nickname
+      );
+      if (message) {
+        getPromptOrNull()?.setMessage(message);
+      }
+    },
+    clearPrompt: ({ context }) => {
+      const prompt = getPromptOrNull();
+      if (prompt) {
+        //prompt.clear(); // has side effects
+        prompt.setMessage(context.defaultPlaceholderText);
+      }
+    },
+    draftPrompt: ({ context }) => {
+      const text = mergeService
+        .mergeTranscriptsLocal(context.transcriptions)
+        .trim();
+      if (text) getPromptOrNull()?.setDraft(text);
+    },
+
+    mergeAndSubmitTranscript: ({ context }) => {
+      const text = mergeService
+        .mergeTranscriptsLocal(context.transcriptions)
+        .trim();
+      if (text) getPromptOrNull()?.setFinal(text, context.isMaintainanceMessage);
+    },
+
+    callIsStarting: () => {
+      // buttonModule.callStarting();
+    },
+    callFailedToStart: () => {
+      // buttonModule.callInactive();
+      audibleNotifications.callFailed();
+    },
+    callNotStarted: () => {
+      //if (buttonModule) {
+        // buttonModule may not be available on initial load
+        // buttonModule.callInactive();
+      //}
+    },
+    callHasStarted: () => {
+      // buttonModule.callActive();
+      audibleNotifications.callStarted();
+      EventBus.emit("session:started");
+    },
+    callInterruptible: () => {
+      // buttonModule.callInterruptible();
+    },
+    callInterruptibleIfListening: ({ context }) => {
+      if (context.lastState === "listening") {
+        // buttonModule.callInterruptible();
+      }
+    },
+    callContinues: () => {
+      // buttonModule.callActive();
+    },
+    callHasEnded: () => {
+      visualNotifications.listeningStopped();
+      // buttonModule.callInactive();
+      audibleNotifications.callEnded();
+      EventBus.emit("session:ended");
+    },
+    callHasErrors: () => {
+      // buttonModule.callError();
+    },
+    callHasNoErrors: () => {
+      // buttonModule.callActive();
+    },
+    disableCallButton: () => {
+      // buttonModule.disableCallButton();
+    },
+    enableCallButton: () => {
+      // buttonModule.enableCallButton();
+    },
+    cancelCountdownAnimation: () => {
+      visualNotifications.listeningStopped();
+    },
+    activateAudioOutput: () => {
+      audioControls.activateAudioOutput(true);
+    },
+    requestWakeLock: () => {
+      requestWakeLock();
+    },
+    releaseWakeLock: () => {
+      releaseWakeLock();
+    },
+    notifySentMessage: ({ context }) => {
+      const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
+      const submission_delay_ms = lastSubmissionDelay;
+      EventBus.emit("session:message-sent", {
+        delay_ms: delay_ms,
+        wait_time_ms: submission_delay_ms,
+      });
+    },
+    notifyPiSpeaking: () => {
+      EventBus.emit("saypi:piSpeaking");
+    },
+    clearPendingTranscriptionsAction: () => {
+      // discard in-flight transcriptions. Called after a successful submission
+      clearPendingTranscriptions();
+    },
+    clearTranscriptsAction: assign({
+      transcriptions: () => ({}),
+      shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
+    }),
+    updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
+    setMaintainanceFlag: assign(({ context }) => {
+      const timeoutReached = isTimeoutReached(context);
+      const mustRespond = mustRespondToMessage(context);
+      const shouldRespond = shouldAlwaysRespond() || context.shouldRespond;
+      const shouldSetFlag = mustRespond && !shouldRespond;
+      logger.debug(shouldSetFlag
+        ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
+        : "Clearing maintainance flag since below context window capacity and timeout threshold"
+      );
+      return {
+        isMaintainanceMessage: shouldSetFlag
+      };
+    }),
+    suppressResponseEarlyWhenMaintainance: ({ context }) => {
+      if (context.isMaintainanceMessage) {
+        // these actions can be performed early, before the message is fully written
+        EventBus.emit("saypi:tts:skipCurrent");
+        logger.debug("Skipping speech generation due to this being a maintainance message");
+      }
+    },
+    suppressWrittenResponseWhenMaintainance: ({ context }) => {
+      if (context.isMaintainanceMessage) {
+        EventBus.emit("saypi:ui:hide-message");
+        logger.debug("Hiding message due to this being a maintainance message");
+      }
+    },
+    suppressSpokenResponseWhenMaintainance: ({ context }) => {
+      if (context.isMaintainanceMessage) {
+        EventBus.emit("saypi:ui:hide-message"); // send again to ensure the message is hidden
+        EventBus.emit("audio:skipCurrent");
+        logger.debug("Skipping speech due to this being a maintainance message");
+      }
+    },
+    // NOTE: this is a deliberate no-op. In v4 it called assign(...) imperatively
+    // and discarded the result, so it never cleared the flag. Preserved as-is to
+    // keep production behavior identical (see characterization spec).
+    clearMaintainanceFlag: () => {
+      assign({ isMaintainanceMessage: () => false });
+    },
+    pauseAudio: () => {
+      logger.debug("[ConversationMachine] [pauseAudio] Pausing audio for user interruption");
+      EventBus.emit("audio:output:pause");
+    },
+    resumeAudio: () => {
+      EventBus.emit("audio:output:resume");
+    },
+    recordTranscriptionFailure: () => {
+      TranscriptionErrorManager.recordAttempt(false);
+    },
+    showOrSuppressAudioInputErrorHint: () => {
+      if (TranscriptionErrorManager.shouldShowUserHint()) {
+        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+        const displayForSeconds = 10;
+        textualNotifications.showNotification(getMessage("audioInputError", nickname), "microphone-muted", displayForSeconds);
+        TranscriptionErrorManager.reset();
+      } else {
+        // Optionally, log that the hint was suppressed, or do nothing.
+        logger.debug("Transcription failure hint suppressed due to low error rate.");
+      }
+    },
+    logSubmissionTiming: () => {
+      try {
+        const now = Date.now();
+        const actualWait = now - lastSubmissionScheduledAt;
+        const jitter = actualWait - lastSubmissionDelay;
+        logger.debug(
+          "[ConversationMachine] submissionTiming:",
+          JSON.stringify({
+            scheduledAt: lastSubmissionScheduledAt,
+            plannedDelay: lastSubmissionDelay,
+            actualWait,
+            jitter,
+            now,
+            nextSubmissionTime,
+          })
+        );
+      } catch {}
+    },
+  },
+  guards: {
+    hasAudio: ({ event }) => {
+      if (event.type === "saypi:userStoppedSpeaking") {
+        const e = event as ConversationSpeechStoppedEvent;
+        return e.blob !== undefined && e.duration > 0;
+      }
+      return false;
+    },
+    hasNoAudio: ({ event }) => {
+      if (event.type === "saypi:userStoppedSpeaking") {
+        const e = event as ConversationSpeechStoppedEvent;
+        return (
+          e.blob === undefined ||
+          e.blob.size === 0 ||
+          e.duration === 0
+        );
+      }
+      return false;
+    },
+    submissionConditionsMet: ({ context, event }, _params) => {
+      void event;
+      const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
+      const mustRespond = mustRespondToMessage(context);
+      const ready = provisionallyReadyToSubmit(context);
+      const userHasStoppedSpeaking = context.timeUserStoppedSpeaking > 0;
+      const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
+
+      /* start debug logging */
+      const criteria = [];
+      if (isTimeoutReached(context)) {
+        criteria.push("timeout reached");
+      }
+      if (context.shouldRespond) {
+        criteria.push("response trigger");
+      }
+      if (isContextWindowApproachingCapacity(context.transcriptions)) {
+        criteria.push("context window approaching capacity");
+      }
+      let reason = criteria.length > 0 ? criteria.join(", ") : "no thresholds met";
+      if (mustRespond) {
+        reason = reason + (ready ? " and ready to submit" : " but not ready to submit");
+        logger.debug(`Submission needed because ${reason}`);
+      } else {
+        if (context.timeUserStoppedSpeaking > 0) {
+          reason = reason + ` (time since stopped speaking: ${timeSinceStoppedSpeaking / 1000} seconds)`;
+        }
+        const noStopYet = !userHasStoppedSpeaking;
+        logger.debug(`Submission not needed because ${reason}`, { noStopYet, tUSS: context.timeUserStoppedSpeaking, context });
+      }
+      /* end debug logging */
+
+      return mustRespond && autoSubmitEnabled && ready && userHasStoppedSpeaking;
+    },
+    wasListening: ({ context }) => {
+      return context.lastState === "listening";
+    },
+    wasInactive: ({ context }) => {
+      return context.lastState === "inactive";
+    },
+    interruptionsAllowed: () => {
+      const allowInterrupt = userPreferences.getCachedAllowInterruptions();
+      return allowInterrupt;
+    },
+    interruptionsNotAllowed: () => {
+      const allowInterrupt = userPreferences.getCachedAllowInterruptions();
+      return !allowInterrupt;
+    },
+  },
+  actors: {
+    mergeOptimistic: fromPromise(
+      async ({ input }: { input: { transcriptions: Record<number, string> } }) => {
+        const transcriptions = input.transcriptions;
+        // Check if there are two or more transcripts to merge
+        if (Object.keys(transcriptions).length > 1) {
+          // This function should return a Promise that resolves with the merged transcript string
+          return mergeService.mergeTranscriptsRemote(
+            transcriptions,
+            nextSubmissionTime
+          );
+        } else {
+          // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
+          const existingTranscriptKeys = Object.keys(transcriptions);
+          if (existingTranscriptKeys.length === 1) {
+            const key = existingTranscriptKeys[0];
+            return Promise.resolve(transcriptions[Number(key)]);
+          } else {
+            return Promise.resolve(""); // No transcripts to merge
+          }
+        }
+      }
+    ),
+  },
+  delays: {
+    submissionDelay: ({ context, event }) => {
+      // check if the event is a transcription event
+      if (event.type !== "saypi:transcribed") {
+        return 0;
+      }
+      const e = event as ConversationTranscribedEvent;
+
+      const maxDelay = 7000; // 7 second max submission delay (lowered from 8s in v1.6.0)
+
+      // Calculate the initial delay based on pFinishedSpeaking
+      let probabilityFinished = 1;
+      if (e.pFinishedSpeaking !== undefined) {
+        probabilityFinished = e.pFinishedSpeaking;
+      }
+
+      // Incorporate the tempo into the delay. If undefined, treat as 0 (neutral)
+      // so we do not zero‑out the delay. In calculateDelay we use (1 - tempo)
+      // as a factor; a default of 1 would make the factor 0 and eliminate
+      // any waiting, which is not desired when tempo is unavailable.
+      let tempo = e.tempo !== undefined ? e.tempo : 0;
+      // Clamp to [0, 1] to avoid unexpected values from upstream
+      tempo = Math.max(0, Math.min(1, tempo));
+
+      const scheduledAt = Date.now();
+      const timeElapsed = scheduledAt - context.timeUserStoppedSpeaking;
+      const finalDelay = calculateDelay(
+        context.timeUserStoppedSpeaking,
+        probabilityFinished,
+        tempo,
+        maxDelay
+      );
+
+      if (finalDelay > 0) {
+        logger.debug(
+          "Waiting for",
+          (finalDelay / 1000).toFixed(1),
+          "seconds before submitting"
+        );
+      }
+
+      // ideally we would use the current state to determine if we're ready to submit,
+      // but we don't have access to the state here, so we'll use the provisional readyToSubmit
+      const ready = provisionallyReadyToSubmit(context);
+      if (finalDelay > 0 && ready) {
+        visualNotifications.listeningTimeRemaining(finalDelay / 1000);
+      }
+
+      nextSubmissionTime = scheduledAt + finalDelay;
+
+      // Capture the delay for analytics events
+      lastSubmissionDelay = finalDelay;
+      lastSubmissionScheduledAt = scheduledAt;
+
+      // Detailed debug to correlate measured vs expected
+      const tempoFactor = 1 - tempo;
+      const initialDelay = Math.max(maxDelay * probabilityFinished * tempoFactor, 0);
+      try {
+        logger.debug(
+          "[ConversationMachine] submissionDelay:",
+          JSON.stringify({
+            seq: (e as any).sequenceNumber,
+            pFinished: probabilityFinished,
+            tempo,
+            tempoFactor,
+            maxDelay,
+            timeUserStoppedSpeaking: context.timeUserStoppedSpeaking,
+            scheduledAt,
+            timeElapsed,
+            initialDelay,
+            finalDelay,
+            nextSubmissionTime,
+          })
+        );
+      } catch {}
+
+      return finalDelay;
+    },
+  },
+}).createMachine(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAxAV1jACcMiwAzYsAOwGMwBhACxWpggG0AGAXUVAAOAe1hYALliHV+IAB6IuAGhBoFAXzXLUmLADos1FLQkA3MDm0CsCAUSEBbAWIBKYFBDTc+SEMNESpGXkEAGYAdgAOAE5dMKiwrhCAFgAmADYAVgikjIzlVQQARkKUrl0IiOSoiOLqwviNLXRsfUNjLDMLdCsEWhQAG36vGT9xSWkfYKiU-MQopJiUrLCUsNyliK4wxpBtFoMjU3NLaysAZQE3AGsDKGGfUYCJ0GCk4ozYqLSojMSQjJKeRUiEKyRC5RCaTChQi0K4GTC4R2ez0fUGZzEKCIEjYXTQPTR-Vc7k8vBGIjGgUmiBySV0hSS2SyFSScTiQIKjI+SSSaRSqyihTShS4SUhyOaqIG-QxWJxUDxPRYbDwAnuggpTyCiAiM2BRS4P10v1h-0RaTSXEKGQlOl0hNl2NuiushIAYigsP1IOrfJrxtqEDy6QymRVsmyfrMilFwRkQlFEwDRTUE7aWg7MU7cbJYJixGBdChyAWiAAKUpcKsASjxGeljvlvceAepQYyIcZOXDrPiUf1yTKiZCgNWmUyNs0u0lun6WDzNGdJxsWAAKkwDDc2M3-VSXogQpDwWyq1lvmkkvDo4eMml6RUocVYVCkum9HOF9Ql91TlgLtdbh3fxW33UJ-mPeJTwic9Lw5A8SjCXQ3l+FYfhSSpKjfWd5wLL9cWXEx5ywAAjb0gMpZ45BBC0ImNM8akyflshCaNrXSWJoi+MIEiWQEsI-XDv3xawUDwCBJF6KRqDAYwfTJB5d0o4IhV5XQE15GDYziVixTKQ8X3U8JeUKficMXfCfwQUTxKEBAyFoKSZLEcitTbFTEMYnJRSrIVkmveNEMhBjqi83lTM-ISekIWBRCkKyYqwKBpM4eSNWAvcqKKC86QWfkeUfaD4mvHkh2tQoEjCS9QWtcLBLYXR7KEIhxIs4SEGVKBVRckDMpvCCEnhQqLyvfVK3BEJ4XWBMEyWV8pxRbCIvqxrmtuXRqCEMR-xQLcFWXAhiDdAx5yYSBtt27qMuCPrPgGs8vlg6N+VFXQLQWf4Ig7XUQlq8yoAamSmpa-6Nq2y4dsi6wDqIc7ANSv10qUkE-l0FIhQFVYrUtCInsNO9piieFvlKdJtnmmcBL+gGHNW+rodh1qenpsQhAES4IAZu54ZbK6dQZY10MiRkRTenHRvqRCCZU35knjNJfrw-6VuB3R6fB3aXQQZnWfZzmOEKbw0oowMajpDJBeyGouFFp6GUQ1JBRFaEYUteXybtSnFftKQzGzf6jFoPB7DwfoUHlHAICkQsDBMIQrkLexiBgAB5JwsHsHCsFoS6kYNLIkLCTIFmKVIlj1Ap0KFCE0gqBIR1WCIFbWhzqF9+Ui1oQPg9D8PiDsIhdAEHvyCa+xdETogU7TjO8yznPAxFDIYgZHIEWSa0qxY0aVnGypvi4TZWRSVkm-qlu27WgOg5DsPIYQMQiFYWBaCIEi5MNhHjbbeJwTR2FKkqomKEYQnoIg+LGUUjIJqWlZD9d2LRPbNx9sQduV9u630ZtYB+T8X5vw9F6d+5JEaBjRuxBM2QJy-GqFvCuw1dCCgWITSqKQvhwKaB7MyXtz4oMvp3a+Pc77YOoM-V+xFIAAFFHBiFJB-HmudSF3nIbyXIVDKhPU2HeN4CxIigjRhaMm7CEGcKQa3Hh9U0E33DrmfMhZiyljLCUKsXBawLUQWfZBfsO5d0sXDWRilAxKH1FwU--1uGeIsQInMeYw62JLMQMssA8DERnrFagAARMAoc0AuIpsY9xpjwl8PQU2bm-i3JvEQn-RES86hcDRteTe9JMh-FBJECak5DHvjyaEjx7dEnJPEOHeebZ9L9SgjBEaBQRzcXoQyQmpRCZZBCd7Ap7chEiJIoIx+wjcFiJSn44hbZ4x0iqWsQ8ADRTqKroeCqiRoJWzmp0xadUemrLWus3ZWycGiLAPg70+yiFf1Asc1GMJuLxhCBcpIT15gnMJqCGawp4QGOnBwparyL71Q+aIr5OyfkQEkU4GRgLXLAuSKC2EZzIXhEuQOOpd4WFVlWAsXU6EOmoqMei3QfcmqyjEAQblRB+6wBwNYmJRY4nll+DWOsXSuU8phvmAVCrYDDNAiwlI4IoR9iTAiTYNDEBLDiEhOZsIuKavFPAvQZBYDCGoMDTWHUuqlMOaBN41pPjfBlv8QErFrS0UvHXfkDI+TlSwjau1Dr9qEBhurXxJKeqvBuUhaY3ZzbRH+HBUIYpwSGiPtjTVCxw1wEjWtKwHrtIeQ1vmLcLqgWZVZHU+h2RpgHz-pCBp3xYjC0TPlaojcrUA1tVIFW5aNzUA1suKwAB1V+JSDn1teDxZtuU20wg7QOY+KRUaMjRo7NGYpi3DvtWWv8Na9qWXOCzNmZ1z1qsynya8FRt38kLvENGkJUiPI5daktI7T2c01lenWt6ALbgNgm3mQZ3iep+H8AESw-VbHoVsRI3YLyCjdk8iN-76rVrAxetqVgjpflgKdDmd662ksyuba8sZt0rHBSKeEmqOxHtLXhs9BHNZqwI-e4I8YjSfUTDUBE0JcjXnSLRBhsYJrWh9d+haOGT2ccA8uAwpYiCqmclRxNiAl6sl0HU3UuRRObHLgeJF9IJroX7YifK7HcP-XwxDTBCANN920-rBd1HgihsKMaNIkIFksITFmzNZRQTGbs8kMKg7lOjqwLOsYbmXMXV01BgKelIQFuthhyTMITWMjiPycISz4t-pU85pLc6q1-mvezZL87IO5xWE+kcsQxxilLqKeYjmqu6AAO6enlG6Jq2BVxCAxKzNTl76sgYo3xjLudAkFGCRV49KthspagGNkga4pvXsA2KgsEr7HSpyXaBLa1tujfGwd6bAg9bLYCdGdb2HKsq2hgASWoJp7Td9tY3sW65rmPm9MICy2pHLba8sLGvAmO89zg2lBbQOj7m21o-b+55tObmge6zvRBhSrrMq6mvFCJHpCIysjiP8DQU4NoQDgDIFELXAwAFoV7Rg5wsMo0rDRLxWMfC8KKFoHHaGYdnIy1gBdSPUdGw5yogP1AhcakJKrWxhNorCmY5S3Gl26izQY0ZGYVyhTIQpoghMN5lDnXweeXlzU4pe6bsjFGWcrA3JPF2Gq7emuIQW96y5VwUbXtEqyMeMiw2knvAa0xBptTmtvlKatopUZIuo1jMltuhekcQrdIu4lCOPNMvsxuTz73z8FEIB9YcHgEofDWGm3ZHn1obqjcWWWE+UKfEC87FgUDnsJjROKCrGX4Klu+9N4d4yJUA+8IEFB8P++r7NgINQgFhHrGUHxCEayoJlB1uIxWY-6-SM5iF71XiH5UvjlBKMVnk3EhRpBhebV6zSGQJgL9BafbysVtkNliJvcjZq8Ywm8t9pgV9OIER3JExlkFU+UCBF9j4W9zZEChVeUlVqCVV6CWFGCxRmDwhWCK55cisfhuIaVoh2VXFyCkCBCKCmpqDsU8FPR-l6CZklEsCWDcDhRwRkI-gRx3VFNcl5U+DFUw5lUbDqCM5aBxEbDdDApMDxCcCnpmDZlfhSg65pl+tgZF8B8edNVa8nFC5KgqwndLCrtPtT0K0J1QDP5wCc17ZU0sh00J9wtqp6FqheJDRphgEgiANz1F8sgm1cpohUNnp+wplBZrNRRERNhqh4xSjOMmsUi5FAxtEAtN4JoVhYR-Drx6gygWV+QgtUghYsMf0h0ON-pbtbg9sJtDsZtyib8oNVsDwEhaIosakShPoFg4iWhrs6YY1ft-s8cF9Njc5GRohXpD5GVrRRcEd0DYtERDwShEwtgGc1AgA */
     context: {
@@ -279,11 +795,9 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
         }),
         on: {
           "saypi:promptReady": {
-            target: "inactive",
-            internal: true,
             actions: [
               assign({
-                defaultPlaceholderText: (context, event) =>
+                defaultPlaceholderText: () =>
                   getChatbotDefaultPlaceholder(),
               }),
             ],
@@ -471,7 +985,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                         "notSpeaking",
                         "#conversation.listening.converting.transcribing",
                       ],
-                      cond: "hasAudio",
+                      guard: "hasAudio",
                       actions: [
                         assign({
                           userIsSpeaking: false,
@@ -484,7 +998,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                     },
                     {
                       target: "notSpeaking",
-                      cond: "hasNoAudio",
+                      guard: "hasNoAudio",
                     },
                   ],
                 },
@@ -520,12 +1034,12 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                 after: {
                   submissionDelay: {
                     target: "submitting",
-                    cond: "submissionConditionsMet",
+                    guard: "submissionConditionsMet",
                     description: "Submit combined transcript to Pi after waiting for user to stop speaking.",
                   },
                   [USER_STOPPED_TIMEOUT_MS]: { // Uses the constant as the delay duration
                     target: "submitting",
-                    cond: "submissionConditionsMet",
+                    guard: "submissionConditionsMet",
                     description: "Submit combined transcript to Pi after a prolonged period of user not speaking.",
                   },
                 },
@@ -534,41 +1048,18 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                 },
                 invoke: {
                   id: "mergeOptimistic",
-                  src: (context: ConversationContext, event: ConversationEvent) => {
-                    // Check if there are two or more transcripts to merge
-                    if (Object.keys(context.transcriptions).length > 1) {
-                      // This function should return a Promise that resolves with the merged transcript string
-                      return mergeService.mergeTranscriptsRemote(
-                        context.transcriptions,
-                        nextSubmissionTime
-                      );
-                    } else {
-                      // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
-                      const existingTranscriptKeys = Object.keys(
-                        context.transcriptions
-                      );
-                      if (existingTranscriptKeys.length === 1) {
-                        const key = existingTranscriptKeys[0];
-                        return Promise.resolve(
-                          context.transcriptions[Number(key)]
-                        );
-                      } else {
-                        return Promise.resolve(""); // No transcripts to merge
-                      }
-                    }
-                  },
+                  src: "mergeOptimistic",
+                  input: ({ context }) => ({
+                    transcriptions: context.transcriptions,
+                  }),
 
                   onDone: {
-                    target: "accumulating",
-                    internal: true,
                     actions: [
                       assign({
-                        transcriptions: (
-                          context: ConversationContext,
-                          event: DoneInvokeEvent<string>
-                        ) => {
-                          // If the event.data is empty, just return the current context.transcriptions
-                          if (!event.data) {
+                        transcriptions: ({ context, event }) => {
+                          const output = event.output as string;
+                          // If the output is empty, just return the current context.transcriptions
+                          if (!output) {
                             return context.transcriptions;
                           }
 
@@ -579,10 +1070,10 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                           );
                           if (originalKeys.length > 1) {
                             console.log(
-                              `Merge accepted: ${originalKeys} into ${nextKey} - ${event.data}`
+                              `Merge accepted: ${originalKeys} into ${nextKey} - ${output}`
                             );
                           }
-                          return { [nextKey]: event.data };
+                          return { [nextKey]: output };
                         },
                       }),
                     ],
@@ -597,6 +1088,11 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
+                    // v5: same-target transitions are internal by default. v4
+                    // treated this as an external self-transition, re-running the
+                    // entry (draftPrompt) and re-invoking mergeOptimistic with the
+                    // newly accumulated transcript. reenter:true preserves that.
+                    reenter: true,
                     actions: {
                       type: "handleTranscriptionResponse",
                     },
@@ -793,8 +1289,8 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           },
           "saypi:session:assigned": {
             actions: assign({
-              sessionId: (context, event: ConversationSessionAssignedEvent) =>
-                event.session_id,
+              sessionId: ({ event }) =>
+                (event as ConversationSessionAssignedEvent).session_id,
             }),
           },
         },
@@ -821,7 +1317,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
           },
           "saypi:userSpeaking": {
             target: "#conversation.responding.userInterrupting",
-            cond: {
+            guard: {
               type: "interruptionsAllowed",
             },
           },
@@ -858,7 +1354,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
               [PI_THINKING_TIMEOUT_MS]: [
                 {
                   target: "#conversation.listening",
-                  cond: {
+                  guard: {
                     type: "wasListening",
                   },
                   description:
@@ -866,7 +1362,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                 },
                 {
                   target: "#conversation.inactive",
-                  cond: {
+                  guard: {
                     type: "wasInactive",
                   },
                   description:
@@ -904,13 +1400,13 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
               "saypi:piStoppedSpeaking": [
                 {
                   target: "#conversation.listening",
-                  cond: {
+                  guard: {
                     type: "wasListening",
                   },
                 },
                 {
                   target: "#conversation.inactive",
-                  cond: {
+                  guard: {
                     type: "wasInactive",
                   },
                 },
@@ -920,7 +1416,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
               },
               "saypi:userSpeaking": {
                 target: "userInterrupting",
-                cond: {
+                guard: {
                   type: "interruptionsAllowed",
                 },
                 actions: {
@@ -934,7 +1430,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                   target: "waitingForPiToStopSpeaking",
                   description: `The user has forced an interruption, i.e. tapped to interrupt Pi, during a call.`,
                   actions: "pauseAudio",
-                  cond: "wasListening",
+                  guard: "wasListening",
                 },
                 {
                   target: "#conversation.inactive",
@@ -1028,7 +1524,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                   actions: {
                     type: "resumeAudio",
                   },
-                  cond: {
+                  guard: {
                     type: "hasNoAudio",
                   },
                   description: "User speech cancelled (i.e. was non-speech).",
@@ -1038,7 +1534,7 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
                     "#conversation.listening.converting.transcribing",
                     "#conversation.listening.recording.notSpeaking",
                   ],
-                  cond: {
+                  guard: {
                     type: "hasAudio",
                   },
                   actions: [
@@ -1085,553 +1581,17 @@ const machine = createMachine<ConversationContext, ConversationEvent, Conversati
     on: {
       "userPreferenceChanged": {
         actions: assign({
-          shouldRespond: (context, event: ConversationUserPreferenceChangedEvent) => {
+          shouldRespond: ({ context, event }) => {
+            const e = event as ConversationUserPreferenceChangedEvent;
             // Update shouldRespond based on discretionary mode if it was changed
-            console.debug("userPreferenceChanged", event);
-            if (event.discretionaryMode !== undefined) {
-              return !event.discretionaryMode; // shouldRespond is true when discretionary mode is false
+            console.debug("userPreferenceChanged", e);
+            if (e.discretionaryMode !== undefined) {
+              return !e.discretionaryMode; // shouldRespond is true when discretionary mode is false
             }
             return context.shouldRespond; // keep existing value if discretionary mode wasn't changed
           }
         })
       }
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-  },
-  {
-    actions: {
-      stopAllAnimations: (context, event) => {
-        AnimationModule.stopAllAnimations();
-      },
-
-      startAnimation: (context, event, { action }) => {
-        AnimationModule.startAnimation(action.params.animation);
-      },
-
-      stopAnimation: (context, event, { action }) => {
-        AnimationModule.stopAnimation(action.params.animation);
-      },
-
-      transcribeAudio: (
-        context: ConversationContext,
-        event: ConversationSpeechStoppedEvent
-      ) => {
-        const audioBlob = event.blob;
-        if (audioBlob) {
-          uploadAudioWithRetry(
-            audioBlob,
-            event.duration,
-            context.transcriptions,
-            context.sessionId,
-            3, // default maxRetries
-            event.captureTimestamp,
-            event.clientReceiveTimestamp,
-            undefined, // inputType - not used in conversation mode
-            undefined, // inputLabel - not used in conversation mode
-            undefined  // onSequenceNumber - no target switching in conversation mode
-          );
-          EventBus.emit("session:transcribing", {
-            audio_duration_seconds: event.duration / 1000,
-            speech_end_time: Date.now(), // bit hacky, as it assumes the audio is transcribed immediately
-            speech_start_time: Date.now() - event.duration,
-            captureTimestamp: event.captureTimestamp,
-            clientReceiveTimestamp: event.clientReceiveTimestamp,
-            handlerTimestamp: event.handlerTimestamp
-          });
-        }
-      },
-
-      handleTranscriptionResponse: (
-        ConversationContext,
-        event: ConversationTranscribedEvent
-      ) => {
-        const transcription = event.text;
-        const sequenceNumber = event.sequenceNumber;
-        const shouldRespondToThis = event.responseAnalysis?.shouldRespond;
-        logger.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\\'t respond"}]`);
-        
-        if (transcription && transcription.trim() !== "") {
-          ConversationContext.transcriptions[sequenceNumber] = transcription;
-          TranscriptionErrorManager.recordAttempt(true); // Record success
-        } else {
-          // This case should ideally be handled by saypi:transcribedEmpty if the API guarantees it,
-          // but as a fallback, we can record a failure here if text is empty.
-          // However, the primary failure recording for empty will be on the saypi:transcribedEmpty event transition.
-        }
-
-        if (event.merged) {
-          event.merged.forEach((mergedSequenceNumber) => {
-            delete ConversationContext.transcriptions[mergedSequenceNumber];
-          });
-        }
-        ConversationContext.shouldRespond = shouldRespondToThis ?? shouldAlwaysRespond();
-      },
-
-      acquireMicrophone: (context, event) => {
-        // warmup the microphone on idle in mobile view,
-        // since there's no mouseover event to trigger it
-        if (ImmersionStateChecker.isViewImmersive()) {
-          EventBus.emit("audio:setupRecording");
-        }
-      },
-
-      setupRecording: (context, event) => {
-        // differs from acquireMicrophone in that it's user-initiated
-        EventBus.emit("audio:setupRecording");
-      },
-
-      startRecording: (context, event) => {
-        EventBus.emit("audio:startRecording");
-      },
-
-      pauseRecording: (context, event) => {
-        EventBus.emit("audio:input:stop");
-      },
-
-      pauseRecordingIfInterruptionsNotAllowed: (context, event) => {
-        const handsFreeInterrupt =
-          userPreferences.getCachedAllowInterruptions();
-        if (!handsFreeInterrupt) {
-          EventBus.emit("audio:input:stop");
-        }
-      },
-
-      resumeRecording: (context: ConversationContext, event) => {
-        if (context.lastState === "listening") {
-          // only resume recording if we were already listening
-          EventBus.emit("audio:startRecording");
-        }
-      },
-
-      stopRecording: (context, event) => {
-        EventBus.emit("audio:stopRecording");
-        EventBus.emit("audio:tearDownRecording");
-      },
-
-      reconnectAudio: (context, event) => {
-        EventBus.emit("audio:input:reconnect");
-      },
-
-      dismissNotification: () => {
-        textualNotifications.hideNotification();
-      },
-
-      showNotification: (context, event, { action }) => {
-        const icon = action.params.icon;
-        const message = action.params.message;
-        textualNotifications.showNotification(message, icon);
-      },
-
-      notifyAudioConnected: (context, event: ConversationAudioConnectedEvent) => {
-        const deviceId = event.deviceId;
-        const deviceLabel = event.deviceLabel;
-        const message = getMessage("audioConnected", deviceLabel);
-        textualNotifications.showNotification(message, "microphone");
-      },
-
-      notifyAudioReconnecting: (context, event: ConversationAudioReconnectEvent) => {
-        const deviceId = event.deviceId;
-        const deviceLabel = event.deviceLabel;
-        const message = getMessage("audioReconnecting", deviceLabel);
-        textualNotifications.showNotification(message, "microphone-switch");
-      },
-
-      acknowledgeUserInput: () => {
-        visualNotifications.listeningStopped();
-        audibleNotifications.listeningStopped();
-      },
-
-      listenPrompt: () => {
-        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
-        const normalMode = shouldAlwaysRespond();
-        const message = getMessage(normalMode ? "assistantIsListening" : "assistantIsListeningAttentively", nickname);
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
-      },
-      callStartingPrompt: () => {
-        const message = getMessage("callStarting");
-        if (message) {
-          const initialText = getPromptOrNull()?.getDraft();
-          assign({ defaultPlaceholderText: initialText });
-          getPromptOrNull()?.setMessage(message);
-        }
-      },
-      thinkingPrompt: () => {
-        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
-        const message = getMessage("assistantIsThinking", nickname);
-        if (message) {
-          const promptEditor = getPromptOrNull();
-          if (promptEditor) {
-            promptEditor.setMessage(message);
-          } else {
-            logger.warn("[ConversationMachine] [thinkingPrompt] no prompt editor found");
-          }
-        }
-      },
-      writingPrompt: () => {
-        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
-        const message = getMessage("assistantIsWriting", nickname);
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
-      },
-      speakingPrompt: (context: ConversationContext) => {
-        const handsFreeInterrupt =
-          userPreferences.getCachedAllowInterruptions();
-        
-        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
-        const message = handsFreeInterrupt
-          ? getMessage("assistantIsSpeaking", nickname)
-          : getMessage(
-              "assistantIsSpeakingWithManualInterrupt",
-              nickname
-            );
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
-      },
-      interruptingPiPrompt: () => {
-        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
-        const message = getMessage(
-          "userStartedInterrupting",
-          nickname
-        );
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
-      },
-      clearPrompt: (context: ConversationContext) => {
-        const prompt = getPromptOrNull();
-        if (prompt) {
-          //prompt.clear(); // has side effects
-          prompt.setMessage(context.defaultPlaceholderText);
-        }
-      },
-      draftPrompt: (context: ConversationContext) => {
-        const text = mergeService
-          .mergeTranscriptsLocal(context.transcriptions)
-          .trim();
-        if (text) getPromptOrNull()?.setDraft(text);
-      },
-
-      mergeAndSubmitTranscript: (context: ConversationContext) => {
-        const text = mergeService
-          .mergeTranscriptsLocal(context.transcriptions)
-          .trim();
-        if (text) getPromptOrNull()?.setFinal(text, context.isMaintainanceMessage);
-      },
-
-      callIsStarting: () => {
-        // buttonModule.callStarting();
-      },
-      callFailedToStart: () => {
-        // buttonModule.callInactive();
-        audibleNotifications.callFailed();
-      },
-      callNotStarted: () => {
-        //if (buttonModule) {
-          // buttonModule may not be available on initial load
-          // buttonModule.callInactive();
-        //}
-      },
-      callHasStarted: () => {
-        // buttonModule.callActive();
-        audibleNotifications.callStarted();
-        EventBus.emit("session:started");
-      },
-      callInterruptible: () => {
-        // buttonModule.callInterruptible();
-      },
-      callInterruptibleIfListening: (context: ConversationContext) => {
-        if (context.lastState === "listening") {
-          // buttonModule.callInterruptible();
-        }
-      },
-      callContinues: () => {
-        // buttonModule.callActive();
-      },
-      callHasEnded: () => {
-        visualNotifications.listeningStopped();
-        // buttonModule.callInactive();
-        audibleNotifications.callEnded();
-        EventBus.emit("session:ended");
-      },
-      callHasErrors: () => {
-        // buttonModule.callError();
-      },
-      callHasNoErrors: () => {
-        // buttonModule.callActive();
-      },
-      disableCallButton: () => {
-        // buttonModule.disableCallButton();
-      },
-      enableCallButton: () => {
-        // buttonModule.enableCallButton();
-      },
-      cancelCountdownAnimation: () => {
-        visualNotifications.listeningStopped();
-      },
-      activateAudioOutput: () => {
-        audioControls.activateAudioOutput(true);
-      },
-      requestWakeLock: () => {
-        requestWakeLock();
-      },
-      releaseWakeLock: () => {
-        releaseWakeLock();
-      },
-      notifySentMessage: (context: ConversationContext, event: ConversationEvent) => {
-        const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
-        const submission_delay_ms = lastSubmissionDelay;
-        EventBus.emit("session:message-sent", {
-          delay_ms: delay_ms,
-          wait_time_ms: submission_delay_ms,
-        });
-      },
-      notifyPiSpeaking: () => {
-        EventBus.emit("saypi:piSpeaking");
-      },
-      clearPendingTranscriptionsAction: () => {
-        // discard in-flight transcriptions. Called after a successful submission
-        clearPendingTranscriptions();
-      },
-      clearTranscriptsAction: assign({
-        transcriptions: () => ({}),
-        shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
-      }),
-      updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
-      setMaintainanceFlag: assign((context: ConversationContext, event) => {
-        const timeoutReached = isTimeoutReached(context);
-        const mustRespond = mustRespondToMessage(context);
-        const shouldRespond = shouldAlwaysRespond() || context.shouldRespond;
-        const shouldSetFlag = mustRespond && !shouldRespond;
-        logger.debug(shouldSetFlag 
-          ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
-          : "Clearing maintainance flag since below context window capacity and timeout threshold"
-        );
-        return { 
-          isMaintainanceMessage: shouldSetFlag 
-        };
-      }),
-      suppressResponseEarlyWhenMaintainance: (context: ConversationContext, event) => {
-        if (context.isMaintainanceMessage) {
-          // these actions can be performed early, before the message is fully written
-          EventBus.emit("saypi:tts:skipCurrent");
-          logger.debug("Skipping speech generation due to this being a maintainance message");
-        }
-      },
-      suppressWrittenResponseWhenMaintainance: (context: ConversationContext, event) => {
-        if (context.isMaintainanceMessage) {
-          EventBus.emit("saypi:ui:hide-message");
-          logger.debug("Hiding message due to this being a maintainance message");
-        }
-      },
-      suppressSpokenResponseWhenMaintainance: (context: ConversationContext, event) => {
-        if (context.isMaintainanceMessage) {
-          EventBus.emit("saypi:ui:hide-message"); // send again to ensure the message is hidden
-          EventBus.emit("audio:skipCurrent");
-          logger.debug("Skipping speech due to this being a maintainance message");
-        }
-      },
-      clearMaintainanceFlag: (ConversationContext, event) => {
-        assign({ isMaintainanceMessage: () => false });
-      },
-      pauseAudio: () => {
-        logger.debug("[ConversationMachine] [pauseAudio] Pausing audio for user interruption");
-        EventBus.emit("audio:output:pause");
-      },
-      resumeAudio: () => {
-        EventBus.emit("audio:output:resume");
-      },
-      recordTranscriptionFailure: (context, event) => {
-        TranscriptionErrorManager.recordAttempt(false);
-      },
-      showOrSuppressAudioInputErrorHint: (context, event) => {
-        if (TranscriptionErrorManager.shouldShowUserHint()) {
-          const nickname = userPreferences.getCachedNickname() || chatbot.getName();
-          const displayForSeconds = 10;
-          textualNotifications.showNotification(getMessage("audioInputError", nickname), "microphone-muted", displayForSeconds);
-          TranscriptionErrorManager.reset();
-        } else {
-          // Optionally, log that the hint was suppressed, or do nothing.
-          logger.debug("Transcription failure hint suppressed due to low error rate.");
-        }
-      },
-      logSubmissionTiming: () => {
-        try {
-          const now = Date.now();
-          const actualWait = now - lastSubmissionScheduledAt;
-          const jitter = actualWait - lastSubmissionDelay;
-          logger.debug(
-            "[ConversationMachine] submissionTiming:",
-            JSON.stringify({
-              scheduledAt: lastSubmissionScheduledAt,
-              plannedDelay: lastSubmissionDelay,
-              actualWait,
-              jitter,
-              now,
-              nextSubmissionTime,
-            })
-          );
-        } catch {}
-      },
-    },
-    services: {},
-    guards: {
-      hasAudio: (context: ConversationContext, event: ConversationEvent) => {
-        if (event.type === "saypi:userStoppedSpeaking") {
-          event = event as ConversationSpeechStoppedEvent;
-          return event.blob !== undefined && event.duration > 0;
-        }
-        return false;
-      },
-      hasNoAudio: (context: ConversationContext, event: ConversationEvent) => {
-        if (event.type === "saypi:userStoppedSpeaking") {
-          event = event as ConversationSpeechStoppedEvent;
-          return (
-            event.blob === undefined ||
-            event.blob.size === 0 ||
-            event.duration === 0
-          );
-        }
-        return false;
-      },
-      submissionConditionsMet: (
-        context: ConversationContext,
-        event: ConversationEvent,
-        meta
-      ) => {
-        const { state } = meta;
-        const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
-        const mustRespond = mustRespondToMessage(context);
-        const ready = readyToSubmit(state, context);
-        const userHasStoppedSpeaking = context.timeUserStoppedSpeaking > 0;
-        const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
-
-        /* start debug logging */
-        const criteria = [];
-        if (isTimeoutReached(context)) {
-          criteria.push("timeout reached");
-        }
-        if (context.shouldRespond) {
-          criteria.push("response trigger");
-        }
-        if (isContextWindowApproachingCapacity(context.transcriptions)) {
-          criteria.push("context window approaching capacity");
-        }
-        let reason = criteria.length > 0 ? criteria.join(", ") : "no thresholds met";
-        if (mustRespond) {
-          reason = reason + (ready ? " and ready to submit" : " but not ready to submit");
-          logger.debug(`Submission needed because ${reason}`);
-        } else {
-          if (context.timeUserStoppedSpeaking > 0) {
-            reason = reason + ` (time since stopped speaking: ${timeSinceStoppedSpeaking / 1000} seconds)`;
-          }
-          const noStopYet = !userHasStoppedSpeaking;
-          logger.debug(`Submission not needed because ${reason}`, { noStopYet, tUSS: context.timeUserStoppedSpeaking, context });
-        }
-        /* end debug logging */
-
-        return mustRespond && autoSubmitEnabled && ready && userHasStoppedSpeaking;
-      },
-      wasListening: (context: ConversationContext) => {
-        return context.lastState === "listening";
-      },
-      wasInactive: (context: ConversationContext) => {
-        return context.lastState === "inactive";
-      },
-      interruptionsAllowed: (context: ConversationContext) => {
-        const allowInterrupt = userPreferences.getCachedAllowInterruptions();
-        return allowInterrupt;
-      },
-      interruptionsNotAllowed: (context: ConversationContext) => {
-        const allowInterrupt = userPreferences.getCachedAllowInterruptions();
-        return !allowInterrupt;
-      },
-    },
-    delays: {
-      submissionDelay: (context: ConversationContext, event: ConversationEvent) => {
-        // check if the event is a transcription event
-        if (event.type !== "saypi:transcribed") {
-          return 0;
-        } else {
-          event = event as ConversationTranscribedEvent;
-        }
-
-        const maxDelay = 7000; // 7 second max submission delay (lowered from 8s in v1.6.0)
-
-        // Calculate the initial delay based on pFinishedSpeaking
-        let probabilityFinished = 1;
-        if (event.pFinishedSpeaking !== undefined) {
-          probabilityFinished = event.pFinishedSpeaking;
-        }
-
-        // Incorporate the tempo into the delay. If undefined, treat as 0 (neutral)
-        // so we do not zero‑out the delay. In calculateDelay we use (1 - tempo)
-        // as a factor; a default of 1 would make the factor 0 and eliminate
-        // any waiting, which is not desired when tempo is unavailable.
-        let tempo = event.tempo !== undefined ? event.tempo : 0;
-        // Clamp to [0, 1] to avoid unexpected values from upstream
-        tempo = Math.max(0, Math.min(1, tempo));
-
-        const scheduledAt = Date.now();
-        const timeElapsed = scheduledAt - context.timeUserStoppedSpeaking;
-        const finalDelay = calculateDelay(
-          context.timeUserStoppedSpeaking,
-          probabilityFinished,
-          tempo,
-          maxDelay
-        );
-
-        if (finalDelay > 0) {
-          logger.debug(
-            "Waiting for",
-            (finalDelay / 1000).toFixed(1),
-            "seconds before submitting"
-          );
-        }
-
-        // ideally we would use the current state to determine if we're ready to submit,
-        // but we don't have access to the state here, so we'll use the provisional readyToSubmit
-        const ready = provisionallyReadyToSubmit(context);
-        if (finalDelay > 0 && ready) {
-          visualNotifications.listeningTimeRemaining(finalDelay / 1000);
-        }
-
-        // Get the current time (in milliseconds)
-        const currentTime = scheduledAt;
-        nextSubmissionTime = scheduledAt + finalDelay;
-
-        // Capture the delay for analytics events
-        lastSubmissionDelay = finalDelay;
-        lastSubmissionScheduledAt = scheduledAt;
-
-        // Detailed debug to correlate measured vs expected
-        const tempoFactor = 1 - tempo;
-        const initialDelay = Math.max(maxDelay * probabilityFinished * tempoFactor, 0);
-        try {
-          logger.debug(
-            "[ConversationMachine] submissionDelay:",
-            JSON.stringify({
-              seq: (event as any).sequenceNumber,
-              pFinished: probabilityFinished,
-              tempo,
-              tempoFactor,
-              maxDelay,
-              timeUserStoppedSpeaking: context.timeUserStoppedSpeaking,
-              scheduledAt,
-              timeElapsed,
-              initialDelay,
-              finalDelay,
-              nextSubmissionTime,
-            })
-          );
-        } catch {}
-
-        return finalDelay;
-      },
     },
   }
 );
@@ -1648,17 +1608,6 @@ function provisionallyReadyToSubmit(context: ConversationContext): boolean {
   const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
   return readyToSubmitOnAllowedState(allowedState, context);
 }
-function readyToSubmit(
-  state: State<ConversationContext, ConversationEvent, any, any, any>,
-  context: ConversationContext
-): boolean {
-  const allowedState = !(
-    state.matches("listening.recording.userSpeaking") ||
-    state.matches("listening.converting.transcribing")
-  );
-  return readyToSubmitOnAllowedState(allowedState, context);
-}
-
 function isTimeoutReached(context: ConversationContext): boolean {
   // If timeUserStoppedSpeaking hasn't been updated yet, there's no timeout.
   if (context.timeUserStoppedSpeaking === 0) {

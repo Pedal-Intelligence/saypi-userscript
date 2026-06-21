@@ -44,13 +44,13 @@ export default class EventModule {
 
   static registerConversationEvents(actor) {
     EventBus.on("saypi:ui:content-loaded", () => {
-      actor.send(PROMPT_READY);
+      actor.send({ type: PROMPT_READY });
     });
     EventBus.on(CALL_READY, () => {
-      actor.send(CALL_READY);
+      actor.send({ type: CALL_READY });
     });
     EventBus.on(USER_SPEAKING, () => {
-      actor.send(USER_SPEAKING);
+      actor.send({ type: USER_SPEAKING });
     });
 
     [
@@ -79,14 +79,14 @@ export default class EventModule {
       END_CALL,
     ].forEach((eventName) => {
       EventBus.on(eventName, () => {
-        actor.send(eventName);
+        actor.send({ type: eventName });
       });
     });
 
     // notify the actor when the tab is visible
     document.addEventListener("visibilitychange", async () => {
       if (document.visibilityState === "visible") {
-        actor.send(VISIBLE);
+        actor.send({ type: VISIBLE });
       }
     });
 
@@ -97,10 +97,10 @@ export default class EventModule {
 
   static registerSessionEvents(actor) {
     EventBus.on("session:started", () => {
-      actor.send("start_session");
+      actor.send({ type: "start_session" });
     });
     EventBus.on("session:ended", () => {
-      actor.send("end_session");
+      actor.send({ type: "end_session" });
     });
     EventBus.on("session:message-sent", (detail) => {
       actor.send({ type: "send_message", ...detail });

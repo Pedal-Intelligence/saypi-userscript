@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { interpret } from 'xstate';
+import { createTestActor } from './state-machines/support/testActor';
 import EventBus from '../src/events/EventBus.js';
 
 // Mock dependencies
@@ -49,10 +49,36 @@ vi.spyOn(EventBus, 'emit');
 import { createDictationMachine } from '../src/state-machines/DictationMachine';
 import * as TranscriptionModule from '../src/TranscriptionModule';
 
+/**
+ * Drive one real speech turn so the machine registers `transcriptionTargets[seq]`
+ * the way production does, instead of mutating the (frozen-on-v5) snapshot context.
+ *
+ * The recording flow is: saypi:userSpeaking -> saypi:userStoppedSpeaking (with audio).
+ * `handleAudioStopped` calls `uploadAudioSegment`, which assigns
+ * `transcriptionTargets[getCurrentSequenceNumber() + 1] = <active target>`.
+ *
+ * Because the mocked `getCurrentSequenceNumber()` starts at 0 and the mocked
+ * `uploadAudioWithRetry()` increments it on each turn, successive turns register
+ * sequence numbers 1, 2, 3, ... — exactly the numbers the assertions below expect.
+ *
+ * The active target is `context.targetElement` (set by startDictation / switchTarget),
+ * so each turn maps the current target. A non-empty `blob` and positive `duration`
+ * are required to pass the machine's `hasAudio` guard. `frames` is intentionally
+ * omitted to keep the fallback (single-segment) path and avoid Phase-2 buffering.
+ */
+const driveSpeechTurn = (svc: any) => {
+  svc.send({ type: 'saypi:userSpeaking' });
+  svc.send({
+    type: 'saypi:userStoppedSpeaking',
+    duration: 1000,
+    blob: new Blob(['x'], { type: 'audio/wav' }),
+  });
+};
+
 describe('Universal Dictation State Accumulation Bug', () => {
   let service: any;
   let chatInputElement: HTMLInputElement;
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
     
@@ -74,7 +100,7 @@ describe('Universal Dictation State Accumulation Bug', () => {
     
     // Create fresh machine for each test
     const machine = createDictationMachine(chatInputElement);
-    service = interpret(machine);
+    service = createTestActor(machine);
   });
 
   afterEach(() => {
@@ -91,10 +117,11 @@ describe('Universal Dictation State Accumulation Bug', () => {
     // Simulate starting dictation
     service.send({ type: 'saypi:startDictation', targetElement: chatInputElement });
     service.send({ type: 'saypi:callReady' });
-    
-    // Set up first transcription target mapping
-    service.state.context.transcriptionTargets[1] = chatInputElement;
-    
+
+    // Register the first transcription target by driving a real speech turn
+    // (maps transcriptionTargets[1] -> chatInputElement) instead of mutating the snapshot.
+    driveSpeechTurn(service);
+
     // Simulate transcription response for first session
     service.send({
       type: 'saypi:transcribed',
@@ -112,10 +139,11 @@ describe('Universal Dictation State Accumulation Bug', () => {
     // NOTE: This clearing does NOT trigger a manual edit event, which is the bug
     chatInputElement.value = '';
     // Do NOT dispatch input event - this simulates external clearing without manual edit detection
-    
-    // Set up second transcription target mapping (same element, different sequence)
-    service.state.context.transcriptionTargets[2] = chatInputElement;
-    
+
+    // Register the second transcription target via another real speech turn
+    // (same element, maps transcriptionTargets[2] -> chatInputElement).
+    driveSpeechTurn(service);
+
     // Simulate transcription response for second session
     service.send({
       type: 'saypi:transcribed',
@@ -144,17 +172,17 @@ describe('Universal Dictation State Accumulation Bug', () => {
     // Simulate starting dictation
     service.send({ type: 'saypi:startDictation', targetElement: chatInputElement });
     service.send({ type: 'saypi:callReady' });
-    
-    // Set up transcription target mapping
-    service.state.context.transcriptionTargets[1] = chatInputElement;
-    
+
+    // Register the transcription target via a real speech turn (maps transcriptionTargets[1]).
+    driveSpeechTurn(service);
+
     // Simulate transcription response
     service.send({
       type: 'saypi:transcribed',
       text: 'Hello world',
       sequenceNumber: 1,
     });
-    
+
     // Verify initial state
     expect(chatInputElement.value).toBe('Hello world');
     expect(Object.keys(service.state.context.transcriptionsByTarget)).toHaveLength(1);
@@ -189,18 +217,19 @@ describe('Universal Dictation State Accumulation Bug', () => {
     service.send({ type: 'saypi:callReady' });
     
     // Simulate receiving an empty transcription (should not trigger clearing logic)
-    service.state.context.transcriptionTargets[1] = chatInputElement;
+    // Register transcriptionTargets[1] via a real speech turn first.
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: '', // Empty transcription
       sequenceNumber: 1,
     });
-    
+
     // Field should remain empty and no clearing should occur
     expect(chatInputElement.value).toBe('');
-    
-    // Now send a real transcription
-    service.state.context.transcriptionTargets[2] = chatInputElement;
+
+    // Now send a real transcription (register transcriptionTargets[2] via another turn).
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Real transcription',
@@ -219,32 +248,32 @@ describe('Universal Dictation State Accumulation Bug', () => {
     service.send({ type: 'saypi:startDictation', targetElement: chatInputElement });
     service.send({ type: 'saypi:callReady' });
     
-    // First session
-    service.state.context.transcriptionTargets[1] = chatInputElement;
+    // First session (register transcriptionTargets[1] via a real speech turn)
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'First message',
       sequenceNumber: 1,
     });
     expect(chatInputElement.value).toBe('First message');
-    
+
     // External clear (simulate chat platform clearing)
     chatInputElement.value = '';
-    
-    // Second session
-    service.state.context.transcriptionTargets[2] = chatInputElement;
+
+    // Second session (register transcriptionTargets[2])
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Second message',
       sequenceNumber: 2,
     });
     expect(chatInputElement.value).toBe('Second message');
-    
+
     // Another external clear
     chatInputElement.value = '';
-    
-    // Third session
-    service.state.context.transcriptionTargets[3] = chatInputElement;
+
+    // Third session (register transcriptionTargets[3])
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Third message',
@@ -262,10 +291,21 @@ describe('Universal Dictation State Accumulation Bug', () => {
 describe('Universal Dictation State Accumulation Bug - ContentEditable Elements', () => {
   let service: any;
   let contentEditableElement: HTMLDivElement;
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
+    // Driving the real recording flow runs the machine's getInputContext(), which does
+    // an `instanceof HTMLSelectElement` check. The shared JSDOM setup promotes
+    // HTMLInputElement/HTMLTextAreaElement/HTMLDivElement to globals but not
+    // HTMLSelectElement, so for the input-element tests the `instanceof` short-circuits
+    // before reaching it — but for a contentEditable target it is evaluated and throws
+    // a ReferenceError. Promote it here (from the JSDOM window) so the event-driven
+    // setup can register transcription targets for contentEditable elements too.
+    if (typeof (globalThis as any).HTMLSelectElement === 'undefined') {
+      (globalThis as any).HTMLSelectElement = (window as any).HTMLSelectElement;
+    }
+
     // Reset TranscriptionModule mocks
     let sequenceCounter = 0;
     vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockImplementation(() => sequenceCounter);
@@ -284,7 +324,7 @@ describe('Universal Dictation State Accumulation Bug - ContentEditable Elements'
     
     // Create fresh machine for each test
     const machine = createDictationMachine(contentEditableElement);
-    service = interpret(machine);
+    service = createTestActor(machine);
   });
 
   afterEach(() => {
@@ -304,25 +344,25 @@ describe('Universal Dictation State Accumulation Bug - ContentEditable Elements'
     service.send({ type: 'saypi:startDictation', targetElement: contentEditableElement });
     service.send({ type: 'saypi:callReady' });
     
-    // First transcription session
-    service.state.context.transcriptionTargets[1] = contentEditableElement;
+    // First transcription session (register transcriptionTargets[1] via a real speech turn)
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Hello from contentEditable',
       sequenceNumber: 1,
     });
-    
+
     expect(contentEditableElement.textContent).toBe('Hello from contentEditable');
     expect(service.state.context.transcriptionsByTarget['chat-editable']).toEqual({
       1: 'Hello from contentEditable'
     });
-    
+
     // Simulate external clearing (like what chat platforms do)
     // This is the key test - clearing textContent instead of value
     contentEditableElement.textContent = '';
-    
-    // Second session - should detect clearing and start fresh
-    service.state.context.transcriptionTargets[2] = contentEditableElement;
+
+    // Second session - should detect clearing and start fresh (register transcriptionTargets[2])
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'New message',
@@ -343,22 +383,22 @@ describe('Universal Dictation State Accumulation Bug - ContentEditable Elements'
     service.send({ type: 'saypi:startDictation', targetElement: contentEditableElement });
     service.send({ type: 'saypi:callReady' });
     
-    // First transcription
-    service.state.context.transcriptionTargets[1] = contentEditableElement;
+    // First transcription (register transcriptionTargets[1] via a real speech turn)
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Content with formatting',
       sequenceNumber: 1,
     });
-    
+
     expect(contentEditableElement.textContent).toBe('Content with formatting');
-    
+
     // Simulate platform adding HTML formatting, then clearing
     contentEditableElement.innerHTML = '<p><br></p>'; // Some platforms do this
     expect(contentEditableElement.textContent).toBe(''); // textContent should be empty
-    
-    // Second transcription should detect clearing
-    service.state.context.transcriptionTargets[2] = contentEditableElement;
+
+    // Second transcription should detect clearing (register transcriptionTargets[2])
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Fresh start',
@@ -386,34 +426,37 @@ describe('Universal Dictation State Accumulation Bug - ContentEditable Elements'
     service.send({ type: 'saypi:startDictation', targetElement: contentEditableElement });
     service.send({ type: 'saypi:callReady' });
     
-    service.state.context.transcriptionTargets[1] = contentEditableElement;
+    // Register transcriptionTargets[1] -> contentEditableElement via a real speech turn
+    // (the active target is the contentEditable from startDictation).
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'ContentEditable text',
       sequenceNumber: 1,
     });
-    
+
     expect(contentEditableElement.textContent).toBe('ContentEditable text');
-    
-    // Switch to input element
+
+    // Switch to input element - the active target becomes inputElement, so the next
+    // speech turn maps transcriptionTargets[2] -> inputElement.
     service.send({ type: 'saypi:switchTarget', targetElement: inputElement });
-    
-    service.state.context.transcriptionTargets[2] = inputElement;
+
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Input text',
       sequenceNumber: 2,
     });
-    
+
     expect(inputElement.value).toBe('Input text');
-    
+
     // Clear both externally
     contentEditableElement.textContent = '';
     inputElement.value = '';
-    
-    // Back to contentEditable - should detect clearing
+
+    // Back to contentEditable - should detect clearing (register transcriptionTargets[3]).
     service.send({ type: 'saypi:switchTarget', targetElement: contentEditableElement });
-    service.state.context.transcriptionTargets[3] = contentEditableElement;
+    driveSpeechTurn(service);
     service.send({
       type: 'saypi:transcribed',
       text: 'Fresh contentEditable',

@@ -2,11 +2,11 @@ import {
   machine as focusMachine,
   exitFocusMode,
 } from "./state-machines/FocusMachine";
-import { interpret } from "xstate";
+import { createActor } from "xstate";
 import { isMobileDevice } from "./UserAgentModule";
 import { logger } from "./LoggingModule";
 
-const focusActor = interpret(focusMachine);
+const focusActor = createActor(focusMachine);
 const tickInterval = 1000;
 var ticker: ReturnType<typeof setInterval>;
 const userInputEvents = ["mousemove", "click", "keypress"];

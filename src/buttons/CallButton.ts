@@ -11,7 +11,6 @@ import callIconSVG from "../icons/call.svg?raw";
 import callStartingIconSVG from "../icons/call-starting.svg?raw";
 import hangupIconSVG from "../icons/hangup.svg?raw";
 import interruptIconSVG from "../icons/interrupt.svg?raw";
-import { State } from 'xstate'; // Import State type
 import { logger } from "../LoggingModule";
 // import hangupMincedIconSVG from "../icons/hangup-minced.svg"; // Not used anymore
 
@@ -51,7 +50,7 @@ export class CallButton {
         this.handleAudioFrame(probabilities);
       });
        // Listen for state machine changes that affect the button visually
-       this.sayPiActor.subscribe((state: State<any, any, any, any, any>) => {
+       this.sayPiActor.subscribe((state: any) => {
         if (!this.element) return;
 
         // Glow management based on state
