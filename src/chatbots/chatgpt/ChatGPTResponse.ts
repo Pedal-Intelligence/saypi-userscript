@@ -4,12 +4,19 @@ import { UserPreferenceModule } from "../../prefs/PreferenceModule";
 import { logger } from "../../LoggingModule";
 import { ElementTextStream, InputStreamOptions, AddedText } from "../../tts/InputStream";
 import { TTSControlsModule } from "../../tts/TTSControlsModule";
+import { isMessageNewSinceCallStart } from "./readAloudGating";
 
 export class ChatGPTResponse extends AssistantResponse {
   constructor(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean) {
     super(element, includeInitialText);
-    // Mark streaming messages as unread for auto-read aloud functionality
-    if (isStreaming) {
+    // Mark new replies unread so auto-read-aloud picks them up. A reply is "new"
+    // if it streamed in under our chat-history observer (isStreaming) OR it first
+    // appeared after the current voice call started. The latter covers the
+    // new-chat / route-change race (#200/#408): there the chat-history container
+    // is found late, so the reply is decorated via the old-message path and never
+    // gets the streaming flag — yet it is the awaited reply and must be read aloud.
+    // Messages already present when the call started stay silent (#245).
+    if (isStreaming || isMessageNewSinceCallStart(element.getAttribute('data-turn-id'))) {
       element.setAttribute('data-saypi-unread', 'true');
     }
   }
