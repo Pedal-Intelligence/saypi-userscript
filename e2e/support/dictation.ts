@@ -39,3 +39,19 @@ export async function getTranscribeHits(serviceWorker: Worker): Promise<number> 
     return ((await res.json()) as { hits: number }).hits;
   }, TRANSCRIBE_HITS_URL);
 }
+
+/**
+ * Read the Content-Type the mock /transcribe saw on the last uploaded audio part
+ * — `audio/webm` (WebM/Opus) or `audio/wav` (PCM fallback). Proves which encoder
+ * path the content script actually took (#414). Read via the SW for the same
+ * reason as the hit counter.
+ */
+export async function getLastAudioContentType(
+  serviceWorker: Worker
+): Promise<string | null> {
+  return serviceWorker.evaluate(async (url) => {
+    const res = await fetch(url);
+    return ((await res.json()) as { lastAudioContentType: string | null })
+      .lastAudioContentType;
+  }, TRANSCRIBE_HITS_URL);
+}

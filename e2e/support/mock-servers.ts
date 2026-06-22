@@ -14,6 +14,7 @@ export interface MockServers {
   piPort: number;
   apiPort: number;
   transcribeHits: () => number;
+  lastAudioContentType: () => string | null;
   close: () => Promise<void>;
 }
 
@@ -23,8 +24,18 @@ function extractSequenceNumber(body: Buffer): number {
   return m ? Number(m[1]) : 1;
 }
 
+function extractAudioContentType(body: Buffer): string | null {
+  // tolerant scan of the multipart form for the audio part's Content-Type
+  // (proves whether the client uploaded WebM/Opus or fell back to PCM WAV — #414)
+  const m = body
+    .toString("latin1")
+    .match(/name="audio";\s*filename="[^"]*"\r?\nContent-Type:\s*([^\r\n]+)/i);
+  return m ? m[1].trim() : null;
+}
+
 export async function startMockServers(): Promise<MockServers> {
   let hits = 0;
+  let lastAudioContentType: string | null = null;
 
   // One page server backs both decorated hosts; the Host header picks the page.
   // claude.ai and pi.ai both resolve here via --host-resolver-rules, and the
@@ -46,7 +57,7 @@ export async function startMockServers(): Promise<MockServers> {
         "content-type": "application/json",
         "access-control-allow-origin": "*",
       });
-      res.end(JSON.stringify({ hits }));
+      res.end(JSON.stringify({ hits, lastAudioContentType }));
       return;
     }
     if (req.method === "POST" && req.url && req.url.startsWith("/transcribe")) {
@@ -54,7 +65,9 @@ export async function startMockServers(): Promise<MockServers> {
       req.on("data", (c) => chunks.push(c));
       req.on("end", () => {
         hits++;
-        const seq = extractSequenceNumber(Buffer.concat(chunks));
+        const body = Buffer.concat(chunks);
+        lastAudioContentType = extractAudioContentType(body) ?? lastAudioContentType;
+        const seq = extractSequenceNumber(body);
         const payload = JSON.stringify(buildTranscribeResponse({ sequenceNumber: seq }));
         res.writeHead(200, {
           "content-type": "application/json",
@@ -90,6 +103,7 @@ export async function startMockServers(): Promise<MockServers> {
     piPort: (piServer.address() as import("node:net").AddressInfo).port,
     apiPort: (apiServer.address() as import("node:net").AddressInfo).port,
     transcribeHits: () => hits,
+    lastAudioContentType: () => lastAudioContentType,
     close: async () => {
       await new Promise((r) => piServer.close(() => r(null)));
       await new Promise((r) => apiServer.close(() => r(null)));

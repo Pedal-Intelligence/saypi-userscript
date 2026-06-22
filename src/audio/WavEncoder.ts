@@ -71,6 +71,34 @@ export function encodeWAV(
   return buffer;
 }
 
+/**
+ * Decode a 16-bit PCM mono WAV (as produced by `encodeWAV(..., 1, 16000, 1, 16)`)
+ * back to Float32 samples. Returns null if the bytes are not the expected
+ * 16-bit-PCM layout, so callers can leave non-matching blobs untouched. Used to
+ * transcode the upload to Opus at the network boundary (#414) without re-plumbing
+ * the synchronous audio-event pipeline that carries the WAV blob.
+ */
+export function decodePcm16Wav(buffer: ArrayBuffer): Float32Array | null {
+  if (buffer.byteLength < 44) return null;
+  const view = new DataView(buffer);
+  const isRiffWave =
+    view.getUint32(0, false) === 0x52494646 /* "RIFF" */ &&
+    view.getUint32(8, false) === 0x57415645 /* "WAVE" */;
+  const audioFormat = view.getUint16(20, true);
+  const bitsPerSample = view.getUint16(34, true);
+  if (!isRiffWave || audioFormat !== 1 || bitsPerSample !== 16) return null;
+
+  const declaredDataLength = view.getUint32(40, true);
+  const available = buffer.byteLength - 44;
+  const dataLength = Math.min(declaredDataLength, available);
+  const sampleCount = Math.floor(dataLength / 2);
+  const out = new Float32Array(sampleCount);
+  for (let i = 0; i < sampleCount; i++) {
+    out[i] = view.getInt16(44 + i * 2, true) / 0x8000;
+  }
+  return out;
+}
+
 function interleave(inputL: Float32Array, inputR: Float32Array) {
   var length = inputL.length + inputR.length;
   var result = new Float32Array(length);

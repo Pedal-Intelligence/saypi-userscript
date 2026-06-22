@@ -100,6 +100,7 @@
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",
     "wasm-feature-detect": "^1.8.0",
+    "webm-muxer": "^5.1.4",
     "xstate": "^5.20.1"
   },
   "devDependencies": {

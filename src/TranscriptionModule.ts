@@ -7,6 +7,7 @@ import EventBus from "./events/EventBus";
 import { ChatbotService } from "./chatbots/ChatbotService";
 import { buildUsageMetadata } from "./usage/UsageMetadata";
 import { constructTranscriptionFormData } from "./TranscriptionForm";
+import { transcodeForUpload } from "./audio/AudioEncoder";
 import { parseServerTiming } from "./telemetry/serverTiming";
 
 /**
@@ -437,14 +438,18 @@ async function uploadAudioForRefinementInternal(
 
     // Build minimal FormData (no sequence number, no messages, no acceptsMerge)
     const formData = new FormData();
+
+    // Compress to WebM/Opus where supported (#414); no-op otherwise.
+    const uploadBlob = await transcodeForUpload(audioBlob);
+
     let audioFilename = "audio.webm";
-    if (audioBlob.type === "audio/mp4") {
+    if (uploadBlob.type === "audio/mp4") {
       audioFilename = "audio.mp4";
-    } else if (audioBlob.type === "audio/wav") {
+    } else if (uploadBlob.type === "audio/wav") {
       audioFilename = "audio.wav";
     }
 
-    formData.append("audio", audioBlob, audioFilename);
+    formData.append("audio", uploadBlob, audioFilename);
     formData.append("duration", (audioDurationMillis / 1000).toString());
     formData.append("requestId", requestId); // UUID for correlation
 
