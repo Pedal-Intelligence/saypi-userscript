@@ -2,6 +2,7 @@ import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { ChatbotService } from "./chatbots/ChatbotService";
 import { buildUsageMetadata } from "./usage/UsageMetadata";
+import { transcodeForUpload } from "./audio/AudioEncoder";
 
 const userPreferences = UserPreferenceModule.getInstance();
 
@@ -16,22 +17,26 @@ export async function constructTranscriptionFormData(
   inputLabel?: string
 ) {
   const formData = new FormData();
-  let audioFilename = "audio.webm";
 
-  if (audioBlob.type === "audio/mp4") {
+  // Compress to WebM/Opus where the browser supports it (#414); a no-op that
+  // returns the original blob for unsupported contexts or non-WAV input.
+  const uploadBlob = await transcodeForUpload(audioBlob);
+
+  let audioFilename = "audio.webm";
+  if (uploadBlob.type === "audio/mp4") {
     audioFilename = "audio.mp4";
-  } else if (audioBlob.type === "audio/wav") {
+  } else if (uploadBlob.type === "audio/wav") {
     audioFilename = "audio.wav";
   }
 
   logger.debug(
-    `Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(
-      audioBlob.size / 1024
+    `Transcribing audio Blob with MIME type: ${uploadBlob.type}, size: ${(
+      uploadBlob.size / 1024
     ).toFixed(2)}kb`
   );
 
   // Add the audio and other input parameters to the FormData object
-  formData.append("audio", audioBlob, audioFilename);
+  formData.append("audio", uploadBlob, audioFilename);
   formData.append("duration", audioDurationSeconds.toString());
   formData.append("sequenceNumber", (sequenceNumber ?? 0).toString());
   formData.append("messages", JSON.stringify(messages));

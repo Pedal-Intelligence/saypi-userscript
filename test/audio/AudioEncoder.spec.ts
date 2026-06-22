@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { convertToWavBuffer, convertToWavBlob } from "../../src/audio/AudioEncoder";
-import { encodeWAV } from "../../src/audio/WavEncoder";
+import { encodeWAV, decodePcm16Wav } from "../../src/audio/WavEncoder";
 
 /**
  * Minimal WAV header reader so the tests can assert the on-the-wire format
@@ -115,6 +115,31 @@ describe("AudioEncoder — transcribe upload format (#414)", () => {
       const header = readWavHeader(encodeWAV(samples, 3, 16000, 1, 32));
       expect(header.audioFormat).toBe(3);
       expect(header.bitsPerSample).toBe(32);
+    });
+  });
+
+  // decodePcm16Wav is the inverse used to transcode the WAV upload to Opus (#414).
+  describe("decodePcm16Wav", () => {
+    it("round-trips 16-bit PCM WAV samples back to ~Float32", () => {
+      const src = new Float32Array([0, 0.5, -0.5, 1, -1]);
+      const decoded = decodePcm16Wav(convertToWavBuffer(src));
+      expect(decoded).not.toBeNull();
+      expect(decoded!.length).toBe(src.length);
+      expect(decoded![0]).toBeCloseTo(0, 4);
+      expect(decoded![1]).toBeCloseTo(0.5, 3);
+      expect(decoded![2]).toBeCloseTo(-0.5, 4);
+      expect(decoded![3]).toBeCloseTo(1, 3); // 32767/32768 ≈ 0.99997
+      expect(decoded![4]).toBeCloseTo(-1, 4);
+    });
+
+    it("returns null for a 32-bit float WAV (not 16-bit PCM)", () => {
+      const floatWav = encodeWAV(new Float32Array([0.1, 0.2]), 3, 16000, 1, 32);
+      expect(decodePcm16Wav(floatWav)).toBeNull();
+    });
+
+    it("returns null for non-RIFF / too-short bytes", () => {
+      expect(decodePcm16Wav(new ArrayBuffer(8))).toBeNull();
+      expect(decodePcm16Wav(new ArrayBuffer(64))).toBeNull(); // 64 zero bytes: not RIFF
     });
   });
 });
