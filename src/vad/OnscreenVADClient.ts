@@ -141,7 +141,9 @@ export class OnscreenVADClient implements VADClientInterface {
             `peak=${stats.peakSpeechProb.toFixed(3)}, mean=${stats.meanSpeechProb.toFixed(3)}, ` +
             `speechFrames=${stats.speechFrameCount}. Not uploading.`
           );
-          this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
+          // #420 — the audio WAS speech-like, just too faint to transcribe; show a
+          // distinct detail rather than the self-contradictory "Non-speech audio detected".
+          this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailAudioTooFaint'));
           setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
           this.callbacks.onVADMisfire?.({
             reason: `admission-gate:${decision.reason}`,

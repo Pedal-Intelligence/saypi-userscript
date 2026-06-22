@@ -994,6 +994,10 @@
     "message": "Non-speech audio detected",
     "description": "VAD detail for non-speech audio detection."
   },
+  "vadDetailAudioTooFaint": {
+    "message": "Audio too faint to transcribe",
+    "description": "VAD detail when speech-like audio was detected but was too faint / low-confidence to transcribe (client-side admission-gate drop)."
+  },
   "vadStatusError": {
     "message": "Error",
     "description": "Generic VAD error status."

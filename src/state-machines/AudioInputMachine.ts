@@ -115,6 +115,14 @@ function setupVADEventListeners() {
         `[AudioInputMachine] Admission gate dropped a segment (${info.reason}): ` +
         `peak=${info.peakSpeechProb}, speechFrames=${info.speechFrameCount}.`
       );
+      // #420 — feed the per-session analytics counter so a regression that clips real
+      // (quiet) speech surfaces in session_ended rather than going silent.
+      EventBus.emit("session:vad-gate-drop", {
+        reason: info.reason,
+        peakSpeechProb: info.peakSpeechProb,
+        meanSpeechProb: info.meanSpeechProb,
+        speechFrameCount: info.speechFrameCount,
+      });
     } else {
       logger.debug("[AudioInputMachine] VAD misfire detected.");
     }

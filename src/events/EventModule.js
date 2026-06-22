@@ -108,6 +108,11 @@ export default class EventModule {
     EventBus.on("session:transcribing", (detail) => {
       actor.send({ type: "transcribing", ...detail });
     });
+    // #420 — count client-side VAD admission-gate drops per session so a regression
+    // that clips real (quiet) speech is visible in analytics rather than silent.
+    EventBus.on("session:vad-gate-drop", () => {
+      actor.send({ type: "vad_gate_drop" });
+    });
   }
 
   static registerNotifications() {

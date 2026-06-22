@@ -61,6 +61,10 @@ interface SessionContext {
   message_count: number;
   audio_duration_seconds: number;
   talk_time_seconds: number;
+  // #420 — count of segments the client-side VAD admission gate dropped this session.
+  // Reported at session end so a regression where the gate clips real (quiet) speech
+  // is visible in analytics rather than silent.
+  vad_gate_drop_count: number;
   last_message: {
     speech_start_time: number;
     speech_end_time: number;
@@ -81,11 +85,13 @@ type SendMessageEvent = {
   wait_time_ms: number;
 };
 type EndSessionEvent = { type: "end_session" };
+type GateDropEvent = { type: "vad_gate_drop" };
 type SessionEvent =
   | EndSessionEvent
   | SendMessageEvent
   | TranscriptionEvent
-  | StartSessionEvent;
+  | StartSessionEvent
+  | GateDropEvent;
 
 const machine = setup({
   types: {
@@ -109,6 +115,7 @@ const machine = setup({
         duration_mins: durationInMinutes,
         audio_duration_seconds: context.audio_duration_seconds,
         talk_time_seconds: context.talk_time_seconds,
+        vad_gate_drop_count: context.vad_gate_drop_count,
       });
     },
     notifySendMessage: async ({ context, event }) => {
@@ -156,6 +163,7 @@ const machine = setup({
       message_count: 0,
       audio_duration_seconds: 0,
       talk_time_seconds: 0,
+      vad_gate_drop_count: 0,
       last_message: {
         speech_start_time: 0,
         speech_end_time: 0,
@@ -167,6 +175,9 @@ const machine = setup({
       message_count: ({ context }) => context.message_count + 1,
       talk_time_seconds: ({ context }) =>
         context.talk_time_seconds + context.last_message.talk_time_seconds,
+    }),
+    incrementGateDropCount: assign({
+      vad_gate_drop_count: ({ context }) => context.vad_gate_drop_count + 1,
     }),
     clearLastMessage: assign({
       last_message: () => {
@@ -216,6 +227,7 @@ const machine = setup({
     message_count: 0,
     audio_duration_seconds: 0,
     talk_time_seconds: 0,
+    vad_gate_drop_count: 0,
     last_message: {
       speech_start_time: 0,
       speech_end_time: 0,
@@ -249,6 +261,11 @@ const machine = setup({
       on: {
         transcribing: {
           actions: "rollupTranscription",
+        },
+        vad_gate_drop: {
+          // #420 — count an admission-gate drop against this session. NOT re-entrant:
+          // a dropped non-speech blip must not reset the 30-min auto-end timer.
+          actions: "incrementGateDropCount",
         },
         send_message: {
           actions: [
