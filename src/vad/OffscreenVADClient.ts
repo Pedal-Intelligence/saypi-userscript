@@ -97,13 +97,18 @@ export class OffscreenVADClient implements VADClientInterface {
             speechFrameCount: message.speechFrameCount,
           });
           break;
-        case "VAD_MISFIRE":
-          this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
+        case "VAD_MISFIRE": {
+          // #420 — an admission-gate drop heard speech-like audio that was just too
+          // faint to transcribe; "Non-speech audio detected" would be self-contradictory,
+          // so show a distinct detail and surface the drop in the content-script log.
+          const isGateDrop =
+            typeof message.reason === "string" && message.reason.startsWith("admission-gate");
+          const misfireDetail = isGateDrop
+            ? getMessage('vadDetailAudioTooFaint')
+            : getMessage('vadDetailNonSpeechAudioDetected');
+          this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), misfireDetail);
           setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-          // #420 — surface an admission-gate drop in the content-script log too (not just
-          // the offscreen one) and forward its reason/stats so it stays distinguishable
-          // from a genuine non-speech misfire for any downstream counter.
-          if (typeof message.reason === "string" && message.reason.startsWith("admission-gate")) {
+          if (isGateDrop) {
             logger.info(
               `[SayPi OffscreenVADClient] Admission gate dropped a segment (${message.reason}): ` +
               `peak=${message.peakSpeechProb}, speechFrames=${message.speechFrameCount}.`
@@ -116,6 +121,7 @@ export class OffscreenVADClient implements VADClientInterface {
             speechFrameCount: message.speechFrameCount,
           });
           break;
+        }
         case "VAD_FRAME_PROCESSED":
           this.callbacks.onFrameProcessed?.(message.probabilities);
           break;

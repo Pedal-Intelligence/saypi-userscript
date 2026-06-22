@@ -20,12 +20,16 @@ vi.mock("../../src/LoggingModule", () => ({
   logger: { log: vi.fn(), debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn(), reportError: vi.fn() },
 }));
 vi.mock("../../src/i18n", () => ({ default: (key: string) => key }));
+const { indicatorInstances } = vi.hoisted(() => ({ indicatorInstances: [] as any[] }));
 vi.mock("../../src/ui/VADStatusIndicator", () => ({
   VADStatusIndicator: class {
     updateStatus = vi.fn();
     hide = vi.fn();
     show = vi.fn();
     destroy = vi.fn();
+    constructor() {
+      indicatorInstances.push(this);
+    }
   },
 }));
 vi.mock("../../src/UserAgentModule", () => ({
@@ -47,6 +51,7 @@ describe("#420 OnscreenVADClient admission gate + stat forwarding", () => {
     };
     micVadNew.mockClear();
     fakeVad.start.mockClear();
+    indicatorInstances.length = 0;
   });
 
   afterEach(() => {
@@ -98,5 +103,13 @@ describe("#420 OnscreenVADClient admission gate + stat forwarding", () => {
     const info = onVADMisfire.mock.calls[0][0];
     expect(info.reason).toMatch(/admission-gate/);
     expect(info.peakSpeechProb).toBeCloseTo(0.42, 5);
+
+    // And it shows the distinct "too faint" status detail, not the misleading
+    // "Non-speech audio detected" (the audio WAS speech-like, just below the bar).
+    const indicator = indicatorInstances[0];
+    expect(indicator.updateStatus).toHaveBeenCalledWith(
+      "vadStatusMisfire",
+      "vadDetailAudioTooFaint"
+    );
   });
 });

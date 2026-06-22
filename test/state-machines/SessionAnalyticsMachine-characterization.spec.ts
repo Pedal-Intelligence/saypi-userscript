@@ -126,6 +126,7 @@ describe("SessionAnalyticsMachine — initial state & context", () => {
       message_count: 0,
       audio_duration_seconds: 0,
       talk_time_seconds: 0,
+      vad_gate_drop_count: 0,
       last_message: {
         speech_start_time: 0,
         speech_end_time: 0,
@@ -506,6 +507,7 @@ describe("SessionAnalyticsMachine — Active: end_session", () => {
       duration_mins: (endTime - startTime) / 1000 / 60,
       audio_duration_seconds: 4,
       talk_time_seconds: 4,
+      vad_gate_drop_count: 0,
     });
 
     dateSpy.mockRestore();
@@ -529,6 +531,62 @@ describe("SessionAnalyticsMachine — Active: end_session", () => {
     expect(ctx.message_count).toBe(0);
     expect(ctx.audio_duration_seconds).toBe(0);
     expect(ctx.talk_time_seconds).toBe(0);
+  });
+});
+
+describe("#420 SessionAnalyticsMachine — Active: vad_gate_drop counter", () => {
+  it("increments vad_gate_drop_count per event while Active, without ending the session", () => {
+    startActive();
+    service.send({ type: "vad_gate_drop" });
+    service.send({ type: "vad_gate_drop" });
+    expect(service.state.matches("Active")).toBe(true);
+    expect(service.state.context.vad_gate_drop_count).toBe(2);
+  });
+
+  it("a gate drop does not call analytics on its own (only counted, flushed at session end)", () => {
+    startActive();
+    getAnalytics().sendEvent.mockClear();
+    service.send({ type: "vad_gate_drop" });
+    expect(getAnalytics().sendEvent).not.toHaveBeenCalled();
+  });
+
+  it("reports the per-session vad_gate_drop_count in session_ended", () => {
+    const startTime = 1_700_000_000_000;
+    const dateSpy = vi.spyOn(Date, "now").mockReturnValue(startTime);
+    service = createTestActor(machine);
+    service.start();
+    service.send("start_session");
+    const sessionId = service.state.context.session_id;
+
+    service.send({ type: "vad_gate_drop" });
+    service.send({ type: "vad_gate_drop" });
+    service.send({ type: "vad_gate_drop" });
+
+    getAnalytics().sendEvent.mockClear();
+    service.send("end_session");
+
+    const call = getAnalytics().sendEvent.mock.calls.find((c) => c[0] === "session_ended");
+    expect(call).toBeTruthy();
+    expect((call![1] as Record<string, unknown>).session_id).toBe(sessionId);
+    expect((call![1] as Record<string, unknown>).vad_gate_drop_count).toBe(3);
+
+    dateSpy.mockRestore();
+  });
+
+  it("resets vad_gate_drop_count on a fresh session", () => {
+    startActive();
+    service.send({ type: "vad_gate_drop" });
+    service.send("end_session");
+    service.send("start_session");
+    expect(service.state.context.vad_gate_drop_count).toBe(0);
+  });
+
+  it("ignores vad_gate_drop while Idle (no session to attribute it to)", () => {
+    service = createTestActor(machine);
+    service.start();
+    service.send({ type: "vad_gate_drop" });
+    expect(service.state.matches("Idle")).toBe(true);
+    expect(service.state.context.vad_gate_drop_count).toBe(0);
   });
 });
 

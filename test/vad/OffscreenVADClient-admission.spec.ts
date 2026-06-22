@@ -14,12 +14,16 @@ vi.mock("../../src/i18n", () => ({ default: (key: string) => key }));
 vi.mock("../../src/offscreen/media_coordinator", () => ({
   sanitizeMessageForLogs: (m: any) => m,
 }));
+const { indicatorInstances } = vi.hoisted(() => ({ indicatorInstances: [] as any[] }));
 vi.mock("../../src/ui/VADStatusIndicator", () => ({
   VADStatusIndicator: class {
     updateStatus = vi.fn();
     hide = vi.fn();
     show = vi.fn();
     destroy = vi.fn();
+    constructor() {
+      indicatorInstances.push(this);
+    }
   },
 }));
 
@@ -30,6 +34,7 @@ describe("#420 OffscreenVADClient forwards admission stats", () => {
 
   beforeEach(() => {
     ports = [];
+    indicatorInstances.length = 0;
     (global as any).chrome = {
       runtime: {
         connect: vi.fn(() => {
@@ -103,9 +108,21 @@ describe("#420 OffscreenVADClient forwards admission stats", () => {
     expect(info.reason).toBe("admission-gate:low-peak-confidence");
     expect(info.peakSpeechProb).toBeCloseTo(0.41, 5);
     expect(info.speechFrameCount).toBe(2);
+
+    // A gate drop shows a distinct, non-self-contradictory status detail — the audio
+    // WAS speech-like, just too faint to transcribe — NOT "Non-speech audio detected".
+    const indicator = indicatorInstances[0];
+    expect(indicator.updateStatus).toHaveBeenCalledWith(
+      "vadStatusMisfire",
+      "vadDetailAudioTooFaint"
+    );
+    expect(indicator.updateStatus).not.toHaveBeenCalledWith(
+      "vadStatusMisfire",
+      "vadDetailNonSpeechAudioDetected"
+    );
   });
 
-  it("a plain library misfire forwards undefined gate detail", () => {
+  it("a plain library misfire forwards undefined gate detail and keeps the non-speech status", () => {
     const client = new OffscreenVADClient();
     const onVADMisfire = vi.fn();
     client.on("onVADMisfire", onVADMisfire);
@@ -115,5 +132,12 @@ describe("#420 OffscreenVADClient forwards admission stats", () => {
     expect(onVADMisfire).toHaveBeenCalledTimes(1);
     const info = onVADMisfire.mock.calls[0][0];
     expect(info.reason).toBeUndefined();
+
+    // A genuine library misfire (non-speech blip) keeps the original detail.
+    const indicator = indicatorInstances[0];
+    expect(indicator.updateStatus).toHaveBeenCalledWith(
+      "vadStatusMisfire",
+      "vadDetailNonSpeechAudioDetected"
+    );
   });
 });
