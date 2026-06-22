@@ -20,6 +20,10 @@ import { logger } from "../LoggingModule";
 const SAMPLE_RATE = 16000;
 const NUM_CHANNELS = 1;
 const OPUS_BITRATE = 24000; // 24 kbps — speech-transparent for 16 kHz mono
+// A real encode of a few seconds of 16 kHz audio takes ~tens of ms; this only
+// trips if the codec stalls and never fires `error` (rare, but it would
+// otherwise hang the upload forever — the caller then falls back to WAV).
+const ENCODE_TIMEOUT_MS = 5000;
 
 const OPUS_CONFIG: AudioEncoderConfig = {
   codec: "opus",
@@ -80,14 +84,33 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
   });
 
   await new Promise<void>((resolve, reject) => {
-    const encoder = new AudioEncoder({
-      // `meta` carries the OpusHead (decoderConfig.description) webm-muxer needs.
-      output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
-      error: (e) => reject(e),
-    });
+    let settled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    let encoder: AudioEncoder | null = null;
+    let frame: AudioData | null = null;
+
+    // Close codec resources on every exit path (success, error, timeout) so a
+    // failed encode can't leak an AudioEncoder/AudioData.
+    const settle = (err?: unknown) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      try { frame?.close(); } catch { /* already closed */ }
+      try { encoder?.close(); } catch { /* already closed */ }
+      if (err) reject(err instanceof Error ? err : new Error(String(err)));
+      else resolve();
+    };
+
+    timer = setTimeout(() => settle(new Error("Opus encode timed out")), ENCODE_TIMEOUT_MS);
+
     try {
+      encoder = new AudioEncoder({
+        // `meta` carries the OpusHead (decoderConfig.description) webm-muxer needs.
+        output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+        error: (e) => settle(e),
+      });
       encoder.configure(OPUS_CONFIG);
-      const frame = new AudioData({
+      frame = new AudioData({
         format: "f32",
         sampleRate: SAMPLE_RATE,
         numberOfFrames: audioData.length,
@@ -98,13 +121,9 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
         data: audioData as unknown as BufferSource,
       });
       encoder.encode(frame);
-      frame.close();
-      encoder.flush().then(() => {
-        encoder.close();
-        resolve();
-      }, reject);
+      encoder.flush().then(() => settle(), (e) => settle(e));
     } catch (e) {
-      reject(e);
+      settle(e);
     }
   });
 

@@ -22,6 +22,7 @@ describe("OpusEncoder — WebCodecs capability probe (#414)", () => {
   afterEach(() => {
     g.AudioEncoder = originalAudioEncoder;
     g.AudioData = originalAudioData;
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -73,5 +74,26 @@ describe("OpusEncoder — WebCodecs capability probe (#414)", () => {
     delete g.AudioData;
     const { encodeToOpusWebM } = await import("../../src/audio/OpusEncoder");
     await expect(encodeToOpusWebM(new Float32Array([0, 0.1, -0.1]))).rejects.toThrow();
+  });
+
+  it("encodeToOpusWebM rejects on timeout if the codec stalls (never resolves, never errors)", async () => {
+    vi.useFakeTimers();
+    g.AudioEncoder = class {
+      static isConfigSupported = vi.fn().mockResolvedValue({ supported: true });
+      configure() {}
+      encode() {}
+      flush() {
+        return new Promise<void>(() => {}); // never settles, never fires error()
+      }
+      close() {}
+    };
+    g.AudioData = class {
+      close() {}
+    };
+    const { encodeToOpusWebM } = await import("../../src/audio/OpusEncoder");
+    const p = encodeToOpusWebM(new Float32Array([0.1, 0.2, 0.3]));
+    p.catch(() => {}); // avoid an unhandled rejection while advancing timers
+    await vi.advanceTimersByTimeAsync(5001);
+    await expect(p).rejects.toThrow(/timed out/);
   });
 });
