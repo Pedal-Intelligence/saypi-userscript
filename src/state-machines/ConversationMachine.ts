@@ -1,7 +1,6 @@
 import {
   setup,
   assign,
-  log,
 } from "xstate";
 import AnimationModule from "../AnimationModule.js";
 import {
