@@ -85,17 +85,36 @@ export class OffscreenVADClient implements VADClientInterface {
           logTransferDelay(captureTimestamp, receiveTimestamp);
 
           // Pass the reconstructed Float32Array's buffer as ArrayBuffer
-          this.callbacks.onSpeechEnd?.({ 
-            duration: message.duration, 
+          this.callbacks.onSpeechEnd?.({
+            duration: message.duration,
             audioBuffer: rawAudioData.buffer,
             captureTimestamp: captureTimestamp,
-            clientReceiveTimestamp: receiveTimestamp
+            clientReceiveTimestamp: receiveTimestamp,
+            // #420 — forward the VAD's per-segment speech-probability stats instead of
+            // dropping them at this boundary (the gap the issue identifies).
+            peakSpeechProb: message.peakSpeechProb,
+            meanSpeechProb: message.meanSpeechProb,
+            speechFrameCount: message.speechFrameCount,
           });
           break;
         case "VAD_MISFIRE":
           this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
           setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-          this.callbacks.onVADMisfire?.();
+          // #420 — surface an admission-gate drop in the content-script log too (not just
+          // the offscreen one) and forward its reason/stats so it stays distinguishable
+          // from a genuine non-speech misfire for any downstream counter.
+          if (typeof message.reason === "string" && message.reason.startsWith("admission-gate")) {
+            logger.info(
+              `[SayPi OffscreenVADClient] Admission gate dropped a segment (${message.reason}): ` +
+              `peak=${message.peakSpeechProb}, speechFrames=${message.speechFrameCount}.`
+            );
+          }
+          this.callbacks.onVADMisfire?.({
+            reason: message.reason,
+            peakSpeechProb: message.peakSpeechProb,
+            meanSpeechProb: message.meanSpeechProb,
+            speechFrameCount: message.speechFrameCount,
+          });
           break;
         case "VAD_FRAME_PROCESSED":
           this.callbacks.onFrameProcessed?.(message.probabilities);

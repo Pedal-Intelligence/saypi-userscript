@@ -4,6 +4,12 @@ import { logger } from "../LoggingModule.js";
 import { debounce } from "../utils/debounce";
 import { incrementUsage, decrementUsage, resetUsageCounter, registerMessageHandler } from "./media_coordinator";
 import { VAD_CONFIGS, VADPreset } from "../vad/VADConfigs";
+import {
+  SegmentStatsTracker,
+  admitSegment,
+  DEFAULT_ADMISSION_CONFIG,
+  SILERO_V5_DEFAULT_POSITIVE_THRESHOLD,
+} from "../vad/segmentAdmission";
 import { resolveVadStream, type SyntheticAudioLatch } from "./synthetic-audio";
 
 const globalScope = globalThis as Record<PropertyKey, unknown>;
@@ -57,6 +63,11 @@ let speechStartTime = 0;
 let lastFrameProbabilities: { isSpeech: number; notSpeech: number } | null = null;
 let activePreset: VADPreset = "none";
 
+// #420 — accumulates each segment's peak/mean speech probability + speech-frame count
+// from the per-frame VAD callbacks, so the admission gate can drop near-threshold
+// non-speech BEFORE the audio is serialised across the offscreen→content IPC.
+const segmentStats = new SegmentStatsTracker(SILERO_V5_DEFAULT_POSITIVE_THRESHOLD);
+
 // DEV-only: when armed (via VAD_USE_SYNTHETIC_AUDIO), the next VAD init is fed a
 // bundled WAV instead of the live mic, so the agent can drive a voice turn with
 // no human speaking. See src/offscreen/synthetic-audio.ts.
@@ -82,6 +93,7 @@ const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks =
   onSpeechStart: () => {
     logger.debug("[SayPi VAD Handler] Speech started.");
     speechStartTime = Date.now();
+    segmentStats.beginSegment();
     if (currentVadTabId !== null) {
       const confidence = lastFrameProbabilities?.isSpeech ?? null;
       chrome.runtime.sendMessage({
@@ -103,16 +115,39 @@ const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks =
     const frameCount = rawAudioData.length;
     const frameRate = 16000;
     const duration = frameCount / frameRate;
+    // #420 — summarise the segment's speech-probability before deciding to upload.
+    const stats = segmentStats.endSegment();
+    const decision = admitSegment(stats, DEFAULT_ADMISSION_CONFIG);
     console.debug(`[SayPi VAD Handler] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
     logger.debug(`[SayPi VAD Handler] Speech ended. Duration: ${speechDuration}ms`);
     if (currentVadTabId !== null) {
-      // Convert Float32Array to regular Array for proper serialization
-      const audioArray = Array.from(rawAudioData);
-      
-      // Add precise timestamp of when audio was captured
       const captureTimestamp = speechStopTime;
       const confidence = lastFrameProbabilities?.isSpeech ?? null;
-      
+
+      // #420 — gate at the cheapest point: a segment that never cleared the speech
+      // bar is dropped as a misfire so its audio is NEVER serialised across the IPC.
+      // (Reuses the existing non-speech/misfire path end-to-end.)
+      if (!decision.admit) {
+        logger.info(
+          `[SayPi VAD Handler] Admission gate dropped a segment (${decision.reason}): ` +
+          `peak=${stats.peakSpeechProb.toFixed(3)}, mean=${stats.meanSpeechProb.toFixed(3)}, ` +
+          `speechFrames=${stats.speechFrameCount}. Not uploading.`
+        );
+        chrome.runtime.sendMessage({
+          type: "VAD_MISFIRE",
+          reason: `admission-gate:${decision.reason}`,
+          peakSpeechProb: stats.peakSpeechProb,
+          meanSpeechProb: stats.meanSpeechProb,
+          speechFrameCount: stats.speechFrameCount,
+          targetTabId: currentVadTabId,
+          origin: "offscreen-document",
+        });
+        return;
+      }
+
+      // Convert Float32Array to regular Array for proper serialization
+      const audioArray = Array.from(rawAudioData);
+
       chrome.runtime.sendMessage({
         type: "VAD_SPEECH_END",
         duration: speechDuration,
@@ -120,16 +155,22 @@ const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks =
         frameCount: frameCount,
         captureTimestamp: captureTimestamp,
         confidence,
+        // #420 — per-segment speech-probability stats forwarded for observability and
+        // future threshold calibration (the gate that admitted this segment used them).
+        peakSpeechProb: stats.peakSpeechProb,
+        meanSpeechProb: stats.meanSpeechProb,
+        speechFrameCount: stats.speechFrameCount,
         targetTabId: currentVadTabId,
         origin: "offscreen-document",
       });
-      
+
       // Log message sending delays if they exceed thresholds
       logMessageDelay(captureTimestamp);
     }
   },
   onVADMisfire: () => {
     logger.debug("[SayPi VAD Handler] VAD misfire.");
+    segmentStats.reset();
     if (currentVadTabId !== null) {
       chrome.runtime.sendMessage({
         type: "VAD_MISFIRE",
@@ -140,6 +181,7 @@ const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks =
   },
   onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
     lastFrameProbabilities = probabilities;
+    segmentStats.observe(probabilities.isSpeech);
     debouncedSendFrameProcessed(probabilities);
   },
 };
@@ -245,6 +287,11 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
     logger.log("[SayPi VAD Handler] Initializing VAD with default options...");
     const preset: VADPreset = initOptions.preset && VAD_CONFIGS[initOptions.preset] ? initOptions.preset : "none";
     const mergedOptions = { ...vadCallbackOptions, ...VAD_CONFIGS[preset], ...vadBundleOptions };
+    // #420 — count speech frames against the active preset's positive threshold
+    // (the "none" preset has no override, so fall back to the Silero v5 default).
+    segmentStats.setPositiveSpeechThreshold(
+      VAD_CONFIGS[preset]?.positiveSpeechThreshold ?? SILERO_V5_DEFAULT_POSITIVE_THRESHOLD
+    );
 
     const existingOrtConfig = mergedOptions.ortConfig;
     mergedOptions.ortConfig = (runtime: typeof ort) => {
@@ -375,6 +422,9 @@ export async function stopVAD(sourceTabId?: number) {
     try {
       logger.log("[SayPi VAD Handler] Stopping VAD...");
       vadInstance.pause(); // Use pause, or destroy if it's a full stop
+      // #420 — pause() with submitUserSpeechOnPause:false fires no callback, so reset
+      // the tracker here to keep it idle between segments if a call stops mid-utterance.
+      segmentStats.reset();
       decrementUsage('vad');
       return { success: true };
     } catch (error: any) {
@@ -394,6 +444,7 @@ export function destroyVAD(sourceTabId?: number) {
     return { success: true, ignored: true };
   }
   logger.log("[SayPi VAD Handler] Destroying VAD...");
+  segmentStats.reset(); // #420 — don't carry segment state across a destroy
   if (vadInstance) {
     vadInstance.destroy();
     vadInstance = null;

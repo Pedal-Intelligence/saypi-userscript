@@ -7,6 +7,12 @@ import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
 import { getBrowserInfo } from '../UserAgentModule';
 import { ChatbotIdentifier } from '../chatbots/ChatbotIdentifier';
 import { VAD_CONFIGS, VADPreset } from "./VADConfigs";
+import {
+  SegmentStatsTracker,
+  admitSegment,
+  DEFAULT_ADMISSION_CONFIG,
+  SILERO_V5_DEFAULT_POSITIVE_THRESHOLD,
+} from "./segmentAdmission";
 
 logger.debug("[SayPi OnscreenVADClient] Client loaded.");
 
@@ -87,6 +93,10 @@ export class OnscreenVADClient implements VADClientInterface {
   private isStarted: boolean = false;
   private preset: VADPreset = "balanced";
 
+  // #420 — accumulates each segment's speech-probability stats so the admission gate
+  // (shared with the offscreen handler) can drop near-threshold non-speech.
+  private statsTracker = new SegmentStatsTracker(SILERO_V5_DEFAULT_POSITIVE_THRESHOLD);
+
   // Debounced sender for VAD frame events, max once per 100ms
   private debouncedSendFrameProcessed = debounce(
     (probabilities: { isSpeech: number; notSpeech: number }) => {
@@ -100,164 +110,113 @@ export class OnscreenVADClient implements VADClientInterface {
     this.statusIndicator = new VADStatusIndicator();
   }
 
-  private getVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
-    // Base VAD options without asset paths (similar to offscreen implementation)
-    const presetConfig = VAD_CONFIGS[this.preset] || {};
-    const baseOptions = {
+  /**
+   * The VAD event callbacks, shared by all three init strategies (primary / fallback /
+   * minimal) which previously each carried an identical copy — the triplication was a
+   * standing drift hazard and, after #420, the one place per-segment accumulation +
+   * the admission gate must live. The strategies now differ ONLY in their asset-path /
+   * model options.
+   */
+  private buildSegmentCallbacks(): MyRealTimeVADCallbacks {
+    return {
       onSpeechStart: () => {
         logger.debug("[SayPi OnscreenVADClient] Speech started.");
         this.speechStartTime = Date.now();
+        this.statsTracker.beginSegment();
         this.statusIndicator.updateStatus(getMessage('vadStatusListening'), getMessage('vadDetailSpeechDetected'));
         this.callbacks.onSpeechStart?.();
       },
       onSpeechEnd: (rawAudioData: Float32Array) => {
         const speechStopTime = Date.now();
         const speechDuration = speechStopTime - this.speechStartTime;
-        const frameCount = rawAudioData.length;
-        const frameRate = 16000;
-        const duration = frameCount / frameRate;
-        
-        logger.debug(`[SayPi OnscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+        // #420 — summarise the segment and run the admission gate before uploading.
+        const stats = this.statsTracker.endSegment();
+        const decision = admitSegment(stats, DEFAULT_ADMISSION_CONFIG);
+
+        if (!decision.admit) {
+          // A segment that never cleared the speech bar: treat it exactly like a VAD
+          // misfire (non-speech) so it is never sent for transcription.
+          logger.info(
+            `[SayPi OnscreenVADClient] Admission gate dropped a segment (${decision.reason}): ` +
+            `peak=${stats.peakSpeechProb.toFixed(3)}, mean=${stats.meanSpeechProb.toFixed(3)}, ` +
+            `speechFrames=${stats.speechFrameCount}. Not uploading.`
+          );
+          this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
+          setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
+          this.callbacks.onVADMisfire?.({
+            reason: `admission-gate:${decision.reason}`,
+            peakSpeechProb: stats.peakSpeechProb,
+            meanSpeechProb: stats.meanSpeechProb,
+            speechFrameCount: stats.speechFrameCount,
+          });
+          return;
+        }
+
         logger.debug(`[SayPi OnscreenVADClient] Speech ended. Duration: ${speechDuration}ms`);
-        
         this.statusIndicator.updateStatus(getMessage('vadStatusProcessing'), getMessage('vadDetailSpeechEndedDuration', speechDuration.toString()));
         setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-        
-        // Add precise timestamp of when audio was captured
+
+        // In onscreen mode capture and receive timestamps are essentially the same.
         const captureTimestamp = speechStopTime;
-        const clientReceiveTimestamp = Date.now(); // In onscreen mode, this is essentially the same
-        
-        // Log processing delays only if they exceed thresholds
+        const clientReceiveTimestamp = Date.now();
         logProcessingDelay(captureTimestamp, clientReceiveTimestamp);
 
         // Ensure we pass a concrete ArrayBuffer (handle potential SharedArrayBuffer)
         const audioArrayBuffer = rawAudioData.buffer instanceof ArrayBuffer
           ? rawAudioData.buffer
           : rawAudioData.slice().buffer;
-        this.callbacks.onSpeechEnd?.({ 
-          duration: speechDuration, 
+        this.callbacks.onSpeechEnd?.({
+          duration: speechDuration,
           audioBuffer: audioArrayBuffer,
           captureTimestamp: captureTimestamp,
-          clientReceiveTimestamp: clientReceiveTimestamp
+          clientReceiveTimestamp: clientReceiveTimestamp,
+          // #420 — forward the per-segment speech-probability stats for observability.
+          peakSpeechProb: stats.peakSpeechProb,
+          meanSpeechProb: stats.meanSpeechProb,
+          speechFrameCount: stats.speechFrameCount,
         });
       },
       onVADMisfire: () => {
         logger.debug("[SayPi OnscreenVADClient] VAD misfire.");
+        this.statsTracker.reset();
         this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
         setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
         this.callbacks.onVADMisfire?.();
       },
       onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
+        this.statsTracker.observe(probabilities.isSpeech);
         this.debouncedSendFrameProcessed(probabilities);
       },
     };
+  }
 
-    // Bundle options for asset paths (separate like in offscreen implementation)
-    const bundleOptions = {
+  private getVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
+    // Primary: shared callbacks + preset + explicit asset paths.
+    const presetConfig = VAD_CONFIGS[this.preset] || {};
+    return {
+      ...this.buildSegmentCallbacks(),
+      ...presetConfig,
       baseAssetPath: chrome.runtime.getURL("public/"),
       onnxWASMBasePath: chrome.runtime.getURL("public/"),
-    };
-
-    // Merge options (same pattern as offscreen implementation)
-    return {
-      ...baseOptions,
-      ...presetConfig,
-      ...bundleOptions,
     } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
   private getFallbackVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
-    // Fallback options with minimal configuration but still with asset paths
+    // Fallback: base asset path only (no explicit WASM path).
     const presetConfig = VAD_CONFIGS[this.preset] || {};
     return {
-      baseAssetPath: chrome.runtime.getURL("public/"),
+      ...this.buildSegmentCallbacks(),
       ...presetConfig,
-      onSpeechStart: () => {
-        logger.debug("[SayPi OnscreenVADClient] Speech started (fallback)");
-        this.speechStartTime = Date.now();
-        this.statusIndicator.updateStatus(getMessage('vadStatusListening'), getMessage('vadDetailSpeechDetected'));
-        this.callbacks.onSpeechStart?.();
-      },
-      onSpeechEnd: (rawAudioData: Float32Array) => {
-        const speechStopTime = Date.now();
-        const speechDuration = speechStopTime - this.speechStartTime;
-        
-        logger.debug(`[SayPi OnscreenVADClient] Speech ended (fallback). Duration: ${speechDuration}ms`);
-        
-        this.statusIndicator.updateStatus(getMessage('vadStatusProcessing'), getMessage('vadDetailSpeechEndedDuration', speechDuration.toString()));
-        setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-        
-        const captureTimestamp = speechStopTime;
-        const clientReceiveTimestamp = Date.now();
-        
-        logProcessingDelay(captureTimestamp, clientReceiveTimestamp);
-
-        const audioArrayBuffer = rawAudioData.buffer instanceof ArrayBuffer
-          ? rawAudioData.buffer
-          : rawAudioData.slice().buffer;
-        this.callbacks.onSpeechEnd?.({ 
-          duration: speechDuration, 
-          audioBuffer: audioArrayBuffer,
-          captureTimestamp: captureTimestamp,
-          clientReceiveTimestamp: clientReceiveTimestamp
-        });
-      },
-      onVADMisfire: () => {
-        logger.debug("[SayPi OnscreenVADClient] VAD misfire (fallback)");
-        this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
-        setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-        this.callbacks.onVADMisfire?.();
-      },
-      onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
-        this.debouncedSendFrameProcessed(probabilities);
-      },
+      baseAssetPath: chrome.runtime.getURL("public/"),
     } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
   private getMinimalVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
-    // Minimal options - no custom paths, legacy model, let VAD use defaults
+    // Minimal: no custom paths, let the VAD use its defaults.
     const presetConfig = VAD_CONFIGS[this.preset] || {};
     return {
+      ...this.buildSegmentCallbacks(),
       ...presetConfig,
-      onSpeechStart: () => {
-        logger.debug("[SayPi OnscreenVADClient] Speech started (minimal)");
-        this.speechStartTime = Date.now();
-        this.statusIndicator.updateStatus(getMessage('vadStatusListening'), getMessage('vadDetailSpeechDetected'));
-        this.callbacks.onSpeechStart?.();
-      },
-      onSpeechEnd: (rawAudioData: Float32Array) => {
-        const speechStopTime = Date.now();
-        const speechDuration = speechStopTime - this.speechStartTime;
-        
-        logger.debug(`[SayPi OnscreenVADClient] Speech ended (minimal). Duration: ${speechDuration}ms`);
-        
-        this.statusIndicator.updateStatus(getMessage('vadStatusProcessing'), getMessage('vadDetailSpeechEndedDuration', speechDuration.toString()));
-        setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-        
-        const captureTimestamp = speechStopTime;
-        const clientReceiveTimestamp = Date.now();
-        
-        logProcessingDelay(captureTimestamp, clientReceiveTimestamp);
-
-        const audioArrayBuffer = rawAudioData.buffer instanceof ArrayBuffer
-          ? rawAudioData.buffer
-          : rawAudioData.slice().buffer;
-        this.callbacks.onSpeechEnd?.({ 
-          duration: speechDuration, 
-          audioBuffer: audioArrayBuffer,
-          captureTimestamp: captureTimestamp,
-          clientReceiveTimestamp: clientReceiveTimestamp
-        });
-      },
-      onVADMisfire: () => {
-        logger.debug("[SayPi OnscreenVADClient] VAD misfire (minimal)");
-        this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
-        setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
-        this.callbacks.onVADMisfire?.();
-      },
-      onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
-        this.debouncedSendFrameProcessed(probabilities);
-      },
     } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
@@ -272,7 +231,13 @@ export class OnscreenVADClient implements VADClientInterface {
     if (options.preset && VAD_CONFIGS[options.preset]) {
       this.preset = options.preset;
     }
-    
+
+    // #420 — count speech frames against the active preset's positive threshold
+    // (presets with no override fall back to the Silero v5 default).
+    this.statsTracker.setPositiveSpeechThreshold(
+      VAD_CONFIGS[this.preset]?.positiveSpeechThreshold ?? SILERO_V5_DEFAULT_POSITIVE_THRESHOLD
+    );
+
     // Progressive fallback strategy for VAD initialization
     const fallbackStrategies = [
       {
@@ -392,6 +357,10 @@ export class OnscreenVADClient implements VADClientInterface {
     try {
       logger.log("[SayPi OnscreenVADClient] Stopping VAD...");
       this.vadInstance.pause(); // Use pause, same as offscreen implementation
+      // #420 — pause() with submitUserSpeechOnPause:false fires no callback, so an
+      // in-flight segment's tracker state would otherwise persist; reset it so the
+      // "idle between segments" invariant holds even if a call stops mid-utterance.
+      this.statsTracker.reset();
       this.isStarted = false;
       
       this.statusIndicator.updateStatus(getMessage('vadStatusStopped'), getMessage('vadDetailVADProcessingStopped'));
@@ -423,7 +392,8 @@ export class OnscreenVADClient implements VADClientInterface {
       this.vadInstance.destroy();
       this.vadInstance = null;
     }
-    
+
+    this.statsTracker.reset(); // #420 — don't carry segment state across a destroy
     this.isInitialized = false;
     this.isStarted = false;
     
