@@ -36,7 +36,9 @@ import {
   checkFirefoxManifest,
   checkSourceEntries,
   chooseReleaseCommit,
+  PUBLISH_STORES,
 } from "./release-lib.mjs";
+import { submitToStore } from "./release-publish.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const STORES_PATH = join(repoRoot, "doc", "release", "stores.json");
@@ -425,15 +427,50 @@ function createGhRelease(v, tag) {
   }
 }
 
+/**
+ * ⛔ Submit a built artifact to a store via its publishing API (#412). The most dangerous
+ * command: a real submit publishes to a live store. `--dry-run` only auth-checks (no publish);
+ * a real submit requires --yes and is founder-only. Credentials come from env (founder-provided).
+ */
+async function cmdSubmit({ store, version, yes, dryRun }) {
+  if (!PUBLISH_STORES.includes(store)) {
+    bad(`\`submit\` needs a store: ${PUBLISH_STORES.join(" | ")} (e.g. \`submit chrome --dry-run\`).`);
+    process.exit(2);
+  }
+  if (!dryRun) requireYes(`submit ${store}`, { yes });
+  const v = version || pkgVersion();
+  log(`${C.bold}${dryRun ? "Dry-run" : "Submitting"} ${store} — v${v}${C.reset}`);
+  const releaseNotes = existsSync(RELEASE_NOTES_PATH) ? readFileSync(RELEASE_NOTES_PATH, "utf8").trim() : "";
+  const approvalNotes =
+    "Built with Node >=22 / npm >=10: `npm ci && npm run build:firefox`. Source in source-code.zip " +
+    "(pre-minification). The onnxruntime eval() is in the WASM-unused fallback path and is never executed.";
+  try {
+    const result = await submitToStore(store, {
+      env: process.env,
+      dryRun,
+      log,
+      notes: `Automated release of v${v}.`,
+      releaseNotes,
+      approvalNotes,
+    });
+    ok(result);
+  } catch (e) {
+    bad(`${store} submission failed: ${e.message}`);
+    process.exit(1);
+  }
+}
+
 // ── Entry ───────────────────────────────────────────────────────────────────────
 
-function main() {
+async function main() {
   const argv = process.argv.slice(2);
   const command = argv[0];
   const flags = {
     yes: argv.includes("--yes"),
     save: argv.includes("--save"),
+    dryRun: argv.includes("--dry-run"),
     ghRelease: !argv.includes("--no-gh-release"),
+    store: argv[1] && !argv[1].startsWith("-") ? argv[1] : null,
     version: (() => {
       const i = argv.indexOf("--version");
       if (i >= 0 && argv[i + 1]) return argv[i + 1].replace(/^v/, "");
@@ -462,10 +499,16 @@ function main() {
       return cmdTag(flags);
     case "finalize":
       return cmdFinalize(flags);
+    case "submit":
+      return cmdSubmit(flags);
     default:
-      log(`Usage: node scripts/release.mjs <preflight|plan|packet|bump|build|verify|tag|finalize> [--save] [--version X] [--yes]`);
+      log(`Usage: node scripts/release.mjs <preflight|plan|packet|bump|build|verify|tag|finalize|submit> [--save] [--version X] [--dry-run] [--yes]`);
+      log(`       submit <chrome|edge|firefox> [--dry-run | --yes]   # ⛔ founder-only API submission (#412)`);
       process.exit(command ? 1 : 0);
   }
 }
 
-main();
+main().catch((e) => {
+  bad(e?.message || String(e));
+  process.exit(1);
+});

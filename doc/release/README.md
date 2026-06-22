@@ -56,6 +56,8 @@ npm run release:build -- --yes             # = … build --yes  (clears stale ou
 npm run release:verify                     # = … verify  (re-check the built candidates; read-only)
 npm run release:tag -- <version> --yes     # = … tag <version> --yes
 npm run release:finalize -- <version> --yes  # = … finalize <version> --yes
+npm run release:submit -- <store> --dry-run  # ⛔ #412: auth-check a store's publishing API
+npm run release:submit -- <store> --yes      # ⛔ #412: headless API submission (founder-only)
 ```
 
 Run from the **main checkout on `main`** — a real release is cut from main and the build
@@ -108,6 +110,12 @@ Detail + gotchas in `chrome-web-store.md`, `edge-addons.md`, `firefox-amo.md`. K
   `stores.json` on first run.
 - **AMO** requires uploading **`source-code.zip`** (+ build steps in Notes for Reviewers);
   the onnxruntime `eval` warning is non-blocking.
+
+**Or — headless via the publishing APIs (#412).** Once credentials are provisioned (one-time, per
+`publishing-credentials.md`), skip the dashboards entirely: `release:submit -- <store> --dry-run`
+to auth-check, then `release:submit -- <store> --yes` to upload + submit via each store's API
+(CWS V2 / Edge v1.1 / AMO `web-ext sign`). Founder-only and irreversible. This is the long-term
+"one-button" path; the manual packet above remains the fallback and for any listing-copy changes.
 
 ### 6. Finalize ⛔ (founder)
 After all stores are submitted: `node scripts/release.mjs tag <version> --yes` then

@@ -530,3 +530,132 @@ export function chooseReleaseCommit(candidates = [], version) {
   });
   return match ? match.sha : null;
 }
+
+// ── Publishing-API helpers (pure) — for #412 store-submission automation ──────────
+//
+// Pure request builders + response interpreters for the three stores' publishing APIs.
+// The I/O (fetch/spawn, credentials, polling) lives in scripts/release-publish.mjs; these
+// are extracted so they're unit-tested without secrets or network. Specs verified 2026-06
+// from official docs — see doc/release/publishing-credentials.md.
+
+/**
+ * Validate that the given env var names are all present; throw a clear error listing the
+ * missing ones (never echoes values). Returns an object of the requested vars.
+ * @param {string[]} names
+ * @param {Record<string,string|undefined>} env
+ */
+export function requireEnv(names, env = {}) {
+  const missing = names.filter((n) => !env[n]);
+  if (missing.length) {
+    throw new Error(`Missing required env var(s): ${missing.join(", ")}. See doc/release/publishing-credentials.md.`);
+  }
+  return Object.fromEntries(names.map((n) => [n, env[n]]));
+}
+
+// — Chrome Web Store API V2 —
+export const CWS_API = "https://chromewebstore.googleapis.com";
+export const CWS_TOKEN_URL = "https://oauth2.googleapis.com/token";
+export const CWS_SCOPE = "https://www.googleapis.com/auth/chromewebstore";
+export const CWS_ENV = ["CWS_CLIENT_ID", "CWS_CLIENT_SECRET", "CWS_REFRESH_TOKEN", "CWS_PUBLISHER_ID", "CWS_EXTENSION_ID"];
+
+export function cwsTokenBody({ clientId, clientSecret, refreshToken }) {
+  return new URLSearchParams({
+    grant_type: "refresh_token",
+    client_id: clientId,
+    client_secret: clientSecret,
+    refresh_token: refreshToken,
+  }).toString();
+}
+export function cwsUploadUrl(publisherId, extensionId) {
+  return `${CWS_API}/upload/v2/publishers/${publisherId}/items/${extensionId}:upload`;
+}
+export function cwsPublishUrl(publisherId, extensionId) {
+  return `${CWS_API}/v2/publishers/${publisherId}/items/${extensionId}:publish`;
+}
+export function cwsStatusUrl(publisherId, extensionId) {
+  return `${CWS_API}/v2/publishers/${publisherId}/items/${extensionId}:fetchStatus`;
+}
+/** Interpret an upload (or fetchStatus.lastAsyncUploadState) state. V2 enums: SUCCEEDED|IN_PROGRESS|FAILED|NOT_FOUND. */
+export function interpretCwsUpload(json = {}) {
+  const state = json.uploadState || json.lastAsyncUploadState;
+  return { ok: state === "SUCCEEDED", inProgress: state === "IN_PROGRESS", state, version: json.crxVersion, raw: json };
+}
+/** A publish is accepted once it reaches a review/published state (PENDING_REVIEW is normal for an update). */
+export function interpretCwsPublish(json = {}) {
+  const state = json.state;
+  return { ok: ["PENDING_REVIEW", "STAGED", "PUBLISHED", "PUBLISHED_TO_TESTERS"].includes(state), state, warnings: json.warningInfo?.warnings || [], raw: json };
+}
+/** V2 surfaces failures as {error:{code,status,message}} — format for a clear CI message. */
+export function cwsErrorMessage(json = {}) {
+  const e = json.error;
+  if (e) return `${e.status || e.code}: ${e.message}`;
+  if (json.error_description || json.error) return json.error_description || json.error; // oauth token error shape
+  return "unknown error";
+}
+
+// — Edge Add-ons API v1.1 —
+export const EDGE_API = "https://api.addons.microsoftedge.microsoft.com";
+export const EDGE_ENV = ["EDGE_PRODUCT_ID", "EDGE_API_KEY", "EDGE_CLIENT_ID"];
+
+export function edgeHeaders({ apiKey, clientId }) {
+  return { Authorization: `ApiKey ${apiKey}`, "X-ClientID": clientId };
+}
+export function edgeUploadUrl(productId) {
+  return `${EDGE_API}/v1/products/${productId}/submissions/draft/package`;
+}
+export function edgeUploadPollUrl(productId, operationId) {
+  return `${EDGE_API}/v1/products/${productId}/submissions/draft/package/operations/${operationId}`;
+}
+export function edgePublishUrl(productId) {
+  return `${EDGE_API}/v1/products/${productId}/submissions`;
+}
+export function edgePublishPollUrl(productId, operationId) {
+  return `${EDGE_API}/v1/products/${productId}/submissions/operations/${operationId}`;
+}
+/** The operation id arrives in the Location header — may be a bare id or a URL/path; take the last segment. */
+export function operationIdFromLocation(location = "") {
+  const clean = String(location).split("?")[0].replace(/\/+$/, "");
+  return clean.split("/").filter(Boolean).pop() || "";
+}
+/** Edge operation polling: status InProgress|Succeeded|Failed. */
+export function interpretEdgeOperation(json = {}) {
+  const status = json.status;
+  return {
+    ok: status === "Succeeded",
+    inProgress: status === "InProgress",
+    failed: status === "Failed" || (!status && Boolean(json.message)),
+    status,
+    message: json.message,
+    errorCode: json.errorCode,
+    errors: json.errors,
+    raw: json,
+  };
+}
+
+// — Firefox AMO via web-ext (v8: `sign` submits via AMO API v5) —
+export const AMO_ENV = ["WEB_EXT_API_KEY", "WEB_EXT_API_SECRET"]; // JWT issuer + secret
+
+/**
+ * Build the amo-metadata.json object. release_notes/approval_notes nest under `version`.
+ * @param {{releaseNotes?: string, approvalNotes?: string, license?: string, locale?: string}} [opts]
+ */
+export function buildAmoMetadata({ releaseNotes, approvalNotes, license = "MPL-2.0", locale = "en-US" } = {}) {
+  const version = {};
+  if (releaseNotes) version.release_notes = { [locale]: releaseNotes };
+  if (approvalNotes) version.approval_notes = approvalNotes;
+  if (license) version.license = license;
+  return { version };
+}
+/**
+ * Build the `web-ext sign` argv for a LISTED update. Signs from --source-dir (NOT a pre-built xpi).
+ * @param {{sourceDir?: string, artifactsDir?: string, sourceCode?: string, metadataFile?: string, approvalTimeout?: number}} [opts]
+ */
+export function webExtSignArgs({ sourceDir, artifactsDir, sourceCode, metadataFile, approvalTimeout = 0 } = {}) {
+  const args = ["web-ext", "sign", "--channel=listed", `--source-dir=${sourceDir}`, `--artifacts-dir=${artifactsDir}`];
+  if (sourceCode) args.push(`--upload-source-code=${sourceCode}`);
+  if (metadataFile) args.push(`--amo-metadata=${metadataFile}`);
+  args.push(`--approval-timeout=${approvalTimeout}`);
+  return args;
+}
+
+export const PUBLISH_STORES = ["chrome", "edge", "firefox"];
