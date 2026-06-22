@@ -81,6 +81,35 @@ describe("AudioEncoder — transcribe upload format (#414)", () => {
     });
   });
 
+  describe("edge cases", () => {
+    const pcmValues = (buffer: ArrayBuffer) => {
+      const view = new DataView(buffer);
+      const count = (buffer.byteLength - 44) / 2;
+      return Array.from({ length: count }, (_, i) => view.getInt16(44 + i * 2, true));
+    };
+
+    it("emits a valid header-only WAV for a zero-length clip (VAD misfire)", () => {
+      const buffer = convertToWavBuffer(new Float32Array([]));
+      expect(buffer.byteLength).toBe(44);
+      const header = readWavHeader(buffer);
+      expect(header.audioFormat).toBe(1);
+      expect(header.dataLength).toBe(0);
+    });
+
+    it("clamps out-of-range samples to the int16 extremes", () => {
+      // floatTo16BitPCM clamps to [-1, 1] before scaling
+      expect(pcmValues(convertToWavBuffer(new Float32Array([2, -2])))).toEqual([
+        32767, -32768,
+      ]);
+    });
+
+    it("coerces non-finite samples safely (NaN → 0, ±Infinity → extremes)", () => {
+      expect(
+        pcmValues(convertToWavBuffer(new Float32Array([NaN, Infinity, -Infinity])))
+      ).toEqual([0, 32767, -32768]);
+    });
+  });
+
   describe("encodeWAV low-level encoder", () => {
     it("still supports explicit 32-bit float output (format 3)", () => {
       const header = readWavHeader(encodeWAV(samples, 3, 16000, 1, 32));
