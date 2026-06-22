@@ -77,7 +77,7 @@ instantly public). Ensure `.output/firefox-mv2/manifest.json` carries `gecko@say
 
 ## How `--dry-run` checks each store
 - **Chrome:** real OAuth token exchange + a read-only `fetchStatus` (prints the current published version).
-- **Edge:** a credentials probe (a poll-URL GET with a dummy operation id — `401` = bad key, else accepted). Edge has no read-only status endpoint, so this is the safest check short of uploading.
+- **Edge:** a credentials probe (a poll-URL GET with a dummy operation id — `401` = bad key, else accepted). Edge has no read-only status endpoint, so this is the safest check short of uploading. (Caveat: a wrong `EDGE_PRODUCT_ID` returns `404`, which the probe treats as "creds accepted" — it only surfaces on the real upload.)
 - **Firefox:** confirms the JWT env vars are present and `web-ext` runs (`web-ext sign` itself submits, so it isn't invoked in a dry run).
 
 ## Status

@@ -78,7 +78,7 @@ export async function chromeSubmit({ zipPath, env = process.env, dryRun = false,
     up = interpretCwsUpload(s);
   }
   if (!up.ok) throw new Error(`Chrome upload did not succeed (state: ${up.state}).`);
-  log(`  ✓ uploaded ${up.version || ""}`.trimEnd());
+  log("  ✓ package uploaded"); // crxVersion isn't on the upload response; the version is verified pre-build by `verify`
 
   const pubRes = await fetch(cwsPublishUrl(e.CWS_PUBLISHER_ID, e.CWS_EXTENSION_ID), {
     method: "POST",
@@ -101,7 +101,9 @@ async function pollEdge(url, headers, label, log) {
     const op = interpretEdgeOperation(json);
     if (op.ok) return;
     if (op.failed) {
-      throw new Error(`Edge ${label} failed: ${[op.errorCode, op.message, ...(op.errors || [])].filter(Boolean).join(" — ")}`);
+      // Edge `errors` can be strings OR objects ({message}); normalize so we don't print [object Object].
+      const errs = (op.errors || []).map((x) => (x && typeof x === "object" ? x.message ?? JSON.stringify(x) : x));
+      throw new Error(`Edge ${label} failed: ${[op.errorCode, op.message, ...errs].filter(Boolean).join(" — ")}`);
     }
     await sleep(POLL_INTERVAL_MS);
   }
