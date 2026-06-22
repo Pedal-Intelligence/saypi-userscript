@@ -1,4 +1,4 @@
-import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
+import { AssistantResponse, UserMessage } from "../dom/MessageElements";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";

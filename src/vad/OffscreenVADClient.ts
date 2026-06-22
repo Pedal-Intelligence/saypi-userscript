@@ -70,8 +70,7 @@ export class OffscreenVADClient implements VADClientInterface {
           
           const speechDuration = message.duration;
           const captureTimestamp = message.captureTimestamp || 0;
-          const transferDelay = receiveTimestamp - captureTimestamp;
-          
+
           // Convert the array back to Float32Array
           const rawAudioData = new Float32Array(message.audioData || []);
           const frameCount = message.frameCount || rawAudioData.length;

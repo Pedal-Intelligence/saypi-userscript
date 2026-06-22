@@ -1,11 +1,9 @@
 import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
-import getMessage from "../i18n";
 import { audioProviders } from "../tts/SpeechModel";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
-import { PiAIChatbot } from "./Pi";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export class PiVoiceMenu extends VoiceSelector {

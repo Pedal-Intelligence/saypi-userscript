@@ -1,5 +1,3 @@
-import { createIcons, icons } from 'lucide';
-
 let iconsInitialized = false;
 
 /**

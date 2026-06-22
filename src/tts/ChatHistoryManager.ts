@@ -5,7 +5,6 @@ import {
 } from "./SpeechSynthesisModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { MessageHistoryModule } from "./MessageHistoryModule";
-import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "../dom/MessageElements";
@@ -27,7 +26,6 @@ import { UtteranceCharge } from "../billing/BillingModule";
 import { md5 } from "js-md5";
 
 export class ChatHistorySpeechManager implements ResourceReleasable {
-  private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
   private speechHistory = SpeechHistoryModule.getInstance();
   private messageHistory = MessageHistoryModule.getInstance();

@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 // Import the actual strategy classes from the shared module
 import {
-  TextInsertionStrategy,
   SlateEditorStrategy,
   QuillEditorStrategy,
   ProseMirrorEditorStrategy,

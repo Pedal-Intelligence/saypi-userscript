@@ -33,13 +33,11 @@ export class DOMObserver {
         .forEach((node) => {
           const addedElement = node as HTMLElement;
           const promptObs = this.findAndDecoratePrompt(addedElement);
-          const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
+          this.findAndDecorateControlPanel(addedElement);
           const sidebarObs = this.findAndDecorateSidebar(addedElement);
           if (sidebarObs.found && sidebarObs.decorated) {
-            const discoveryPanelObs =
-              this.findAndDecorateDiscoveryPanel(addedElement);
-            const voiceSettingsObs =
-              this.findAndDecorateVoiceSettings(addedElement);
+            this.findAndDecorateDiscoveryPanel(addedElement);
+            this.findAndDecorateVoiceSettings(addedElement);
           }
           const audioControlsObs =
             this.findAndDecorateAudioControls(addedElement);
@@ -48,10 +46,8 @@ export class DOMObserver {
               audioControlsObs.target as HTMLElement
             );
           }
-          const audioOutputButtonObs =
-            this.findAndDecorateAudioOutputButton(addedElement);
-          const chatHistoryObs =
-            this.findAndDecorateChatHistory(addedElement);
+          this.findAndDecorateAudioOutputButton(addedElement);
+          this.findAndDecorateChatHistory(addedElement);
 
           if (promptObs.isReady()) {
             EventBus.emit("saypi:ui:content-loaded");
@@ -262,8 +258,7 @@ export class DOMObserver {
           .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
             const addedElement = node as HTMLElement;
-            const submitButtonObs =
-              this.findAndDecorateSubmitButton(addedElement);
+            this.findAndDecorateSubmitButton(addedElement);
           });
       });
     });
@@ -524,7 +519,7 @@ export class DOMObserver {
   }
 
   decorateVoiceSettings(voiceSettingsElement: HTMLElement): void {
-    const voiceSettings = new PiVoiceSettings(
+    new PiVoiceSettings(
       this.chatbot,
       UserPreferenceModule.getInstance(),
       voiceSettingsElement

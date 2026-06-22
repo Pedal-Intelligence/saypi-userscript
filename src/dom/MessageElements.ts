@@ -10,7 +10,6 @@ import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Observation } from "./Observation";
 import { Chatbot } from "../chatbots/Chatbot";
-import { PiAIChatbot } from "../chatbots/Pi";
 import EventBus from "../events/EventBus";
 import { isMobileDevice } from "../UserAgentModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
@@ -758,36 +757,6 @@ abstract class MessageControls {
     
     // Add speech-enabled class to the message element
     this.safeAddClass("speech-enabled");
-  }
-
-  private watchForPopupMenu(
-    actionBar: HTMLElement,
-    speech: SpeechUtterance
-  ): void {
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const node of [...mutation.addedNodes]) {
-          if (node instanceof HTMLElement) {
-            const addedElement = node as HTMLElement;
-            const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
-            if (obs.found && !obs.decorated) {
-              const popupMenu = new PopupMenu(
-                this.message,
-                obs.target as HTMLElement,
-                speech,
-                this.ttsControls
-              );
-              popupMenu.decorate();
-              EventBus.emit("saypi:tts:menuPop", {
-                utteranceId: speech.id,
-                menu: popupMenu,
-              });
-            }
-          }
-        }
-      }
-    });
-    observer.observe(actionBar, { childList: true, subtree: false });
   }
 
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
@@ -2146,22 +2115,6 @@ abstract class MessageControls {
     
     // Update via telemetry module
     telemetryModule.updateTelemetryData(telemetryData);
-  }
-
-  /**
-   * Add controls to a message
-   */
-  private addControls(container: HTMLElement): void {
-    const controlsContainer = document.createElement("div");
-    controlsContainer.className = "saypi-tts-controls";
-    
-    // Create telemetry button and add it to controls
-    const telemetryButton = this.createTelemetryButton();
-    controlsContainer.appendChild(telemetryButton);
-    
-    // Add any additional controls here
-    
-    container.appendChild(controlsContainer);
   }
 
   /**

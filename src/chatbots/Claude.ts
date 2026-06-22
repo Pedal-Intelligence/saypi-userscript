@@ -1,7 +1,6 @@
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt, SidebarConfig } from "./Chatbot";
@@ -509,12 +508,6 @@ class PlaceholderManager {
    */
   protected getStandardPlaceholder(): HTMLParagraphElement | null {
     return this.input.querySelector("p[data-placeholder]");
-  }
-  private showStandardPlaceholder() {
-    const placeholder = this.getStandardPlaceholder();
-    if (placeholder) {
-      placeholder.style.visibility = "visible";
-    }
   }
   private hideStandardPlaceholder() {
     const placeholder = this.getStandardPlaceholder();

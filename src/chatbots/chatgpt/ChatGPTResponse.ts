@@ -189,12 +189,6 @@ export class ChatGPTMessageControls extends MessageControls {
     return banned.some(term => name.includes(term));
   }
 
-  private getMoreActionsButton(): HTMLButtonElement | null {
-    const triggers = this.getActionMenuTriggers();
-    if (!triggers.length) return null;
-    return triggers[triggers.length - 1];
-  }
-
   protected override async decorateControls(message: AssistantResponse): Promise<void> {
     await super.decorateControls(message);
     try { this.addHoverReopenListener(); } catch {}
@@ -454,35 +448,6 @@ export class ChatGPTMessageControls extends MessageControls {
     } catch {}
   }
 
-  private relocateMenuItemToActionBarAndClick(item: HTMLElement, trigger: HTMLElement): void {
-    try {
-      const bar = (this.findActionBar() || trigger.parentElement || this.message.element) as HTMLElement;
-      if (!bar) {
-        try { item.click(); } catch {}
-        setTimeout(() => this.hideOpenRadixPopperContent(), 50);
-        return;
-      }
-      const holder = document.createElement('span');
-      holder.className = 'saypi-relocated-voice-action';
-      bar.appendChild(holder);
-      holder.appendChild(item);
-      try { (item as HTMLElement).focus?.(); } catch {}
-      setTimeout(() => {
-        try {
-          item.click();
-          // Nudge focus back to the item for environments that blur on click
-          setTimeout(() => { try { (item as HTMLElement).focus?.(); } catch {} }, 10);
-        } finally {
-          setTimeout(() => this.hideOpenRadixPopperContent(), 50);
-          setTimeout(() => { try { holder.remove(); } catch {} }, 50);
-        }
-      }, 0);
-    } catch (e) {
-      try { item.click(); } catch {}
-      console.debug('Say, Pi: relocation click fallback due to error:', e);
-    }
-  }
-
   private isMenuOpen(trigger: HTMLElement): boolean {
     const expanded = trigger.getAttribute('aria-expanded');
     const state = trigger.getAttribute('data-state');
@@ -501,20 +466,6 @@ export class ChatGPTMessageControls extends MessageControls {
     } catch (e) {
       console.debug('Say, Pi: synthetic click failed on menu trigger:', e);
     }
-  }
-
-  private hideOpenRadixPopperContent(): void {
-    const sel = '[data-radix-menu-content][data-state="open"], [data-radix-dropdown-menu-content][data-state="open"], [role="menu"][data-state="open"]';
-    const open = document.querySelector(sel) as HTMLElement | null;
-    if (open) this.hideRadixPopperContent(open);
-  }
-
-  private hideRadixPopperContent(popper: HTMLElement): void {
-    try {
-      (popper.style as any).opacity = '0';
-      (popper.style as any).pointerEvents = 'none';
-      popper.setAttribute('aria-hidden', 'true');
-    } catch {}
   }
 
   private getOpenMenuWrapperFor(el: HTMLElement): HTMLElement | null {

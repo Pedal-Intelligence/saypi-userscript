@@ -165,7 +165,6 @@ describe('SubmitModeController', () => {
       slider.value = '0'; // auto
       slider.dispatchEvent(new Event('input'));
 
-      const descriptions = document.querySelectorAll('.description');
       const autoDesc = document.querySelector('[data-i18n="submit_mode_auto_description"]');
       const agentDesc = document.querySelector('[data-i18n="submit_mode_agent_description"]');
 

@@ -7,7 +7,6 @@ import { submitErrorHandler } from "./SubmitErrorHandler";
 import getMessage from "./i18n";
 import { DOMObserver } from "./chatbots/bootstrap";
 import { addChild } from "./dom/DOMModule";
-import SlowResponseHandler from "./SlowResponseHandler";
 import { ChatbotService } from "./chatbots/ChatbotService";
 import { logger } from "./LoggingModule";
 
@@ -101,8 +100,8 @@ export class AIChatModule {
     }
 
     const buttonContainer = lockPanel;
-    var lockButton = buttonModule.createLockButton(buttonContainer);
-    var unlockButton = buttonModule.createUnlockButton(buttonContainer);
+    buttonModule.createLockButton(buttonContainer);
+    buttonModule.createUnlockButton(buttonContainer);
     var touchAbsorber = document.createElement("div");
     touchAbsorber.id = "saypi-touch-absorber";
     lockPanel.appendChild(touchAbsorber);

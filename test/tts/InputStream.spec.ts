@@ -1,5 +1,4 @@
 import { expect, test, vi } from "vitest";
-import { JSDOM } from "jsdom";
 import {
   ElementTextStream,
   STREAM_TIMEOUT,

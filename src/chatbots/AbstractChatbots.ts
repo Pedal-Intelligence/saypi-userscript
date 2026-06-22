@@ -5,7 +5,6 @@ import { shortenTranscript } from "../TextModule";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
 import { VoiceSelector } from "../tts/VoiceMenu";
-import type { ChatbotService } from "./ChatbotService";
 
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();

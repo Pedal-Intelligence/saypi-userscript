@@ -258,7 +258,7 @@ describe('Pre-commit hook patterns', () => {
   it('should NOT match .env.production.example', () => {
     // This is tricky - the current pattern would match .env.production.example
     // because it matches .env.p... Let's check
-    const result = sensitivePattern.test('.env.production.example');
+    sensitivePattern.test('.env.production.example');
     // If this fails, we need to adjust the hook to use grep -v '\.example$'
     // which is what we do in the actual hook
   });

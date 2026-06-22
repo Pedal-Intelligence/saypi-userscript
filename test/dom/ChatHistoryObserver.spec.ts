@@ -5,7 +5,6 @@ import {
   ChatHistoryMessageObserver,
   RootChatHistoryObserver,
 } from "../../src/dom/ChatHistory";
-import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
@@ -18,7 +17,6 @@ import {
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../../src/tts/SpeechModel";
-import { BillingModule } from "../../src/billing/BillingModule";
 import { PiAIChatbot } from "../../src/chatbots/Pi";
 import { PiResponse } from "../../src/chatbots/pi/PiResponse";
 import { setupTestDOM } from "../utils/dom";
@@ -33,7 +31,6 @@ describe("ChatHistoryMessageObserver", () => {
   let textToSpeechServiceMock: TextToSpeechService;
   let audioStreamManagerMock: AudioStreamManager;
   let userPreferenceModuleMock: UserPreferenceModule;
-  let ttsControlsModuleMock: TTSControlsModule;
   let chatHistoryElement: HTMLElement;
   let mockVoice: SpeechSynthesisVoiceRemote;
   let assistantResponseSelector: string;
@@ -90,15 +87,12 @@ describe("ChatHistoryMessageObserver", () => {
     userPreferenceModuleMock =
       UserPreferenceModuleMock.getInstance() as unknown as UserPreferenceModule;
 
-    const billingModuleMock = BillingModule.getInstance();
-
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,
       audioStreamManagerMock,
-      userPreferenceModuleMock,
-      billingModuleMock
+      userPreferenceModuleMock
     );
-    ttsControlsModuleMock = TTSControlsModule.getInstance();
+    TTSControlsModule.getInstance();
 
     assistantResponseSelector =
       new PiAIChatbot().getAssistantResponseSelector();
@@ -489,7 +483,6 @@ describe("ChatHistoryMessageObserver", () => {
   describe("text operators for assistant messages", () => {
     it("should get the text of an assistant message", () => {
       const chatMessageElement = createAssistantMessage("Hello there!");
-      const html = chatMessageElement.outerHTML;
       const message = new PiResponse(chatMessageElement);
       expect(message.text).toBe("Hello there!");
     });

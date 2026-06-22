@@ -2,7 +2,7 @@
  * Tests for PKCEManager - PKCE utilities for OAuth 2.1
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock wxt/browser before importing PKCEManager
 const mockStorage: Record<string, any> = {};

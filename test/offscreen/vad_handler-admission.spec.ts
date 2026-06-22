@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  *    even sent, which is the whole point of gating here rather than server-side.
  */
 
-const { fakeVad, sendMessage, micVadNew } = vi.hoisted(() => {
+const { sendMessage, micVadNew } = vi.hoisted(() => {
   const sendMessage = vi.fn();
   (globalThis as any).chrome = {
     runtime: {

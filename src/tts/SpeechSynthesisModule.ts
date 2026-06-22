@@ -10,14 +10,11 @@ import {
   SpeechSynthesisVoiceRemote,
   audioProviders,
   SpeechPlaceholder,
-  AIVoice,
-  PiAIVoice,
-  MatchableVoice,
   VoiceFactory,
   isFailedUtterance,
   isPlaceholderUtterance
 } from "./SpeechModel";
-import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
+import { BillingModule } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
@@ -58,13 +55,19 @@ class SpeechSynthesisModule {
 
       const audioStreamManager = new AudioStreamManager(ttsService);
       const userPreferenceModule = UserPreferenceModule.getInstance();
-      const billingModule = BillingModule.getInstance();
+
+      // Load-bearing side effect — do NOT remove. Eagerly constructs the
+      // BillingModule singleton so its `saypi:piStoppedWriting` charge listener
+      // is registered at bootstrap, before the first conversation turn. This
+      // module is instantiated early (ChatHistoryManager / TTSControlsModule /
+      // AudioOutputMachine); the lazy BillingModule.getInstance() calls in
+      // MessageElements run too late for the streaming charge path.
+      BillingModule.getInstance();
 
       SpeechSynthesisModule.instance = new SpeechSynthesisModule(
         ttsService,
         audioStreamManager,
-        userPreferenceModule,
-        billingModule
+        userPreferenceModule
       );
     }
     return SpeechSynthesisModule.instance;
@@ -85,8 +88,7 @@ class SpeechSynthesisModule {
   constructor(
     ttsService: TextToSpeechService,
     audioStreamManager: AudioStreamManager,
-    userPreferenceModule: UserPreferenceModule,
-    private billingModule: BillingModule
+    userPreferenceModule: UserPreferenceModule
   ) {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;

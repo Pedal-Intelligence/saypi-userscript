@@ -5,7 +5,6 @@ import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
-import { BillingModule } from "../../src/billing/BillingModule";
 import { audioProviders, isPlaceholderUtterance } from "../../src/tts/SpeechModel";
 import EventBus from "../../src/events/EventBus";
 
@@ -14,7 +13,6 @@ describe("SpeechSynthesisModule", () => {
   let textToSpeechServiceMock: TextToSpeechService;
   let audioStreamManagerMock: AudioStreamManager;
   let userPreferenceModuleMock: UserPreferenceModule;
-  let billingModuleMock: BillingModule;
 
   beforeEach(() => {
     // mock the ConfigModule
@@ -50,15 +48,10 @@ describe("SpeechSynthesisModule", () => {
       getLanguage: vi.fn().mockResolvedValue("en-US"),
     } as unknown as UserPreferenceModule;
 
-    billingModuleMock = {
-      getChargeForUtterance: vi.fn(),
-    } as unknown as BillingModule;
-
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,
       audioStreamManagerMock,
-      userPreferenceModuleMock,
-      billingModuleMock
+      userPreferenceModuleMock
     );
   });
 

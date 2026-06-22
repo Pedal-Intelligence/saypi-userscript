@@ -17,8 +17,6 @@ import EventBus from "../events/EventBus";
 import { logger } from "../LoggingModule";
 import getMessage from "../i18n";
 import { IconModule } from "../icons/IconModule";
-import { ChatbotService } from "../chatbots/ChatbotService";
-import type { Chatbot } from "../chatbots/Chatbot";
 import type { PromptLevel } from "./AuthPromptController";
 import { getAuthPromptController } from "./AuthPromptController";
 import { h } from "preact";
@@ -43,7 +41,6 @@ export class AuthPromptUI {
   private currentPrompt: HTMLElement | null = null;
   private currentOverlay: HTMLElement | null = null;
   private isInitialized: boolean = false;
-  private cachedChatbot: Chatbot | null = null;
 
   private constructor() {
     logger.debug("[AuthPromptUI] Created");
@@ -71,16 +68,6 @@ export class AuthPromptUI {
 
     this.isInitialized = true;
     logger.debug("[AuthPromptUI] Initialized");
-  }
-
-  /**
-   * Get cached chatbot instance
-   */
-  private async getChatbot(): Promise<Chatbot> {
-    if (!this.cachedChatbot) {
-      this.cachedChatbot = await ChatbotService.getChatbot();
-    }
-    return this.cachedChatbot;
   }
 
   /**

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { GeneralTab } from '../../../entrypoints/settings/tabs/general';
 import { setupChromeMock, createTestContainer, cleanupTestContainer, mockUserAgent, restoreUserAgent, setupLocationMock } from '../setup';
 
@@ -6,12 +6,11 @@ describe('GeneralTab', () => {
   let chromeMock: ReturnType<typeof setupChromeMock>;
   let container: HTMLElement;
   let generalTab: GeneralTab;
-  let locationMock: ReturnType<typeof setupLocationMock>;
 
   beforeEach(() => {
     chromeMock = setupChromeMock();
     container = createTestContainer();
-    locationMock = setupLocationMock();
+    setupLocationMock();
     generalTab = new GeneralTab(container);
   });
 

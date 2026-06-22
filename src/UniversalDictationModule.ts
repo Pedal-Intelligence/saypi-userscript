@@ -1,5 +1,3 @@
-import { Observation } from "./dom/Observation";
-import { addChild } from "./dom/DOMModule";
 import {
   createDictationMachine,
   DictationTranscribedEvent,

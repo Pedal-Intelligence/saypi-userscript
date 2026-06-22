@@ -18,7 +18,7 @@ describe("UsageTracker logic", () => {
   describe("UsageStats interface", () => {
     it("should have the expected structure", async () => {
       // Import the interface
-      const { UsageTracker } = await import("../../src/auth/UsageTracker");
+      await import("../../src/auth/UsageTracker");
 
       // The default stats should have all required fields
       const defaultStats = {

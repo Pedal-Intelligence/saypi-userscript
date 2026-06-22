@@ -19,7 +19,6 @@ import {
   storePKCEState,
   retrievePKCEState,
   clearPKCEState,
-  type PKCEState,
 } from './PKCEManager';
 import {
   authenticateWithTabBasedPKCE,

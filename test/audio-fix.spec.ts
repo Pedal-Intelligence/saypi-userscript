@@ -23,7 +23,6 @@ describe('Audio Provider Fix', () => {
 
     it('should detect dictation mode correctly for non-chatbot sites', () => {
       // Mock window.location for non-chatbot site
-      const mockLocation = { hostname: 'example.com' };
       vi.spyOn(ChatbotIdentifier, 'identifyChatbot').mockReturnValue('web');
       
       expect(ChatbotIdentifier.isInDictationMode()).toBe(true);

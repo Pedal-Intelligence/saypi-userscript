@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('Background API Request Handler', () => {
   let mockJwtManager: any;
-  let mockLogger: any;
   let mockFetch: any;
   let mockChrome: any;
 
@@ -11,13 +10,6 @@ describe('Background API Request Handler', () => {
     mockJwtManager = {
       getAuthHeader: vi.fn().mockReturnValue('Bearer test-token'),
       refresh: vi.fn().mockResolvedValue(undefined)
-    };
-
-    // Mock Logger
-    mockLogger = {
-      debug: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn()
     };
 
     // Mock fetch
@@ -228,7 +220,7 @@ describe('Background API Request Handler', () => {
 
       const handleApiRequest = async (message: any, sendResponse: any) => {
         try {
-          const response = await fetch(message.url, message.options);
+          await fetch(message.url, message.options);
           // This shouldn't be reached
           sendResponse({ success: true, response: {} });
         } catch (error: any) {

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { sendMessageToActiveTab } from '../../../entrypoints/settings/shared/messaging';
 import { setupChromeMock } from '../setup';
 

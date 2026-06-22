@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { AgentModeNoticeModule } from '../../src/ui/AgentModeNoticeModule';
-import * as PreferenceModule from '../../src/prefs/PreferenceModule';
 
 // Mock dependencies
 const mockGetCachedDiscretionaryMode = vi.fn(() => false);

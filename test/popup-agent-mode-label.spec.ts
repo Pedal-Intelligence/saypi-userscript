@@ -35,8 +35,7 @@ global.chrome = {
 
 describe('Agent Mode Label Initialization', () => {
   let document: Document;
-  let window: Window;
-  
+
   beforeEach(() => {
     const dom = new JSDOM(`
       <!DOCTYPE html>
@@ -66,7 +65,6 @@ describe('Agent Mode Label Initialization', () => {
       </html>
     `);
     document = dom.window.document;
-    window = dom.window as unknown as Window;
 
     // Set up DOM context (no need to assign to globals in test)
   });
