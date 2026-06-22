@@ -16,6 +16,21 @@ import {
   checkFirefoxManifest,
   checkSourceEntries,
   chooseReleaseCommit,
+  requireEnv,
+  cwsTokenBody,
+  cwsUploadUrl,
+  cwsPublishUrl,
+  interpretCwsUpload,
+  interpretCwsPublish,
+  cwsErrorMessage,
+  edgeHeaders,
+  edgeUploadUrl,
+  edgePublishPollUrl,
+  operationIdFromLocation,
+  interpretEdgeOperation,
+  buildAmoMetadata,
+  webExtSignArgs,
+  PUBLISH_STORES,
 } from "../../scripts/release-lib.mjs";
 
 // A known-good production Chrome manifest shape for the checks below.
@@ -380,5 +395,79 @@ describe("chooseReleaseCommit", () => {
   it("returns null when no candidate matches (so the CLI refuses to tag the wrong commit)", () => {
     expect(chooseReleaseCommit(candidates, "1.12.0")).toBe(null);
     expect(chooseReleaseCommit([], "1.11.0")).toBe(null);
+  });
+});
+
+// ── Publishing-API helpers (#412) ──────────────────────────────────────────────────
+
+describe("requireEnv", () => {
+  it("returns the requested vars when present", () => {
+    expect(requireEnv(["A", "B"], { A: "1", B: "2", C: "3" })).toEqual({ A: "1", B: "2" });
+  });
+  it("throws listing the missing ones (never the values)", () => {
+    expect(() => requireEnv(["A", "B", "C"], { A: "1" })).toThrow(/Missing required env var\(s\): B, C/);
+  });
+});
+
+describe("Chrome Web Store API helpers", () => {
+  it("builds a url-encoded refresh-token body", () => {
+    const body = cwsTokenBody({ clientId: "cid", clientSecret: "sec", refreshToken: "rt" });
+    expect(body).toContain("grant_type=refresh_token");
+    expect(body).toContain("client_id=cid");
+    expect(body).toContain("refresh_token=rt");
+  });
+  it("builds the V2 upload/publish URLs with the /upload prefix on upload only", () => {
+    expect(cwsUploadUrl("pub", "ext")).toBe("https://chromewebstore.googleapis.com/upload/v2/publishers/pub/items/ext:upload");
+    expect(cwsPublishUrl("pub", "ext")).toBe("https://chromewebstore.googleapis.com/v2/publishers/pub/items/ext:publish");
+  });
+  it("interprets upload state (SUCCEEDED ok, IN_PROGRESS keeps polling)", () => {
+    expect(interpretCwsUpload({ uploadState: "SUCCEEDED", crxVersion: "1.11.0" })).toMatchObject({ ok: true, version: "1.11.0" });
+    expect(interpretCwsUpload({ uploadState: "IN_PROGRESS" })).toMatchObject({ ok: false, inProgress: true });
+    expect(interpretCwsUpload({ lastAsyncUploadState: "FAILED" })).toMatchObject({ ok: false, inProgress: false });
+  });
+  it("treats PENDING_REVIEW as an accepted publish; formats Google + oauth errors", () => {
+    expect(interpretCwsPublish({ state: "PENDING_REVIEW" }).ok).toBe(true);
+    expect(interpretCwsPublish({ state: "REJECTED" }).ok).toBe(false);
+    expect(cwsErrorMessage({ error: { status: "PERMISSION_DENIED", message: "nope" } })).toBe("PERMISSION_DENIED: nope");
+    expect(cwsErrorMessage({ error_description: "bad refresh token" })).toBe("bad refresh token");
+  });
+});
+
+describe("Edge Add-ons API helpers", () => {
+  it("builds ApiKey + X-ClientID headers and the operation URLs", () => {
+    expect(edgeHeaders({ apiKey: "k", clientId: "c" })).toEqual({ Authorization: "ApiKey k", "X-ClientID": "c" });
+    expect(edgeUploadUrl("p")).toBe("https://api.addons.microsoftedge.microsoft.com/v1/products/p/submissions/draft/package");
+    expect(edgePublishPollUrl("p", "op9")).toBe("https://api.addons.microsoftedge.microsoft.com/v1/products/p/submissions/operations/op9");
+  });
+  it("extracts the operation id from a bare id OR a URL Location header", () => {
+    expect(operationIdFromLocation("abc-123")).toBe("abc-123");
+    expect(operationIdFromLocation("/v1/products/p/submissions/operations/op-7?x=1")).toBe("op-7");
+  });
+  it("interprets operation status (Succeeded ok, Failed surfaces errorCode)", () => {
+    expect(interpretEdgeOperation({ status: "Succeeded" })).toMatchObject({ ok: true });
+    expect(interpretEdgeOperation({ status: "InProgress" })).toMatchObject({ inProgress: true, ok: false });
+    expect(interpretEdgeOperation({ status: "Failed", errorCode: "NoModulesUpdated" })).toMatchObject({ failed: true, errorCode: "NoModulesUpdated" });
+  });
+});
+
+describe("Firefox AMO (web-ext) helpers", () => {
+  it("nests release_notes/approval_notes under `version` (top-level is ignored by AMO)", () => {
+    const m = buildAmoMetadata({ releaseNotes: "Reliability fixes.", approvalNotes: "build steps" });
+    expect(m).toEqual({ version: { release_notes: { "en-US": "Reliability fixes." }, approval_notes: "build steps", license: "MPL-2.0" } });
+  });
+  it("builds a listed-channel web-ext sign argv from --source-dir (not the prebuilt xpi)", () => {
+    const args = webExtSignArgs({ sourceDir: ".output/firefox-mv2", artifactsDir: "dist/web-ext-artifacts", sourceCode: "source-code.zip", metadataFile: "dist/amo-metadata.json" });
+    expect(args).toEqual([
+      "web-ext", "sign", "--channel=listed",
+      "--source-dir=.output/firefox-mv2", "--artifacts-dir=dist/web-ext-artifacts",
+      "--upload-source-code=source-code.zip", "--amo-metadata=dist/amo-metadata.json", "--approval-timeout=0",
+    ]);
+    expect(args).not.toContain("--source-dir=dist/saypi.firefox.xpi");
+  });
+});
+
+describe("PUBLISH_STORES", () => {
+  it("is the three supported stores", () => {
+    expect(PUBLISH_STORES).toEqual(["chrome", "edge", "firefox"]);
   });
 });
