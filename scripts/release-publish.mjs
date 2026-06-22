@@ -144,6 +144,10 @@ export async function edgeSubmit({ zipPath, notes = "", env = process.env, dryRu
 }
 
 // ── Firefox AMO (via web-ext sign) ────────────────────────────────────────────────
+/**
+ * @param {{sourceDir?: string, sourceCode?: string, releaseNotes?: string, approvalNotes?: string,
+ *   env?: Record<string,string|undefined>, dryRun?: boolean, log?: Function}} opts
+ */
 export function firefoxSubmit({ sourceDir, sourceCode, releaseNotes, approvalNotes, env = process.env, dryRun = false, log = console.log }) {
   requireEnv(AMO_ENV, env);
   const bin = join(repoRoot, "node_modules", ".bin", "web-ext");
