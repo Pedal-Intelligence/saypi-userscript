@@ -26,7 +26,8 @@ const goodChrome = {
 const goodFirefox = {
   manifest_version: 2,
   version: "1.11.0",
-  permissions: ["storage", "cookies", "tabs", "contextMenus", "alarms", "audio", "identity"],
+  // Firefox MV2 strips the Chrome-only offscreen + audio permissions.
+  permissions: ["storage", "cookies", "tabs", "contextMenus", "alarms", "identity"],
   browser_specific_settings: { gecko: { id: "gecko@saypi.ai" } },
 };
 
@@ -342,6 +343,7 @@ describe("checkFirefoxManifest", () => {
     expect(checkFirefoxManifest({ ...goodFirefox, manifest_version: 3 }, "1.11.0").issues.join(" ")).toMatch(/expected 2/);
     expect(checkFirefoxManifest({ ...goodFirefox, browser_specific_settings: { gecko: { id: "x" } } }, "1.11.0").issues.join(" ")).toMatch(/gecko id/);
     expect(checkFirefoxManifest({ ...goodFirefox, permissions: [...goodFirefox.permissions, "offscreen"] }, "1.11.0").issues.join(" ")).toMatch(/offscreen/);
+    expect(checkFirefoxManifest({ ...goodFirefox, permissions: [...goodFirefox.permissions, "audio"] }, "1.11.0").issues.join(" ")).toMatch(/audio.*Chrome-only/);
   });
 });
 

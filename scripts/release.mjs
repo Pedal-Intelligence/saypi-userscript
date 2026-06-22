@@ -111,7 +111,7 @@ function cmdPreflight() {
     warn(`could not compare HEAD to origin/main`);
   }
 
-  for (const tool of ["node", "npm", "jq", "zip"]) {
+  for (const tool of ["node", "npm", "jq", "zip", "unzip", "cmp"]) {
     try {
       execFileSync("which", [tool], { stdio: "ignore" });
       ok(`${tool} available`);
@@ -307,9 +307,14 @@ function verifyArtifacts(version) {
     return false;
   }
 
-  note("chrome", checkChromeManifest(manifestFromZip(chromeZip), version));
-  note("firefox", checkFirefoxManifest(manifestFromZip(firefoxXpi), version));
-  note("source", checkSourceEntries(zipEntries(sourceZip)));
+  // Read each archive defensively: a corrupt/unreadable zip becomes a clean failure on the
+  // same reporting path, not an uncaught stack trace.
+  try { note("chrome", checkChromeManifest(manifestFromZip(chromeZip), version)); }
+  catch (e) { allIssues.push(`[chrome] could not read manifest: ${e.message}`); }
+  try { note("firefox", checkFirefoxManifest(manifestFromZip(firefoxXpi), version)); }
+  catch (e) { allIssues.push(`[firefox] could not read manifest: ${e.message}`); }
+  try { note("source", checkSourceEntries(zipEntries(sourceZip))); }
+  catch (e) { allIssues.push(`[source] could not read entries: ${e.message}`); }
 
   // Edge must be a byte-identical copy of Chrome.
   try {

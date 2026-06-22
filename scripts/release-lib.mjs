@@ -485,8 +485,12 @@ export function checkFirefoxManifest(manifest = {}, version, geckoId = "gecko@sa
   }
   const gecko = manifest.browser_specific_settings?.gecko?.id;
   if (gecko !== geckoId) issues.push(`Firefox gecko id is "${gecko}", expected "${geckoId}".`);
-  if ((manifest.permissions || []).includes("offscreen")) {
-    issues.push(`Firefox manifest must not include the "offscreen" permission (Chrome-only).`);
+  // The Firefox MV2 build strips Chrome-only permissions (wxt.config.ts); their presence
+  // means the build didn't target Firefox correctly.
+  for (const chromeOnly of ["offscreen", "audio"]) {
+    if ((manifest.permissions || []).includes(chromeOnly)) {
+      issues.push(`Firefox manifest must not include the "${chromeOnly}" permission (Chrome-only; stripped for MV2).`);
+    }
   }
   return { issues, warnings };
 }
