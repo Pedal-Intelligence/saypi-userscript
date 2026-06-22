@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi, MockedFunction } from 'vitest';
-import { logger } from '../../src/LoggingModule.js';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // Mock the logger
 vi.mock('../../src/LoggingModule.js', () => ({
@@ -190,18 +189,6 @@ describe('Audio Handler', () => {
   
   describe('Audio event forwarding', () => {
     it('should register event listeners on audio element', () => {
-      const expectedEvents = [
-        "loadedmetadata",
-        "canplaythrough", 
-        "play",
-        "pause",
-        "ended",
-        "seeked",
-        "emptied",
-        "playing",
-        "error"
-      ];
-      
       // Trigger event listener registration by accessing the element
       const element = document.getElementById('saypi-audio-offscreen');
       

@@ -3,8 +3,6 @@ export interface TabNavigatorOptions {
 }
 
 export class TabNavigator {
-  private currentTab: string = 'general';
-  
   constructor(private options: TabNavigatorOptions = {}) {
     this.init();
   }
@@ -56,8 +54,6 @@ export class TabNavigator {
   }
   
   selectTab(tabId: string): void {
-    this.currentTab = tabId;
-    
     // Update button states
     document.querySelectorAll('.tab-button').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);

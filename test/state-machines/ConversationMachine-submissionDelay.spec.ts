@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createTestActor } from './support/testActor';
 
 // Mocks needed by ConversationMachine
@@ -124,7 +124,6 @@ describe('ConversationMachine submissionDelay scheduling', () => {
 
     // User stops speaking now
     const blob = new Blob(['a'], { type: 'audio/webm' });
-    const stopAt = Date.now();
     service.send({ type: 'saypi:userStoppedSpeaking', duration: 800, blob });
     expect(service.state.matches({ listening: { converting: 'transcribing' } })).toBe(true);
 

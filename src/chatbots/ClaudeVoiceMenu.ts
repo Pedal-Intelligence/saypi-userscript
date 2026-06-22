@@ -10,7 +10,6 @@ import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { getJwtManagerSync } from "../JwtManager";
 import { getResourceUrl } from "../ResourceModule";
-import globeSvgContent from "../icons/lucide-globe.svg?raw";
 import marsSvgContent from "../icons/lucide-mars.svg?raw";
 import venusSvgContent from "../icons/lucide-venus.svg?raw";
 import { logger } from "../LoggingModule";

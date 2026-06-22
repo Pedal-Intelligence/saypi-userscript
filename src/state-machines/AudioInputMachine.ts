@@ -2,7 +2,6 @@ import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { setup, assign, fromPromise } from "xstate";
 import EventBus from "../events/EventBus.js";
-import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 import { OffscreenVADClient } from '../vad/OffscreenVADClient';
 import { OnscreenVADClient } from '../vad/OnscreenVADClient';
@@ -261,64 +260,6 @@ async function monitorAudioInputDevices() {
 
 // Call the function every 5 seconds
 setInterval(monitorAudioInputDevices, 5000);
-
-async function checkAudioCapabilities() {
-  const detector = new AudioCapabilityDetector();
-  const thresholds = {
-    minimumEchoQuality: 0.5,
-    preferredEchoQuality: 0.75,
-  };
-  const config = await detector.configureAudioFeatures(thresholds);
-
-  // Check WebAssembly capabilities
-  const { webAssembly } = config.audioQualityDetails;
-  
-  // Required memory for ONNX model (approximately 32MB)
-  const requiredPages = 512; // 32MB = 512 pages * 64KB
-  
-  if (!webAssembly.memory.initial) {
-    throw new Error(getMessage("webAssemblyMemoryUnavailable"));
-  }
-  
-  if (webAssembly.memory.maximumSize < requiredPages) {
-    throw new Error(getMessage("webAssemblyInsufficientMemory", 
-      `Required: ${requiredPages * 64}KB, Available: ${webAssembly.memory.maximumSize * 64}KB`));
-  }
-
-  if (!webAssembly.memory.growth) {
-    console.warn("WebAssembly memory growth is not supported. VAD may be unstable.");
-  }
-
-  if (!webAssembly.simd) {
-    console.warn("WebAssembly SIMD is not supported. VAD may not function optimally.");
-  }
-
-  if (!webAssembly.threads) {
-    console.info("WebAssembly Threading is not supported, but probably won't affect performance.");
-  }
-
-  if (config.enableInterruptions) {
-    console.debug("The interrupt feature can be enabled", config);
-  }
-
-  if (config.showQualityWarning) {
-    console.warn(
-      "Echo cancellation quality is low. Consider disabling the interrupt feature."
-    );
-    const actualScore =
-      config.audioQualityDetails.echoCancellationQuality
-        ?.echoCancellationQuality;
-    console.debug(
-      `Echo cancellation test score of ${actualScore?.toFixed(
-        2
-      )} is lower than the preferred quality of ${
-        thresholds.preferredEchoQuality
-      }`
-    );
-  }
-
-  return config;
-}
 
 // Helper function to communicate with the background script for permission
 async function checkAndRequestMicrophonePermissionViaBackground(): Promise<boolean> {

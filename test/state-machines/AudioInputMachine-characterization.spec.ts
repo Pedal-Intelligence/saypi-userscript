@@ -25,7 +25,6 @@ import { createTestActor } from "./support/testActor";
 // hoisted vi.mock factories run (which reference them).
 const {
   vadBehavior,
-  vadCallbacks,
   initializeMock,
   startMock,
   stopMock,

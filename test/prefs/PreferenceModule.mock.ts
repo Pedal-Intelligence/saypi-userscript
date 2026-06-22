@@ -1,4 +1,4 @@
-import { Preference, VoicePreference } from "../../src/prefs/PreferenceModule";
+import { Preference } from "../../src/prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
 import { vi } from "vitest";
 import { mockVoices } from "../data/Voices";
@@ -22,10 +22,4 @@ export class UserPreferenceModuleMock {
   );
   public setVoice = vi.fn((..._args: any[]) => Promise.resolve());
   public unsetVoice = vi.fn((..._args: any[]) => Promise.resolve());
-
-  private getStoredValue(key: string, defaultValue: any): Promise<any> {
-    return new Promise((resolve) => {
-      resolve(defaultValue);
-    });
-  }
 }

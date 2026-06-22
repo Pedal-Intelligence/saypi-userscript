@@ -16,25 +16,6 @@ type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
 type VoicePreferenceMap = Record<string, string>;
 
-// Define an interface for the structure you expect to receive from storage.sync.get OR storage.local.get
-interface StorageResult {
-  prefer?: Preference; // prefered mode, i.e. 'speed', 'balanced', 'accuracy'
-  soundEffects?: boolean;
-  autoSubmit?: boolean;
-  language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
-  voiceId?: string; // prefered speech synthesis voice (remains in sync)
-  voicePreferences?: VoicePreferenceMap;
-  theme?: string; // 'light' or 'dark' (remains in sync)
-  shareData?: boolean; // has the user consented to data sharing? (remains in sync)
-  discretionaryMode?: boolean; // new beta feature for discretionary responses
-  nickname?: string; // user's preferred nickname for the AI assistant
-  enableTTS?: boolean; // Added for migration
-  allowInterruptions?: boolean; // Added for migration
-  vadStatusIndicatorEnabled?: boolean; // To control VAD status indicator visibility
-  removeFillerWords?: boolean; // Prefer cleaned transcripts (LLM-powered)
-  autoReadAloudChatGPT?: boolean; // Auto click ChatGPT Read Aloud during voice calls
-}
-
 // Define feature codes
 export const FEATURE_CODES = {
   AGENT_MODE: "agent_mode"

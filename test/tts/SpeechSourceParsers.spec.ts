@@ -7,7 +7,6 @@ import {
   PiSpeechSourceParser,
   SayPiSpeechSourceParser,
 } from "../../src/tts/SpeechSourceParsers";
-import { BillingModule } from "../../src/billing/BillingModule";
 import { audioProviders } from "../../src/tts/SpeechModel";
 
 vi.mock("../../src/tts/SpeechSynthesisModule", () => {
@@ -87,8 +86,7 @@ describe("SayPiSpeechSourceParser", () => {
     const mockVoiceModule = new SpeechSynthesisModule(
       {} as TextToSpeechService,
       {} as AudioStreamManager,
-      {} as UserPreferenceModule,
-      {} as BillingModule
+      {} as UserPreferenceModule
     );
     const parser = new SayPiSpeechSourceParser(mockVoiceModule);
     const result = await parser.parse(source);
@@ -118,8 +116,7 @@ describe("SayPiSpeechSourceParser", () => {
     const mockVoiceModule = new SpeechSynthesisModule(
       {} as TextToSpeechService,
       {} as AudioStreamManager,
-      {} as UserPreferenceModule,
-      {} as BillingModule
+      {} as UserPreferenceModule
     );
     const sayPiParser = new SayPiSpeechSourceParser(mockVoiceModule);
 

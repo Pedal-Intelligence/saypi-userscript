@@ -215,7 +215,7 @@ const addLocalePublicAssets = (files: Array<Record<string, any>>) => {
 };
 
 const addIconPublicAssets = (files: Array<Record<string, any>>) => {
-  for (const [size, fileName] of ICON_FILE_NAMES) {
+  for (const [, fileName] of ICON_FILE_NAMES) {
     const relativeDest = `icons/${fileName}`;
     if (files.some((file) => file.relativeDest === relativeDest)) {
       continue;

@@ -10,12 +10,11 @@ describe('Settings Page Integration', () => {
   let chromeMock: ReturnType<typeof setupChromeMock>;
   let container: HTMLElement;
   let mockLucide: any;
-  let locationMock: ReturnType<typeof setupLocationMock>;
 
   beforeEach(() => {
     chromeMock = setupChromeMock();
     container = createTestContainer();
-    locationMock = setupLocationMock();
+    setupLocationMock();
 
     // Reset icon state before each test
     _resetIconState();
@@ -88,7 +87,7 @@ describe('Settings Page Integration', () => {
       await chatTab.init();
 
       // 2. Initialize tab navigator
-      const navigator = new TabNavigator();
+      new TabNavigator();
 
       // 3. Apply i18n
       replaceI18n();
@@ -105,7 +104,7 @@ describe('Settings Page Integration', () => {
     it('should preserve icons after i18n replacement', async () => {
       setupFullSettingsPage();
 
-      const navigator = new TabNavigator();
+      new TabNavigator();
 
       // Icons should be added to buttons
       const generalButton = container.querySelector('[data-tab="general"]');
@@ -304,7 +303,7 @@ describe('Settings Page Integration', () => {
       const generalTab = new GeneralTab(container.querySelector('#tab-general')!);
       await generalTab.init();
 
-      const navigator = new TabNavigator();
+      new TabNavigator();
       replaceI18n();
 
       // Icons should be in DOM but not yet initialized
@@ -318,7 +317,7 @@ describe('Settings Page Integration', () => {
     it('should not destroy icons on subsequent refreshes', async () => {
       setupFullSettingsPage();
 
-      const navigator = new TabNavigator();
+      new TabNavigator();
       initIcons();
 
       const iconsBefore = container.querySelectorAll('[data-lucide]');

@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { UtteranceCharge } from "../../src/billing/BillingModule";
 import {
   PiSpeech,
-  SpeechUtterance,
   StreamedSpeech,
 } from "../../src/tts/SpeechModel";
 import {

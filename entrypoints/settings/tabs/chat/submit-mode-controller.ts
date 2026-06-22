@@ -23,7 +23,6 @@ export interface SubmitModeState {
  */
 export class SubmitModeController {
   private hasEntitlement: boolean = false;
-  private currentNickname: string | null = null;
 
   private submitModeSlider: HTMLInputElement | null = null;
   private submitModeOutput: HTMLElement | null = null;
@@ -381,8 +380,6 @@ export class SubmitModeController {
    * Update agent mode description with current nickname
    */
   updateAgentModeDescription(nickname: string | null): void {
-    this.currentNickname = nickname;
-    
     const agentDescription = document.querySelector('[data-i18n="submit_mode_agent_description"]');
     if (agentDescription) {
       const chatbotName = nickname && nickname.trim() ? nickname.trim() : 'assistant';

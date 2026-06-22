@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import EventBus from '../src/events/EventBus.js';
 
 // Mock dependencies
 vi.mock('../src/events/EventBus.js', () => ({

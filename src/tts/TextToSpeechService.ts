@@ -1,6 +1,5 @@
 import {
   isPlaceholderUtterance,
-  isFailedUtterance,
   SayPiSpeech,
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,

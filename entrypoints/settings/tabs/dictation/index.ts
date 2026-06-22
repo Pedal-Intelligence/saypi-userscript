@@ -61,7 +61,7 @@ export class DictationTab implements TabController {
     // Manually initialize language picker after HTML is injected
     const pickerElement = this.container.querySelector('.js-language-picker');
     if (pickerElement && window.LanguagePicker) {
-      const picker = new window.LanguagePicker(pickerElement);
+      new window.LanguagePicker(pickerElement);
 
       // Set up change listener for storage
       const select = pickerElement.querySelector('select');

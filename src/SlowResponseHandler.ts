@@ -1,11 +1,6 @@
 import { ReloadAudioRequest } from "./audio/AudioEvents";
 import EventBus from "./events/EventBus";
-import { audioProviders, SayPiSpeech } from "./tts/SpeechModel";
-import {
-  PiSpeechSourceParser,
-  SayPiSpeechSourceParser,
-  SpeechSourceParser,
-} from "./tts/SpeechSourceParsers";
+import { audioProviders } from "./tts/SpeechModel";
 import { SpeechSynthesisModule } from "./tts/SpeechSynthesisModule";
 
 class SlowResponseHandler {

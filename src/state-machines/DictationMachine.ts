@@ -2,12 +2,10 @@ import { setup, assign } from "xstate";
 import {
   uploadAudioWithRetry,
   uploadAudioForRefinement,
-  isTranscriptionPending,
   clearPendingTranscriptions,
   getCurrentSequenceNumber,
 } from "../TranscriptionModule";
 import EventBus from "../events/EventBus.js";
-import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 import { TranscriptMergeService } from "../TranscriptMergeService";
 import { convertToWavBlob } from "../audio/AudioEncoder";
@@ -154,14 +152,6 @@ interface DictationContext {
   // Accumulated refined text per target for incremental refinement (O(n) optimization)
   // Used as initial_prompt context when refining only new segments
   refinedTextByTarget: Record<string, string>;
-}
-
-function getHighestKey(transcriptions: Record<number, string>): number {
-  const highestKey = Object.keys(transcriptions).reduce(
-    (max, key) => Math.max(max, parseInt(key, 10)),
-    -1
-  );
-  return highestKey;
 }
 
 /**
@@ -715,8 +705,6 @@ function uploadAudioSegment(
   });
 }
 
-const userPreferences = UserPreferenceModule.getInstance();
-
 const mergeService = new TranscriptMergeService();
 
 let targetInputElement: HTMLElement | null = null;
@@ -724,38 +712,6 @@ let targetInputElement: HTMLElement | null = null;
 // Helper function to get the target element
 function getTargetElement(): HTMLElement | null {
   return targetInputElement;
-}
-
-// Helper function to position cursor at the end of contentEditable element
-function positionCursorAtEnd(element: HTMLElement): void {
-  const selection = window.getSelection();
-  if (!selection) return;
-  
-  // Create a range that selects the end of the element's content
-  const range = document.createRange();
-  
-  // Move to the end of the element's content
-  if (element.childNodes.length > 0) {
-    // If there are child nodes, position after the last one
-    const lastNode = element.childNodes[element.childNodes.length - 1];
-    if (lastNode.nodeType === Node.TEXT_NODE) {
-      // If last node is text, position at the end of that text
-      range.setStart(lastNode, lastNode.textContent?.length || 0);
-      range.setEnd(lastNode, lastNode.textContent?.length || 0);
-    } else {
-      // If last node is not text, position after it
-      range.setStartAfter(lastNode);
-      range.setEndAfter(lastNode);
-    }
-  } else {
-    // If no child nodes, position inside the element
-    range.setStart(element, 0);
-    range.setEnd(element, 0);
-  }
-  
-  // Apply the range to the selection
-  selection.removeAllRanges();
-  selection.addRange(range);
 }
 
 // Text insertion strategies are now imported from the shared module
@@ -792,11 +748,7 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
   const success = textInsertionManager.insertText(target, text, replaceAll, caretOffset);
 
   if (success) {
-    
-    // Check what actually ended up in the target after insertion
-    const finalValue = (target as any).value || (target as any).textContent || (target as any).innerText || '';
-    
-    
+
     emitContentUpdated(text);
     // Clear the programmatic update flag on the next tick
     setTimeout(() => {
@@ -914,136 +866,6 @@ function removeMergedSequencesFromContext(
   console.debug(
     `Removed server-merged sequences [${mergedSequences.join(", ")}] from context`
   );
-}
-
-/**
- * Update transcriptionsByTarget based on manual edits to preserve user changes.
- * This function tries to match the new content against existing transcriptions
- * and updates the transcription records to reflect the manual changes.
- */
-function updateTranscriptionsForManualEdit(
-  context: DictationContext,
-  targetElement: HTMLElement,
-  newContent: string,
-  oldContent: string
-): void {
-  const targetId = getTargetElementId(targetElement);
-  const targetTranscriptions = context.transcriptionsByTarget[targetId];
-  
-  if (!targetTranscriptions || Object.keys(targetTranscriptions).length === 0) {
-    console.debug("No transcriptions found for manually edited target:", targetId);
-    return;
-  }
-
-  // Get the current merged content from transcriptions
-  const currentTranscribedContent = smartJoinTranscriptions(targetTranscriptions);
-  
-  // Only proceed if the old content matches what we expect from transcriptions
-  // This ensures we're updating the right content
-  if (oldContent !== currentTranscribedContent) {
-    console.debug("Old content doesn't match transcribed content, skipping update", {
-      oldContent,
-      currentTranscribedContent,
-      targetId
-    });
-    return;
-  }
-
-  // If the user cleared the content, delete the associated transcription(s)
-  if (newContent.trim() === "") {
-    const transcriptionKeys = Object.keys(targetTranscriptions).map(k => parseInt(k, 10));
-
-    if (transcriptionKeys.length === 1) {
-      // Only one sequence – remove it completely
-      const seq = transcriptionKeys[0];
-      delete targetTranscriptions[seq];
-      delete context.transcriptions[seq];
-    } else if (transcriptionKeys.length > 1) {
-      // Multiple sequences – assume the user cleared the *last* chunk
-      const sortedKeys = transcriptionKeys.sort((a, b) => a - b);
-      const lastKey = sortedKeys[sortedKeys.length - 1];
-      delete targetTranscriptions[lastKey];
-      delete context.transcriptions[lastKey];
-    }
-
-    // If the bucket is now empty, remove it for neatness
-    if (Object.keys(targetTranscriptions).length === 0) {
-      delete context.transcriptionsByTarget[targetId];
-    }
-
-    console.debug("Cleared transcription entry due to manual deletion for target:", targetId);
-    return;
-  }
-
-  // Simple approach: if we have exactly one transcription, replace it entirely
-  const transcriptionKeys = Object.keys(targetTranscriptions).map(k => parseInt(k, 10));
-  
-  if (transcriptionKeys.length === 1) {
-    // Single transcription - replace it entirely
-    const sequenceNumber = transcriptionKeys[0];
-    targetTranscriptions[sequenceNumber] = newContent;
-    console.debug(`Updated single transcription [${sequenceNumber}] for target ${targetId}:`, {
-      from: oldContent,
-      to: newContent
-    });
-  } else if (transcriptionKeys.length > 1) {
-    // Multiple transcriptions - try to map changes to the last transcription
-    // This is a simple heuristic: assume the edit was made to the most recent part
-    const sortedKeys = transcriptionKeys.sort((a, b) => a - b);
-    const lastKey = sortedKeys[sortedKeys.length - 1];
-    
-    // Calculate what the content would be without the last transcription
-    const transcriptionsWithoutLast: Record<number, string> = {};
-    sortedKeys.slice(0, -1).forEach(key => {
-      transcriptionsWithoutLast[key] = targetTranscriptions[key];
-    });
-    const contentWithoutLast = smartJoinTranscriptions(transcriptionsWithoutLast);
-    
-    // If newContent starts with contentWithoutLast, update the last transcription
-    if (newContent.startsWith(contentWithoutLast)) {
-      let remainder = newContent.substring(contentWithoutLast.length);
-      
-      
-      
-      // Handle spacing: if remainder starts with a single space (from automatic joining),
-      // but now contains special formatting like newlines, preserve the formatting.
-      // Otherwise, trim leading/trailing spaces as before for normal text edits.
-      if (remainder.startsWith(" ") && remainder.includes("\n")) {
-        // Contains newlines - this is likely formatting, so preserve leading space-to-newline transitions
-        const beforeTrim = remainder;
-        remainder = remainder.substring(1); // Remove the single joining space
-        
-      } else if (remainder.startsWith(" ") && !remainder.includes("\n")) {
-        // Normal text edit - trim leading space from joining
-        const beforeTrim = remainder;
-        remainder = remainder.substring(1);
-        
-      }
-      // Note: We preserve other whitespace like tabs, multiple spaces, trailing spaces
-      
-      if (remainder !== "") {
-        targetTranscriptions[lastKey] = remainder;
-        
-      }
-    } else {
-      // Content changed significantly - replace the last transcription with the entire new content
-      // and clear all other transcriptions
-      sortedKeys.slice(0, -1).forEach(key => {
-        delete targetTranscriptions[key];
-        delete context.transcriptions[key];
-      });
-      targetTranscriptions[lastKey] = newContent;
-      console.debug(`Replaced all transcriptions with single updated transcription [${lastKey}] for target ${targetId}:`, {
-        to: newContent
-      });
-    }
-  }
-
-  // Also update the global transcriptions for backward compatibility
-  Object.keys(targetTranscriptions).forEach(key => {
-    const sequenceNumber = parseInt(key, 10);
-    context.transcriptions[sequenceNumber] = targetTranscriptions[sequenceNumber];
-  });
 }
 
 /**

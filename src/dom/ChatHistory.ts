@@ -252,8 +252,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
           const addedElement = node as Element;
           const responseObservations =
             await this.findAndDecorateAssistantResponses(addedElement);
-          const promptObservations = 
-            await this.findAndDecorateUserPrompts(addedElement);
+          await this.findAndDecorateUserPrompts(addedElement);
           if (this.haltOnFirst && responseObservations[0]?.isReady()) {
             // only expecting one new chat message at a time, so
             // skip this mutation if the chat message is already decorated

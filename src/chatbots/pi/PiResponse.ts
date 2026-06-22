@@ -9,7 +9,6 @@ import {
   STREAM_TIMEOUT,
   getNestedText,
 } from "../../tts/InputStream";
-import { UserPreferenceModule } from "../../prefs/PreferenceModule";
 import { TTSControlsModule } from "../../tts/TTSControlsModule";
 
 export class PiResponse extends AssistantResponse {

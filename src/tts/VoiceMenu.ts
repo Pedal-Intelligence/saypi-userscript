@@ -3,11 +3,10 @@
 import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
-import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
 import getMessage from "../i18n";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import { audioProviders, SpeechSynthesisVoiceRemote } from "./SpeechModel";
+import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import { getJwtManagerSync } from "../JwtManager";
 
