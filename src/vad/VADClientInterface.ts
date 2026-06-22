@@ -3,15 +3,35 @@
  * This ensures both clients provide the same API for the AudioInputMachine
  */
 
+/**
+ * #420 — Detail attached to a VAD misfire when it was the admission gate (not the
+ * library) that dropped the segment. `reason` is prefixed `admission-gate:` so a
+ * consumer can count gate drops separately from genuine non-speech misfires.
+ */
+export interface VADMisfireInfo {
+  reason?: string;
+  peakSpeechProb?: number;
+  meanSpeechProb?: number;
+  speechFrameCount?: number;
+}
+
 export interface VADClientCallbacks {
   onSpeechStart?: () => void;
-  onSpeechEnd?: (data: { 
-    duration: number; 
-    audioBuffer: ArrayBuffer; 
-    captureTimestamp: number; 
-    clientReceiveTimestamp: number 
+  onSpeechEnd?: (data: {
+    duration: number;
+    audioBuffer: ArrayBuffer;
+    captureTimestamp: number;
+    clientReceiveTimestamp: number;
+    // #420 — per-segment speech-probability stats from the VAD. Optional because not
+    // every code path (older offscreen builds, some tests) supplies them.
+    peakSpeechProb?: number;
+    meanSpeechProb?: number;
+    speechFrameCount?: number;
   }) => void;
-  onVADMisfire?: () => void;
+  // #420 — onVADMisfire fires for both a library misfire (sub-minSpeechFrames blip,
+  // no info) AND an admission-gate drop (info present: reason + the segment's stats),
+  // so a dropped-real-speech regression is distinguishable from genuine non-speech.
+  onVADMisfire?: (info?: VADMisfireInfo) => void;
   onError?: (error: string) => void;
   // Fired when another tab claims the single shared offscreen mic, displacing
   // this tab's VAD session. Offscreen VAD only — onscreen VAD is per-tab. (#320)

@@ -73,17 +73,26 @@ function setupVADEventListeners() {
     EventBus.emit("saypi:userSpeaking");
   });
 
-  vadClient.on('onSpeechEnd', (data: { 
-    duration: number; 
-    audioBuffer: ArrayBuffer; 
-    captureTimestamp: number; 
-    clientReceiveTimestamp: number 
+  vadClient.on('onSpeechEnd', (data: {
+    duration: number;
+    audioBuffer: ArrayBuffer;
+    captureTimestamp: number;
+    clientReceiveTimestamp: number;
+    // #420 — per-segment speech-probability stats forwarded from the VAD client (the
+    // admission gate that admitted this segment ran upstream; these are for visibility).
+    peakSpeechProb?: number;
+    meanSpeechProb?: number;
+    speechFrameCount?: number;
   }) => {
-    logger.debug(`[AudioInputMachine] User speech ended. Duration: ${data.duration}ms`);
-    
+    const stats =
+      data.peakSpeechProb !== undefined
+        ? ` (peak=${data.peakSpeechProb.toFixed(3)}, speechFrames=${data.speechFrameCount})`
+        : "";
+    logger.debug(`[AudioInputMachine] User speech ended. Duration: ${data.duration}ms${stats}`);
+
     // Log processing delays only if they exceed thresholds
     logProcessingDelay(data.captureTimestamp, data.clientReceiveTimestamp);
-    
+
     EventBus.emit("saypi:userStoppedSpeaking", {
       audioBuffer: data.audioBuffer,
       duration: data.duration,
@@ -92,8 +101,23 @@ function setupVADEventListeners() {
     });
   });
 
-  vadClient.on('onVADMisfire', () => {
-    logger.debug("[AudioInputMachine] VAD misfire detected.");
+  vadClient.on('onVADMisfire', (info?: {
+    reason?: string;
+    peakSpeechProb?: number;
+    meanSpeechProb?: number;
+    speechFrameCount?: number;
+  }) => {
+    // #420 — distinguish an admission-gate drop (real-ish audio dropped for low peak
+    // confidence) from a genuine library misfire (sub-minSpeechFrames blip), so a
+    // dropped-quiet-speech regression is visible in the logs rather than silent.
+    if (info?.reason?.startsWith("admission-gate")) {
+      logger.info(
+        `[AudioInputMachine] Admission gate dropped a segment (${info.reason}): ` +
+        `peak=${info.peakSpeechProb}, speechFrames=${info.speechFrameCount}.`
+      );
+    } else {
+      logger.debug("[AudioInputMachine] VAD misfire detected.");
+    }
     EventBus.emit("saypi:vadMisfire");
   });
 
