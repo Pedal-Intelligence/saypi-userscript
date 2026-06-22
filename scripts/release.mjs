@@ -35,6 +35,7 @@ import {
   checkChromeManifest,
   checkFirefoxManifest,
   checkSourceEntries,
+  chooseReleaseCommit,
 } from "./release-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -349,17 +350,48 @@ function cmdVerify({ version }) {
   ok(`Release candidates verified.`);
 }
 
+function versionAtCommit(ref) {
+  try {
+    return JSON.parse(execFileSync("git", ["show", `${ref}:package.json`], { cwd: repoRoot, encoding: "utf8" })).version;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Resolve the EXACT commit a release was built from — the version-bump commit (matched by message)
+ * whose package.json equals the version. Falls back to HEAD only if HEAD's package.json matches.
+ * Returns null if nothing matches, so we never tag the wrong commit after concurrent merges move main.
+ */
+function resolveReleaseCommit(version) {
+  const shas = git(["log", "--grep", `Version bump to v${version}`, "--format=%H", "-n", "30"], { allowFail: true })
+    .split("\n")
+    .filter(Boolean);
+  const candidates = shas.map((sha) => ({ sha, version: versionAtCommit(sha) })).filter((c) => c.version);
+  const chosen = chooseReleaseCommit(candidates, version);
+  if (chosen) return chosen;
+  const head = git(["rev-parse", "HEAD"], { allowFail: true });
+  if (head && versionAtCommit("HEAD") === version) return head;
+  return null;
+}
+
 function cmdTag({ version, yes }) {
   requireYes("tag", { yes });
   assertOnMain("tag");
   const v = version || pkgVersion();
   const tag = `v${v}`;
-  // `git tag` (no -f) refuses to clobber an existing tag — re-tagging a released version fails loudly.
-  execFileSync("git", ["tag", tag], { cwd: repoRoot, stdio: "inherit" });
-  ok(`Created tag ${tag} (local). Push with \`finalize\` after all stores are submitted.`);
+  const commit = resolveReleaseCommit(v);
+  if (!commit) {
+    bad(`Could not find the v${v} release commit (no "Version bump to v${v}" commit and HEAD's package.json isn't ${v}). Bump + commit the release first.`);
+    process.exit(2);
+  }
+  // Tag the resolved release commit explicitly (NOT HEAD — concurrent merges may have moved main).
+  // `git tag` (no -f) refuses to clobber an existing tag, so re-tagging a released version fails loudly.
+  execFileSync("git", ["tag", tag, commit], { cwd: repoRoot, stdio: "inherit" });
+  ok(`Created tag ${tag} → ${commit.slice(0, 7)} (the v${v} release commit). Push with \`finalize\`.`);
 }
 
-function cmdFinalize({ version, yes }) {
+function cmdFinalize({ version, yes, ghRelease }) {
   requireYes("finalize", { yes });
   assertOnMain("finalize");
   const v = version || pkgVersion();
@@ -370,7 +402,27 @@ function cmdFinalize({ version, yes }) {
   }
   // Push the release commit and tag together, explicitly to origin/main (not the default remote).
   execFileSync("git", ["push", "origin", "main", tag], { cwd: repoRoot, stdio: "inherit" });
-  ok(`Pushed the release commit and tag ${tag}. Optionally: gh release create ${tag} -F dist/release-notes-draft-v${v}.md`);
+  ok(`Pushed origin/main and tag ${tag}.`);
+  if (ghRelease) createGhRelease(v, tag);
+  else log(`${C.dim}  (skipped GitHub release; create with \`gh release create ${tag} --notes-file _locales/en/release_notes.txt\`)${C.reset}`);
+}
+
+/** Cut a GitHub release from the voiced notes (best-effort; --no-gh-release opts out). */
+function createGhRelease(v, tag) {
+  const notes = existsSync(RELEASE_NOTES_PATH) ? RELEASE_NOTES_PATH : join(DIST, `release-notes-draft-v${v}.md`);
+  if (!existsSync(notes)) {
+    warn(`No release notes found (${RELEASE_NOTES_PATH} or dist draft) — skipping GitHub release.`);
+    return;
+  }
+  try {
+    execFileSync("gh", ["release", "create", tag, "--title", tag, "--notes-file", notes, "--verify-tag", "--latest"], {
+      cwd: repoRoot,
+      stdio: "inherit",
+    });
+    ok(`Created GitHub release ${tag} (you can refine its title/body on GitHub).`);
+  } catch (e) {
+    warn(`Could not create the GitHub release (${e.message}); create it manually if wanted.`);
+  }
 }
 
 // ── Entry ───────────────────────────────────────────────────────────────────────
@@ -381,6 +433,7 @@ function main() {
   const flags = {
     yes: argv.includes("--yes"),
     save: argv.includes("--save"),
+    ghRelease: !argv.includes("--no-gh-release"),
     version: (() => {
       const i = argv.indexOf("--version");
       if (i >= 0 && argv[i + 1]) return argv[i + 1].replace(/^v/, "");

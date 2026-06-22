@@ -511,3 +511,22 @@ export function checkSourceEntries(entries = []) {
   if (!has(/(^|\/)src\//)) warnings.push(`Source archive has no src/ entries — confirm it contains the real sources.`);
   return { issues, warnings };
 }
+
+/**
+ * Pick the release commit for a version from a list of candidates. The CLI gathers candidates
+ * (commits whose message is the version bump) and reads each one's package.json version; this
+ * returns the SHA of the first candidate whose version matches — so we tag the EXACT commit a
+ * release was built from, not whatever HEAD happens to be after later merges moved main.
+ *
+ * @param {{sha: string, version: string}[]} candidates
+ * @param {string} version
+ * @returns {string|null}
+ */
+export function chooseReleaseCommit(candidates = [], version) {
+  const target = parseSemver(version) ? formatSemver(parseSemver(version)) : version;
+  const match = candidates.find((c) => {
+    const v = parseSemver(c.version) ? formatSemver(parseSemver(c.version)) : c.version;
+    return v === target;
+  });
+  return match ? match.sha : null;
+}

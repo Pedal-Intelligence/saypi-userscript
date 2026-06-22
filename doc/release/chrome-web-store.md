@@ -32,7 +32,7 @@ Canonical answers live in `doc/WEB_STORE_PERMISSIONS.md`. The tab is sticky but 
 - Listing limits (only relevant if editing copy): **name ≤ 75**, **summary ≤ 132**, **detailed description ≤ ~16,000** (widely documented; verify on the live field). Screenshots 1280×800 (≥1), small promo tile 440×280, marquee 1400×560 (optional). Assets carry over on an update.
 
 ## Review timing
-- Usually a **few days**; occasionally up to **~3 weeks** (a 2026-04 submission-surge notice is posted). Broad host permissions / sensitive permissions slow it. Contact developer support if pending >3 weeks.
+- **Often fast** — frequently within **a few hours to a day** (v1.11.0 published ~1–2h after submission, 2026-06). Occasionally **a few days to ~3 weeks** when broad host permissions / sensitive permissions trigger manual review. Variable; contact developer support if pending >3 weeks.
 - Default **auto-publishes on approval** (unless you unchecked it).
 
 ## ⚠️ The dev console cannot be browser-automated
