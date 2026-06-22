@@ -19,7 +19,7 @@
  * loads .env.production. `tag`/`finalize` touch shared git history. The latter four refuse
  * to run without --yes and must be operated by the founder, never autonomously.
  */
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve as resolvePath } from "node:path";
@@ -32,6 +32,9 @@ import {
   parseSemver,
   compareSemver,
   formatSemver,
+  checkChromeManifest,
+  checkFirefoxManifest,
+  checkSourceEntries,
 } from "./release-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -235,15 +238,110 @@ function assertOnMain(cmd) {
   }
 }
 
-function cmdBuild({ yes }) {
+function cmdBuild({ yes, version }) {
   requireYes("build", { yes });
+  const v = version || pkgVersion();
+  // Loud, unambiguous: the stale-build near-miss happened because a build ran in a different
+  // checkout. Print exactly what/where, and clear stale output so nothing carries over.
+  log(`${C.bold}Building v${v}${C.reset} from ${repoRoot}`);
+  if (pkgVersion() !== v) {
+    bad(`package.json is ${pkgVersion()} but you asked to build ${v}. Bump first (or drop --version).`);
+    process.exit(2);
+  }
   warn(`This runs the production build (loads .env.production) and packages all stores.`);
+  for (const stale of [".output", "dist", "source-code.zip"]) {
+    rmSync(join(repoRoot, stale), { recursive: true, force: true });
+  }
   execFileSync("bash", [join(repoRoot, "package-extension.sh"), "chrome", "edge", "firefox"], {
     cwd: repoRoot,
     stdio: "inherit",
   });
   execFileSync("npm", ["run", "source-archive"], { cwd: repoRoot, stdio: "inherit" });
   ok(`Built + packaged: dist/saypi.chrome.zip, dist/saypi.edge.zip, dist/saypi.firefox.xpi, source-code.zip`);
+  log(`\n${C.bold}Verifying the release candidates…${C.reset}`);
+  const clean = verifyArtifacts(v);
+  if (!clean) {
+    bad(`Build verification FAILED — do NOT submit these artifacts. See issues above.`);
+    process.exit(1);
+  }
+}
+
+// ── Artifact verification ─────────────────────────────────────────────────────────
+
+/** Parse manifest.json out of a zip/xpi (without extracting). */
+function manifestFromZip(zipPath) {
+  const raw = execFileSync("unzip", ["-p", zipPath, "manifest.json"], { cwd: repoRoot, encoding: "utf8" });
+  return JSON.parse(raw);
+}
+
+/** List entry paths inside a zip. */
+function zipEntries(zipPath) {
+  return execFileSync("unzip", ["-Z1", zipPath], { cwd: repoRoot, encoding: "utf8" })
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/**
+ * Verify the built release candidates against the target version. Returns true if clean
+ * (no hard issues). Codifies the manual checks from the 1.11.0 wet run.
+ */
+function verifyArtifacts(version) {
+  const chromeZip = join(DIST, "saypi.chrome.zip");
+  const edgeZip = join(DIST, "saypi.edge.zip");
+  const firefoxXpi = join(DIST, "saypi.firefox.xpi");
+  const sourceZip = join(repoRoot, "source-code.zip");
+
+  const allIssues = [];
+  const allWarnings = [];
+  const note = (label, { issues, warnings }) => {
+    issues.forEach((i) => allIssues.push(`[${label}] ${i}`));
+    warnings.forEach((w) => allWarnings.push(`[${label}] ${w}`));
+  };
+
+  for (const [label, p] of [["chrome.zip", chromeZip], ["edge.zip", edgeZip], ["firefox.xpi", firefoxXpi], ["source-code.zip", sourceZip]]) {
+    if (!existsSync(p)) allIssues.push(`[${label}] missing — run \`build\` first.`);
+  }
+  if (allIssues.length) {
+    allIssues.forEach(bad);
+    return false;
+  }
+
+  note("chrome", checkChromeManifest(manifestFromZip(chromeZip), version));
+  note("firefox", checkFirefoxManifest(manifestFromZip(firefoxXpi), version));
+  note("source", checkSourceEntries(zipEntries(sourceZip)));
+
+  // Edge must be a byte-identical copy of Chrome.
+  try {
+    execFileSync("cmp", ["-s", chromeZip, edgeZip]);
+    ok(`edge.zip is byte-identical to chrome.zip`);
+  } catch {
+    allIssues.push(`[edge] edge.zip differs from chrome.zip (should be an identical copy).`);
+  }
+
+  // Freshness: the artifacts should be newer than package.json (else they predate the bump).
+  const pkgMtime = statSync(join(repoRoot, "package.json")).mtimeMs;
+  for (const [label, p] of [["chrome.zip", chromeZip], ["firefox.xpi", firefoxXpi]]) {
+    const m = statSync(p).mtimeMs;
+    if (m < pkgMtime) allWarnings.push(`[${label}] is OLDER than package.json — possible stale build.`);
+  }
+
+  allIssues.forEach(bad);
+  allWarnings.forEach(warn);
+  if (!allIssues.length) {
+    ok(`All archives report version ${version}; permissions, manifests, and source archive look good.`);
+  }
+  return allIssues.length === 0;
+}
+
+function cmdVerify({ version }) {
+  const v = version || gather().decision.version;
+  log(`${C.bold}Verifying release candidates for v${v}…${C.reset}\n`);
+  if (!verifyArtifacts(v)) {
+    bad(`Verification FAILED — do NOT submit these artifacts.`);
+    process.exit(1);
+  }
+  ok(`Release candidates verified.`);
 }
 
 function cmdTag({ version, yes }) {
@@ -300,12 +398,14 @@ function main() {
       return cmdBump(flags);
     case "build":
       return cmdBuild(flags);
+    case "verify":
+      return cmdVerify(flags);
     case "tag":
       return cmdTag(flags);
     case "finalize":
       return cmdFinalize(flags);
     default:
-      log(`Usage: node scripts/release.mjs <preflight|plan|packet|bump|build|tag|finalize> [--save] [--version X] [--yes]`);
+      log(`Usage: node scripts/release.mjs <preflight|plan|packet|bump|build|verify|tag|finalize> [--save] [--version X] [--yes]`);
       process.exit(command ? 1 : 0);
   }
 }

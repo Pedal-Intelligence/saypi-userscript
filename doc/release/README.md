@@ -52,7 +52,8 @@ npm run release:preflight                  # = node scripts/release.mjs prefligh
 npm run release:plan                       # = … plan
 npm run release:packet                     # = … packet
 npm run release:bump -- <version> --yes    # = … bump <version> --yes
-npm run release:build -- --yes             # = … build --yes
+npm run release:build -- --yes             # = … build --yes  (clears stale output, then self-verifies)
+npm run release:verify                     # = … verify  (re-check the built candidates; read-only)
 npm run release:tag -- <version> --yes     # = … tag <version> --yes
 npm run release:finalize -- <version> --yes  # = … finalize <version> --yes
 ```
@@ -76,10 +77,15 @@ lockfile, no tag). Reconcile the stale root `manifest.json` if it drifts (legacy
 the WXT build). Commit the bump.
 
 ### 2. Build & package ⛔ (founder, loads `.env.production`)
-`node scripts/release.mjs build --yes` → `package-extension.sh chrome edge firefox` +
+`node scripts/release.mjs build --yes` → **clears stale `.output`/`dist`/`source-code.zip`**,
+prints what/where it's building, runs `package-extension.sh chrome edge firefox` +
 `source-archive` → `dist/saypi.chrome.zip`, `dist/saypi.edge.zip`, `dist/saypi.firefox.xpi`,
-`source-code.zip`. Verify the built manifest version matches and the Chrome bundle has no
-`eval` (`grep -r eval .output/chrome-mv3 --include=*.js` → 0).
+`source-code.zip`, then **auto-verifies** them and **fails the build** if anything is off.
+The verification (also runnable standalone via `release:verify`) checks: the version *inside
+each archive* matches the target (catches stale builds), Edge≡Chrome, the Firefox MV2 manifest
++ gecko id, **no dev-only `downloads`**, **no secrets in the source zip**, and **permission-set
+drift** (would have caught the missing `alarms`/`identity`). This codifies the manual checks
+from the 1.11.0 wet run — see `scripts/release-lib.mjs` (`checkChromeManifest` etc.).
 
 ### 3. Draft the "what's new" ⛔ (to apply)
 `node scripts/release.mjs plan --save` writes the factual digest to

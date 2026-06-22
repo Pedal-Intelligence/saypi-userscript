@@ -10,7 +10,25 @@ import {
   renderReleaseDigest,
   renderPacket,
   INTERNAL_SCOPES,
+  EXPECTED_PROD_PERMISSIONS,
+  diffPermissions,
+  checkChromeManifest,
+  checkFirefoxManifest,
+  checkSourceEntries,
 } from "../../scripts/release-lib.mjs";
+
+// A known-good production Chrome manifest shape for the checks below.
+const goodChrome = {
+  manifest_version: 3,
+  version: "1.11.0",
+  permissions: [...EXPECTED_PROD_PERMISSIONS],
+};
+const goodFirefox = {
+  manifest_version: 2,
+  version: "1.11.0",
+  permissions: ["storage", "cookies", "tabs", "contextMenus", "alarms", "audio", "identity"],
+  browser_specific_settings: { gecko: { id: "gecko@saypi.ai" } },
+};
 
 // `git log --oneline` always prefixes a 7+ hex abbreviated hash. Build fixtures the
 // same way so the parser sees realistic input.
@@ -277,5 +295,69 @@ describe("INTERNAL_SCOPES", () => {
     for (const s of ["tooling", "dev", "ci", "test", "e2e", "layer4cdp"]) {
       expect(INTERNAL_SCOPES.has(s)).toBe(true);
     }
+  });
+});
+
+describe("diffPermissions", () => {
+  it("reports nothing for the exact expected set", () => {
+    expect(diffPermissions([...EXPECTED_PROD_PERMISSIONS])).toEqual({ added: [], removed: [] });
+  });
+  it("flags added and removed permissions", () => {
+    const d = diffPermissions(["storage", "cookies", "tabs", "contextMenus", "alarms", "offscreen", "audio", "bookmarks"]);
+    expect(d.added).toEqual(["bookmarks"]);
+    expect(d.removed).toEqual(["identity"]);
+  });
+});
+
+describe("checkChromeManifest", () => {
+  it("passes a known-good production manifest", () => {
+    const r = checkChromeManifest(goodChrome, "1.11.0");
+    expect(r.issues).toEqual([]);
+    expect(r.warnings).toEqual([]);
+  });
+  it("catches a STALE BUILD (wrong version) — the 1.11.0 near-miss", () => {
+    const r = checkChromeManifest({ ...goodChrome, version: "1.10.8" }, "1.11.0");
+    expect(r.issues.join(" ")).toMatch(/version is 1\.10\.8, expected 1\.11\.0.*STALE/i);
+  });
+  it("hard-fails on the dev-only 'downloads' permission leaking into prod", () => {
+    const r = checkChromeManifest({ ...goodChrome, permissions: [...EXPECTED_PROD_PERMISSIONS, "downloads"] }, "1.11.0");
+    expect(r.issues.join(" ")).toMatch(/dev-only permission "downloads"/);
+  });
+  it("warns (not fails) when the permission set changes", () => {
+    const r = checkChromeManifest({ ...goodChrome, permissions: [...EXPECTED_PROD_PERMISSIONS, "bookmarks"] }, "1.11.0");
+    expect(r.issues).toEqual([]);
+    expect(r.warnings.join(" ")).toMatch(/ADDED.*bookmarks/);
+  });
+  it("flags a non-MV3 manifest", () => {
+    expect(checkChromeManifest({ ...goodChrome, manifest_version: 2 }, "1.11.0").issues.join(" ")).toMatch(/manifest_version is 2/);
+  });
+});
+
+describe("checkFirefoxManifest", () => {
+  it("passes a known-good MV2 manifest", () => {
+    expect(checkFirefoxManifest(goodFirefox, "1.11.0").issues).toEqual([]);
+  });
+  it("catches wrong version, wrong manifest version, missing gecko id, and stray offscreen", () => {
+    expect(checkFirefoxManifest({ ...goodFirefox, version: "1.10.7" }, "1.11.0").issues.join(" ")).toMatch(/STALE/i);
+    expect(checkFirefoxManifest({ ...goodFirefox, manifest_version: 3 }, "1.11.0").issues.join(" ")).toMatch(/expected 2/);
+    expect(checkFirefoxManifest({ ...goodFirefox, browser_specific_settings: { gecko: { id: "x" } } }, "1.11.0").issues.join(" ")).toMatch(/gecko id/);
+    expect(checkFirefoxManifest({ ...goodFirefox, permissions: [...goodFirefox.permissions, "offscreen"] }, "1.11.0").issues.join(" ")).toMatch(/offscreen/);
+  });
+});
+
+describe("checkSourceEntries", () => {
+  const good = ["package-lock.json", "src/index.ts", ".env.example", ".env.production.example", "README.md"];
+  it("passes a clean source archive (templates OK)", () => {
+    expect(checkSourceEntries(good).issues).toEqual([]);
+  });
+  it("hard-fails on a real secret env file (but not the .example templates)", () => {
+    expect(checkSourceEntries([...good, ".env"]).issues.join(" ")).toMatch(/secret env file.*\.env/);
+    expect(checkSourceEntries([...good, ".env.production"]).issues.join(" ")).toMatch(/secret env file/);
+    // templates alone must NOT trip it
+    expect(checkSourceEntries(good).issues.join(" ")).not.toMatch(/secret/);
+  });
+  it("hard-fails on node_modules and missing lockfile", () => {
+    expect(checkSourceEntries([...good, "node_modules/x/index.js"]).issues.join(" ")).toMatch(/node_modules/);
+    expect(checkSourceEntries(["src/index.ts"]).issues.join(" ")).toMatch(/missing package-lock\.json/);
   });
 });
