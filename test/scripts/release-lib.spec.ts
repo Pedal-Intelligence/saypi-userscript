@@ -15,6 +15,7 @@ import {
   checkChromeManifest,
   checkFirefoxManifest,
   checkSourceEntries,
+  chooseReleaseCommit,
 } from "../../scripts/release-lib.mjs";
 
 // A known-good production Chrome manifest shape for the checks below.
@@ -361,5 +362,23 @@ describe("checkSourceEntries", () => {
   it("hard-fails on node_modules and missing lockfile", () => {
     expect(checkSourceEntries([...good, "node_modules/x/index.js"]).issues.join(" ")).toMatch(/node_modules/);
     expect(checkSourceEntries(["src/index.ts"]).issues.join(" ")).toMatch(/missing package-lock\.json/);
+  });
+});
+
+describe("chooseReleaseCommit", () => {
+  const candidates = [
+    { sha: "aaaaaaa", version: "1.11.1" }, // a later bump commit
+    { sha: "de64dc4", version: "1.11.0" }, // the v1.11.0 release commit
+  ];
+  it("picks the commit whose package.json matches the version (not just the newest)", () => {
+    expect(chooseReleaseCommit(candidates, "1.11.0")).toBe("de64dc4");
+    expect(chooseReleaseCommit(candidates, "1.11.1")).toBe("aaaaaaa");
+  });
+  it("is v-prefix tolerant on both sides", () => {
+    expect(chooseReleaseCommit([{ sha: "abc1234", version: "v2.0.0" }], "2.0.0")).toBe("abc1234");
+  });
+  it("returns null when no candidate matches (so the CLI refuses to tag the wrong commit)", () => {
+    expect(chooseReleaseCommit(candidates, "1.12.0")).toBe(null);
+    expect(chooseReleaseCommit([], "1.11.0")).toBe(null);
   });
 });

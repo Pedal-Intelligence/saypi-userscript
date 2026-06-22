@@ -11,7 +11,7 @@
       "hasReleaseNotesField": false,
       "releaseNotesFallback": "Chrome has no changelog field. Optionally fold highlights into the detailed description; otherwise the version simply ships.",
       "autoPublishOnApproval": true,
-      "reviewEta": "usually a few days; occasionally up to ~3 weeks (submission-surge notice as of 2026-04)",
+      "reviewEta": "often fast — frequently within a few hours to a day (v1.11.0 published ~1–2h after submission, 2026-06); occasionally a few days to ~3 weeks for broad/sensitive permissions. Variable.",
       "declarations": [
         "Remote code: select \"No, I am not using remote code\".",
         "Per-permission justifications (storage, cookies, tabs, contextMenus, alarms, offscreen, audio, identity) — canonical text in doc/WEB_STORE_PERMISSIONS.md.",

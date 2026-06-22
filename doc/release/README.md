@@ -111,8 +111,11 @@ Detail + gotchas in `chrome-web-store.md`, `edge-addons.md`, `firefox-amo.md`. K
 
 ### 6. Finalize ⛔ (founder)
 After all stores are submitted: `node scripts/release.mjs tag <version> --yes` then
-`finalize <version> --yes` (pushes the release commit + tag from main). Optionally
-`gh release create v<x> -F dist/release-notes-draft-v<x>.md`.
+`finalize <version> --yes`. `tag` resolves the **actual release commit** (the `Version bump
+to v<x>` commit whose package.json matches) and tags *that* — not `HEAD`, which concurrent
+merges may have moved past — and refuses if it can't find a matching commit. `finalize` pushes
+origin/main + the tag, then **cuts the GitHub release** from `_locales/en/release_notes.txt`
+(pass `--no-gh-release` to skip; refine the release title/body on GitHub afterward).
 
 ## Future: one-click automation via publishing APIs (#412)
 The 1.11.0 wet run established that **browser-driving is a dead end for releases:**
