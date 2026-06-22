@@ -110,7 +110,11 @@ WXT discovers entry points in **`entrypoints/`**; each is a thin shim that impor
 
 #### Build Output
 
-`wxt build` emits to **`.output/<target>/`** (git-ignored) — e.g. `.output/chrome-mv3/` (MV3) and `.output/firefox-mv2/` (MV2). Each contains the generated `manifest.json`, `background.js`, `content-scripts/` (`saypi.js`, `saypi-universal.js`), hashed `chunks/`, and the HTML pages (`offscreen.html`, `settings.html`, `permissions.html`). Store-submission packaging (zipping the per-target `.output/` dir) is part of the founder-run release step.
+`wxt build` emits to **`.output/<target>/`** (git-ignored) — e.g. `.output/chrome-mv3/` (MV3) and `.output/firefox-mv2/` (MV2). Each contains the generated `manifest.json`, `background.js`, `content-scripts/` (`saypi.js`, `saypi-universal.js`), hashed `chunks/`, and the HTML pages (`offscreen.html`, `settings.html`, `permissions.html`). Store-submission packaging + the whole founder-run release flow is the **release runbook** — see **Releasing** below.
+
+#### Releasing / publishing to the web stores
+
+**To cut, ship, or publish a release (Chrome Web Store, Edge Add-ons, Firefox AMO): START at [doc/release/README.md](doc/release/README.md)** — the `release-extension` runbook backed by `scripts/release.mjs` (npm `release:*` aliases). It is **founder-only and gated**: preflight → **derive the version** from the published baseline + payload (never assume `package.json`) → bump → build (clears stale output and **self-verifies** the artifacts: version-in-zip, no dev-only `downloads`, no secrets in the source zip) → draft the changelog in brand voice → generate a per-store **submission packet** → tag/finalize. The submission itself is manual-from-the-packet, or headless via each store's **publishing API** (`release:submit`, with credentials per `doc/release/publishing-credentials.md`). Agents run only the read-only steps (`plan`/`packet`) and draft copy; the founder runs build/tag/finalize/submit. (Per `AGENTS.md`, never load `.env.production` or submit without explicit founder authorization.)
 
 > `public/` is the static-asset **source** dir (ONNX/WASM/icons), **not** build output. To inspect actual artifacts, run a build and list `.output/`. Never hand-edit `.output/`, `dist/`, `.wxt/`, or generated files in `public/`.
 
