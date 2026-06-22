@@ -33,7 +33,7 @@ Sibling Claude sessions autonomously maintain **saypi-api** and **saypi-saas** u
 
 - **The `session_id` contract** — saypi-api shipped deterministic `fal_vs_groq` A/B bucketing that only activates once this client sends `session_id` on transcription requests. Documented API-side; unfiled here. (Backward-compatible adoption: the API already accepts it with or without — this is a normal client change, not a cross-repo contract negotiation.)
 - **#92's client half** — OpenAI value-tier TTS voices are live in the API; the userscript voice-selection UI to expose them is unbuilt.
-- **Vestigial `mergeTranscriptsRemote`** — the API retired the dead `POST /merge` endpoint (it returned a field this client stopped reading in Nov 2023). The client's `mergeTranscriptsRemote` path is now calling a 404 and can be deleted.
+- **Vestigial `mergeTranscriptsRemote`** — the API retired the dead `POST /merge` endpoint (it returned a field this client stopped reading in Nov 2023). The client's `mergeTranscriptsRemote` path was calling a 404. ✅ Resolved — removed in #426 (issue #425).
 
 These are *candidates*, not instructions — triage each with evidence per the Issue Authoring Standard before filing or fixing.
 

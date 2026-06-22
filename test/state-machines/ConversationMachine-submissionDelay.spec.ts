@@ -60,13 +60,10 @@ vi.mock('../../src/TranscriptionModule', () => ({
   getCurrentSequenceNumber: vi.fn(() => 1),
 }));
 
-// Keep local merge cheap; set remote merge to resolve after the submissionDelay
-// to ensure any self-transitions don't interfere with the timer in this test
-const remoteMergeDelayMs = 500;
+// Keep local merge cheap; the machine joins segments locally at submission time.
 vi.mock('../../src/TranscriptMergeService', () => ({
   TranscriptMergeService: vi.fn().mockImplementation(() => ({
     mergeTranscriptsLocal: (t: Record<number,string>) => Object.values(t).join(' '),
-    mergeTranscriptsRemote: vi.fn(() => new Promise<string>((resolve) => setTimeout(() => resolve('merged'), remoteMergeDelayMs))),
   })),
 }));
 
@@ -120,7 +117,7 @@ describe('ConversationMachine submissionDelay scheduling', () => {
     vi.useRealTimers();
   });
 
-  it('fires submitting after the calculated remaining delay and survives merge re-entries', async () => {
+  it('fires submitting after the calculated remaining delay', async () => {
     // Move to speaking then stopped speaking
     service.send('saypi:userSpeaking');
     expect(service.state.matches({ listening: { recording: 'userSpeaking' } })).toBe(true);

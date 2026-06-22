@@ -148,7 +148,7 @@ instead of silently calling the real internet.
 | `fixtures/audio/` | the fake-mic WAV clip + its [README](fixtures/audio/README.md) |
 | `support/global-setup.ts` | build guard + start mock servers + export ports |
 | `support/global-teardown.ts` | close mock servers |
-| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, `/merge`, GA catch-all) |
+| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, GA catch-all) |
 | `support/mock-pi-page.html` | minimal Pi.ai-shaped DOM the content script decorates |
 | `support/mock-claude-page.html` | minimal claude.ai stand-in (defines no `--black`) for the host-CSS contrast spec |
 | `support/transcribe-response.ts` | the STT contract: shape of the `/transcribe` response |

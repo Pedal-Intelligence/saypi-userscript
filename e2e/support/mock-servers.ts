@@ -78,11 +78,6 @@ export async function startMockServers(): Promise<MockServers> {
       });
       return;
     }
-    if (req.method === "POST" && req.url && req.url.startsWith("/merge")) {
-      res.writeHead(200, { "content-type": "application/json" });
-      res.end(JSON.stringify({ combined_transcript: "" }));
-      return;
-    }
     // Catch-all: absorb any other POST (e.g. the GA beacon to /debug/mp/collect)
     // so the harness stays hermetic. Drain the body, then return an empty 200.
     if (req.method === "POST") {
