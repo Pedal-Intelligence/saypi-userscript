@@ -6,7 +6,6 @@ import {
   clearPendingTranscriptions,
   getCurrentSequenceNumber,
 } from "../TranscriptionModule";
-import { config } from "../ConfigModule";
 import EventBus from "../events/EventBus.js";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
@@ -716,19 +715,9 @@ function uploadAudioSegment(
   });
 }
 
-const apiServerUrl = config.apiServerUrl;
-if (apiServerUrl === undefined) {
-  throw new Error(
-    "Configuration error: apiServerUrl is not defined. Please check your environment variables."
-  );
-}
-
 const userPreferences = UserPreferenceModule.getInstance();
 
-let mergeService: TranscriptMergeService;
-userPreferences.getLanguage().then((language) => {
-  mergeService = new TranscriptMergeService(apiServerUrl, language);
-});
+const mergeService = new TranscriptMergeService();
 
 let targetInputElement: HTMLElement | null = null;
 
@@ -1058,16 +1047,13 @@ function updateTranscriptionsForManualEdit(
 }
 
 /**
- * Merge a target's transcription fragments into a single string, using the
- * shared TranscriptMergeService when it is ready and the local smart-join
- * otherwise. (mergeService is initialised asynchronously, so both paths occur.)
+ * Merge a target's transcription fragments into a single string via the shared
+ * TranscriptMergeService's local smart-join.
  */
 function mergeTargetTranscriptions(
   transcriptions: Record<number, string>
 ): string {
-  return mergeService
-    ? mergeService.mergeTranscriptsLocal(transcriptions)
-    : smartJoinTranscriptions(transcriptions);
+  return mergeService.mergeTranscriptsLocal(transcriptions);
 }
 
 /**

@@ -81,7 +81,6 @@ vi.mock('../../src/TranscriptionModule', () => ({
 vi.mock('../../src/TranscriptMergeService', () => ({
   TranscriptMergeService: vi.fn().mockImplementation(() => ({
     mergeTranscriptsLocal: (t: Record<number, string>) => Object.values(t).join(' '),
-    mergeTranscriptsRemote: vi.fn(() => Promise.resolve('merged')),
   })),
 }));
 

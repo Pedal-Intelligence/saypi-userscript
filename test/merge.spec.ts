@@ -1,11 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { TranscriptMergeService } from "../src/TranscriptMergeService";
 
-// Constructed with mock values; sortTranscripts is pure and makes no network requests.
-const transcriptMergeService = new TranscriptMergeService(
-  "http://mock-api-url",
-  "en-US"
-);
+// sortTranscripts and mergeTranscriptsLocal are pure and make no network requests.
+const transcriptMergeService = new TranscriptMergeService();
 
 describe("TranscriptMergeService.sortTranscripts", () => {
   it("orders segments by ascending numeric (not lexicographic) key", () => {

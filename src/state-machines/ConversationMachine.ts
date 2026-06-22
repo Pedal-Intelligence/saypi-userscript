@@ -2,7 +2,6 @@ import {
   setup,
   assign,
   log,
-  fromPromise,
 } from "xstate";
 import AnimationModule from "../AnimationModule.js";
 import {
@@ -16,7 +15,6 @@ import {
   clearPendingTranscriptions,
 } from "../TranscriptionModule";
 import { TranscriptMergeService } from "../TranscriptMergeService";
-import { config } from "../ConfigModule";
 import EventBus from "../events/EventBus.js";
 import { calculateDelay } from "../TimerModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
@@ -109,15 +107,6 @@ interface ConversationContext {
   isMaintainanceMessage?: boolean; // is the current message a maintainance message?
 }
 
-function getHighestKey(transcriptions: Record<number, string>): number {
-  // Find the highest existing key in the transcriptions
-  const highestKey = Object.keys(transcriptions).reduce(
-    (max, key) => Math.max(max, parseInt(key, 10)),
-    -1
-  );
-  return highestKey;
-}
-
 function isContextWindowApproachingCapacity(transcriptions: Record<number, string>): boolean {
   // Calculate total length of all transcriptions
   const totalLength = Object.values(transcriptions).reduce((sum, text) => sum + text.length, 0);
@@ -127,7 +116,7 @@ function isContextWindowApproachingCapacity(transcriptions: Record<number, strin
 }
 
 // time at which the user's prompt is scheduled to be submitted
-// used to judge whether there's time for another remote operation (i.e. merge request)
+// retained for submission-timing diagnostics (see submissionDelay logging)
 var nextSubmissionTime = Date.now();
 
 // most recent enforced delay while waiting for additional user input
@@ -136,23 +125,13 @@ var lastSubmissionDelay = 0;
 // timestamp when the most recent submission was scheduled
 var lastSubmissionScheduledAt = 0;
 
-const apiServerUrl = config.apiServerUrl;
-if (apiServerUrl === undefined) {
-  throw new Error(
-    "Configuration error: apiServerUrl is not defined. Please check your environment variables."
-  );
-}
-
 const audibleNotifications = AudibleNotificationsModule.getInstance();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();
 const userPreferences = UserPreferenceModule.getInstance();
 
-let mergeService: TranscriptMergeService;
-userPreferences.getLanguage().then((language) => {
-  mergeService = new TranscriptMergeService(apiServerUrl, language);
-});
+const mergeService = new TranscriptMergeService();
 userPreferences.getDiscretionaryMode().then((discretionaryModeEnabled) => {
   const cachedValue = userPreferences.getCachedDiscretionaryMode();
   if (cachedValue !== discretionaryModeEnabled) {
@@ -668,30 +647,6 @@ const machine = setup({
       return !allowInterrupt;
     },
   },
-  actors: {
-    mergeOptimistic: fromPromise(
-      async ({ input }: { input: { transcriptions: Record<number, string> } }) => {
-        const transcriptions = input.transcriptions;
-        // Check if there are two or more transcripts to merge
-        if (Object.keys(transcriptions).length > 1) {
-          // This function should return a Promise that resolves with the merged transcript string
-          return mergeService.mergeTranscriptsRemote(
-            transcriptions,
-            nextSubmissionTime
-          );
-        } else {
-          // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
-          const existingTranscriptKeys = Object.keys(transcriptions);
-          if (existingTranscriptKeys.length === 1) {
-            const key = existingTranscriptKeys[0];
-            return Promise.resolve(transcriptions[Number(key)]);
-          } else {
-            return Promise.resolve(""); // No transcripts to merge
-          }
-        }
-      }
-    ),
-  },
   delays: {
     submissionDelay: ({ context, event }) => {
       // check if the event is a transcription event
@@ -1050,52 +1005,13 @@ const machine = setup({
                 entry: {
                   type: "draftPrompt",
                 },
-                invoke: {
-                  id: "mergeOptimistic",
-                  src: "mergeOptimistic",
-                  input: ({ context }) => ({
-                    transcriptions: context.transcriptions,
-                  }),
-
-                  onDone: {
-                    actions: [
-                      assign({
-                        transcriptions: ({ context, event }) => {
-                          const output = event.output as string;
-                          // If the output is empty, just return the current context.transcriptions
-                          if (!output) {
-                            return context.transcriptions;
-                          }
-
-                          // Use the highest key for the merged transcript
-                          const nextKey = getHighestKey(context.transcriptions);
-                          const originalKeys = Object.keys(
-                            context.transcriptions
-                          );
-                          if (originalKeys.length > 1) {
-                            console.log(
-                              `Merge accepted: ${originalKeys} into ${nextKey} - ${output}`
-                            );
-                          }
-                          return { [nextKey]: output };
-                        },
-                      }),
-                    ],
-                  },
-
-                  onError: {
-                    actions: log(
-                      "Merge request did not complete, and will be ignored"
-                    ),
-                  },
-                },
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
                     // v5: same-target transitions are internal by default. v4
                     // treated this as an external self-transition, re-running the
-                    // entry (draftPrompt) and re-invoking mergeOptimistic with the
-                    // newly accumulated transcript. reenter:true preserves that.
+                    // entry (draftPrompt) to redraft from the newly accumulated
+                    // transcript. reenter:true preserves that.
                     reenter: true,
                     actions: {
                       type: "handleTranscriptionResponse",

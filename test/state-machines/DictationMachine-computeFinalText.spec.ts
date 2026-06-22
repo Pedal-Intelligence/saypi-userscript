@@ -43,9 +43,9 @@ import { computeFinalText } from "../../src/state-machines/DictationMachine";
  * comment says so; changing it is a separate, fail-first behavioral change.
  *
  * Determinism note: computeFinalText merges via the module-level `mergeService`
- * when set, else falls back to `smartJoinTranscriptions`. The two agree for
- * inputs without ellipses (the only difference is ellipsis→space), so every
- * input here is ellipsis-free and the result is independent of init timing.
+ * (TranscriptMergeService.mergeTranscriptsLocal). Its only quirk versus a plain
+ * join is ellipsis→space, so every input here is ellipsis-free for a stable
+ * result.
  *
  * Signature: computeFinalText(targetTranscriptions, mergedSequences, serverText,
  *                             initialText = "", isUsingStoredInitialText = false)

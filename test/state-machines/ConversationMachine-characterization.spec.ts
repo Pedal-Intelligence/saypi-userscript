@@ -90,7 +90,6 @@ vi.mock('../../src/TranscriptionModule', () => ({
 vi.mock('../../src/TranscriptMergeService', () => ({
   TranscriptMergeService: vi.fn().mockImplementation(() => ({
     mergeTranscriptsLocal: (t: Record<number, string>) => Object.values(t).join(' '),
-    mergeTranscriptsRemote: vi.fn(() => Promise.resolve('merged')),
   })),
 }));
 
@@ -668,29 +667,25 @@ describe('ConversationMachine characterization', () => {
   });
 
   // -------------------------------------------------------------------------
-  // mergeOptimistic invoked service: onDone collapses transcriptions
+  // multi-segment submission: accumulated segments are joined locally at submit
+  // (the remote /merge optimization was removed — see #425)
   // -------------------------------------------------------------------------
-  describe('mergeOptimistic onDone', () => {
-    it('collapses multiple accumulated transcriptions into a single highest-key entry', async () => {
-      prefs.autoSubmit = false; // stay in accumulating
+  describe('multi-segment submission via local merge', () => {
+    it('retains every accumulated segment and submits their locally-joined text', () => {
       driveToTranscribing(service);
+      // Two transcripts arrive back-to-back (no timer advance), so both accumulate
+      // before the submission delay fires; the second re-enters accumulating.
       service.send({ type: 'saypi:transcribed', text: 'one', sequenceNumber: 1 });
-      // Let the first (single-transcript) mergeOptimistic actor settle before the
-      // second transcript arrives. In v5 the invoked fromPromise resolves on a
-      // microtask; flushing here keeps the two invocations from racing.
-      await vi.runOnlyPendingTimersAsync?.();
-      await Promise.resolve();
-      await Promise.resolve();
-      // second transcript re-enters accumulating, re-invoking mergeOptimistic with 2 entries
       service.send({ type: 'saypi:transcribed', text: 'two', sequenceNumber: 2 });
-      // The mocked mergeTranscriptsRemote resolves 'merged'; flush microtasks.
-      await vi.runOnlyPendingTimersAsync?.();
-      await Promise.resolve();
-      await Promise.resolve();
-      const t = service.state.context.transcriptions;
-      // onDone keeps only the highest key (2) with the merged data.
-      expect(t[2]).toBe('merged');
-      expect(t[1]).toBeUndefined();
+      // No remote collapse: both segments persist as separate keys until submission.
+      expect(service.state.context.transcriptions[1]).toBe('one');
+      expect(service.state.context.transcriptions[2]).toBe('two');
+      // On submission, mergeAndSubmitTranscript joins them locally (mock joins values).
+      vi.advanceTimersByTime(USER_STOPPED_TIMEOUT_MS_LOCAL + 5);
+      expect(service.state.matches({ responding: 'piThinking' })).toBe(true);
+      // The submitted prompt is the locally-joined text of both segments.
+      expect(spyPrompt.setFinal).toHaveBeenCalled();
+      expect(spyPrompt.setFinal.mock.calls[0][0]).toBe('one two');
     });
   });
 
