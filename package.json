@@ -45,6 +45,7 @@
     "release:packet": "node scripts/release.mjs packet",
     "release:bump": "node scripts/release.mjs bump",
     "release:build": "node scripts/release.mjs build",
+    "release:verify": "node scripts/release.mjs verify",
     "release:tag": "node scripts/release.mjs tag",
     "release:finalize": "node scripts/release.mjs finalize",
     "prebuild:firefox": "node scripts/validate-env.js --file .env.production --env production && npm run copy-onnx",

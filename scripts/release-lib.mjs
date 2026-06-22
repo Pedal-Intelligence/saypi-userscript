@@ -414,3 +414,100 @@ export function renderPacket({ version, dateISO, baseline, stores, releaseNotes,
   }
   return out.join("\n");
 }
+
+// ── Release-candidate verification (pure checks) ──────────────────────────────────
+//
+// These codify the manual checks that caught the 1.11.0 stale-build near-miss. The CLI
+// (scripts/release.mjs `verify`, and `build` automatically) does the unzip/IO and calls
+// these on the parsed manifests + archive entry lists. `issues` block the release;
+// `warnings` are things to confirm.
+
+/** The Chrome/Edge MV3 production permission set. Drift from this is flagged for review. */
+export const EXPECTED_PROD_PERMISSIONS = [
+  "storage",
+  "cookies",
+  "tabs",
+  "contextMenus",
+  "alarms",
+  "offscreen",
+  "audio",
+  "identity",
+];
+
+/** Permissions that must NEVER appear in a production build (dev-only). */
+export const DEV_ONLY_PERMISSIONS = ["downloads"];
+
+/** @returns {{added: string[], removed: string[]}} actual-vs-expected permission diff. */
+export function diffPermissions(actual = [], expected = EXPECTED_PROD_PERMISSIONS) {
+  const e = new Set(expected);
+  const a = new Set(actual);
+  return {
+    added: actual.filter((p) => !e.has(p)).sort(),
+    removed: expected.filter((p) => !a.has(p)).sort(),
+  };
+}
+
+/**
+ * Check a built Chrome/Edge MV3 manifest.
+ * @returns {{issues: string[], warnings: string[]}}
+ */
+export function checkChromeManifest(manifest = {}, version) {
+  const issues = [];
+  const warnings = [];
+  if (manifest.version !== version) {
+    issues.push(`Chrome manifest version is ${manifest.version}, expected ${version} (STALE BUILD?).`);
+  }
+  if (manifest.manifest_version !== 3) {
+    issues.push(`Chrome manifest_version is ${manifest.manifest_version}, expected 3.`);
+  }
+  const perms = manifest.permissions || [];
+  for (const dev of DEV_ONLY_PERMISSIONS) {
+    if (perms.includes(dev)) issues.push(`Production build contains dev-only permission "${dev}".`);
+  }
+  const { added, removed } = diffPermissions(perms.filter((p) => !DEV_ONLY_PERMISSIONS.includes(p)));
+  if (added.length) warnings.push(`Permission(s) ADDED vs the known set: ${added.join(", ")} — add justifications + expect extra review scrutiny.`);
+  if (removed.length) warnings.push(`Permission(s) REMOVED vs the known set: ${removed.join(", ")} — confirm intended.`);
+  return { issues, warnings };
+}
+
+/**
+ * Check a built Firefox MV2 manifest.
+ * @returns {{issues: string[], warnings: string[]}}
+ */
+export function checkFirefoxManifest(manifest = {}, version, geckoId = "gecko@saypi.ai") {
+  const issues = [];
+  const warnings = [];
+  if (manifest.version !== version) {
+    issues.push(`Firefox manifest version is ${manifest.version}, expected ${version} (STALE BUILD?).`);
+  }
+  if (manifest.manifest_version !== 2) {
+    issues.push(`Firefox manifest_version is ${manifest.manifest_version}, expected 2 (MV2).`);
+  }
+  const gecko = manifest.browser_specific_settings?.gecko?.id;
+  if (gecko !== geckoId) issues.push(`Firefox gecko id is "${gecko}", expected "${geckoId}".`);
+  // The Firefox MV2 build strips Chrome-only permissions (wxt.config.ts); their presence
+  // means the build didn't target Firefox correctly.
+  for (const chromeOnly of ["offscreen", "audio"]) {
+    if ((manifest.permissions || []).includes(chromeOnly)) {
+      issues.push(`Firefox manifest must not include the "${chromeOnly}" permission (Chrome-only; stripped for MV2).`);
+    }
+  }
+  return { issues, warnings };
+}
+
+/**
+ * Check the AMO source archive's entry list (array of path strings).
+ * @returns {{issues: string[], warnings: string[]}}
+ */
+export function checkSourceEntries(entries = []) {
+  const issues = [];
+  const warnings = [];
+  const has = (re) => entries.some((e) => re.test(e));
+  // Real secret files must never ship to AMO; templates ending in .example are fine.
+  const secret = entries.filter((e) => /(^|\/)\.env(\.production)?$/.test(e));
+  if (secret.length) issues.push(`Source archive contains secret env file(s): ${secret.join(", ")}.`);
+  if (has(/(^|\/)node_modules\//)) issues.push(`Source archive contains node_modules/ (should be excluded).`);
+  if (!has(/(^|\/)package-lock\.json$/)) issues.push(`Source archive is missing package-lock.json (AMO reviewers need it).`);
+  if (!has(/(^|\/)src\//)) warnings.push(`Source archive has no src/ entries — confirm it contains the real sources.`);
+  return { issues, warnings };
+}
