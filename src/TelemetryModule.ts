@@ -98,7 +98,6 @@ export class TelemetryModule {
   private speechStartTime: number = 0;
   private speechEndTime: number = 0;
   private transcriptionStartTime: number = 0;
-  private transcriptionEndTime: number = 0;
   private lastTranscriptionTime: number = 0;
   private promptSubmissionTime: number = 0;
   private completionStartTime: number = 0;
@@ -164,7 +163,6 @@ export class TelemetryModule {
         this.currentTelemetry.timestamps.transcriptionEnd = event.timestamp;
         // Save the last transcription time for grace period calculation
         this.lastTranscriptionTime = event.timestamp;
-        this.transcriptionEndTime = event.timestamp;
         logger.debug(`Transcription received and lastTranscriptionTime updated: ${this.lastTranscriptionTime}`);
         this.emitUpdate();
       }
@@ -255,7 +253,6 @@ export class TelemetryModule {
     this.speechStartTime = 0;
     this.speechEndTime = 0;
     this.transcriptionStartTime = 0;
-    this.transcriptionEndTime = 0;
     this.promptSubmissionTime = 0;
     this.completionStartTime = 0;
     this.completionEndTime = 0;
