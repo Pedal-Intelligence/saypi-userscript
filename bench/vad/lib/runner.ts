@@ -100,6 +100,7 @@ export async function runClip(
   const segments: BenchSegment[] = [];
   let processed = 0; // frames processed so far
   let segmentStartFrame = 0;
+  let maxFrameProb = 0; // highest per-frame speech prob anywhere (even if no segment opened)
   // True only during the end-of-clip flush, where `processed` already counts the whole
   // clip — so the trailing segment ends at frame `processed`, not `processed + 1`
   // (matches vad-web NonRealTimeVAD's `end = frameIndex*frameSamples/16` at flush).
@@ -109,6 +110,7 @@ export async function runClip(
     switch (event.msg) {
       case Message.FrameProcessed:
         tracker.observe(event.probs.isSpeech);
+        maxFrameProb = Math.max(maxFrameProb, event.probs.isSpeech);
         break;
       case Message.SpeechStart:
         // SpeechStart fires during the current frame's process(); processed is the
@@ -152,7 +154,7 @@ export async function runClip(
   flushing = true;
   frameProcessor.endSegment(handleEvent);
 
-  return { preset, frames: processed, segments };
+  return { preset, frames: processed, segments, maxFrameProb };
 }
 
 export const RUNNER_FRAME_MS = FRAME_MS;
