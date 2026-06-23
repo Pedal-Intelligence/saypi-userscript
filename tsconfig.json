@@ -1,6 +1,7 @@
 {
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
+    "noUnusedLocals": true,
     "allowJs": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
