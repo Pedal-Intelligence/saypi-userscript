@@ -8,7 +8,7 @@ import { OnscreenVADClient } from '../vad/OnscreenVADClient';
 import { VADClientInterface } from '../vad/VADClientInterface';
 import { logger } from "../LoggingModule";
 import { likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule";
-import { VADPreset } from "../vad/VADConfigs";
+import { VADPreset, selectVADPreset } from "../vad/VADConfigs";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 
@@ -36,10 +36,13 @@ let previousDefaultDevice: MediaDeviceInfo | null = null;
 // VAD client instance - will be either OffscreenVADClient or OnscreenVADClient
 let vadClient: VADClientInterface | null = null;
 
-// Choose preset once based on chatbot context
-const currentVADPreset: VADPreset = ChatbotIdentifier.isInDictationMode()
-  ? "highSensitivity"
-  : "balanced";
+// Choose the VAD preset once based on chatbot context. #420 item 4: the host→preset
+// mapping is centralised + benchmark-driven in selectVADPreset (see bench/vad/README.md);
+// today every context resolves to `balanced` (generic/dictation pages used to get the
+// trigger-happy `highSensitivity`, which the benchmark showed over-uploads real noise/music).
+const currentVADPreset: VADPreset = selectVADPreset({
+  isDictation: ChatbotIdentifier.isInDictationMode(),
+});
 
 // Initialize the appropriate VAD client based on browser support
 function initializeVADClient() {

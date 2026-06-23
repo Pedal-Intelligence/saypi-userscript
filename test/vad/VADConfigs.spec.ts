@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { VAD_CONFIGS, type VADPreset } from "../../src/vad/VADConfigs";
+import { VAD_CONFIGS, selectVADPreset, type VADPreset } from "../../src/vad/VADConfigs";
 
 /**
  * #420 item 2 — Lock the VAD preset values. They were hand-tuned in one commit (PR
@@ -87,5 +87,30 @@ describe("#420 VAD_CONFIGS preset ordering invariants", () => {
     expect(VAD_CONFIGS.highSensitivity.minSpeechFrames!).toBeLessThan(
       VAD_CONFIGS.conservative.minSpeechFrames!
     );
+  });
+});
+
+/**
+ * #420 item 4 — host→preset selection. The VAD-quality benchmark (bench/vad/README.md)
+ * showed `highSensitivity` (previously bound to generic / universal-dictation pages, the
+ * noisiest context) false-accepts 59% of real non-speech there — 100% of music — for only
+ * a marginal false-reject edge concentrated in one short word. So the noisiest context no
+ * longer gets the trigger-happiest preset (the issue's gap #3): every context now uses
+ * `balanced` (the measured knee), and `highSensitivity` joins `conservative` as a reserved,
+ * unselected preset. This locks that decision; a future noise/SNR- or device-adaptive split
+ * would re-diverge them.
+ */
+describe("#420 selectVADPreset (host→preset mapping)", () => {
+  it("uses balanced for dictation / generic pages (was highSensitivity — the gap-#3 fix)", () => {
+    expect(selectVADPreset({ isDictation: true })).toBe("balanced");
+  });
+
+  it("uses balanced for dedicated chat sites (unchanged — the core product, quietest context)", () => {
+    expect(selectVADPreset({ isDictation: false })).toBe("balanced");
+  });
+
+  it("never selects the trigger-happy highSensitivity preset for any current context", () => {
+    const chosen: VADPreset[] = [true, false].map((isDictation) => selectVADPreset({ isDictation }));
+    expect(chosen).not.toContain("highSensitivity");
   });
 });
