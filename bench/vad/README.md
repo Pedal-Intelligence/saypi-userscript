@@ -148,8 +148,8 @@ This is the data the synthetic seed couldn't give, and it changes the picture:
   FAR falls 59 → 41 → 29 → 26%. The synthetic corpus showed ~0% on both for most presets; real
   audio exposes the actual trade-off, and `balanced` sits at its knee.
 - **Music is the worst false-accept source — and `highSensitivity` admits *all* of it.**
-  Per negative type on `highSensitivity`: **music 8/8 (100%)**, noise 11/24 (46%), silence
-  0/2. `balanced` cuts music to 5/8 and noise to 9/24; `conservative` to 3/8 and 7/24. Since
+  Per negative type on `highSensitivity` (raw): **music 8/8 (100%)**, noise 12/24 (50%),
+  silence 0/2. `balanced` cuts music to 5/8 and noise to 9/24; `conservative` to 3/8 and 7/24. Since
   generic web pages frequently have **background music/video playing**, binding the
   trigger-happiest preset to them is the worst possible match — exactly #420's gap-#3 concern,
   now measured.
@@ -172,7 +172,7 @@ dedicated chat sites `balanced`. The data says that's backwards for the noisy co
 - Generic pages are the **noisiest, least-controlled** (often with background media), and
   `highSensitivity` false-accepts **59%** of non-speech there incl. **100% of music** —
   a large hallucination surface.
-- The cost of calming them to `balanced` is small and concentrated (FAR 56 → 41%, music 8/8 →
+- The cost of calming them to `balanced` is small and concentrated (FAR 59 → 41%, music 8/8 →
   5/8, for FRR 3 → 8% that is mostly the isolated word `up`, overstated vs connected dictation).
 
 **Recommended remap (implemented in the follow-up):** generic / dictation pages

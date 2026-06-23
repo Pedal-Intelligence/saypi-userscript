@@ -167,7 +167,7 @@ if (!haveFfmpeg) {
         label: "nonspeech",
         source: "Kevin MacLeod / Incompetech",
         license: "CC-BY-4.0",
-        attribution: "Kevin MacLeod (incompetech.com), licensed under CC-BY-4.0",
+        attribution: "Kevin MacLeod (incompetech.com), CC-BY-4.0 https://creativecommons.org/licenses/by/4.0/",
         note: `real music: "${track}"`,
       });
       musicIdx++;
