@@ -16,7 +16,10 @@ import { summarize } from "./lib/metrics.mjs";
 import { loadV5Model, runClip, RUNNER_FRAME_MS } from "./lib/runner.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const corpusDir = resolve(here, "corpus");
+// Optional corpus dir arg (defaults to the committed synthetic seed):
+//   npm run bench:vad -- corpus-real
+const corpusName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : "corpus";
+const corpusDir = resolve(here, corpusName);
 const PRESETS = ["highSensitivity", "balanced", "conservative", "none"];
 
 const fmtPct = (x: number | null) => (x === null ? "  —  " : `${(x * 100).toFixed(0)}%`.padStart(5));
@@ -36,21 +39,23 @@ async function main() {
   for (const clip of clips) {
     const { samples, sampleRate } = decodeWav(readFileSync(resolve(corpusDir, clip.file)));
     for (const preset of PRESETS) {
-      const { segments } = await runClip(model, samples, sampleRate, preset);
+      const { segments, maxFrameProb } = await runClip(model, samples, sampleRate, preset);
       const admitted = segments.filter((s) => s.admitted);
 
+      // Latency is only meaningful when the clip declares true speech boundaries.
+      // The synthetic corpus does; fetched real clips don't (no frame-level word
+      // boundary), so latency is omitted there rather than reported as an artifact.
+      const hasBounds =
+        clip.label === "speech" && typeof clip.speechStartMs === "number";
       for (const [mode, segs] of [["raw", segments], ["gated", admitted]] as const) {
         const first = segs[0];
-        const isSpeech = clip.label === "speech";
         records.push({
           preset,
           mode,
           label: clip.label,
           detectedCount: segs.length,
-          onsetLatencyMs:
-            isSpeech && first ? first.startMs - (clip.speechStartMs ?? 0) : undefined,
-          tailLatencyMs:
-            isSpeech && first ? first.endMs - (clip.speechEndMs ?? 0) : undefined,
+          onsetLatencyMs: hasBounds && first ? first.startMs - clip.speechStartMs! : undefined,
+          tailLatencyMs: hasBounds && first ? first.endMs - clip.speechEndMs! : undefined,
         });
       }
 
@@ -60,7 +65,8 @@ async function main() {
         preset,
         rawSegments: segments.length,
         admittedSegments: admitted.length,
-        peakSpeechProb: segments.length ? Math.max(...segments.map((s) => s.peakSpeechProb)) : 0,
+        segmentPeakProb: segments.length ? Math.max(...segments.map((s) => s.peakSpeechProb)) : 0,
+        maxFrameProb, // highest per-frame prob even if no segment opened (characterises false-rejects)
       });
     }
   }
@@ -89,7 +95,7 @@ async function main() {
   }
 
   // --- Machine-readable report (git-ignored artifact) ---
-  const reportPath = resolve(here, "report.json");
+  const reportPath = resolve(here, `report.${corpusName}.json`);
   writeFileSync(
     reportPath,
     JSON.stringify({ corpus: manifest.note, frameMs: RUNNER_FRAME_MS, summary, perClip }, null, 2) + "\n"

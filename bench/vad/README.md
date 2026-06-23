@@ -16,13 +16,20 @@ reimplementation that could drift.
 ## Run it
 
 ```bash
-npm run bench:vad          # replay the corpus through every preset, print the table
+npm run bench:vad                 # synthetic seed corpus (committed; no network)
+npm run bench:vad:fetch-real      # fetch the REAL corpus (~2.4 GB download, once)
+npm run bench:vad -- corpus-real  # replay the real corpus
 ```
 
-No microphone, no browser, no network — it loads the bundled `silero_vad_v5.onnx` via
-`onnxruntime-web` in Node and replays the committed corpus. Deterministic: the model and
-corpus are fixed, so the false-reject / false-accept / latency numbers are reproducible.
-(Run via `node --experimental-strip-types` so it can import the real TypeScript gate.)
+No microphone, no browser — it loads the bundled `silero_vad_v5.onnx` via `onnxruntime-web`
+in Node and replays a corpus. Deterministic: the model and corpus are fixed, so the
+false-reject / false-accept numbers are reproducible. (Run via `node --experimental-strip-types`
+so it can import the real TypeScript gate.) There are **two corpora**:
+
+- **`corpus/`** — a committed **synthetic seed** (default; runs offline, no fetch).
+- **`corpus-real/`** — a **real** labelled corpus fetched on demand from public datasets
+  (git-ignored audio; see *The real corpus* below). The fetch is deterministic, so the
+  numbers below reproduce.
 
 ## What it does
 
@@ -103,12 +110,75 @@ reproduction of that fallback path.
   default `minSpeechFrames: 9` (288 ms) exceeds that plosive's voiced length. This is
   precisely why SayPi's presets lower `minSpeechFrames` (#420 item 2).
 
+## The real corpus
+
+`npm run bench:vad:fetch-real` assembles `corpus-real/` from public, **commercial-OK**
+datasets — deterministically (sorted, fixed counts), so the numbers below reproduce. The
+**audio is git-ignored** (no third-party bytes committed); only the fetch script + the
+generated `manifest.json` (with per-clip source/license/attribution) are tracked.
+
+- **Positives — Google Speech Commands v2** ([CC-BY-4.0](https://www.tensorflow.org/datasets/catalog/speech_commands)):
+  32 real short confirmations (`yes`/`no`/`stop`/`go`/`up`/`down`/`on`/`off`, 4 distinct
+  speakers each) recorded by thousands of people on varied web/phone mics — the short,
+  sometimes-soft, sometimes-clipped regime the synthetic `say` corpus couldn't stress.
+  Digitally-silent/corrupt source clips are filtered out (peak amplitude floor).
+- **Negatives — MUSAN noise, free-sound subset** (US Public Domain;
+  [OpenSLR 17](https://www.openslr.org/17/), Snyder/Chen/Povey 2015): 14 real ambient-noise
+  recordings, already 16 kHz mono PCM16 — plus digital silence.
+- **Music — not yet.** No license-clean *per-file* music source exists without the 11 GB
+  MUSAN tarball (the HF mirrors carry only noise/metadata). A clear follow-up.
+
+### Findings (real corpus, 32 speech / 16 non-speech)
+
+| preset | FRR | FAR (raw → gated) |
+|---|---|---|
+| highSensitivity | 3% | 56% → **50%** |
+| balanced | 9% | 38% → 38% |
+| conservative | 34% | 25% → 25% |
+| none (v5 default) | 59% | 25% → 25% |
+
+(Latency is omitted for real clips — we have no frame-level word boundaries; latency lives
+in the synthetic corpus.)
+
+This is the data the synthetic seed couldn't give, and it changes the picture:
+
+- **The false-reject/false-accept dial is real and steep.** Across presets, FRR climbs
+  3% → 9% → 34% → 59% while FAR falls 56% → 38% → 25%. The synthetic corpus showed ~0% on
+  both for most presets; real audio exposes the actual trade-off.
+- **`highSensitivity` false-accepts on real ambient noise 56% of the time.** Real MUSAN
+  noise opens a segment on over half the clips — more than half of those are *confident*
+  triggers (peak 0.75–0.99) that no conservative gate can catch. This strongly corroborates #420's concern
+  that the trigger-happy preset bound to noisy generic pages is the FAR risk.
+- **The #420 gate now demonstrably reduces FAR with zero FRR cost** (`highSensitivity`
+  56% → 50%): it drops `nonspeech_musan_07` (segment peak **0.373**, below the 0.40 floor) —
+  exactly the borderline non-speech the gate targets — while leaving the confident triggers
+  and all real speech untouched. Modest, because most real-noise false-accepts are confident,
+  not borderline; the cure for those is a higher opening threshold, not the gate.
+- **Real short confirmations *do* get clipped — the cost the synthetic corpus hid.** The
+  false-rejects are genuine: e.g. `speech_sc_up_17` reaches frame-peak 0.613 but is too short
+  to sustain `minSpeechFrames` on `balanced`; `off_29` (soft "off", peak 0.395) is missed even
+  by `highSensitivity`. So `balanced`'s lower FAR comes at a real ~6-point FRR cost over
+  `highSensitivity` — clipping real "up"/"off" confirmations.
+
+### Bearing on item #420(4) (host → preset remap)
+
+This is the substrate item 4 needs, and it now quantifies the swap it was blocked on:
+moving generic pages from `highSensitivity` → `balanced` would trade **FAR 50% → 38%** for
+**FRR 3% → 9%** (clipping ~6% more real confirmations). That is a genuine, measured
+trade-off — no longer a guess. **But do not remap on these numbers yet:** 32 speech / 16
+noise is a small sample (wide confidence intervals), there is **no music** in the corpus,
+and Speech Commands recording conditions differ from in-browser dictation. Expand the corpus
+(more clips, real music, real café/keyboard ambient) before flipping a production mapping.
+
 ## Files
 
-- `run.ts` — CLI entry; orchestrates corpus × presets, prints the table, writes
-  `report.json` (git-ignored).
+- `run.ts` — CLI entry; `npm run bench:vad [-- <corpus-dir>]`. Orchestrates corpus ×
+  presets, prints the table, writes `report.<corpus>.json` (git-ignored).
 - `lib/runner.ts` — the offline runner (real v5 model + frame processor + admission gate).
 - `lib/metrics.mjs` — pure FRR/FAR/latency aggregation (unit-tested).
 - `lib/wav.mjs` — minimal WAV decode/encode (no deps).
-- `generate-corpus.mjs` — regenerate the seed corpus.
+- `generate-corpus.mjs` — regenerate the committed **synthetic seed** corpus.
+- `fetch-real-corpus.mjs` — fetch the **real** corpus (Speech Commands + MUSAN noise) into
+  the git-ignored `corpus-real/`; writes its `manifest.json` with per-clip attribution.
 - `corpus/` — committed seed WAVs + `manifest.json` (labels + speech regions).
+- `corpus-real/` — git-ignored real audio (fetched on demand).
