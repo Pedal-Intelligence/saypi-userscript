@@ -118,57 +118,72 @@ datasets — deterministically (sorted, fixed counts), so the numbers below repr
 generated `manifest.json` (with per-clip source/license/attribution) are tracked.
 
 - **Positives — Google Speech Commands v2** ([CC-BY-4.0](https://www.tensorflow.org/datasets/catalog/speech_commands)):
-  32 real short confirmations (`yes`/`no`/`stop`/`go`/`up`/`down`/`on`/`off`, 4 distinct
+  64 real short confirmations (`yes`/`no`/`stop`/`go`/`up`/`down`/`on`/`off`, 8 distinct
   speakers each) recorded by thousands of people on varied web/phone mics — the short,
   sometimes-soft, sometimes-clipped regime the synthetic `say` corpus couldn't stress.
   Digitally-silent/corrupt source clips are filtered out (peak amplitude floor).
 - **Negatives — MUSAN noise, free-sound subset** (US Public Domain;
-  [OpenSLR 17](https://www.openslr.org/17/), Snyder/Chen/Povey 2015): 14 real ambient-noise
-  recordings, already 16 kHz mono PCM16 — plus digital silence.
-- **Music — not yet.** No license-clean *per-file* music source exists without the 11 GB
-  MUSAN tarball (the HF mirrors carry only noise/metadata). A clear follow-up.
+  [OpenSLR 17](https://www.openslr.org/17/), Snyder/Chen/Povey 2015): 24 real ambient-noise
+  recordings; **real music** — Kevin MacLeod / [Incompetech](https://incompetech.com)
+  (CC-BY-4.0), 8 varied tracks converted to 20 s 16 kHz clips with `ffmpeg`; and digital
+  silence. (Music needs `ffmpeg` to fetch; it's skipped if absent, and the exact tracks
+  depend on Incompetech availability — speech/noise are from stable sources and fully
+  reproducible.)
 
-### Findings (real corpus, 32 speech / 16 non-speech)
+### Findings (real corpus, 64 speech / 34 non-speech)
 
 | preset | FRR | FAR (raw → gated) |
 |---|---|---|
-| highSensitivity | 3% | 56% → **50%** |
-| balanced | 9% | 38% → 38% |
-| conservative | 34% | 25% → 25% |
-| none (v5 default) | 59% | 25% → 25% |
+| highSensitivity | 3% | 59% → **56%** |
+| balanced | 8% | 41% → 41% |
+| conservative | 23% | 29% → 29% |
+| none (v5 default) | 50% | 26% → 26% |
 
 (Latency is omitted for real clips — we have no frame-level word boundaries; latency lives
 in the synthetic corpus.)
 
 This is the data the synthetic seed couldn't give, and it changes the picture:
 
-- **The false-reject/false-accept dial is real and steep.** Across presets, FRR climbs
-  3% → 9% → 34% → 59% while FAR falls 56% → 38% → 25%. The synthetic corpus showed ~0% on
-  both for most presets; real audio exposes the actual trade-off.
-- **`highSensitivity` false-accepts on real ambient noise 56% of the time.** Real MUSAN
-  noise opens a segment on over half the clips — more than half of those are *confident*
-  triggers (peak 0.75–0.99) that no conservative gate can catch. This strongly corroborates #420's concern
-  that the trigger-happy preset bound to noisy generic pages is the FAR risk.
-- **The #420 gate now demonstrably reduces FAR with zero FRR cost** (`highSensitivity`
-  56% → 50%): it drops `nonspeech_musan_07` (segment peak **0.373**, below the 0.40 floor) —
-  exactly the borderline non-speech the gate targets — while leaving the confident triggers
-  and all real speech untouched. Modest, because most real-noise false-accepts are confident,
-  not borderline; the cure for those is a higher opening threshold, not the gate.
-- **Real short confirmations *do* get clipped — the cost the synthetic corpus hid.** The
-  false-rejects are genuine: e.g. `speech_sc_up_17` reaches frame-peak 0.613 but is too short
-  to sustain `minSpeechFrames` on `balanced`; `off_29` (soft "off", peak 0.395) is missed even
-  by `highSensitivity`. So `balanced`'s lower FAR comes at a real ~6-point FRR cost over
-  `highSensitivity` — clipping real "up"/"off" confirmations.
+- **The false-reject/false-accept dial is real and steep.** FRR climbs 3 → 8 → 23 → 50% while
+  FAR falls 59 → 41 → 29 → 26%. The synthetic corpus showed ~0% on both for most presets; real
+  audio exposes the actual trade-off, and `balanced` sits at its knee.
+- **Music is the worst false-accept source — and `highSensitivity` admits *all* of it.**
+  Per negative type on `highSensitivity`: **music 8/8 (100%)**, noise 11/24 (46%), silence
+  0/2. `balanced` cuts music to 5/8 and noise to 9/24; `conservative` to 3/8 and 7/24. Since
+  generic web pages frequently have **background music/video playing**, binding the
+  trigger-happiest preset to them is the worst possible match — exactly #420's gap-#3 concern,
+  now measured.
+- **The #420 gate reduces FAR with zero FRR cost** (`highSensitivity` 59 → 56%): it drops the
+  borderline non-speech clips whose peak lands in `[threshold, threshold+0.05)`, while leaving
+  the confident triggers and all real speech untouched. Modest, because most real-noise/music
+  false-accepts are *confident*; the cure for those is a calmer preset, not the gate.
+- **The false-reject cost is concentrated in one hard word.** `highSensitivity` clips only
+  `up` (1/8) and `off` (1/8); `balanced` clips `up` (4/8) and `off` (1/8) — every other word
+  (`yes`/`no`/`stop`/`go`/`down`/`on`) is caught by both. So `balanced`'s 8% FRR is almost
+  entirely the short, soft `up`. And isolated single words are a *harder* test than connected
+  dictation (where the VAD opens on the utterance stream), so this **overstates** the real
+  dictation FRR cost.
 
-### Bearing on item #420(4) (host → preset remap)
+### Bearing on item #420(4) (host → preset remap) — now actionable
 
-This is the substrate item 4 needs, and it now quantifies the swap it was blocked on:
-moving generic pages from `highSensitivity` → `balanced` would trade **FAR 50% → 38%** for
-**FRR 3% → 9%** (clipping ~6% more real confirmations). That is a genuine, measured
-trade-off — no longer a guess. **But do not remap on these numbers yet:** 32 speech / 16
-noise is a small sample (wide confidence intervals), there is **no music** in the corpus,
-and Speech Commands recording conditions differ from in-browser dictation. Expand the corpus
-(more clips, real music, real café/keyboard ambient) before flipping a production mapping.
+The current mapping gives **generic / universal-dictation pages `highSensitivity`** and
+dedicated chat sites `balanced`. The data says that's backwards for the noisy context:
+
+- Generic pages are the **noisiest, least-controlled** (often with background media), and
+  `highSensitivity` false-accepts **59%** of non-speech there incl. **100% of music** —
+  a large hallucination surface.
+- The cost of calming them to `balanced` is small and concentrated (FAR 56 → 41%, music 8/8 →
+  5/8, for FRR 3 → 8% that is mostly the isolated word `up`, overstated vs connected dictation).
+
+**Recommended remap (implemented in the follow-up):** generic / dictation pages
+`highSensitivity` → `balanced`. **Leave chat sites at `balanced`** — they're the core product
+and the quietest context (a focused voice conversation), so there's no data-backed reason to
+make them *more* trigger-happy, and changing them carries more risk than reward. Net: `balanced`
+everywhere; `highSensitivity` becomes a reserved preset (like `conservative`).
+
+Still-open refinements (not blockers): a **noise/SNR-adaptive** or **mobile-vs-desktop** axis
+(the corpus isn't device-labelled, so that needs its own data), and broadening the corpus with
+café/keyboard ambient and non-English speech.
 
 ## Files
 

@@ -10,10 +10,10 @@
 //     (yes/no/stop/go/up/down/on/off) from thousands of varied speakers/mics — the
 //     short-and-sometimes-soft regime the synthetic `say` corpus could not stress.
 //   Negatives — MUSAN noise, free-sound subset (US Public Domain): real ambient noise,
-//     already 16 kHz mono PCM16; plus generated digital silence.
-//   Music — intentionally NOT fetched yet: no license-clean *per-file* source without the
-//     11 GB MUSAN tarball. A clear follow-up (see bench/vad/README.md).
+//     already 16 kHz mono PCM16; real music (Kevin MacLeod / Incompetech, CC-BY-4.0)
+//     converted with ffmpeg; plus generated digital silence.
 //
+// Needs `curl` always; `ffmpeg` only for the music clips (skipped if absent).
 // Usage: npm run bench:vad:fetch-real   [-- --force]
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
@@ -28,13 +28,22 @@ const SR = 16000;
 const force = process.argv.includes("--force");
 
 const SC_WORDS = ["yes", "no", "stop", "go", "up", "down", "on", "off"];
-const SC_PER_WORD = 4; // 8 words × 4 distinct speakers = 32 real speech positives
-const SC_CANDIDATES = 14; // over-select per word, then drop silent/corrupt source clips
+const SC_PER_WORD = 8; // 8 words × 8 distinct speakers = 64 real speech positives
+const SC_CANDIDATES = 20; // over-select per word, then drop silent/corrupt source clips
 const MIN_PEAK_AMP = 0.02; // a real word peaks far above this; ~0 = silent/corrupt clip
 const SC_URL = "https://storage.googleapis.com/download.tensorflow.org/data/speech_commands_v0.02.tar.gz";
-const MUSAN_NOISE_COUNT = 14;
+const MUSAN_NOISE_COUNT = 24;
 const MUSAN_API = "https://huggingface.co/api/datasets/bilguun/musan-noise/tree/main/noise/free-sound";
 const MUSAN_RESOLVE = "https://huggingface.co/datasets/bilguun/musan-noise/resolve/main/noise/free-sound";
+// Real music negatives — Kevin MacLeod / Incompetech (CC-BY-4.0). Over-list; the fetch is
+// graceful (skips any track that 404s or fails to convert) and stops at MUSIC_COUNT.
+const MUSIC_COUNT = 8;
+const INCOMPETECH = "https://incompetech.com/music/royalty-free/mp3-royaltyfree";
+const MUSIC_TRACKS = [
+  "Carefree", "Cipher", "Sneaky Snitch", "Monkeys Spinning Monkeys", "Fluffing a Duck",
+  "Investigations", "Wallpaper", "Local Forecast - Elevator", "Dreams Become Real",
+  "Volatile Reaction", "Despair and Triumph", "Frost Waltz",
+];
 
 if (existsSync(resolve(outDir, "manifest.json")) && !force) {
   console.log("corpus-real/ already populated; pass --force to refetch. Skipping.");
@@ -128,6 +137,47 @@ noiseWavs.forEach((path, i) => {
   });
 });
 
+// --- Negatives: real music — Kevin MacLeod / Incompetech (CC-BY-4.0) via ffmpeg ---
+const haveFfmpeg = (() => {
+  try {
+    execFileSync("ffmpeg", ["-version"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+})();
+let musicIdx = 0;
+if (!haveFfmpeg) {
+  console.log("ffmpeg not found — skipping music clips (install ffmpeg to include them).");
+} else {
+  console.log("Fetching real music (Kevin MacLeod / Incompetech, CC-BY-4.0)…");
+  for (const track of MUSIC_TRACKS) {
+    if (musicIdx >= MUSIC_COUNT) break;
+    const mp3 = resolve(tmpDir, `music_${musicIdx}.mp3`);
+    const name = `nonspeech_music_${String(musicIdx).padStart(2, "0")}.wav`;
+    try {
+      curl(["-o", mp3, `${INCOMPETECH}/${encodeURIComponent(track)}.mp3`]);
+      // A 20 s clip from 15 s in (past any quiet intro) → 16 k mono PCM16.
+      execFileSync("ffmpeg", [
+        "-hide_banner", "-loglevel", "error", "-y", "-ss", "15", "-t", "20",
+        "-i", mp3, "-ac", "1", "-ar", "16000", "-c:a", "pcm_s16le", resolve(outDir, name),
+      ]);
+      manifest.push({
+        file: name,
+        label: "nonspeech",
+        source: "Kevin MacLeod / Incompetech",
+        license: "CC-BY-4.0",
+        attribution: "Kevin MacLeod (incompetech.com), licensed under CC-BY-4.0",
+        note: `real music: "${track}"`,
+      });
+      musicIdx++;
+    } catch (e) {
+      console.log(`  skipped music "${track}" (${String(e.message).split("\n")[0]})`);
+    }
+  }
+  console.log(`Kept ${musicIdx} music clips.`);
+}
+
 // --- Negatives: digital silence (control) ---
 for (const ms of [1500, 2500]) {
   const name = `nonspeech_silence_${ms}.wav`;
@@ -141,7 +191,7 @@ writeFileSync(
     {
       sampleRate: SR,
       generatedBy: "bench/vad/fetch-real-corpus.mjs",
-      note: "REAL corpus (git-ignored audio). Positives: Google Speech Commands v2 (CC-BY-4.0). Negatives: MUSAN free-sound noise (US Public Domain) + digital silence. Music pending (see README).",
+      note: "REAL corpus (git-ignored audio). Positives: Google Speech Commands v2 (CC-BY-4.0). Negatives: MUSAN free-sound noise (US Public Domain) + Incompetech music (CC-BY-4.0) + digital silence.",
       clips: manifest,
     },
     null,
