@@ -1,4 +1,4 @@
-import { RealTimeVADOptions } from "@ricky0123/vad-web";
+import type { RealTimeVADOptions } from "@ricky0123/vad-web";
 
 /**
  * Preset names for tuning Silero VAD v5 parameters.

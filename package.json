@@ -28,6 +28,8 @@
     "test:vitest": "vitest run --config vitest.config.js",
     "test:vitest:watch": "vitest --watch --config vitest.config.js",
     "test": "npm-run-all -s typecheck test:jest test:vitest",
+    "bench:vad": "node --experimental-strip-types --no-warnings bench/vad/run.ts",
+    "bench:vad:corpus": "node bench/vad/generate-corpus.mjs",
     "e2e:build": "node --experimental-strip-types scripts/e2e-build.mjs",
     "test:e2e": "playwright test --config e2e/playwright.config.ts",
     "test:e2e:visual": "playwright test --config e2e/playwright.visual.config.ts",
