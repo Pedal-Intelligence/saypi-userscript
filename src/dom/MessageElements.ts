@@ -8,10 +8,8 @@ import {
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
-import { Observation } from "./Observation";
 import { Chatbot } from "../chatbots/Chatbot";
 import EventBus from "../events/EventBus";
-import { isMobileDevice } from "../UserAgentModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { regenerateSpeech } from "./regenerateSpeech";
@@ -64,46 +62,6 @@ declare global {
         getMessageTelemetry: (messageId: string) => Record<string, number> | null;
       };
     };
-  }
-}
-
-class PopupMenu {
-  private _element: HTMLElement;
-
-  constructor(
-    private message: AssistantResponse,
-    element: HTMLElement,
-    private speech: SpeechUtterance | null,
-    private ttsControls: TTSControlsModule
-  ) {
-    this._element = element;
-  }
-
-  get element(): HTMLElement {
-    return this._element;
-  }
-
-  decorate(): void {
-    this._element.classList.add("popup-menu");
-    this.ttsControls.addCopyButton(this.message, this._element, true);
-    if (this.speech) {
-      this.decorateSpeech(this.speech);
-    }
-  }
-  decorateSpeech(speech: SpeechUtterance) {
-    this.ttsControls.addSpeechButton(speech, this._element, null, true);
-  }
-
-  static find(chatbot: Chatbot, searchRoot: HTMLElement): Observation {
-    let popupMenu = searchRoot.querySelector(".popup-menu");
-    if (popupMenu) {
-      return Observation.foundAlreadyDecorated(".popup-menu", popupMenu);
-    }
-    popupMenu = searchRoot.querySelector(".shadow-input") as HTMLElement | null; // TODO: generalize with Chatbot parameter
-    if (popupMenu) {
-      return Observation.foundUndecorated(".popup-menu", popupMenu);
-    }
-    return Observation.notFound(".popup-menu");
   }
 }
 
@@ -831,30 +789,6 @@ abstract class MessageControls {
       messageContentElement.id = `saypi-message-content-${this.message.utteranceId}`;
     }
 
-    if (isMobileDevice()) {
-      // TODO: we need a way to deregister this listener when the message is removed - perhaps a teardown method?
-      EventBus.on(
-        "saypi:tts:menuPop",
-        (event: { utteranceId: string; menu: PopupMenu }) => {
-    const id = this.message.element.dataset.utteranceId;
-    if (
-      !id ||
-      id !== event.utteranceId ||
-            id !== charge.utteranceId ||
-            !charge.cost
-    ) {
-      return;
-    }
-    const menuElement = event.menu.element;
-    const menuCostElement = menuElement.querySelector(".saypi-cost");
-      if (menuCostElement) {
-        this.ttsControls.updateCostBasis(menuElement, charge);
-      } else {
-        this.ttsControls.addCostBasis(menuElement, charge, true);
-      }
-    }
-      );
-    }
   }
 
   /**
@@ -2188,7 +2122,7 @@ abstract class MessageControls {
   }
 }
 
-export { AssistantResponse, MessageControls, PopupMenu };
+export { AssistantResponse, MessageControls };
 
 /**
  * Represents a user message in the chat history

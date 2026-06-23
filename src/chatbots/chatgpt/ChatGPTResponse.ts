@@ -513,13 +513,6 @@ export class ChatGPTMessageControls extends MessageControls {
       inner?.setAttribute('data-saypi-shielded', 'true');
     } catch {}
     try { this.repositionMenuToBottomRight(wrapper); } catch {}
-    this.outsideShieldCleanup = () => {
-      try { wrapper.removeAttribute('data-saypi-shielded'); } catch {}
-      try {
-        const inner = wrapper.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
-        inner?.removeAttribute('data-saypi-shielded');
-      } catch {}
-    };
   }
 
   private scheduleLazyAttach(): void {
@@ -531,34 +524,11 @@ export class ChatGPTMessageControls extends MessageControls {
     }, 200);
   }
 
-  // The shielding / positioning helpers are kept in case of dropdown interference
-  private outsideShieldEventHandlers: Array<{event: string, handler: (...args: any[]) => void}> = [];
-  private outsideShieldCleanup: (() => void) | null = null;
-  private outsideShieldWatch: any = null;
-  private outsideShieldTrigger: HTMLElement | null = null;
-  private outsideShieldWrapper: HTMLElement | null = null;
-
   private sweepShieldAttributes(ancestor: HTMLElement | null): void {
     const sel = '[data-saypi-shielded]';
     const nodes = Array.from((ancestor || document).querySelectorAll(sel));
     for (const n of nodes) { try { n.removeAttribute('data-saypi-shielded'); } catch {} }
   }
-
-  private gentlyCloseMenu(wrapper: HTMLElement, trigger?: HTMLElement | null): void {
-    try {
-      const menu = wrapper.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
-      const isOpen = !!menu && (menu.getAttribute('data-state') === 'open' || wrapper.getAttribute('data-state') === 'open');
-      if (!isOpen) return;
-      if (menu) { try { menu.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'Escape' })); } catch {} }
-      setTimeout(() => {
-        const stillOpen = menu && (menu.getAttribute('data-state') === 'open' || wrapper.getAttribute('data-state') === 'open');
-        if (stillOpen && trigger) { try { this.synthesizeUserClick(trigger); } catch {} }
-        try { this.blurTrigger(trigger || undefined); } catch {}
-      }, 40);
-    } catch {}
-  }
-
-  private blurTrigger(trigger?: HTMLElement | null): void { try { trigger && trigger.blur?.(); } catch {} }
 
   private repositionMenuToBottomRight(wrapper: HTMLElement): void {
     const menu = wrapper.querySelector('[data-radix-menu-content],[data-radix-dropdown-menu-content],[role="menu"]') as HTMLElement | null;
@@ -571,12 +541,6 @@ export class ChatGPTMessageControls extends MessageControls {
     wrapper.style.transform = `translate(${x}px, ${y}px) scale(0.965)`;
   }
 
-  private restoreMenuPosition(wrapper: HTMLElement): void {
-    const prev = (wrapper as any)._saypiPrevTransform;
-    if (typeof prev === 'string') { wrapper.style.transform = prev; }
-    else { try { wrapper.style.removeProperty('transform'); } catch {} }
-    try { delete (wrapper as any)._saypiPrevTransform; } catch {}
-  }
 }
 
 export class ChatGPTTextBlockCapture extends ElementTextStream {
