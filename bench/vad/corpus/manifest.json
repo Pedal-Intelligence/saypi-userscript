@@ -1,0 +1,93 @@
+{
+  "sampleRate": 16000,
+  "generatedBy": "bench/vad/generate-corpus.mjs",
+  "note": "SEED corpus: synthetic say-voiced positives + generated negatives. Not a substitute for real labelled audio (esp. music/ambient). See bench/vad/README.md.",
+  "clips": [
+    {
+      "file": "speech_yes.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 534,
+      "note": "say \"yes\""
+    },
+    {
+      "file": "speech_no.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 458,
+      "note": "say \"no\""
+    },
+    {
+      "file": "speech_okay.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 543,
+      "note": "say \"okay\""
+    },
+    {
+      "file": "speech_stop.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 564,
+      "note": "say \"stop\""
+    },
+    {
+      "file": "speech_thank-you.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 630,
+      "note": "say \"thank you\""
+    },
+    {
+      "file": "speech_sentence.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 1805,
+      "note": "say \"what time is it in Tokyo right now\""
+    },
+    {
+      "file": "speech_quiet_yes.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 534,
+      "note": "say \"yes\" @ gain 0.18 (quiet)"
+    },
+    {
+      "file": "speech_quiet_thank-you.wav",
+      "label": "speech",
+      "speechStartMs": 0,
+      "speechEndMs": 618,
+      "note": "say \"thank you\" @ gain 0.15 (quiet)"
+    },
+    {
+      "file": "nonspeech_silence.wav",
+      "label": "nonspeech",
+      "note": "digital silence"
+    },
+    {
+      "file": "nonspeech_white_low.wav",
+      "label": "nonspeech",
+      "note": "white noise, low"
+    },
+    {
+      "file": "nonspeech_white_mod.wav",
+      "label": "nonspeech",
+      "note": "white noise, moderate"
+    },
+    {
+      "file": "nonspeech_pink.wav",
+      "label": "nonspeech",
+      "note": "pink-ish hiss"
+    },
+    {
+      "file": "nonspeech_tone.wav",
+      "label": "nonspeech",
+      "note": "440 Hz tone"
+    },
+    {
+      "file": "nonspeech_hum.wav",
+      "label": "nonspeech",
+      "note": "60 Hz hum"
+    }
+  ]
+}
