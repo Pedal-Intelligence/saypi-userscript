@@ -13,15 +13,18 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  * false-accepts. The #420 admission gate (`segmentAdmission.ts`) backstops that
  * false-accept risk; a VAD-quality benchmark to re-tune these numbers is #420 item 3.
  *
- * Wiring status (which presets a code path actually selects):
- *  - `highSensitivity` / `balanced`: selected by AudioInputMachine from the host —
- *    dictation/generic pages get `highSensitivity`, dedicated chat sites get `balanced`
- *    (revisiting that mapping is #420 item 4).
+ * Wiring status (which presets a code path actually selects) — see `selectVADPreset`:
+ *  - `balanced`: the preset every context uses today (#420 item 4). The VAD-quality
+ *    benchmark (bench/vad/README.md) put it at the knee of the false-reject/false-accept
+ *    trade-off, so it is the host-agnostic default.
+ *  - `highSensitivity`: previously bound to dictation/generic pages, but the benchmark
+ *    showed it false-accepts ~59% of real non-speech there (100% of music) for only a
+ *    marginal false-reject edge — so it is now **reserved, unselected** (the gap-#3 fix).
  *  - `conservative`: a valid noisy-environment preset that **no code path selects yet**.
- *    Kept (not deleted) because #420 item 4 plans to wire it to a noise/SNR estimate;
- *    its values are locked by test so it can't rot in the meantime.
+ *    Kept (not deleted) because #420 item 4 plans to wire it to a noise/SNR estimate.
  *  - `none`: the no-override fallback `initializeVAD` resolves to when no (or an
  *    unknown) preset is requested — it inherits the library's v5 defaults verbatim.
+ * (Both `highSensitivity` and `conservative` stay locked by test so they can't rot.)
  */
 export type VADPreset = "highSensitivity" | "balanced" | "conservative" | "none";
 
@@ -68,3 +71,29 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     // No-override fallback: inherit all base options from Silero VAD v5.
   },
 };
+
+/** The context that drives VAD preset selection. */
+export interface VADSelectionContext {
+  /** True on generic / universal-dictation pages; false on dedicated chat sites. */
+  isDictation: boolean;
+}
+
+/**
+ * Choose the VAD preset for a context — #420 item 4, driven by the VAD-quality benchmark
+ * (`bench/vad/README.md`), not a guess.
+ *
+ * Both contexts map to `balanced` today:
+ *  - Generic / universal-dictation pages were `highSensitivity`, but on the real corpus it
+ *    false-accepts ~59% of non-speech there (100% of music) for only a marginal, mostly
+ *    isolated-"up" false-reject edge — so the noisiest, least-controlled context no longer
+ *    gets the trigger-happiest preset (the issue's gap #3).
+ *  - Dedicated chat sites stay `balanced` — the core product and the quietest context, with
+ *    no data-backed reason to make them *more* trigger-happy.
+ *
+ * `context` is unused today but kept as the seam for a future noise/SNR- or device-adaptive
+ * split (item 4's remaining refinement), which would re-diverge the mapping.
+ */
+export function selectVADPreset(context: VADSelectionContext): VADPreset {
+  void context;
+  return "balanced";
+}
