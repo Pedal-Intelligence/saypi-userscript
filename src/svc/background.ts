@@ -3,6 +3,7 @@ import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
 import { registerDevReloadHandler, DEV_FEED_SPEECH_MESSAGE } from "../dev/devReload";
+import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -164,7 +165,10 @@ if (import.meta.env.DEV) {
         type: "VAD_USE_SYNTHETIC_AUDIO",
         enabled: true,
         loop: opts.loop === true, // default one-shot (#349) so end-of-speech fires → STT submits
-        clipUrl: getExtensionURL("audio/synthetic-speech.wav"),
+        // Pick a clip at random so the transcript submitted to the assistant varies
+        // run-to-run (and addresses the assistant, not the SayPi input layer). The
+        // hermetic transcript is mocked, so selection can't affect CI assertions.
+        clipUrl: getExtensionURL(pickSyntheticSpeechClip()),
         origin: "background",
       },
       tabId,

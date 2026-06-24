@@ -7,6 +7,12 @@ Chromium with `--use-fake-device-for-media-stream` plus
 clip instead of a real mic. The clip drives the real offscreen WASM-VAD
 (Silero-v5) → mock STT path that the dictation spec asserts on.
 
+This single file is the **fallback** capture clip for the launch-flag path. The
+primary path — the in-extension synthetic source armed by `saypi:dev-feed-speech`
+— now draws at random from a **pool** of clips in `public/audio/synthetic-speech/`
+(see [Pool & regeneration](#pool--regeneration) below), so the transcript varies
+run-to-run. `speech-16k-mono.wav` here is a mirror of pool clip `01.wav`.
+
 ## File
 
 - `speech-16k-mono.wav`
@@ -19,8 +25,8 @@ clip instead of a real mic. The clip drives the real offscreen WASM-VAD
 | Encoding        | 16-bit PCM (`pcm_s16le`, Microsoft PCM)         |
 | Channels        | Mono (1 channel)                                |
 | Sample rate     | 16 kHz (16000 Hz)                               |
-| Content         | ~3 s of real speech + 0.5 s trailing silence    |
-| Size            | < 200 KB (~132 KB)                              |
+| Content         | ~5-7 s of real speech + 0.5 s trailing silence   |
+| Size            | < 256 KB                                         |
 
 The format is dictated by Chromium's fake-audio-capture requirement (it expects a
 plain RIFF/WAVE PCM file) and by the VAD model's preferred input (16 kHz mono).
@@ -37,33 +43,39 @@ hand a segment to the (mock) STT backend.
 
 ## Provenance & license
 
-Self-generated on macOS via the built-in `say` synthesizer
-(`say -v Samantha`), then transcoded with `ffmpeg`. No third-party recording is
-used, so the clip is license-clean and safe to commit to the repository. The
-spoken text is:
+Self-generated on macOS via the built-in `say` synthesizer (a spread of voices —
+Samantha / Daniel / Karen / Moira), then transcoded with `ffmpeg`. No third-party
+recording is used, so the clips are license-clean and safe to commit. The phrases
+are assistant-agnostic (they play on pi.ai, claude.ai *and* chatgpt.com, so they
+must not bake in a host name) and shaped as greeting + observation + question —
+e.g. clip `01`:
 
-> "Hello SayPi, this is a test of voice activity detection."
+> "Hello there. This is a quick test of the voice activity detection. Can you hear me clearly?"
 
-## Regeneration
+The full phrase list lives in `scripts/generate-synthetic-speech.mjs`.
 
-Both `say` (macOS) and `ffmpeg` must be available. From the repository root:
+## Pool & regeneration
+
+The primary in-extension source draws at random from a **pool** of clips in
+`public/audio/synthetic-speech/` (`01.wav`..`NN.wav`) so the transcript submitted
+to the assistant varies run-to-run. Clip `01.wav` is mirrored to this fixture
+(`speech-16k-mono.wav`) and to `public/audio/synthetic-speech.wav` for the
+single-file fallback paths. The runtime picker is
+`src/offscreen/syntheticSpeechPool.ts`; its on-disk test guards file/list drift.
+
+Regenerate the whole pool (macOS + `ffmpeg` required) from the repo root:
 
 ```bash
-say -v Samantha -o /tmp/saypi-speech.aiff "Hello SayPi, this is a test of voice activity detection."
-ffmpeg -hide_banner -loglevel error -y -i /tmp/saypi-speech.aiff \
-  -ac 1 -ar 16000 -c:a pcm_s16le -af "apad=pad_dur=0.5" \
-  -map_metadata -1 -flags +bitexact -fflags +bitexact \
-  e2e/fixtures/audio/speech-16k-mono.wav
-rm /tmp/saypi-speech.aiff
+node scripts/generate-synthetic-speech.mjs
 ```
 
-The `-map_metadata -1` / `+bitexact` flags strip encoder/timestamp metadata so the
-output is reproducible (no embedded ffmpeg version string or creation time).
+The script bakes each phrase with `-map_metadata -1` / `+bitexact` so output is
+reproducible (no embedded ffmpeg version string or creation time) — re-running
+doesn't churn the repo unless a phrase changes.
 
 ### Verify
 
 ```bash
-ffprobe -hide_banner e2e/fixtures/audio/speech-16k-mono.wav   # expect: pcm_s16le, 16000 Hz, 1 channels, s16
-file e2e/fixtures/audio/speech-16k-mono.wav                    # expect: RIFF ... WAVE audio, Microsoft PCM, 16 bit, mono 16000 Hz
-ls -l e2e/fixtures/audio/speech-16k-mono.wav                   # expect: < 200 KB
+ffprobe -hide_banner public/audio/synthetic-speech/01.wav   # expect: pcm_s16le, 16000 Hz, 1 channels, s16
+file public/audio/synthetic-speech/01.wav                    # expect: RIFF ... WAVE audio, Microsoft PCM, 16 bit, mono 16000 Hz
 ```
