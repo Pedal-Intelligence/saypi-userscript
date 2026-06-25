@@ -585,11 +585,16 @@ export function interpretCwsPublish(json = {}) {
   const state = json.state;
   return { ok: ["PENDING_REVIEW", "STAGED", "PUBLISHED", "PUBLISHED_TO_TESTERS"].includes(state), state, warnings: json.warningInfo?.warnings || [], raw: json };
 }
-/** V2 surfaces failures as {error:{code,status,message}} — format for a clear CI message. */
+/**
+ * Format a Chrome API failure for a clear CI message. Two shapes occur:
+ *  - V2 store API: {error:{code,status,message}} → "STATUS: message".
+ *  - OAuth token endpoint: {error:"invalid_grant", error_description:"…"} where `error` is
+ *    a STRING. Must NOT be treated as the object shape (that rendered "undefined: undefined").
+ */
 export function cwsErrorMessage(json = {}) {
   const e = json.error;
-  if (e) return `${e.status || e.code}: ${e.message}`;
-  if (json.error_description || json.error) return json.error_description || json.error; // oauth token error shape
+  if (e && typeof e === "object") return `${e.status || e.code}: ${e.message}`;
+  if (json.error_description || e) return json.error_description || e; // oauth token error shape (string `error`)
   return "unknown error";
 }
 
