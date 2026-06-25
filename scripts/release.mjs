@@ -209,7 +209,13 @@ function cmdPacket({ version }) {
 
 function requireYes(cmd, flags) {
   if (!flags.yes) {
+    // `cmd` is the subcommand plus any positional, e.g. "bump" or "submit chrome".
+    // Show the npm-correct form too: via `npm run`, flags MUST follow a `--` separator,
+    // or npm swallows them and a bare `--yes`/`--dry-run` silently never reaches this script.
+    const [sub, ...rest] = cmd.split(" ");
+    const npmHint = `npm run release:${sub} -- ${[...rest, "--yes"].join(" ")}`;
     bad(`\`${cmd}\` mutates state and is founder-only. Re-run with --yes once you've reviewed the plan.`);
+    warn(`Via npm, flags need a \`--\` separator: ${npmHint}`);
     warn(`Release is irreversible once users auto-update (AGENTS.md). Never run this autonomously.`);
     process.exit(2);
   }
@@ -434,7 +440,7 @@ function createGhRelease(v, tag) {
  */
 async function cmdSubmit({ store, version, yes, dryRun }) {
   if (!PUBLISH_STORES.includes(store)) {
-    bad(`\`submit\` needs a store: ${PUBLISH_STORES.join(" | ")} (e.g. \`submit chrome --dry-run\`).`);
+    bad(`\`submit\` needs a store: ${PUBLISH_STORES.join(" | ")} (e.g. \`npm run release:submit -- chrome --dry-run\`).`);
     process.exit(2);
   }
   if (!dryRun) requireYes(`submit ${store}`, { yes });
@@ -504,6 +510,7 @@ async function main() {
     default:
       log(`Usage: node scripts/release.mjs <preflight|plan|packet|bump|build|verify|tag|finalize|submit> [--save] [--version X] [--dry-run] [--yes]`);
       log(`       submit <chrome|edge|firefox> [--dry-run | --yes]   # ⛔ founder-only API submission (#412)`);
+      log(`Via npm, put flags after \`--\` or npm drops them, e.g. \`npm run release:submit -- chrome --dry-run\`.`);
       process.exit(command ? 1 : 0);
   }
 }
