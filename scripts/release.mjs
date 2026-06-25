@@ -44,6 +44,9 @@ const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const STORES_PATH = join(repoRoot, "doc", "release", "stores.json");
 const RELEASE_NOTES_PATH = join(repoRoot, "_locales", "en", "release_notes.txt");
 const DIST = join(repoRoot, "dist");
+// Gitignored, founder-provided publishing credentials (#412). Loaded ONLY for `submit`,
+// and ONLY this file — never .env.production (which carries build secrets, see SAFETY above).
+const ENV_PUBLISH_PATH = join(repoRoot, ".env.publish");
 
 const C = { reset: "\x1b[0m", red: "\x1b[31m", green: "\x1b[32m", yellow: "\x1b[33m", dim: "\x1b[2m", bold: "\x1b[1m" };
 const log = (m) => console.log(m);
@@ -438,11 +441,34 @@ function createGhRelease(v, tag) {
  * command: a real submit publishes to a live store. `--dry-run` only auth-checks (no publish);
  * a real submit requires --yes and is founder-only. Credentials come from env (founder-provided).
  */
+// Load .env.publish into process.env so `submit` works without a manual
+// `set -a; source .env.publish; set +a`. Already-exported shell vars win (we never
+// override), and values are never logged — only the names of keys loaded. Returns the
+// count loaded. A simple KEY=VALUE parser: optional leading `export `, `#` comments and
+// blank lines skipped, surrounding quotes stripped. (Deliberately only .env.publish.)
+function loadPublishEnv() {
+  if (!existsSync(ENV_PUBLISH_PATH)) return 0;
+  const loaded = [];
+  for (const raw of readFileSync(ENV_PUBLISH_PATH, "utf8").split("\n")) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const m = line.match(/^(?:export\s+)?([A-Z0-9_]+)\s*=\s*(.*)$/);
+    if (!m) continue;
+    const [, key, rawVal] = m;
+    if (key in process.env) continue; // explicit shell env takes precedence
+    process.env[key] = rawVal.replace(/^(['"])(.*)\1$/, "$2");
+    loaded.push(key);
+  }
+  if (loaded.length) log(`${C.dim}Loaded ${loaded.length} credential(s) from .env.publish: ${loaded.join(", ")}${C.reset}`);
+  return loaded.length;
+}
+
 async function cmdSubmit({ store, version, yes, dryRun }) {
   if (!PUBLISH_STORES.includes(store)) {
     bad(`\`submit\` needs a store: ${PUBLISH_STORES.join(" | ")} (e.g. \`npm run release:submit -- chrome --dry-run\`).`);
     process.exit(2);
   }
+  loadPublishEnv();
   if (!dryRun) requireYes(`submit ${store}`, { yes });
   const v = version || pkgVersion();
   log(`${C.bold}${dryRun ? "Dry-run" : "Submitting"} ${store} — v${v}${C.reset}`);

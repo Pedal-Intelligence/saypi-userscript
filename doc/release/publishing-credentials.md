@@ -9,9 +9,11 @@ requires `--yes`; `--dry-run` only auth-checks (no upload/publish).
 > everywhere — the API is the only real automation path. See `chrome-web-store.md`.
 
 Credentials are **never** stored in the repo. Provide them as **environment variables** at submit
-time (e.g. a local, gitignored `.env.publish` you `set -a; source .env.publish; set +a`, or your
-shell/CI secret store). The tool only *reads* `process.env`; it never reads `.env.production` or
-echoes secret values.
+time. The easiest way: drop them in a local, gitignored **`.env.publish`** at the repo root
+(`KEY=value` per line) — `submit` **auto-loads that file** into `process.env`, so no manual
+`source` is needed. Already-exported shell vars (or your CI secret store) take precedence over the
+file. The tool reads only `process.env` and `.env.publish`; it **never** reads `.env.production`,
+and it logs only the *names* of the keys it loaded — never their values.
 
 ## Usage
 
