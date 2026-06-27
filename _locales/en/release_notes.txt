@@ -1,14 +1,7 @@
-This release is a big reliability and voice-quality push across ChatGPT, Claude, and Pi.
+This release makes your voice turns faster and your transcripts cleaner.
 
 ✨ Highlights
-• Read-aloud on ChatGPT is back and more dependable — it now reads the first reply in a new voice chat, and keeps working as ChatGPT reshuffles its layout.
-• Your voice controls (the call button and voice menus) reliably appear across ChatGPT, Claude, and Pi — even as they redesign their pages and when you reload a conversation.
-• A lighter, faster-loading interface, plus refreshed performance insights with a transcription-latency breakdown.
+• Quicker transcription — your speech now uploads in a lighter, compressed format, so your words come back faster with less data sent.
+• Fewer phantom words — Say, Pi is better at telling real speech from silence and background noise, so quiet pauses and stray sounds are far less likely to turn into text you didn't say.
 
-🛠️ Also improved
-• Voice output no longer reads Claude's private "thinking" notes aloud, and the voice-selection greeting plays properly again.
-• Voice typing now inserts text right at your cursor.
-• The microphone hands off cleanly when you start talking in another tab.
-• Clearer messages when voice is off or unavailable, and your TTS usage now shows as credits.
-
-Plus a lot of under-the-hood work — including new automated testing across all three sites — to keep Say, Pi fast and dependable.
+Plus the usual under-the-hood work to keep Say, Pi fast and dependable.
