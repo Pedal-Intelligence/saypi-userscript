@@ -430,6 +430,10 @@ describe("Chrome Web Store API helpers", () => {
     expect(interpretCwsPublish({ state: "REJECTED" }).ok).toBe(false);
     expect(cwsErrorMessage({ error: { status: "PERMISSION_DENIED", message: "nope" } })).toBe("PERMISSION_DENIED: nope");
     expect(cwsErrorMessage({ error_description: "bad refresh token" })).toBe("bad refresh token");
+    // OAuth token endpoint shape: `error` is a STRING (not the V2 {code,status,message}
+    // object) with a sibling error_description. Must not render "undefined: undefined".
+    expect(cwsErrorMessage({ error: "unauthorized_client", error_description: "Unauthorized" })).toBe("Unauthorized");
+    expect(cwsErrorMessage({ error: "invalid_grant" })).toBe("invalid_grant");
   });
 });
 
