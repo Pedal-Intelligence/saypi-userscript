@@ -43,10 +43,35 @@ Requires the built artifacts (`release:build` first): `dist/saypi.chrome.zip`,
 | `CWS_REFRESH_TOKEN` | long-lived refresh token (one-time, below) |
 
 **One-time setup:** Google Cloud Console → new project → **enable the Chrome Web Store API** →
-create an **OAuth client (Web application)** with redirect `https://developers.google.com/oauthplayground`
-→ OAuth Playground (use your own creds) → authorize scope `https://www.googleapis.com/auth/chromewebstore`
-**signed in as the account that owns the extension** → exchange for a **refresh token**. The owning
-account **must have 2-Step Verification on** or publish returns 403. (Flow: `using-api` guide.)
+create an **OAuth client (Web application)** with redirect `https://developers.google.com/oauthplayground`.
+The owning account **must have 2-Step Verification on** or publish returns 403.
+
+### Minting `CWS_REFRESH_TOKEN` (the part you'll redo)
+
+`CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, and `CWS_REFRESH_TOKEN` must **all come from the same OAuth
+client** — a refresh token presented with a *different* client's id/secret fails the token
+exchange with **`401 unauthorized_client`** (not `invalid_grant`; that one means expired/revoked).
+
+1. Google Cloud Console → the OAuth client → copy the **Client ID** and download the full
+   **Client secret** (the console only shows it masked).
+2. Open **https://developers.google.com/oauthplayground** → top-right **⚙️** → tick
+   **"Use your own OAuth credentials"** → paste that Client ID + secret.
+3. Step 1 → **"Input your own scopes"** → `https://www.googleapis.com/auth/chromewebstore` →
+   **Authorize APIs**.
+4. Sign in **as the account that owns the extension**. ("Google hasn't verified this app" →
+   **Advanced → Go to … (unsafe)** — it's your own client.)
+5. Step 2 → **Exchange authorization code for tokens** → copy the **Refresh token** (`1//…`).
+6. Put all three (id, secret, refresh token) in `.env.publish`.
+
+If the exchange returns **no refresh token** (only an access token), you've authorized this
+client+account before — revoke at https://myaccount.google.com/permissions and redo, or confirm
+"Use your own credentials" is ticked (the Playground forces `prompt=consent`).
+
+> ⚠️ **Refresh-token lifetime hinges on the OAuth app's publishing status** (Google Auth Platform
+> → **Audience** → *Publishing status*): **"Testing" → the refresh token expires in ~7 days**
+> (you'll remint weekly); **"In production" → long-lived** (no inactivity expiry under 6 months).
+> For a publishing client you only use yourself, **publish the app to production** so the token
+> persists. A working `--dry-run` today does **not** tell you which you have — only this field does.
 
 API V2 (`chromewebstore.googleapis.com`) is current; V1 sunsets 2026-10-15. V2 can't create items or
 change visibility (fine — Say, Pi exists).
