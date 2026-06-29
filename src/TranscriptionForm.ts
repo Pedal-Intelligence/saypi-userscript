@@ -52,6 +52,7 @@ export async function constructTranscriptionFormData(
     if (usageMeta.version) formData.append("version", usageMeta.version);
     if (usageMeta.app) formData.append("app", usageMeta.app);
     if (usageMeta.language) formData.append("language", usageMeta.language);
+    if (usageMeta.teamId) formData.append("teamId", usageMeta.teamId);
   } catch (error) {
     logger.warn("[TranscriptionForm] Failed to add usage analytics metadata:", error);
   }

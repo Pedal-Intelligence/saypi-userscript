@@ -19,6 +19,13 @@ vi.mock("../src/usage/ClientIdManager", () => ({
 vi.mock("../src/usage/VersionManager", () => ({
   getExtensionVersion: vi.fn().mockReturnValue("1.2.3-test"),
 }));
+// Authenticated user with a team — teamId should be forwarded (#437)
+vi.mock("../src/JwtManager", () => ({
+  getJwtManagerSync: () => ({
+    isAuthenticated: () => true,
+    getClaims: () => ({ teamId: "team-99" }),
+  }),
+}));
 
 // Mock preferences to control language and flags
 vi.mock("../src/prefs/PreferenceModule", () => ({
@@ -95,6 +102,7 @@ describe("TranscriptionModule form data analytics fields", () => {
     expect(asMap.get("version")).toBe("1.2.3-test");
     expect(asMap.get("app")).toBe("mockbot");
     expect(asMap.get("language")).toBe("en-US");
+    expect(asMap.get("teamId")).toBe("team-99");
     // Restore append
     (FormData.prototype as any).append = originalAppend;
   });

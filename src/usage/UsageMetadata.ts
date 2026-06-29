@@ -8,6 +8,13 @@ export interface UsageMetadata {
   version?: string;
   app?: string;
   language?: string;
+  /**
+   * The authenticated user's team id (from the JWT claims). Present only once
+   * the user is signed in; absent for anonymous traffic. Sending it attributes
+   * first-conversation usage to the user's team so the onboarding funnel can
+   * tell "installed but never succeeded" apart from "never installed" (#437).
+   */
+  teamId?: string;
 }
 
 /**
@@ -44,6 +51,19 @@ export async function buildUsageMetadata(chatbot?: Chatbot): Promise<UsageMetada
     if (language) result.language = language;
   } catch (e) {
     console.warn("[UsageMetadata] Failed to resolve language", e);
+  }
+
+  try {
+    const { getJwtManagerSync } = await import("../JwtManager");
+    const jwt = getJwtManagerSync();
+    // Only attribute to a team once the user is actually signed in; anonymous
+    // traffic stays keyed on clientId alone.
+    if (jwt.isAuthenticated()) {
+      const teamId = jwt.getClaims()?.teamId;
+      if (teamId) result.teamId = teamId;
+    }
+  } catch (e) {
+    console.warn("[UsageMetadata] Failed to resolve teamId", e);
   }
 
   return result;
