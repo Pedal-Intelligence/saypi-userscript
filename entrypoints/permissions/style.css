@@ -45,3 +45,40 @@ p {
   color: #777;
   margin-top: 20px;
 }
+
+.recovery {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: rgba(108, 92, 231, 0.08);
+  text-align: left;
+}
+
+.recovery h2 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  color: #2c3e50;
+}
+
+.recovery p {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+}
+
+.retry-button {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #6c5ce7;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.retry-button:hover,
+.retry-button:focus {
+  filter: brightness(1.08);
+}
