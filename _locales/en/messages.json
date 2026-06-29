@@ -1198,6 +1198,26 @@
     "message": "You can revisit this any time from Say, Pi's settings. Your privacy matters — audio is only captured during an active call.",
     "description": "Footer text on the first-run onboarding page."
   },
+  "onboarding_micTestButton": {
+    "message": "🎤 Test your microphone",
+    "description": "Button that starts the no-stakes onboarding microphone test."
+  },
+  "onboarding_micTestRequesting": {
+    "message": "Requesting microphone…",
+    "description": "Status shown while the onboarding mic test waits for permission."
+  },
+  "onboarding_micTestListening": {
+    "message": "Listening — say something! 🎙️",
+    "description": "Status shown while the onboarding mic test is metering input."
+  },
+  "onboarding_micTestStop": {
+    "message": "Stop test",
+    "description": "Button label to stop the onboarding mic test while it is running."
+  },
+  "onboarding_micTestDone": {
+    "message": "Nice — your microphone works! 🎉",
+    "description": "Status shown after the onboarding mic test completes successfully."
+  },
   "permissions_promptTitle": {
     "message": "Microphone Permission",
     "description": "Title of the permissions prompt page."
