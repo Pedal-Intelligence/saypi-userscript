@@ -1228,6 +1228,42 @@
     "message": "This tab will close automatically once you've responded.",
     "description": "Footer text indicating the tab will auto-close."
   },
+  "permissions_recoveryDeniedTitle": {
+    "message": "Microphone access is blocked",
+    "description": "Title of the recovery panel when mic permission was denied/blocked."
+  },
+  "permissions_recoveryDeniedBody": {
+    "message": "Your browser is blocking the microphone. Click the camera or lock icon in the address bar, set Microphone to \"Allow\", then try again. On macOS, also check System Settings → Privacy & Security → Microphone.",
+    "description": "Recovery guidance when mic permission is blocked."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "message": "No microphone found",
+    "description": "Title of the recovery panel when no microphone device is available."
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "message": "We couldn't find a microphone. Plug one in (or connect your headset), make sure it's selected as your input device, then try again.",
+    "description": "Recovery guidance when no microphone device is available."
+  },
+  "permissions_recoveryInUseTitle": {
+    "message": "Your microphone is busy",
+    "description": "Title of the recovery panel when the mic is in use by another app."
+  },
+  "permissions_recoveryInUseBody": {
+    "message": "Another app or tab may be using your microphone. Close anything else that might be recording (video calls, voice memos), then try again.",
+    "description": "Recovery guidance when the microphone is in use elsewhere."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "message": "We couldn't access your microphone",
+    "description": "Title of the recovery panel for an unknown mic error."
+  },
+  "permissions_recoveryUnknownBody": {
+    "message": "Something went wrong reaching your microphone. Check that it's connected and allowed in your browser settings, then try again.",
+    "description": "Recovery guidance for an unknown microphone error."
+  },
+  "permissions_retryButton": {
+    "message": "Try again",
+    "description": "Label for the button that re-requests microphone permission."
+  },
   "permissions_errorDomLoadFailure": {
     "message": "Permissions prompt page DOM failed to load correctly.",
     "description": "Error message sent via runtime message if the DOM fails to load."
