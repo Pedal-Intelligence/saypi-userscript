@@ -473,6 +473,7 @@ async function uploadAudioForRefinementInternal(
       if (usageMeta.version) formData.append("version", usageMeta.version);
       if (usageMeta.app) formData.append("app", usageMeta.app);
       if (usageMeta.language) formData.append("language", usageMeta.language);
+      if (usageMeta.teamId) formData.append("teamId", usageMeta.teamId);
     } catch (error) {
       logger.warn(`[Refinement ${requestId}] Failed to add usage metadata:`, error);
     }

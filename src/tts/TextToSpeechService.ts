@@ -24,6 +24,7 @@ interface TTSRequestData {
   clientId?: string;
   version?: string;
   app?: string;
+  teamId?: string;
 }
 
 /**
@@ -106,6 +107,7 @@ export class TextToSpeechService {
       if (usageMeta.clientId) data.clientId = usageMeta.clientId;
       if (usageMeta.version) data.version = usageMeta.version;
       if (usageMeta.app) data.app = usageMeta.app;
+      if (usageMeta.teamId) data.teamId = usageMeta.teamId;
     } catch (error) {
       console.warn("[TextToSpeechService] Failed to add usage analytics metadata:", error);
       // Continue without analytics metadata if there's an error
