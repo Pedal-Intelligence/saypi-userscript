@@ -42,6 +42,7 @@ declare module "wxt/browser" {
     | "/icons/sixty-seconds.svg"
     | "/logos/marquee.png"
     | "/offscreen.html"
+    | "/onboarding.html"
     | "/ort-wasm-simd-threaded.mjs"
     | "/permissions.html"
     | "/settings.html"
