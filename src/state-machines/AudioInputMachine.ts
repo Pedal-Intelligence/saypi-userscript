@@ -10,6 +10,7 @@ import { logger } from "../LoggingModule";
 import { likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule";
 import { VADPreset, selectVADPreset } from "../vad/VADConfigs";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { persistAudioSegment } from "../audio/AudioSegmentPersistence";
 
 setupInterceptors();
@@ -36,13 +37,10 @@ let previousDefaultDevice: MediaDeviceInfo | null = null;
 // VAD client instance - will be either OffscreenVADClient or OnscreenVADClient
 let vadClient: VADClientInterface | null = null;
 
-// Choose the VAD preset once based on chatbot context. #420 item 4: the host→preset
-// mapping is centralised + benchmark-driven in selectVADPreset (see bench/vad/README.md);
-// today every context resolves to `balanced` (generic/dictation pages used to get the
-// trigger-happy `highSensitivity`, which the benchmark showed over-uploads real noise/music).
-const currentVADPreset: VADPreset = selectVADPreset({
-  isDictation: ChatbotIdentifier.isInDictationMode(),
-});
+// The VAD preset is chosen per-recording (see setupRecording) so a runtime change to
+// quiet mode takes effect on the next call without a page reload. #420 item 4: the
+// host→preset mapping is centralised + benchmark-driven in selectVADPreset
+// (see bench/vad/README.md); #437: quiet/whisper mode overrides it to highSensitivity.
 
 // Initialize the appropriate VAD client based on browser support
 function initializeVADClient() {
@@ -336,9 +334,14 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       logger.debug("[AudioInputMachine] Using OnscreenVADClient - skipping extension permission check (host site permissions will be requested during VAD initialization)...");
     }
 
-    // Initialize the VAD client (works for both offscreen and onscreen)
+    // Initialize the VAD client (works for both offscreen and onscreen). Choose the
+    // preset now so a runtime quiet-mode toggle is honoured on the next recording (#437).
     logger.debug("[AudioInputMachine] Initializing VAD client...");
-    const initResult = await vadClient.initialize({ preset: currentVADPreset });
+    const preset: VADPreset = selectVADPreset({
+      isDictation: ChatbotIdentifier.isInDictationMode(),
+      quietMode: UserPreferenceModule.getInstance().getCachedQuietMode(),
+    });
+    const initResult = await vadClient.initialize({ preset });
     
     if (!initResult.success) {
       const errorMsg = initResult.error || "Failed to initialize VAD";

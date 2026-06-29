@@ -17,14 +17,20 @@ const src = readFileSync(
 );
 
 describe("#420 AudioInputMachine selects the VAD preset via selectVADPreset", () => {
-  it("imports and calls selectVADPreset to choose currentVADPreset", () => {
+  it("imports and calls selectVADPreset to choose the preset", () => {
     expect(src).toMatch(/import\s*\{[^}]*\bselectVADPreset\b[^}]*\}\s*from\s*["']\.\.\/vad\/VADConfigs["']/);
-    expect(src).toMatch(/currentVADPreset[^=]*=\s*selectVADPreset\(/);
+    // Selection is computed per-recording (see #437) rather than a module const, but it
+    // must still go through selectVADPreset(...) — not a hardcoded literal.
+    expect(src).toMatch(/=\s*selectVADPreset\(/);
   });
 
   it("no longer hardcodes the trigger-happy highSensitivity preset for dictation pages", () => {
     // The benchmark retired highSensitivity from active selection; it must not reappear
     // as a literal preset choice in this file.
     expect(src).not.toMatch(/["']highSensitivity["']/);
+  });
+
+  it("#437 passes the quiet-mode preference into the preset selection", () => {
+    expect(src).toMatch(/quietMode:\s*UserPreferenceModule\.getInstance\(\)\.getCachedQuietMode\(\)/);
   });
 });

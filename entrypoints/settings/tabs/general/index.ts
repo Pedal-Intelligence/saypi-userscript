@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
+import { sendMessageToActiveTab } from '../../shared/messaging';
 import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
 import { GeneralPanel } from './GeneralPanel';
 import dataSharingPortraitUrl from '../../../../src/popup/data-sharing-portrait.jpg';
@@ -19,6 +20,7 @@ export class GeneralTab implements TabController {
 
     // Initialize components
     await this.setupSoundEffects();
+    await this.setupQuietMode();
     await this.setupAnalytics();
     await this.setupConsent();
     this.setupClearPreferences();
@@ -63,6 +65,30 @@ export class GeneralTab implements TabController {
     });
   }
   
+  /**
+   * Quiet/whisper mode (#437): a more sensitive VAD preset plus quieter TTS
+   * playback, so the user can speak softly (e.g. around others). The content
+   * script reacts live via the broadcast preference message.
+   */
+  private async setupQuietMode(): Promise<void> {
+    const input = this.container.querySelector<HTMLInputElement>('#quiet-mode');
+    if (!input) return;
+
+    const value = await getStoredValue('quietMode', false);
+    input.checked = value;
+    if (value) input.parentElement?.classList.add('checked');
+
+    input.addEventListener('change', async () => {
+      try {
+        await setStoredValue('quietMode', input.checked);
+        input.parentElement?.classList.toggle('checked', input.checked);
+        sendMessageToActiveTab({ quietMode: input.checked });
+      } catch (error) {
+        // Error already logged by setStoredValue; prevent unhandled rejection.
+      }
+    });
+  }
+
   private async setupAnalytics(): Promise<void> {
     const input = this.container.querySelector<HTMLInputElement>('#share-data');
     if (!input) return;

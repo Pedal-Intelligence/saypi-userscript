@@ -76,6 +76,12 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
 export interface VADSelectionContext {
   /** True on generic / universal-dictation pages; false on dedicated chat sites. */
   isDictation: boolean;
+  /**
+   * Quiet/whisper mode (#437): the user is speaking quietly (e.g. around others),
+   * so trade the benchmark-tuned defaults for the most sensitive preset to catch
+   * whispered speech. Off/unset preserves the normal mapping.
+   */
+  quietMode?: boolean;
 }
 
 /**
@@ -90,10 +96,12 @@ export interface VADSelectionContext {
  *  - Dedicated chat sites stay `balanced` — the core product and the quietest context, with
  *    no data-backed reason to make them *more* trigger-happy.
  *
- * `context` is unused today but kept as the seam for a future noise/SNR- or device-adaptive
+ * Quiet/whisper mode (#437) overrides the host mapping with `highSensitivity` so
+ * quietly-spoken/whispered speech still opens the gate. Otherwise the host context
+ * is unused today but kept as the seam for a future noise/SNR- or device-adaptive
  * split (item 4's remaining refinement), which would re-diverge the mapping.
  */
 export function selectVADPreset(context: VADSelectionContext): VADPreset {
-  void context;
+  if (context.quietMode) return "highSensitivity";
   return "balanced";
 }
