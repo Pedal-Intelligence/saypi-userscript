@@ -124,7 +124,7 @@ function registerLifecycleDebug(audio: HTMLAudioElement) {
   });
 }
 
-function loadAudio(url: string, tabId: number, playImmediately: boolean = true) {
+function loadAudio(url: string, tabId: number, playImmediately: boolean = true, volume?: number) {
   if (!audioElement) {
     initializeAudio();
   }
@@ -159,7 +159,12 @@ function loadAudio(url: string, tabId: number, playImmediately: boolean = true) 
     
     // Set the source
     audioElement.src = url;
-    
+
+    // Apply quiet-mode playback volume when provided (#437); default stays full.
+    if (typeof volume === "number" && isFinite(volume)) {
+      audioElement.volume = Math.min(1, Math.max(0, volume));
+    }
+
     if (playImmediately) {
       logger.debug(`[SayPi Audio Handler] Attempting to play audio from: ${url}`);
       audioElement.play()
@@ -388,7 +393,7 @@ if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
     if (message.url) {
       logger.debug(`[SayPi Audio Handler] Processing AUDIO_LOAD_REQUEST with URL: ${message.url}`);
       const autoPlay = message.autoPlay !== false; // Default to true if not specified
-      return loadAudio(message.url, sourceTabId, autoPlay);
+      return loadAudio(message.url, sourceTabId, autoPlay, message.volume);
     } else {
       logger.warn(`[SayPi Audio Handler] Missing URL in AUDIO_LOAD_REQUEST`);
       return { success: false, error: "No URL provided for loading audio" };

@@ -10,6 +10,7 @@ import { isSafari } from "../UserAgentModule.ts";
 // SlowResponseHandler and adapter are imported dynamically for Pi.ai only
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
+import { ttsVolumeForQuietMode } from "../tts/quietVolume.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
@@ -595,8 +596,11 @@ export default class AudioModule {
         return;
       }
       
-      // Fallback to in-page audio
+      // Fallback to in-page audio. Quiet/whisper mode plays the reply softly (#437).
       audioElement.src = url;
+      audioElement.volume = ttsVolumeForQuietMode(
+        UserPreferenceModule.getInstance().getCachedQuietMode()
+      );
       if (play) {
         const playbackController = new AbortController();
         this.pendingPlaybackController = playbackController;

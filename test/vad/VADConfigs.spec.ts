@@ -109,8 +109,20 @@ describe("#420 selectVADPreset (host→preset mapping)", () => {
     expect(selectVADPreset({ isDictation: false })).toBe("balanced");
   });
 
-  it("never selects the trigger-happy highSensitivity preset for any current context", () => {
+  it("never selects the trigger-happy highSensitivity preset for any non-quiet context", () => {
     const chosen: VADPreset[] = [true, false].map((isDictation) => selectVADPreset({ isDictation }));
     expect(chosen).not.toContain("highSensitivity");
+  });
+});
+
+describe("#437 selectVADPreset quiet/whisper mode", () => {
+  it("uses highSensitivity when quiet mode is on (catches whispered speech)", () => {
+    expect(selectVADPreset({ isDictation: false, quietMode: true })).toBe("highSensitivity");
+    expect(selectVADPreset({ isDictation: true, quietMode: true })).toBe("highSensitivity");
+  });
+
+  it("falls back to the normal mapping when quiet mode is off or unset", () => {
+    expect(selectVADPreset({ isDictation: false, quietMode: false })).toBe("balanced");
+    expect(selectVADPreset({ isDictation: true })).toBe("balanced");
   });
 });

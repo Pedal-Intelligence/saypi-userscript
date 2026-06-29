@@ -2,6 +2,8 @@ import { browser } from "wxt/browser";
 import { logger } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isFirefox, isSafari, isMobileChromium, likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule.ts";
+import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
+import { ttsVolumeForQuietMode } from "../tts/quietVolume.ts";
 
 /**
  * Bridge class that connects the content script to the offscreen document for audio playback
@@ -403,7 +405,11 @@ export default class OffscreenAudioBridge {
       return false;
     }
     
-    return await this._sendMessageToOffscreen("AUDIO_LOAD_REQUEST", { url, autoPlay });
+    // Quiet/whisper mode plays the assistant's reply softly (#437).
+    const volume = ttsVolumeForQuietMode(
+      UserPreferenceModule.getInstance().getCachedQuietMode()
+    );
+    return await this._sendMessageToOffscreen("AUDIO_LOAD_REQUEST", { url, autoPlay, volume });
   }
 
   /**

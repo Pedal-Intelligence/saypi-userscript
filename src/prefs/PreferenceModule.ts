@@ -28,7 +28,7 @@ const LOCAL_STORAGE_KEYS = [
   "prefer", "language", "discretionaryMode", "nickname",
   "autoSubmit", "allowInterruptions", "soundEffects", "theme",
   "shareData", "voiceId", VOICE_PREFERENCES_KEY, "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords",
-  "autoReadAloudChatGPT"
+  "autoReadAloudChatGPT", "quietMode"
 ];
 
 // Add a flag to mark that sync-to-local migration has completed
@@ -153,6 +153,10 @@ class UserPreferenceModule {
         voiceId: activeVoiceId ?? null,
         voicePreferences: preferences,
       });
+    }).catch((error) => {
+      // Init side-effects must not surface as unhandled rejections (e.g. if the
+      // chatbot identity isn't resolvable yet); the cache simply stays unprimed.
+      console.debug("[PreferenceModule] Failed to prime voice preferences:", error);
     });
     this.getStoredValue("enableTTS", true, 'local').then((value) => {
       this.cache.setCachedValue("enableTTS", value);
@@ -183,6 +187,12 @@ class UserPreferenceModule {
     this.getStoredValue("removeFillerWords", false, 'local').then((value) => {
       this.cache.setCachedValue("removeFillerWords", value);
       EventBus.emit("userPreferenceChanged", { removeFillerWords: value });
+    });
+
+    // Quiet/whisper mode (default false) — #437
+    this.getStoredValue("quietMode", false, 'local').then((value) => {
+      this.cache.setCachedValue("quietMode", value);
+      EventBus.emit("userPreferenceChanged", { quietMode: value });
     });
 
     // Auto Read Aloud for ChatGPT (default true)
@@ -362,6 +372,12 @@ class UserPreferenceModule {
           EventBus.emit("userPreferenceChanged", { removeFillerWords: request.removeFillerWords });
         }
 
+        if ("quietMode" in request) {
+          this.cache.setCachedValue("quietMode", request.quietMode);
+          actions.push(this.setStoredValue("quietMode", request.quietMode, 'local'));
+          EventBus.emit("userPreferenceChanged", { quietMode: request.quietMode });
+        }
+
         if ("autoReadAloudChatGPT" in request) {
           this.cache.setCachedValue("autoReadAloudChatGPT", request.autoReadAloudChatGPT);
           actions.push(this.setStoredValue("autoReadAloudChatGPT", request.autoReadAloudChatGPT, 'local'));
@@ -447,6 +463,10 @@ class UserPreferenceModule {
                   case "removeFillerWords":
                     this.cache.setCachedValue("removeFillerWords", newValue);
                     eventData = { removeFillerWords: newValue };
+                    break;
+                  case "quietMode":
+                    this.cache.setCachedValue("quietMode", newValue);
+                    eventData = { quietMode: newValue };
                     break;
                   case "autoReadAloudChatGPT":
                     this.cache.setCachedValue("autoReadAloudChatGPT", newValue);
@@ -671,6 +691,27 @@ class UserPreferenceModule {
     this.cache.setCachedValue("removeFillerWords", enabled);
     EventBus.emit("userPreferenceChanged", { removeFillerWords: enabled });
     return this.setStoredValue("removeFillerWords", enabled, 'local');
+  }
+
+  // Quiet/whisper mode (LOCAL) — #437: more sensitive VAD + quieter TTS playback
+  public async getQuietMode(): Promise<boolean> {
+    const cached = this.cache.getCachedValue("quietMode", null);
+    if (cached !== null) {
+      return Promise.resolve(cached as boolean);
+    }
+    const stored = await this.getStoredValue("quietMode", false, 'local') as boolean;
+    this.cache.setCachedValue("quietMode", stored);
+    return stored;
+  }
+
+  public getCachedQuietMode(): boolean {
+    return this.cache.getCachedValue("quietMode", false) as boolean;
+  }
+
+  public setQuietMode(enabled: boolean): Promise<void> {
+    this.cache.setCachedValue("quietMode", enabled);
+    EventBus.emit("userPreferenceChanged", { quietMode: enabled });
+    return this.setStoredValue("quietMode", enabled, 'local');
   }
 
   // keepSegments removed (dev-only via env)

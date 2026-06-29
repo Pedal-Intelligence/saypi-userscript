@@ -37,6 +37,25 @@ export function GeneralPanel() {
 
       <div
         class="user-preference-item w-full max-w-lg"
+        id="quiet-mode-preference"
+      >
+        <label
+          class="wraper"
+          for="quiet-mode"
+          data-i18n-attr="title:quietModeTooltip"
+        >
+          <span class="label-text" data-i18n="quietModeLabel">
+            Quiet mode
+          </span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="quiet-mode" name="quietMode" />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
+
+      <div
+        class="user-preference-item w-full max-w-lg"
         id="analytics-consent-preference-item"
       >
         <label class="wraper" for="share-data">

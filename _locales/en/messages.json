@@ -121,6 +121,14 @@
     "message": "Sound effects",
     "description": "Label for the checkbox to enable/disable sound effects."
   },
+  "quietModeLabel": {
+    "message": "Quiet mode",
+    "description": "Label for the toggle that enables quiet/whisper mode."
+  },
+  "quietModeTooltip": {
+    "message": "Speak softly — picks up quieter speech and lowers the assistant's reply volume, so you can use voice around others.",
+    "description": "Tooltip explaining what quiet/whisper mode does."
+  },
   "preferedLanguage": {
     "message": "Language",
     "description": "Label for a control to select the prefered transcription language."
