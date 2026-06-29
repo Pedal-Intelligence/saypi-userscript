@@ -4,6 +4,7 @@ import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRe
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
 import { registerDevReloadHandler, DEV_FEED_SPEECH_MESSAGE } from "../dev/devReload";
 import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
+import { maybeOpenFirstRunTab } from "../onboarding/firstRun";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -414,8 +415,8 @@ function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
   } catch {}
 }
 
-// Context menu setup for dictation
-browser.runtime.onInstalled.addListener(() => {
+// Context menu setup for dictation + first-run onboarding tab
+browser.runtime.onInstalled.addListener((details) => {
   try {
     if (!browser.contextMenus || typeof browser.contextMenus.create !== 'function') return;
     const appName = getMessage("appName");
@@ -430,6 +431,18 @@ browser.runtime.onInstalled.addListener(() => {
       ]
     });
   } catch {}
+
+  // On a fresh install, open the onboarding tab once to guide the user to
+  // their first spoken exchange (#437). Never fires on update; never re-nags.
+  void maybeOpenFirstRunTab(details, {
+    openTab: (url: string) => browser.tabs.create({ url, active: true }),
+    getUrl: getExtensionURL,
+    storage: {
+      get: async (key: string) => (await browser.storage.local.get(key))[key],
+      set: async (key: string, value: unknown) =>
+        browser.storage.local.set({ [key]: value }),
+    },
+  });
 });
 
 // Handle context menu clicks

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to Say, Pi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="./index.ts"></script>
+  </head>
+  <body>
+    <main class="card">
+      <h1 id="onboarding-heading">🗣️ Welcome to Say, Pi</h1>
+      <p id="onboarding-intro" class="lead">
+        You're two steps away from your first spoken conversation with an AI. Talking is
+        about 3× faster than typing — let's get you set up.
+      </p>
+
+      <ol class="steps">
+        <li>
+          <h2 id="onboarding-step1-title">Pin Say, Pi to your toolbar</h2>
+          <p id="onboarding-step1-body">
+            Click the puzzle-piece <span aria-hidden="true">🧩</span> icon at the top-right
+            of your browser, then the pin <span aria-hidden="true">📌</span> next to
+            Say, Pi. That keeps the call button one click away.
+          </p>
+        </li>
+        <li>
+          <h2 id="onboarding-step2-title">Open an AI chat and start talking</h2>
+          <p id="onboarding-step2-body">
+            Head to one of the supported assistants below, then tap the Say, Pi call
+            button and say hello. We'll ask for microphone access the first time — that's
+            expected, and we only listen while you're actively in a call.
+          </p>
+          <div class="cta-row">
+            <a class="cta" id="onboarding-cta-pi" href="https://pi.ai/talk" target="_blank" rel="noopener noreferrer">Open Pi</a>
+            <a class="cta" id="onboarding-cta-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude</a>
+            <a class="cta" id="onboarding-cta-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT</a>
+          </div>
+        </li>
+      </ol>
+
+      <p class="footer-text" id="onboarding-footer">
+        You can revisit this any time from Say, Pi's settings. Your privacy matters — audio
+        is only captured during an active call.
+      </p>
+    </main>
+  </body>
+</html>

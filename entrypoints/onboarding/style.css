@@ -1,0 +1,112 @@
+:root {
+  --saypi-ink: #2c3e50;
+  --saypi-body: #3a3f47;
+  --saypi-accent: #6c5ce7;
+  --saypi-accent-ink: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--saypi-body);
+  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 20px;
+}
+
+.card {
+  background: #fff;
+  max-width: 560px;
+  width: 100%;
+  padding: 40px 40px 32px;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(44, 62, 80, 0.12);
+}
+
+h1 {
+  color: var(--saypi-ink);
+  margin: 0 0 12px;
+  font-size: 1.8rem;
+}
+
+.lead {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+}
+
+.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 24px 52px;
+}
+
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--saypi-accent);
+  color: var(--saypi-accent-ink);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.steps h2 {
+  font-size: 1.1rem;
+  color: var(--saypi-ink);
+  margin: 4px 0 6px;
+}
+
+.steps p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cta {
+  display: inline-block;
+  background: var(--saypi-accent);
+  color: var(--saypi-accent-ink);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: filter 0.15s ease;
+}
+
+.cta:hover,
+.cta:focus {
+  filter: brightness(1.08);
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: #7a7f87;
+  margin: 16px 0 0;
+  line-height: 1.5;
+}

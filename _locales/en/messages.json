@@ -1158,6 +1158,46 @@
     "message": "Releasing VAD resources...",
     "description": "VAD detail when releasing VAD resources."
   },
+  "onboarding_heading": {
+    "message": "🗣️ Welcome to Say, Pi",
+    "description": "Main heading on the first-run onboarding page."
+  },
+  "onboarding_intro": {
+    "message": "You're two steps away from your first spoken conversation with an AI. Talking is about 3× faster than typing — let's get you set up.",
+    "description": "Intro paragraph on the first-run onboarding page."
+  },
+  "onboarding_step1Title": {
+    "message": "Pin Say, Pi to your toolbar",
+    "description": "Title of the first onboarding step (pin the extension)."
+  },
+  "onboarding_step1Body": {
+    "message": "Click the puzzle-piece 🧩 icon at the top-right of your browser, then the pin 📌 next to Say, Pi. That keeps the call button one click away.",
+    "description": "Body of the first onboarding step explaining how to pin the extension."
+  },
+  "onboarding_step2Title": {
+    "message": "Open an AI chat and start talking",
+    "description": "Title of the second onboarding step (start a conversation)."
+  },
+  "onboarding_step2Body": {
+    "message": "Head to one of the supported assistants below, then tap the Say, Pi call button and say hello. We'll ask for microphone access the first time — that's expected, and we only listen while you're actively in a call.",
+    "description": "Body of the second onboarding step explaining how to start a voice conversation."
+  },
+  "onboarding_ctaPi": {
+    "message": "Open Pi",
+    "description": "Button label that opens Pi.ai."
+  },
+  "onboarding_ctaClaude": {
+    "message": "Open Claude",
+    "description": "Button label that opens Claude.ai."
+  },
+  "onboarding_ctaChatgpt": {
+    "message": "Open ChatGPT",
+    "description": "Button label that opens ChatGPT."
+  },
+  "onboarding_footer": {
+    "message": "You can revisit this any time from Say, Pi's settings. Your privacy matters — audio is only captured during an active call.",
+    "description": "Footer text on the first-run onboarding page."
+  },
   "permissions_promptTitle": {
     "message": "Microphone Permission",
     "description": "Title of the permissions prompt page."
