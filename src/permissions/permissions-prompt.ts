@@ -2,18 +2,28 @@
 import getMessage from '../i18n';
 import { classifyMicError } from './micPermissionRecovery';
 import { renderMicRecovery } from './micRecoveryView';
+import { parsePermissionReason } from './permissionLossDetection';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // When the background flags this as a revoked-access recovery (mic was granted
+  // before, e.g. turned off after an OS/browser update), show tailored copy
+  // instead of the first-run prompt wording (#437).
+  const isRevoked = parsePermissionReason(window.location.search) !== null;
+
   // Localize static HTML content
   document.title = getMessage('permissions_promptTitle');
   const headingElement = document.getElementById('prompt-heading');
   if (headingElement) {
-    headingElement.textContent = getMessage('permissions_promptHeading');
+    headingElement.textContent = getMessage(
+      isRevoked ? 'permissions_revokedHeading' : 'permissions_promptHeading'
+    );
   }
   const infoElement = document.getElementById('prompt-info');
   if (infoElement) {
     // The productName placeholder will be $1, which is "Say, Pi" from the appName key
-    infoElement.innerHTML = getMessage('permissions_promptInfo', getMessage('appName'));
+    infoElement.innerHTML = isRevoked
+      ? getMessage('permissions_revokedInfo', getMessage('appName'))
+      : getMessage('permissions_promptInfo', getMessage('appName'));
   }
   const actionElement = document.getElementById('prompt-action');
   if (actionElement) {

@@ -1282,6 +1282,20 @@
       }
     }
   },
+  "permissions_revokedHeading": {
+    "message": "🎙️ Let's reconnect your microphone",
+    "description": "Heading shown when microphone access was previously granted but has since been revoked."
+  },
+  "permissions_revokedInfo": {
+    "message": "Your microphone access was turned off — this often happens after a browser or system update. Re-allow it below and $productName$ will be back to listening when you're in a call.",
+    "description": "Informational text shown when microphone access was revoked after being granted.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
   "permissions_promptAction": {
     "message": "You'll see a browser prompt at the top of this window. Just hit <strong>\"Allow while visiting the site\"</strong> so we can start talking.",
     "description": "Instructional text on what action the user should take in the browser prompt."
