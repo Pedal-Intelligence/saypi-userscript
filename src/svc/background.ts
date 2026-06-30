@@ -5,6 +5,7 @@ import { authenticate, isPKCESupported } from "../auth/OAuthService";
 import { registerDevReloadHandler, DEV_FEED_SPEECH_MESSAGE } from "../dev/devReload";
 import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
 import { maybeOpenFirstRunTab } from "../onboarding/firstRun";
+import { detectPermissionLoss, buildPermissionsUrl, MIC_GRANTED_FLAG } from "../permissions/permissionLossDetection";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -736,6 +737,9 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
     logger.debug(`[Background] Microphone permission state for extension origin: ${permissionStatus.state}`);
 
     if (permissionStatus.state === 'granted') {
+      // Remember the mic was granted, so a later revocation (e.g. after an OS
+      // update) can be recognised as a loss rather than a first-time prompt (#437).
+      try { await browser.storage.local.set({ [MIC_GRANTED_FLAG]: true }); } catch { /* non-fatal */ }
       replyToRequester(originalSender, {
         type: 'MICROPHONE_PERMISSION_RESPONSE',
         requestId: originalRequestId,
@@ -744,8 +748,15 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
       return;
     }
 
-    // If 'denied' or 'prompt', proceed to open the permissions tab.
-    const permissionsPageUrl = getExtensionURL(PERMISSIONS_PROMPT_PATH_HTML);
+    // If 'denied' or 'prompt', proceed to open the permissions tab. If the mic
+    // was previously granted, this is a revocation — flag the page so it shows
+    // tailored "your access was turned off" recovery copy (#437).
+    let micPreviouslyGranted = false;
+    try {
+      micPreviouslyGranted = !!(await browser.storage.local.get(MIC_GRANTED_FLAG))[MIC_GRANTED_FLAG];
+    } catch { /* default false */ }
+    const isPermissionLoss = detectPermissionLoss(micPreviouslyGranted, permissionStatus.state);
+    const permissionsPageUrl = buildPermissionsUrl(getExtensionURL(PERMISSIONS_PROMPT_PATH_HTML), isPermissionLoss);
     let newTabId: number | undefined;
     let handlingPrompt = true; // Flag to manage listeners correctly
 
@@ -765,13 +776,17 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
         return;
       }
       logger.debug(`[Background] Sending final MICROPHONE_PERMISSION_RESPONSE for ${originalRequestId}: granted=${granted}, error=${error}`);
+      // Record a (re)grant so a future revocation is detected as a loss (#437).
+      if (granted) {
+        browser.storage.local.set({ [MIC_GRANTED_FLAG]: true }).catch(() => undefined);
+      }
       replyToRequester(originalSender, {
         type: 'MICROPHONE_PERMISSION_RESPONSE',
         requestId: originalRequestId,
         granted: granted,
         error: error
       });
-      cleanupPromptListeners(); 
+      cleanupPromptListeners();
     };
 
     const messageListenerFromPromptTab = (msg: any, senderFromPrompt: any) => {
