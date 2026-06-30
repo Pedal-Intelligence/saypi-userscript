@@ -137,6 +137,50 @@ h1 {
   color: var(--saypi-ink);
 }
 
+.env-question {
+  margin: 28px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid #ece9fb;
+}
+
+.env-question h2 {
+  font-size: 1.1rem;
+  color: var(--saypi-ink);
+  margin: 0 0 12px;
+}
+
+.env-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.env-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1.5px solid #ddd6fe;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.env-option:hover {
+  border-color: var(--saypi-accent);
+}
+
+.env-option input {
+  accent-color: var(--saypi-accent);
+}
+
+.env-status {
+  margin: 12px 0 0;
+  min-height: 1.2em;
+  font-size: 0.95rem;
+  color: var(--saypi-accent);
+}
+
 .footer-text {
   font-size: 0.9rem;
   color: #7a7f87;

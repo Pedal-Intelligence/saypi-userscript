@@ -1240,6 +1240,30 @@
     "message": "Nice — your microphone works! 🎉",
     "description": "Status shown after the onboarding mic test completes successfully."
   },
+  "onboarding_envTitle": {
+    "message": "Where will you usually talk?",
+    "description": "Heading for the onboarding question about the user's environment."
+  },
+  "onboarding_envPrivate": {
+    "message": "Somewhere private",
+    "description": "Environment option: a private space."
+  },
+  "onboarding_envMixed": {
+    "message": "A mix of places",
+    "description": "Environment option: a mix of private and shared spaces."
+  },
+  "onboarding_envAroundOthers": {
+    "message": "Around other people",
+    "description": "Environment option: around other people."
+  },
+  "onboarding_envQuietOn": {
+    "message": "Quiet mode on — we'll pick up softer speech and reply quietly, so you can talk discreetly.",
+    "description": "Confirmation shown when the environment answer enables quiet mode."
+  },
+  "onboarding_envQuietOff": {
+    "message": "Got it — we'll keep the standard listening and playback settings.",
+    "description": "Confirmation shown when the environment answer leaves quiet mode off."
+  },
   "permissions_promptTitle": {
     "message": "Microphone Permission",
     "description": "Title of the permissions prompt page."

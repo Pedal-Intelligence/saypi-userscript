@@ -5,8 +5,10 @@
  * other locales by id. The mapping + apply step are extracted as a pure
  * function so they can be unit-tested in JSDOM without the extension runtime.
  */
+import { browser } from "wxt/browser";
 import getMessage from "../i18n";
 import { wireMicTest } from "./micTestWiring";
+import { wireEnvironmentQuestion } from "./environmentQuestion";
 
 /** Maps element ids in onboarding/index.html to their i18n message keys. */
 export const ONBOARDING_I18N_KEYS: Record<string, string> = {
@@ -20,6 +22,10 @@ export const ONBOARDING_I18N_KEYS: Record<string, string> = {
   "onboarding-cta-claude": "onboarding_ctaClaude",
   "onboarding-cta-chatgpt": "onboarding_ctaChatgpt",
   "onboarding-mic-test-btn": "onboarding_micTestButton",
+  "onboarding-env-title": "onboarding_envTitle",
+  "onboarding-env-private-label": "onboarding_envPrivate",
+  "onboarding-env-mixed-label": "onboarding_envMixed",
+  "onboarding-env-around-label": "onboarding_envAroundOthers",
   "onboarding-footer": "onboarding_footer",
 };
 
@@ -58,9 +64,19 @@ export function setupMicTest(root: ParentNode): void {
   );
 }
 
+/** Wires the "where will you usually talk?" question if present (#437). */
+export function setupEnvironmentQuestion(root: ParentNode): void {
+  if (!root.querySelector('input[name="voice-environment"]')) return;
+  wireEnvironmentQuestion(root, {
+    translate: (key) => getMessage(key),
+    setQuietMode: (on) => browser.storage.local.set({ quietMode: on }),
+  });
+}
+
 function init(): void {
   applyOnboardingI18n(document, (key) => getMessage(key));
   setupMicTest(document);
+  setupEnvironmentQuestion(document);
 }
 
 if (typeof document !== "undefined") {
