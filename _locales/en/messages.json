@@ -724,6 +724,24 @@
       }
     }
   },
+  "surveyQuestion": {
+    "message": "How's voice working out for you so far?",
+    "description": "The single question of the one-time post-win micro-survey."
+  },
+  "surveyRatingLabel": {
+    "message": "Rate $rating$ out of 5",
+    "description": "Accessible label for a survey rating button.",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "message": "Thanks — that helps us make Say, Pi better. 🙏",
+    "description": "Acknowledgement shown after the user answers the post-win survey."
+  },
   "nicknameLabel": {
     "message": "Assistant nickname",
     "description": "Label for the input field to set a custom nickname for the AI assistant."
