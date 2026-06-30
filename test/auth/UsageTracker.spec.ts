@@ -28,6 +28,8 @@ describe("UsageTracker logic", () => {
         lastPromptShown: 0,
         promptsDismissed: 0,
         lastPromptLevel: undefined,
+        sttSeconds: 0, // #437
+        postWinShown: false, // #437
       };
 
       expect(defaultStats).toHaveProperty("interactionCount");
@@ -35,6 +37,36 @@ describe("UsageTracker logic", () => {
       expect(defaultStats).toHaveProperty("firstUseDate");
       expect(defaultStats).toHaveProperty("lastPromptShown");
       expect(defaultStats).toHaveProperty("promptsDismissed");
+      expect(defaultStats).toHaveProperty("sttSeconds");
+      expect(defaultStats).toHaveProperty("postWinShown");
+    });
+  });
+
+  describe("sttSeconds accumulation (#437)", () => {
+    // Same guard logic as UsageTracker.handleTranscribing — only positive,
+    // finite seconds are summed, so a malformed event can't corrupt the total.
+    const accumulate = (total: number, seconds: unknown): number => {
+      if (typeof seconds !== "number" || !isFinite(seconds) || seconds <= 0) {
+        return total;
+      }
+      return total + seconds;
+    };
+
+    it("sums positive segment durations", () => {
+      let total = 0;
+      total = accumulate(total, 2.5);
+      total = accumulate(total, 4.0);
+      expect(total).toBeCloseTo(6.5, 6);
+    });
+
+    it("ignores missing / non-positive / non-finite durations", () => {
+      let total = 10;
+      total = accumulate(total, undefined);
+      total = accumulate(total, 0);
+      total = accumulate(total, -3);
+      total = accumulate(total, NaN);
+      total = accumulate(total, Infinity);
+      expect(total).toBe(10);
     });
   });
 

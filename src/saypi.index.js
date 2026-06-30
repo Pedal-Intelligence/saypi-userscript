@@ -16,6 +16,7 @@ import "./styles/rectangles.css";
 import "./styles/agent-notice.scss";
 import "./styles/compat-notice.scss";
 import "./styles/auth-prompt.scss";
+import "./styles/speed-notice.scss";
 
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
@@ -88,6 +89,14 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
     };
   } catch (error) {
     logger.error("Auth prompt system failed to initialize (non-fatal):", error);
+  }
+
+  // Initialize the one-time post-win speed-payoff notice (#437)
+  try {
+    const { getSpeedPayoffNoticeModule } = await import(/* webpackMode: "eager" */ "./onboarding/SpeedPayoffNoticeModule.ts");
+    getSpeedPayoffNoticeModule().initialize();
+  } catch (error) {
+    logger.error("Speed-payoff notice failed to initialize (non-fatal):", error);
   }
 
   // Initialize telemetry module

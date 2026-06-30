@@ -38,6 +38,10 @@ export interface UsageStats {
   promptsDismissed: number;
   /** Prompt level that was last shown (e.g., 'toast', 'soft-modal', 'modal') */
   lastPromptLevel?: string;
+  /** Cumulative seconds of speech transcribed (drives the speed-payoff value-mirror) — #437 */
+  sttSeconds: number;
+  /** Whether the one-time post-win speed-payoff notice has been shown — #437 */
+  postWinShown: boolean;
 }
 
 /**
@@ -50,6 +54,8 @@ const DEFAULT_STATS: UsageStats = {
   lastPromptShown: 0,
   promptsDismissed: 0,
   lastPromptLevel: undefined,
+  sttSeconds: 0,
+  postWinShown: false,
 };
 
 const STORAGE_KEY = "saypi-usage-stats";
@@ -147,6 +153,9 @@ export class UsageTracker {
     // Listen for dictation completions (user finished dictating to a field)
     EventBus.on("dictation:complete", this.handleInteractionCompleted);
 
+    // Accumulate transcribed speech seconds for the speed-payoff value-mirror (#437)
+    EventBus.on("session:transcribing", this.handleTranscribing);
+
     this.isListening = true;
 
     logger.debug("[UsageTracker] Event listeners set up for voice interactions");
@@ -176,6 +185,20 @@ export class UsageTracker {
       transcriptionCount: this.stats.interactionCount, // Use interactionCount for compatibility
       firstUseDate: this.stats.firstUseDate,
     });
+  };
+
+  /**
+   * Accumulate transcribed-speech seconds (#437). Fires per speech segment via
+   * `session:transcribing`, before the turn is submitted, so by the time the
+   * post-win notice is gated the seconds already include the first exchange.
+   */
+  private handleTranscribing = async (detail?: { audio_duration_seconds?: number }): Promise<void> => {
+    const seconds = detail?.audio_duration_seconds;
+    if (typeof seconds !== "number" || !isFinite(seconds) || seconds <= 0) {
+      return;
+    }
+    this.stats.sttSeconds += seconds;
+    await this.saveStats();
   };
 
   /**
@@ -209,6 +232,17 @@ export class UsageTracker {
     await this.saveStats();
 
     logger.debug(`[UsageTracker] Recorded prompt shown: ${level}`);
+  }
+
+  /**
+   * Record that the one-time post-win speed-payoff notice has been shown (#437),
+   * so it never appears again.
+   */
+  public async markPostWinShown(): Promise<void> {
+    if (this.stats.postWinShown) return;
+    this.stats.postWinShown = true;
+    await this.saveStats();
+    logger.debug("[UsageTracker] Recorded post-win notice shown");
   }
 
   /**
@@ -261,6 +295,7 @@ export class UsageTracker {
     if (this.isListening) {
       EventBus.off("session:message-sent", this.handleInteractionCompleted);
       EventBus.off("dictation:complete", this.handleInteractionCompleted);
+      EventBus.off("session:transcribing", this.handleTranscribing);
       this.isListening = false;
     }
     this.isInitialized = false;
