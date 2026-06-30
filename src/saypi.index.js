@@ -17,6 +17,7 @@ import "./styles/agent-notice.scss";
 import "./styles/compat-notice.scss";
 import "./styles/auth-prompt.scss";
 import "./styles/speed-notice.scss";
+import "./styles/survey-notice.scss";
 
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
@@ -97,6 +98,14 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
     getSpeedPayoffNoticeModule().initialize();
   } catch (error) {
     logger.error("Speed-payoff notice failed to initialize (non-fatal):", error);
+  }
+
+  // Initialize the one-time post-win micro-survey (#437)
+  try {
+    const { getSurveyNoticeModule } = await import(/* webpackMode: "eager" */ "./onboarding/SurveyNoticeModule.ts");
+    getSurveyNoticeModule().initialize();
+  } catch (error) {
+    logger.error("Post-win survey failed to initialize (non-fatal):", error);
   }
 
   // Initialize telemetry module

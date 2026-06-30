@@ -1,0 +1,106 @@
+// Post-win micro-survey notice styling (#437).
+.saypi-survey-notice {
+  display: block;
+  margin: 0.75rem 0;
+  padding: 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.07) 0%, rgba(59, 130, 246, 0.07) 100%);
+  border: 1px solid rgba(108, 92, 231, 0.22);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: inherit;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .saypi-survey-notice-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    padding: 0.875rem 1rem;
+    position: relative;
+  }
+
+  .saypi-survey-notice-question {
+    flex: 1 1 auto;
+    margin: 0;
+    color: inherit;
+    font-weight: 500;
+  }
+
+  .saypi-survey-notice-ratings {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .saypi-survey-notice-rating {
+    width: 2rem;
+    height: 2rem;
+    border: 1.5px solid rgba(108, 92, 231, 0.35);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover,
+    &:focus {
+      background: rgba(108, 92, 231, 0.12);
+      border-color: rgba(108, 92, 231, 0.7);
+    }
+  }
+
+  .saypi-survey-notice-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: rgba(107, 114, 128, 0.1);
+    border-radius: 50%;
+    color: rgba(107, 114, 128, 0.6);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(107, 114, 128, 0.2);
+      color: rgba(107, 114, 128, 0.8);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.12) 0%, rgba(59, 130, 246, 0.12) 100%);
+    border-color: rgba(108, 92, 231, 0.32);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  [data-chatbot="claude"] & {
+    margin: 0.75rem auto;
+    max-width: 48rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity 0.2s ease;
+    transform: none;
+
+    &.visible {
+      transform: none;
+    }
+  }
+}

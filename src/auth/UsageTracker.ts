@@ -42,6 +42,8 @@ export interface UsageStats {
   sttSeconds: number;
   /** Whether the one-time post-win speed-payoff notice has been shown — #437 */
   postWinShown: boolean;
+  /** Whether the one-time post-win micro-survey has been shown — #437 */
+  surveyShown: boolean;
 }
 
 /**
@@ -56,6 +58,7 @@ const DEFAULT_STATS: UsageStats = {
   lastPromptLevel: undefined,
   sttSeconds: 0,
   postWinShown: false,
+  surveyShown: false,
 };
 
 const STORAGE_KEY = "saypi-usage-stats";
@@ -243,6 +246,17 @@ export class UsageTracker {
     this.stats.postWinShown = true;
     await this.saveStats();
     logger.debug("[UsageTracker] Recorded post-win notice shown");
+  }
+
+  /**
+   * Record that the one-time post-win micro-survey has been shown (#437), so it
+   * never appears again.
+   */
+  public async markSurveyShown(): Promise<void> {
+    if (this.stats.surveyShown) return;
+    this.stats.surveyShown = true;
+    await this.saveStats();
+    logger.debug("[UsageTracker] Recorded post-win survey shown");
   }
 
   /**
