@@ -51,6 +51,25 @@
         </li>
       </ol>
 
+      <section class="env-question">
+        <h2 id="onboarding-env-title">Where will you usually talk?</h2>
+        <div class="env-options" role="radiogroup" aria-labelledby="onboarding-env-title">
+          <label class="env-option">
+            <input type="radio" name="voice-environment" value="private" />
+            <span id="onboarding-env-private-label">Somewhere private</span>
+          </label>
+          <label class="env-option">
+            <input type="radio" name="voice-environment" value="mixed" />
+            <span id="onboarding-env-mixed-label">A mix of places</span>
+          </label>
+          <label class="env-option">
+            <input type="radio" name="voice-environment" value="around-others" />
+            <span id="onboarding-env-around-label">Around other people</span>
+          </label>
+        </div>
+        <p class="env-status" id="onboarding-env-status" role="status" aria-live="polite"></p>
+      </section>
+
       <p class="footer-text" id="onboarding-footer">
         You can revisit this any time from Say, Pi's settings. Your privacy matters — audio
         is only captured during an active call.
