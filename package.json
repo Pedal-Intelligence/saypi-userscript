@@ -43,6 +43,7 @@
     "layer4cdp:verify": "node scripts/layer4cdp.mjs verify",
     "layer4cdp:self-test": "node scripts/layer4cdp.mjs self-test",
     "e2e-host-sweep": "node scripts/e2e-host-sweep.mjs",
+    "e2e-dictation-sweep": "node scripts/e2e-dictation-sweep.mjs",
     "release:preflight": "node scripts/release.mjs preflight",
     "release:plan": "node scripts/release.mjs plan",
     "release:packet": "node scripts/release.mjs packet",
