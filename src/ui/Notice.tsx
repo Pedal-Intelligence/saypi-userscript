@@ -12,7 +12,7 @@
  */
 export interface NoticeProps {
   /** Drives the class prefix and which stylesheet applies. */
-  variant: "agent" | "compat";
+  variant: "agent" | "compat" | "speed";
   /** Optional root data attribute (e.g. `data-chatbot` / `data-issue-key`). */
   dataAttr?: { name: string; value: string };
   /** Raw SVG markup for the icon (already carrying its class + size), or null. */

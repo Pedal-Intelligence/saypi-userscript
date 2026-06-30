@@ -710,6 +710,20 @@
     "message": "Dismiss",
     "description": "Aria label for the dismiss notice button."
   },
+  "speedPayoffNoticeHeadline": {
+    "message": "Nice — speaking is about 3× faster than typing.",
+    "description": "Headline of the one-time post-win speed-payoff notice shown after the first spoken exchange."
+  },
+  "speedPayoffNoticeMinutes": {
+    "message": "You've already spoken roughly $minutes$ min faster than typing it.",
+    "description": "Optional second line of the speed-payoff notice showing whole minutes saved.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "nicknameLabel": {
     "message": "Assistant nickname",
     "description": "Label for the input field to set a custom nickname for the AI assistant."
