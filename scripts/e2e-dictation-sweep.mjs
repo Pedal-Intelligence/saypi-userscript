@@ -28,7 +28,15 @@ import http from "node:http";
 import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveCdpProfileDir, buildCdpChromeArgs, isCloudflareChallenge } from "./layer4cdp-lib.mjs";
-import { TARGETS, parseSweepArgs, flattenFields, summarizeField, transcriptLanded } from "./e2e-dictation-sweep-lib.mjs";
+import {
+  TARGETS,
+  parseSweepArgs,
+  flattenFields,
+  summarizeField,
+  transcriptLanded,
+  DEFAULT_BUTTON_TIMEOUT_MS,
+  DEFAULT_TRANSCRIPT_TIMEOUT_MS,
+} from "./e2e-dictation-sweep-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const EXT_DIR = join(repoRoot, ".output", "chrome-mv3-dev");
@@ -93,12 +101,17 @@ function startFixtureServer() {
 }
 
 /** Dismiss a one-time site modal (e.g. Mistral's ToS dialog) if present.
- * Best-effort — absence isn't an error, most targets don't have one. */
+ * Best-effort — absence isn't an error, most targets don't have one. Waits for the
+ * button to become visible rather than a one-shot `count()` check: `count()` doesn't
+ * auto-wait, so on a client-rendered SPA a modal that mounts even slightly after
+ * domcontentloaded would be missed and never dismissed (same waiting idiom as
+ * waitForSelector elsewhere in this codebase, e.g. e2e-host-sweep.mjs/layer4cdp.mjs). */
 async function dismissModalIfPresent(page, dismissModal) {
   if (!dismissModal) return false;
   const btn = page.getByRole(dismissModal.role, { name: dismissModal.name });
-  if ((await btn.count().catch(() => 0)) === 0) return false;
-  await btn.click().catch(() => {});
+  const appeared = await btn.first().waitFor({ state: "visible", timeout: 5_000 }).then(() => true).catch(() => false);
+  if (!appeared) return false;
+  await btn.first().click().catch(() => {});
   await page.waitForTimeout(800);
   return true;
 }
@@ -139,7 +152,7 @@ async function sweepField(ctx, item, outDir, index) {
     await page.screenshot({ path: join(dir, "01-focused.png") }).catch(() => {});
 
     ev.buttonAppeared = await page
-      .waitForSelector(".saypi-dictation-button:visible", { timeout: 10_000 })
+      .waitForSelector(".saypi-dictation-button:visible", { timeout: DEFAULT_BUTTON_TIMEOUT_MS })
       .then(() => true)
       .catch(() => false);
 
@@ -158,7 +171,7 @@ async function sweepField(ctx, item, outDir, index) {
         if (!el) return false;
         const v = (el.value ?? el.textContent ?? "").trim();
         return v.length > 0 ? v : false;
-      }, item.fieldSelector, { timeout: 30_000 })
+      }, item.fieldSelector, { timeout: DEFAULT_TRANSCRIPT_TIMEOUT_MS })
       .then((h) => h.jsonValue())
       .catch(() => null);
 
