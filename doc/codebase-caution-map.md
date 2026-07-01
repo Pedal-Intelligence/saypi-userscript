@@ -22,15 +22,15 @@ Both conditions have to hold. Draw the 2×2:
 ```
                     CHEAP to get wrong          EXPENSIVE to get wrong
                  ┌────────────────────────┬────────────────────────────┐
-   LOUD          │  routine                │  the net catches it        │
- (a test / type  │  just do it             │  fix the red thing;        │
-  error / thrown │                         │  normal effort             │
-  error fails)   │                         │                            │
+   LOUD          │  routine               │  the net catches it        │
+ (a test / type  │  just do it            │  fix the red thing;        │
+  error / thrown │                        │  normal effort             │
+  error fails)   │                        │                            │
                  ├────────────────────────┼────────────────────────────┤
-   QUIET         │  low stakes             │  ★ RESERVE ZONE ★          │
- (all green, no  │  don't over-think       │  strong model / high       │
-  signal at all) │                         │  effort / adversarial      │
-                 │                         │  review / real-host verify │
+   QUIET         │  low stakes            │  ★ RESERVE ZONE ★          │
+ (all green, no  │  don't over-think      │  strong model / high       │
+  signal at all) │                        │  effort / adversarial      │
+                 │                        │  review / real-host verify │
                  └────────────────────────┴────────────────────────────┘
 ```
 
@@ -100,7 +100,7 @@ The trap is spending the budget on the typing and skimping on the diagnosis and 
 
 These are real, harvested from this repo's own ⚠️ markers, deep-dive docs, operating memory, and resolved-ticket history, then verified against current `main`. Each is an edit an agent would reasonably treat as trivial, where a subtly-wrong version is quiet-and-costly. A fixed bug listed here means **the guard that fixes it still lives on `main` and is easy to naively remove** — the caution is "don't regress this."
 
-Distilled from **73 verified findings** (harvested per-subsystem, then each adversarially checked against `main`; entries that a red test or type error would catch — e.g. removing the `#383` sr-only filter, whose regression tests go red — were deliberately **dropped**, because *loud* is not the reserve zone). Grouped by the four fragility lines. Each entry: *what it looks like* → **the trap** → `evidence`.
+Distilled from **73 verified findings** (harvested per-subsystem, then each adversarially checked against `main`; entries that a red test or type error would catch — e.g. removing the `#383` sr-only filter, whose regression tests go red — were deliberately **dropped**, because *loud* is not the reserve zone). Grouped into clusters A–K: the four fragility lines anchor A (host DOM), C–D (cross-context wiring and its browser-forked assets), H (auth), and I (release); the rest (B hashed/billed text, E–F the XState control plane and dictation, G i18n, J SayPi-owned UI, K observability/bootstrap) are cross-cutting quiet-and-costly zones the four lines don't cover. Each entry: *what it looks like* → **the trap** → `evidence`.
 
 ### A. Third-party host DOM — selectors, turn detection, read-aloud gating
 
@@ -129,33 +129,33 @@ The md5 of a message's "readable text" keys both the speech cache *and* the char
 
 ### D. VAD tuning & the WASM/asset invariants
 
-- **Deleting a "redundant" WASM/ONNX variant, or dropping `wasm-unsafe-eval`, to slim the bundle.** All four WASM files are runtime-selected per browser/CPU; removing one (or the CSP directive) breaks VAD init on some path with no local repro. `src/vad/README.md` ("Do not remove any of these"), `WEB_STORE_PERMISSIONS.md`.
+- **Deleting a "redundant" WASM/ONNX variant, or dropping `wasm-unsafe-eval`, to slim the bundle.** All four WASM files are runtime-selected per browser/CPU; removing one (or the CSP directive) breaks VAD init on some path with no local repro. `src/vad/README.md` ("Do not remove any of these"), `doc/WEB_STORE_PERMISSIONS.md`.
 - **Trimming `preSpeechPadFrames`/`redemptionFrames` or nudging `positiveSpeechThreshold` for "snappier" latency.** Re-clips the first/last word (`#260`) or re-admits ASR hallucinations (`#420`); values are locked by `test/vad/VADConfigs.spec.ts` — "just updating the lock test" to make it pass defeats the guard.
 - **Trusting `doc/vad/silero-vad-v5-optimization-guide.md`'s millisecond math.** The doc itself is the trap: its numbers are v4 (frameSamples 1536, ~96ms/frame); the real v5 default is 512 samples = 32ms/frame. `VADConfigs.ts`'s header is the source of truth (§7 flags the doc for correction).
 - **Assuming `startVAD` inherits the selected preset.** Offscreen `initializeVAD` defaults to `'none'`; onscreen defaults to `'balanced'` — the two have already drifted, so behavior differs by browser.
 
 ### E. XState v5 machines (the control plane)
 
-- **Renaming an XState actor event type or reshaping its payload.** `tsc` will *not* catch it: some senders don't import xstate and post a string-keyed object (EventModule.js, TranscriptionModule, UniversalDictationModule:1032-1083) — those calls silently no-op. `state-machines/README.md:84-89`, `memory: xstate-v5-migration`.
+- **Renaming an XState actor event type or reshaping its payload.** `tsc` will *not* catch it: senders post string-keyed objects through untyped seams — modules that don't import xstate at all (EventModule.js, TranscriptionModule.ts) or an `any`-typed actor reference (UniversalDictationModule's `dictationService`, :1032-1083) — so those calls silently no-op. `src/state-machines/README.md:84-89`, `memory: xstate-v5-migration`.
 - **Renaming/"tidying" an i18n key a machine references.** `getMessage("gone")` yields `Error("")` or a blank toast; machines guard with `if (message)`, so it fails *silently to empty*. `#310`/`#318`.
 - **Making `DictationMachine` "comply" with the assign-not-mutate rule, or swapping its `context: () => ({...})` factory to a static object "for consistency."** It mutates context in place by captured reference from Promise callbacks and works *only* because the factory hands each actor a fresh object; a static context makes two dictation sessions share state and lose refined text. It's the one load-bearing machine the v5 migration deliberately left unconverted. `xstate-v5-migration design:137-145`, README rule #1.
-- **Tuning the auto-submit timing / submission guard in ConversationMachine** (`submissionConditionsMet`, `submissionDelay`, the `after` transitions). This is the patient-listening endpointing gate; dropping `userHasStoppedSpeaking` or lowering `maxDelay` submits mid-sentence for real users — reproduces only with real speech cadence. `voice-endpointing.md` ("Submission Gate (crucial)"), `#311`.
+- **Tuning the auto-submit timing / submission guard in ConversationMachine** (`submissionConditionsMet`, `submissionDelay`, the `after` transitions). This is the patient-listening endpointing gate; dropping `userHasStoppedSpeaking` or lowering `maxDelay` submits mid-sentence for real users — reproduces only with real speech cadence. `doc/voice-endpointing.md` ("Submission Gate (crucial)").
 
 ### F. Universal dictation & text insertion
 
 - **Editing the caret-aware full-field rewrite** (`composeFinalTextAtCaret`, DictationMachine:216-244). A slip silently deletes everything after the caret. `#178`.
 - **The `getTargetElementId` fallback (:277-288) and the external-clearing reset heuristic (:1124-1155).** Identical/anonymous fields collide → dictation bleeds across fields; a wrong reset heuristic drops accumulated text. The test fixture and Mistral both use unique ids / a single composer, so the layer-1/4 nets don't see the collision.
-- **Adding/reordering contenteditable strategies** (`TextInsertionManager` first-match). Mis-routes ProseMirror/Lexical to the generic `innerHTML` fallback; and the plain-input strategy assigns `.value` + a bare `Event('input')`, which **React/Vue ignore** — dictation no-ops on framework-controlled inputs (use the native value-setter). `UNIVERSAL_DICTATION_SUMMARY.md` "Framework Support".
+- **Adding/reordering contenteditable strategies** (`TextInsertionManager` first-match). Mis-routes ProseMirror/Lexical to the generic `innerHTML` fallback; and the plain-input strategy assigns `.value` + a bare `Event('input')`, which **React/Vue ignore** — dictation no-ops on framework-controlled inputs (use the native value-setter). `doc/UNIVERSAL_DICTATION_SUMMARY.md` "Framework Support".
 - **Swapping the deprecated `unload` listener to `pagehide`** (`#449`). Not a lint-clean drop-in: `pagehide` also fires on bfcache entry, breaking restore. `memory: e2e-dictation-sweep-built`.
 
 ### G. i18n key drift (silent empty strings across 31 locales)
 
-- **Adding/renaming an i18n key without running `translate`.** 31 locales desync — English fallback at best, an **empty string that breaks TTS** at worst. The prebuild i18n gate checks placeholders/lengths, **not key existence** (63 keys already drift across all locales; a stale `consetPrivacyPolicy` typo lingers). Dynamically-built keys (`${type}Quota*`, `voiceIntroduction_*`) and `data-i18n-attr` (which *blanks* the attribute on miss) resolve to empty with no error. `#318`/`#310`/`#375`.
+- **Adding/renaming an i18n key without running `translate`.** 31 locales desync — English fallback at best, an **empty string that breaks TTS** at worst. The prebuild i18n gate checks placeholders/lengths, **not key existence** (63 keys already drift across all locales; a stale `consetPrivacyPolicy` typo lingers). Dynamically-built keys (`${type}Quota*`, `voiceIntroduction_*`) and `data-i18n-attr` (which *blanks* the attribute on miss) resolve to empty with no error. `#318`/`#310`.
 - **Adding a preference but missing one of its five sites** (`LOCAL_STORAGE_KEYS`, `reloadCache`, the two listeners, the getter). Cross-tab live update silently dies; defaults are duplicated across 3+ sites and can disagree.
 
 ### H. Auth / security / CSP-bypass — HIGH-BLAST-RADIUS (founder sign-off)
 
-- **Loosening the API-proxy host allowlist or adding an `API_REQUEST` path** (background.ts:860 `allowedHosts`, :1435 dispatch). The allowlist is the *only* guard on where the background sends the user's bearer token; widening it — or a CSP-bypass domain allowlist, or embedding a shared secret — leaks the JWT. (The mic-permission path has a `sender.id` guard; the API path does not.) `CSP_BYPASS_IMPLEMENTATION.md` "Security Considerations", AGENTS.md ("never ship a shared secret").
+- **Loosening the API-proxy host allowlist or adding an `API_REQUEST` path** (background.ts:860 `allowedHosts`, :1435 dispatch). The allowlist is the *only* guard on where the background sends the user's bearer token; widening it — or a CSP-bypass domain allowlist, or embedding a shared secret — leaks the JWT. (The mic-permission path has a `sender.id` guard; the API path does not.) `doc/CSP_BYPASS_IMPLEMENTATION.md` "Security Considerations", AGENTS.md ("never ship a shared secret").
 - **Editing the `jwtManager.refresh` monkey-patch** (background.ts:1556). Silently drops the `silent401` arg `JwtManager.refresh` takes, risking a 401-refresh recursion / auth-broadcast storm; and it wraps only the cookie path, so OAuth-token refreshes never broadcast. `setInterval(pollAuthCookie)` is a real fallback on Firefox MV2 but *illusory* on Chrome MV3 (dies on SW recycle — JWT refresh correctly uses `browser.alarms`).
 - **Editing the popup/settings local `signOut()`** (popup/auth.js:32-44). Its hardcoded remove-list omits `oauthRefreshToken`, so `JwtManager.loadFromStorage` re-authenticates on the next SW start — **the user silently signs back in**, and because it mutates storage without touching the in-memory background singleton, content scripts are never told. Chrome/OAuth-only, only after a reload. Route sign-out through `SIGN_OUT` → `JwtManager.clear()` (the single source of truth). *(latent defect — §7.)*
 - **Using `setTimeout` for the token-refresh/retry fallback** (JwtManager.ts:182/534/731). In an MV3 service worker the timer is destroyed on idle eviction, so the refresh *silently never runs* and the token quietly expires; `browser.alarms` survives suspension precisely because timers don't. Chrome-only, only after minutes of idle — invisible to any foreground/fake-timer test. Relatedly, `scheduleRefresh` clamps the alarm to `0.5` min while its own comment (JwtManager.ts:171) says the production floor is 1 min — Chrome clamps it, firing the "refresh 60s before expiry" *after* expiry for short-lived tokens.
@@ -163,7 +163,7 @@ The md5 of a message's "readable text" keys both the speech cache *and* the char
 
 ### I. Manifest / permissions / release — **CRITICAL** (irreversible, all users)
 
-- **Adding a manifest permission.** A new permission **silently auto-disables the live extension for every user** until they re-consent, and the release verify only *warns* on permission drift. `release-lib.mjs:468`, `doc/release/README.md`.
+- **Adding a manifest permission.** A new permission **silently auto-disables the live extension for every user** until they re-consent, and the release verify only *warns* on permission drift. `scripts/release-lib.mjs:468`, `doc/release/README.md`.
 - **`host_permissions` is env-derived at config load and never verified** (wxt.config.ts:333-362); the release check reads only `manifest.permissions`. A dropped/altered host silently breaks all authenticated API calls with nothing failing in verify.
 - **Touching "removable" build config.** `modulePreload:false` (wxt.config.ts:503) keeps window-dependent code out of the SW bundle; CSP `wasm-unsafe-eval` (:458) is what lets local WASM load; underscore-free chunk names (:34-39) exist because Chrome's loader *intermittently* fails on underscores.
 - **`source-code.zip` is `git archive HEAD`** (release.mjs) — its `package.json` version can mismatch the shipped xpi (HEAD vs working tree), causing a late AMO rejection after everything else is green.
@@ -229,7 +229,7 @@ High technical debt is a **caution multiplier until it's paid down**: oversized 
 7. **Convert the critical untyped `.js` to TS** where stakes are highest: `AudioModule.js` (964), `OffscreenAudioBridge.js`, `RequestInterceptor.js`, the popup `.js` cluster (reached via `window.*` globals today); type `Observation.decorations` (`any[]`) and the EventBus listener signatures. Restores the loudest net layer exactly where quiet failures cost the most.
 8. **Table-driven `PreferenceModule` registry** (`{key, default, event}`) generating the five-site boilerplate and de-duplicating the per-pref defaults that can silently disagree.
 9. **Untangle the auth state broadcasters.** Replace the runtime `jwtManager.refresh`/`clear` monkey-patches with a `jwt:auth:changed` event JwtManager emits on any transition (covers both cookie *and* OAuth paths), subscribed once in background; add one `normalizeExpiresIn()`; route all sign-out through `JwtManager.clear()`. Collapses four overlapping, sometimes-disagreeing auth-state mechanisms into one source of truth.
-10. **Delete vestigial / lying code** (it invites reliance on behavior that isn't there): Claude's "self-healing" placeholder observer that's never `.observe()`d; the dormant `custom-model-fetcher.js`; `PreferenceModule`'s ignored `storageType` param (always writes `local`) + the closed-window `migrateStorage`/`MIGRATION_FLAG` scaffolding; `ChatHistoryManager`'s doubled listener push; `SpeechModel`'s misspelled `retreiveProviderByVoice` alias.
+10. **Delete vestigial / lying code** (it invites reliance on behavior that isn't there): Claude's "self-healing" placeholder observer that's never `.observe()`d; the dormant `custom-model-fetcher.js`; `PreferenceModule`'s ignored `storageType` param (always writes `local`) + the closed-window `migrateStorage`/`MIGRATION_FLAG` scaffolding; `ChatHistoryManager`'s doubled listener push; `SpeechModel`'s misspelled `retreiveProviderByVoice` alias; and the v4-numbered millisecond math in `doc/vad/silero-vad-v5-optimization-guide.md` (frameSamples 1536/~96ms — the real v5 default is 512/32ms; correct it to match `VADConfigs.ts`'s header, per §5.D).
 
 ### Latent defects surfaced by the debt sweep — *filed* (per the AGENTS.md Issue Authoring Standard)
 
