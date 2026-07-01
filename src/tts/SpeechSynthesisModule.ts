@@ -462,6 +462,14 @@ class SpeechSynthesisModule {
         this.audioStreamManager.stopKeepAlive(event.utterance.id);
       }
     );
+    // The voice list is auth-dependent (401 → [], plus per-user custom voices),
+    // so invalidate the cache on sign-out / sign-in / account switch. The
+    // VoiceSelector re-renders on this same event and refetches, landing in
+    // the correct state for the new auth state (#456).
+    EventBus.on("saypi:auth:status-changed", () => {
+      this.voicesCache.clear();
+      this.voicesLoading.clear();
+    });
   }
 }
 

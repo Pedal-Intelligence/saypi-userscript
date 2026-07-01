@@ -56,6 +56,10 @@ describe("SpeechSynthesisModule", () => {
   });
 
   afterEach(() => {
+    // Each beforeEach constructs a fresh module that registers listeners on the
+    // shared singleton EventBus; drop the auth listener so stale instances
+    // can't clear caches in unrelated tests.
+    EventBus.removeAllListeners("saypi:auth:status-changed");
     vi.unstubAllEnvs();
     vi.clearAllMocks();
   });
@@ -290,6 +294,42 @@ describe("SpeechSynthesisModule", () => {
     expect(provider).toEqual(
       audioProviders.getDefaultForChatbot("chatgpt")
     );
+  });
+
+  // The voice list is auth-dependent (401 → [], plus per-user custom voices),
+  // so a cached list from the previous session must not survive a sign-out or
+  // account switch. The base VoiceSelector already re-renders on
+  // saypi:auth:status-changed; invalidating here lets that re-render refetch
+  // and land in the correct state instead of re-displaying stale voices (#456).
+  it("invalidates the voice cache on saypi:auth:status-changed so a signed-out refetch returns the 401 shape (#456)", async () => {
+    // Seed the cache as a signed-in session would.
+    speechSynthesisModule._cacheVoices(mockVoices, "claude");
+
+    // Signed-out fetches now come back empty (TextToSpeechService maps 401 → []).
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
+
+    EventBus.emit("saypi:auth:status-changed", false);
+
+    const voices = await speechSynthesisModule.getVoices(undefined, "claude");
+
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalled();
+    expect(voices).toEqual([]);
+  });
+
+  it("refetches fresh voices after a subsequent sign-in (account-switch path) (#456)", async () => {
+    // Prior session's voices are cached...
+    speechSynthesisModule._cacheVoices([mockVoices[0]], "claude");
+
+    // ...then the new session's account has a different voice list.
+    const freshVoices = [{ ...mockVoices[0], id: "fresh-voice", name: "Fresh Voice" }];
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve(freshVoices));
+
+    EventBus.emit("saypi:auth:status-changed", true);
+
+    const voices = await speechSynthesisModule.getVoices(undefined, "claude");
+
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalled();
+    expect(voices).toEqual(freshVoices);
   });
 
   // "" is InputBuffer's end-of-speech sentinel (END_OF_SPEECH_MARKER). ChatGPT's
