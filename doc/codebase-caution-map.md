@@ -231,16 +231,16 @@ High technical debt is a **caution multiplier until it's paid down**: oversized 
 9. **Untangle the auth state broadcasters.** Replace the runtime `jwtManager.refresh`/`clear` monkey-patches with a `jwt:auth:changed` event JwtManager emits on any transition (covers both cookie *and* OAuth paths), subscribed once in background; add one `normalizeExpiresIn()`; route all sign-out through `JwtManager.clear()`. Collapses four overlapping, sometimes-disagreeing auth-state mechanisms into one source of truth.
 10. **Delete vestigial / lying code** (it invites reliance on behavior that isn't there): Claude's "self-healing" placeholder observer that's never `.observe()`d; the dormant `custom-model-fetcher.js`; `PreferenceModule`'s ignored `storageType` param (always writes `local`) + the closed-window `migrateStorage`/`MIGRATION_FLAG` scaffolding; `ChatHistoryManager`'s doubled listener push; `SpeechModel`'s misspelled `retreiveProviderByVoice` alias.
 
-### Latent defects surfaced by the debt sweep — *consider filing* (per the AGENTS.md Issue Authoring Standard)
+### Latent defects surfaced by the debt sweep — *filed* (per the AGENTS.md Issue Authoring Standard)
 
-These are quiet-and-costly *bugs* the map found, not just maintainability. Not auto-filed — each wants a fail-first repro first:
+These are quiet-and-costly *bugs* the map found, not just maintainability. Each is filed with a code-level reproduction; each still wants a fail-first test before its fix (the auth ones are high-blast-radius — founder sign-off):
 
-- **`audio_handler.currentAudioTabId` has no owner/preemption guard** (vad_handler got one for `#320`); a second tab can hijack the first's audio-event stream.
-- **`AbstractChatbots.getAssistantResponse` caches per element ignoring `isStreaming`** (acknowledged TODO), so a turn first materialized non-streaming is cached without the unread flag — the root of the `#408` new-chat read-aloud race the gating snapshot only papers over.
-- **`InputTextareaStrategy` assigns `.value` + a bare `Event('input')`**, which React/Vue ignore — universal dictation silently no-ops on framework-controlled inputs (needs the native prototype value-setter).
-- **Popup local `signOut()` orphans `oauthRefreshToken`** → the user silently signs back in on the next SW start (Chrome/OAuth).
-- **`setTimeout` refresh fallback dies with the MV3 SW**, and the `scheduleRefresh` `0.5`-min alarm clamp contradicts its own 1-min comment — tokens can quietly stop refreshing / refresh after expiry.
-- **`SpeechSynthesisModule.voicesCache` is never invalidated on sign-out** → a signed-out session keeps serving the previous user's cached voices.
+- **`audio_handler.currentAudioTabId` has no owner/preemption guard** (vad_handler got one for `#320`); a second tab can hijack the first's audio-event stream. → **#452**
+- **`AbstractChatbots.getAssistantResponse` caches per element ignoring `isStreaming`** (acknowledged TODO), so a turn first materialized non-streaming is cached without the unread flag — the root of the `#408` new-chat read-aloud race the gating snapshot only papers over. → root-cause analysis on **#408**
+- **`InputTextareaStrategy` assigns `.value` + a bare `Event('input')`**, which React/Vue ignore — universal dictation silently no-ops on framework-controlled inputs (needs the native prototype value-setter). → **#453**
+- **Popup local `signOut()` orphans `oauthRefreshToken`** → the user silently signs back in on the next SW start (Chrome/OAuth). → **#454**
+- **`setTimeout` refresh fallback dies with the MV3 SW**, and the `scheduleRefresh` `0.5`-min alarm clamp contradicts its own 1-min comment — tokens can quietly stop refreshing / refresh after expiry. → **#455**
+- **`SpeechSynthesisModule.voicesCache` is never invalidated on sign-out** → a signed-out session keeps serving the previous user's cached voices. → **#456**
 
 ---
 
