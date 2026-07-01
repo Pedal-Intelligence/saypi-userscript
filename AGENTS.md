@@ -21,6 +21,8 @@ Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered
 - Request-contract changes with saypi-api that *require the server (saypi-api/saypi-saas) to also change* (new/changed fields/headers the server must parse, origin/CORS, auth). Backward-compatible *adoption* of a contract the server already supports is normal-gate.
 - MV2/MV3 manifest, permissions, or content-script injection scope (`wxt.config.ts`).
 
+Beyond this founder-gated set, **`doc/codebase-caution-map.md`** maps the wider *quiet-and-costly* zone — changes that pass CI but break a real host, one browser, billing/speech-cache hashing, or an i18n key across 31 locales — with a verified "looks-mechanical-is-a-trap" catalog and a re-derivation rubric. Consult it (and give those diffs a second adversarial lens) when a change lands in that zone.
+
 **Hard guardrails (defense-in-depth):**
 - All changes via PR. Never push to `main`, force-push shared branches, or touch branches/issues/PRs that aren't yours.
 - **Concurrent agents — isolate in `.worktrees/`.** Sibling Claude sessions work this repo at the same time (you may see live peers as sibling directories under the gitignored `.worktrees/`). Run every fix in its **own per-task git worktree under `.worktrees/`** — e.g. `git worktree add .worktrees/<task> -b <branch>` — never the shared `main` checkout and never an out-of-repo location (it must stay gitignored and discoverable to peers). Treat another agent's worktree, branch, and uncommitted files as off-limits: never edit, commit to, rebase, or `git worktree remove` them.
