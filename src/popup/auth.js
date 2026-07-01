@@ -28,23 +28,14 @@ function parseJwt(token) {
 // Event handlers
 // The updateAuthUI function is now in auth-shared.js
 
-// Sign out functionality - used by the shared handleSignOut function
-async function signOut() {
-  // Clear stored token
-  await browserAPI.storage.local.remove([
-    'token',
-    'jwtToken',
-    'tokenExpiresAt',
-    'authCookieValue',
-    'authReturnUrl',
-  ]);
-  
-  // Update UI using the shared function
-  updateAuthUI(false);
-}
-
-// Make signOut available to the shared module
-window.signOut = signOut;
+// Sign-out is handled by auth-shared.js's performLocalSignOut(), which sends
+// SIGN_OUT to the background script — the single source of truth for the
+// credential wipe (jwtManager.clear(): in-memory state, refresh alarm, and
+// ALL storage keys incl. oauthRefreshToken) plus auth-cookie removal and
+// auth-status broadcast to content scripts. Do not reintroduce a local
+// window.signOut here: a popup-side storage wipe leaves the background's
+// in-memory session (and its refresh alarm) alive, silently re-signing the
+// user in — see issue #454.
 
 const initializeAuth = async () => {
   // Check current auth state
