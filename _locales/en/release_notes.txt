@@ -1,7 +1,9 @@
-This release makes your voice turns faster and your transcripts cleaner.
+This release is all about your first minutes with Say, Pi.
 
-✨ Highlights
-• Quicker transcription — your speech now uploads in a lighter, compressed format, so your words come back faster with less data sent.
-• Fewer phantom words — Say, Pi is better at telling real speech from silence and background noise, so quiet pauses and stray sounds are far less likely to turn into text you didn't say.
+✨ New
+• A proper welcome for new installs — a first-run tab that gets you set up, with a live "try it yourself" mic-test meter so you can see your voice working before your first real conversation.
+• Quiet mode, suggested automatically when you tell us you're somewhere a hands-free voice doesn't quite fit.
+• Clearer recovery when your microphone access is denied or gets lost after a browser update, so you're never left wondering why voice stopped working.
+• A quick nod after your first successful voice turn, showing how much time you just saved.
 
 Plus the usual under-the-hood work to keep Say, Pi fast and dependable.
