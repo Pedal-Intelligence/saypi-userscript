@@ -35,9 +35,9 @@ test("offscreen auto-shutdown closes the document but keeps the live content-scr
   const page = await openDecoratedPiPage(context);
 
   // Baseline: an active call registers a real CS<->SW port and creates the offscreen
-  // doc. Wait for a real transcribe hit so the call is genuinely live. The mock's hit
-  // counter is a shared, never-reset global, so assert a NEW hit (delta) rather than
-  // hits > 0, which earlier specs already satisfy in a full-suite run.
+  // doc. Wait for a real transcribe hit so the call is genuinely live. Cross-test
+  // isolation is by construction (per-test mock reset in the context fixture — #462);
+  // the delta form is within-test hygiene: only a hit AFTER the click counts.
   const hitsBefore = await getTranscribeHits(serviceWorker);
   await page.click("#saypi-callButton");
   await expect

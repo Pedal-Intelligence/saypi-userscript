@@ -46,6 +46,23 @@ try {
   assert(typeof json.sequenceNumber === "number", "/transcribe response missing numeric 'sequenceNumber'");
   assert(json.sequenceNumber === 7, `/transcribe should echo sequenceNumber 7, got ${json.sequenceNumber}`);
   assert(servers.transcribeHits() === 1, `expected 1 transcribe hit, got ${servers.transcribeHits()}`);
+  assert(
+    servers.lastAudioContentType() === "audio/wav",
+    `expected audio/wav content-type, got ${servers.lastAudioContentType()}`,
+  );
+
+  // 3) The reset route zeroes the transcribe diagnostics (per-test isolation, #462).
+  const resetRes = await fetch(`https://127.0.0.1:${servers.apiPort}/__transcribe-hits/reset`, {
+    method: "POST",
+  });
+  assert(resetRes.status === 200, `reset status was ${resetRes.status}`);
+  const afterReset = await (await fetch(`https://127.0.0.1:${servers.apiPort}/__transcribe-hits`)).json();
+  assert(afterReset.hits === 0, `expected 0 hits after reset, got ${afterReset.hits}`);
+  assert(
+    afterReset.lastAudioContentType === null,
+    `expected null content-type after reset, got ${afterReset.lastAudioContentType}`,
+  );
+  assert(servers.transcribeHits() === 0, `expected in-process hit counter 0 after reset, got ${servers.transcribeHits()}`);
 
   console.log("servers OK");
 } finally {

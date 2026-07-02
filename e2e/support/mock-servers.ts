@@ -60,6 +60,20 @@ export async function startMockServers(): Promise<MockServers> {
       res.end(JSON.stringify({ hits, lastAudioContentType }));
       return;
     }
+    // Reset route: zero the transcribe diagnostics. The Playwright context
+    // fixture POSTs here BEFORE launching each test's browser, so no spec's
+    // hits/content-type assertion can be satisfied by another test's (or an
+    // earlier CI retry's) traffic — isolation by construction (#462).
+    if (req.method === "POST" && req.url && req.url.startsWith("/__transcribe-hits/reset")) {
+      hits = 0;
+      lastAudioContentType = null;
+      res.writeHead(200, {
+        "content-type": "application/json",
+        "access-control-allow-origin": "*",
+      });
+      res.end(JSON.stringify({ hits, lastAudioContentType }));
+      return;
+    }
     if (req.method === "POST" && req.url && req.url.startsWith("/transcribe")) {
       const chunks: Buffer[] = [];
       req.on("data", (c) => chunks.push(c));

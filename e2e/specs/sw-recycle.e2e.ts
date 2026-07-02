@@ -41,11 +41,11 @@ test("idle SW recycle is quiet and self-heals on next use", async ({ context, se
     if (/OffscreenVADClient].*[Pp]ort disconnected/.test(m.text())) disconnectLogs.push(m.text());
   });
 
-  // Snapshot the mock's transcribe-hit counter while the SW is still alive. It is a
-  // shared, never-reset global in the mock server (one instance across the whole
-  // suite), so the self-heal assertion below checks a NEW transcribe occurs (delta):
-  // a bare hits > 0 is already satisfied by earlier specs in a full-suite run, which
-  // would make the positive control vacuous.
+  // Snapshot the mock's transcribe-hit counter while the SW is still alive. Cross-
+  // test isolation is now by construction (the context fixture resets the mock's
+  // transcribe state before every test — #462), so this baseline is 0 in practice;
+  // the delta form is kept as within-test hygiene so the self-heal assertion below
+  // can only be satisfied by a transcribe that happens AFTER the recycle.
   const hitsBeforeRecycle = await getTranscribeHits(serviceWorker);
 
   // Force the idle recycle. Returns the closed targetId, proving an SW existed.
