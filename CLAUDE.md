@@ -145,6 +145,8 @@ The testability net has four layers — reach for the cheapest one that can actu
 
 Rule of thumb: if a controlled DOM can reproduce it, it belongs in Layer 3 (repeatable, in CI); reserve the real-host loops for what only the real host can show.
 
+**How much care does the change deserve?** The test layer tells you *how to prove* a change; **[doc/codebase-caution-map.md](doc/codebase-caution-map.md)** tells you *how much reasoning effort, review depth, and real-host verification to spend* on it. It maps where a subtly-wrong edit is **quiet-and-costly** — passes `tsc` and the tests but breaks a real host, one browser, auth, billing/speech-cache hashing, i18n keys, or a shipped release — and carries a "looks-mechanical-is-a-trap" catalog plus the highest-leverage refactor candidates. Read it before a change in the reserve zone (host-DOM, cross-context, auth, manifest/release, i18n-key, hashed/billed text).
+
 #### Driving a synthetic voice turn (no mic, any host) — START HERE for voice work
 
 To exercise the voice path (VAD → STT → transcript) **without a microphone**, DEV

@@ -19,8 +19,8 @@ must itself pass store review.
    Don't start a patch until the defect fits in one sentence.
 2. **Server-side mitigation beats store review — check it first.** The extension
    talks to saypi-api/saypi-saas on every voice turn, so a server-side
-   kill-switch, feature flag, or config change (e.g. the voice-rollout
-   kill-switch pattern in `doc/plans/2026-06-21-openai-voices-rollout.md`) can
+   kill-switch, feature flag, or config change (the pattern used to gate the
+   OpenAI-voices rollout on the API side) can
    often disable a broken path in minutes instead of store-review days. File or
    urgently update a cross-repo issue on saypi-api and coordinate with its
    autonomous session.
