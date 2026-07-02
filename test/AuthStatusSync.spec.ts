@@ -196,4 +196,72 @@ describe("handleAuthStatusUpdate (content-script AUTH_STATUS_CHANGED handler, #4
 
     expect(storageState().authCookieValue).toBe("cookie-123");
   });
+
+  it("preserves recovery credentials when a transient-401 broadcast arrives while the in-memory token is still live (#456 / PR #457 round 3)", async () => {
+    // pollAuthCookie force-refreshes on every service-worker wake whenever an
+    // auth_session cookie exists — at an arbitrary point in the token's ~15m
+    // life. If the website cookie has died, refresh()'s silent-401 branch
+    // nulls jwtToken in storage WITHOUT clear(), deliberately preserving
+    // authCookieValue/oauthRefreshToken as recovery credentials, and the
+    // background broadcasts isAuthenticated:false off that storage write. A
+    // tab whose in-memory token is still LIVE then takes the clear() guard —
+    // which must not destroy the preserved credentials: for PKCE users the
+    // oauthRefreshToken is still valid, and after MV3 SW eviction the fresh
+    // service worker recovers the session from it (loadFromStorage →
+    // refreshWithOAuth). Wiping it turns a transient 401 into a silent
+    // permanent sign-out.
+
+    // Signed-in session with both recovery credentials alongside the token.
+    seedStorage({
+      jwtToken: makeJwt({ userId: "user-a" }),
+      tokenExpiresAt: Date.now() + 15 * 60_000,
+      authCookieValue: "cookie-123",
+      oauthRefreshToken: "refresh-456",
+    });
+    await handleAuthStatusUpdate(true);
+    expect(getJwtManagerSync().isAuthenticated()).toBe(true); // sanity
+
+    // The background's silent-401 storage write (JwtManager.refresh):
+    // jwtToken nulled, recovery credentials deliberately kept.
+    await browser.storage.local.set({ jwtToken: null, tokenExpiresAt: null });
+
+    const broadcasts: boolean[] = [];
+    EventBus.on("saypi:auth:status-changed", (auth: boolean) =>
+      broadcasts.push(auth)
+    );
+
+    await handleAuthStatusUpdate(false);
+
+    // Both recovery credentials survive in storage...
+    expect(storageState().authCookieValue).toBe("cookie-123");
+    expect(storageState().oauthRefreshToken).toBe("refresh-456");
+    // ...the stale in-memory token is dropped...
+    expect(getJwtManagerSync().isAuthenticated()).toBe(false);
+    // ...no token is resurrected into storage...
+    expect(storageState().jwtToken ?? null).toBeNull();
+    // ...and UI consumers were still notified of the sign-out.
+    expect(broadcasts).toEqual([false]);
+  });
+
+  it("does not resurrect credentials on a genuine sign-out (restore is a no-op when storage was already wiped)", async () => {
+    // Genuine sign-out: the background's own JwtManager.clear() removes ALL
+    // auth keys before broadcasting false. The snapshot taken before the
+    // content-side clear() is empty, so the restore must not bring the dead
+    // credentials back.
+    seedStorage({
+      jwtToken: makeJwt({ userId: "user-a" }),
+      tokenExpiresAt: Date.now() + 15 * 60_000,
+      authCookieValue: "cookie-123",
+      oauthRefreshToken: "refresh-456",
+    });
+    await handleAuthStatusUpdate(true);
+    expect(getJwtManagerSync().isAuthenticated()).toBe(true); // sanity
+
+    await browser.storage.local.remove(AUTH_STORAGE_KEYS);
+    await handleAuthStatusUpdate(false);
+
+    expect(storageState().authCookieValue).toBeUndefined();
+    expect(storageState().oauthRefreshToken).toBeUndefined();
+    expect(getJwtManagerSync().isAuthenticated()).toBe(false);
+  });
 });
