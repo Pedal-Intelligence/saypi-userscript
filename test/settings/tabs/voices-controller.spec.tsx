@@ -3,6 +3,7 @@ import { render, cleanup } from "@testing-library/preact";
 import { ChatPanel } from "../../../entrypoints/settings/tabs/chat/ChatPanel";
 import { VoicesController } from "../../../entrypoints/settings/tabs/chat/voices-controller";
 import {
+  ElevenLabsVoice,
   claudeMockVoices,
   openAiMockVoices,
   mockVoices,
@@ -130,5 +131,55 @@ describe("VoicesController", () => {
     const empty = container.querySelector("#voice-catalog .voice-catalog-empty");
     expect(empty).toBeTruthy();
     expect(empty?.getAttribute("data-i18n")).toBe("voicesNoneAvailable");
+  });
+
+  // The live pi catalog carries two distinct voices both named "Paola"
+  // (classic + eleven_v3). Only one has a server description, so rows
+  // without one must fall back to language-coverage metadata — otherwise the
+  // user sees two identical bare rows (#474).
+  describe("identically-named voices (#474)", () => {
+    const paolaClassic = new ElevenLabsVoice(
+      "ig1TeITnnNlsJtfHxJlW",
+      "Paola",
+      undefined,
+      undefined,
+      undefined,
+      ["en", "ja", "zh"]
+    );
+    const paolaV3 = new ElevenLabsVoice(
+      "paola-v3",
+      "Paola",
+      "F",
+      undefined,
+      "Paola on ElevenLabs' most expressive model, with expanded language coverage.",
+      ["en", "ja", "zh", "is"]
+    );
+
+    it("falls back to a languages subtitle so twin names stay distinguishable", async () => {
+      const deps = makeDeps({
+        getVoices: vi.fn(async () => [paolaClassic, paolaV3]),
+      });
+      const { container } = await mount(deps);
+      const subtitleOf = (id: string) =>
+        container.querySelector(
+          `#voice-catalog [data-voice-id='${id}'] .voice-row-desc`
+        )?.textContent ?? "";
+      expect(subtitleOf("paola-v3")).toContain("most expressive");
+      expect(subtitleOf("ig1TeITnnNlsJtfHxJlW")).not.toBe("");
+      expect(subtitleOf("ig1TeITnnNlsJtfHxJlW")).not.toBe(
+        subtitleOf("paola-v3")
+      );
+    });
+
+    it("shows no subtitle when there is neither description nor language data", async () => {
+      const bare = new ElevenLabsVoice("v1", "Solo");
+      const deps = makeDeps({ getVoices: vi.fn(async () => [bare]) });
+      const { container } = await mount(deps);
+      expect(
+        container.querySelector(
+          "#voice-catalog [data-voice-id='v1'] .voice-row-desc"
+        )
+      ).toBeNull();
+    });
   });
 });
