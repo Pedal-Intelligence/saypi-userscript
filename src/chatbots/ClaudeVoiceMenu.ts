@@ -643,6 +643,29 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     delete voiceSelector.dataset.clickListenerAdded;
   }
 
+  /**
+   * The Claude selector is a dropdown, not a button grid: reflect an
+   * externally-changed voice on the trigger button + row checkmarks. If the
+   * shortlist is hiding the new voice, pin it for the next populate — the
+   * menu rebuilds from the (now-correct) button label on every open, so the
+   * row appears then. Never tears the menu down, so safe while it is open.
+   */
+  protected override applySelectedVoice(
+    voice: SpeechSynthesisVoiceRemote | null
+  ): void {
+    this.updateSelectedVoice(voice);
+    if (!voice) {
+      this.pinnedCustomVoiceId = null;
+      return;
+    }
+    const hasRow = Array.from(
+      this.menuContent.querySelectorAll<HTMLElement>("[role='menuitem']")
+    ).some((item) => item.dataset.voiceName === voice.name);
+    if (!hasRow) {
+      this.pinnedCustomVoiceId = voice.id;
+    }
+  }
+
   private updateSelectedVoice(
     selectedVoice: SpeechSynthesisVoiceRemote | null
   ): void {
