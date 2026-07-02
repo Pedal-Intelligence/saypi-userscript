@@ -60,6 +60,18 @@ describe("VoicesController", () => {
     expect(rows.length).toBe(flipDayClaude.length);
   });
 
+  it("mirrors the active pill into aria-selected, not just the color accent (#473)", async () => {
+    const { container } = await mount();
+    const pi = container.querySelector("#voice-host-pi")!;
+    const claude = container.querySelector("#voice-host-claude")!;
+    expect(pi.getAttribute("aria-selected")).toBe("true");
+    expect(claude.getAttribute("aria-selected")).toBe("false");
+    (claude as HTMLElement).click();
+    await flushAsync();
+    expect(pi.getAttribute("aria-selected")).toBe("false");
+    expect(claude.getAttribute("aria-selected")).toBe("true");
+  });
+
   it("groups a mixed-tier catalog into HD and Everyday shelves", async () => {
     const { container } = await mount();
     (container.querySelector("#voice-host-claude") as HTMLElement).click();
