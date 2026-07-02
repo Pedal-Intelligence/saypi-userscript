@@ -65,15 +65,42 @@ export class InputTextareaStrategy implements TextInsertionStrategy {
 
   insertText(target: HTMLElement, text: string, replaceAll: boolean, caretOffset?: number): void {
     const inputTarget = target as HTMLInputElement | HTMLTextAreaElement;
+    const newValue = replaceAll ? text : inputTarget.value + text;
 
-    if (replaceAll) {
-      inputTarget.value = text;
+    // Set the value through the native prototype setter so framework value
+    // trackers register the mutation (#453). React installs an instance-level
+    // `value` descriptor (inputValueTracking) that records direct `.value =`
+    // assignments; the subsequent input event is then deduped as "no change"
+    // and the dictated text is dropped/reverted on controlled inputs. Calling
+    // the prototype setter bypasses the instance tracker, so the framework
+    // sees the delta — just like real typing.
+    const prototype =
+      inputTarget instanceof HTMLTextAreaElement
+        ? HTMLTextAreaElement.prototype
+        : HTMLInputElement.prototype;
+    const nativeValueSetter = Object.getOwnPropertyDescriptor(prototype, "value")?.set;
+    if (nativeValueSetter) {
+      nativeValueSetter.call(inputTarget, newValue);
     } else {
-      inputTarget.value = inputTarget.value + text;
+      // Defensive fallback for environments without a prototype descriptor
+      inputTarget.value = newValue;
     }
 
-    // Dispatch input event for framework compatibility
-    inputTarget.dispatchEvent(new Event("input", { bubbles: true }));
+    // Dispatch an InputEvent (not a bare Event) for framework compatibility —
+    // listeners inspect inputType/data, and real typing produces InputEvents.
+    try {
+      inputTarget.dispatchEvent(
+        new InputEvent("input", {
+          bubbles: true,
+          composed: true,
+          inputType: "insertText",
+          data: text,
+        })
+      );
+    } catch {
+      // InputEvent unavailable (exotic/legacy environment) — plain Event
+      inputTarget.dispatchEvent(new Event("input", { bubbles: true }));
+    }
 
     // Position the caret at the requested offset (#178 insert-at-caret). Done after
     // dispatching the input event so our position is the final state even if a

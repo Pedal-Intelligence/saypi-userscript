@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 // Import the actual strategy classes from the shared module
 import {
+  InputTextareaStrategy,
   SlateEditorStrategy,
   QuillEditorStrategy,
   ProseMirrorEditorStrategy,
@@ -10,16 +11,141 @@ import {
 import { TextInsertionManager } from '../../src/text-insertion/TextInsertionManager';
 
 describe('TextInsertionStrategies', () => {
+  let inputTextareaStrategy: InputTextareaStrategy;
   let slateStrategy: SlateEditorStrategy;
   let quillStrategy: QuillEditorStrategy;
   let proseMirrorStrategy: ProseMirrorEditorStrategy;
   let textInsertionManager: TextInsertionManager;
 
   beforeEach(() => {
+    inputTextareaStrategy = new InputTextareaStrategy();
     slateStrategy = new SlateEditorStrategy();
     quillStrategy = new QuillEditorStrategy();
     proseMirrorStrategy = new ProseMirrorEditorStrategy();
     textInsertionManager = TextInsertionManager.getInstance();
+  });
+
+  describe('InputTextareaStrategy', () => {
+    /**
+     * Installs a React-style value tracker on the element (#453).
+     *
+     * This mirrors React's `inputValueTracking` byte-for-byte: `track()`
+     * defines an INSTANCE-level `value` descriptor whose setter records the
+     * assigned value before delegating to the native prototype setter, and
+     * `updateValueIfChanged()` (run on every `input` event) only registers a
+     * change when the DOM value differs from the tracked value.
+     *
+     * Direct `.value =` assignment runs the instance setter, so the tracker
+     * is updated in lockstep and React dedupes the subsequent input event as
+     * "no change" — dictation silently no-ops on controlled inputs. Setting
+     * the value through the native prototype setter bypasses the instance
+     * descriptor, leaving the tracker stale so the framework sees the delta.
+     */
+    function installReactValueTracker(
+      element: HTMLInputElement | HTMLTextAreaElement
+    ): { changes: string[] } {
+      const proto =
+        element instanceof HTMLTextAreaElement
+          ? HTMLTextAreaElement.prototype
+          : HTMLInputElement.prototype;
+      const nativeDesc = Object.getOwnPropertyDescriptor(proto, 'value')!;
+      let trackedValue = String(element.value);
+
+      // React's track(): instance-level descriptor shadowing the prototype's
+      Object.defineProperty(element, 'value', {
+        configurable: true,
+        get() {
+          return nativeDesc.get!.call(this);
+        },
+        set(value: string) {
+          trackedValue = String(value);
+          nativeDesc.set!.call(this, value);
+        },
+      });
+
+      // React's updateValueIfChanged(): dedupe input events by tracked value
+      const changes: string[] = [];
+      element.addEventListener('input', () => {
+        const currentValue = nativeDesc.get!.call(element) as string;
+        if (currentValue !== trackedValue) {
+          trackedValue = currentValue;
+          changes.push(currentValue);
+        }
+      });
+
+      return { changes };
+    }
+
+    it('should handle input and textarea elements only', () => {
+      expect(inputTextareaStrategy.canHandle(document.createElement('input'))).toBe(true);
+      expect(inputTextareaStrategy.canHandle(document.createElement('textarea'))).toBe(true);
+
+      const contentEditableDiv = document.createElement('div');
+      contentEditableDiv.contentEditable = 'true';
+      expect(inputTextareaStrategy.canHandle(contentEditableDiv)).toBe(false);
+    });
+
+    it('registers the mutation with a React-style value tracker on an input (replaceAll)', () => {
+      const input = document.createElement('input');
+      const { changes } = installReactValueTracker(input);
+
+      inputTextareaStrategy.insertText(input, 'hello', true);
+
+      expect(input.value).toBe('hello');
+      // React only commits the change when the tracker sees a delta at
+      // input-event time; direct `.value =` assignment updates the tracker
+      // first, so the event is deduped and dictation silently no-ops.
+      expect(changes).toEqual(['hello']);
+    });
+
+    it('registers the mutation with a React-style value tracker on a textarea', () => {
+      const textarea = document.createElement('textarea');
+      const { changes } = installReactValueTracker(textarea);
+
+      inputTextareaStrategy.insertText(textarea, 'dictated text', true);
+
+      expect(textarea.value).toBe('dictated text');
+      expect(changes).toEqual(['dictated text']);
+    });
+
+    it('registers appended text with a React-style value tracker (replaceAll=false)', () => {
+      const input = document.createElement('input');
+      input.value = 'hello';
+      const { changes } = installReactValueTracker(input);
+
+      inputTextareaStrategy.insertText(input, ' world', false);
+
+      expect(input.value).toBe('hello world');
+      expect(changes).toEqual(['hello world']);
+    });
+
+    it('dispatches a bubbling InputEvent describing the insertion', () => {
+      const input = document.createElement('input');
+      const events: Event[] = [];
+      input.addEventListener('input', (event) => events.push(event));
+
+      inputTextareaStrategy.insertText(input, 'abc', true);
+
+      expect(events).toHaveLength(1);
+      expect(events[0]).toBeInstanceOf(InputEvent);
+      expect((events[0] as InputEvent).inputType).toBe('insertText');
+      expect((events[0] as InputEvent).data).toBe('abc');
+      expect(events[0].bubbles).toBe(true);
+    });
+
+    it('positions the caret at the requested offset after insertion (#178)', () => {
+      const input = document.createElement('input');
+      input.value = 'hello';
+      installReactValueTracker(input);
+
+      // Simulate inserting " there" at the caret (after "hello") within a
+      // longer value, leaving the caret right after the inserted text.
+      inputTextareaStrategy.insertText(input, 'hello there world', true, 11);
+
+      expect(input.value).toBe('hello there world');
+      expect(input.selectionStart).toBe(11);
+      expect(input.selectionEnd).toBe(11);
+    });
   });
 
   describe('QuillEditorStrategy', () => {
