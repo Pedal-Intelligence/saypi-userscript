@@ -844,6 +844,14 @@ class UserPreferenceModule {
     try {
       return await tts.getVoiceById(voiceIdToFetch, chatbotInstance, chatbotId);
     } catch (error: any) {
+      if (!getJwtManagerSync().isAuthenticated()) {
+        // While signed out, /voices returns [] (401 shape), so the failed
+        // lookup says nothing about whether the voice still exists on the
+        // user's account. Keep the stored preference so it survives a
+        // sign-out → sign-in cycle (#456).
+        console.info(`Voice with ID ${voiceIdToFetch} unavailable while signed out; keeping stored preference for ${chatbotId}.`);
+        return null;
+      }
       console.info(`Voice with ID ${voiceIdToFetch} not found for ${chatbotId}. Clearing stored voice preference.`);
       const updatedPreferences = { ...preferences };
       delete updatedPreferences[chatbotId];

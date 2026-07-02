@@ -17,6 +17,7 @@ import {
 import { BillingModule } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import { getJwtManagerSync } from "../JwtManager";
 
 const UNKNOWN_CHATBOT_CACHE_KEY = "__unknown__";
 
@@ -106,6 +107,43 @@ class SpeechSynthesisModule {
 
   private voicesCache: Map<string, SpeechSynthesisVoiceRemote[]> = new Map();
   private voicesLoading: Map<string, Promise<void>> = new Map();
+  /** Auth state the caches were populated under — see {@link syncVoicesCacheWithAuthState}. */
+  private voicesCacheAuthFingerprint: string | null = null;
+
+  /**
+   * The voice list is auth-dependent: signed-out requests 401 → [], and each
+   * account can carry its own custom voices, so a cached list is only valid
+   * for the auth state it was fetched under (#456).
+   */
+  private currentAuthFingerprint(): string {
+    const jwtManager = getJwtManagerSync();
+    if (!jwtManager.isAuthenticated()) {
+      return "anonymous";
+    }
+    return `user:${jwtManager.getClaims()?.userId ?? "authenticated"}`;
+  }
+
+  /**
+   * Drops the voice caches when the auth state has changed since they were
+   * populated (sign-out, sign-in, account switch — #456). Runs synchronously
+   * on every cache read/write rather than on saypi:auth:status-changed,
+   * because EventBus listener ordering can't be relied on: on the standard
+   * bootstrap path the first VoiceSelector registers its re-render listener
+   * *before* this singleton exists (the selector's own constructor chain
+   * creates it), so an event-driven clear here would run after the menu had
+   * already re-read the stale cache. JwtManager is updated before that event
+   * is emitted (setupAuthListener in saypi.index.js awaits loadFromStorage
+   * first), so checking it here guarantees every consumer reads a cache that
+   * matches the current auth state, whatever triggered the read.
+   */
+  private syncVoicesCacheWithAuthState(): void {
+    const fingerprint = this.currentAuthFingerprint();
+    if (this.voicesCacheAuthFingerprint !== fingerprint) {
+      this.voicesCache.clear();
+      this.voicesLoading.clear();
+      this.voicesCacheAuthFingerprint = fingerprint;
+    }
+  }
 
   private resolveChatbotKey(chatbot?: Chatbot | string, override?: string): string | undefined {
     if (override) {
@@ -126,20 +164,29 @@ class SpeechSynthesisModule {
   ): Promise<SpeechSynthesisVoiceRemote[]> {
     const appId = this.resolveChatbotKey(chatbot, chatbotIdOverride);
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
+    this.syncVoicesCacheWithAuthState();
     const cached = this.voicesCache.get(cacheKey);
     if (cached && cached.length > 0) {
       return cached;
     }
     if (!this.voicesLoading.has(cacheKey)) {
-      const loadPromise = this.ttsService
+      const fingerprintAtFetchStart = this.voicesCacheAuthFingerprint;
+      const loadPromise: Promise<void> = this.ttsService
         .getVoices(typeof chatbot === "string" ? undefined : chatbot, appId)
         .then((voices) => {
-          this.voicesCache.set(cacheKey, voices);
-          this.voicesLoading.delete(cacheKey);
+          // An auth change may have invalidated this fetch while it was in
+          // flight; caching its result would resurrect the previous auth
+          // state's voice list (#456).
+          if (this.voicesCacheAuthFingerprint === fingerprintAtFetchStart) {
+            this.voicesCache.set(cacheKey, voices);
+          }
         })
-        .catch((error) => {
-          this.voicesLoading.delete(cacheKey);
-          throw error;
+        .finally(() => {
+          // Only remove our own entry — an auth change may have replaced it
+          // with a fresh in-flight fetch for the new auth state.
+          if (this.voicesLoading.get(cacheKey) === loadPromise) {
+            this.voicesLoading.delete(cacheKey);
+          }
         });
       this.voicesLoading.set(cacheKey, loadPromise);
     }
@@ -184,6 +231,7 @@ class SpeechSynthesisModule {
   _cacheVoices(voices: SpeechSynthesisVoiceRemote[], chatbotId?: string) {
     const appId = chatbotId ?? ChatbotIdentifier.getAppId();
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
+    this.syncVoicesCacheWithAuthState(); // stamp: cached under the current auth state
     this.voicesCache.set(cacheKey, voices);
   }
 
@@ -462,14 +510,6 @@ class SpeechSynthesisModule {
         this.audioStreamManager.stopKeepAlive(event.utterance.id);
       }
     );
-    // The voice list is auth-dependent (401 → [], plus per-user custom voices),
-    // so invalidate the cache on sign-out / sign-in / account switch. The
-    // VoiceSelector re-renders on this same event and refetches, landing in
-    // the correct state for the new auth state (#456).
-    EventBus.on("saypi:auth:status-changed", () => {
-      this.voicesCache.clear();
-      this.voicesLoading.clear();
-    });
   }
 }
 
