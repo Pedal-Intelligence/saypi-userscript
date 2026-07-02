@@ -114,6 +114,10 @@ panel left empty by a chunk/import break.
      dictation-stt.e2e.ts fake mic (WAV) -> getUserMedia -> offscreen Silero-v5 VAD
                           -> onSpeechEnd -> SW POSTs /transcribe (mock echoes a
                           transcript) -> draft written into #saypi-prompt.value
+     mock-isolation.e2e.ts a fresh test observes ZERO mock /transcribe state —
+                          guards the per-test reset the context fixture performs,
+                          so no spec's hits/content-type assertion can be
+                          satisfied by another spec's traffic (#462)
      tooltip-contrast.e2e.ts page.goto(https://claude.ai/new) -> body.claude ->
                           the real built CSS renders .saypi-tooltip as an opaque
                           dark pill (guards the host-CSS-var contrast bug)
@@ -143,12 +147,12 @@ instead of silently calling the real internet.
 | Path | Role |
 | --- | --- |
 | `playwright.config.ts` | serial runner, global setup/teardown, CI retries/trace |
-| `fixtures/extension.ts` | `test`/`expect` fixture: launches the context, exposes `serviceWorker`/`extensionId` |
+| `fixtures/extension.ts` | `test`/`expect` fixture: resets the mock API's transcribe state (per-test isolation, #462), launches the context, exposes `serviceWorker`/`extensionId` |
 | `fixtures/launch-args.ts` | pure builder for the Chrome launch args (unit-testable) |
 | `fixtures/audio/` | the fake-mic WAV clip + its [README](fixtures/audio/README.md) |
 | `support/global-setup.ts` | build guard + start mock servers + export ports |
 | `support/global-teardown.ts` | close mock servers |
-| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, GA catch-all) |
+| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, hit/content-type diagnostics + per-test reset route, GA catch-all) |
 | `support/mock-pi-page.html` | minimal Pi.ai-shaped DOM the content script decorates |
 | `support/mock-claude-page.html` | minimal claude.ai stand-in (defines no `--black`) for the host-CSS contrast spec |
 | `support/transcribe-response.ts` | the STT contract: shape of the `/transcribe` response |

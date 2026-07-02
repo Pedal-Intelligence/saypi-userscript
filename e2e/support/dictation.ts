@@ -32,6 +32,9 @@ export async function openDecoratedPiPage(context: BrowserContext): Promise<Page
  * Read the mock /transcribe hit counter from the SW context. The upload is issued
  * from the extension SW/offscreen context, so it is invisible to page.on("response")
  * and must be read via the service worker.
+ *
+ * The counter is reset before every test by the context fixture (#462), so a bare
+ * `> 0` assertion in a spec can only be satisfied by that test's own traffic.
  */
 export async function getTranscribeHits(serviceWorker: Worker): Promise<number> {
   return serviceWorker.evaluate(async (url) => {
@@ -45,6 +48,10 @@ export async function getTranscribeHits(serviceWorker: Worker): Promise<number> 
  * — `audio/webm` (WebM/Opus) or `audio/wav` (PCM fallback). Proves which encoder
  * path the content script actually took (#414). Read via the SW for the same
  * reason as the hit counter.
+ *
+ * Reset to null before every test by the context fixture (#462), so it provably
+ * reflects an upload made by the current test, never a previous spec's (or an
+ * earlier CI retry's).
  */
 export async function getLastAudioContentType(
   serviceWorker: Worker
