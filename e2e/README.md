@@ -47,9 +47,15 @@ npx playwright test --config e2e/playwright.config.ts e2e/specs/dictation-stt.e2
 npx playwright show-trace test-results/**/trace.zip
 ```
 
-Retries are `0` locally and `2` on CI; a Playwright trace is captured
-`on-first-retry`. `workers: 1` / `fullyParallel: false` — the harness binds
-mock servers and a fake-mic device per run, so the specs run serially.
+Retries are `0` locally and `2` on CI. Every failed attempt — including a
+first-attempt failure with zero retries — leaves diagnosable evidence in
+`test-results/` at the repo root: screenshots (`screenshot: "only-on-failure"`)
+and a trace (`trace: "retain-on-failure"`, recorded per attempt and kept only
+when the attempt fails, so green runs pay ~nothing and write nothing). CI adds
+an HTML reporter so the `playwright-report/` upload in the failure-artifact
+step is a browsable report, not an empty directory (#463). `workers: 1` /
+`fullyParallel: false` — the harness binds mock servers and a fake-mic device
+per run, so the specs run serially.
 
 ## Settings page (Preact migration)
 
@@ -267,7 +273,9 @@ tests, but it also carries risk that unit tests don't:
 - **CI risk (now a required check):** headless Chromium + fake-audio + WASM-VAD
   on shared Ubuntu runners is inherently timing-sensitive — the VAD's
   speech-end detection and the SW upload race can flake under load. CI runs with
-  2 retries and uploads the trace on failure. The suite earned promotion to a
+  2 retries and uploads failure artifacts (per-attempt screenshots + traces in
+  `test-results/`, plus the HTML report in `playwright-report/`). The suite
+  earned promotion to a
   **required** check (2026-06-20) after a stable green streak on CI runners; it
   remains a separate workflow rather than part of the `npm test` aggregate. If
   it starts flaking under load, fix the flake — don't silently demote it.
