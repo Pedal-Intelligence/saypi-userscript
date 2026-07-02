@@ -13,6 +13,11 @@ import { getResourceUrl } from "../ResourceModule";
 import marsSvgContent from "../icons/lucide-mars.svg?raw";
 import venusSvgContent from "../icons/lucide-venus.svg?raw";
 import { logger } from "../LoggingModule";
+import {
+  curateShortlist,
+  getVoiceTier,
+  CLAUDE_MENU_CAP,
+} from "../tts/VoiceCuration";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
@@ -20,7 +25,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   // Heuristics to avoid clutter – computed per dataset in populateVoices
   private showAccent: boolean = false;
   private showGender: boolean = false;
-  private showPrice: boolean = false;
+  private showTier: boolean = false;
 
   constructor(
     chatbot: Chatbot,
@@ -288,12 +293,15 @@ export class ClaudeVoiceMenu extends VoiceSelector {
           chips.appendChild(genderChip);
         }
       }
-      // Price, if there are variations
-      if (this.showPrice) {
-        const priceChip = document.createElement("span");
-        priceChip.classList.add("inline-flex", "items-center", "opacity-80");
-        priceChip.textContent = this.formatPrice(voice);
-        chips.appendChild(priceChip);
+      // Tier chip: a single "HD" mark on premium rows, only while tiers
+      // coexist in the catalog. Raw prices/credits never render in the picker
+      // (doc/plans/2026-07-02-voice-selection-ux.md §3).
+      if (this.showTier && getVoiceTier(voice) === "hd") {
+        const tierChip = document.createElement("span");
+        tierChip.classList.add("inline-flex", "items-center", "opacity-80");
+        tierChip.textContent = "HD";
+        tierChip.title = getMessage("hdVoicesAllowanceNote");
+        chips.appendChild(tierChip);
       }
     }
     if (chips.childElementCount > 0) {
@@ -338,21 +346,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.appendChild(divider);
 
     return item;
-  }
-
-  // Short dollar display; fall back to credits if USD missing
-  private formatPrice(voice: SpeechSynthesisVoiceRemote): string {
-    const usd = voice.price_per_thousand_chars_in_usd ?? voice.price;
-    if (typeof usd === "number" && !isNaN(usd) && usd > 0) {
-      // Keep it compact: $0.3/1k
-      const rounded = Math.round(usd * 100) / 100;
-      return `$${rounded}/1k`;
-    }
-    const credits = voice.price_per_thousand_chars_in_credits;
-    if (typeof credits === "number" && credits > 0) {
-      return `${Math.round(credits)}/1k cr`;
-    }
-    return getMessage("free") || "Free";
   }
 
   // If accent looks like a BCP‑47 tag (e.g., en-US), treat it as the accent locale
@@ -687,7 +680,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     });
   }
 
-  override populateVoices(voices: SpeechSynthesisVoiceRemote[], voiceSelector: HTMLElement): boolean {
+  override populateVoices(
+    voices: SpeechSynthesisVoiceRemote[],
+    voiceSelector: HTMLElement
+  ): boolean {
     // Compute heuristics to decide what to show across this dataset
     try {
       const accents = new Set(
@@ -696,18 +692,16 @@ export class ClaudeVoiceMenu extends VoiceSelector {
           .filter(Boolean)
       );
       const genders = new Set(voices.map(v => (v.gender || '').toString().toUpperCase()).filter(Boolean));
-      const prices = new Set(voices.map(v => v.price_per_thousand_chars_in_usd ?? v.price).filter((p): p is number => typeof p === 'number'));
       this.showAccent = accents.size > 1; // only show if helpful to differentiate
       this.showGender = genders.size > 1; // only show if varies
-      this.showPrice = prices.size > 1;   // show only when price differs
     } catch (_) {
       // Fail safe: don't show extra metadata if anything goes wrong
-      this.showAccent = this.showGender = this.showPrice = false;
+      this.showAccent = this.showGender = false;
     }
 
     // Get the currently selected voice before recreating the menu
     let currentSelectedVoice: SpeechSynthesisVoiceRemote | null = null;
-    
+
     // Try to get from the current button if it exists
     if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
       const voiceNameElement = this.menuButton.querySelector(".voice-name");
@@ -719,11 +713,16 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         }
       }
     }
-    
-    // If we couldn't get it from the button, try to get it from user preferences
-    if (!currentSelectedVoice) {
-      // This will be handled asynchronously below
-    }
+
+    // The menu shows a constant-size shortlist however large the catalog
+    // grows; the full catalog lives behind the "More voices…" door in the
+    // extension settings (doc/plans/2026-07-02-voice-selection-ux.md §3).
+    const curated = curateShortlist(
+      voices,
+      currentSelectedVoice?.id ?? this.pinnedCustomVoiceId,
+      CLAUDE_MENU_CAP
+    );
+    this.showTier = curated.tiersCoexist;
 
     // Comprehensive cleanup to prevent duplicates
     this.cleanupExistingElements(voiceSelector);
@@ -745,11 +744,33 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const voiceOffItem = this.createMenuItem(null, noVoicesAvailable);
     this.menuContent.appendChild(voiceOffItem);
 
-    // Add available voices
-    voices.forEach((voice) => {
+    // Add the shortlisted voices
+    curated.voices.forEach((voice) => {
       const menuItem = this.createMenuItem(voice);
       this.menuContent.appendChild(menuItem);
     });
+
+    // One muted line carries the whole in-menu economics story, only while
+    // premium and value tiers coexist.
+    if (curated.tiersCoexist) {
+      const footnote = document.createElement("div");
+      footnote.classList.add(
+        "saypi-voice-footnote",
+        "py-1",
+        "px-2",
+        "text-xs",
+        "text-text-500",
+        "select-none"
+      );
+      footnote.setAttribute("role", "note");
+      footnote.textContent = getMessage("hdVoicesAllowanceNote");
+      this.menuContent.appendChild(footnote);
+    }
+
+    // The door to the full catalog, only when the shortlist hides voices.
+    if (curated.hiddenCount > 0) {
+      this.menuContent.appendChild(this.createMoreVoicesItem());
+    }
 
     // Add subtle separators for easier scanning
     this.applyItemSeparators();
@@ -761,10 +782,62 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       // Fall back to getting the voice from preferences asynchronously
       this.userPreferences.getVoice(this.chatbot).then((voice) => {
         this.updateSelectedVoice(voice);
+        // The stored voice must never vanish from the menu: if the shortlist
+        // hid it, remember it as pinned. The pin persists on the instance so
+        // every later populate includes it synchronously.
+        const storedId =
+          voice && voices.some((v) => v.id === voice.id) ? voice.id : null;
+        if (!storedId) {
+          this.pinnedCustomVoiceId = null;
+          return;
+        }
+        if (curated.voices.some((v) => v.id === storedId)) {
+          // Visible without help; drop a pin left over from a previous voice.
+          if (
+            this.pinnedCustomVoiceId &&
+            this.pinnedCustomVoiceId !== storedId
+          ) {
+            this.pinnedCustomVoiceId = null;
+          }
+          return;
+        }
+        this.pinnedCustomVoiceId = storedId;
+        // Never rebuild a menu the user has open — the teardown would close
+        // it mid-interaction. The pin applies on the next populate instead.
+        if (this.menuButton.getAttribute("aria-expanded") !== "true") {
+          this.populateVoices(voices, voiceSelector);
+        }
       });
     }
 
     return !noVoicesAvailable;
+  }
+
+  /**
+   * The muted final row linking to the full voice catalog in the extension
+   * settings (AI Chat tab). Rendered only when the shortlist hides voices.
+   */
+  private createMoreVoicesItem(): HTMLDivElement {
+    const item = document.createElement("div");
+    item.classList.add(
+      "py-1",
+      "px-2",
+      "rounded-md",
+      "cursor-pointer",
+      "select-none",
+      "text-sm",
+      "text-text-500",
+      "hover:bg-bg-300"
+    );
+    item.setAttribute("role", "menuitem");
+    item.setAttribute("tabindex", "-1");
+    item.dataset.action = "more-voices";
+    item.textContent = getMessage("moreVoices");
+    item.addEventListener("click", () => {
+      this.toggleMenu();
+      openSettings("chat");
+    });
+    return item;
   }
 
   // Add a faint bottom divider to each menu item except the last one

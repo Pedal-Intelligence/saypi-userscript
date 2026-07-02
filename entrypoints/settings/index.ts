@@ -10,6 +10,7 @@ import { DictationTab } from "./tabs/dictation";
 import { AboutTab } from "./tabs/about";
 import { replaceI18n } from "./shared/i18n";
 import type { TabController } from "./shared/types";
+import { SETTINGS_DEEP_LINK_KEY } from "../../src/popup/popupopener";
 
 // Styles
 import "./styles/base.css"; // reset + utilities (replaces the 2.9 MB Tailwind v2 dump)
@@ -70,8 +71,22 @@ class SettingsApp {
     this.tabs.set('dictation', new DictationTab(document.querySelector('#tab-dictation')!));
     this.tabs.set('about', new AboutTab(document.querySelector('#tab-about')!));
 
-    // Determine which tab to show initially
-    const initialTab = localStorage.getItem('saypi.settings.selectedTab') || 'general';
+    // Determine which tab to show initially: a one-shot deep link (set by
+    // openSettings(tab) from a content script, e.g. the voice menus' "More
+    // voices…" row) wins over the last-viewed tab.
+    let initialTab = localStorage.getItem('saypi.settings.selectedTab') || 'general';
+    try {
+      const stored = await chrome.storage.local.get(SETTINGS_DEEP_LINK_KEY);
+      const deepLink = stored?.[SETTINGS_DEEP_LINK_KEY];
+      if (typeof deepLink === 'string' && this.tabs.has(deepLink)) {
+        initialTab = deepLink;
+      }
+      if (deepLink !== undefined) {
+        await chrome.storage.local.remove(SETTINGS_DEEP_LINK_KEY);
+      }
+    } catch (e) {
+      // Deep link is best-effort; fall back to the last-viewed tab
+    }
 
     // Load only the initial tab
     await this.loadTab(initialTab);

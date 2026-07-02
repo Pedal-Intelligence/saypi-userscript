@@ -972,6 +972,46 @@
     "message": "Voice off",
     "description": "Label for when text-to-speech is disabled"
   },
+  "moreVoices": {
+    "message": "More voices…",
+    "description": "Menu row linking from the in-page voice menu to the full voice catalog in the extension settings"
+  },
+  "voicesSectionTitle": {
+    "message": "Voices",
+    "description": "Heading for the voice catalog section in the settings AI Chat tab"
+  },
+  "voicesSectionDescription": {
+    "message": "Choose the voice that reads replies aloud on each site.",
+    "description": "Subheading for the voice catalog section in the settings AI Chat tab"
+  },
+  "voicesShelfHd": {
+    "message": "HD — richest sound",
+    "description": "Group heading for premium (HD) voices in the settings voice catalog"
+  },
+  "voicesShelfEveryday": {
+    "message": "Everyday — sounds great, lasts longer",
+    "description": "Group heading for value-tier voices in the settings voice catalog"
+  },
+  "voicesShelfEverydayBlurb": {
+    "message": "Great quality — your monthly allowance lasts about 20× longer.",
+    "description": "One-line note under the Everyday voices group heading in the settings voice catalog"
+  },
+  "voicesUse": {
+    "message": "Use this voice",
+    "description": "Button that selects a voice from the settings voice catalog"
+  },
+  "voicesCurrent": {
+    "message": "In use",
+    "description": "Badge marking the currently selected voice in the settings voice catalog"
+  },
+  "voicesNoneAvailable": {
+    "message": "Voices couldn't be loaded right now. Please try again later.",
+    "description": "Shown in the settings voice catalog when the voice list is empty for a signed-in user (e.g. a network problem)"
+  },
+  "hdVoicesAllowanceNote": {
+    "message": "HD voices use your monthly allowance about 20× faster.",
+    "description": "One-line note shown in voice menus when premium (HD) and value voices are both available"
+  },
   "ttsVoice": {
     "message": "TTS voice",
     "description": "Label describing a text-to-speech voice option in the menu"

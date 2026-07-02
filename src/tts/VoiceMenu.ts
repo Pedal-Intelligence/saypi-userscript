@@ -9,6 +9,8 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import { getJwtManagerSync } from "../JwtManager";
+import { openSettings } from "../popup/popupopener";
+import { curateShortlist, getVoiceTier } from "./VoiceCuration";
 
 /**
  * A chatbot that ships its own set of built-in voices, with introduction audio
@@ -38,6 +40,8 @@ export abstract class VoiceSelector {
   protected userPreferences: UserPreferenceModule;
   protected element: HTMLElement;
   protected selectedVoiceButton: HTMLButtonElement | null = null;
+  /** Set when the stored voice would otherwise be hidden by the shortlist cap. */
+  protected pinnedCustomVoiceId: string | null = null;
 
   constructor(
     chatbot: Chatbot,
@@ -123,10 +127,20 @@ export abstract class VoiceSelector {
   }
 
   protected isBuiltInVoiceButton(button: HTMLButtonElement): boolean {
-    return !(
-      button.classList.contains("saypi-custom-voice") ||
-      button.classList.contains("saypi-restored-voice")
-    );
+    // Every SayPi-injected row carries the positive marker; anything without
+    // it is a host-native (built-in) button. Safer than enumerating SayPi
+    // row types — new rows are excluded by construction.
+    return !button.classList.contains("saypi-voice-button");
+  }
+
+  /**
+   * Max SayPi (custom) voice rows this surface shows before tucking the rest
+   * behind a "More voices" door. null = uncapped (the default — e.g. Pi's own
+   * settings-page grid); in-host menus override
+   * (doc/plans/2026-07-02-voice-selection-ux.md §3).
+   */
+  protected getCustomVoiceCap(): number | null {
+    return null;
   }
 
   async refreshMenu(): Promise<void> {
@@ -162,9 +176,123 @@ export abstract class VoiceSelector {
     const customVoices = voices.filter((voice) => !voice.default);
 
     this.populateDefaultVoices(defaultVoices, voiceSelector);
-    this.populateCustomVoices(customVoices, voiceSelector);
+
+    const cap = this.getCustomVoiceCap();
+    if (cap === null) {
+      this.populateCustomVoices(customVoices, voiceSelector);
+      return true;
+    }
+
+    // Capped surface: show a curated shortlist of SayPi voices (built-in host
+    // voices above are never capped), with a door to the full catalog.
+    const curated = curateShortlist(
+      customVoices,
+      this.pinnedCustomVoiceId,
+      cap
+    );
+    this.populateCustomVoices(
+      curated.voices,
+      voiceSelector,
+      curated.tiersCoexist
+    );
+    if (curated.hiddenCount > 0) {
+      this.addMoreVoicesDoor(voiceSelector);
+    }
+
+    // The stored voice must never vanish from the menu: if the cap hid it,
+    // pin it and re-render the SayPi block once. Runs only when this call
+    // could actually hide something — partial lists (addMissingPiVoices
+    // passes Pi's built-in top-ups alone) must not disturb the pin state.
+    if (customVoices.length > cap) {
+      this.userPreferences.getVoice(this.chatbot).then((voice) => {
+        const storedCustomId =
+          voice && customVoices.some((v) => v.id === voice.id)
+            ? voice.id
+            : null;
+        if (!storedCustomId) {
+          this.pinnedCustomVoiceId = null;
+          return;
+        }
+        if (curated.voices.some((v) => v.id === storedCustomId)) {
+          // Visible without help; drop a pin left over from a previous voice.
+          if (
+            this.pinnedCustomVoiceId &&
+            this.pinnedCustomVoiceId !== storedCustomId
+          ) {
+            this.pinnedCustomVoiceId = null;
+          }
+          return;
+        }
+        if (this.pinnedCustomVoiceId !== storedCustomId) {
+          this.pinnedCustomVoiceId = storedCustomId;
+          this.removeCustomVoiceRows(
+            voiceSelector,
+            new Set(customVoices.map((v) => v.id))
+          );
+          this.populateVoices(voices, voiceSelector);
+        }
+      });
+    }
 
     return true;
+  }
+
+  /**
+   * Remove this catalog's SayPi voice rows (and the door) ahead of a
+   * re-render. Scoped to the given ids so rows from other sources — Pi's
+   * extra built-ins arrive via a separate populate call — survive.
+   */
+  private removeCustomVoiceRows(
+    voiceSelector: HTMLElement,
+    catalogIds: Set<string>
+  ): void {
+    voiceSelector
+      .querySelectorAll<HTMLButtonElement>("button.saypi-custom-voice")
+      .forEach((button) => {
+        const id = button.dataset.voiceId;
+        if (id && catalogIds.has(id)) {
+          button.remove();
+        }
+      });
+    voiceSelector
+      .querySelectorAll("button.saypi-more-voices")
+      .forEach((button) => button.remove());
+  }
+
+  /**
+   * The muted final row of the SayPi block, linking to the full voice catalog
+   * in the extension settings. Styled like the host's own rows. Idempotent:
+   * an existing door is moved back into place rather than duplicated.
+   */
+  private addMoreVoicesDoor(voiceSelector: HTMLElement): void {
+    let door = voiceSelector.querySelector<HTMLButtonElement>(
+      "button.saypi-more-voices"
+    );
+    if (!door) {
+      door = document.createElement("button");
+      door.type = "button";
+      // saypi-voice-button keeps it under the menu's expand/collapse visibility
+      // rules (voices.scss); saypi-more-voices exempts it from voice-selection
+      // handling (isBuiltInVoiceButton).
+      door.classList.add(
+        ...this.getButtonClasses(),
+        "saypi-voice-button",
+        "saypi-more-voices"
+      );
+      door.textContent = getMessage("moreVoices");
+      door.addEventListener("click", () => {
+        openSettings("chat");
+      });
+    }
+    const customButtons = voiceSelector.querySelectorAll(
+      "button.saypi-custom-voice"
+    );
+    const lastCustom = customButtons[customButtons.length - 1];
+    if (lastCustom) {
+      lastCustom.insertAdjacentElement("afterend", door);
+    } else {
+      voiceSelector.appendChild(door);
+    }
   }
 
   populateDefaultVoices(
@@ -220,7 +348,8 @@ export abstract class VoiceSelector {
 
   populateCustomVoices(
     customVoices: SpeechSynthesisVoiceRemote[],
-    voiceSelector: HTMLElement
+    voiceSelector: HTMLElement,
+    showTier: boolean = false
   ): void {
     const customVoiceButtons = Array(customVoices.length);
 
@@ -244,6 +373,15 @@ export abstract class VoiceSelector {
       name.classList.add("voice-name");
       name.innerText = voice.name;
       button.appendChild(name);
+      // Quiet tier suffix on premium rows, only while tiers coexist
+      // (doc/plans/2026-07-02-voice-selection-ux.md §3 — no chips, no prices on Pi).
+      if (showTier && getVoiceTier(voice) === "hd") {
+        const tier = document.createElement("span");
+        tier.classList.add("voice-tier");
+        tier.textContent = "HD";
+        tier.title = getMessage("hdVoicesAllowanceNote");
+        button.appendChild(tier);
+      }
       const flair = document.createElement("img");
       flair.classList.add("flair");
       flair.src = getResourceUrl("icons/logos/saypi.png");
