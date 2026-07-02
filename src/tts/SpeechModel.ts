@@ -276,6 +276,7 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   gender?: string;        // e.g., "F", "M" (or descriptive string)
   accent?: string;        // e.g., "American", "British"
   description?: string;   // short human-friendly description
+  languages?: string[];   // ISO codes the voice can speak, e.g. ["en", "ja"]
 }
 
 interface MatchableVoice {

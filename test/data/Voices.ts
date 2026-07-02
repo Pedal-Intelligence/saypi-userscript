@@ -38,12 +38,14 @@ class ElevenLabsVoice extends Voice implements SpeechSynthesisVoiceRemote {
   gender?: string;
   accent?: string;
   description?: string;
+  languages?: string[];
 
-  constructor(id: string, name: string, gender?: string, accent?: string, description?: string) {
+  constructor(id: string, name: string, gender?: string, accent?: string, description?: string, languages?: string[]) {
     super(id, name, 0.3, 1000, "ElevenLabs");
     this.gender = gender;
     this.accent = accent;
     this.description = description;
+    this.languages = languages;
   }
   default: boolean = false;
   localService: boolean = false;

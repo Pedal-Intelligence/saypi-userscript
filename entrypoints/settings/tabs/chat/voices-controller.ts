@@ -185,10 +185,11 @@ export class VoicesController {
     name.classList.add("voice-row-name");
     name.textContent = voice.name;
     main.appendChild(name);
-    if (voice.description) {
+    const subtitle = voice.description || this.languagesSubtitle(voice);
+    if (subtitle) {
       const description = document.createElement("span");
       description.classList.add("voice-row-desc", "description");
-      description.textContent = voice.description;
+      description.textContent = subtitle;
       main.appendChild(description);
     }
     row.appendChild(main);
@@ -212,6 +213,19 @@ export class VoicesController {
       row.appendChild(use);
     }
     return row;
+  }
+
+  /**
+   * Metadata fallback for rows whose voice carries no server description.
+   * Language coverage is what genuinely separates otherwise identically-named
+   * variants — the pi catalog serves two "Paola"s (#474) — and it is honest,
+   * useful copy on any description-less row.
+   */
+  private languagesSubtitle(voice: SpeechSynthesisVoiceRemote): string {
+    const count = voice.languages?.length ?? 0;
+    return count > 1
+      ? getMessage("voiceSpeaksNLanguages", [String(count)])
+      : "";
   }
 
   private async useVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {

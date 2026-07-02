@@ -1008,6 +1008,16 @@
     "message": "Voices couldn't be loaded right now. Please try again later.",
     "description": "Shown in the settings voice catalog when the voice list is empty for a signed-in user (e.g. a network problem)"
   },
+  "voiceSpeaksNLanguages": {
+    "message": "Speaks $count$ languages",
+    "description": "Fallback subtitle for a voice row in the settings voice catalog when the voice has no description; $count$ is the number of languages the voice supports.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
   "hdVoicesAllowanceNote": {
     "message": "HD voices use your monthly allowance about 20× faster.",
     "description": "One-line note shown in voice menus when premium (HD) and value voices are both available"
