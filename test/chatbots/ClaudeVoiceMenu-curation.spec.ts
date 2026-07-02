@@ -96,11 +96,11 @@ describe("ClaudeVoiceMenu shortlist cap + door (flip-day catalog)", () => {
     expect(openSettingsMock).toHaveBeenCalled();
   });
 
-  it("omits the door row when the whole catalog fits the cap", () => {
+  it("keeps the door row even when the whole catalog fits the cap (#472)", () => {
     const menu = makeMenu();
     menu.populateVoices(flipDayCatalog.slice(0, 3), menu.element);
     const door = menu.menuContent.querySelector("[data-action='more-voices']");
-    expect(door).toBeNull();
+    expect(door).not.toBeNull();
   });
 
   it("keeps the Voice off item", () => {

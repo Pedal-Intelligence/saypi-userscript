@@ -767,10 +767,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.menuContent.appendChild(footnote);
     }
 
-    // The door to the full catalog, only when the shortlist hides voices.
-    if (curated.hiddenCount > 0) {
-      this.menuContent.appendChild(this.createMoreVoicesItem());
-    }
+    // The door to the full catalog — always present: it is the navigation
+    // path to the settings catalog, not an overflow marker (#472).
+    this.menuContent.appendChild(this.createMoreVoicesItem());
 
     // Add subtle separators for easier scanning
     this.applyItemSeparators();
@@ -815,7 +814,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   /**
    * The muted final row linking to the full voice catalog in the extension
-   * settings (AI Chat tab). Rendered only when the shortlist hides voices.
+   * settings (AI Chat tab). Always rendered — it is the menu's path to the
+   * catalog, whether or not the shortlist is hiding voices.
    */
   private createMoreVoicesItem(): HTMLDivElement {
     const item = document.createElement("div");
