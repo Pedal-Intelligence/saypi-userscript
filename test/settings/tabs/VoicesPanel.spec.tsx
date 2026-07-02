@@ -28,4 +28,23 @@ describe("VoicesPanel", () => {
     ]);
     expect(container.querySelector("#voice-catalog")).toBeTruthy();
   });
+
+  it("brands each pill with its assistant's logo while keeping the text label (#473)", () => {
+    const { container } = render(<VoicesPanel />);
+    const piLogo = container.querySelector<HTMLImageElement>(
+      "#voice-host-pi img.voice-host-logo"
+    );
+    const claudeLogo = container.querySelector<HTMLImageElement>(
+      "#voice-host-claude img.voice-host-logo"
+    );
+    expect(piLogo?.getAttribute("src")).toBe("/icons/logos/pi.png");
+    expect(claudeLogo?.getAttribute("src")).toBe("/icons/logos/claude.png");
+    // Decorative images: the pill text stays the accessible label.
+    expect(piLogo?.getAttribute("alt")).toBe("");
+    expect(claudeLogo?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector("#voice-host-pi")?.textContent?.trim()).toBe("Pi");
+    expect(
+      container.querySelector("#voice-host-claude")?.textContent?.trim()
+    ).toBe("Claude");
+  });
 });

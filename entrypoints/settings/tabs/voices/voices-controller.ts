@@ -73,7 +73,11 @@ export class VoicesController {
     this.container
       .querySelectorAll<HTMLButtonElement>(".voice-host-pill")
       .forEach((pill) => {
-        pill.classList.toggle("active", pill.id === `voice-host-${host}`);
+        const isActive = pill.id === `voice-host-${host}`;
+        pill.classList.toggle("active", isActive);
+        // The pills are a tablist; state must be programmatic too, not just
+        // the brand-color accent (#473).
+        pill.setAttribute("aria-selected", String(isActive));
       });
 
     const [voices, current] = await Promise.all([

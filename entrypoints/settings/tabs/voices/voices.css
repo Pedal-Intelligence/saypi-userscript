@@ -6,6 +6,9 @@
   margin: 0.5rem 0 0.75rem;
 }
 .voice-host-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   border: 1px solid #d1d5db;
   border-radius: 9999px;
   background: transparent;
@@ -13,9 +16,28 @@
   font-size: 0.85rem;
   cursor: pointer;
 }
+.voice-host-logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+/* The active pill takes on its assistant's brand palette (#473): Pi's forest
+   green on cream, Claude's terracotta on ivory. Weight + border + aria-selected
+   carry the state too — color is an accent, never the only signal. */
 .voice-host-pill.active {
   background: #e5e7eb;
   font-weight: 600;
+}
+#voice-host-pi.active {
+  background: #f5efe1;
+  border-color: #12805c;
+  color: #0b5c41;
+}
+#voice-host-claude.active {
+  background: #f8f0e9;
+  border-color: #d97757;
+  color: #ae5630;
 }
 .voice-shelf {
   margin-bottom: 0.75rem;

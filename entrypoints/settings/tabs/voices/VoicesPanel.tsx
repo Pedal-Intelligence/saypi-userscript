@@ -21,6 +21,13 @@ export function VoicesPanel() {
         <div class="description" data-i18n="voicesSectionDescription">
           Choose the voice that reads replies aloud on each site.
         </div>
+        {/* Each pill wears its assistant's logo and brand color (#473) so
+            users orient at a glance — matching the platform cards on
+            saypi.ai/features/sites-supported. Logos are decorative (the pill
+            text is the accessible label), hence alt="" + aria-hidden; the
+            active state is also carried by aria-selected and font weight, so
+            color is never the only signal. Assets live in public/icons/logos/,
+            served from the extension root. */}
         <div id="voice-host-pills" role="tablist">
           <button
             type="button"
@@ -28,6 +35,12 @@ export function VoicesPanel() {
             class="voice-host-pill"
             role="tab"
           >
+            <img
+              class="voice-host-logo"
+              src="/icons/logos/pi.png"
+              alt=""
+              aria-hidden="true"
+            />
             Pi
           </button>
           <button
@@ -36,6 +49,12 @@ export function VoicesPanel() {
             class="voice-host-pill"
             role="tab"
           >
+            <img
+              class="voice-host-logo"
+              src="/icons/logos/claude.png"
+              alt=""
+              aria-hidden="true"
+            />
             Claude
           </button>
         </div>
