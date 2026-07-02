@@ -126,6 +126,29 @@ Acceptance criteria / Notes-Hypotheses (non-binding). Note in the body that it w
 via this Layer-4 CDP sweep on the current commit. File automation blockers too (label
 `enhancement` + `agent`; there is no `testing` label in this repo).
 
+## Cost & side effects (know what a run spends)
+
+A default sweep is **not free or traceless** — it acts as the founder on real accounts:
+
+- **Real messages.** Each host receives a real user message (the synthetic transcript)
+  in a **new conversation that is not cleaned up afterwards**; on auto-submit hosts the
+  assistant genuinely replies. Repeated runs accumulate junk conversations on the
+  founder's pi.ai / claude.ai / chatgpt.com accounts.
+- **Real quota.** A run consumes Claude/ChatGPT plan quota, SayPi STT calls, and (when
+  voice-on) SayPi TTS credits. Run on-demand with a purpose; never in an unattended
+  loop or cron.
+- **The model switch persists.** The default `--claude-model=haiku` selection is a real
+  UI click and stays set on the profile after the run; use `--claude-model=keep` to
+  avoid changing it.
+- **Evidence can contain account data.** Screenshots and captured console/network lines
+  may include account names, conversation content, and auth-adjacent headers. They live
+  under git-ignored `.output/e2e-host-sweep/` — never commit them, and check before
+  pasting any into a GitHub issue.
+- **One CDP run at a time.** All Layer-4 harnesses share the one seeded profile
+  (`~/.config/saypi-cdp-profile`) and there is no lockfile guard — don't run two
+  sweeps/verifies concurrently (the `/sweep` skill runs its two harnesses sequentially
+  for exactly this reason).
+
 ## Boundaries
 
 - **Headed only** for Cloudflare hosts → a visible window; machine must be unlocked. Not

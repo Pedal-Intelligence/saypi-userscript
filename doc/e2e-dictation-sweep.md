@@ -109,6 +109,15 @@ that it was found via this Layer-4 CDP dictation sweep on the current commit.
 Labels: `bug` (no host-specific labels exist for dictation targets the way the chat
 sweep has `claude`/`chatgpt`/`pi ai` — use the target name in the body instead).
 
+## Cost & side effects
+
+Lighter than the host sweep (no SayPi sign-in, no TTS, and the fixture target is fully
+local), but a `mistral` run still types a real message into a real Le Chat composer and
+spends real SayPi STT calls — purposeful runs only, never an unattended loop. Evidence
+lands under git-ignored `.output/e2e-dictation-sweep/` — never commit it. Same
+shared-profile rule as the host sweep: one CDP harness run at a time (no lockfile
+guard).
+
 ## Boundaries
 
 - **Headed** for the real-site target (Mistral isn't currently known to wall

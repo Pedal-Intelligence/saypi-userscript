@@ -5,6 +5,15 @@ product**, under the same mandate as saypi-api (`~/SayPi/saypi-api/AGENTS.md`) a
 Paste its body as the first message of a fresh Claude Code session in this repo to start the
 initiative. It is kept in-repo so the mandate travels with the code, not a single machine.
 
+> **Historical document (2026-06-13) — preserved verbatim.** The living constitution is
+> `AGENTS.md`, which supersedes this brief wherever they disagree. Claims below that were
+> true at bootstrap but are now stale: CI being "unit/integration only, no E2E" (the Layer-3
+> `e2e` job has been a **required** check since 2026-06-20); "`public/` and
+> `src/popup/popup-config.js` are generated — never hand-edit" (`public/` is a *source*
+> asset dir and no generated `popup-config.js` exists — see `AGENTS.md`); and the
+> "SHIPPED (this PR)" notes, which refer to the PRs that first landed those layers, not to
+> any current PR. Re-verify anything else here before relying on it.
+
 ---
 
 You are taking on a standing mandate from me (Ross Cadogan, SayPi founder): make **saypi-userscript an autonomously engineered product**, the same way saypi-api has been run since June 9, 2026, and saypi-saas after it. The saypi-api experiment shipped ~30 merged PRs and 4 features to production in under two days of elapsed operation with zero deploy-caused downtime — by holding founder-level quality at agent speed. You are extending that operating model to the client.
