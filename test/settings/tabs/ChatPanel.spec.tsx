@@ -50,4 +50,18 @@ describe("ChatPanel", () => {
       container.querySelector("input#chatgpt-auto-read-aloud[type='checkbox']"),
     ).toBeTruthy();
   });
+
+  it("renders the Voices section with host pills and the catalog container VoicesController targets", () => {
+    const { container } = render(<ChatPanel />);
+    expect(container.querySelector("#voices-preference")).toBeTruthy();
+    expect(
+      container
+        .querySelector("#voices-preference [data-i18n='voicesSectionTitle']"),
+    ).toBeTruthy();
+    const pills = [
+      ...container.querySelectorAll("#voice-host-pills button.voice-host-pill"),
+    ];
+    expect(pills.map((p) => p.id)).toEqual(["voice-host-pi", "voice-host-claude"]);
+    expect(container.querySelector("#voice-catalog")).toBeTruthy();
+  });
 });

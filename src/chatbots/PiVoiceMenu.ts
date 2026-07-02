@@ -3,6 +3,7 @@ import EventBus from "../events/EventBus";
 import { audioProviders } from "../tts/SpeechModel";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
+import { PI_MENU_CAP } from "../tts/VoiceCuration";
 import { Chatbot } from "./Chatbot";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
@@ -22,6 +23,13 @@ export class PiVoiceMenu extends VoiceSelector {
 
   getId(): string {
     return "saypi-voice-menu";
+  }
+
+  // The in-chat dropdown is Pi's most minimal surface: cap the SayPi block
+  // and route the rest through "More voices" (Pi's own settings-page grid,
+  // PiVoiceSettings, stays uncapped).
+  protected override getCustomVoiceCap(): number {
+    return PI_MENU_CAP;
   }
 
   getButtonClasses(): string[] {

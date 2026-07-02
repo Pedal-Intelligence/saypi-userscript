@@ -17,6 +17,18 @@
   height: 20px;
   padding-left: 0.5rem;
 }
+// Quiet tier suffix on premium rows (shown only while HD and value voices coexist)
+.saypi-voice-button .voice-tier {
+  opacity: 0.6;
+  font-size: 0.75em;
+  margin-left: 0.35em;
+  vertical-align: middle;
+}
+// The muted door row to the full catalog in the extension settings
+button.saypi-more-voices {
+  opacity: 0.7;
+  font-size: 0.9em;
+}
 #saypi-voice-settings button.selected.paola {
   background-color: rgb(200, 200, 200);
   border-color: rgb(200, 200, 200);

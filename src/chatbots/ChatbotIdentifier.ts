@@ -2,7 +2,7 @@
  * A lightweight module for identifying the current chatbot without circular dependencies.
  * This module doesn't import any specific chatbot implementations to avoid dependency cycles.
  */
-type ChatbotId = "claude" | "pi" | "chatgpt" | "web";
+export type ChatbotId = "claude" | "pi" | "chatgpt" | "web";
 
 export class ChatbotIdentifier {
   /**
