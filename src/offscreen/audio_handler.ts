@@ -124,6 +124,42 @@ function registerLifecycleDebug(audio: HTMLAudioElement) {
   });
 }
 
+/**
+ * Decide whether loading audio for `newTabId` should preempt a different tab that
+ * currently owns the single shared <audio> element. Returns the tab to notify, or
+ * null. Pure (no side effects) so the routing-overwrite contract is unit-testable —
+ * the audio-side mirror of vad_handler's computePreemption (#320). (#452)
+ */
+export function computeAudioPreemption(
+  previousTabId: number | null,
+  newTabId: number,
+  playbackActive: boolean
+): { targetTabId: number } | null {
+  if (previousTabId !== null && previousTabId !== newTabId && playbackActive) {
+    return { targetTabId: previousTabId };
+  }
+  return null;
+}
+
+/**
+ * A control request (pause/resume/stop/URL-less play) against the single shared
+ * <audio> element should be honored only when it comes from the tab that currently
+ * owns playback. A displaced (non-owner) tab must NOT control the audio the new
+ * owner is using — nor decrement the shared usage counter via stop. When there is
+ * no current owner (or no source tab id) there is no ambiguity, so honor it
+ * (legacy behavior) — the audio-side mirror of vad_handler's isTeardownFromOwner
+ * (#320). (#452)
+ */
+export function isAudioRequestFromOwner(
+  sourceTabId: number | undefined,
+  currentOwner: number | null
+): boolean {
+  if (sourceTabId === undefined || currentOwner === null) {
+    return true;
+  }
+  return sourceTabId === currentOwner;
+}
+
 function loadAudio(url: string, tabId: number, playImmediately: boolean = true, volume?: number) {
   if (!audioElement) {
     initializeAudio();
@@ -140,7 +176,37 @@ function loadAudio(url: string, tabId: number, playImmediately: boolean = true, 
   }
   
   logger.debug(`[SayPi Audio Handler] Loading audio from URL: ${url} for tab ${tabId}`);
-  
+
+  // Last-tab-wins: if a DIFFERENT tab currently owns actively-loaded audio, it is
+  // being displaced (there is only one shared <audio> element, so its playback
+  // physically stops when the src is replaced below). Send it a terminal
+  // AUDIO_ENDED so its AudioOutputMachine exits the playing state instead of
+  // hanging — without this, the teardown events fired by the src replacement are
+  // stamped with the NEW owner's tab id and the displaced tab never hears
+  // anything. AUDIO_ENDED (rather than a new message type) rides the existing
+  // bridge → EventBus → AudioOutputMachine path, so no client changes are needed.
+  // (#452, mirrors the #320 VAD preemption notice)
+  //
+  // Usage-counting note: this takeover still increments below, while the displaced
+  // tab's owner-guarded stop no-ops (no matching decrement) — a deliberate
+  // asymmetry shared with the VAD side. It is safe: the count can only stay too
+  // HIGH, which never triggers auto-shutdown early.
+  // playbackActive checks the src ATTRIBUTE (the property getter resolves '' to
+  // the document URL after stopAudio clears it, so it can't be used here).
+  const playbackActive = !!audioElement.getAttribute("src") && !audioElement.ended;
+  const preemption = computeAudioPreemption(currentAudioTabId, tabId, playbackActive);
+  if (preemption) {
+    logger.log(
+      `[SayPi Audio Handler] Tab ${tabId} is taking over audio playback from tab ${preemption.targetTabId}; notifying the displaced tab.`
+    );
+    chrome.runtime.sendMessage({
+      type: "AUDIO_ENDED",
+      detail: { timestamp: Date.now() },
+      targetTabId: preemption.targetTabId,
+      origin: "offscreen-document",
+    });
+  }
+
   currentAudioTabId = tabId;
   incrementUsage('audio');
   
@@ -402,17 +468,29 @@ if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
 
   registerMessageHandler("AUDIO_PLAY_REQUEST", (message, sourceTabId) => {
     if (message.url) {
-      // Legacy support - if URL is provided, call loadAudio
+      // Legacy support - if URL is provided, call loadAudio. A load is a
+      // legitimate last-tab-wins takeover, so it is NOT owner-guarded —
+      // loadAudio notifies the displaced owner instead. (#452)
       logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST with URL: ${message.url}`);
       return loadAudio(message.url, sourceTabId, true);
     } else {
-      // Standard usage - no URL means play current audio
+      // Standard usage - no URL means play current audio; only the owner may
+      // resume the shared element. (#452)
+      if (!isAudioRequestFromOwner(sourceTabId, currentAudioTabId)) {
+        logger.debug(`[SayPi Audio Handler] Ignoring AUDIO_PLAY_REQUEST (resume) from non-owner tab ${sourceTabId} (current owner: ${currentAudioTabId}).`);
+        return { success: true, ignored: true };
+      }
       logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST (resume playback)`);
       return playAudio();
     }
   });
 
   registerMessageHandler("AUDIO_PAUSE_REQUEST", (message, sourceTabId) => {
+    // A displaced (non-owner) tab must not pause the audio the new owner is using. (#452)
+    if (!isAudioRequestFromOwner(sourceTabId, currentAudioTabId)) {
+      logger.debug(`[SayPi Audio Handler] Ignoring AUDIO_PAUSE_REQUEST from non-owner tab ${sourceTabId} (current owner: ${currentAudioTabId}).`);
+      return { success: true, ignored: true };
+    }
     const result = pauseAudio();
     if (result.success) {
       logger.debug(`[SayPi Audio Handler] AUDIO_PAUSE_REQUEST successful at ${new Date().toISOString()}`);
@@ -423,6 +501,11 @@ if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
   });
 
   registerMessageHandler("AUDIO_RESUME_REQUEST", (message, sourceTabId) => {
+    // A displaced (non-owner) tab must not resume the audio the new owner is using. (#452)
+    if (!isAudioRequestFromOwner(sourceTabId, currentAudioTabId)) {
+      logger.debug(`[SayPi Audio Handler] Ignoring AUDIO_RESUME_REQUEST from non-owner tab ${sourceTabId} (current owner: ${currentAudioTabId}).`);
+      return { success: true, ignored: true };
+    }
     const result = playAudio();
     if (result.success) {
       logger.debug(`[SayPi Audio Handler] AUDIO_RESUME_REQUEST successful at ${new Date().toISOString()}`);
@@ -433,6 +516,13 @@ if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
   });
 
   registerMessageHandler("AUDIO_STOP_REQUEST", (message, sourceTabId) => {
+    // A displaced (non-owner) tab must not stop the audio the new owner is using —
+    // and must not decrement the shared usage counter for a stop that did not
+    // happen (stopAudio decrements unconditionally). (#452)
+    if (!isAudioRequestFromOwner(sourceTabId, currentAudioTabId)) {
+      logger.debug(`[SayPi Audio Handler] Ignoring AUDIO_STOP_REQUEST from non-owner tab ${sourceTabId} (current owner: ${currentAudioTabId}).`);
+      return { success: true, ignored: true };
+    }
     return stopAudio();
   });
 
