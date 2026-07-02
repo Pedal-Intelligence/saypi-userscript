@@ -52,6 +52,7 @@ export abstract class VoiceSelector {
     this.userPreferences = userPreferences;
     this.element = element;
     this.registerAuthenticationChangeHandler();
+    this.registerVoicePreferenceChangeHandler();
   }
 
   abstract getId(): string;
@@ -71,6 +72,66 @@ export abstract class VoiceSelector {
         this.addVoicesToSelector(voiceSelector as HTMLElement);
       }
     });
+  }
+
+  /**
+   * Registers a listener for voice-preference changes that originate outside
+   * this menu. Picking a voice in the settings-page catalog persists to
+   * chrome.storage, which PreferenceModule relays into the host tab as a
+   * "userPreferenceChanged" event carrying `voicePreferences`. TTS switches
+   * voices the moment that write lands, so the selector must follow in the
+   * same beat rather than waiting for its next repopulate (#475).
+   */
+  protected registerVoicePreferenceChangeHandler(): void {
+    EventBus.on(
+      "userPreferenceChanged",
+      (detail: {
+        voicePreferences?: unknown;
+        voiceChatbotId?: string | null;
+      }) => {
+        if (!detail || detail.voicePreferences === undefined) {
+          return; // not a voice-preference event
+        }
+        if (
+          detail.voiceChatbotId &&
+          detail.voiceChatbotId !== this.chatbot.getID()
+        ) {
+          return; // another host's selection
+        }
+        // Re-read through the preference module (its cache is already
+        // updated) so we apply a resolved voice object, not a bare id.
+        this.userPreferences.getVoice(this.chatbot).then((voice) => {
+          this.applySelectedVoice(voice ?? null);
+        });
+      }
+    );
+  }
+
+  /**
+   * Reflect an externally-changed stored voice on this surface without a
+   * repopulate (and therefore without disturbing an open menu). The base
+   * covers button-grid surfaces (Pi's menus); dropdown-style selectors
+   * override (ClaudeVoiceMenu).
+   */
+  protected applySelectedVoice(voice: SpeechSynthesisVoiceRemote | null): void {
+    if (!voice) {
+      this.element
+        .querySelectorAll<HTMLButtonElement>("button.saypi-custom-voice")
+        .forEach((button) => this.unmarkButtonAsSelectedVoice(button));
+      return;
+    }
+    const target = this.element.querySelector<HTMLButtonElement>(
+      `button[data-voice-id="${voice.id}"]`
+    );
+    if (!target) {
+      // Hidden by the shortlist cap: pin it so the next populate shows it.
+      this.pinnedCustomVoiceId = voice.id;
+      return;
+    }
+    this.element.querySelectorAll("button").forEach((button) => {
+      this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
+    });
+    this.markButtonAsSelectedVoice(target);
   }
 
   /**
