@@ -5,8 +5,32 @@ import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
-import { audioProviders, isPlaceholderUtterance } from "../../src/tts/SpeechModel";
+import {
+  audioProviders,
+  isPlaceholderUtterance,
+  SpeechSynthesisVoiceRemote,
+} from "../../src/tts/SpeechModel";
 import EventBus from "../../src/events/EventBus";
+
+// Controllable stand-in for the JwtManager singleton: the voice cache's
+// validity is keyed off the auth state it reports (#456).
+const fakeAuth = vi.hoisted(() => ({
+  authenticated: false,
+  userId: undefined as string | undefined,
+}));
+
+vi.mock("../../src/JwtManager", () => {
+  const fakeJwtManager = {
+    isAuthenticated: () => fakeAuth.authenticated,
+    getClaims: () => (fakeAuth.userId ? { userId: fakeAuth.userId } : null),
+  };
+  return {
+    JwtManager: class {},
+    getJwtManagerSync: () => fakeJwtManager,
+    getJwtManager: () => Promise.resolve(fakeJwtManager),
+    default: () => Promise.resolve(fakeJwtManager),
+  };
+});
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
@@ -40,6 +64,9 @@ describe("SpeechSynthesisModule", () => {
       isOpen: vi.fn().mockReturnValue(false),
     } as unknown as AudioStreamManager;
 
+    fakeAuth.authenticated = false;
+    fakeAuth.userId = undefined;
+
     const preferredVoiceMock = mockVoices[0];
 
     userPreferenceModuleMock = {
@@ -56,6 +83,9 @@ describe("SpeechSynthesisModule", () => {
   });
 
   afterEach(() => {
+    // Some tests register menu-style listeners on the shared singleton
+    // EventBus; drop them so they can't leak into unrelated tests.
+    EventBus.removeAllListeners("saypi:auth:status-changed");
     vi.unstubAllEnvs();
     vi.clearAllMocks();
   });
@@ -290,6 +320,111 @@ describe("SpeechSynthesisModule", () => {
     expect(provider).toEqual(
       audioProviders.getDefaultForChatbot("chatgpt")
     );
+  });
+
+  // The voice list is auth-dependent (401 → [], plus per-user custom voices),
+  // so a cached list is only valid for the auth state it was fetched under.
+  // Invalidation is keyed off JwtManager's synchronous state — which the
+  // content script updates *before* emitting saypi:auth:status-changed — so it
+  // holds regardless of EventBus listener ordering (#456).
+  it("invalidates the voice cache on sign-out so a refetch returns the 401 shape (#456)", async () => {
+    // Seed the cache as a signed-in session would.
+    fakeAuth.authenticated = true;
+    fakeAuth.userId = "user-a";
+    speechSynthesisModule._cacheVoices(mockVoices, "claude");
+
+    // Sign out: fetches now come back empty (TextToSpeechService maps 401 → []).
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
+    fakeAuth.authenticated = false;
+    fakeAuth.userId = undefined;
+
+    const voices = await speechSynthesisModule.getVoices(undefined, "claude");
+
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalled();
+    expect(voices).toEqual([]);
+  });
+
+  it("refetches fresh voices on an account switch (#456)", async () => {
+    // The previous account's voices are cached...
+    fakeAuth.authenticated = true;
+    fakeAuth.userId = "user-a";
+    speechSynthesisModule._cacheVoices([mockVoices[0]], "claude");
+
+    // ...then a different account signs in, with its own voice list.
+    const freshVoices = [{ ...mockVoices[0], id: "fresh-voice", name: "Fresh Voice" }];
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve(freshVoices));
+    fakeAuth.userId = "user-b";
+
+    const voices = await speechSynthesisModule.getVoices(undefined, "claude");
+
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalled();
+    expect(voices).toEqual(freshVoices);
+  });
+
+  // On the standard bootstrap path the first VoiceSelector registers its
+  // re-render listener BEFORE this module exists (the selector's own ctor
+  // chain constructs the singleton), and EventBus dispatches in insertion
+  // order. An event-driven cache clear in this module would therefore run
+  // *after* the menu had already re-read the stale cache. The invalidation
+  // must be listener-order-independent: the menu's synchronous getVoices call
+  // during the sign-out re-render must already see an invalidated cache.
+  it("serves the signed-out list to a menu listener that runs before the module's own auth handling (#456)", async () => {
+    fakeAuth.authenticated = true;
+    fakeAuth.userId = "user-a";
+
+    // Mirror bootstrap order: menu listener first, module constructed second.
+    EventBus.removeAllListeners("saypi:auth:status-changed");
+    let voicesSeenByMenu: Promise<SpeechSynthesisVoiceRemote[]> | undefined;
+    EventBus.on("saypi:auth:status-changed", () => {
+      voicesSeenByMenu = lateModule.getVoices(undefined, "claude");
+    });
+    const lateModule = new SpeechSynthesisModule(
+      textToSpeechServiceMock,
+      audioStreamManagerMock,
+      userPreferenceModuleMock
+    );
+    lateModule._cacheVoices(mockVoices, "claude");
+
+    // Sign out. JwtManager's state is reconciled with the broadcast before
+    // the event is emitted (handleAuthStatusUpdate in AuthStatusSync.ts —
+    // exercised against the real JwtManager in test/AuthStatusSync.spec.ts).
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
+    fakeAuth.authenticated = false;
+    fakeAuth.userId = undefined;
+    EventBus.emit("saypi:auth:status-changed", false);
+
+    expect(await voicesSeenByMenu).toEqual([]);
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalled();
+  });
+
+  // A voices fetch that started under the previous auth state must not
+  // populate the cache after the auth state changes — a late response would
+  // resurrect the previous user's voice list.
+  it("discards an in-flight voices response that raced an auth change (#456)", async () => {
+    fakeAuth.authenticated = true;
+    fakeAuth.userId = "user-a";
+
+    let resolveStaleFetch!: (voices: SpeechSynthesisVoiceRemote[]) => void;
+    textToSpeechServiceMock.getVoices = vi.fn(
+      () =>
+        new Promise<SpeechSynthesisVoiceRemote[]>((resolve) => {
+          resolveStaleFetch = resolve;
+        })
+    );
+    const staleCall = speechSynthesisModule.getVoices(undefined, "claude");
+
+    // Sign out while user A's fetch is still in flight; a signed-out call
+    // starts its own fetch, then user A's response arrives late.
+    fakeAuth.authenticated = false;
+    fakeAuth.userId = undefined;
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
+    const signedOutCall = speechSynthesisModule.getVoices(undefined, "claude");
+    resolveStaleFetch(mockVoices);
+
+    expect(await signedOutCall).toEqual([]);
+    expect(await staleCall).toEqual([]); // must not surface user A's voices
+    // ...and the late response must not have poisoned the cache for later reads.
+    expect(await speechSynthesisModule.getVoices(undefined, "claude")).toEqual([]);
   });
 
   // "" is InputBuffer's end-of-speech sentinel (END_OF_SPEECH_MARKER). ChatGPT's

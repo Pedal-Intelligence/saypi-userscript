@@ -2,6 +2,7 @@ import AudioModule from "./audio/AudioModule.js";
 import EventBus from "./events/EventBus.js";
 import { logger } from "./LoggingModule.js";
 import { getJwtManager } from "./JwtManager.ts";
+import { handleAuthStatusUpdate } from "./AuthStatusSync.ts";
 import telemetryModule from "./TelemetryModule.ts";
 import { addUserAgentFlags } from "./UserAgentModule.ts";
 import { stampBuildOnDocument } from "./build-stamp.ts";
@@ -146,13 +147,13 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
     chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
       if (message.type === "AUTH_STATUS_CHANGED") {
         logger.info("Received auth status change:", message.isAuthenticated);
-        
-        // Refresh token to ensure we have the latest from storage
-        getJwtManager().then(async jwtManager => {
-          await jwtManager.loadFromStorage();
-          // Optionally, you can add more logic here if needed
-          logger.debug("JWT manager updated with latest token");
-          EventBus.emit("saypi:auth:status-changed", message.isAuthenticated);
+
+        // Reconcile the in-memory JwtManager with the broadcast state — on
+        // sign-out this drops the stale in-memory token, which loadFromStorage
+        // alone cannot do (#456) — then re-emit "saypi:auth:status-changed"
+        // on the EventBus.
+        handleAuthStatusUpdate(message.isAuthenticated).catch((error) => {
+          logger.error("Failed to reconcile auth status change:", error);
         });
       }
       // Make sure to return false as we're not sending a response asynchronously
