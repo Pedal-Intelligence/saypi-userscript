@@ -18,7 +18,7 @@ import { test, expect } from "../fixtures/extension";
  * gate — see e2e/README.md).
  */
 
-const TABS = ["general", "chat", "dictation", "about"] as const;
+const TABS = ["general", "chat", "dictation", "voices", "about"] as const;
 
 test.describe("settings page (Preact migration)", () => {
   test("bootstraps the header and every tab panel without uncaught errors", async ({

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/preact";
-import { ChatPanel } from "../../../entrypoints/settings/tabs/chat/ChatPanel";
-import { VoicesController } from "../../../entrypoints/settings/tabs/chat/voices-controller";
+import { VoicesPanel } from "../../../entrypoints/settings/tabs/voices/VoicesPanel";
+import { VoicesController } from "../../../entrypoints/settings/tabs/voices/voices-controller";
 import {
   ElevenLabsVoice,
   claudeMockVoices,
@@ -28,7 +28,7 @@ function makeDeps(overrides: Partial<Record<string, any>> = {}) {
 }
 
 async function mount(deps = makeDeps()) {
-  const { container } = render(<ChatPanel />);
+  const { container } = render(<VoicesPanel />);
   const controller = new VoicesController(container as HTMLElement, deps as any);
   await controller.init();
   return { container: container as HTMLElement, controller, deps };

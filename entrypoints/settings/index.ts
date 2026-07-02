@@ -7,6 +7,7 @@ import { TabNavigator } from "./components/tabs";
 import { GeneralTab } from "./tabs/general";
 import { ChatTab } from "./tabs/chat";
 import { DictationTab } from "./tabs/dictation";
+import { VoicesTab } from "./tabs/voices";
 import { AboutTab } from "./tabs/about";
 import { replaceI18n } from "./shared/i18n";
 import type { TabController } from "./shared/types";
@@ -69,6 +70,7 @@ class SettingsApp {
     this.tabs.set('general', new GeneralTab(document.querySelector('#tab-general')!));
     this.tabs.set('chat', new ChatTab(document.querySelector('#tab-chat')!));
     this.tabs.set('dictation', new DictationTab(document.querySelector('#tab-dictation')!));
+    this.tabs.set('voices', new VoicesTab(document.querySelector('#tab-voices')!));
     this.tabs.set('about', new AboutTab(document.querySelector('#tab-about')!));
 
     // Determine which tab to show initially: a one-shot deep link (set by

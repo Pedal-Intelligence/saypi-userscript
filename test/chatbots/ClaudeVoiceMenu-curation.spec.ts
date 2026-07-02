@@ -93,7 +93,7 @@ describe("ClaudeVoiceMenu shortlist cap + door (flip-day catalog)", () => {
       "[data-action='more-voices']"
     ) as HTMLElement;
     door.click();
-    expect(openSettingsMock).toHaveBeenCalled();
+    expect(openSettingsMock).toHaveBeenCalledWith("voices");
   });
 
   it("keeps the door row even when the whole catalog fits the cap (#472)", () => {
@@ -198,13 +198,13 @@ describe("ClaudeVoiceMenu current-voice pinning", () => {
     expect(rows[0].dataset.voiceName).toBe("Lucy");
   });
 
-  it("passes the AI Chat tab as the door's settings destination", () => {
+  it("passes the Voices tab as the door's settings destination (#471)", () => {
     const menu = makeMenu();
     menu.populateVoices(flipDayCatalog, menu.element);
     const door = menu.menuContent.querySelector(
       "[data-action='more-voices']"
     ) as HTMLElement;
     door.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("chat");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices");
   });
 });

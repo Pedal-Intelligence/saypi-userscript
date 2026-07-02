@@ -33,7 +33,7 @@ function defaultDeps(): VoiceCatalogDeps {
 }
 
 /**
- * Renders the full per-host voice catalog in the settings AI Chat tab — the
+ * Renders the full per-host voice catalog in the settings Voices tab — the
  * "shelf" layer of the voice-selection architecture: HD and Everyday groups,
  * every catalog voice listed, selection per host. The in-page menus stay
  * capped; this surface absorbs the catalog's growth.

@@ -1,6 +1,4 @@
-/* Chat tab specific styles */
-
-/* Voices section — the full per-host catalog behind the in-page menus'
+/* Voices tab — the full per-host catalog behind the in-page menus'
    "More voices…" door */
 #voice-host-pills {
   display: flex;

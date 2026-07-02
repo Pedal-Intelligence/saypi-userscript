@@ -28,6 +28,7 @@ export class TabNavigator {
       chat: 'bot-message-square',
       general: 'settings',
       dictation: 'mic',
+      voices: 'audio-lines',
       about: 'info'
     };
 
