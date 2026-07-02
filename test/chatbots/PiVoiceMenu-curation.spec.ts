@@ -23,7 +23,7 @@ vi.mock("../../src/popup/popupopener", () => ({
   openSettings: (...args: unknown[]) => openSettingsMock(...args),
 }));
 
-import { PiVoiceMenu } from "../../src/chatbots/PiVoiceMenu";
+import { PiVoiceMenu, PiVoiceSettings } from "../../src/chatbots/PiVoiceMenu";
 import { PI_MENU_CAP } from "../../src/tts/VoiceCuration";
 import { ElevenLabsVoice, OpenAIVoice, openAiMockVoices } from "../data/Voices";
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
@@ -107,12 +107,52 @@ describe("PiVoiceMenu shortlist cap + door", () => {
     expect(openSettingsMock).toHaveBeenCalled();
   });
 
-  it("omits the door and shows everything when the catalog fits the cap (today's 3 voices)", () => {
+  it("still shows the door when the catalog fits the cap — it's the path to the catalog, not an overflow marker (#472)", () => {
     const menu = makeMenu();
     const selector = document.createElement("div");
     menu.populateVoices([...piBuiltIns, ...piElevenLabs], selector);
     expect(customRows(selector).length).toBe(piElevenLabs.length);
-    expect(selector.querySelector("button.saypi-more-voices")).toBeNull();
+    const door = selector.querySelector(
+      "button.saypi-more-voices"
+    ) as HTMLButtonElement;
+    expect(door).not.toBeNull();
+    door.click();
+    expect(openSettingsMock).toHaveBeenCalled();
+  });
+});
+
+describe("PiVoiceSettings door (#472)", () => {
+  function makeSettings(): any {
+    const settings = Object.create(PiVoiceSettings.prototype);
+    settings.chatbot = {} as any;
+    settings.userPreferences = {
+      getVoice: vi.fn(async () => null),
+      setVoice: vi.fn(async () => {}),
+      unsetVoice: vi.fn(async () => {}),
+    };
+    settings.element = document.createElement("div");
+    return settings;
+  }
+
+  it("appends a 'More voices' door to the uncapped settings grid", () => {
+    const settings = makeSettings();
+    const grid = document.createElement("div");
+    settings.populateVoices([...piElevenLabs], grid);
+    expect(customRows(grid).length).toBe(piElevenLabs.length); // grid stays uncapped
+    const door = grid.querySelector(
+      "button.saypi-more-voices"
+    ) as HTMLButtonElement;
+    expect(door).not.toBeNull();
+    door.click();
+    expect(openSettingsMock).toHaveBeenCalled();
+  });
+
+  it("does not duplicate the door on repeated populates", () => {
+    const settings = makeSettings();
+    const grid = document.createElement("div");
+    settings.populateVoices([...piElevenLabs], grid);
+    settings.populateVoices([...piElevenLabs], grid);
+    expect(grid.querySelectorAll("button.saypi-more-voices").length).toBe(1);
   });
 });
 

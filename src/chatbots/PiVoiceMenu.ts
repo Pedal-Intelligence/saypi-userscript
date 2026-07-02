@@ -182,6 +182,12 @@ export class PiVoiceSettings extends VoiceSelector {
     return "saypi-voice-settings";
   }
 
+  // Pi's own settings grid is uncapped, but still gets the door — it is the
+  // only path from this surface to the extension's full voice catalog (#472).
+  protected override showsMoreVoicesDoor(): boolean {
+    return true;
+  }
+
   getButtonClasses(): string[] {
     return [
       "flex",

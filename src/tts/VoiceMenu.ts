@@ -143,6 +143,16 @@ export abstract class VoiceSelector {
     return null;
   }
 
+  /**
+   * Whether this surface renders the "More voices" door to the settings
+   * catalog. The door is the navigation path to the full catalog, not an
+   * overflow marker, so capped surfaces always show it; uncapped surfaces
+   * opt in (Pi's settings grid does — #472).
+   */
+  protected showsMoreVoicesDoor(): boolean {
+    return this.getCustomVoiceCap() !== null;
+  }
+
   async refreshMenu(): Promise<void> {
     // remove all voices from the selector
     const voiceButtons = Array.from(this.element.querySelectorAll("button"));
@@ -180,6 +190,9 @@ export abstract class VoiceSelector {
     const cap = this.getCustomVoiceCap();
     if (cap === null) {
       this.populateCustomVoices(customVoices, voiceSelector);
+      if (this.showsMoreVoicesDoor()) {
+        this.addMoreVoicesDoor(voiceSelector);
+      }
       return true;
     }
 
@@ -195,7 +208,7 @@ export abstract class VoiceSelector {
       voiceSelector,
       curated.tiersCoexist
     );
-    if (curated.hiddenCount > 0) {
+    if (this.showsMoreVoicesDoor()) {
       this.addMoreVoicesDoor(voiceSelector);
     }
 
