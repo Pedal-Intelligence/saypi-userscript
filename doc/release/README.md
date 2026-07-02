@@ -17,6 +17,9 @@ auto-update**, and store-submission plumbing is founder-gated.
   copy freely, but **stop at the first mutating/outward gate** and hand off to the founder.
 - The tooling **never loads `.env.production`**, bumps, builds, tags, pushes, or submits
   without the founder. `bump`/`build`/`tag`/`finalize` refuse to run without `--yes`.
+- **Shipped something bad?** The reverse path is
+  [`doc/release/incident-response.md`](incident-response.md) — server-side kill-switch
+  first, expedited patch second; escalate to the founder immediately.
 
 ## Layout
 

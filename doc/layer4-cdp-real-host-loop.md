@@ -121,5 +121,10 @@ running `seed`, **Ctrl-C** now shuts Chrome down gracefully too.
 - **Headed only** for Cloudflare hosts → a visible window; the machine must be
   unlocked. Not silent cron.
 - **Not CI** — real internet, real auth, flaky/rate-limited.
+- **`verify` sends a real message** (unless `--no-turn`): the synthetic transcript is
+  submitted to the host as the founder, leaving a real conversation behind and spending
+  real STT quota. Purposeful runs only; never loop it unattended.
+- **One CDP run at a time.** `verify`/`diagnose` and both sweeps share the seeded
+  profile with no lockfile — never run two concurrently.
 - **Requires Google Chrome** installed (set `CHROME_PATH` if not at the default).
 - Real-host DOM drifts — confirms behavior, not a frozen contract.
