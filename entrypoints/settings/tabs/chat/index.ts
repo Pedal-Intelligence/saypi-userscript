@@ -3,14 +3,11 @@ import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
 import { sendMessageToActiveTab } from '../../shared/messaging';
 import { SubmitModeController } from './submit-mode-controller';
-import { VoicesController } from './voices-controller';
 import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
 import { ChatPanel } from './ChatPanel';
-import './chat.css';
 
 export class ChatTab implements TabController {
   private submitModeController: SubmitModeController | null = null;
-  private voicesController: VoicesController | null = null;
 
   constructor(public container: HTMLElement) {}
 
@@ -24,11 +21,6 @@ export class ChatTab implements TabController {
     await this.setupInterruptions();
     await this.setupAutoReadAloud();
     await this.setupSubmitMode();
-    // Voice catalog loads over the network — don't block tab init on it.
-    this.voicesController = new VoicesController(this.container);
-    this.voicesController.init().catch((error) => {
-      console.error('Failed to load the voice catalog:', error);
-    });
   }
 
   /**
@@ -37,7 +29,6 @@ export class ChatTab implements TabController {
    */
   destroy(): void {
     this.submitModeController = null;
-    this.voicesController = null;
     unmountFrom(this.container);
   }
   

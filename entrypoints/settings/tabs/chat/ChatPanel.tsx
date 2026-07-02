@@ -154,36 +154,6 @@ export function ChatPanel() {
         </div>
       </div>
 
-      {/* Full voice catalog — the destination of the in-page menus' "More
-          voices…" door. Static skeleton only; VoicesController renders the
-          per-host catalog into #voice-catalog after mount. */}
-      <div class="user-preference-item w-full max-w-lg" id="voices-preference">
-        <span class="label-text" data-i18n="voicesSectionTitle">
-          Voices
-        </span>
-        <div class="description" data-i18n="voicesSectionDescription">
-          Choose the voice that reads replies aloud on each site.
-        </div>
-        <div id="voice-host-pills" role="tablist">
-          <button
-            type="button"
-            id="voice-host-pi"
-            class="voice-host-pill"
-            role="tab"
-          >
-            Pi
-          </button>
-          <button
-            type="button"
-            id="voice-host-claude"
-            class="voice-host-pill"
-            role="tab"
-          >
-            Claude
-          </button>
-        </div>
-        <div id="voice-catalog" aria-live="polite"></div>
-      </div>
     </>
   );
 }

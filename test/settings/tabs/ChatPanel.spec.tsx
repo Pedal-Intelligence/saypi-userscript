@@ -51,17 +51,9 @@ describe("ChatPanel", () => {
     ).toBeTruthy();
   });
 
-  it("renders the Voices section with host pills and the catalog container VoicesController targets", () => {
+  it("no longer hosts the Voices section — it moved to its own tab (#471)", () => {
     const { container } = render(<ChatPanel />);
-    expect(container.querySelector("#voices-preference")).toBeTruthy();
-    expect(
-      container
-        .querySelector("#voices-preference [data-i18n='voicesSectionTitle']"),
-    ).toBeTruthy();
-    const pills = [
-      ...container.querySelectorAll("#voice-host-pills button.voice-host-pill"),
-    ];
-    expect(pills.map((p) => p.id)).toEqual(["voice-host-pi", "voice-host-claude"]);
-    expect(container.querySelector("#voice-catalog")).toBeTruthy();
+    expect(container.querySelector("#voices-preference")).toBeNull();
+    expect(container.querySelector("#voice-catalog")).toBeNull();
   });
 });

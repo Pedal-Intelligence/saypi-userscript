@@ -1580,6 +1580,10 @@
     "message": "Dictation",
     "description": "Tab label for the dictation settings section."
   },
+  "tabVoices": {
+    "message": "Voices",
+    "description": "Tab label for the voices settings section (per-site voice catalog)."
+  },
   "tabAbout": {
     "message": "About",
     "description": "Tab label for the about section."

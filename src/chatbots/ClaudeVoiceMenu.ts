@@ -837,7 +837,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   /**
    * The muted final row linking to the full voice catalog in the extension
-   * settings (AI Chat tab). Always rendered — it is the menu's path to the
+   * settings (Voices tab). Always rendered — it is the menu's path to the
    * catalog, whether or not the shortlist is hiding voices.
    */
   private createMoreVoicesItem(): HTMLDivElement {
@@ -858,7 +858,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.textContent = getMessage("moreVoices");
     item.addEventListener("click", () => {
       this.toggleMenu();
-      openSettings("chat");
+      openSettings("voices");
     });
     return item;
   }

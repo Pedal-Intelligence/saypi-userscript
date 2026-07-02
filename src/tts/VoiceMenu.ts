@@ -355,7 +355,7 @@ export abstract class VoiceSelector {
       );
       door.textContent = getMessage("moreVoices");
       door.addEventListener("click", () => {
-        openSettings("chat");
+        openSettings("voices");
       });
     }
     const customButtons = voiceSelector.querySelectorAll(
