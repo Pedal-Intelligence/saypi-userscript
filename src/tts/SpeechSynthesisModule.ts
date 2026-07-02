@@ -131,10 +131,12 @@ class SpeechSynthesisModule {
    * bootstrap path the first VoiceSelector registers its re-render listener
    * *before* this singleton exists (the selector's own constructor chain
    * creates it), so an event-driven clear here would run after the menu had
-   * already re-read the stale cache. JwtManager is updated before that event
-   * is emitted (setupAuthListener in saypi.index.js awaits loadFromStorage
-   * first), so checking it here guarantees every consumer reads a cache that
-   * matches the current auth state, whatever triggered the read.
+   * already re-read the stale cache. JwtManager is reconciled with the
+   * broadcast auth state before that event is emitted (handleAuthStatusUpdate
+   * in AuthStatusSync.ts — on sign-out it clears the stale in-memory token,
+   * since loadFromStorage can't null state from empty storage), so checking
+   * it here guarantees every consumer reads a cache that matches the current
+   * auth state, whatever triggered the read.
    */
   private syncVoicesCacheWithAuthState(): void {
     const fingerprint = this.currentAuthFingerprint();

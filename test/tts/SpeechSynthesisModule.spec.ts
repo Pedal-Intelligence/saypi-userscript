@@ -385,8 +385,9 @@ describe("SpeechSynthesisModule", () => {
     );
     lateModule._cacheVoices(mockVoices, "claude");
 
-    // Sign out. JwtManager's state is updated before the event is emitted
-    // (setupAuthListener in saypi.index.js awaits loadFromStorage first).
+    // Sign out. JwtManager's state is reconciled with the broadcast before
+    // the event is emitted (handleAuthStatusUpdate in AuthStatusSync.ts —
+    // exercised against the real JwtManager in test/AuthStatusSync.spec.ts).
     textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
     fakeAuth.authenticated = false;
     fakeAuth.userId = undefined;
