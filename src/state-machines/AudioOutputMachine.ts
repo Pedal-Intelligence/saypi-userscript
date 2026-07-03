@@ -25,6 +25,14 @@ type ChangeVoiceEvent = {
   voice: MatchableVoice | null;
 };
 type ReplayingAudioEvent = { type: "replaying" };
+// A free canned voice-sample audition (design §4). Deliberately carries a
+// `source` that mismatches the selected voice/provider; the `preview`
+// transition arms `replaying` so `shouldSkip` lets it through.
+type PreviewEvent = { type: "preview"; source: string };
+// Call-boundary signals (from ConversationMachine's session:* events) that gate
+// previews out of an active call even between utterances (idle-but-in-a-call).
+type CallStartedEvent = { type: "callStarted" };
+type CallEndedEvent = { type: "callEnded" };
 type AudioOutputEvent =
   | LoadstartEvent
   | { type: "skipNext" }
@@ -37,7 +45,10 @@ type AudioOutputEvent =
   | { type: "emptied" }
   | ChangeProviderEvent
   | ChangeVoiceEvent
-  | ReplayingAudioEvent;
+  | ReplayingAudioEvent
+  | PreviewEvent
+  | CallStartedEvent
+  | CallEndedEvent;
 
 type AudioOutputContext = {
   skip: boolean;
@@ -45,6 +56,10 @@ type AudioOutputContext = {
   replaying: boolean;
   provider: AudioProvider;
   voice: MatchableVoice | null;
+  // True while a voice call is live. A preview must never talk over a call, so
+  // it is refused while this is set even though the machine may be idle between
+  // the call's own utterances.
+  callActive: boolean;
 };
 
 export const audioOutputMachine = setup({
@@ -73,6 +88,22 @@ export const audioOutputMachine = setup({
     setSkip: assign({
       skip: true,
     }),
+    setCallActive: assign({
+      callActive: true,
+    }),
+    clearCallActive: assign({
+      callActive: false,
+    }),
+    // Kick the actual load on the same channel live TTS uses. The real
+    // <audio> `loadstart` then advances the machine (rest -> loading);
+    // `replaying` (armed by the preview transition) keeps the mismatched
+    // sample from being skipped. This reuses the machine-wide `replaying`
+    // exemption, which assumes the NEXT loadstart is this preview's own — safe
+    // because a preview is only reachable from a resting state (nothing else is
+    // loading a track to race it), and `loading.entry` clears the flag at once.
+    startPreview: ({ event }) => {
+      EventBus.emit("audio:load", { url: (event as PreviewEvent).source });
+    },
     emitEvent: (_, params: { eventName: string }) => {
       EventBus.emit(params.eventName);
     },
@@ -97,6 +128,7 @@ export const audioOutputMachine = setup({
     },
   },
   guards: {
+    notCallActive: ({ context }) => !context.callActive,
     shouldSkip: ({ context, event }) => {
       const shouldSkip = context.skip === true;
 
@@ -129,6 +161,7 @@ export const audioOutputMachine = setup({
     replaying: false,
     provider: audioProviders.getDefault(),
     voice: null,
+    callActive: false,
   },
   id: "audioOutput",
   initial: "idle",
@@ -141,6 +174,12 @@ export const audioOutputMachine = setup({
     },
     replaying: {
       actions: "setReplaying",
+    },
+    callStarted: {
+      actions: "setCallActive",
+    },
+    callEnded: {
+      actions: "clearCallActive",
     },
   },
   states: {
@@ -173,6 +212,19 @@ export const audioOutputMachine = setup({
           description: `Do not play the next track.`,
           actions: "setSkip",
         },
+        // A preview is allowed from every RESTING state — idle here, plus the
+        // non-playing `loaded` substates (ready/paused/ended below). It is
+        // deliberately ABSENT from `loading` and `loaded.playing`, where the
+        // event is unhandled and dropped, so a preview can never talk over
+        // audio that is loading or playing. `notCallActive` closes the
+        // resting-but-in-a-call gap. Internal (no target): the ensuing real
+        // `loadstart` advances the machine, exempted from shouldSkip by the
+        // armed `replaying` flag; `clearSkip` stops a lingering skip (armed to
+        // suppress Pi auto-play) from swallowing an intentional audition.
+        preview: {
+          guard: "notCallActive",
+          actions: ["clearSkip", "setReplaying", "startPreview"],
+        },
       },
     },
     loading: {
@@ -198,6 +250,11 @@ export const audioOutputMachine = setup({
           on: {
             play: {
               target: "playing",
+            },
+            // Resting state (loaded, not yet playing) — allow previews. See idle.
+            preview: {
+              guard: "notCallActive",
+              actions: ["clearSkip", "setReplaying", "startPreview"],
             },
           },
         },
@@ -236,6 +293,13 @@ export const audioOutputMachine = setup({
                 target: "playing",
               },
             ],
+            // A paused reply is not audible — allow previews (and the intro on a
+            // mid-turn voice change). Otherwise pausing TTS would dead-end the
+            // voice menu. See idle.
+            preview: {
+              guard: "notCallActive",
+              actions: ["clearSkip", "setReplaying", "startPreview"],
+            },
           },
         },
         ended: {
@@ -250,6 +314,15 @@ export const audioOutputMachine = setup({
               target: "ready",
               description:
                 "An ended track is seeked back to earlier in the track.",
+            },
+            // A finished track parks the machine here (not idle), so a preview
+            // must also be reachable from `ended` — otherwise the SECOND ▶ tap
+            // (or the first tap after a TTS reply ends) would be silently
+            // dropped and the menu would look broken. Same guard/actions as
+            // idle; nothing is audible in `ended`, so it never double-talks.
+            preview: {
+              guard: "notCallActive",
+              actions: ["clearSkip", "setReplaying", "startPreview"],
             },
           },
         },

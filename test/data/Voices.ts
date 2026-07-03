@@ -39,6 +39,7 @@ class ElevenLabsVoice extends Voice implements SpeechSynthesisVoiceRemote {
   accent?: string;
   description?: string;
   languages?: string[];
+  sample_url?: string;
 
   constructor(id: string, name: string, gender?: string, accent?: string, description?: string, languages?: string[]) {
     super(id, name, 0.3, 1000, "ElevenLabs");
@@ -60,6 +61,7 @@ class OpenAIVoice extends Voice implements SpeechSynthesisVoiceRemote {
   gender?: string;
   accent?: string;
   description?: string;
+  sample_url?: string;
 
   constructor(id: string, name: string, gender?: string, accent?: string, description?: string) {
     super(id, name, 0.015, 50, "OpenAI");

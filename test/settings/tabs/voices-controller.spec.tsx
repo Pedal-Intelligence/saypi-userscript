@@ -23,8 +23,19 @@ function makeDeps(overrides: Partial<Record<string, any>> = {}) {
     getVoice: vi.fn(async () => null as SpeechSynthesisVoiceRemote | null),
     setVoice: vi.fn(async () => {}),
     isAuthenticated: vi.fn(() => true),
+    playPreview: vi.fn((_voice: SpeechSynthesisVoiceRemote) => {}),
     ...overrides,
   };
+}
+
+function voiceWithSample(
+  id: string,
+  name: string,
+  sampleUrl?: string
+): SpeechSynthesisVoiceRemote {
+  const v = new ElevenLabsVoice(id, name);
+  v.sample_url = sampleUrl;
+  return v;
 }
 
 async function mount(deps = makeDeps()) {
@@ -192,6 +203,66 @@ describe("VoicesController", () => {
           "#voice-catalog [data-voice-id='v1'] .voice-row-desc"
         )
       ).toBeNull();
+    });
+  });
+
+  // Choice by ear (design §4): a free canned preview clip, rendered only when
+  // the server serves a sample_url — a separate target from "Use this voice".
+  describe("voice preview (▶)", () => {
+    it("renders a ▶ button only on rows whose voice has a sample_url", async () => {
+      const withClip = voiceWithSample(
+        "withclip",
+        "Nova",
+        "https://api.saypi.ai/voices/nova/sample.mp3"
+      );
+      const noClip = voiceWithSample("noclip", "Ash", undefined);
+      const deps = makeDeps({ getVoices: vi.fn(async () => [withClip, noClip]) });
+      const { container } = await mount(deps);
+      const previewOf = (id: string) =>
+        container.querySelector(
+          `#voice-catalog [data-voice-id='${id}'] button.voice-preview`
+        );
+      expect(previewOf("withclip")).toBeTruthy();
+      expect(previewOf("noclip")).toBeNull();
+    });
+
+    it("plays the sample without selecting the voice when ▶ is clicked", async () => {
+      const withClip = voiceWithSample(
+        "withclip",
+        "Nova",
+        "https://api.saypi.ai/voices/nova/sample.mp3"
+      );
+      const deps = makeDeps({ getVoices: vi.fn(async () => [withClip]) });
+      const { container } = await mount(deps);
+      const btn = container.querySelector(
+        "#voice-catalog [data-voice-id='withclip'] button.voice-preview"
+      ) as HTMLElement;
+      btn.click();
+      await flushAsync();
+      expect(deps.playPreview).toHaveBeenCalledTimes(1);
+      expect(deps.playPreview).toHaveBeenCalledWith(
+        expect.objectContaining({ id: "withclip" })
+      );
+      // Preview must not select — that is the "Use this voice" button's job.
+      expect(deps.setVoice).not.toHaveBeenCalled();
+    });
+
+    it("offers ▶ on the current voice's row too (the 'Your voice' card previews)", async () => {
+      const current = voiceWithSample(
+        "withclip",
+        "Nova",
+        "https://api.saypi.ai/voices/nova/sample.mp3"
+      );
+      const deps = makeDeps({
+        getVoices: vi.fn(async () => [current]),
+        getVoice: vi.fn(async () => current),
+      });
+      const { container } = await mount(deps);
+      const row = container.querySelector(
+        "#voice-catalog [data-voice-id='withclip']"
+      ) as HTMLElement;
+      expect(row.classList.contains("current")).toBe(true);
+      expect(row.querySelector("button.voice-preview")).toBeTruthy();
     });
   });
 });

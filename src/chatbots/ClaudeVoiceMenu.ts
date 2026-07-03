@@ -5,6 +5,8 @@ import { Chatbot } from "./Chatbot";
 import chevronSvgContent from "../icons/claude-chevron.svg?raw";
 import volumeSvgContent from "../icons/volume-mid.svg?raw";
 import volumeMutedSvgContent from "../icons/volume-muted.svg?raw";
+import playSvgContent from "../icons/play.svg?raw";
+import EventBus from "../events/EventBus";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
@@ -333,10 +335,40 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     item.appendChild(content);
 
-    // Add checkmark container - positioned as second column in grid
+    // Trailing controls occupy the grid's second column. Wrapping them (rather
+    // than widening the grid to a new `grid-cols-[…]` arbitrary value claude.ai
+    // may not compile — cluster-J trap) keeps the existing 2-column template
+    // intact and lets the ▶ + checkmark sit together, styled by SayPi's own SCSS.
+    const trailing = document.createElement("div");
+    trailing.classList.add("saypi-voice-trailing");
+
+    // Choice by ear (design §4): a free ▶ preview, a SEPARATE target from
+    // selecting the row, rendered only when the server serves a sample clip.
+    if (voice && voice.sample_url) {
+      const sampleUrl = voice.sample_url;
+      const preview = document.createElement("button");
+      preview.type = "button";
+      // Kept out of the roving focus for now (the menu has no keyboard model);
+      // still mouse-operable and screen-reader-labelled.
+      preview.tabIndex = -1;
+      preview.classList.add("saypi-voice-preview");
+      preview.setAttribute("aria-label", getMessage("voicesPreview", [voice.name]));
+      addSvgToButton(preview, playSvgContent, "w-4", "h-4");
+      preview.addEventListener("click", (e) => {
+        // The row div carries the select listener; stopPropagation is the
+        // single invariant that keeps play and select as distinct targets.
+        e.stopPropagation();
+        EventBus.emit("audio:preview", { url: sampleUrl });
+      });
+      trailing.appendChild(preview);
+    }
+
+    // Checkmark container - updateSelectedVoice finds it by descendant query,
+    // so nesting it under `trailing` is transparent to selection rendering.
     const checkmarkContainer = document.createElement("div");
     checkmarkContainer.classList.add("checkmark-container");
-    item.appendChild(checkmarkContainer);
+    trailing.appendChild(checkmarkContainer);
+    item.appendChild(trailing);
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice, item));
     
