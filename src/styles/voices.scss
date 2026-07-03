@@ -29,6 +29,40 @@ button.saypi-more-voices {
   opacity: 0.7;
   font-size: 0.9em;
 }
+// ▶ free-sample preview affordance in the in-page voice menus (design §4).
+// A target of its own, separate from selecting the row. Fully SayPi-styled so
+// it renders identically on every host (never relying on the host's Tailwind),
+// and it resets host button chrome that would otherwise bleed in.
+.saypi-voice-trailing {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+button.saypi-voice-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+}
+button.saypi-voice-preview:hover {
+  opacity: 1;
+  background: rgba(127, 127, 127, 0.18);
+}
+button.saypi-voice-preview svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}
 #saypi-voice-settings button.selected.paola {
   background-color: rgb(200, 200, 200);
   border-color: rgb(200, 200, 200);

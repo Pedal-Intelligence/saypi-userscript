@@ -29,6 +29,11 @@ vi.mock("../../src/tts/SpeechSynthesisModule", () => ({
   },
 }));
 
+const emitMock = vi.fn();
+vi.mock("../../src/events/EventBus", () => ({
+  default: { emit: (...args: any[]) => emitMock(...args), on: vi.fn(), off: vi.fn() },
+}));
+
 import { VoiceSelector } from "../../src/tts/VoiceMenu";
 
 class TestVoiceSelector extends VoiceSelector {
@@ -99,5 +104,56 @@ describe("VoiceSelector.introduceVoice — streaming source (#375)", () => {
     expect(createCompletedSpeechStreamMock).not.toHaveBeenCalled();
     expect(createSpeechMock).not.toHaveBeenCalled();
     expect(speakMock).not.toHaveBeenCalled();
+  });
+});
+
+/**
+ * Phase 1.5 (founder-chosen): route the existing select-time audition through
+ * the gated preview path, so selecting a voice mid-turn no longer talks over
+ * live TTS / an active call — it is suppressed instead. The audition still
+ * SYNTHESIZES (metered) for custom voices; only its PLAYBACK is gated. The
+ * metered synthesis itself is retired later (Phase 2, server-gated on clips).
+ */
+describe("VoiceSelector.introduceVoice — routes audition through the gated preview path", () => {
+  const customVoice: any = { id: "vabc", name: "Jarnathan", default: false, powered_by: "inflection.ai" };
+
+  beforeEach(() => {
+    createCompletedSpeechStreamMock.mockReset().mockResolvedValue({ voice: null });
+    createSpeechMock.mockReset().mockResolvedValue({ voice: null });
+    speakMock.mockReset();
+    emitMock.mockReset();
+    getMessageMock.mockReset().mockImplementation((key: string) => `intro:${key}`);
+  });
+
+  it("plays a custom-voice audition through speak(..., preview=true), not ungated", async () => {
+    const el = document.createElement("div");
+    const chatbot: any = { getID: () => "claude" }; // custom-voice branch
+    const selector = new TestVoiceSelector(chatbot, {} as any, el);
+
+    selector.introduceVoice(customVoice);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    // The 3rd arg is the preview flag: true routes playback through audio:preview.
+    expect(speakMock.mock.calls[0][2]).toBe(true);
+  });
+
+  it("plays a built-in voice audition via audio:preview, not the ungated audio:load", () => {
+    const el = document.createElement("div");
+    // A built-in provider (has getVoiceIntroductionUrl) with a default voice.
+    const chatbot: any = {
+      getID: () => "pi",
+      getExtraVoices: () => [],
+      getVoiceIntroductionUrl: (id: string) => `https://pi.ai/intro/${id}`,
+    };
+    const selector = new TestVoiceSelector(chatbot, {} as any, el);
+    const builtInVoice: any = { id: "1", name: "Pi 1", default: true, powered_by: "inflection.ai" };
+
+    selector.introduceVoice(builtInVoice);
+
+    expect(emitMock).toHaveBeenCalledWith("audio:preview", {
+      url: "https://pi.ai/intro/1",
+    });
+    expect(emitMock).not.toHaveBeenCalledWith("audio:load", expect.anything());
   });
 });

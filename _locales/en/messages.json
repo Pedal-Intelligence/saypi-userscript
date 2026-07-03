@@ -1004,6 +1004,16 @@
     "message": "In use",
     "description": "Badge marking the currently selected voice in the settings voice catalog"
   },
+  "voicesPreview": {
+    "message": "Play a sample of $name$",
+    "description": "Accessible label for the play (▶) button that auditions a voice's free sample clip on a voice row; $name$ is the voice's name.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
   "voicesNoneAvailable": {
     "message": "Voices couldn't be loaded right now. Please try again later.",
     "description": "Shown in the settings voice catalog when the voice list is empty for a signed-in user (e.g. a network problem)"

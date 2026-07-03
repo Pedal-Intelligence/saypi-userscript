@@ -526,6 +526,28 @@ export default class AudioModule {
         outputActor.send({ type: "skipNext" });
       }
     });
+    // Voice preview (design §4): audition a canned sample clip. The machine's
+    // `preview` transition is idle-only and callActive-gated, so a preview can
+    // never talk over live TTS or an active call — the gating lives there, not
+    // here. Playback rides the same audio:load channel as conversation TTS.
+    EventBus.on("audio:preview", (detail) => {
+      if (outputActor && detail?.url) {
+        outputActor.send({ type: "preview", source: detail.url });
+      }
+    });
+    // Track the call boundary so previews are refused for its whole duration,
+    // even between the call's own utterances (session:* originate in
+    // ConversationMachine — the canonical call-boundary signal, not the DOM).
+    EventBus.on("session:started", () => {
+      if (outputActor) {
+        outputActor.send({ type: "callStarted" });
+      }
+    });
+    EventBus.on("session:ended", () => {
+      if (outputActor) {
+        outputActor.send({ type: "callEnded" });
+      }
+    });
     EventBus.on("audio:skipCurrent", async (e) => {
       // pause both offscreen and onscreen audio
       this.stopOnscreenAudio();

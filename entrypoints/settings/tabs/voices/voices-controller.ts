@@ -17,6 +17,22 @@ export interface VoiceCatalogDeps {
   getVoice(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote | null>;
   setVoice(voice: SpeechSynthesisVoiceRemote, host: VoiceHostId): Promise<void>;
   isAuthenticated(): boolean;
+  /** Play the voice's free canned sample clip (design §4). No-op without one. */
+  playPreview(voice: SpeechSynthesisVoiceRemote): void;
+}
+
+// The settings page is its own document — no content-script audio-output
+// machine, no live TTS, no active call to collide with — so a preview here
+// plays straight through a single reused <audio> element. Reusing one element
+// gives single-preview semantics for free: starting a new sample stops any
+// in-flight one.
+let previewAudio: HTMLAudioElement | null = null;
+function playPreviewClip(url: string): void {
+  if (!previewAudio) previewAudio = new Audio();
+  previewAudio.pause();
+  previewAudio.src = url;
+  // A blocked/failed preview is a non-event, not an error the user must see.
+  void previewAudio.play().catch(() => {});
 }
 
 // The settings page runs outside any host tab, so every preference call MUST
@@ -29,6 +45,9 @@ function defaultDeps(): VoiceCatalogDeps {
     getVoice: (host) => prefs.getVoice(host) as Promise<SpeechSynthesisVoiceRemote | null>,
     setVoice: (voice, host) => prefs.setVoice(voice, host).then(() => {}),
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
+    playPreview: (voice) => {
+      if (voice.sample_url) playPreviewClip(voice.sample_url);
+    },
   };
 }
 
@@ -197,6 +216,23 @@ export class VoicesController {
       main.appendChild(description);
     }
     row.appendChild(main);
+
+    // Choice by ear (design §4): a free ▶ preview, its own target separate from
+    // "Use this voice", rendered only when the server serves a sample clip. It
+    // rides on both current and selectable rows so the "Your voice" card can be
+    // auditioned too.
+    if (voice.sample_url) {
+      const preview = document.createElement("button");
+      preview.type = "button";
+      preview.classList.add("voice-preview");
+      preview.setAttribute("aria-label", getMessage("voicesPreview", [voice.name]));
+      preview.innerHTML =
+        '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"></path></svg>';
+      preview.addEventListener("click", () => {
+        this.deps.playPreview(voice);
+      });
+      row.appendChild(preview);
+    }
 
     if (isCurrent) {
       row.classList.add("current");

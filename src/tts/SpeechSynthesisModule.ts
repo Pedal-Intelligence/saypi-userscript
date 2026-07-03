@@ -374,7 +374,13 @@ class SpeechSynthesisModule {
     return utterance;
   }
 
-  speak(speech: SpeechUtterance, chatbot?: Chatbot): void {
+  /**
+   * @param preview When true, playback routes through the gated `audio:preview`
+   *   channel (idle- and call-gated by AudioOutputMachine) instead of loading
+   *   directly — so a voice audition never talks over live TTS or an active
+   *   call. Normal conversation playback leaves this false.
+   */
+  speak(speech: SpeechUtterance, chatbot?: Chatbot, preview: boolean = false): void {
     if (isPlaceholderUtterance(speech)) {
       // Expected whenever voice is off (the auto-TTS path yields a placeholder):
       // a no-op, not a warning. Debug-level so it doesn't spam the console
@@ -390,7 +396,9 @@ class SpeechSynthesisModule {
     // Start audio playback with utterance.uri as the audio source
     const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
     getUtteranceURI(speech, appId).then((uri) => {
-      EventBus.emit("audio:load", { url: uri }); // indirectly calls AudioModule.loadAudio
+      // audio:preview is gated (never over live TTS / a call); audio:load loads
+      // directly. Both are handled by AudioModule → the shared audio element.
+      EventBus.emit(preview ? "audio:preview" : "audio:load", { url: uri });
     });
   }
 

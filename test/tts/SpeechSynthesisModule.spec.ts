@@ -188,6 +188,40 @@ describe("SpeechSynthesisModule", () => {
     expect(utterance).toBe(mockUtterance);
   });
 
+  // A voice audition (introduceVoice) must route its playback through the gated
+  // audio:preview channel so it never talks over live TTS or an active call
+  // (design §4). Normal conversation playback still loads directly.
+  describe("speak() playback channel", () => {
+    const utterance = {
+      id: "u1",
+      lang: "en-US",
+      voice: mockVoices[0],
+      uri: "https://api.saypi.ai/speak/u1/stream?voice_id=x",
+      provider: audioProviders.SayPi,
+      toString: () => "u1",
+    } as any;
+
+    it("emits audio:load for normal playback (preview omitted)", async () => {
+      const emitSpy = vi.spyOn(EventBus, "emit");
+      speechSynthesisModule.speak(utterance, { getID: () => "claude" } as any);
+      await new Promise((r) => setTimeout(r, 0));
+      expect(emitSpy).toHaveBeenCalledWith("audio:load", {
+        url: utterance.uri,
+      });
+      expect(emitSpy).not.toHaveBeenCalledWith("audio:preview", expect.anything());
+    });
+
+    it("emits audio:preview (the gated channel) when preview is true", async () => {
+      const emitSpy = vi.spyOn(EventBus, "emit");
+      speechSynthesisModule.speak(utterance, { getID: () => "claude" } as any, true);
+      await new Promise((r) => setTimeout(r, 0));
+      expect(emitSpy).toHaveBeenCalledWith("audio:preview", {
+        url: utterance.uri,
+      });
+      expect(emitSpy).not.toHaveBeenCalledWith("audio:load", expect.anything());
+    });
+  });
+
   it("createCompletedSpeechStream sends no text and finalizes nothing when voice is off (#375)", async () => {
     (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
 

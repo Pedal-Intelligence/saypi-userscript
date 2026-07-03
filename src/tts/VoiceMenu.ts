@@ -503,8 +503,10 @@ export abstract class VoiceSelector {
     if (voice.default && isBuiltInVoiceProvider(this.chatbot)) {
       const introductionUrl = this.chatbot.getVoiceIntroductionUrl(voice.id);
       if (introductionUrl) {
-        // play the introduction audio
-        EventBus.emit("audio:load", { url: introductionUrl });
+        // Play the introduction through the GATED preview channel so a mid-turn
+        // voice change never talks over live TTS / an active call (it is
+        // suppressed instead) — was an ungated audio:load.
+        EventBus.emit("audio:preview", { url: introductionUrl });
       }
     } else {
       // Introduce the custom voice through the SAME finalized streaming path the
@@ -523,7 +525,9 @@ export abstract class VoiceSelector {
         .createCompletedSpeechStream(introduction, this.chatbot)
         .then((utterance) => {
           utterance.voice = voice;
-          speechSynthesis.speak(utterance);
+          // preview=true routes playback through the gated audio:preview channel
+          // so this audition never talks over live TTS / an active call.
+          speechSynthesis.speak(utterance, this.chatbot, true);
         });
     }
   }
