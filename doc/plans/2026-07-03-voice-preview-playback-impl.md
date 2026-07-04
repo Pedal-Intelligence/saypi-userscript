@@ -74,8 +74,6 @@ actually existing.
   A's Pi7/8 bugs). Since the ▶ is dormant and Pi already gets the gated
   audition-on-select via the reroute, this ships **last** with real-host (Layer
   4 CDP) verification once clips exist. Tracked in a follow-up issue.
-- **Retiring the metered `introduceVoice` synthesis** — Phase 2, when
-  GET /voices serves `sample_url`.
 - **Keyboard reachability of the in-host ▶** — the Claude menu has no roving
   tabindex model today; v1 is mouse + `aria-label`. Its own backlog item.
 
@@ -91,10 +89,28 @@ actually existing.
 - `VoiceIntroduction.spec.ts`, `SpeechSynthesisModule.spec.ts` — the reroute +
   the `speak` preview flag.
 
+## Phase 2 — DONE (2026-07-04, PR #484)
+
+saypi-api shipped the `sample_url` pipeline (saypi-api #292 / #294, merged **and
+deployed** — live `/voices` serves `https://api.saypi.ai/voices/<id>/sample?v=<hash>`,
+`200 audio/mpeg`, unauthenticated, ~2s volume-normalized, versioned). So the
+feature is no longer dormant, and Phase 2 landed: **`introduceVoice` now plays the
+free clip instead of the metered synthesis** whenever a voice carries `sample_url`.
+Metered live-TTS survives only as the fallback for clip-less voices (custom
+clones); Pi's built-in static intro URLs are unchanged. This closes the
+`introduceVoice()` metered-preview quota-burn defect flagged on the post-flip watch
+list. Data path verified statically end-to-end (fetch returns `sample_url` verbatim
+→ `SayPi.matches()` by hostname → `host_permissions`/CSP accept `api.saypi.ai`);
+the remaining check is a Layer-4 (CDP) real-host spot-check on live claude.ai.
+
 ## Pending / coordination
 
 - One new i18n key `voicesPreview` (English only) — a founder `npm run translate`
   run is pending (adds to the ~16 keys already awaiting).
-- **saypi-api**: serve `sample_url` as a static, free, `api.saypi.ai`-hosted
-  clip (so provider-match + offscreen CSP + zero billing all hold). Client is
-  dormant until then — same handoff shape as the manifest work.
+- **Pi menu ▶** (see Deferred) still needs the row restructure + Layer-4 verify —
+  saypi-userscript #483. Pi voices carry no `sample_url`, so Pi keeps the metered
+  fallback audition; the ▶ there is a separate affordance.
+- **saypi-api curation manifest** (§5 fields: `featured`/`section`/`recommended`/
+  `language`/`sibling_id`/`deprecated` + measured chars-per-minute) — saypi-api
+  #293, still open; consumed by future client patches (Patch B/C), blocks nothing
+  shipped today.
