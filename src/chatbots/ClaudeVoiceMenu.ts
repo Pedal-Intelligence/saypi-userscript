@@ -725,13 +725,19 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   /**
-   * The dropdown's single render path: rebuild the trigger button + menu
+   * The dropdown's single render path: paint the trigger button + menu
    * content from the given catalog and stored voice. The stored voice arrives
    * WITH the catalog (gather-then-render), so the trigger label is right on
-   * the first paint and curateShortlist pins the current voice synchronously
-   * — the old read-selection-from-the-button-label block and the async
-   * getVoice fallback (with its pin writeback + conditional re-populate) are
-   * gone.
+   * the first paint and curateShortlist pins the current voice synchronously.
+   *
+   * The trigger and menu container are STABLE NODES: created once, then
+   * updated/refilled in place. Rebuilding them here is not safe — every open
+   * runs this via refreshMenu, whose fetches resolve from warm in-memory
+   * caches in microtasks, i.e. (for a real, trusted click) BETWEEN the
+   * trigger's click listener and the document-level outside-click listener.
+   * A rebuild detaches the click's event.target, so the outside-click check
+   * `this.element.contains(event.target)` reads the opening click as
+   * "outside" and closes the menu in the same tick it opened (#494).
    */
   protected override renderMenu(
     voices: SpeechSynthesisVoiceRemote[],
@@ -763,21 +769,27 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     );
     this.showTier = curated.tiersCoexist;
 
-    // Comprehensive cleanup to prevent duplicates
-    this.cleanupExistingElements(voiceSelector);
-
     // Check if we have any voices available besides "Voice off"
     const noVoicesAvailable = voices.length === 0;
+    const requiresSignIn = this.ttsRequiresSignIn(noVoicesAvailable);
 
-    // Recreate the menu button and content from scratch
-    this.menuButton = this.createVoiceButton(
-      storedVoice,
-      this.ttsRequiresSignIn(noVoicesAvailable)
-    );
-    voiceSelector.appendChild(this.menuButton);
+    // First render creates the nodes; every later render reuses them.
+    // (Duplicate defense — cleanupExistingElements — runs once, from the
+    // constructor, where a fresh instance may inherit a prior instance's
+    // leftovers.)
+    if (!this.menuButton.isConnected) {
+      this.menuButton = this.createVoiceButton(storedVoice, requiresSignIn);
+      voiceSelector.appendChild(this.menuButton);
+    }
+    this.updateSignInAffordance(requiresSignIn);
 
-    this.menuContent = this.createVoiceMenu();
-    voiceSelector.appendChild(this.menuContent);
+    if (!this.menuContent.isConnected) {
+      this.menuContent = this.createVoiceMenu();
+      voiceSelector.appendChild(this.menuContent);
+    }
+    // Refill in place — the container keeps its identity and, when open, its
+    // place in document.body and its visibility.
+    this.menuContent.replaceChildren();
 
     // Add "Voice off" option with appropriate messaging
     const voiceOffItem = this.createMenuItem(null, noVoicesAvailable);
@@ -815,6 +827,22 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     // Selection is a pure render of the stored voice we were handed.
     this.updateSelectedVoice(storedVoice);
+  }
+
+  /**
+   * In-place counterpart of createVoiceButton's requiresSignIn branch, for
+   * re-renders that reuse the trigger node (see that branch for the
+   * accessibility rationale).
+   */
+  private updateSignInAffordance(requiresSignIn: boolean): void {
+    this.menuButton.classList.toggle("saypi-voice-unavailable", requiresSignIn);
+    if (requiresSignIn) {
+      this.menuButton.setAttribute("aria-label", getMessage("signInForTTS"));
+      this.menuButton.setAttribute("title", getMessage("signInForTTS"));
+    } else {
+      this.menuButton.removeAttribute("aria-label");
+      this.menuButton.removeAttribute("title");
+    }
   }
 
   /**
