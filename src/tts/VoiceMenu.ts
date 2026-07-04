@@ -215,10 +215,19 @@ export abstract class VoiceSelector {
   }
 
   async refreshMenu(): Promise<void> {
-    // remove all voices from the selector
-    const voiceButtons = Array.from(this.element.querySelectorAll("button"));
+    // Remove the voice buttons from the selector. Scope to DIRECT children:
+    // `removeChild` only removes direct children, so the query that feeds it must
+    // match only those. A bare `querySelectorAll("button")` also matches buttons
+    // nested inside menu items (e.g. the ▶ `.saypi-voice-preview` control added in
+    // #482), and `removeChild` throws `NotFoundError` on a non-child — which aborts
+    // the rebuild and makes the whole menu vanish on open. (Pre-#482 every match was
+    // a direct child, so this was latent.) Nested buttons are cleared by the item
+    // rebuild in `populateVoices`, not here.
+    const voiceButtons = Array.from(this.element.children).filter(
+      (el): el is HTMLButtonElement => el.tagName === "BUTTON"
+    );
     voiceButtons.forEach((button) => {
-      this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
+      this.unmarkButtonAsSelectedVoice(button);
       this.element.removeChild(button);
     });
     // add voices to the selector
