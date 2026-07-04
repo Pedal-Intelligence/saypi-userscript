@@ -1,13 +1,12 @@
 import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
 import { audioProviders } from "../tts/SpeechModel";
-import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
-import { VoiceSelector } from "../tts/VoiceMenu";
+import { GridVoiceSelector } from "../tts/GridVoiceSelector";
 import { PI_MENU_CAP } from "../tts/VoiceCuration";
 import { Chatbot } from "./Chatbot";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
-export class PiVoiceMenu extends VoiceSelector {
+export class PiVoiceMenu extends GridVoiceSelector {
   constructor(
     chatbot: Chatbot,
     userPreferences: UserPreferenceModule,
@@ -132,12 +131,17 @@ export class PiVoiceMenu extends VoiceSelector {
               node === audioControlsContainer.firstChild
             ) {
               voiceMenu.classList.add("expanded");
-              // mark the selected voice each time the menu is expanded (because pi.ai recreates the menu each time)
+              // Pi recreates its native menu on every expand: re-adopt the
+              // fresh host rows and re-render SayPi's block from state. When
+              // TTS is off we still adopt + top up Pi's extras (and the
+              // door), just with no SayPi catalog rows.
               this.userPreferences.getTextToSpeechEnabled().then((enabled) => {
-                if (enabled) this.addVoicesToSelector(voiceMenu);
+                if (enabled) {
+                  this.refreshMenu();
+                } else {
+                  this.renderMenu([], null);
+                }
               });
-              this.addMissingPiVoices(voiceMenu);
-              this.registerVoiceChangeHandler(voiceMenu);
             }
           }
           for (let node of mutation.removedNodes) {
@@ -160,7 +164,7 @@ export class PiVoiceMenu extends VoiceSelector {
   }
 }
 
-export class PiVoiceSettings extends VoiceSelector {
+export class PiVoiceSettings extends GridVoiceSelector {
   constructor(
     chatbot: Chatbot,
     userPreferences: UserPreferenceModule,
@@ -168,14 +172,10 @@ export class PiVoiceSettings extends VoiceSelector {
   ) {
     super(chatbot, userPreferences, element);
     this.addIdVoiceMenu(element);
-    SpeechSynthesisModule.getInstance()
-      .getVoices(chatbot)
-      .then((multilingualVoices) => {
-        this.populateVoices(multilingualVoices, element);
-        this.addMissingPiVoices(element);
-        this.handleExistingVoiceButtons(element);
-        this.registerVoiceChangeHandler(element);
-      });
+    // One gather-then-render covers what four calls did before: catalog rows,
+    // Pi's extra-voice top-up, adoption of Pi's pre-existing native buttons,
+    // and selection marking.
+    this.refreshMenu();
   }
 
   getId(): string {
@@ -203,14 +203,4 @@ export class PiVoiceSettings extends VoiceSelector {
       "border-neutral-500",
     ];
   }
-
-  handleExistingVoiceButtons(voiceMenu: HTMLElement): void {
-    const voiceButtons = Array.from(voiceMenu.querySelectorAll("button"));
-    if (!voiceButtons || voiceButtons.length === 0) {
-      return;
-    }
-    voiceButtons.forEach((button) => {
-      this.handleButtonAddition(button as HTMLButtonElement);
-    });
-  }
-} 
+}

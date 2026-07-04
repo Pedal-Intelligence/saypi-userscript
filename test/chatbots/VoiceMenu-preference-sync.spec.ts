@@ -152,7 +152,7 @@ describe("PiVoiceMenu reacts to settings-page voice changes (#475)", () => {
     const joey = piVoices[1];
     let stored: SpeechSynthesisVoiceRemote | null = paola;
     const menu = makePiMenu(() => stored);
-    menu.populateVoices(piVoices, menu.element);
+    menu.renderMenu(piVoices, stored);
     await flushAsync();
 
     stored = joey;
