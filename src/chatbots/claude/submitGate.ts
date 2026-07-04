@@ -20,6 +20,12 @@
 // `data-is-streaming="true"` and flips it to `"false"` on completion. This is
 // the same load-bearing signal `ClaudeResponse.dataIsStreaming` keys on, and it
 // is exactly what gates the composer's send-vs-stop control.
+//
+// Deliberately a bare attribute match, broader than `getAssistantResponseSelector()`
+// (which additionally requires a `font-claude-response` child): this also catches
+// the *thinking* phase, before any answer text exists but while the send control is
+// already in stop mode. Don't "align" the two selectors — that would regress
+// thinking-phase coverage.
 const STREAMING_SELECTOR = '[data-is-streaming="true"]';
 
 /** True while any Claude assistant response is actively streaming. */
@@ -45,6 +51,11 @@ export interface SubmitWhenIdleOptions {
 const DEFAULT_POLL_INTERVAL_MS = 250;
 // Claude answers can run long; wait generously before giving up and dispatching
 // best-effort. The common case (composer already idle) never waits at all.
+// Tradeoff: were the attribute ever left stuck `"true"` on an aborted/errored
+// stream, this delays the submit by the full budget before firing anyway (vs.
+// the old immediate dispatch). A shorter budget would instead risk best-effort
+// firing mid-stream on a genuinely long answer — reintroducing the dropped
+// Enter — so we err on the side of waiting.
 const DEFAULT_MAX_WAIT_MS = 30000;
 
 /**
