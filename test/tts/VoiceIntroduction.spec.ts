@@ -43,6 +43,8 @@ class TestVoiceSelector extends VoiceSelector {
   getButtonClasses(): string[] {
     return [];
   }
+  protected renderMenu(): void {}
+  protected applySelectedVoice(): void {}
 }
 
 /**

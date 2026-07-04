@@ -7,7 +7,6 @@ import volumeSvgContent from "../icons/volume-mid.svg?raw";
 import volumeMutedSvgContent from "../icons/volume-muted.svg?raw";
 import playSvgContent from "../icons/play.svg?raw";
 import EventBus from "../events/EventBus";
-import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { getJwtManagerSync } from "../JwtManager";
@@ -24,7 +23,7 @@ import {
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
   private menuContent: HTMLDivElement;
-  // Heuristics to avoid clutter – computed per dataset in populateVoices
+  // Heuristics to avoid clutter – computed per dataset in renderMenu
   private showAccent: boolean = false;
   private showGender: boolean = false;
   private showTier: boolean = false;
@@ -48,7 +47,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Clean up any existing voice selector elements before initializing
     this.cleanupExistingElements(this.element);
 
-    this.initializeVoiceSelector(chatbot);
+    this.initializeVoiceSelector();
   }
 
   getId(): string {
@@ -678,24 +677,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   /**
    * The Claude selector is a dropdown, not a button grid: reflect an
    * externally-changed voice on the trigger button + row checkmarks. If the
-   * shortlist is hiding the new voice, pin it for the next populate — the
-   * menu rebuilds from the (now-correct) button label on every open, so the
-   * row appears then. Never tears the menu down, so safe while it is open.
+   * shortlist is hiding the voice, no pin is needed — the menu re-renders
+   * from refreshMenu() on every open, and curateShortlist puts the stored
+   * voice first. Never tears the menu down, so safe while it is open.
    */
   protected override applySelectedVoice(
     voice: SpeechSynthesisVoiceRemote | null
   ): void {
     this.updateSelectedVoice(voice);
-    if (!voice) {
-      this.pinnedCustomVoiceId = null;
-      return;
-    }
-    const hasRow = Array.from(
-      this.menuContent.querySelectorAll<HTMLElement>("[role='menuitem']")
-    ).some((item) => item.dataset.voiceName === voice.name);
-    if (!hasRow) {
-      this.pinnedCustomVoiceId = voice.id;
-    }
   }
 
   private updateSelectedVoice(
@@ -735,10 +724,20 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     });
   }
 
-  override populateVoices(
+  /**
+   * The dropdown's single render path: rebuild the trigger button + menu
+   * content from the given catalog and stored voice. The stored voice arrives
+   * WITH the catalog (gather-then-render), so the trigger label is right on
+   * the first paint and curateShortlist pins the current voice synchronously
+   * — the old read-selection-from-the-button-label block and the async
+   * getVoice fallback (with its pin writeback + conditional re-populate) are
+   * gone.
+   */
+  protected override renderMenu(
     voices: SpeechSynthesisVoiceRemote[],
-    voiceSelector: HTMLElement
-  ): boolean {
+    storedVoice: SpeechSynthesisVoiceRemote | null
+  ): void {
+    const voiceSelector = this.element;
     // Compute heuristics to decide what to show across this dataset
     try {
       const accents = new Set(
@@ -754,27 +753,12 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.showAccent = this.showGender = false;
     }
 
-    // Get the currently selected voice before recreating the menu
-    let currentSelectedVoice: SpeechSynthesisVoiceRemote | null = null;
-
-    // Try to get from the current button if it exists
-    if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
-      const voiceNameElement = this.menuButton.querySelector(".voice-name");
-      if (voiceNameElement) {
-        const currentVoiceName = voiceNameElement.textContent;
-        if (currentVoiceName && currentVoiceName !== getMessage("voiceOff")) {
-          // Find the voice object that matches the current selection
-          currentSelectedVoice = voices.find(voice => voice.name === currentVoiceName) || null;
-        }
-      }
-    }
-
     // The menu shows a constant-size shortlist however large the catalog
     // grows; the full catalog lives behind the "More voices…" door in the
     // extension settings (doc/plans/2026-07-02-voice-selection-ux.md §3).
     const curated = curateShortlist(
       voices,
-      currentSelectedVoice?.id ?? this.pinnedCustomVoiceId,
+      storedVoice?.id ?? null,
       CLAUDE_MENU_CAP
     );
     this.showTier = curated.tiersCoexist;
@@ -787,7 +771,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     // Recreate the menu button and content from scratch
     this.menuButton = this.createVoiceButton(
-      currentSelectedVoice,
+      storedVoice,
       this.ttsRequiresSignIn(noVoicesAvailable)
     );
     voiceSelector.appendChild(this.menuButton);
@@ -829,42 +813,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Add subtle separators for easier scanning
     this.applyItemSeparators();
 
-    // If we found a selected voice from the button, update the menu items to show selection
-    if (currentSelectedVoice) {
-      this.updateSelectedVoice(currentSelectedVoice);
-    } else {
-      // Fall back to getting the voice from preferences asynchronously
-      this.userPreferences.getVoice(this.chatbot).then((voice) => {
-        this.updateSelectedVoice(voice);
-        // The stored voice must never vanish from the menu: if the shortlist
-        // hid it, remember it as pinned. The pin persists on the instance so
-        // every later populate includes it synchronously.
-        const storedId =
-          voice && voices.some((v) => v.id === voice.id) ? voice.id : null;
-        if (!storedId) {
-          this.pinnedCustomVoiceId = null;
-          return;
-        }
-        if (curated.voices.some((v) => v.id === storedId)) {
-          // Visible without help; drop a pin left over from a previous voice.
-          if (
-            this.pinnedCustomVoiceId &&
-            this.pinnedCustomVoiceId !== storedId
-          ) {
-            this.pinnedCustomVoiceId = null;
-          }
-          return;
-        }
-        this.pinnedCustomVoiceId = storedId;
-        // Never rebuild a menu the user has open — the teardown would close
-        // it mid-interaction. The pin applies on the next populate instead.
-        if (this.menuButton.getAttribute("aria-expanded") !== "true") {
-          this.populateVoices(voices, voiceSelector);
-        }
-      });
-    }
-
-    return !noVoicesAvailable;
+    // Selection is a pure render of the stored voice we were handed.
+    this.updateSelectedVoice(storedVoice);
   }
 
   /**
@@ -908,21 +858,17 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     });
   }
 
-  private initializeVoiceSelector(chatbot: Chatbot): void {
+  private initializeVoiceSelector(): void {
     // Prevent double initialization
     if (this.element.dataset.voiceSelectorInitialized === "true") {
       logger.debug("[status] Voice selector already initialized, skipping");
       return;
     }
 
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
     logger.debug("[status] Initializing voice selector");
-    speechSynthesis.getVoices(chatbot).then((voices) => {
-      this.populateVoices(voices, this.element);
-
-      // Note: populateVoices() now handles restoring the selected voice,
-      // so we don't need to call updateSelectedVoice() here anymore
-
+    // Gather-then-render: the base fetches the catalog AND the stored voice,
+    // so the trigger label + checkmarks are correct on the first paint.
+    this.refreshMenu().then(() => {
       // Close menu when clicking outside - only add if not already added
       if (!this.element.dataset.clickListenerAdded) {
         document.addEventListener("click", (event) => {

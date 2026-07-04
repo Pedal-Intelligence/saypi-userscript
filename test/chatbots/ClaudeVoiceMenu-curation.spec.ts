@@ -33,13 +33,14 @@ const flipDayCatalog: SpeechSynthesisVoiceRemote[] = [
   ...openAiMockVoices,
 ]; // 20 voices — the claude.ai payload once OPENAI_TTS_ENABLED flips
 
-// Bypass the heavy constructor; populateVoices only needs prototype methods
-// plus the fields it reads (pattern from VoiceMenu.spec.ts).
-function makeMenu(currentVoice: SpeechSynthesisVoiceRemote | null = null): any {
+// Bypass the heavy constructor; renderMenu only needs prototype methods
+// plus the fields it reads (pattern from VoiceMenu.spec.ts). The stored
+// voice is passed straight into renderMenu (gather-then-render).
+function makeMenu(): any {
   const menu = Object.create(ClaudeVoiceMenu.prototype);
   menu.chatbot = {} as any;
   menu.userPreferences = {
-    getVoice: vi.fn(async () => currentVoice),
+    getVoice: vi.fn(async () => null),
     setVoice: vi.fn(async () => {}),
     unsetVoice: vi.fn(async () => {}),
   };
@@ -63,10 +64,6 @@ function voiceRows(menu: any): HTMLElement[] {
   ) as HTMLElement[];
 }
 
-function flushAsync(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
 beforeEach(() => {
   openSettingsMock.mockReset();
   document.body.innerHTML = "";
@@ -75,20 +72,20 @@ beforeEach(() => {
 describe("ClaudeVoiceMenu shortlist cap + door (flip-day catalog)", () => {
   it("renders at most CLAUDE_MENU_CAP voice rows from a 20-voice catalog", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     expect(voiceRows(menu).length).toBe(CLAUDE_MENU_CAP);
   });
 
   it("renders a 'More voices…' door row when voices are hidden", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     const door = menu.menuContent.querySelector("[data-action='more-voices']");
     expect(door).not.toBeNull();
   });
 
   it("opens the extension settings when the door row is clicked", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     const door = menu.menuContent.querySelector(
       "[data-action='more-voices']"
     ) as HTMLElement;
@@ -98,14 +95,14 @@ describe("ClaudeVoiceMenu shortlist cap + door (flip-day catalog)", () => {
 
   it("keeps the door row even when the whole catalog fits the cap (#472)", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog.slice(0, 3), menu.element);
+    menu.renderMenu(flipDayCatalog.slice(0, 3), null);
     const door = menu.menuContent.querySelector("[data-action='more-voices']");
     expect(door).not.toBeNull();
   });
 
   it("keeps the Voice off item", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     const off = menu.menuContent.querySelector("[data-voice-name='voice-off']");
     expect(off).not.toBeNull();
   });
@@ -114,7 +111,7 @@ describe("ClaudeVoiceMenu shortlist cap + door (flip-day catalog)", () => {
 describe("ClaudeVoiceMenu tier signalling", () => {
   it("marks HD rows with an HD chip when tiers coexist, and never shows raw prices", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     const rows = voiceRows(menu);
     const jarnathan = rows.find((r) => r.dataset.voiceName === "Jarnathan")!;
     const coral = rows.find((r) => r.dataset.voiceName === "Coral")!;
@@ -125,21 +122,21 @@ describe("ClaudeVoiceMenu tier signalling", () => {
 
   it("shows a single footer note about HD allowance burn when tiers coexist", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     const footer = menu.menuContent.querySelector(".saypi-voice-footnote");
     expect(footer).not.toBeNull();
   });
 
   it("shows no HD chips and no footer for a single-tier catalog (pre-flip)", () => {
     const menu = makeMenu();
-    menu.populateVoices(claudeMockVoices, menu.element);
+    menu.renderMenu(claudeMockVoices, null);
     expect(menu.menuContent.textContent).not.toContain("HD");
     expect(menu.menuContent.querySelector(".saypi-voice-footnote")).toBeNull();
   });
 
   it("still caps and offers the door for the single-tier pre-flip catalog", () => {
     const menu = makeMenu();
-    menu.populateVoices(claudeMockVoices, menu.element); // 10 ElevenLabs voices
+    menu.renderMenu(claudeMockVoices, null); // 10 ElevenLabs voices
     expect(voiceRows(menu).length).toBe(CLAUDE_MENU_CAP);
     expect(
       menu.menuContent.querySelector("[data-action='more-voices']")
@@ -147,60 +144,54 @@ describe("ClaudeVoiceMenu tier signalling", () => {
   });
 });
 
-describe("ClaudeVoiceMenu current-voice pinning", () => {
-  it("re-renders with the stored voice pinned first when it was not in the shortlist", async () => {
+describe("ClaudeVoiceMenu current-voice visibility (was: pinning)", () => {
+  it("renders the stored voice first, synchronously, when the shortlist would have hidden it", () => {
     const lucy = claudeMockVoices.find((v) => v.name === "Lucy")!;
-    const menu = makeMenu(lucy);
-    menu.populateVoices(flipDayCatalog, menu.element);
-    await flushAsync();
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, lucy); // no flushAsync — no pin round-trip
     const rows = voiceRows(menu);
     expect(rows[0].dataset.voiceName).toBe("Lucy");
     expect(rows.length).toBe(CLAUDE_MENU_CAP);
   });
 
-  it("does not re-render when the stored voice is already featured", async () => {
+  it("does not duplicate a stored voice that is already featured", () => {
     const jarnathan = claudeMockVoices.find((v) => v.name === "Jarnathan")!;
-    const menu = makeMenu(jarnathan);
-    menu.populateVoices(flipDayCatalog, menu.element);
-    await flushAsync();
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, jarnathan);
     const rows = voiceRows(menu);
     const jarnathans = rows.filter((r) => r.dataset.voiceName === "Jarnathan");
     expect(jarnathans.length).toBe(1);
     expect(rows.length).toBe(CLAUDE_MENU_CAP);
   });
 
-  it("persists the pin so the next populate renders the stored voice synchronously", async () => {
+  it("every re-render includes the stored voice — no pin state to persist or wipe", () => {
     const lucy = claudeMockVoices.find((v) => v.name === "Lucy")!;
-    const menu = makeMenu(lucy);
-    menu.populateVoices(flipDayCatalog, menu.element);
-    await flushAsync(); // async pin + one re-render
-    // A fresh populate (e.g. menu reopened) must include Lucy immediately,
-    // without waiting for another async round-trip.
-    menu.populateVoices(flipDayCatalog, menu.element);
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, lucy);
+    menu.renderMenu(flipDayCatalog, lucy); // e.g. menu reopened
     const rows = voiceRows(menu);
     expect(rows[0].dataset.voiceName).toBe("Lucy");
   });
 
-  it("defers the pin re-render while the menu is open instead of tearing it down", async () => {
+  it("an external voice change never tears down an open menu (applySelectedVoice only re-marks)", () => {
     const lucy = claudeMockVoices.find((v) => v.name === "Lucy")!;
-    const menu = makeMenu(lucy);
-    menu.populateVoices(flipDayCatalog, menu.element);
-    // Simulate the menu being open when the async pin lands.
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, null);
+    // Simulate the menu being open when a settings-page change lands.
     menu.menuButton.setAttribute("aria-expanded", "true");
     const openMenuContent = menu.menuContent;
-    await flushAsync();
+    menu.applySelectedVoice(lucy);
     // The open menu must not be destroyed out from under the user…
     expect(menu.menuContent).toBe(openMenuContent);
-    // …but the pin is remembered for the next populate.
-    menu.menuButton.setAttribute("aria-expanded", "false");
-    menu.populateVoices(flipDayCatalog, menu.element);
+    // …and the next render (menu reopened → refreshMenu) shows Lucy first.
+    menu.renderMenu(flipDayCatalog, lucy);
     const rows = voiceRows(menu);
     expect(rows[0].dataset.voiceName).toBe("Lucy");
   });
 
   it("passes the Voices tab as the door's settings destination (#471)", () => {
     const menu = makeMenu();
-    menu.populateVoices(flipDayCatalog, menu.element);
+    menu.renderMenu(flipDayCatalog, null);
     const door = menu.menuContent.querySelector(
       "[data-action='more-voices']"
     ) as HTMLElement;
