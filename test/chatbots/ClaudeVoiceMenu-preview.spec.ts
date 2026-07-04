@@ -82,9 +82,9 @@ beforeEach(() => {
 describe("ClaudeVoiceMenu voice preview (▶)", () => {
   it("renders a ▶ preview button only on rows whose voice has a sample_url", () => {
     const menu = makeMenu();
-    menu.populateVoices(
+    menu.renderMenu(
       [withSample("a", "Nova", SAMPLE), withSample("b", "Ash", undefined)],
-      menu.element
+      null
     );
     expect(
       rowFor(menu, "Nova")!.querySelector("button.saypi-voice-preview")
@@ -96,7 +96,7 @@ describe("ClaudeVoiceMenu voice preview (▶)", () => {
 
   it("never renders a ▶ on the Voice off row", () => {
     const menu = makeMenu();
-    menu.populateVoices([withSample("a", "Nova", SAMPLE)], menu.element);
+    menu.renderMenu([withSample("a", "Nova", SAMPLE)], null);
     const off = menu.menuContent.querySelector(
       "[data-voice-name='voice-off']"
     ) as HTMLElement | null;
@@ -105,7 +105,7 @@ describe("ClaudeVoiceMenu voice preview (▶)", () => {
 
   it("auditions the sample (audio:preview) without selecting the voice when ▶ is clicked", () => {
     const menu = makeMenu();
-    menu.populateVoices([withSample("a", "Nova", SAMPLE)], menu.element);
+    menu.renderMenu([withSample("a", "Nova", SAMPLE)], null);
     const btn = rowFor(menu, "Nova")!.querySelector(
       "button.saypi-voice-preview"
     ) as HTMLElement;

@@ -20,6 +20,8 @@ vi.mock("../../src/JwtManager", () => ({
 }));
 
 import { VoiceSelector } from "../../src/tts/VoiceMenu";
+import { GridVoiceSelector } from "../../src/tts/GridVoiceSelector";
+import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
 import { ClaudeVoiceMenu } from "../../src/chatbots/ClaudeVoiceMenu";
 
 // Minimal concrete selector to exercise base-class logic.
@@ -30,6 +32,8 @@ class TestVoiceSelector extends VoiceSelector {
   getButtonClasses(): string[] {
     return [];
   }
+  protected renderMenu(): void {}
+  protected applySelectedVoice(): void {}
 }
 
 describe("VoiceSelector.ttsRequiresSignIn", () => {
@@ -57,39 +61,52 @@ describe("VoiceSelector.ttsRequiresSignIn", () => {
   });
 });
 
-describe("VoiceSelector built-in-voice-provider capability detection", () => {
-  // The base class adds a chatbot's own built-in voices (e.g. Pi.ai's native
-  // voices + introduction audio) when the chatbot can provide them. This used
-  // to be gated on `instanceof PiAIChatbot`, which forced VoiceMenu to import
-  // the concrete Pi chatbot and created a VoiceMenu -> Pi -> PiVoiceMenu ->
-  // VoiceMenu import cycle. The gate is now a structural capability check, so
+describe("GridVoiceSelector built-in-voice-provider capability detection", () => {
+  // The grid render tops up a chatbot's own built-in voices (e.g. Pi.ai's
+  // account-gated extras) when the chatbot can provide them. This used to be
+  // gated on `instanceof PiAIChatbot`, which forced VoiceMenu to import the
+  // concrete Pi chatbot and created a VoiceMenu -> Pi -> PiVoiceMenu ->
+  // VoiceMenu import cycle. The gate is a structural capability check, so
   // any chatbot exposing getExtraVoices()/getVoiceIntroductionUrl() qualifies.
-  function makeSelector(chatbot: unknown): TestVoiceSelector {
-    return new TestVoiceSelector(
-      chatbot as any,
-      {} as any,
-      document.createElement("div"),
-    );
+  class TestGrid extends GridVoiceSelector {
+    getId(): string {
+      return "test-grid-capability";
+    }
+    getButtonClasses(): string[] {
+      return [];
+    }
+  }
+
+  function makeGrid(chatbot: unknown): any {
+    const grid: any = Object.create(TestGrid.prototype);
+    grid.chatbot = chatbot;
+    grid.userPreferences = {
+      getVoice: vi.fn(async () => null),
+      setVoice: vi.fn(async () => {}),
+      unsetVoice: vi.fn(async () => {}),
+    };
+    grid.element = document.createElement("div");
+    return grid;
   }
 
   it("requests extra voices from a chatbot that provides its own built-in voices", () => {
-    const getExtraVoices = vi.fn(() => []);
+    const getExtraVoices = vi.fn((): SpeechSynthesisVoiceRemote[] => []);
     const chatbot = {
       getExtraVoices,
       getVoiceIntroductionUrl: vi.fn(() => ""),
     };
-    const selector = makeSelector(chatbot);
-    // An empty menu has 0 built-in voices, i.e. below the 8-voice threshold.
-    selector.addMissingPiVoices(document.createElement("div"));
+    const grid = makeGrid(chatbot);
+    // An empty menu has 0 adopted host rows, i.e. below the 8-voice threshold.
+    grid.renderMenu([], null);
     expect(getExtraVoices).toHaveBeenCalled();
   });
 
   it("does nothing for a chatbot without built-in voices (e.g. Claude)", () => {
     const chatbot = { getName: () => "Claude" };
-    const selector = makeSelector(chatbot);
-    const populateSpy = vi.spyOn(selector as any, "populateVoices");
-    selector.addMissingPiVoices(document.createElement("div"));
-    expect(populateSpy).not.toHaveBeenCalled();
+    const grid = makeGrid(chatbot);
+    grid.renderMenu([], null);
+    // No extras requested, so no rows appear in the empty render.
+    expect(grid.element.querySelectorAll("[data-voice-id]").length).toBe(0);
   });
 });
 

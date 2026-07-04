@@ -95,7 +95,7 @@ describe("ClaudeVoiceMenu reacts to settings-page voice changes (#475)", () => {
     const jarnathan = claudeMockVoices.find((v) => v.name === "Jarnathan")!;
     let stored: SpeechSynthesisVoiceRemote | null = cassidy;
     const menu = makeClaudeMenu(() => stored);
-    menu.populateVoices(claudeMockVoices, menu.element);
+    menu.renderMenu(claudeMockVoices, cassidy);
     await flushAsync();
     expect(
       menu.menuButton.querySelector(".voice-name")?.textContent
@@ -118,7 +118,7 @@ describe("ClaudeVoiceMenu reacts to settings-page voice changes (#475)", () => {
     const cassidy = claudeMockVoices.find((v) => v.name === "Cassidy")!;
     let stored: SpeechSynthesisVoiceRemote | null = cassidy;
     const menu = makeClaudeMenu(() => stored);
-    menu.populateVoices(claudeMockVoices, menu.element);
+    menu.renderMenu(claudeMockVoices, cassidy);
     await flushAsync();
 
     emitVoiceChange("some-pi-voice", "pi");
@@ -133,7 +133,7 @@ describe("ClaudeVoiceMenu reacts to settings-page voice changes (#475)", () => {
     const cassidy = claudeMockVoices.find((v) => v.name === "Cassidy")!;
     let stored: SpeechSynthesisVoiceRemote | null = cassidy;
     const menu = makeClaudeMenu(() => stored);
-    menu.populateVoices(claudeMockVoices, menu.element);
+    menu.renderMenu(claudeMockVoices, cassidy);
     await flushAsync();
 
     stored = null;
@@ -152,7 +152,7 @@ describe("PiVoiceMenu reacts to settings-page voice changes (#475)", () => {
     const joey = piVoices[1];
     let stored: SpeechSynthesisVoiceRemote | null = paola;
     const menu = makePiMenu(() => stored);
-    menu.populateVoices(piVoices, menu.element);
+    menu.renderMenu(piVoices, stored);
     await flushAsync();
 
     stored = joey;

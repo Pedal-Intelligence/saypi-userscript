@@ -1,6 +1,8 @@
-// Pi-specific voice menu classes have been moved to src/chatbots/PiVoiceMenu.ts
-// This file now contains only the generic/abstract base for voice controls.
-import { getResourceUrl } from "../ResourceModule";
+// The generic/abstract base for voice selectors. Rendering machinery lives in
+// the surface-specific layers: GridVoiceSelector (Pi's button grids) and
+// ClaudeVoiceMenu (dropdown). This base owns only the cross-surface concerns:
+// event wiring (auth, external preference changes), the gather-then-render
+// refresh cycle, and voice introduction playback.
 import { Chatbot } from "../chatbots/Chatbot";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import EventBus from "../events/EventBus";
@@ -9,8 +11,6 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import { getJwtManagerSync } from "../JwtManager";
-import { openSettings } from "../popup/popupopener";
-import { curateShortlist, getVoiceTier } from "./VoiceCuration";
 
 /**
  * A chatbot that ships its own set of built-in voices, with introduction audio
@@ -39,9 +39,9 @@ export abstract class VoiceSelector {
   protected chatbot: Chatbot;
   protected userPreferences: UserPreferenceModule;
   protected element: HTMLElement;
-  protected selectedVoiceButton: HTMLButtonElement | null = null;
-  /** Set when the stored voice would otherwise be hidden by the shortlist cap. */
-  protected pinnedCustomVoiceId: string | null = null;
+  // No selection or pin fields: "which voice is selected" is the stored
+  // preference, fetched at render time. The DOM is a render of that state,
+  // never the place it is recovered from.
 
   constructor(
     chatbot: Chatbot,
@@ -59,17 +59,56 @@ export abstract class VoiceSelector {
   abstract getButtonClasses(): string[];
 
   /**
+   * THE single render path: given the fetched catalog + the stored voice,
+   * make this selector's DOM reflect them. Must be idempotent — callable
+   * repeatedly with the same inputs and converging on the same DOM.
+   * Implementations: GridVoiceSelector (Pi's button grids), ClaudeVoiceMenu
+   * (dropdown).
+   */
+  protected abstract renderMenu(
+    voices: SpeechSynthesisVoiceRemote[],
+    storedVoice: SpeechSynthesisVoiceRemote | null
+  ): void;
+
+  /**
+   * Reflect an externally-changed stored voice on this surface without a
+   * repopulate (and therefore without disturbing an open menu).
+   */
+  protected abstract applySelectedVoice(
+    voice: SpeechSynthesisVoiceRemote | null
+  ): void;
+
+  /**
+   * Gather-then-render: fetch the catalog and the stored voice TOGETHER, then
+   * render once. Handing the stored voice to the render is what lets
+   * curateShortlist pin the current voice synchronously — the old
+   * render-then-detect-then-re-render pin recursion (and the pin field) died
+   * with this. Also gone: the old teardown half, which fed a descendant
+   * `querySelectorAll("button")` to direct-child-only `removeChild` — the
+   * #485 crash. Renders reconcile; nothing bulk-removes buttons.
+   */
+  async refreshMenu(): Promise<void> {
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
+    const [voices, storedVoice] = await Promise.all([
+      speechSynthesis.getVoices(this.chatbot),
+      this.userPreferences.getVoice(this.chatbot),
+    ]);
+    this.renderMenu(voices ?? [], storedVoice ?? null);
+  }
+
+  /**
    * Registers an event listener to handle authentication status changes.
    * This allows the voice menu to update dynamically when a user signs in.
    */
   protected registerAuthenticationChangeHandler(): void {
-    EventBus.on('saypi:auth:status-changed', (isAuthenticated: boolean) => {
+    EventBus.on("saypi:auth:status-changed", (isAuthenticated: boolean) => {
       // Authentication status changed, refresh the voice selector
-      console.log(`User has logged ${isAuthenticated ? "in" : "out"}, refreshing voice selector`);
-      const id = this.getId();
-      const voiceSelector = document.getElementById(id);
+      console.log(
+        `User has logged ${isAuthenticated ? "in" : "out"}, refreshing voice selector`
+      );
+      const voiceSelector = document.getElementById(this.getId());
       if (voiceSelector) {
-        this.addVoicesToSelector(voiceSelector as HTMLElement);
+        this.refreshMenu();
       }
     });
   }
@@ -108,33 +147,6 @@ export abstract class VoiceSelector {
   }
 
   /**
-   * Reflect an externally-changed stored voice on this surface without a
-   * repopulate (and therefore without disturbing an open menu). The base
-   * covers button-grid surfaces (Pi's menus); dropdown-style selectors
-   * override (ClaudeVoiceMenu).
-   */
-  protected applySelectedVoice(voice: SpeechSynthesisVoiceRemote | null): void {
-    if (!voice) {
-      this.element
-        .querySelectorAll<HTMLButtonElement>("button.saypi-custom-voice")
-        .forEach((button) => this.unmarkButtonAsSelectedVoice(button));
-      return;
-    }
-    const target = this.element.querySelector<HTMLButtonElement>(
-      `button[data-voice-id="${voice.id}"]`
-    );
-    if (!target) {
-      // Hidden by the shortlist cap: pin it so the next populate shows it.
-      this.pinnedCustomVoiceId = voice.id;
-      return;
-    }
-    this.element.querySelectorAll("button").forEach((button) => {
-      this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
-    });
-    this.markButtonAsSelectedVoice(target);
-  }
-
-  /**
    * Text-to-speech via Say, Pi requires authentication. When the user is signed
    * out AND there are no voices to offer (the /voices request returns [] on a
    * 401), the selector should present as unavailable / sign-in-required.
@@ -145,355 +157,8 @@ export abstract class VoiceSelector {
     return noVoicesAvailable && !getJwtManagerSync().isAuthenticated();
   }
 
-  // Voice selection management
-  registerVoiceChangeHandler(menu: HTMLElement): boolean {
-    const voiceButtons = Array.from(menu.querySelectorAll("button"));
-    if (!voiceButtons || voiceButtons.length === 0) {
-      return false;
-    }
-    const builtInPiVoiceButtons = voiceButtons.filter((button) =>
-      this.isBuiltInVoiceButton(button)
-    );
-    builtInPiVoiceButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        this.userPreferences.unsetVoice(this.chatbot).then(() => {
-          if (this.selectedVoiceButton) {
-            this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
-          }
-          this.markButtonAsSelectedVoice(button);
-        });
-      });
-    });
-    return true;
-  }
   protected addIdVoiceMenu(element: HTMLElement): void {
     element.id = this.getId();
-  }
-  protected markButtonAsSelectedVoice(button: HTMLButtonElement): void {
-    button.disabled = true;
-    button.classList.add("selected", "bg-neutral-300", "text-primary-700");
-    button.classList.remove("hover:bg-neutral-300");
-
-    if (this.selectedVoiceButton) {
-      this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
-    }
-    this.selectedVoiceButton = button;
-  }
-
-  protected unmarkButtonAsSelectedVoice(button: HTMLButtonElement): void {
-    button.disabled = false;
-    button.classList.remove("selected", "bg-neutral-300", "text-primary-700");
-    button.classList.add("hover:bg-neutral-300", "border-neutral-500");
-    button.setAttribute("style", ""); // remove inline styles from builtin voice buttons on voice settings page
-  }
-
-  protected isBuiltInVoiceButton(button: HTMLButtonElement): boolean {
-    // Every SayPi-injected row carries the positive marker; anything without
-    // it is a host-native (built-in) button. Safer than enumerating SayPi
-    // row types — new rows are excluded by construction.
-    return !button.classList.contains("saypi-voice-button");
-  }
-
-  /**
-   * Max SayPi (custom) voice rows this surface shows before tucking the rest
-   * behind a "More voices" door. null = uncapped (the default — e.g. Pi's own
-   * settings-page grid); in-host menus override
-   * (doc/plans/2026-07-02-voice-selection-ux.md §3).
-   */
-  protected getCustomVoiceCap(): number | null {
-    return null;
-  }
-
-  /**
-   * Whether this surface renders the "More voices" door to the settings
-   * catalog. The door is the navigation path to the full catalog, not an
-   * overflow marker, so capped surfaces always show it; uncapped surfaces
-   * opt in (Pi's settings grid does — #472).
-   */
-  protected showsMoreVoicesDoor(): boolean {
-    return this.getCustomVoiceCap() !== null;
-  }
-
-  async refreshMenu(): Promise<void> {
-    // Remove the voice buttons from the selector. Scope to DIRECT children:
-    // `removeChild` only removes direct children, so the query that feeds it must
-    // match only those. A bare `querySelectorAll("button")` also matches buttons
-    // nested inside menu items (e.g. the ▶ `.saypi-voice-preview` control added in
-    // #482), and `removeChild` throws `NotFoundError` on a non-child — which aborts
-    // the rebuild and makes the whole menu vanish on open. (Pre-#482 every match was
-    // a direct child, so this was latent.) Nested buttons are cleared by the item
-    // rebuild in `populateVoices`, not here.
-    const voiceButtons = Array.from(this.element.children).filter(
-      (el): el is HTMLButtonElement => el.tagName === "BUTTON"
-    );
-    voiceButtons.forEach((button) => {
-      this.unmarkButtonAsSelectedVoice(button);
-      this.element.removeChild(button);
-    });
-    // add voices to the selector
-    await this.addVoicesToSelector(this.element);
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-
-  addVoicesToSelector(voiceSelector: HTMLElement): void {
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
-    speechSynthesis.getVoices(this.chatbot).then((voices) => {
-      this.populateVoices(voices, voiceSelector);
-    });
-  }
-
-  populateVoices(
-    voices: SpeechSynthesisVoiceRemote[],
-    voiceSelector: HTMLElement
-  ): boolean {
-    if (!voices || voices.length === 0) {
-      console.log("No voices found");
-      return false;
-    }
-
-    // filter voices into default and custom voices based on the voice.default property
-    const defaultVoices = voices.filter((voice) => voice.default);
-    const customVoices = voices.filter((voice) => !voice.default);
-
-    this.populateDefaultVoices(defaultVoices, voiceSelector);
-
-    const cap = this.getCustomVoiceCap();
-    if (cap === null) {
-      this.populateCustomVoices(customVoices, voiceSelector);
-      if (this.showsMoreVoicesDoor()) {
-        this.addMoreVoicesDoor(voiceSelector);
-      }
-      return true;
-    }
-
-    // Capped surface: show a curated shortlist of SayPi voices (built-in host
-    // voices above are never capped), with a door to the full catalog.
-    const curated = curateShortlist(
-      customVoices,
-      this.pinnedCustomVoiceId,
-      cap
-    );
-    this.populateCustomVoices(
-      curated.voices,
-      voiceSelector,
-      curated.tiersCoexist
-    );
-    if (this.showsMoreVoicesDoor()) {
-      this.addMoreVoicesDoor(voiceSelector);
-    }
-
-    // The stored voice must never vanish from the menu: if the cap hid it,
-    // pin it and re-render the SayPi block once. Runs only when this call
-    // could actually hide something — partial lists (addMissingPiVoices
-    // passes Pi's built-in top-ups alone) must not disturb the pin state.
-    if (customVoices.length > cap) {
-      this.userPreferences.getVoice(this.chatbot).then((voice) => {
-        const storedCustomId =
-          voice && customVoices.some((v) => v.id === voice.id)
-            ? voice.id
-            : null;
-        if (!storedCustomId) {
-          this.pinnedCustomVoiceId = null;
-          return;
-        }
-        if (curated.voices.some((v) => v.id === storedCustomId)) {
-          // Visible without help; drop a pin left over from a previous voice.
-          if (
-            this.pinnedCustomVoiceId &&
-            this.pinnedCustomVoiceId !== storedCustomId
-          ) {
-            this.pinnedCustomVoiceId = null;
-          }
-          return;
-        }
-        if (this.pinnedCustomVoiceId !== storedCustomId) {
-          this.pinnedCustomVoiceId = storedCustomId;
-          this.removeCustomVoiceRows(
-            voiceSelector,
-            new Set(customVoices.map((v) => v.id))
-          );
-          this.populateVoices(voices, voiceSelector);
-        }
-      });
-    }
-
-    return true;
-  }
-
-  /**
-   * Remove this catalog's SayPi voice rows (and the door) ahead of a
-   * re-render. Scoped to the given ids so rows from other sources — Pi's
-   * extra built-ins arrive via a separate populate call — survive.
-   */
-  private removeCustomVoiceRows(
-    voiceSelector: HTMLElement,
-    catalogIds: Set<string>
-  ): void {
-    voiceSelector
-      .querySelectorAll<HTMLButtonElement>("button.saypi-custom-voice")
-      .forEach((button) => {
-        const id = button.dataset.voiceId;
-        if (id && catalogIds.has(id)) {
-          button.remove();
-        }
-      });
-    voiceSelector
-      .querySelectorAll("button.saypi-more-voices")
-      .forEach((button) => button.remove());
-  }
-
-  /**
-   * The muted final row of the SayPi block, linking to the full voice catalog
-   * in the extension settings. Styled like the host's own rows. Idempotent:
-   * an existing door is moved back into place rather than duplicated.
-   */
-  private addMoreVoicesDoor(voiceSelector: HTMLElement): void {
-    let door = voiceSelector.querySelector<HTMLButtonElement>(
-      "button.saypi-more-voices"
-    );
-    if (!door) {
-      door = document.createElement("button");
-      door.type = "button";
-      // saypi-voice-button keeps it under the menu's expand/collapse visibility
-      // rules (voices.scss); saypi-more-voices exempts it from voice-selection
-      // handling (isBuiltInVoiceButton).
-      door.classList.add(
-        ...this.getButtonClasses(),
-        "saypi-voice-button",
-        "saypi-more-voices"
-      );
-      door.textContent = getMessage("moreVoices");
-      door.addEventListener("click", () => {
-        openSettings("voices");
-      });
-    }
-    const customButtons = voiceSelector.querySelectorAll(
-      "button.saypi-custom-voice"
-    );
-    const lastCustom = customButtons[customButtons.length - 1];
-    if (lastCustom) {
-      lastCustom.insertAdjacentElement("afterend", door);
-    } else {
-      voiceSelector.appendChild(door);
-    }
-  }
-
-  populateDefaultVoices(
-    defaultVoices: SpeechSynthesisVoiceRemote[],
-    voiceSelector: HTMLElement
-  ): void {
-    const defaultVoiceButtons = Array(defaultVoices.length);
-
-    defaultVoices.forEach((voice) => {
-      // if not already in the menu, add the voice
-      if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
-        // voice already in menu, move voice to end of menu and skip to next voice
-        const button = voiceSelector.querySelector(
-          `button[data-voice-id="${voice.id}"]`
-        );
-        voiceSelector.appendChild(button as HTMLElement);
-
-        return;
-      }
-      const button = document.createElement("button");
-      // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
-      button.type = "button";
-      const additionalClasses = ["saypi-voice-button", "saypi-restored-voice"];
-      const combinedClasses = [
-        ...this.getButtonClasses(),
-        ...additionalClasses,
-        voice.name.toLowerCase().replace(" ", "-"),
-      ];
-      button.classList.add(...combinedClasses);
-      button.innerText = voice.name;
-      button.addEventListener("click", () => {
-        this.userPreferences.setVoice(voice, this.chatbot).then(() => {
-          console.log(`Selected voice: ${voice.name}`);
-          defaultVoiceButtons.forEach((button) => {
-            this.unmarkButtonAsSelectedVoice(button);
-          });
-          const voiceButtons = voiceSelector.querySelectorAll("button");
-          voiceButtons.forEach((button) => {
-            this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
-          });
-          this.markButtonAsSelectedVoice(button);
-          this.introduceVoice(voice);
-        });
-      });
-      button.dataset.voiceId = voice.id;
-      defaultVoiceButtons.push(button);
-    });
-
-    defaultVoiceButtons.forEach((button) => {
-      voiceSelector.appendChild(button);
-    });
-  }
-
-  populateCustomVoices(
-    customVoices: SpeechSynthesisVoiceRemote[],
-    voiceSelector: HTMLElement,
-    showTier: boolean = false
-  ): void {
-    const customVoiceButtons = Array(customVoices.length);
-
-    customVoices.forEach((voice) => {
-      // if not already in the menu, add the voice
-      if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
-        // voice already in menu, skip to next voice
-        return;
-      }
-      const button = document.createElement("button");
-      // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
-      button.type = "button";
-      const additionalClasses = ["saypi-voice-button", "saypi-custom-voice"];
-      const combinedClasses = [
-        ...this.getButtonClasses(),
-        ...additionalClasses,
-        voice.name.toLowerCase().replace(" ", "-"),
-      ];
-      button.classList.add(...combinedClasses);
-      const name = document.createElement("span");
-      name.classList.add("voice-name");
-      name.innerText = voice.name;
-      button.appendChild(name);
-      // Quiet tier suffix on premium rows, only while tiers coexist
-      // (doc/plans/2026-07-02-voice-selection-ux.md §3 — no chips, no prices on Pi).
-      if (showTier && getVoiceTier(voice) === "hd") {
-        const tier = document.createElement("span");
-        tier.classList.add("voice-tier");
-        tier.textContent = "HD";
-        tier.title = getMessage("hdVoicesAllowanceNote");
-        button.appendChild(tier);
-      }
-      const flair = document.createElement("img");
-      flair.classList.add("flair");
-      flair.src = getResourceUrl("icons/logos/saypi.png");
-      flair.alt = "Say, Pi logo";
-      flair.title = getMessage("enhancedVoice", ["Say, Pi"]);
-      button.appendChild(flair);
-      button.addEventListener("click", () => {
-        this.userPreferences.setVoice(voice, this.chatbot).then(() => {
-          console.log(`Selected voice: ${voice.name}`);
-          customVoiceButtons.forEach((button) => {
-            this.unmarkButtonAsSelectedVoice(button);
-          });
-          const voiceButtons = voiceSelector.querySelectorAll("button");
-          voiceButtons.forEach((button) => {
-            if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
-              this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
-            }
-          });
-          this.markButtonAsSelectedVoice(button);
-          this.introduceVoice(voice);
-        });
-      });
-      button.dataset.voiceId = voice.id;
-      customVoiceButtons.push(button);
-    });
-
-    customVoiceButtons.reverse().forEach((button) => {
-      voiceSelector.insertBefore(button, voiceSelector.firstChild);
-    });
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
@@ -555,71 +220,6 @@ export abstract class VoiceSelector {
         // so this audition never talks over live TTS / an active call.
         speechSynthesis.speak(utterance, this.chatbot, true);
       });
-  }
-
-  // Listen for additions of custom voice buttons and update selections
-  addVoiceButtonAdditionListener(voiceMenu: HTMLElement): void {
-    const observerCallback = (
-      mutationsList: MutationRecord[],
-      observer: MutationObserver
-    ) => {
-      for (let mutation of mutationsList) {
-        if (mutation.type === "childList") {
-          for (let node of mutation.addedNodes) {
-            if (
-              node.nodeName === "BUTTON" &&
-              node instanceof HTMLButtonElement
-            ) {
-              const button = node as HTMLButtonElement;
-              this.handleButtonAddition(button);
-            }
-          }
-        }
-      }
-    };
-    const observer = new MutationObserver(observerCallback);
-    observer.observe(voiceMenu, { childList: true });
-  }
-
-  handleButtonAddition(button: HTMLButtonElement): void {
-    // a voice button was added to the menu that is not a custom voice button
-    // if a voice is selected, mark the button as selected
-    this.userPreferences.getVoice(this.chatbot).then((voice) => {
-      const customVoiceIsSelected = voice !== null;
-      if (customVoiceIsSelected) {
-        if (this.isBuiltInVoiceButton(button)) {
-          this.unmarkButtonAsSelectedVoice(button);
-        } else if (button.dataset.voiceId === voice.id) {
-          // unmark all other buttons and mark this one as selected
-          const voiceButtons = Array.from(
-            this.element.querySelectorAll("button")
-          );
-          voiceButtons.forEach((btn) => {
-            this.unmarkButtonAsSelectedVoice(btn as HTMLButtonElement);
-          });
-          this.markButtonAsSelectedVoice(button);
-        }
-      }
-    });
-  }
-
-  addMissingPiVoices(voiceSelector: HTMLElement) {
-    // only for chatbots that ship their own built-in voices (Pi.ai)
-    if (!isBuiltInVoiceProvider(this.chatbot)) {
-      return;
-    }
-    // count the number of original Pi voices in the menu
-    let piVoices = 0;
-    const voiceButtons = Array.from(voiceSelector.querySelectorAll("button"));
-    voiceButtons.forEach((button) => {
-      if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
-        piVoices++;
-      }
-    });
-    // if fewer than 8 Pi voices, add the missing Pi voices to the menu
-    if (piVoices < 8) {
-      this.populateVoices(this.chatbot.getExtraVoices(), voiceSelector);
-    }
   }
 
   /**
