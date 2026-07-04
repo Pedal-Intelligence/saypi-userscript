@@ -6,6 +6,7 @@ import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
 import { ClaudeResponse } from "./claude/ClaudeResponse";
+import { dispatchSubmitWhenIdle, isClaudeGenerating } from "./claude/submitGate";
 
 class ClaudeChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
@@ -202,20 +203,31 @@ class ClaudeChatbot extends AbstractChatbot {
   simulateFormSubmit(): boolean {
     // Claude.ai uses the standard SayPi submit button, so fallback to keyboard events
     const promptComposer = document.getElementById("saypi-prompt");
-    if (promptComposer) {
-      const enterEvent = new KeyboardEvent("keydown", {
-        bubbles: true,
-        key: "Enter",
-        keyCode: 13,
-        which: 13,
-      });
-      promptComposer.dispatchEvent(enterEvent);
-      console.debug("Dispatched Enter keydown event to Claude at", Date.now());
-      return true;
+    if (!promptComposer) {
+      console.error(
+        "Cannot submit prompt for Claude: No prompt composer found."
+      );
+      return false;
     }
 
-    console.error("Cannot submit prompt for Claude: No prompt composer found.");
-    return false;
+    // Defer the Enter until Claude finishes any in-flight response. Dispatching
+    // it while the send control is in stop/streaming mode drops it silently and
+    // strands the transcript in the composer (issue #488). When idle — the
+    // common case — this dispatches synchronously with no delay.
+    dispatchSubmitWhenIdle({
+      isGenerating: () => isClaudeGenerating(),
+      submit: () => {
+        const enterEvent = new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "Enter",
+          keyCode: 13,
+          which: 13,
+        });
+        promptComposer.dispatchEvent(enterEvent);
+        console.debug("Dispatched Enter keydown event to Claude at", Date.now());
+      },
+    });
+    return true;
   }
 
   getSidebarConfig(sidebar: HTMLElement): SidebarConfig | null {
