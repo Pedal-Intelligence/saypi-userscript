@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   getVoiceTier,
   curateShortlist,
+  visibleCatalog,
   CLAUDE_MENU_CAP,
   PI_MENU_CAP,
 } from "../../src/tts/VoiceCuration";
@@ -189,5 +190,178 @@ describe("curateShortlist", () => {
     const result = curateShortlist(piFlipDay, "voice3", PI_MENU_CAP);
     expect(result.voices.length).toBe(PI_MENU_CAP);
     expect(result.voices.map((v) => v.id)).not.toContain("voice3");
+  });
+});
+
+// --- §5 curation-manifest consumption (saypi-api #293) --------------------
+// GET /voices now serves featured/section/recommended/deprecated/... on each
+// voice. When those fields are present the client obeys them instead of the
+// local price/rank heuristic; when absent it falls back (contract discipline).
+
+type Manifest = Partial<
+  Pick<
+    SpeechSynthesisVoiceRemote,
+    | "featured"
+    | "section"
+    | "recommended"
+    | "deprecated"
+    | "sibling_id"
+    | "language"
+    | "chars_per_minute"
+  >
+>;
+
+function withManifest(
+  v: SpeechSynthesisVoiceRemote,
+  m: Manifest
+): SpeechSynthesisVoiceRemote {
+  return { ...v, ...m };
+}
+
+// A server-curated catalog mirroring the live shape (3 ElevenLabs "hd" +
+// 10 OpenAI "everyday"). The featured set is deliberately DIVERGENT from what
+// the local heuristic would pick (onyx/sage/shimmer are low-rank everyday
+// voices the heuristic would never shortlist) — so a green test proves the
+// client follows the server manifest, not its own ranking.
+const FEATURED_IDS = new Set([
+  "ig1TeITnnNlsJtfHxJlW", // Paola (hd)
+  "bWJPewAagbymiJXZcxnh", // Joey (hd)
+  "onyx",
+  "sage",
+  "shimmer",
+]);
+const curated = piFlipDay.map((v) =>
+  withManifest(v, {
+    featured: FEATURED_IDS.has(v.id),
+    section: v.powered_by === "ElevenLabs" ? "hd" : "everyday",
+  })
+);
+
+describe("getVoiceTier with a server section", () => {
+  it("prefers section:hd over a value price", () => {
+    expect(
+      getVoiceTier(withManifest(voice("x", "X", "OpenAI", 50), { section: "hd" }))
+    ).toBe("hd");
+  });
+
+  it("prefers section:everyday over a premium price", () => {
+    expect(
+      getVoiceTier(
+        withManifest(voice("y", "Y", "ElevenLabs", 1000), { section: "everyday" })
+      )
+    ).toBe("everyday");
+  });
+
+  it("treats a language-shelf section as everyday for the HD chip", () => {
+    expect(
+      getVoiceTier(
+        withManifest(voice("z", "Z", "60dB", undefined), { section: "language" })
+      )
+    ).toBe("everyday");
+  });
+
+  it("falls back to the price/provider heuristic when section is absent", () => {
+    expect(getVoiceTier(voice("w", "W", "ElevenLabs", 1000))).toBe("hd");
+  });
+});
+
+describe("curateShortlist with a server-curated catalog", () => {
+  it("draws the shortlist from the server featured set, in server order", () => {
+    const result = curateShortlist(curated, null, PI_MENU_CAP);
+    expect(result.voices.map((v) => v.name)).toEqual([
+      "Paola",
+      "Joey",
+      "Onyx",
+      "Sage",
+      "Shimmer",
+    ]);
+  });
+
+  it("pins the current voice first, then the server featured set", () => {
+    const result = curateShortlist(curated, "alloy", CLAUDE_MENU_CAP);
+    expect(result.voices.map((v) => v.name)).toEqual([
+      "Alloy",
+      "Paola",
+      "Joey",
+      "Onyx",
+      "Sage",
+      "Shimmer",
+    ]);
+  });
+
+  it("fills to the cap in server order when fewer voices are featured than the cap", () => {
+    const result = curateShortlist(curated, null, CLAUDE_MENU_CAP); // 5 featured, cap 6
+    expect(result.voices.length).toBe(CLAUDE_MENU_CAP);
+    // the 6th slot is the next un-taken voice in server order (Paola v3)
+    expect(result.voices[5].id).toBe("paola-v3");
+  });
+
+  it("never yields an empty menu when the server marks nothing featured", () => {
+    const noneFeatured = piFlipDay.map((v) =>
+      withManifest(v, {
+        featured: false,
+        section: v.powered_by === "ElevenLabs" ? "hd" : "everyday",
+      })
+    );
+    const result = curateShortlist(noneFeatured, null, PI_MENU_CAP);
+    expect(result.voices.length).toBe(PI_MENU_CAP);
+    // filled straight down the server order
+    expect(result.voices.map((v) => v.id)).toEqual(
+      piFlipDay.slice(0, PI_MENU_CAP).map((v) => v.id)
+    );
+  });
+
+  it("still uses the local heuristic for a catalog with no manifest fields", () => {
+    // piFlipDay carries no featured field → heuristic path (backward compat)
+    const result = curateShortlist(piFlipDay, null, PI_MENU_CAP);
+    const everyday = result.voices
+      .filter((v) => getVoiceTier(v) === "everyday")
+      .map((v) => v.name);
+    expect(everyday).toEqual(["Coral", "Nova", "Ash"].slice(0, everyday.length));
+  });
+});
+
+describe("curateShortlist grandfathering (deprecated voices)", () => {
+  it("excludes a deprecated voice even when the server featured it", () => {
+    const withDeprecated = curated.map((v) =>
+      v.id === "onyx" ? withManifest(v, { deprecated: true }) : v
+    );
+    const result = curateShortlist(withDeprecated, null, CLAUDE_MENU_CAP);
+    expect(result.voices.map((v) => v.id)).not.toContain("onyx");
+  });
+
+  it("drops deprecated voices from the selectable count behind the door", () => {
+    const withDeprecated = curated.map((v) =>
+      v.id === "alloy" ? withManifest(v, { deprecated: true }) : v
+    );
+    const result = curateShortlist(withDeprecated, null, CLAUDE_MENU_CAP);
+    // 13 catalog − 1 deprecated − 6 shown = 6 behind the door
+    expect(result.hiddenCount).toBe(6);
+  });
+
+  it("keeps rendering the user's current voice even after it is deprecated (grandfathering)", () => {
+    const withDeprecated = curated.map((v) =>
+      v.id === "alloy" ? withManifest(v, { deprecated: true }) : v
+    );
+    const result = curateShortlist(withDeprecated, "alloy", CLAUDE_MENU_CAP);
+    expect(result.voices[0].id).toBe("alloy");
+  });
+});
+
+describe("visibleCatalog", () => {
+  const a = voice("a", "A", "OpenAI", 50);
+  const b = withManifest(voice("b", "B", "OpenAI", 50), { deprecated: true });
+  const c = voice("c", "C", "OpenAI", 50);
+
+  it("hides deprecated voices from new selectors", () => {
+    expect(visibleCatalog([a, b, c], null).map((v) => v.id)).toEqual(["a", "c"]);
+  });
+
+  it("keeps a deprecated voice that is the current selection", () => {
+    expect(visibleCatalog([a, b, c], "b").map((v) => v.id)).toEqual([
+      "a",
+      "b",
+      "c",
+    ]);
   });
 });

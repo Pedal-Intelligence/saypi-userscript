@@ -5,9 +5,15 @@ import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
  *
  * The in-host voice menus stay capped at a constant size while the server
  * catalog grows; the full catalog lives one click deeper (extension settings).
- * Until GET /voices carries curation metadata (featured/section/recommended),
- * tier and featured-set are derived locally from fields the API already serves
- * (powered_by + price), per the rollout plan's confirmed contract.
+ *
+ * GET /voices now carries a curation manifest (saypi-api #293): `section` gives
+ * the tier, `featured` marks the in-host shortlist, and `deprecated` retires a
+ * voice. The client obeys those fields when present and falls back to the local
+ * price/rank heuristic when they are absent, so it renders correctly against
+ * both new and old server deployments (the additive-optional contract). Two
+ * invariants the manifest can never override: a deprecated voice keeps
+ * rendering (and working) if it is the user's current selection
+ * (grandfathering), and the menu never renders empty.
  */
 
 export type VoiceTier = "hd" | "everyday";
@@ -45,11 +51,32 @@ const EVERYDAY_RANK = [
 ];
 
 export function getVoiceTier(voice: SpeechSynthesisVoiceRemote): VoiceTier {
+  // The server's shelf key is authoritative when present (design §5). Only "hd"
+  // drives the premium tier / HD chip; "everyday" and the "language" shelf both
+  // read as everyday for tier purposes (the language shelf itself is Patch C).
+  if (voice.section === "hd") return "hd";
+  if (voice.section === "everyday" || voice.section === "language") {
+    return "everyday";
+  }
+  // Fallback for catalogs that don't carry the manifest yet.
   const credits = voice.price_per_thousand_chars_in_credits;
   if (typeof credits === "number" && !isNaN(credits)) {
     return credits >= HD_CREDITS_THRESHOLD ? "hd" : "everyday";
   }
   return voice.powered_by === "ElevenLabs" ? "hd" : "everyday";
+}
+
+/**
+ * Drop retired (deprecated) voices before a catalog is offered to new selectors
+ * — EXCEPT the user's current voice, which must always keep rendering
+ * (grandfathering, design §5). The server keeps synthesising TTS for prior
+ * selectors; this governs only what the menus and settings catalog show.
+ */
+export function visibleCatalog(
+  voices: SpeechSynthesisVoiceRemote[],
+  currentVoiceId: string | null
+): SpeechSynthesisVoiceRemote[] {
+  return voices.filter((v) => !v.deprecated || v.id === currentVoiceId);
 }
 
 export interface CuratedShortlist {
@@ -115,16 +142,25 @@ function pickHdFeatured(
 
 /**
  * Order and cap a voice catalog for an in-host menu: pin the user's current
- * voice first (it must never vanish from the menu), then the featured premium
- * pair, then value voices by popularity rank, then fill any spare capacity in
- * server order (covers single-tier catalogs).
+ * voice first (it must never vanish from the menu), then the shortlist — the
+ * server's `featured` set when the manifest is present, otherwise the local
+ * featured pair + value voices by popularity rank — then fill any spare
+ * capacity in server order (covers single-tier catalogs and short featured
+ * sets). Deprecated voices are dropped first, except the current one.
  */
 export function curateShortlist(
   voices: SpeechSynthesisVoiceRemote[],
   currentVoiceId: string | null,
   cap: number
 ): CuratedShortlist {
-  const tiersCoexist = new Set(voices.map(getVoiceTier)).size > 1;
+  const catalog = visibleCatalog(voices, currentVoiceId);
+  // Once the server serves `featured`, it drives shortlist membership; until
+  // then the local price/rank heuristic does. Detected at the field level so a
+  // server that marks nothing featured still counts as server-curated (the
+  // fill-to-cap below then keeps the menu populated in server order).
+  const serverCurated = catalog.some((voice) => voice.featured !== undefined);
+
+  const tiersCoexist = new Set(catalog.map(getVoiceTier)).size > 1;
 
   const shortlist: SpeechSynthesisVoiceRemote[] = [];
   const taken = new Set<string>();
@@ -136,27 +172,33 @@ export function curateShortlist(
   };
 
   const current = currentVoiceId
-    ? voices.find((voice) => voice.id === currentVoiceId)
+    ? catalog.find((voice) => voice.id === currentVoiceId)
     : undefined;
   if (current) take(current);
 
-  pickHdFeatured(voices.filter((v) => getVoiceTier(v) === "hd")).forEach(take);
+  if (serverCurated) {
+    catalog.filter((voice) => voice.featured).forEach(take);
+  } else {
+    pickHdFeatured(catalog.filter((v) => getVoiceTier(v) === "hd")).forEach(
+      take
+    );
 
-  voices
-    .map((voice, serverIndex) => ({ voice, serverIndex }))
-    .filter(({ voice }) => getVoiceTier(voice) === "everyday")
-    .sort(
-      (a, b) =>
-        everydayRank(a.voice) - everydayRank(b.voice) ||
-        a.serverIndex - b.serverIndex
-    )
-    .forEach(({ voice }) => take(voice));
+    catalog
+      .map((voice, serverIndex) => ({ voice, serverIndex }))
+      .filter(({ voice }) => getVoiceTier(voice) === "everyday")
+      .sort(
+        (a, b) =>
+          everydayRank(a.voice) - everydayRank(b.voice) ||
+          a.serverIndex - b.serverIndex
+      )
+      .forEach(({ voice }) => take(voice));
+  }
 
-  voices.forEach(take);
+  catalog.forEach(take);
 
   return {
     voices: shortlist,
-    hiddenCount: voices.length - shortlist.length,
+    hiddenCount: catalog.length - shortlist.length,
     tiersCoexist,
   };
 }

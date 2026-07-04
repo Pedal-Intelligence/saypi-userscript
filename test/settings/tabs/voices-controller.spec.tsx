@@ -265,4 +265,43 @@ describe("VoicesController", () => {
       expect(row.querySelector("button.voice-preview")).toBeTruthy();
     });
   });
+
+  // Retirement (design §5): a deprecated voice drops out of the catalog for new
+  // selectors, but a user already on one keeps seeing and using it forever
+  // (grandfathering — never a silent swap).
+  describe("deprecated voices (grandfathering)", () => {
+    function deprecate(
+      v: SpeechSynthesisVoiceRemote
+    ): SpeechSynthesisVoiceRemote {
+      v.deprecated = true;
+      return v;
+    }
+
+    it("hides a deprecated voice from the catalog", async () => {
+      const live = new ElevenLabsVoice("live", "Live");
+      const retired = deprecate(new ElevenLabsVoice("retired", "Retired"));
+      const deps = makeDeps({ getVoices: vi.fn(async () => [live, retired]) });
+      const { container } = await mount(deps);
+      expect(
+        container.querySelector("#voice-catalog [data-voice-id='live']")
+      ).toBeTruthy();
+      expect(
+        container.querySelector("#voice-catalog [data-voice-id='retired']")
+      ).toBeNull();
+    });
+
+    it("keeps rendering a deprecated voice that is the user's current selection", async () => {
+      const retired = deprecate(new ElevenLabsVoice("retired", "Retired"));
+      const deps = makeDeps({
+        getVoices: vi.fn(async () => [retired]),
+        getVoice: vi.fn(async () => retired),
+      });
+      const { container } = await mount(deps);
+      const row = container.querySelector(
+        "#voice-catalog [data-voice-id='retired']"
+      ) as HTMLElement;
+      expect(row).toBeTruthy();
+      expect(row.classList.contains("current")).toBe(true);
+    });
+  });
 });
