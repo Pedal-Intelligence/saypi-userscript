@@ -157,3 +157,90 @@ describe("VoiceSelector.introduceVoice — routes audition through the gated pre
     expect(emitMock).not.toHaveBeenCalledWith("audio:load", expect.anything());
   });
 });
+
+/**
+ * Phase 2 (server-gated on canned clips — now live): once saypi-api serves a free
+ * `sample_url` per voice (design §4), the select-time audition plays that FREE clip
+ * through the gated preview channel instead of synthesizing "Hi, I'm X" via the
+ * METERED live-TTS path. Auditioning a voice must no longer burn the user's TTS
+ * quota (the `introduceVoice()` metered-preview defect, amplified post-flip by
+ * novelty). Metered synthesis stays ONLY as the fallback for voices that carry no
+ * clip (e.g. a user's private custom clone the catalog can't pre-render).
+ */
+describe("VoiceSelector.introduceVoice — prefers the free sample_url clip over metered synthesis (Phase 2)", () => {
+  beforeEach(() => {
+    createCompletedSpeechStreamMock.mockReset().mockResolvedValue({ voice: null });
+    createSpeechMock.mockReset().mockResolvedValue({ voice: null });
+    speakMock.mockReset();
+    emitMock.mockReset();
+    getMessageMock.mockReset().mockImplementation((key: string) => `intro:${key}`);
+  });
+
+  it("plays the free sample_url clip via audio:preview and does NOT synthesize (no quota spend)", async () => {
+    const el = document.createElement("div");
+    const chatbot: any = { getID: () => "claude" }; // catalog voice on a non-built-in host
+    const selector = new TestVoiceSelector(chatbot, {} as any, el);
+    const sampleUrl = "https://api.saypi.ai/voices/nova/sample?v=abc123";
+    const catalogVoice: any = {
+      id: "nova",
+      name: "Nova",
+      default: false,
+      powered_by: "OpenAI",
+      sample_url: sampleUrl,
+    };
+
+    selector.introduceVoice(catalogVoice);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(emitMock).toHaveBeenCalledWith("audio:preview", { url: sampleUrl });
+    // The metered live-TTS path must NOT run when a free clip exists.
+    expect(createCompletedSpeechStreamMock).not.toHaveBeenCalled();
+    expect(speakMock).not.toHaveBeenCalled();
+  });
+
+  it("still falls back to gated metered synthesis for a voice with no sample_url (custom clone)", async () => {
+    const el = document.createElement("div");
+    const chatbot: any = { getID: () => "claude" };
+    const selector = new TestVoiceSelector(chatbot, {} as any, el);
+    // A user's private clone carries no pre-rendered catalog clip.
+    const customClone: any = { id: "vabc", name: "Jarnathan", default: false, powered_by: "ElevenLabs" };
+
+    selector.introduceVoice(customClone);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(createCompletedSpeechStreamMock).toHaveBeenCalledTimes(1);
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    expect(speakMock.mock.calls[0][2]).toBe(true); // still gated (preview=true)
+    // No free clip → nothing played directly through the preview channel.
+    expect(emitMock).not.toHaveBeenCalledWith(
+      "audio:preview",
+      expect.objectContaining({ url: expect.stringContaining("/sample") })
+    );
+  });
+
+  it("prefers sample_url even for a built-in default voice when the catalog serves one", () => {
+    const el = document.createElement("div");
+    const chatbot: any = {
+      getID: () => "pi",
+      getExtraVoices: () => [],
+      getVoiceIntroductionUrl: (id: string) => `https://pi.ai/intro/${id}`,
+    };
+    const selector = new TestVoiceSelector(chatbot, {} as any, el);
+    const sampleUrl = "https://api.saypi.ai/voices/1/sample?v=zzz";
+    const builtInVoice: any = {
+      id: "1",
+      name: "Pi 1",
+      default: true,
+      powered_by: "inflection.ai",
+      sample_url: sampleUrl,
+    };
+
+    selector.introduceVoice(builtInVoice);
+
+    // The canonical catalog clip wins over the provider's own intro URL.
+    expect(emitMock).toHaveBeenCalledWith("audio:preview", { url: sampleUrl });
+    expect(emitMock).not.toHaveBeenCalledWith("audio:preview", {
+      url: "https://pi.ai/intro/1",
+    });
+  });
+});
