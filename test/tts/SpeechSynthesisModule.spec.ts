@@ -140,6 +140,7 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("should create a speech stream", async () => {
+    fakeAuth.authenticated = true; // streaming TTS requires an authenticated user
     const mockVoice = mockVoices[0];
     const mockUtterance = {
       id: "uuid",
@@ -162,6 +163,7 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("createCompletedSpeechStream opens, sends the full text, and finalizes a one-shot stream (#375)", async () => {
+    fakeAuth.authenticated = true; // streaming TTS requires an authenticated user
     const mockUtterance = {
       id: "intro-uuid",
       text: " ",
@@ -236,6 +238,7 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("reuses an open stream when the same messageId is provided", async () => {
+    fakeAuth.authenticated = true; // streaming TTS requires an authenticated user
     const mockVoice = mockVoices[0];
     const mockUtterance = {
       id: "uuid",
@@ -269,6 +272,40 @@ describe("SpeechSynthesisModule", () => {
 
     expect(isPlaceholderUtterance(utterance)).toBe(true);
     expect(audioStreamManagerMock.createStream).not.toHaveBeenCalled();
+  });
+
+  it("does not attempt TTS synthesis when the user is signed out, even with a voice still selected (#268)", async () => {
+    // SayPi TTS is an authenticated/premium feature. A user who selected a voice
+    // while signed in, then signed out, still has that voice persisted — but the
+    // auto-TTS path must NOT attempt synthesis (it fails with an uncaught
+    // "Failed to synthesize speech"). Degrade to a silent placeholder instead.
+    fakeAuth.authenticated = false; // explicit; also the beforeEach default
+    // getVoice returns the default preferredVoiceMock — a voice IS selected.
+
+    const utterance = await speechSynthesisModule.createSpeechStream(
+      { getID: () => "claude" } as any,
+      "message-signedout"
+    );
+
+    expect(isPlaceholderUtterance(utterance)).toBe(true);
+    expect(audioStreamManagerMock.createStream).not.toHaveBeenCalled();
+  });
+
+  it("degrades to a silent placeholder when stream synthesis fails rather than rejecting (#268)", async () => {
+    // Defense in depth: even for an authenticated user, a synthesis failure
+    // (network, quota, an auth race) must not surface as an uncaught rejection
+    // on the auto-TTS path — it degrades to silence.
+    fakeAuth.authenticated = true;
+    (audioStreamManagerMock.createStream as Mock).mockRejectedValue(
+      new Error("Failed to synthesize speech")
+    );
+
+    const utterance = await speechSynthesisModule.createSpeechStream(
+      { getID: () => "claude" } as any,
+      "message-synthfail"
+    );
+
+    expect(isPlaceholderUtterance(utterance)).toBe(true);
   });
 
   it("keeps native audio for chatbots without a Say Pi voice selection", async () => {

@@ -298,20 +298,38 @@ class SpeechSynthesisModule {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice(chatbot);
     const preferedLang = await this.userPreferences.getLanguage();
-    if (!preferedVoice) {
-      // Voice off, or the voice was cleared between the provider check and here
-      // (a race when toggling voice mid-response): degrade to a silent placeholder
-      // rather than throwing. The auto-TTS path must treat "no voice" as a no-op,
-      // not an uncaught rejection that aborts message decoration / submission.
+    if (!preferedVoice || !getJwtManagerSync().isAuthenticated()) {
+      // Degrade to a silent placeholder rather than attempting synthesis when:
+      //  - Voice is off, or the voice was cleared between the provider check and
+      //    here (a race when toggling voice mid-response); or
+      //  - The user is signed out. SayPi TTS is an authenticated/premium feature,
+      //    and a user who selected a voice while signed in, then signed out, still
+      //    has that voice persisted — attempting a stream then fails with an
+      //    uncaught "Failed to synthesize speech" (#268). Pi's own voices use a
+      //    different provider and never reach this SayPi-only path.
+      // The auto-TTS path must treat both as a no-op, not an uncaught rejection
+      // that aborts message decoration / submission.
       return new SpeechPlaceholder(preferedLang, audioProviders.None);
     }
     const uuid = generateUUID();
-    const utterance = await this.audioStreamManager.createStream(
-      uuid,
-      preferedVoice,
-      preferedLang,
-      chatbot
-    );
+    let utterance: SpeechUtterance;
+    try {
+      utterance = await this.audioStreamManager.createStream(
+        uuid,
+        preferedVoice,
+        preferedLang,
+        chatbot
+      );
+    } catch (error) {
+      // Defense in depth: any synthesis failure (network, quota, an auth race)
+      // degrades to silence rather than an uncaught rejection on the auto-TTS
+      // path (#268).
+      console.warn(
+        "[SayPi] Speech synthesis stream failed; continuing without audio",
+        error
+      );
+      return new SpeechPlaceholder(preferedLang, audioProviders.None);
+    }
 
     if (messageId) {
       this.activeStreamsByMessageId.set(messageId, utterance);
