@@ -23,7 +23,7 @@ vi.mock("../../src/popup/popupopener", () => ({
   openSettings: (...args: unknown[]) => openSettingsMock(...args),
 }));
 
-import { PiVoiceMenu, PiVoiceSettings } from "../../src/chatbots/PiVoiceMenu";
+import { PiVoiceMenu } from "../../src/chatbots/PiVoiceMenu";
 import { PI_MENU_CAP } from "../../src/tts/VoiceCuration";
 import { ElevenLabsVoice, OpenAIVoice, openAiMockVoices } from "../data/Voices";
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
@@ -116,41 +116,9 @@ describe("PiVoiceMenu shortlist cap + door", () => {
   });
 });
 
-describe("PiVoiceSettings door (#472)", () => {
-  function makeSettings(): any {
-    const settings = Object.create(PiVoiceSettings.prototype);
-    settings.chatbot = { getID: () => "pi" } as any;
-    settings.userPreferences = {
-      getVoice: vi.fn(async () => null),
-      setVoice: vi.fn(async () => {}),
-      unsetVoice: vi.fn(async () => {}),
-    };
-    settings.element = document.createElement("div");
-    settings.introduceVoice = vi.fn();
-    return settings;
-  }
-
-  it("appends a 'More voices' door to the uncapped settings grid", () => {
-    const settings = makeSettings();
-    settings.renderMenu([...piElevenLabs], null);
-    expect(customRows(settings.element).length).toBe(piElevenLabs.length); // grid stays uncapped
-    const door = settings.element.querySelector(
-      "button.saypi-more-voices"
-    ) as HTMLButtonElement;
-    expect(door).not.toBeNull();
-    door.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
-  });
-
-  it("does not duplicate the door on repeated renders", () => {
-    const settings = makeSettings();
-    settings.renderMenu([...piElevenLabs], null);
-    settings.renderMenu([...piElevenLabs], null);
-    expect(
-      settings.element.querySelectorAll("button.saypi-more-voices").length
-    ).toBe(1);
-  });
-});
+// PiVoiceSettings is now door-first (Pi's settings grid gets only the "More
+// voices" door, not inline SayPi rows) — its coverage lives in
+// test/chatbots/PiVoiceSettings-more-voices-door.spec.ts.
 
 describe("PiVoiceMenu tier badge", () => {
   it("suffixes premium rows with a quiet HD badge only when tiers coexist", () => {

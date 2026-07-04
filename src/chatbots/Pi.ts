@@ -110,7 +110,17 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getVoiceSettingsSelector(): string {
-    return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
+    // Pi's Voice settings page (pi.ai/profile/settings) — re-anchored 2026-07-04
+    // (Layer-4 CDP): the content column drifted `px-6 py-10` → `px-6 py-3 pt-20`
+    // and the card grid `grid-cols-2` → `grid-cols-1 gap-4 sm:grid-cols-2`, so
+    // the old literal matched 0 and PiVoiceSettings never decorated (no door).
+    // Anchor on the settings content column (`mx-auto w-full max-w-2xl px-6` —
+    // `max-w-2xl` keeps this off wider surfaces like /discover /threads, which
+    // the every-batch body scan in bootstrap also visits) and its direct-child
+    // responsive card grid. Volatile padding / exact column-count literals are
+    // dropped. Verified live: matches the settings grid, 0 on /talk /discover
+    // /threads.
+    return 'div.mx-auto.w-full.max-w-2xl.px-6 > div.grid.gap-4[class~="sm:grid-cols-2"]';
   }
 
   getChatHistory(searchRoot: HTMLElement): HTMLElement {
