@@ -2,6 +2,7 @@ import { browser, Browser } from "wxt/browser";
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
+import { sendOnboardingHint, voiceGoalFromUrl } from "../auth/OnboardingHint";
 import { registerDevReloadHandler, DEV_FEED_SPEECH_MESSAGE } from "../dev/devReload";
 import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
 import { maybeOpenFirstRunTab } from "../onboarding/firstRun";
@@ -1304,6 +1305,28 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
               success: true,
               claims: jwtManager.getClaims()
             });
+
+            // Best-effort onboarding hint for wizard-skippers: capture voiceGoal
+            // (from the site the user connected from) and UI locale so the SaaS
+            // can populate User.voiceGoal / signupLocale for the ~89% who never
+            // complete the web wizard (#490 / saypi-saas#225). Fire-and-forget:
+            // it runs after sendResponse and never affects the connect flow.
+            try {
+              const voiceGoal = voiceGoalFromUrl(sender?.tab?.url);
+              const locale =
+                typeof browser.i18n?.getUILanguage === "function"
+                  ? browser.i18n.getUILanguage()
+                  : undefined;
+              void sendOnboardingHint(result.tokens.access_token, {
+                voiceGoal,
+                locale,
+              });
+            } catch (hintError) {
+              logger.debug(
+                "[Background] onboarding hint dispatch skipped:",
+                hintError
+              );
+            }
           } else {
             logger.warn('[Background] PKCE authentication failed:', result.error);
             sendResponse({
