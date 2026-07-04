@@ -278,6 +278,18 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   description?: string;   // short human-friendly description
   languages?: string[];   // ISO codes the voice can speak, e.g. ["en", "ja"]
   sample_url?: string;    // free ~2s canned preview clip; server-served when present (design §4)
+  // Curation manifest (design §5; saypi-api #293). All additive and optional —
+  // the client obeys them when present and falls back to local heuristics when
+  // absent. featured/section/deprecated are consumed today; recommended,
+  // sibling_id, language and chars_per_minute are preserved for later phases
+  // (defaults + rails, language shelf) but not yet acted on.
+  featured?: boolean;         // in the in-host shortlist for this app
+  section?: string;           // shelf key: "hd" | "everyday" | "language"
+  recommended?: boolean;      // the default for this (host, locale, plan) cohort — exactly one
+  sibling_id?: string;        // "everyday sibling" of an HD voice (Downshift + deprecation successor)
+  deprecated?: boolean;       // retired: hidden from the catalog, still served to prior selectors
+  language?: string;          // BCP-47 tag driving the gated language shelf (§6)
+  chars_per_minute?: number;  // measured speaking rate (drives minute denominations; null until measured)
 }
 
 interface MatchableVoice {

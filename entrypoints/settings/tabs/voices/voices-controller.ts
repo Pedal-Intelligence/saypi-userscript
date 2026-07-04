@@ -1,6 +1,6 @@
 import getMessage from "../../../../src/i18n";
 import { SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
-import { getVoiceTier } from "../../../../src/tts/VoiceCuration";
+import { getVoiceTier, visibleCatalog } from "../../../../src/tts/VoiceCuration";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
 import { getJwtManagerSync } from "../../../../src/JwtManager";
@@ -118,7 +118,9 @@ export class VoicesController {
     if (voices.length === 0) {
       // Signed out → /voices legitimately returns [] (401): prompt sign-in.
       // Signed in with an empty catalog means the fetch failed — telling an
-      // authenticated user to sign in would be wrong and confusing.
+      // authenticated user to sign in would be wrong and confusing. This runs
+      // on the RAW catalog (before the deprecated filter) so the signed-out vs
+      // fetch-failure distinction is never masked by retirement.
       const emptyKey = this.deps.isAuthenticated()
         ? "voicesNoneAvailable"
         : "signInForTTS";
@@ -130,8 +132,12 @@ export class VoicesController {
       return;
     }
 
-    const hd = voices.filter((voice) => getVoiceTier(voice) === "hd");
-    const everyday = voices.filter(
+    // Retirement (design §5): deprecated voices drop out of the catalog for new
+    // selectors, but the user's current voice always survives (grandfathering).
+    const shown = visibleCatalog(voices, current?.id ?? null);
+
+    const hd = shown.filter((voice) => getVoiceTier(voice) === "hd");
+    const everyday = shown.filter(
       (voice) => getVoiceTier(voice) === "everyday"
     );
 
@@ -150,7 +156,7 @@ export class VoicesController {
       );
     } else {
       // Single-tier catalog (today's state): a flat list, no shelf chrome.
-      catalog.appendChild(this.renderList(voices, current));
+      catalog.appendChild(this.renderList(shown, current));
     }
   }
 
