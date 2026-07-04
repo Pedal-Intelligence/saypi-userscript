@@ -35,6 +35,7 @@ Object.defineProperties(global, {
   HTMLInputElement: { value: dom.window.HTMLInputElement },
   HTMLTextAreaElement: { value: dom.window.HTMLTextAreaElement },
   HTMLDivElement: { value: dom.window.HTMLDivElement },
+  HTMLButtonElement: { value: dom.window.HTMLButtonElement },
   DOMParser: { value: dom.window.DOMParser },
   SVGElement: { value: dom.window.SVGElement },
   Event: { value: dom.window.Event },
