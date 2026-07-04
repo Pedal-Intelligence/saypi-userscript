@@ -488,6 +488,39 @@ export abstract class VoiceSelector {
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
+    // Prefer the free, server-served canned clip (design §4) whenever the catalog
+    // provides one. Playing it costs NO TTS quota — the whole point of "choice by
+    // ear should be free" — and it routes through the GATED preview channel so a
+    // mid-turn voice change is suppressed rather than talking over live TTS / an
+    // active call. This retires the metered live-TTS audition (below) for every
+    // voice the catalog can pre-render; the metered path now survives only as the
+    // fallback for voices with no clip (e.g. a user's private custom clone). It is
+    // also the same sound the ▶ preview button plays, so both auditions agree.
+    if (voice.sample_url) {
+      EventBus.emit("audio:preview", { url: voice.sample_url });
+      return;
+    }
+
+    // Built-in providers (Pi) supply their own free static intro clip per voice.
+    if (voice.default && isBuiltInVoiceProvider(this.chatbot)) {
+      const introductionUrl = this.chatbot.getVoiceIntroductionUrl(voice.id);
+      if (introductionUrl) {
+        // Play the introduction through the GATED preview channel so a mid-turn
+        // voice change never talks over live TTS / an active call (it is
+        // suppressed instead) — was an ungated audio:load.
+        EventBus.emit("audio:preview", { url: introductionUrl });
+      }
+      return;
+    }
+
+    // Fallback — metered live-TTS synthesis, only for voices with no canned clip.
+    // Introduce the custom voice through the SAME finalized streaming path the
+    // conversation-turn TTS uses (open → send text → finalize), so the resulting
+    // `…/speak/<id>/stream` source plays. A plain non-streaming createSpeech yields
+    // a `…/speak/<id>` URL the audio-output parser rejects ("is not a streaming
+    // speech URL"); an un-finalized stream 405s on playback — both left the intro
+    // silent (#375). introduceVoice runs after setVoice persists, so the stream's
+    // preferred voice is the just-selected voice.
     const lastMessage = getMostRecentAssistantMessage(this.chatbot);
     const name = voice.name.toLowerCase().replace(" ", "_");
     // Most SayPi voices have no voice-specific `voiceIntroduction_<name>` script
@@ -500,36 +533,19 @@ export abstract class VoiceSelector {
       lastMessage?.text ||
       getMessage(`voiceIntroduction_${name}`) ||
       getMessage("voiceIntroductionGeneric", [voice.name]);
-    if (voice.default && isBuiltInVoiceProvider(this.chatbot)) {
-      const introductionUrl = this.chatbot.getVoiceIntroductionUrl(voice.id);
-      if (introductionUrl) {
-        // Play the introduction through the GATED preview channel so a mid-turn
-        // voice change never talks over live TTS / an active call (it is
-        // suppressed instead) — was an ungated audio:load.
-        EventBus.emit("audio:preview", { url: introductionUrl });
-      }
-    } else {
-      // Introduce the custom voice through the SAME finalized streaming path the
-      // conversation-turn TTS uses (open → send text → finalize), so the resulting
-      // `…/speak/<id>/stream` source plays. A plain non-streaming createSpeech yields
-      // a `…/speak/<id>` URL the audio-output parser rejects ("is not a streaming
-      // speech URL"); an un-finalized stream 405s on playback — both left the intro
-      // silent (#375). introduceVoice runs after setVoice persists, so the stream's
-      // preferred voice is the just-selected voice.
-      if (!introduction || !introduction.trim()) {
-        // Nothing to say — don't synthesize an empty stream (no audio + a 405).
-        return;
-      }
-      const speechSynthesis = SpeechSynthesisModule.getInstance();
-      speechSynthesis
-        .createCompletedSpeechStream(introduction, this.chatbot)
-        .then((utterance) => {
-          utterance.voice = voice;
-          // preview=true routes playback through the gated audio:preview channel
-          // so this audition never talks over live TTS / an active call.
-          speechSynthesis.speak(utterance, this.chatbot, true);
-        });
+    if (!introduction || !introduction.trim()) {
+      // Nothing to say — don't synthesize an empty stream (no audio + a 405).
+      return;
     }
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
+    speechSynthesis
+      .createCompletedSpeechStream(introduction, this.chatbot)
+      .then((utterance) => {
+        utterance.voice = voice;
+        // preview=true routes playback through the gated audio:preview channel
+        // so this audition never talks over live TTS / an active call.
+        speechSynthesis.speak(utterance, this.chatbot, true);
+      });
   }
 
   // Listen for additions of custom voice buttons and update selections
