@@ -37,7 +37,6 @@ export class DOMObserver {
           const sidebarObs = this.findAndDecorateSidebar(addedElement);
           if (sidebarObs.found && sidebarObs.decorated) {
             this.findAndDecorateDiscoveryPanel(addedElement);
-            this.findAndDecorateVoiceSettings(addedElement);
           }
           const audioControlsObs =
             this.findAndDecorateAudioControls(addedElement);
@@ -89,6 +88,15 @@ export class DOMObserver {
           }
         });
     });
+    // Pi's Voice settings page (pi.ai/profile/settings) has NO chat prompt, so
+    // the content-loaded chain that scans for voice settings never fires there;
+    // and its voice grid lives in the main content, not the sidebar. Decorate it
+    // independently of the sidebar gate, scanning the whole body once per batch
+    // so the grid is found wherever/whenever the SPA renders it. Idempotent
+    // (getElementById guard → cheap early-return once decorated), and a no-op on
+    // hosts whose getVoiceSettingsSelector is empty (ChatGPT) or doesn't match
+    // (Claude).
+    this.findAndDecorateVoiceSettings(document.body);
   };
   constructor(private chatbot: Chatbot) {
     this.voiceMenuUiMgr = new VoiceMenuUIManager(

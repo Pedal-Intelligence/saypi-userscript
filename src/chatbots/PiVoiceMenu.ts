@@ -8,6 +8,53 @@ import { PI_MENU_CAP } from "../tts/VoiceCuration";
 import { Chatbot } from "./Chatbot";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
+/**
+ * Build a "More voices" door for Pi's live voice surfaces. It visually CLONES a
+ * Pi native row/card (`template`) by copying its class list — Pi's own utilities
+ * are already compiled, so its arbitrary classes (`min-h-11`, `h-[56px]`,
+ * `!bg-secondary-default`) apply to the clone; SayPi can't author those itself
+ * (host-injected-arbitrary-Tailwind). A REAL template is required (callers wait
+ * for Pi to populate its rows/cards) — cloning nothing would leave a permanently
+ * unstyled foreign door that the idempotence guard then never re-styles. `tag`
+ * matches the host's native element — Pi's in-chat rows are `<div>`s, its
+ * settings cards are `<button>`s — so the door reads as one of them; div doors
+ * get the keyboard operability Pi's own role-less divs lack. Click → the
+ * extension's full Voices catalog.
+ */
+function buildMoreVoicesDoor(
+  template: HTMLElement,
+  tag: "div" | "button"
+): HTMLElement {
+  // Annotate as HTMLElement so addEventListener("keydown") keeps its typed
+  // KeyboardEvent overload (a union createElement return would widen it to Event).
+  const door: HTMLElement = document.createElement(tag);
+  if (tag === "button") (door as HTMLButtonElement).type = "button";
+  door.className = template.className;
+  door.classList.add("saypi-more-voices");
+  if (tag === "div") {
+    door.setAttribute("role", "button");
+    door.tabIndex = 0;
+  }
+
+  const label = document.createElement("span");
+  const templateSpan = template.querySelector("span");
+  if (templateSpan) label.className = templateSpan.className;
+  label.textContent = getMessage("moreVoices");
+  door.appendChild(label);
+
+  const open = () => openSettings("voices");
+  door.addEventListener("click", open);
+  if (tag === "div") {
+    door.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
+    });
+  }
+  return door;
+}
+
 export class PiVoiceMenu extends GridVoiceSelector {
   constructor(
     chatbot: Chatbot,
@@ -150,7 +197,12 @@ export class PiVoiceMenu extends GridVoiceSelector {
     const list = this.findLiveVoiceList(audioControls);
     if (!list) return; // collapsed / no list to host the door
     if (list.querySelector(".saypi-more-voices")) return; // already present
-    list.appendChild(this.createLiveMenuDoor(list));
+    // Pi's in-chat rows are `<div>`s — clone the first one so the door matches.
+    // If the list has no rows yet, wait: the subtree observer re-fires once Pi
+    // populates it (never inject an unstyled, un-cloned door).
+    const template = list.firstElementChild as HTMLElement | null;
+    if (!template) return;
+    list.appendChild(buildMoreVoicesDoor(template, "div"));
   }
 
   /**
@@ -170,40 +222,18 @@ export class PiVoiceMenu extends GridVoiceSelector {
     return card.querySelector<HTMLElement>(".flex.flex-col.gap-1");
   }
 
-  /**
-   * Build the door as a Pi-native-looking row by CLONING a native row's class
-   * list (Pi's own utilities are already compiled, so its arbitrary classes —
-   * `min-h-11`, `!bg-secondary-default` — apply to the clone; SayPi can't author
-   * those itself, per the host-injected-arbitrary-Tailwind constraint). Pi's
-   * rows are role-less `<div>` clickables, so we match with a keyboard-operable
-   * div (marginally better a11y than Pi's own rows).
-   */
-  private createLiveMenuDoor(list: HTMLElement): HTMLElement {
-    const template = list.firstElementChild as HTMLElement | null;
-    const door = document.createElement("div");
-    if (template) door.className = template.className;
-    door.classList.add("saypi-more-voices");
-    door.setAttribute("role", "button");
-    door.tabIndex = 0;
-
-    const label = document.createElement("span");
-    const templateSpan = template?.querySelector("span");
-    if (templateSpan) label.className = templateSpan.className;
-    label.textContent = getMessage("moreVoices");
-    door.appendChild(label);
-
-    const open = () => openSettings("voices");
-    door.addEventListener("click", open);
-    door.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        open();
-      }
-    });
-    return door;
-  }
 }
 
+/**
+ * Pi's own Voice settings page (pi.ai/profile/settings). Door-first (#491
+ * sibling): Pi redesigned this into a static `div.grid` of `<button>` voice
+ * cards, and SayPi's old full-grid render never decorated it (stale selector).
+ * SayPi now adds only the "More voices" door → the extension's full Voices
+ * catalog. Inline SayPi voice rows on this surface are deferred (companion to
+ * the in-chat #497). Unlike the in-chat menu this grid is static, but Pi's
+ * React can still re-render it (e.g. on selection), so the door is re-injected
+ * on grid mutations.
+ */
 export class PiVoiceSettings extends GridVoiceSelector {
   constructor(
     chatbot: Chatbot,
@@ -212,35 +242,52 @@ export class PiVoiceSettings extends GridVoiceSelector {
   ) {
     super(chatbot, userPreferences, element);
     this.addIdVoiceMenu(element);
-    // One gather-then-render covers what four calls did before: catalog rows,
-    // Pi's extra-voice top-up, adoption of Pi's pre-existing native buttons,
-    // and selection marking.
-    this.refreshMenu();
+    this.ensureSettingsDoor();
+    this.observeSettingsGrid();
   }
 
   getId(): string {
     return "saypi-voice-settings";
   }
 
-  // Pi's own settings grid is uncapped, but still gets the door — it is the
-  // only path from this surface to the extension's full voice catalog (#472).
-  protected override showsMoreVoicesDoor(): boolean {
-    return true;
+  // Also reached on auth changes via the base refreshMenu → re-ensure the door,
+  // never draw inline voice rows (door-first).
+  protected override renderMenu(): void {
+    this.ensureSettingsDoor();
+  }
+
+  // Door-only surface: no per-row selection to reflect.
+  protected override applySelectedVoice(): void {}
+
+  /**
+   * Inject the "More voices" door as the last card of Pi's settings grid,
+   * cloned from a native card so it renders Pi-native (cards are `<button>`s
+   * here). Idempotent (guarded on `.saypi-more-voices`).
+   */
+  private ensureSettingsDoor(): void {
+    const grid = this.element;
+    if (grid.querySelector(".saypi-more-voices")) return;
+    // Clone a native card for styling. If Pi hasn't rendered its card buttons
+    // yet (empty grid), wait: observeSettingsGrid re-fires when they arrive, so
+    // we never inject an unstyled door that the guard above would then freeze.
+    const template = grid.querySelector<HTMLElement>(":scope > button");
+    if (!template) return;
+    grid.appendChild(buildMoreVoicesDoor(template, "button"));
+  }
+
+  /**
+   * Pi's React may re-render the grid (e.g. selecting a voice) and drop our
+   * foreign door child. Re-inject on any grid childList change; idempotent, so
+   * the door's own append never loops.
+   */
+  private observeSettingsGrid(): void {
+    const observer = new MutationObserver(() => this.ensureSettingsDoor());
+    observer.observe(this.element, { childList: true });
   }
 
   getButtonClasses(): string[] {
-    return [
-      "flex",
-      "items-center",
-      "justify-between",
-      "rounded-lg",
-      "border",
-      "px-3",
-      "py-5",
-      "font-sans",
-      "text-body-m-mobile",
-      "text-primary-700",
-      "border-neutral-500",
-    ];
+    // Required by the abstract base; unused on this door-first surface — the
+    // door clones Pi's native card styling rather than authoring its own.
+    return [];
   }
 }
