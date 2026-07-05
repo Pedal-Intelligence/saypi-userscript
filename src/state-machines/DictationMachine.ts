@@ -282,7 +282,12 @@ const fallbackTargetIds = new WeakMap<HTMLElement, string>();
 let fallbackTargetIdCounter = 0;
 
 function getTargetElementId(element: HTMLElement): string {
-  // Generate a unique identifier for the target element
+  // Generate a unique identifier for the target element.
+  // NOTE: this assumes an element's `id`-presence doesn't change mid-session — if
+  // something ever assigned an `id` to a target between registration and a later
+  // lookup, the same class of key-drift bug this function was fixed for (#507)
+  // would recur (registered under the fallback key, looked up under the new `id`).
+  // No such mutation exists in UniversalDictationModule today.
   if (element.id) {
     return element.id;
   }
