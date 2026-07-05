@@ -108,9 +108,15 @@ transcriptLanded / transcriptText) and screenshots (`01-focused`, `99-final` or
    comment on/update #163 instead of filing a duplicate `bug` issue. Only genuine
    regressions on already-confirmed-working sites/fields, or new findings on the v1
    fixture (no prior failure history), get a fresh issue.
-4. **Honest per-target reporting.** A clean sweep — both targets, all fields,
+4. **Honest per-target reporting.** A clean sweep — all targets, all fields,
    transcript landed — is reported clean-with-evidence, not padded with a low-value
    finding to manufacture a defect count.
+5. **A `grok` failure on an unauthenticated profile is expected, not a fresh
+   defect.** Since `grok` is included in the default (no-args) target list but
+   requires a one-time manual X sign-in (see Preconditions), a profile that hasn't
+   been signed in will legitimately show `buttonAppeared=false`/`transcriptLanded=false`
+   for `grok` while `fixture`/`mistral` stay clean — sign in before concluding
+   there's a regression.
 
 ## Filing
 
@@ -134,9 +140,9 @@ guard).
 
 ## Boundaries
 
-- **Headed** for the real-site target (Mistral isn't currently known to wall
-  headless, but the harness defaults headed for parity with the host sweep and to
-  catch a future change). The local fixture target works headless too if ever
+- **Headed** for the real-site targets (Mistral and Grok aren't currently known to
+  wall headless, but the harness defaults headed for parity with the host sweep and
+  to catch a future change). The local fixture target works headless too if ever
   needed, since it has no Cloudflare/bot-detection surface.
 - Single dictation turn per field (`loop:false`) — same synthetic-speech limitation
   as the host sweep (issue #364); no multi-utterance or field-switching scenarios.
