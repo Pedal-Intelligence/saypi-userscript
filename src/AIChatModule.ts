@@ -47,20 +47,13 @@ export class AIChatModule {
       submitErrorHandler.checkForRestorePoint();
 
       new ImmersionService(chatbot).initMode();
-      this.startAudioModule();
+      this.audioModule.start();
       this.isLoaded = true;
     });
 
     // Initialize chat-specific modules
     EventModule.init();
     new DOMObserver(chatbot).observeDOM();
-  }
-
-  private startAudioModule(): void {
-    window.addEventListener("unload", () => {
-      this.audioModule.stop();
-    });
-    this.audioModule.start();
   }
 
   private addVisualisations(container: HTMLElement | null): void {

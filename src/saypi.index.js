@@ -173,17 +173,10 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
     
     // UniversalDictationModule is already imported statically - just use it
 
-    function startAudioModule() {
-      window.addEventListener("unload", () => {
-        audioModule.stop();
-      });
-      audioModule.start();
-    }
-
     // Start audio module when dictation is needed
     EventBus.on("saypi:dictation:initialized", function () {
       console.log("Starting audio module for dictation");
-      startAudioModule();
+      audioModule.start();
     });
     
     // Initialize Universal Dictation Module
