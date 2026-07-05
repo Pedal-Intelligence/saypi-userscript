@@ -193,8 +193,6 @@ export default class AudioModule {
     }
   }
 
-  stop() {}
-
   initializeVoiceConverter() {
     const prefs = UserPreferenceModule.getInstance();
     ChatbotService.getChatbot().then((chatbot) => {
