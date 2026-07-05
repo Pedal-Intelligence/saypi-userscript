@@ -256,4 +256,29 @@ describe('UserPreferenceModule new-install default voice (Marin, 2026-07-05)', (
     await prefs.setVoice(createPiVoice('voice2', 'Pi 2'), 'claude');
     expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['pi']);
   });
+
+  it('does NOT clobber a "Voice off" made while adoption is mid-flight (TOCTOU)', async () => {
+    // A slow /voices fetch leaves adoption in flight; the user turns voice off in
+    // another tab meanwhile. The in-flight adoption must re-check and bail, not
+    // silently swap Marin back on. (Reviewer-found race, 2026-07-05.)
+    store[VOICE_DEFAULT_PENDING_KEY] = ['claude', 'pi'];
+    fakeAuth.authenticated = true;
+    let resolveVoices: (v: SpeechSynthesisVoiceRemote[]) => void = () => {};
+    speechSynthesisMock.getVoices.mockReturnValue(
+      new Promise((resolve) => {
+        resolveVoices = resolve;
+      })
+    );
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    const adopt = prefs.getVoice('claude'); // starts the /voices fetch, in flight
+    await new Promise((r) => setTimeout(r, 0)); // let adoption park on getVoices()
+    await prefs.unsetVoice('claude'); // user turns voice off mid-fetch
+    resolveVoices([marin]);
+    const voice = await adopt;
+
+    expect(voice).toBeNull(); // adoption bailed
+    expect(store.voicePreferences ?? {}).toEqual({}); // stays off, not Marin
+    expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['pi']); // drained by the off
+  });
 });

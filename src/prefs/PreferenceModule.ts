@@ -916,6 +916,13 @@ class UserPreferenceModule {
       const voices = await tts.getVoices(chatbotInstance, chatbotId);
       const recommended = (voices ?? []).find((voice) => voice.recommended);
       if (!recommended) return null; // server hasn't nominated a default yet
+      // Re-validate before the terminal write: the /voices fetch above is a real
+      // network round-trip, and a concurrent explicit setVoice/unsetVoice (e.g.
+      // the user turning voice OFF in another tab) may have drained this host
+      // meanwhile. Adopting now would clobber that explicit choice — a silent
+      // swap. If the host is no longer pending, the explicit action won; bail.
+      const pendingNow = await this.getVoiceDefaultPendingRaw();
+      if (!isDefaultPending(pendingNow, chatbotId)) return null;
       // setVoice persists the choice, drains this host, and notifies listeners.
       await this.setVoice(recommended, chatbot);
       return recommended;
