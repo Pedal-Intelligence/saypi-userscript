@@ -274,17 +274,30 @@ function smartJoinTranscriptions(transcriptions: Record<number, string>): string
   return result;
 }
 
+// Fallback identifiers for elements with no stable `id`, cached by element identity
+// (not by attribute value) so they stay valid even if the element's other attributes
+// change during a dictation session (e.g. UniversalDictationModule swaps `placeholder`
+// to "Recording..."/"Transcribing..." while the same field is being dictated into).
+const fallbackTargetIds = new WeakMap<HTMLElement, string>();
+let fallbackTargetIdCounter = 0;
+
 function getTargetElementId(element: HTMLElement): string {
   // Generate a unique identifier for the target element
   if (element.id) {
     return element.id;
   }
-  // Fallback: use a combination of tag name and attributes to create unique ID
+  const cached = fallbackTargetIds.get(element);
+  if (cached) {
+    return cached;
+  }
+  // First time seeing this element: derive a readable prefix from its tag/class/name,
+  // plus a counter to guarantee uniqueness, then cache it for the element's lifetime.
   const tagName = element.tagName.toLowerCase();
   const className = element.className || '';
   const name = element.getAttribute('name') || '';
-  const placeholder = element.getAttribute('placeholder') || '';
-  return `${tagName}-${className}-${name}-${placeholder}`.replace(/\s+/g, '-');
+  const id = `${tagName}-${className}-${name}-${++fallbackTargetIdCounter}`.replace(/\s+/g, '-');
+  fallbackTargetIds.set(element, id);
+  return id;
 }
 
 /**

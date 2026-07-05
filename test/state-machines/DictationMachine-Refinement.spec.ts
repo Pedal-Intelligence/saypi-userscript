@@ -1207,4 +1207,68 @@ describe('DictationMachine - Dual-Phase Refinement', () => {
       expect(service.getSnapshot().matches('idle')).toBe(true);
     });
   });
+
+  describe('Target ID Stability (issue #507)', () => {
+    it('should refine a target whose placeholder changes between segment capture and refinement', async () => {
+      service.start();
+
+      // An id-less, name-less field whose placeholder is mutated mid-dictation —
+      // mirrors real composers with no stable `id` (e.g. Grok's "Ask anything"
+      // textarea) combined with UniversalDictationModule's own placeholder swap
+      // during recording (e.g. to "Recording..."). The element identity never
+      // changes; only its placeholder attribute does.
+      const target = document.createElement('textarea');
+      target.placeholder = 'Ask anything';
+
+      service.send({ type: 'saypi:startDictation', targetElement: target });
+      service.send({ type: 'saypi:callReady' });
+      service.send({ type: 'saypi:audio:connected', deviceId: 'test', deviceLabel: 'Test Mic' });
+      service.send({ type: 'saypi:session:assigned', session_id: 'test-session' });
+
+      // Two segments so refinement isn't skipped for lack of context.
+      for (let i = 0; i < 2; i++) {
+        service.send({ type: 'saypi:userSpeaking' });
+
+        const mockFrames = new Float32Array(1000);
+        const mockBlob = new Blob([new ArrayBuffer(4000)]);
+
+        vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockReturnValue(i * 2 + 1);
+        vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementationOnce(resolveUpload(i * 2 + 2));
+
+        service.send({
+          type: 'saypi:userStoppedSpeaking',
+          duration: 1000,
+          blob: mockBlob,
+          frames: mockFrames,
+        });
+
+        service.send({
+          type: 'saypi:transcribed',
+          text: `segment ${i}`,
+          sequenceNumber: i * 2 + 2,
+        });
+      }
+
+      // Sanity check: refinement is indeed pending for this target before we mutate it.
+      expect(service.getSnapshot().context.refinementPendingForTargets.size).toBe(1);
+
+      // Simulate UniversalDictationModule swapping the placeholder while the same
+      // dictation session continues (the real-world trigger for this bug).
+      target.placeholder = 'Recording...';
+
+      vi.mocked(TranscriptionModule.uploadAudioForRefinement).mockClear();
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      // Wait for the endpoint-triggered refinement delay (mocked to 100ms) to fire,
+      // plus time for the refinement Promise to resolve.
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('No element found for pending refinement target')
+      );
+      expect(TranscriptionModule.uploadAudioForRefinement).toHaveBeenCalled();
+
+      warnSpy.mockRestore();
+    });
+  });
 });
