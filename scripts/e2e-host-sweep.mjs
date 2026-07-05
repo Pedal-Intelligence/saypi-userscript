@@ -120,23 +120,64 @@ const DIAGS = {
  */
 async function selectClaudeModel(page, host, modelPref) {
   if (host !== "claude" || modelPref === "keep") return null;
-  await page.evaluate(() => {
-    const trigger = document.querySelector("button[data-testid='model-selector-dropdown']");
-    if (trigger) trigger.click();
-  }).catch(() => {});
+
+  // Drive the whole open/select/close sequence with Playwright's TRUSTED clicks
+  // (locator.click), never synthetic `page.evaluate(() => el.click())`. Synthetic
+  // clicks dispatch without the microtask checkpoints a trusted click gets, which
+  // desyncs Claude's Radix-style dismissable-layer open/close bookkeeping — the menu
+  // "content" goes but its full-page backdrop is stranded over everything, blocking
+  // the later #saypi-callButton click and failing the whole turn (#501, same class
+  // as the #494 voice-menu race). The subsequent assert-closed guard makes the
+  // page's interactivity a verified post-condition of this function.
+  await page
+    .locator("button[data-testid='model-selector-dropdown']")
+    .click({ timeout: 8_000 })
+    .catch(() => {});
   await page
     .waitForFunction(() => document.querySelectorAll("[role='menuitemradio']").length > 0, undefined, { timeout: 8_000 })
     .catch(() => {});
-  const picked = await page.evaluate((pref) => {
-    const radios = [...document.querySelectorAll("[role='menuitemradio']")]
-      .filter((r) => !/currently unavailable/i.test(r.textContent || ""));
-    const match = radios.find((r) => new RegExp(pref, "i").test(r.textContent || ""));
-    if (!match) return null;
-    match.click(); // real path: switches the conversation model
-    return (match.textContent || "").trim().slice(0, 40);
-  }, modelPref).catch(() => null);
-  // Read the (possibly updated) model label; close any open menu by pressing Escape.
-  await page.keyboard.press("Escape").catch(() => {});
+
+  // Pick the first radio whose text matches the preference and isn't flagged
+  // "currently unavailable", then click it (real path: switches the conversation model).
+  const item = page
+    .getByRole("menuitemradio")
+    .filter({ hasText: new RegExp(modelPref, "i") })
+    .filter({ hasNotText: /currently unavailable/i })
+    .first();
+  const picked = await item
+    .textContent({ timeout: 4_000 })
+    .then((t) => (t || "").trim().slice(0, 40))
+    .catch(() => null);
+  if (picked) await item.click({ timeout: 4_000 }).catch(() => {});
+
+  // Acceptance criterion (#501): before the caller proceeds to the voice-selection /
+  // call-button steps, verify the model menu is actually closed — both that its
+  // content is gone (no [role='menuitemradio']) AND that the trigger reports collapsed
+  // (aria-expanded !== "true"). Requiring both distinguishes a clean close from the
+  // #501 failure mode where the menu content is removed but its dismissable
+  // layer/backdrop is stranded — in that state the trigger still reads
+  // aria-expanded="true", so the content-only check alone would pass a broken page.
+  // The trusted clicks above are what keep Radix's teardown correct; a trusted Escape
+  // is the fallback if the menu somehow lingers, after which we re-assert.
+  const menuClosed = () =>
+    page
+      .waitForFunction(
+        () => {
+          const contentGone = document.querySelectorAll("[role='menuitemradio']").length === 0;
+          const trigger = document.querySelector("button[data-testid='model-selector-dropdown']");
+          const collapsed = !trigger || trigger.getAttribute("aria-expanded") !== "true";
+          return contentGone && collapsed;
+        },
+        undefined,
+        { timeout: 4_000 }
+      )
+      .then(() => true)
+      .catch(() => false);
+  if (!(await menuClosed())) {
+    await page.keyboard.press("Escape").catch(() => {});
+    await menuClosed();
+  }
+
   if (!picked) return null;
   const label = await page
     .evaluate(() => document.querySelector("[data-testid='model-selector-dropdown']")?.getAttribute("aria-label") || null)
