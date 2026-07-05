@@ -428,10 +428,11 @@ describe('DictationMachine', () => {
         sequenceNumber: 1,
       });
       
-      // Should create entry using fallback identifier
+      // Should create entry using a fallback identifier derived from tag/class/name —
+      // not from `placeholder`, which is mutable during a dictation session (issue #507).
       const targetIds = Object.keys(service.state.context.transcriptionsByTarget);
       expect(targetIds.length).toBe(1);
-      expect(targetIds[0]).toMatch(/input-form-control-test-input-Test-placeholder/);
+      expect(targetIds[0]).toMatch(/^input-form-control-test-input-\d+$/);
     });
   });
 
