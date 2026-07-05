@@ -99,4 +99,24 @@ describe("UniversalDictationModule — root-node decoration (issue #502)", () =>
 
     expect(document.querySelectorAll(".saypi-dictation-button").length).toBe(1);
   });
+
+  it("decorates an element that BECOMES contenteditable via an attribute mutation (Mistral's real mechanism)", async () => {
+    // A Layer-4 DOM probe (3/3 runs) showed Mistral's ProseMirror composer div is
+    // present early (no childList insertion) and gets contenteditable="true" set on
+    // it later via an ATTRIBUTES mutation. A childList-only observer never re-checks
+    // that node, so it's only decorated if it happened to be editable at the initial
+    // scan — a race that leaves the button missing on the slow path (#502).
+    const composer = document.createElement("div");
+    composer.className = "ProseMirror";
+    document.body.appendChild(composer); // not contenteditable yet
+    await flushMutations();
+    // Not decoratable while it lacks contenteditable="true".
+    expect(document.querySelectorAll(".saypi-dictation-button").length).toBe(0);
+
+    // ProseMirror turns the existing node into an editor.
+    composer.setAttribute("contenteditable", "true");
+    await flushMutations();
+
+    expect(document.querySelectorAll(".saypi-dictation-button").length).toBe(1);
+  });
 });
