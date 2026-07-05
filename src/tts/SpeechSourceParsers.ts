@@ -140,4 +140,29 @@ class SayPiSpeechSourceParser implements SpeechSourceParser {
     }
   }
 }
-export { SpeechSourceParser, PiSpeechSourceParser, SayPiSpeechSourceParser };
+/**
+ * A canned voice-PREVIEW clip — `…/voices/<id>/sample` (optionally `?v=<hash>`).
+ * It is a static audio file with no transcript/speech-marks, unlike a
+ * `…/speak/<id>/stream` TTS stream (see {@link SayPiSpeechSourceParser}). The
+ * audio-output path plays it directly, so it must NOT be handed to the stream
+ * parser — doing so throws "is not a streaming speech URL" and logs a spurious
+ * error on every ▶ preview / voice audition (found live on claude.ai 2026-07-05).
+ */
+function isVoiceSampleUrl(source: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(source);
+  } catch (_) {
+    return false;
+  }
+  const segments = url.pathname.split("/");
+  const voicesIndex = segments.indexOf("voices");
+  return voicesIndex !== -1 && segments[voicesIndex + 2] === "sample";
+}
+
+export {
+  SpeechSourceParser,
+  PiSpeechSourceParser,
+  SayPiSpeechSourceParser,
+  isVoiceSampleUrl,
+};

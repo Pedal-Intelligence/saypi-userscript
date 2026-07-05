@@ -5,6 +5,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   PiSpeechSourceParser,
   SayPiSpeechSourceParser,
+  isVoiceSampleUrl,
 } from "../tts/SpeechSourceParsers";
 import {
   AudioProvider,
@@ -345,6 +346,12 @@ async function getSpeechFromAudioSource(
       const userLang = await userPreferences.getLanguage();
       return new PiSpeechSourceParser(userLang).parse(source);
     } else if (audioProviders.SayPi.matches(source)) {
+      // A canned preview clip (…/voices/<id>/sample) is a static audio file with
+      // no transcript — not a streaming-speech source. The `audioProviders.SayPi`
+      // gate matches by hostname alone, so it also catches these; skip resolution
+      // silently rather than let the stream parser throw "is not a streaming
+      // speech URL" and log a spurious error on every ▶ preview / voice audition.
+      if (isVoiceSampleUrl(source)) return null;
       return await new SayPiSpeechSourceParser(
         SpeechSynthesisModule.getInstance()
       ).parse(source);
