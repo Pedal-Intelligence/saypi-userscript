@@ -18,9 +18,14 @@ import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
 
 export type VoiceTier = "hd" | "everyday";
 
-/** Max voice rows in the in-host menus ("Voice off" and "More voices…" excluded). */
-export const CLAUDE_MENU_CAP = 6;
-export const PI_MENU_CAP = 5;
+/**
+ * Max voice rows in the in-host menus ("Voice off" and "More voices…" excluded).
+ * Kept deliberately short (2026-07-05 redesign) — a handful of sensible defaults,
+ * with the full catalog one click deeper in settings. The user's current voice
+ * still pins first, so the visible menu is at most current + 3 featured.
+ */
+export const CLAUDE_MENU_CAP = 4;
+export const PI_MENU_CAP = 4;
 
 /**
  * Credits/1k chars boundary between value voices (OpenAI: 50) and premium

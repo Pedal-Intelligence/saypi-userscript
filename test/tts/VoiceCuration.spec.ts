@@ -106,6 +106,15 @@ describe("curateShortlist", () => {
     expect(result.hiddenCount).toBe(claudeFlipDay.length - CLAUDE_MENU_CAP);
   });
 
+  it("keeps the in-host menus short — 4 rows (2026-07-05 shortlist redesign)", () => {
+    // The menu is a handful of sensible defaults + a door, not a browse surface.
+    // Both hosts share the same short cap.
+    expect(CLAUDE_MENU_CAP).toBe(4);
+    expect(PI_MENU_CAP).toBe(4);
+    // A catalog larger than the cap trims to exactly 4 visible rows.
+    expect(curateShortlist(claudeFlipDay, null, CLAUDE_MENU_CAP).voices.length).toBe(4);
+  });
+
   it("pins the current voice first even when it is not featured", () => {
     // Lucy is last in server order and not an HD-featured pick
     const result = curateShortlist(
@@ -266,34 +275,45 @@ describe("getVoiceTier with a server section", () => {
 });
 
 describe("curateShortlist with a server-curated catalog", () => {
-  it("draws the shortlist from the server featured set, in server order", () => {
+  it("draws the shortlist from the server featured set, in server order (capped)", () => {
+    // curated features 5 voices; the cap of 4 keeps the first four in server order.
     const result = curateShortlist(curated, null, PI_MENU_CAP);
     expect(result.voices.map((v) => v.name)).toEqual([
       "Paola",
       "Joey",
       "Onyx",
       "Sage",
-      "Shimmer",
     ]);
   });
 
   it("pins the current voice first, then the server featured set", () => {
     const result = curateShortlist(curated, "alloy", CLAUDE_MENU_CAP);
+    // current (Alloy) + the first three featured, capped at 4.
     expect(result.voices.map((v) => v.name)).toEqual([
       "Alloy",
       "Paola",
       "Joey",
       "Onyx",
-      "Sage",
-      "Shimmer",
     ]);
   });
 
   it("fills to the cap in server order when fewer voices are featured than the cap", () => {
-    const result = curateShortlist(curated, null, CLAUDE_MENU_CAP); // 5 featured, cap 6
-    expect(result.voices.length).toBe(CLAUDE_MENU_CAP);
-    // the 6th slot is the next un-taken voice in server order (Paola v3)
-    expect(result.voices[5].id).toBe("paola-v3");
+    // Only two featured, cap 4 → the two featured, then the next two in server order.
+    const twoFeatured = piFlipDay.map((v, i) =>
+      withManifest(v, {
+        featured: i < 2,
+        section: v.powered_by === "ElevenLabs" ? "hd" : "everyday",
+      })
+    );
+    const result = curateShortlist(twoFeatured, null, CLAUDE_MENU_CAP);
+    expect(result.voices.length).toBe(CLAUDE_MENU_CAP); // 4
+    expect(result.voices.slice(0, 2).map((v) => v.id)).toEqual(
+      piFlipDay.slice(0, 2).map((v) => v.id)
+    );
+    // slots 3–4 filled straight down server order (next un-taken voices)
+    expect(result.voices.slice(2, 4).map((v) => v.id)).toEqual(
+      piFlipDay.slice(2, 4).map((v) => v.id)
+    );
   });
 
   it("never yields an empty menu when the server marks nothing featured", () => {
@@ -335,8 +355,8 @@ describe("curateShortlist grandfathering (deprecated voices)", () => {
       v.id === "alloy" ? withManifest(v, { deprecated: true }) : v
     );
     const result = curateShortlist(withDeprecated, null, CLAUDE_MENU_CAP);
-    // 13 catalog − 1 deprecated − 6 shown = 6 behind the door
-    expect(result.hiddenCount).toBe(6);
+    // 13 catalog − 1 deprecated − 4 shown = 8 behind the door
+    expect(result.hiddenCount).toBe(8);
   });
 
   it("keeps rendering the user's current voice even after it is deprecated (grandfathering)", () => {
