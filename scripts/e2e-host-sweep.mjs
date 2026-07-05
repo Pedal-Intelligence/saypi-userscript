@@ -150,14 +150,27 @@ async function selectClaudeModel(page, host, modelPref) {
     .catch(() => null);
   if (picked) await item.click({ timeout: 4_000 }).catch(() => {});
 
-  // Acceptance criterion (#501): the menu — and its backdrop — must be verifiably
-  // gone before the caller proceeds to the voice-selection / call-button steps.
-  // A trusted radio click normally closes the menu on its own; if it lingers, a
-  // trusted Escape dismisses it (now that the layer is properly registered), then
-  // we re-assert it's closed.
+  // Acceptance criterion (#501): before the caller proceeds to the voice-selection /
+  // call-button steps, verify the model menu is actually closed — both that its
+  // content is gone (no [role='menuitemradio']) AND that the trigger reports collapsed
+  // (aria-expanded !== "true"). Requiring both distinguishes a clean close from the
+  // #501 failure mode where the menu content is removed but its dismissable
+  // layer/backdrop is stranded — in that state the trigger still reads
+  // aria-expanded="true", so the content-only check alone would pass a broken page.
+  // The trusted clicks above are what keep Radix's teardown correct; a trusted Escape
+  // is the fallback if the menu somehow lingers, after which we re-assert.
   const menuClosed = () =>
     page
-      .waitForFunction(() => document.querySelectorAll("[role='menuitemradio']").length === 0, undefined, { timeout: 4_000 })
+      .waitForFunction(
+        () => {
+          const contentGone = document.querySelectorAll("[role='menuitemradio']").length === 0;
+          const trigger = document.querySelector("button[data-testid='model-selector-dropdown']");
+          const collapsed = !trigger || trigger.getAttribute("aria-expanded") !== "true";
+          return contentGone && collapsed;
+        },
+        undefined,
+        { timeout: 4_000 }
+      )
       .then(() => true)
       .catch(() => false);
   if (!(await menuClosed())) {
