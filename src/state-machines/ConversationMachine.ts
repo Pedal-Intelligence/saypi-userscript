@@ -24,6 +24,8 @@ import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 import { logger } from "../LoggingModule";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import { postTurnOutcome } from "../TurnOutcomeModule";
 
 type ConversationTranscribedEvent = {
   type: "saypi:transcribed";
@@ -94,6 +96,19 @@ type ConversationEvent =
   | { type: "saypi:piStoppedWriting" }
   | ConversationUserPreferenceChangedEvent;
 
+// Snapshot of the correlation data captured at the moment of auto-submit, used
+// to emit a turn-outcome event once the resume window closes (issue #505). Taken
+// at submit time because the transcript buffer is cleared on `listening` exit.
+interface PendingTurnOutcome {
+  submittedAt: number;            // epoch ms, our clock
+  sessionId?: string;
+  lastSequenceNumber?: number;    // the endpointing decision point
+  pFinishedSpeaking?: number;     // score from the last /transcribe response
+  lastSpeechEndedAt: number;      // when the user stopped speaking (timeUserStoppedSpeaking)
+  app?: string;                   // pi / claude / chatgpt
+  isMaintenance: boolean;         // suppressed buffer flush — excluded from the eval
+}
+
 interface ConversationContext {
   transcriptions: Record<number, string>;
   isTranscribing: boolean; // duplicate of state.matches("listening.converting.transcribing")
@@ -104,6 +119,9 @@ interface ConversationContext {
   sessionId?: string;
   shouldRespond?: boolean; // should Pi respond the next time the user finishes speaking?
   isMaintainanceMessage?: boolean; // is the current message a maintainance message?
+  lastSequenceNumber?: number; // highest sequenceNumber seen this turn (endpointing decision point)
+  lastPFinishedSpeaking?: number; // pFinishedSpeaking of that same /transcribe response
+  pendingTurnOutcome?: PendingTurnOutcome | null; // snapshot for the in-flight turn's outcome event
 }
 
 function isContextWindowApproachingCapacity(transcriptions: Record<number, string>): boolean {
@@ -257,9 +275,19 @@ const machine = setup({
         });
       }
 
+      // Persist the endpointing decision point for the turn-outcome event (#505):
+      // the highest sequence number seen this turn and the pFinishedSpeaking of
+      // that same /transcribe response, kept together so the reported score and
+      // sequence number always describe the same utterance. Guarding on the
+      // highest seq keeps them consistent even if responses arrive out of order.
+      const prevSeq = context.lastSequenceNumber ?? -1;
+      const isNewestSeq = sequenceNumber >= prevSeq;
+
       return {
         transcriptions,
         shouldRespond: shouldRespondToThis ?? shouldAlwaysRespond(),
+        lastSequenceNumber: isNewestSeq ? sequenceNumber : context.lastSequenceNumber,
+        lastPFinishedSpeaking: isNewestSeq ? e.pFinishedSpeaking : context.lastPFinishedSpeaking,
       };
     }),
 
@@ -492,6 +520,56 @@ const machine = setup({
     notifyPiSpeaking: () => {
       EventBus.emit("saypi:piSpeaking");
     },
+    // Snapshot the turn's correlation data at auto-submit — the moment the resume
+    // window opens (#505). Taken here because the transcript buffer and the
+    // per-turn sequence/score fields are cleared on `listening` exit, which runs
+    // immediately after this state's `always` transition into `responding`.
+    openTurnOutcome: assign(({ context }) => {
+      const seqs = Object.keys(context.transcriptions).map(Number);
+      const lastSequenceNumber =
+        context.lastSequenceNumber ?? (seqs.length ? Math.max(...seqs) : undefined);
+      const pending: PendingTurnOutcome = {
+        submittedAt: Date.now(),
+        sessionId: context.sessionId,
+        lastSequenceNumber,
+        pFinishedSpeaking: context.lastPFinishedSpeaking,
+        lastSpeechEndedAt: context.timeUserStoppedSpeaking,
+        app: ChatbotIdentifier.getAppId(),
+        isMaintenance: !!context.isMaintainanceMessage,
+      };
+      return { pendingTurnOutcome: pending };
+    }),
+    // Close the resume window and report the outcome (#505). Fired on the single
+    // transition that leaves `responding.piThinking`, so exactly once per turn.
+    // Maintenance messages (suppressed buffer flushes) are excluded from the eval.
+    emitTurnOutcome: (
+      { context },
+      params: { kind: "response-started" | "resumed" | "no-response" }
+    ) => {
+      const pending = context.pendingTurnOutcome;
+      if (!pending || pending.isMaintenance) {
+        return;
+      }
+      const now = Date.now();
+      postTurnOutcome({
+        sessionId: pending.sessionId,
+        lastSequenceNumber: pending.lastSequenceNumber,
+        trigger: "auto",
+        userResumed: params.kind === "resumed",
+        submittedAt: pending.submittedAt,
+        responseStartedAt: params.kind === "response-started" ? now : null,
+        resumedAt: params.kind === "resumed" ? now : null,
+        lastSpeechEndedAt: pending.lastSpeechEndedAt,
+        pFinishedSpeaking: pending.pFinishedSpeaking ?? null,
+        app: pending.app ?? null,
+      });
+    },
+    // Drop any in-flight turn-outcome snapshot (#505). `pendingTurnOutcome` means
+    // "an auto-submitted turn awaiting its outcome", so entering `responding`
+    // by a path that is NOT our own auto-submit (the `saypi:piThinking` handler)
+    // must clear it — otherwise a subsequent response-start would re-emit a stale
+    // prior-turn snapshot as if it were a fresh auto-submit.
+    clearPendingTurnOutcome: assign({ pendingTurnOutcome: null }),
     clearPendingTranscriptionsAction: () => {
       // discard in-flight transcriptions. Called after a successful submission
       clearPendingTranscriptions();
@@ -499,6 +577,8 @@ const machine = setup({
     clearTranscriptsAction: assign({
       transcriptions: () => ({}),
       shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
+      lastSequenceNumber: () => undefined, // reset endpointing decision point for next turn (#505)
+      lastPFinishedSpeaking: () => undefined,
     }),
     updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
     setMaintainanceFlag: assign(({ context }) => {
@@ -1054,6 +1134,9 @@ const machine = setup({
                   },
                   {
                     type: "setMaintainanceFlag",
+                  },
+                  {
+                    type: "openTurnOutcome",
                   }
                 ],
                 exit: ["acknowledgeUserInput"],
@@ -1181,6 +1264,10 @@ const machine = setup({
               {
                 type: "acknowledgeUserInput",
               },
+              {
+                // Not our auto-submit path — discard any stale turn snapshot (#505).
+                type: "clearPendingTurnOutcome",
+              },
             ],
           },
           "saypi:piSpeaking": {
@@ -1262,11 +1349,41 @@ const machine = setup({
         states: {
           piThinking: {
             on: {
+              // Resume-window CLOSE (#505). v1 closes on the FIRST response signal
+              // to leave piThinking — piWriting (text) or piSpeaking (TTS). With
+              // TTS on the order is piThinking->piWriting->piSpeaking, so v1 closes
+              // at text-appear rather than the spec's preferred TTS-start; this
+              // slightly under-counts resumes in the text-shown-not-yet-spoken gap.
+              // Deliberate v1 simplification (founder-approved) — spec-fidelity is
+              // tracked in #510. Emitting on the single piThinking exit keeps it to
+              // exactly one event per turn.
               "saypi:piSpeaking": {
                 target: "piSpeaking",
+                actions: {
+                  type: "emitTurnOutcome",
+                  params: { kind: "response-started" },
+                },
               },
               "saypi:piWriting": {
                 target: "piWriting",
+                actions: {
+                  type: "emitTurnOutcome",
+                  params: { kind: "response-started" },
+                },
+              },
+              // The user resumed speaking before the response started — a
+              // false finish (we cut them off). Captured only when interruptions
+              // are enabled (the default); this is the same transition the parent
+              // `responding` region uses, with the outcome emit attached. (#505)
+              "saypi:userSpeaking": {
+                target: "#conversation.responding.userInterrupting",
+                guard: {
+                  type: "interruptionsAllowed",
+                },
+                actions: {
+                  type: "emitTurnOutcome",
+                  params: { kind: "resumed" },
+                },
               },
             },
             after: {
@@ -1276,6 +1393,11 @@ const machine = setup({
                   guard: {
                     type: "wasListening",
                   },
+                  // Window close: the response never started. (#505)
+                  actions: {
+                    type: "emitTurnOutcome",
+                    params: { kind: "no-response" },
+                  },
                   description:
                     "Fallback: Pi's response was never detected as written/spoken (e.g. host DOM drift broke completion detection). Recover the call's listening state instead of staying stuck on 'thinking', and restore the prompt placeholder via the exit action.",
                 },
@@ -1283,6 +1405,10 @@ const machine = setup({
                   target: "#conversation.inactive",
                   guard: {
                     type: "wasInactive",
+                  },
+                  actions: {
+                    type: "emitTurnOutcome",
+                    params: { kind: "no-response" },
                   },
                   description:
                     "Fallback when Pi was responding outside a call: return to inactive and restore the placeholder.",
