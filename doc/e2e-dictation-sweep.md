@@ -39,6 +39,7 @@ matches an already-logged known-broken site/behavior there is not novel.
 |---|---|---|
 | `fixture` (`test/fixtures/test-dictation.html`, served locally) | plain `<input>`, `<textarea>`, plain `<div contenteditable>` | zero-login, zero-drift baseline covering 3 field types in one page |
 | `mistral` (`chat.mistral.ai`, branded "Vibe" in-product) | `ProseMirror` contenteditable composer | real, **login-free** (one-time ToS dialog, no sign-in), confirmed-working per issue #163, adds rich-editor-strategy + live-DOM-drift coverage |
+| `grok` (`x.com/i/grok`) | plain `<textarea>` composer ("Ask anything") | real; X's own AI assistant embedded in the X web app — **requires X/Twitter sign-in** in the seeded profile (see Preconditions), unlike the other two targets. Not a SayPi chat host (no `ChatbotIdentifier` adapter), so it only gets generic universal dictation — no call button, auto-submit, or TTS. |
 
 Candidates ruled out for v1 (see the design spec for detail): Character.AI
 (hard signup wall before any composer is reachable), GitHub (anonymous users can't
@@ -53,12 +54,22 @@ login-free path).
    to override), with the dev extension profile-installed (Developer mode + Load
    unpacked). See `doc/layer4-cdp-real-host-loop.md` for the one-time setup. No
    SayPi account sign-in is needed (dictation doesn't need auth) — same profile the
-   host sweep uses is fine, no extra seeding step.
-3. **Dev build at HEAD:** `npm run e2e:build` (the profile-installed unpacked
+   host sweep uses is fine, no extra seeding step for `fixture`/`mistral`.
+3. **X/Twitter sign-in for the `grok` target only:** unlike `mistral`, `x.com/i/grok`
+   redirects an anonymous visitor to a login wall with no accessible composer — sign
+   into an X account in the seeded profile's headed window, once (interactive login,
+   same pattern as the SayPi-account seed step in `doc/e2e-host-sweep.md`). There is
+   no automatable one-click sign-in here: Google's FedCM account-chooser popup (if
+   offered) is a native browser dialog rendered outside the page DOM, so it can't be
+   clicked via CDP/Playwright automation — it must be completed by a human in the
+   visible window. If the profile isn't signed in, a `grok` run degrades gracefully
+   (`buttonAppeared=false`, a `focus:` note) rather than failing hard, since the
+   field selector simply won't match the login page.
+4. **Dev build at HEAD:** `npm run e2e:build` (the profile-installed unpacked
    extension re-reads `.output/chrome-mv3-dev` from disk on each launch, so
    rebuilding at HEAD = the sweep tests current `main`; confirm via the
    `data-saypi-build` stamp the sweep logs).
-4. **`cf_clearance` fresh** (only matters if a future target is Cloudflare-gated):
+5. **`cf_clearance` fresh** (only matters if a future target is Cloudflare-gated):
    `npm run layer4cdp:diagnose` should say **VERDICT: usable**.
 
 ## Run it
@@ -70,7 +81,8 @@ npm run e2e-dictation-sweep    # 2. sweep all v1 targets (headed)
 # variants
 node scripts/e2e-dictation-sweep.mjs fixture     # local fixture only (fast, no network)
 node scripts/e2e-dictation-sweep.mjs mistral     # real-site only
-node scripts/e2e-dictation-sweep.mjs --headless  # re-test headless (real-site target may wall this)
+node scripts/e2e-dictation-sweep.mjs grok        # Grok only (needs X sign-in — see Preconditions)
+node scripts/e2e-dictation-sweep.mjs --headless  # re-test headless (real-site targets may wall this)
 ```
 
 Per field the harness writes to
@@ -112,9 +124,11 @@ sweep has `claude`/`chatgpt`/`pi ai` — use the target name in the body instead
 ## Cost & side effects
 
 Lighter than the host sweep (no SayPi sign-in, no TTS, and the fixture target is fully
-local), but a `mistral` run still types a real message into a real Le Chat composer and
-spends real SayPi STT calls — purposeful runs only, never an unattended loop. Evidence
-lands under git-ignored `.output/e2e-dictation-sweep/` — never commit it. Same
+local), but a `mistral` or `grok` run still types a real message into a real composer
+and spends real SayPi STT calls — purposeful runs only, never an unattended loop. The
+`grok` target additionally acts as whichever X account is signed into the seeded
+profile (a real, non-cleaned-up entry in Grok's conversation history). Evidence lands
+under git-ignored `.output/e2e-dictation-sweep/` — never commit it. Same
 shared-profile rule as the host sweep: one CDP harness run at a time (no lockfile
 guard).
 

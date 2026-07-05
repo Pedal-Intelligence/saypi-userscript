@@ -8,8 +8,8 @@ import {
 } from "../../scripts/e2e-dictation-sweep-lib.mjs";
 
 describe("TARGETS registry", () => {
-  it("covers the v1 fixture + Mistral targets, each with at least one field", () => {
-    expect(TARGETS.map((t) => t.key)).toEqual(["fixture", "mistral"]);
+  it("covers the v1 fixture + Mistral + Grok targets, each with at least one field", () => {
+    expect(TARGETS.map((t) => t.key)).toEqual(["fixture", "mistral", "grok"]);
     for (const t of TARGETS) {
       expect(typeof t.label).toBe("string");
       expect(t.fields.length).toBeGreaterThan(0);
@@ -30,14 +30,28 @@ describe("TARGETS registry", () => {
     expect(mistral?.url).toMatch(/^https:\/\//);
     expect(mistral?.dismissModal).toMatchObject({ role: "button" });
   });
+  it("the grok target's field selector is stable across dictation (no :visible, no pinned placeholder value)", () => {
+    const grok = TARGETS.find((t) => t.key === "grok");
+    expect(grok?.url).toBe("https://x.com/i/grok");
+    // `:visible` throws a SyntaxError under native document.querySelector(), which
+    // is how the harness checks transcript-landed (page.waitForFunction) — so the
+    // field selector must be plain CSS the browser itself understands, not a
+    // Playwright-only extension.
+    expect(grok?.fields[0]?.selector).not.toMatch(/:visible/);
+    // Must not pin the placeholder's *value* either: UniversalDictationModule
+    // rewrites it while dictating (e.g. to "Recording..."), so a value-pinned
+    // selector stops matching once recording starts — a false "didn't land".
+    // Presence-only (`[placeholder]`, no `=`) still disambiguates from x.com's
+    // second, placeholder-less mirror textarea, and stays valid all session.
+    expect(grok?.fields[0]?.selector).toBe("textarea[placeholder]");
+  });
 });
 
 describe("flattenFields", () => {
   it("produces one flat entry per field, carrying the parent target's key/label/url/modal", () => {
     const items = flattenFields(TARGETS);
-    const fixtureFieldCount = TARGETS.find((t) => t.key === "fixture")?.fields.length ?? 0;
-    const mistralFieldCount = TARGETS.find((t) => t.key === "mistral")?.fields.length ?? 0;
-    expect(items.length).toBe(fixtureFieldCount + mistralFieldCount);
+    const totalFieldCount = TARGETS.reduce((sum, t) => sum + t.fields.length, 0);
+    expect(items.length).toBe(totalFieldCount);
     for (const item of items) {
       expect(item.targetKey).toBeDefined();
       expect(item.targetLabel).toBeDefined();
@@ -62,7 +76,7 @@ describe("flattenFields", () => {
 describe("parseSweepArgs", () => {
   it("defaults to all targets, headed", () => {
     const a = parseSweepArgs([]);
-    expect(a.targets).toEqual(["fixture", "mistral"]);
+    expect(a.targets).toEqual(["fixture", "mistral", "grok"]);
     expect(a.headed).toBe(true);
     expect(a.unknownTargets).toEqual([]);
   });
