@@ -79,6 +79,18 @@ export class UniversalDictationModule {
   private startObserving(): void {
     this.observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
+        // An existing element's contenteditable changed — re-check it for decoration.
+        // Rich-text editors (e.g. Mistral Le Chat's ProseMirror) set
+        // contenteditable="true" on a node that's ALREADY in the DOM rather than
+        // inserting a new one, so the childList paths below never see it. Without
+        // this, decoration hinges on a race with the initial scan (#502).
+        if (mutation.type === "attributes") {
+          if (mutation.target instanceof HTMLElement) {
+            this.findAndDecorateInputs(mutation.target);
+          }
+          return;
+        }
+
         [...mutation.addedNodes]
           .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
@@ -98,6 +110,9 @@ export class UniversalDictationModule {
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
+      // Also react when a node BECOMES contenteditable in place (#502).
+      attributes: true,
+      attributeFilter: ["contenteditable"],
     });
   }
 
