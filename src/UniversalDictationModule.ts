@@ -140,10 +140,19 @@ export class UniversalDictationModule {
       '[contenteditable="true"]',
       'input:not([type])',
     ];
+    const selector = inputSelectors.join(", ");
 
-    const inputs = searchRoot.querySelectorAll(inputSelectors.join(", "));
+    // querySelectorAll only matches DESCENDANTS of searchRoot — never searchRoot
+    // itself. When the MutationObserver hands us a field that was inserted as a
+    // bare, already-complete root node (e.g. Mistral Le Chat's ProseMirror
+    // composer), the descendant scan alone misses it, so check the root too (#502).
+    const candidates: Element[] = [];
+    if (searchRoot.matches(selector)) {
+      candidates.push(searchRoot);
+    }
+    candidates.push(...searchRoot.querySelectorAll(selector));
 
-    inputs.forEach((input) => {
+    candidates.forEach((input) => {
       if (input instanceof HTMLElement && !this.decoratedElements.has(input)) {
         this.decorateInput(input);
       }
