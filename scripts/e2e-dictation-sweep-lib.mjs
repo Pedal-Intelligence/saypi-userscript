@@ -43,6 +43,41 @@ export const TARGETS = [
       { selector: "[contenteditable='true'].ProseMirror, [contenteditable='true']", type: "contenteditable", label: "Composer (ProseMirror)" },
     ],
   },
+  {
+    // Grok (x.com/i/grok) is X's own AI assistant, embedded in the X web app —
+    // NOT a chat host SayPi has a ChatbotIdentifier/Chatbot.ts adapter for, so it
+    // gets generic universal dictation only (no call button, no auto-submit, no
+    // TTS). REQUIRES the seeded CDP profile to be signed into an X/Twitter account:
+    // unlike Mistral, x.com/i/grok redirects anonymous visitors to a login wall
+    // with no accessible composer. There is no automatable one-click sign-in for
+    // this (Google's FedCM account chooser is a native browser dialog outside the
+    // page DOM, not a clickable element) — sign in manually, once, in the seeded
+    // profile's headed window, same as the SayPi-account seed step in
+    // doc/e2e-host-sweep.md. If unauthenticated, the sweep will simply record
+    // buttonAppeared=false / transcriptLanded=false (the field selector won't
+    // match the login page), not crash.
+    key: "grok",
+    label: "Grok (x.com)",
+    url: "https://x.com/i/grok",
+    dismissModal: null,
+    fields: [
+      // X renders a second, hidden mirror <textarea> (no placeholder attribute at
+      // all, likely for autosizing) alongside the real visible composer — a
+      // presence check (`[placeholder]`, no value match) disambiguates the two.
+      // Deliberately NOT matching the placeholder's *value* ("Ask anything"):
+      // UniversalDictationModule itself rewrites it while dictating (e.g. to
+      // "Recording..."), and the sweep never explicitly stops dictation, so a
+      // value-pinned selector stops matching the moment recording starts and
+      // never matches again — a false "transcript didn't land" even though it
+      // did (confirmed live: the same underlying mutability that caused #507).
+      // Also deliberately NOT using a `:visible` suffix: that's a Playwright-only
+      // pseudo-class that works through Playwright's own selector engine (e.g.
+      // page.click()) but throws a SyntaxError when passed into a native
+      // document.querySelector() call inside page.evaluate()/waitForFunction() —
+      // which is exactly how the harness checks whether the transcript landed.
+      { selector: "textarea[placeholder]", type: "textarea", label: "Composer (Ask anything)" },
+    ],
+  },
 ];
 
 export const DEFAULT_BUTTON_TIMEOUT_MS = 10_000;
