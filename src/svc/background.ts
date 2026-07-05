@@ -6,6 +6,7 @@ import { sendOnboardingHint, voiceGoalFromUrl } from "../auth/OnboardingHint";
 import { registerDevReloadHandler, DEV_FEED_SPEECH_MESSAGE } from "../dev/devReload";
 import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
 import { maybeOpenFirstRunTab } from "../onboarding/firstRun";
+import { seedVoiceDefaultsOnFreshInstall } from "../onboarding/voiceDefaults";
 import { detectPermissionLoss, buildPermissionsUrl, MIC_GRANTED_FLAG } from "../permissions/permissionLossDetection";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
@@ -443,6 +444,16 @@ browser.runtime.onInstalled.addListener((details) => {
       get: async (key: string) => (await browser.storage.local.get(key))[key],
       set: async (key: string, value: unknown) =>
         browser.storage.local.set({ [key]: value }),
+    },
+  });
+
+  // On a fresh install (never an update), mark the chat hosts as pending a
+  // default voice; the content script then adopts the server-recommended voice
+  // on first use. Existing users are never touched (grandfathering).
+  void seedVoiceDefaultsOnFreshInstall(details.reason, {
+    get: async (key: string) => (await browser.storage.local.get(key))[key],
+    set: async (key: string, value: unknown) => {
+      await browser.storage.local.set({ [key]: value });
     },
   });
 });
