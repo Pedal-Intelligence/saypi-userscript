@@ -11,6 +11,11 @@ import { isFirefox, isSafari } from "../UserAgentModule";
 import { getJwtManager, getJwtManagerSync } from "../JwtManager";
 import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import {
+  VOICE_DEFAULT_PENDING_KEY,
+  isDefaultPending,
+  withHostDrained,
+} from "../onboarding/voiceDefaults";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -827,7 +832,9 @@ class UserPreferenceModule {
     const voiceIdToFetch = preferences[chatbotId] ?? null;
 
     if (!voiceIdToFetch) {
-      return null;
+      // No stored voice. On a fresh install this host may still be awaiting its
+      // default — adopt the server-recommended voice once (see maybeAdoptDefaultVoice).
+      return await this.maybeAdoptDefaultVoice(chatbotId, chatbot);
     }
 
     if (PiAIVoice.isPiVoiceId(voiceIdToFetch)) {
@@ -860,6 +867,69 @@ class UserPreferenceModule {
     }
   }
 
+  /**
+   * In-flight guard so rapid first-render getVoice calls for the same host don't
+   * each fetch the catalog and adopt (writes are idempotent, but this avoids
+   * duplicate network calls + userPreferenceChanged emits).
+   */
+  private adoptingDefaultHosts = new Set<string>();
+
+  /** Read the raw first-install "pending default" host set from local storage. */
+  private async getVoiceDefaultPendingRaw(): Promise<unknown> {
+    return await this.getStoredValue(VOICE_DEFAULT_PENDING_KEY, [], "local");
+  }
+
+  /** Remove a host from the first-install pending-default set (idempotent). */
+  private async drainVoiceDefault(chatbotId: string): Promise<void> {
+    const raw = await this.getVoiceDefaultPendingRaw();
+    if (!isDefaultPending(raw, chatbotId)) return;
+    await this.setStoredValue(
+      VOICE_DEFAULT_PENDING_KEY,
+      withHostDrained(raw, chatbotId),
+      "local"
+    );
+  }
+
+  /**
+   * On a fresh install (this host still "pending"), adopt the server-`recommended`
+   * voice the first time it's needed — once signed in, so /voices is populated.
+   * Returns the adopted voice, or null when there's nothing to adopt (host not
+   * pending, signed out, or the server has nominated no recommended voice — in
+   * which case the host stays pending and a later call retries). Never throws.
+   */
+  private async maybeAdoptDefaultVoice(
+    chatbotId: string,
+    chatbot?: Chatbot | string
+  ): Promise<VoicePreference> {
+    const raw = await this.getVoiceDefaultPendingRaw();
+    if (!isDefaultPending(raw, chatbotId)) return null;
+    // /voices needs auth; while signed out the catalog is empty and no default is
+    // knowable — leave the host pending and retry after sign-in.
+    if (!getJwtManagerSync().isAuthenticated()) return null;
+    if (this.adoptingDefaultHosts.has(chatbotId)) return null;
+    this.adoptingDefaultHosts.add(chatbotId);
+    try {
+      const apiServerUrl = config.apiServerUrl;
+      if (!apiServerUrl) return null;
+      const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
+      const chatbotInstance = typeof chatbot === "string" ? undefined : chatbot;
+      const voices = await tts.getVoices(chatbotInstance, chatbotId);
+      const recommended = (voices ?? []).find((voice) => voice.recommended);
+      if (!recommended) return null; // server hasn't nominated a default yet
+      // setVoice persists the choice, drains this host, and notifies listeners.
+      await this.setVoice(recommended, chatbot);
+      return recommended;
+    } catch (e) {
+      console.debug(
+        `[PreferenceModule] default-voice adoption for ${chatbotId} failed:`,
+        e
+      );
+      return null;
+    } finally {
+      this.adoptingDefaultHosts.delete(chatbotId);
+    }
+  }
+
   public async setVoice(voice: SpeechSynthesisVoiceRemote, chatbot?: Chatbot | string): Promise<void> {
     const provider = audioProviders.retrieveProviderByEngine(voice.powered_by);
     const chatbotId = this.resolveChatbotId(chatbot);
@@ -874,6 +944,8 @@ class UserPreferenceModule {
     };
 
     await this.persistVoicePreferences(updatedPreferences);
+    // An explicit voice choice seals this host from first-install auto-defaulting.
+    await this.drainVoiceDefault(chatbotId);
     EventBus.emit("userPreferenceChanged", {
       voiceId: voice.id,
       voice,
@@ -891,6 +963,8 @@ class UserPreferenceModule {
     if (!chatbotId) {
       return;
     }
+    // A deliberate "Voice off" must never be re-defaulted on a fresh install.
+    await this.drainVoiceDefault(chatbotId);
     const preferences = await this.getVoicePreferences();
     if (!(chatbotId in preferences)) {
       EventBus.emit("userPreferenceChanged", {

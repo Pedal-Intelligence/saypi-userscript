@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SpeechSynthesisVoiceRemote } from '../../src/tts/SpeechModel';
+import { VOICE_DEFAULT_PENDING_KEY } from '../../src/onboarding/voiceDefaults';
 
 const store: Record<string, any> = {};
 let originalChrome: any;
@@ -8,6 +9,7 @@ let originalChrome: any;
 // so tests can make the lookup fail on demand (#456).
 const speechSynthesisMock = vi.hoisted(() => ({
   getVoiceById: vi.fn(),
+  getVoices: vi.fn(),
 }));
 vi.mock('../../src/tts/SpeechSynthesisModule', () => ({
   SpeechSynthesisModule: { getInstance: () => speechSynthesisMock },
@@ -85,6 +87,8 @@ beforeEach(async () => {
 
   fakeAuth.authenticated = false;
   speechSynthesisMock.getVoiceById.mockReset();
+  speechSynthesisMock.getVoices.mockReset();
+  speechSynthesisMock.getVoices.mockResolvedValue([]);
 
   prefsModule = await import('../../src/prefs/PreferenceModule');
   // Allow async initialization to settle
@@ -158,5 +162,98 @@ describe('UserPreferenceModule voice preference across auth changes (#456)', () 
 
     expect(voice).toBeNull();
     expect(store.voicePreferences).toEqual({});
+  });
+});
+
+// New installs (only) adopt the server-`recommended` voice on first use per host.
+// Existing users — including a deliberate "Voice off", stored identically to
+// "never chose" — are never touched (no pending marker), so their voice is never
+// silently swapped. See doc/plans/2026-07-05-voice-shortlist-pins-design.md.
+describe('UserPreferenceModule new-install default voice (Marin, 2026-07-05)', () => {
+  const createRecommendedVoice = (
+    id: string,
+    name: string
+  ): SpeechSynthesisVoiceRemote => ({
+    id,
+    name,
+    lang: 'en-US',
+    price: 0,
+    price_per_thousand_chars_in_usd: 0,
+    price_per_thousand_chars_in_credits: 50,
+    powered_by: 'OpenAI',
+    default: false,
+    localService: false,
+    voiceURI: '',
+    recommended: true,
+  });
+  const marin = createRecommendedVoice('marin-openai', 'Marin');
+
+  it('adopts the server-recommended voice on a fresh install (pending + signed in)', async () => {
+    store[VOICE_DEFAULT_PENDING_KEY] = ['claude', 'pi'];
+    fakeAuth.authenticated = true;
+    speechSynthesisMock.getVoices.mockResolvedValue([
+      { ...createRecommendedVoice('x', 'X'), recommended: false },
+      marin,
+    ]);
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    const voice = await prefs.getVoice('claude');
+
+    expect(voice?.id).toBe('marin-openai');
+    expect(store.voicePreferences).toEqual({ claude: 'marin-openai' });
+    // host drained so it never re-adopts
+    expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['pi']);
+  });
+
+  it('does not adopt while signed out (catalog empty / default unknowable)', async () => {
+    store[VOICE_DEFAULT_PENDING_KEY] = ['claude', 'pi'];
+    fakeAuth.authenticated = false;
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    expect(await prefs.getVoice('claude')).toBeNull();
+    expect(store.voicePreferences ?? {}).toEqual({}); // nothing adopted
+    expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['claude', 'pi']); // stays pending
+  });
+
+  it('does not adopt when the server has nominated no recommended voice', async () => {
+    store[VOICE_DEFAULT_PENDING_KEY] = ['claude'];
+    fakeAuth.authenticated = true;
+    speechSynthesisMock.getVoices.mockResolvedValue([
+      { ...marin, recommended: false },
+    ]);
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    expect(await prefs.getVoice('claude')).toBeNull();
+    expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['claude']); // still pending, retries later
+  });
+
+  it('does not adopt for an existing user (no pending marker)', async () => {
+    fakeAuth.authenticated = true;
+    speechSynthesisMock.getVoices.mockResolvedValue([marin]);
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    expect(await prefs.getVoice('claude')).toBeNull();
+    expect(store.voicePreferences ?? {}).toEqual({}); // nothing adopted
+    expect(speechSynthesisMock.getVoices).not.toHaveBeenCalled();
+  });
+
+  it('a deliberate "Voice off" (unsetVoice) drains pending so it is never re-defaulted', async () => {
+    store[VOICE_DEFAULT_PENDING_KEY] = ['claude', 'pi'];
+    fakeAuth.authenticated = true;
+    speechSynthesisMock.getVoices.mockResolvedValue([marin]);
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    await prefs.unsetVoice('claude'); // user turns voice off before any adopt
+    expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['pi']);
+
+    expect(await prefs.getVoice('claude')).toBeNull(); // stays off, not re-defaulted
+    expect(store.voicePreferences ?? {}).toEqual({});
+  });
+
+  it('an explicit voice choice drains pending', async () => {
+    store[VOICE_DEFAULT_PENDING_KEY] = ['claude', 'pi'];
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    await prefs.setVoice(createPiVoice('voice2', 'Pi 2'), 'claude');
+    expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['pi']);
   });
 });
