@@ -11,6 +11,11 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import { getJwtManagerSync } from "../JwtManager";
+import {
+  loadHostOverlay,
+  resolvePinnedIds,
+  serverFeaturedIds,
+} from "./VoicePins";
 
 /**
  * A chatbot that ships its own set of built-in voices, with introduction audio
@@ -67,7 +72,8 @@ export abstract class VoiceSelector {
    */
   protected abstract renderMenu(
     voices: SpeechSynthesisVoiceRemote[],
-    storedVoice: SpeechSynthesisVoiceRemote | null
+    storedVoice: SpeechSynthesisVoiceRemote | null,
+    pinnedIds?: ReadonlySet<string> | null
   ): void;
 
   /**
@@ -89,11 +95,22 @@ export abstract class VoiceSelector {
    */
   async refreshMenu(): Promise<void> {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
-    const [voices, storedVoice] = await Promise.all([
+    const [voices, storedVoice, pinOverlay] = await Promise.all([
       speechSynthesis.getVoices(this.chatbot),
       this.userPreferences.getVoice(this.chatbot),
+      // The host's voice-pin overlay (Phase 2). Loaded alongside the catalog so
+      // pins are resolved synchronously at render — the current voice still
+      // pins first on the first paint. Pin resolution must NEVER break a menu
+      // render: any storage failure falls back to the default shortlist.
+      loadHostOverlay(this.chatbot.getID()).catch(() => null),
     ]);
-    this.renderMenu(voices ?? [], storedVoice ?? null);
+    const catalog = voices ?? [];
+    // A null overlay (un-customized host) yields a null pinned set, which keeps
+    // renderMenu on its default server-featured/heuristic path unchanged.
+    const pinnedIds = pinOverlay
+      ? resolvePinnedIds(serverFeaturedIds(catalog), pinOverlay)
+      : null;
+    this.renderMenu(catalog, storedVoice ?? null, pinnedIds);
   }
 
   /**

@@ -193,3 +193,36 @@ describe("PiVoiceMenu current-voice visibility", () => {
     expect(ids).toContain("coral");
   });
 });
+
+// --- §Phase-2 user pins -----------------------------------------------------
+// When the user has curated their own shortlist (in settings), the resolved
+// pin set is threaded into renderMenu as a third argument and drives menu
+// membership directly: current voice first, then the pins in catalog order,
+// with no fill-to-cap padding. An absent set keeps today's behaviour (proven
+// by every test above, which passes two arguments).
+describe("PiVoiceMenu with user pins", () => {
+  it("renders exactly the pinned voices (catalog order, no fill-to-cap)", () => {
+    const menu = makeMenu();
+    menu.renderMenu([...piBuiltIns, ...piFlipDay], null, new Set(["onyx", "sage"]));
+    const ids = customRows(menu.element).map((r) => r.dataset.voiceId);
+    expect(ids).toEqual(["onyx", "sage"]);
+  });
+
+  it("keeps the current voice pinned first even when it is not in the pin set (grandfathering)", () => {
+    const paola = piElevenLabs.find((v) => v.id === "ig1TeITnnNlsJtfHxJlW")!;
+    const menu = makeMenu();
+    menu.renderMenu([...piBuiltIns, ...piFlipDay], paola, new Set(["onyx"]));
+    const ids = customRows(menu.element).map((r) => r.dataset.voiceId);
+    expect(ids[0]).toBe("ig1TeITnnNlsJtfHxJlW");
+    expect(ids).toContain("onyx");
+  });
+
+  it("shows only the current voice — plus the ever-present door — when the pin set is empty", () => {
+    const paola = piElevenLabs.find((v) => v.id === "ig1TeITnnNlsJtfHxJlW")!;
+    const menu = makeMenu();
+    menu.renderMenu([...piBuiltIns, ...piFlipDay], paola, new Set());
+    const ids = customRows(menu.element).map((r) => r.dataset.voiceId);
+    expect(ids).toEqual(["ig1TeITnnNlsJtfHxJlW"]);
+    expect(menu.element.querySelector("button.saypi-more-voices")).not.toBeNull();
+  });
+});

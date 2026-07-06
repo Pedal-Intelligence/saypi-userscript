@@ -199,3 +199,37 @@ describe("ClaudeVoiceMenu current-voice visibility (was: pinning)", () => {
     expect(openSettingsMock).toHaveBeenCalledWith("voices");
   });
 });
+
+// --- §Phase-2 user pins -----------------------------------------------------
+// The resolved pin set (from settings) is threaded into renderMenu as a third
+// argument and drives dropdown membership directly: current voice first, then
+// the pins in catalog order, no fill-to-cap padding. Absent → today's
+// behaviour (every test above passes two arguments).
+describe("ClaudeVoiceMenu with user pins", () => {
+  it("renders exactly the pinned voices (catalog order, no fill-to-cap)", () => {
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, null, new Set(["onyx", "sage"]));
+    const names = voiceRows(menu).map((r) => r.dataset.voiceName);
+    expect(names).toEqual(["Onyx", "Sage"]);
+  });
+
+  it("keeps the current voice first even when it is not in the pin set (grandfathering)", () => {
+    const lucy = claudeMockVoices.find((v) => v.name === "Lucy")!;
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, lucy, new Set(["onyx"]));
+    const names = voiceRows(menu).map((r) => r.dataset.voiceName);
+    expect(names[0]).toBe("Lucy");
+    expect(names).toContain("Onyx");
+  });
+
+  it("shows only the current voice — plus the ever-present door — when the pin set is empty", () => {
+    const lucy = claudeMockVoices.find((v) => v.name === "Lucy")!;
+    const menu = makeMenu();
+    menu.renderMenu(flipDayCatalog, lucy, new Set());
+    const names = voiceRows(menu).map((r) => r.dataset.voiceName);
+    expect(names).toEqual(["Lucy"]);
+    expect(
+      menu.menuContent.querySelector("[data-action='more-voices']")
+    ).not.toBeNull();
+  });
+});

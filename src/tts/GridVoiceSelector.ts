@@ -47,7 +47,8 @@ export abstract class GridVoiceSelector extends VoiceSelector {
 
   protected renderMenu(
     voices: SpeechSynthesisVoiceRemote[],
-    storedVoice: SpeechSynthesisVoiceRemote | null
+    storedVoice: SpeechSynthesisVoiceRemote | null,
+    pinnedIds?: ReadonlySet<string> | null
   ): void {
     const container = this.element;
     const defaults = voices.filter((voice) => voice.default);
@@ -63,7 +64,7 @@ export abstract class GridVoiceSelector extends VoiceSelector {
     const curated =
       cap === null
         ? { voices: customs, hiddenCount: 0, tiersCoexist: false }
-        : curateShortlist(customs, storedVoice?.id ?? null, cap);
+        : curateShortlist(customs, storedVoice?.id ?? null, cap, pinnedIds);
     this.reconcileCustomRows(
       container,
       curated.voices,

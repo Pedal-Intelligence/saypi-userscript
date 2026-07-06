@@ -741,7 +741,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
    */
   protected override renderMenu(
     voices: SpeechSynthesisVoiceRemote[],
-    storedVoice: SpeechSynthesisVoiceRemote | null
+    storedVoice: SpeechSynthesisVoiceRemote | null,
+    pinnedIds?: ReadonlySet<string> | null
   ): void {
     const voiceSelector = this.element;
     // Compute heuristics to decide what to show across this dataset
@@ -765,7 +766,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const curated = curateShortlist(
       voices,
       storedVoice?.id ?? null,
-      CLAUDE_MENU_CAP
+      CLAUDE_MENU_CAP,
+      pinnedIds
     );
     this.showTier = curated.tiersCoexist;
 

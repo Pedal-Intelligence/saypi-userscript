@@ -116,3 +116,59 @@ describe("refreshMenu with nested (preview) buttons present (#485 tombstone)", (
     expect(preview.hasAttribute("data-saypi-host-voice")).toBe(false);
   });
 });
+
+// refreshMenu is the gather-then-render seam. Phase 2 has it also resolve the
+// host's voice pins (from chrome.storage) alongside the catalog + stored voice,
+// and hand the resolved set to renderMenu as a third argument. When the host is
+// un-customized it hands null, so the menu keeps its default shortlist.
+describe("refreshMenu resolves user pins and forwards them to renderMenu", () => {
+  beforeEach(() => {
+    getVoicesMock.mockReset();
+    (chrome.storage.local as any)._reset();
+  });
+
+  function makeGrid(): TestGrid {
+    const grid: any = Object.create(TestGrid.prototype);
+    grid.chatbot = { getID: () => "claude", getID_: undefined };
+    grid.userPreferences = {
+      getVoice: vi.fn(async () => null),
+      setVoice: vi.fn(async () => {}),
+      unsetVoice: vi.fn(async () => {}),
+    };
+    grid.element = document.createElement("div");
+    return grid as TestGrid;
+  }
+
+  it("passes the resolved pinned set (defaults ± the user's overlay) into renderMenu", async () => {
+    getVoicesMock.mockResolvedValue([
+      { id: "a", featured: true },
+      { id: "b", featured: true },
+      { id: "z" },
+    ]);
+    (chrome.storage.local as any)._setState({
+      voicePins: { claude: { pinned: ["z"], unpinned: ["b"] } },
+    });
+    const grid = makeGrid();
+    const renderSpy = vi
+      .spyOn(grid as any, "renderMenu")
+      .mockImplementation(() => {});
+
+    await grid.refreshMenu();
+
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+    // defaults {a,b} − unpinned {b} + pinned {z} = {a,z}
+    expect(renderSpy.mock.calls[0][2]).toEqual(new Set(["a", "z"]));
+  });
+
+  it("passes null (keep the default shortlist) when the host has no pin overlay", async () => {
+    getVoicesMock.mockResolvedValue([{ id: "a", featured: true }]);
+    const grid = makeGrid();
+    const renderSpy = vi
+      .spyOn(grid as any, "renderMenu")
+      .mockImplementation(() => {});
+
+    await grid.refreshMenu();
+
+    expect(renderSpy.mock.calls[0][2]).toBeNull();
+  });
+});
