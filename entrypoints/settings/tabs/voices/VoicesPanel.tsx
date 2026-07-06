@@ -1,10 +1,11 @@
 /**
  * Voices-tab panel (Preact).
  *
- * Static skeleton only — VoicesController renders the per-host catalog into
- * #voice-catalog after mount and wires the host pills by id, so the ids and
- * classes here (`#voices-preference`, `#voice-host-pills`, `#voice-host-pi`,
- * `#voice-host-claude`, `.voice-host-pill`, `#voice-catalog`) are load-bearing.
+ * Static skeleton only — VoicesController renders ONE unified cross-host
+ * catalog into #voice-catalog after mount, so that id is load-bearing. There
+ * are no per-host pills any more: the catalog is a single list and each row
+ * carries its own per-host pin toggles + Use action (the 2026-07-05 shortlist
+ * redesign — doc/plans/2026-07-05-voice-shortlist-pins-design.md).
  *
  * This tab sits alongside Dictation deliberately: Dictation is voice-in,
  * Voices is voice-out (#471). It is also the destination of the in-page voice
@@ -21,42 +22,11 @@ export function VoicesPanel() {
         <div class="description" data-i18n="voicesSectionDescription">
           Choose the voice that reads replies aloud on each site.
         </div>
-        {/* Each pill wears its assistant's logo and brand color (#473) so
-            users orient at a glance — matching the platform cards on
-            saypi.ai/features/sites-supported. Logos are decorative (the pill
-            text is the accessible label), hence alt="" + aria-hidden; the
-            active state is also carried by aria-selected and font weight, so
-            color is never the only signal. Assets live in public/icons/logos/,
-            served from the extension root. */}
-        <div id="voice-host-pills" role="tablist">
-          <button
-            type="button"
-            id="voice-host-pi"
-            class="voice-host-pill"
-            role="tab"
-          >
-            <img
-              class="voice-host-logo"
-              src="/icons/logos/pi.png"
-              alt=""
-              aria-hidden="true"
-            />
-            Pi
-          </button>
-          <button
-            type="button"
-            id="voice-host-claude"
-            class="voice-host-pill"
-            role="tab"
-          >
-            <img
-              class="voice-host-logo"
-              src="/icons/logos/claude.png"
-              alt=""
-              aria-hidden="true"
-            />
-            Claude
-          </button>
+        {/* What the per-host pin toggles on each row do — the catalog is one
+            unified list; pinning curates each site's short in-app menu. */}
+        <div class="description voices-pin-explainer" data-i18n="voicesPinExplainer">
+          Pin your favourite voices to keep each site's in-app menu short.
+          Pinned voices show in the menu; the full catalogue stays here.
         </div>
         <div id="voice-catalog" aria-live="polite"></div>
       </div>

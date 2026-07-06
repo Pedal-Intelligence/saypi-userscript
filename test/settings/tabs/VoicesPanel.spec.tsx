@@ -17,34 +17,20 @@ describe("VoicesPanel", () => {
     ).toBeTruthy();
   });
 
-  it("renders the host pills and catalog container VoicesController targets", () => {
+  it("explains the per-host pin toggles", () => {
     const { container } = render(<VoicesPanel />);
-    const pills = [
-      ...container.querySelectorAll("#voice-host-pills button.voice-host-pill"),
-    ];
-    expect(pills.map((p) => p.id)).toEqual([
-      "voice-host-pi",
-      "voice-host-claude",
-    ]);
-    expect(container.querySelector("#voice-catalog")).toBeTruthy();
+    expect(
+      container.querySelector(
+        "#voices-preference [data-i18n='voicesPinExplainer']",
+      ),
+    ).toBeTruthy();
   });
 
-  it("brands each pill with its assistant's logo while keeping the text label (#473)", () => {
+  it("renders the unified catalog container VoicesController targets, with no host pills", () => {
     const { container } = render(<VoicesPanel />);
-    const piLogo = container.querySelector<HTMLImageElement>(
-      "#voice-host-pi img.voice-host-logo"
-    );
-    const claudeLogo = container.querySelector<HTMLImageElement>(
-      "#voice-host-claude img.voice-host-logo"
-    );
-    expect(piLogo?.getAttribute("src")).toBe("/icons/logos/pi.png");
-    expect(claudeLogo?.getAttribute("src")).toBe("/icons/logos/claude.png");
-    // Decorative images: the pill text stays the accessible label.
-    expect(piLogo?.getAttribute("alt")).toBe("");
-    expect(claudeLogo?.getAttribute("aria-hidden")).toBe("true");
-    expect(container.querySelector("#voice-host-pi")?.textContent?.trim()).toBe("Pi");
-    expect(
-      container.querySelector("#voice-host-claude")?.textContent?.trim()
-    ).toBe("Claude");
+    expect(container.querySelector("#voice-catalog")).toBeTruthy();
+    // The per-host pill tablist is gone — the catalog is one unified list.
+    expect(container.querySelector("#voice-host-pills")).toBeNull();
+    expect(container.querySelector(".voice-host-pill")).toBeNull();
   });
 });

@@ -996,13 +996,33 @@
     "message": "Great quality — your monthly allowance lasts about 20× longer.",
     "description": "One-line note under the Everyday voices group heading in the settings voice catalog"
   },
-  "voicesUse": {
-    "message": "Use this voice",
-    "description": "Button that selects a voice from the settings voice catalog"
-  },
   "voicesCurrent": {
     "message": "In use",
     "description": "Badge marking the currently selected voice in the settings voice catalog"
+  },
+  "voicesUseShort": {
+    "message": "Use",
+    "description": "Short label on the per-host 'use this voice' button in the unified settings voice catalog (the host is shown alongside it)."
+  },
+  "voicesUseOnHost": {
+    "message": "Use $name$ on $host$",
+    "description": "Accessible label for the per-host 'use this voice' button in the settings voice catalog; $name$ is the voice, $host$ is the assistant (e.g. Pi, Claude).",
+    "placeholders": {
+      "name": { "content": "$1", "example": "Marin" },
+      "host": { "content": "$2", "example": "Claude" }
+    }
+  },
+  "voicesPinToHost": {
+    "message": "Pin $name$ to the $host$ menu",
+    "description": "Accessible label for the per-host pin toggle in the settings voice catalog; pinning shows the voice in that assistant's short in-app voice menu. $name$ is the voice, $host$ is the assistant.",
+    "placeholders": {
+      "name": { "content": "$1", "example": "Marin" },
+      "host": { "content": "$2", "example": "Pi" }
+    }
+  },
+  "voicesPinExplainer": {
+    "message": "Pin your favourite voices to keep each site's in-app menu short. Pinned voices show in the menu; the full catalogue stays here.",
+    "description": "One-line explanation above the unified settings voice catalog describing what the per-host pin toggles do."
   },
   "voicesPreview": {
     "message": "Play a sample of $name$",

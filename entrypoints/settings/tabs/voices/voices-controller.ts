@@ -1,16 +1,41 @@
 import getMessage from "../../../../src/i18n";
 import { SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
-import { getVoiceTier, visibleCatalog } from "../../../../src/tts/VoiceCuration";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
 import { getJwtManagerSync } from "../../../../src/JwtManager";
 import type { ChatbotId } from "../../../../src/chatbots/ChatbotIdentifier";
+import {
+  HostPinOverlay,
+  loadHostOverlay,
+  serverFeaturedIds,
+  setVoicePinned,
+} from "../../../../src/tts/VoicePins";
+import {
+  HostCatalog,
+  HostVoiceState,
+  UnifiedVoiceRow,
+  unifyHostCatalogs,
+} from "../../../../src/tts/VoiceCatalogUnify";
 
 /**
  * The hosts with a SayPi voice picker. ChatGPT is a deliberate non-goal (it
  * uses OpenAI's native read-aloud — doc/plans/2026-07-02-voice-selection-ux.md §3).
  */
 export type VoiceHostId = Extract<ChatbotId, "pi" | "claude">;
+
+/**
+ * The pinnable hosts, in display order. Host-generic: a third host (once SayPi
+ * TTS reaches it) is one more line here, not a schema change — pins, unify, and
+ * the row model all key on the host id.
+ */
+const VOICE_HOSTS: ReadonlyArray<{
+  id: VoiceHostId;
+  label: string;
+  logo: string;
+}> = [
+  { id: "pi", label: "Pi", logo: "/icons/logos/pi.png" },
+  { id: "claude", label: "Claude", logo: "/icons/logos/claude.png" },
+];
 
 export interface VoiceCatalogDeps {
   getVoices(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote[]>;
@@ -19,6 +44,15 @@ export interface VoiceCatalogDeps {
   isAuthenticated(): boolean;
   /** Play the voice's free canned sample clip (design §4). No-op without one. */
   playPreview(voice: SpeechSynthesisVoiceRemote): void;
+  /** The user's pin overlay for a host, or null when un-customized. */
+  loadPins(host: VoiceHostId): Promise<HostPinOverlay | null>;
+  /** Pin/unpin a voice for a host (featuredIds = that host's default pins). */
+  setPinned(
+    host: VoiceHostId,
+    voiceId: string,
+    featuredIds: string[],
+    pin: boolean
+  ): Promise<void>;
 }
 
 // The settings page is its own document — no content-script audio-output
@@ -42,85 +76,76 @@ function defaultDeps(): VoiceCatalogDeps {
   const prefs = UserPreferenceModule.getInstance();
   return {
     getVoices: (host) => speech.getVoices(host),
-    getVoice: (host) => prefs.getVoice(host) as Promise<SpeechSynthesisVoiceRemote | null>,
+    getVoice: (host) =>
+      prefs.getVoice(host) as Promise<SpeechSynthesisVoiceRemote | null>,
     setVoice: (voice, host) => prefs.setVoice(voice, host).then(() => {}),
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
     playPreview: (voice) => {
       if (voice.sample_url) playPreviewClip(voice.sample_url);
     },
+    loadPins: (host) => loadHostOverlay(host),
+    setPinned: (host, voiceId, featuredIds, pin) =>
+      setVoicePinned(host, voiceId, featuredIds, pin),
   };
 }
 
 /**
- * Renders the full per-host voice catalog in the settings Voices tab — the
- * "shelf" layer of the voice-selection architecture: HD and Everyday groups,
- * every catalog voice listed, selection per host. The in-page menus stay
- * capped; this surface absorbs the catalog's growth.
+ * Renders ONE unified cross-host voice catalog in the settings Voices tab. Each
+ * row carries per-host pin toggles (which define the in-host shortlist) and a
+ * per-host Use action; host-serveability is derived from catalog membership.
+ * The in-page menus stay short; this surface absorbs the catalog's growth.
  */
 export class VoicesController {
   private deps!: VoiceCatalogDeps;
   private readonly injectedDeps?: VoiceCatalogDeps;
-  private host: VoiceHostId = "pi";
   private renderToken = 0;
+  /** host id → that host's default pin set (server `featured`), for toggles. */
+  private featuredByHost = new Map<string, string[]>();
 
   constructor(private container: HTMLElement, deps?: VoiceCatalogDeps) {
     this.injectedDeps = deps;
   }
 
   async init(): Promise<void> {
-    // Resolved lazily so constructing the controller is side-effect-free —
-    // the default deps touch app config, and any failure lands in init()'s
-    // rejection (which the tab catches) rather than tab construction.
+    // Resolved lazily so constructing the controller is side-effect-free.
     this.deps = this.injectedDeps ?? defaultDeps();
-    const pills: Array<[string, VoiceHostId]> = [
-      ["#voice-host-pi", "pi"],
-      ["#voice-host-claude", "claude"],
-    ];
-    for (const [selector, host] of pills) {
-      this.container
-        .querySelector<HTMLButtonElement>(selector)
-        ?.addEventListener("click", () => {
-          void this.selectHost(host);
-        });
-    }
-    await this.selectHost(this.host);
+    await this.render();
   }
 
-  private async selectHost(host: VoiceHostId): Promise<void> {
-    this.host = host;
+  /**
+   * Gather every host's catalog + current voice + pin overlay, unify them, and
+   * paint. Per-host resilient: one host's fetch failing degrades to that host
+   * contributing nothing, never blanking the other.
+   */
+  private async render(): Promise<void> {
     const token = ++this.renderToken;
-    this.container
-      .querySelectorAll<HTMLButtonElement>(".voice-host-pill")
-      .forEach((pill) => {
-        const isActive = pill.id === `voice-host-${host}`;
-        pill.classList.toggle("active", isActive);
-        // The pills are a tablist; state must be programmatic too, not just
-        // the brand-color accent (#473).
-        pill.setAttribute("aria-selected", String(isActive));
-      });
+    const catalogs = await Promise.all(
+      VOICE_HOSTS.map(async ({ id }): Promise<HostCatalog> => {
+        const [voices, current, overlay] = await Promise.all([
+          this.deps.getVoices(id).catch(() => []),
+          this.deps.getVoice(id).catch(() => null),
+          this.deps.loadPins(id).catch(() => null),
+        ]);
+        return { hostId: id, voices, currentId: current?.id ?? null, overlay };
+      })
+    );
+    if (token !== this.renderToken) return; // a newer render superseded us
 
-    const [voices, current] = await Promise.all([
-      this.deps.getVoices(host),
-      this.deps.getVoice(host),
-    ]);
-    if (token !== this.renderToken) return; // a newer selection superseded us
-    this.renderCatalog(voices, current);
+    this.featuredByHost = new Map(
+      catalogs.map((c) => [c.hostId, serverFeaturedIds(c.voices)])
+    );
+    this.renderCatalog(unifyHostCatalogs(catalogs));
   }
 
-  private renderCatalog(
-    voices: SpeechSynthesisVoiceRemote[],
-    current: SpeechSynthesisVoiceRemote | null
-  ): void {
+  private renderCatalog(rows: UnifiedVoiceRow[]): void {
     const catalog = this.container.querySelector<HTMLElement>("#voice-catalog");
     if (!catalog) return;
     catalog.innerHTML = "";
 
-    if (voices.length === 0) {
-      // Signed out → /voices legitimately returns [] (401): prompt sign-in.
-      // Signed in with an empty catalog means the fetch failed — telling an
-      // authenticated user to sign in would be wrong and confusing. This runs
-      // on the RAW catalog (before the deprecated filter) so the signed-out vs
-      // fetch-failure distinction is never masked by retirement.
+    if (rows.length === 0) {
+      // Signed out → both /voices calls 401 → []: prompt sign-in. Signed in
+      // with nothing selectable means the fetch failed (or the whole catalog
+      // retired) — telling an authenticated user to sign in would be wrong.
       const emptyKey = this.deps.isAuthenticated()
         ? "voicesNoneAvailable"
         : "signInForTTS";
@@ -132,31 +157,24 @@ export class VoicesController {
       return;
     }
 
-    // Retirement (design §5): deprecated voices drop out of the catalog for new
-    // selectors, but the user's current voice always survives (grandfathering).
-    const shown = visibleCatalog(voices, current?.id ?? null);
-
-    const hd = shown.filter((voice) => getVoiceTier(voice) === "hd");
-    const everyday = shown.filter(
-      (voice) => getVoiceTier(voice) === "everyday"
-    );
+    const hd = rows.filter((row) => row.tier === "hd");
+    const everyday = rows.filter((row) => row.tier === "everyday");
 
     if (hd.length > 0 && everyday.length > 0) {
       catalog.appendChild(
-        this.renderShelf("hd", "voicesShelfHd", "hdVoicesAllowanceNote", hd, current)
+        this.renderShelf("hd", "voicesShelfHd", "hdVoicesAllowanceNote", hd)
       );
       catalog.appendChild(
         this.renderShelf(
           "everyday",
           "voicesShelfEveryday",
           "voicesShelfEverydayBlurb",
-          everyday,
-          current
+          everyday
         )
       );
     } else {
       // Single-tier catalog (today's state): a flat list, no shelf chrome.
-      catalog.appendChild(this.renderList(shown, current));
+      catalog.appendChild(this.renderList(rows));
     }
   }
 
@@ -164,8 +182,7 @@ export class VoicesController {
     tierKey: string,
     titleKey: string,
     blurbKey: string,
-    voices: SpeechSynthesisVoiceRemote[],
-    current: SpeechSynthesisVoiceRemote | null
+    rows: UnifiedVoiceRow[]
   ): HTMLElement {
     const shelf = document.createElement("div");
     shelf.classList.add("voice-shelf", `voice-shelf-${tierKey}`);
@@ -184,29 +201,22 @@ export class VoicesController {
     header.appendChild(blurb);
     shelf.appendChild(header);
 
-    shelf.appendChild(this.renderList(voices, current));
+    shelf.appendChild(this.renderList(rows));
     return shelf;
   }
 
-  private renderList(
-    voices: SpeechSynthesisVoiceRemote[],
-    current: SpeechSynthesisVoiceRemote | null
-  ): HTMLElement {
+  private renderList(rows: UnifiedVoiceRow[]): HTMLElement {
     const list = document.createElement("ul");
     list.classList.add("voice-list");
-    voices.forEach((voice) => {
-      list.appendChild(this.renderRow(voice, current?.id === voice.id));
-    });
+    rows.forEach((row) => list.appendChild(this.renderRow(row)));
     return list;
   }
 
-  private renderRow(
-    voice: SpeechSynthesisVoiceRemote,
-    isCurrent: boolean
-  ): HTMLElement {
-    const row = document.createElement("li");
-    row.classList.add("voice-row");
-    row.dataset.voiceId = voice.id;
+  private renderRow(row: UnifiedVoiceRow): HTMLElement {
+    const voice = row.voice;
+    const li = document.createElement("li");
+    li.classList.add("voice-row");
+    li.dataset.voiceId = voice.id;
 
     const main = document.createElement("div");
     main.classList.add("voice-row-main");
@@ -221,12 +231,10 @@ export class VoicesController {
       description.textContent = subtitle;
       main.appendChild(description);
     }
-    row.appendChild(main);
+    li.appendChild(main);
 
     // Choice by ear (design §4): a free ▶ preview, its own target separate from
-    // "Use this voice", rendered only when the server serves a sample clip. It
-    // rides on both current and selectable rows so the "Your voice" card can be
-    // auditioned too.
+    // "Use this voice", rendered only when the server serves a sample clip.
     if (voice.sample_url) {
       const preview = document.createElement("button");
       preview.type = "button";
@@ -234,38 +242,88 @@ export class VoicesController {
       preview.setAttribute("aria-label", getMessage("voicesPreview", [voice.name]));
       preview.innerHTML =
         '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"></path></svg>';
-      preview.addEventListener("click", () => {
-        this.deps.playPreview(voice);
-      });
-      row.appendChild(preview);
+      preview.addEventListener("click", () => this.deps.playPreview(voice));
+      li.appendChild(preview);
     }
 
-    if (isCurrent) {
-      row.classList.add("current");
+    const hosts = document.createElement("div");
+    hosts.classList.add("voice-row-hosts");
+    row.hosts.forEach((state) => {
+      if (state.serveable) hosts.appendChild(this.renderHostControls(voice, state));
+    });
+    li.appendChild(hosts);
+
+    return li;
+  }
+
+  /**
+   * Per-host controls for one voice: a pin toggle (defines the in-host
+   * shortlist for that host) plus a Use action — or an "in use" badge when the
+   * voice is already that host's current selection. Grouped and labelled by
+   * host so the two hosts stay legible on one row.
+   */
+  private renderHostControls(
+    voice: SpeechSynthesisVoiceRemote,
+    state: HostVoiceState
+  ): HTMLElement {
+    const meta = VOICE_HOSTS.find((h) => h.id === state.hostId)!;
+    const group = document.createElement("div");
+    group.classList.add("voice-host-controls");
+    group.dataset.host = state.hostId;
+
+    const label = document.createElement("span");
+    label.classList.add("voice-host-label");
+    const logo = document.createElement("img");
+    logo.classList.add("voice-host-logo");
+    logo.src = meta.logo;
+    logo.alt = "";
+    logo.setAttribute("aria-hidden", "true");
+    label.appendChild(logo);
+    label.appendChild(document.createTextNode(meta.label));
+    group.appendChild(label);
+
+    const pin = document.createElement("button");
+    pin.type = "button";
+    pin.classList.add("voice-pin");
+    pin.classList.toggle("pinned", state.pinned);
+    pin.setAttribute("aria-pressed", String(state.pinned));
+    pin.setAttribute(
+      "aria-label",
+      getMessage("voicesPinToHost", [voice.name, meta.label])
+    );
+    pin.innerHTML =
+      '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 4v5l2 3v2h-5v5l-1 1-1-1v-5H4v-2l2-3V4a2 2 0 0 1-1-2h10a2 2 0 0 1-1 2z"></path></svg>';
+    pin.addEventListener("click", () =>
+      this.togglePin(pin, voice, meta.id, state.hostId)
+    );
+    group.appendChild(pin);
+
+    if (state.isCurrent) {
       const badge = document.createElement("span");
       badge.classList.add("voice-current-badge");
       badge.setAttribute("data-i18n", "voicesCurrent");
       badge.textContent = getMessage("voicesCurrent");
-      row.appendChild(badge);
+      group.appendChild(badge);
     } else {
       const use = document.createElement("button");
       use.type = "button";
       use.classList.add("voice-use");
-      use.setAttribute("data-i18n", "voicesUse");
-      use.textContent = getMessage("voicesUse");
-      use.addEventListener("click", () => {
-        void this.useVoice(voice);
-      });
-      row.appendChild(use);
+      use.setAttribute(
+        "aria-label",
+        getMessage("voicesUseOnHost", [voice.name, meta.label])
+      );
+      use.setAttribute("data-i18n", "voicesUseShort");
+      use.textContent = getMessage("voicesUseShort");
+      use.addEventListener("click", () => this.useVoice(voice, meta.id));
+      group.appendChild(use);
     }
-    return row;
+    return group;
   }
 
   /**
    * Metadata fallback for rows whose voice carries no server description.
    * Language coverage is what genuinely separates otherwise identically-named
-   * variants — the pi catalog serves two "Paola"s (#474) — and it is honest,
-   * useful copy on any description-less row.
+   * variants — the pi catalog serves two "Paola"s (#474).
    */
   private languagesSubtitle(voice: SpeechSynthesisVoiceRemote): string {
     const count = voice.languages?.length ?? 0;
@@ -274,10 +332,43 @@ export class VoicesController {
       : "";
   }
 
-  private async useVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
-    const host = this.host;
+  /**
+   * Pinning has no cross-row effect and never regroups the shelves, so the
+   * toggle flips IN PLACE — no re-render, so keyboard focus and scroll survive
+   * the interaction. Optimistic: revert the visual if the write fails.
+   */
+  private async togglePin(
+    pinBtn: HTMLButtonElement,
+    voice: SpeechSynthesisVoiceRemote,
+    host: VoiceHostId,
+    hostId: string
+  ): Promise<void> {
+    const nowPinned = pinBtn.getAttribute("aria-pressed") !== "true";
+    pinBtn.setAttribute("aria-pressed", String(nowPinned));
+    pinBtn.classList.toggle("pinned", nowPinned);
+    try {
+      await this.deps.setPinned(
+        host,
+        voice.id,
+        this.featuredByHost.get(hostId) ?? [],
+        nowPinned
+      );
+    } catch (error) {
+      pinBtn.setAttribute("aria-pressed", String(!nowPinned));
+      pinBtn.classList.toggle("pinned", !nowPinned);
+      console.error("Failed to update voice pin", error);
+    }
+  }
+
+  /**
+   * Selecting a voice moves the "in use" badge between two rows, so this one
+   * re-renders (re-reading the stored voice) rather than patching in place.
+   */
+  private async useVoice(
+    voice: SpeechSynthesisVoiceRemote,
+    host: VoiceHostId
+  ): Promise<void> {
     await this.deps.setVoice(voice, host);
-    if (host !== this.host) return; // host switched while persisting
-    await this.selectHost(host); // one render path; re-reads the stored voice
+    await this.render();
   }
 }
