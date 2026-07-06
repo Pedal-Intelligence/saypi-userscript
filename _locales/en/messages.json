@@ -996,10 +996,6 @@
     "message": "Great quality — your monthly allowance lasts about 20× longer.",
     "description": "One-line note under the Everyday voices group heading in the settings voice catalog"
   },
-  "voicesCurrent": {
-    "message": "In use",
-    "description": "Badge marking the currently selected voice in the settings voice catalog"
-  },
   "voicesUseShort": {
     "message": "Use",
     "description": "Short label on the per-host 'use this voice' button in the unified settings voice catalog (the host is shown alongside it)."
@@ -1008,21 +1004,221 @@
     "message": "Use $name$ on $host$",
     "description": "Accessible label for the per-host 'use this voice' button in the settings voice catalog; $name$ is the voice, $host$ is the assistant (e.g. Pi, Claude).",
     "placeholders": {
-      "name": { "content": "$1", "example": "Marin" },
-      "host": { "content": "$2", "example": "Claude" }
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
     }
   },
-  "voicesPinToHost": {
-    "message": "Pin $name$ to the $host$ menu",
-    "description": "Accessible label for the per-host pin toggle in the settings voice catalog; pinning shows the voice in that assistant's short in-app voice menu. $name$ is the voice, $host$ is the assistant.",
+  "voicesSpeaksWith": {
+    "message": "$host$ speaks with",
+    "description": "Eyebrow line above the current voice's name on the settings Voices studio stage; $host$ is the assistant (e.g. Pi). Rendered uppercase by CSS.",
     "placeholders": {
-      "name": { "content": "$1", "example": "Marin" },
-      "host": { "content": "$2", "example": "Pi" }
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
     }
   },
-  "voicesPinExplainer": {
-    "message": "Pin your favourite voices to keep each site's in-app menu short. Pinned voices show in the menu; the full catalogue stays here.",
-    "description": "One-line explanation above the unified settings voice catalog describing what the per-host pin toggles do."
+  "voicesSpeakingNow": {
+    "message": "Speaking now",
+    "description": "State label on the host's currently selected voice in the settings Voices studio (menu slot and voice card)."
+  },
+  "voicesInHostMenu": {
+    "message": "In $host$'s menu",
+    "description": "Section heading above the menu slots row in the settings Voices studio; $host$ is the assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesMenuHint": {
+    "message": "What you'll see in chat",
+    "description": "One-line hint next to the 'In {host}'s menu' heading, explaining the slots row mirrors the in-chat voice menu."
+  },
+  "voicesAddToMenuShort": {
+    "message": "+ Menu",
+    "description": "Short label on a voice card's pin toggle (off state) in the settings Voices studio; pressing adds the voice to the host's in-chat menu."
+  },
+  "voicesInMenuShort": {
+    "message": "✓ In menu",
+    "description": "Short label on a voice card's pin toggle (on state) in the settings Voices studio."
+  },
+  "voicesAddVoiceToMenu": {
+    "message": "Add $name$ to $host$'s menu",
+    "description": "Accessible label for a voice card's pin toggle (off state); $name$ is the voice, $host$ the assistant.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "message": "Remove $name$ from $host$'s menu",
+    "description": "Accessible label for a voice card's pin toggle (on state) and a menu slot's remove button; $name$ is the voice, $host$ the assistant.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "message": "Menu full — remove a voice to add another",
+    "description": "Tooltip/hint on a disabled '+ Menu' toggle when the host's in-chat menu already has its maximum number of voices."
+  },
+  "voicesMenuOverflow": {
+    "message": "$count$ more pinned voices are waiting beyond the menu's $cap$ slots.",
+    "description": "Note under the menu slots when the user has more pinned voices than the in-chat menu can show (legacy state); $count$ is how many don't fit, $cap$ is the menu size.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesLoadError": {
+    "message": "Couldn't load $host$'s voices. Please try again later.",
+    "description": "Error state inside one host's studio when that host's voice catalog failed to load; $host$ is the assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesNoStageVoice": {
+    "message": "No voice selected yet — pick one below.",
+    "description": "Stage placeholder in the settings Voices studio when the host has no current voice."
+  },
+  "voicesBuiltinsNote": {
+    "message": "$host$'s own built-in voices always appear in its menu too.",
+    "description": "Note under the menu slots for hosts that ship native voices (e.g. Pi's 8 built-ins), which the studio doesn't manage; $host$ is the assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "message": "Hear a sample",
+    "description": "Button on the settings Voices studio stage that plays the current voice's free sample clip."
+  },
+  "voiceTagline_alloy": {
+    "message": "Balanced and all-purpose",
+    "description": "Authored personality tagline for the 'Alloy' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_ash": {
+    "message": "Low, thoughtful, calm",
+    "description": "Authored personality tagline for the 'Ash' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_ballad": {
+    "message": "Smooth and melodic",
+    "description": "Authored personality tagline for the 'Ballad' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_cedar": {
+    "message": "Steady and reassuring",
+    "description": "Authored personality tagline for the 'Cedar' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_coral": {
+    "message": "Bright, upbeat energy",
+    "description": "Authored personality tagline for the 'Coral' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_echo": {
+    "message": "Clean and neutral",
+    "description": "Authored personality tagline for the 'Echo' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_fable": {
+    "message": "A storyteller's lilt",
+    "description": "Authored personality tagline for the 'Fable' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_marin": {
+    "message": "Warm and grounded — a morning-radio calm",
+    "description": "Authored personality tagline for the 'Marin' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_nova": {
+    "message": "Quick and curious",
+    "description": "Authored personality tagline for the 'Nova' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_onyx": {
+    "message": "Deep, resonant gravitas",
+    "description": "Authored personality tagline for the 'Onyx' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_sage": {
+    "message": "Soft-spoken clarity",
+    "description": "Authored personality tagline for the 'Sage' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_shimmer": {
+    "message": "Light and airy",
+    "description": "Authored personality tagline for the 'Shimmer' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_paola": {
+    "message": "Expressive Italian warmth",
+    "description": "Authored personality tagline for the 'Paola' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_joey": {
+    "message": "Easy, conversational American",
+    "description": "Authored personality tagline for the 'Joey' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_jarnathan": {
+    "message": "Velvet late-night baritone",
+    "description": "Authored personality tagline for the 'Jarnathan' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_jeff": {
+    "message": "Plainspoken and steady",
+    "description": "Authored personality tagline for the 'Jeff' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_mark": {
+    "message": "Clear, confident narrator",
+    "description": "Authored personality tagline for the 'Mark' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_jamahal": {
+    "message": "Rich and magnetic",
+    "description": "Authored personality tagline for the 'Jamahal' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_finn": {
+    "message": "Fresh and energetic",
+    "description": "Authored personality tagline for the 'Finn' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_juniper": {
+    "message": "Crisp, bright, animated",
+    "description": "Authored personality tagline for the 'Juniper' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_cassidy": {
+    "message": "Friendly and matter-of-fact",
+    "description": "Authored personality tagline for the 'Cassidy' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_addison": {
+    "message": "Sunny and articulate",
+    "description": "Authored personality tagline for the 'Addison' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_jessica": {
+    "message": "Warm, polished poise",
+    "description": "Authored personality tagline for the 'Jessica' voice (settings Voices studio; client-side voice identity map)."
+  },
+  "voiceTagline_lucy": {
+    "message": "Gentle and luminous",
+    "description": "Authored personality tagline for the 'Lucy' voice (settings Voices studio; client-side voice identity map)."
   },
   "voicesPreview": {
     "message": "Play a sample of $name$",
