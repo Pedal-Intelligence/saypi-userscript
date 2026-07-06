@@ -870,7 +870,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.textContent = getMessage("moreVoices");
     item.addEventListener("click", () => {
       this.toggleMenu();
-      openSettings("voices");
+      openSettings("voices/claude");
     });
     return item;
   }

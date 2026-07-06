@@ -118,7 +118,7 @@ describe("PiVoiceSettings — 'More voices' door on Pi's Voice settings page (#4
     const settings = makeSettings(grid);
     settings.ensureSettingsDoor();
     door(grid)!.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 
   it("renderMenu (the auth-change path) just re-ensures the door — never draws voice rows", () => {

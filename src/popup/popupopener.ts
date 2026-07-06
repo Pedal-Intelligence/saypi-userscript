@@ -7,10 +7,25 @@
 export const SETTINGS_DEEP_LINK_KEY = "saypi.settings.deepLinkTab";
 
 /**
+ * A deep-link value is `tab` or `tab/detail` — e.g. "voices/pi" opens the
+ * Voices tab already scoped to Pi's studio. Parsed on the settings page's
+ * side of the storage handoff; kept here so writer and reader share one shape.
+ */
+export function parseSettingsDeepLink(
+  value: unknown
+): { tab: string; detail?: string } | null {
+  if (typeof value !== "string" || !value) return null;
+  const [tab, detail] = value.split("/");
+  if (!tab) return null;
+  return detail ? { tab, detail } : { tab };
+}
+
+/**
  * Opens the extension's settings popup by sending a message to the background script.
  * The background script will handle opening the popup in the native way.
- * @param tab Optional settings tab to open on (e.g. "chat" for the AI Chat
- *            tab's voice catalog); defaults to the user's last-viewed tab.
+ * @param tab Optional settings tab to open on, with an optional `/detail`
+ *            suffix (e.g. "voices/pi" opens the Voices tab scoped to Pi);
+ *            defaults to the user's last-viewed tab.
  */
 export function openSettings(tab?: string): void {
   if (tab) {

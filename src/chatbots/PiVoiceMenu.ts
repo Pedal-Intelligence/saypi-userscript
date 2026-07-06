@@ -42,7 +42,7 @@ function buildMoreVoicesDoor(
   label.textContent = getMessage("moreVoices");
   door.appendChild(label);
 
-  const open = () => openSettings("voices");
+  const open = () => openSettings("voices/pi");
   door.addEventListener("click", open);
   if (tag === "div") {
     door.addEventListener("keydown", (event) => {

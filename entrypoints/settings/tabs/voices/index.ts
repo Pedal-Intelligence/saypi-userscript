@@ -5,6 +5,21 @@ import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
 import { VoicesPanel } from './VoicesPanel';
 import './voices.css';
 
+/**
+ * One-shot host hint from a "voices/<host>" deep link (the in-host menus'
+ * "More voices…" doors) — set by the settings bootstrap before loadTab, so
+ * the studio opens scoped to the host the user came from.
+ */
+let initialHostHint: string | null = null;
+export function setInitialVoicesHost(host: string): void {
+  initialHostHint = host;
+}
+function consumeInitialVoicesHost(): string | null {
+  const host = initialHostHint;
+  initialHostHint = null;
+  return host;
+}
+
 export class VoicesTab implements TabController {
   private voicesController: VoicesController | null = null;
 
@@ -12,12 +27,14 @@ export class VoicesTab implements TabController {
 
   async init(): Promise<void> {
     // Render the panel with Preact, then let VoicesController fill the
-    // catalog — it loads over the network, so don't block tab init on it.
+    // studio — it loads over the network, so don't block tab init on it.
     mountInto(this.container, h(VoicesPanel, {}));
 
-    this.voicesController = new VoicesController(this.container);
+    this.voicesController = new VoicesController(this.container, undefined, {
+      initialHost: consumeInitialVoicesHost(),
+    });
     this.voicesController.init().catch((error) => {
-      console.error('Failed to load the voice catalog:', error);
+      console.error('Failed to load the voice studio:', error);
     });
   }
 

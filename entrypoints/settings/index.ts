@@ -7,11 +7,14 @@ import { TabNavigator } from "./components/tabs";
 import { GeneralTab } from "./tabs/general";
 import { ChatTab } from "./tabs/chat";
 import { DictationTab } from "./tabs/dictation";
-import { VoicesTab } from "./tabs/voices";
+import { VoicesTab, setInitialVoicesHost } from "./tabs/voices";
 import { AboutTab } from "./tabs/about";
 import { replaceI18n } from "./shared/i18n";
 import type { TabController } from "./shared/types";
-import { SETTINGS_DEEP_LINK_KEY } from "../../src/popup/popupopener";
+import {
+  SETTINGS_DEEP_LINK_KEY,
+  parseSettingsDeepLink,
+} from "../../src/popup/popupopener";
 
 // Styles
 import "./styles/base.css"; // reset + utilities (replaces the 2.9 MB Tailwind v2 dump)
@@ -75,15 +78,19 @@ class SettingsApp {
 
     // Determine which tab to show initially: a one-shot deep link (set by
     // openSettings(tab) from a content script, e.g. the voice menus' "More
-    // voices…" row) wins over the last-viewed tab.
+    // voices…" row) wins over the last-viewed tab. A "tab/detail" value also
+    // scopes the tab — "voices/pi" opens the Voices studio on Pi.
     let initialTab = localStorage.getItem('saypi.settings.selectedTab') || 'general';
     try {
       const stored = await chrome.storage.local.get(SETTINGS_DEEP_LINK_KEY);
-      const deepLink = stored?.[SETTINGS_DEEP_LINK_KEY];
-      if (typeof deepLink === 'string' && this.tabs.has(deepLink)) {
-        initialTab = deepLink;
+      const link = parseSettingsDeepLink(stored?.[SETTINGS_DEEP_LINK_KEY]);
+      if (link && this.tabs.has(link.tab)) {
+        initialTab = link.tab;
+        if (link.tab === 'voices' && link.detail) {
+          setInitialVoicesHost(link.detail);
+        }
       }
-      if (deepLink !== undefined) {
+      if (stored?.[SETTINGS_DEEP_LINK_KEY] !== undefined) {
         await chrome.storage.local.remove(SETTINGS_DEEP_LINK_KEY);
       }
     } catch (e) {

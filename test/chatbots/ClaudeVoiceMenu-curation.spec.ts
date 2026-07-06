@@ -90,7 +90,7 @@ describe("ClaudeVoiceMenu shortlist cap + door (flip-day catalog)", () => {
       "[data-action='more-voices']"
     ) as HTMLElement;
     door.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/claude");
   });
 
   it("keeps the door row even when the whole catalog fits the cap (#472)", () => {
@@ -196,7 +196,7 @@ describe("ClaudeVoiceMenu current-voice visibility (was: pinning)", () => {
       "[data-action='more-voices']"
     ) as HTMLElement;
     door.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/claude");
   });
 });
 

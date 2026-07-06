@@ -305,7 +305,8 @@ export abstract class GridVoiceSelector extends VoiceSelector {
       );
       door.textContent = getMessage("moreVoices");
       door.addEventListener("click", () => {
-        openSettings("voices");
+        // Host-scoped: the studio opens on the host the user came from.
+        openSettings(`voices/${this.chatbot.getID()}`);
       });
     }
     const customRows = container.querySelectorAll(".saypi-custom-voice");
