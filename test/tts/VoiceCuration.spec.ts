@@ -341,6 +341,92 @@ describe("curateShortlist with a server-curated catalog", () => {
   });
 });
 
+// --- §Phase-2 user pins (doc/plans/2026-07-05-voice-shortlist-pins-design.md) --
+// When the user has curated their own shortlist by pinning, the resolved
+// pinned set drives menu membership DIRECTLY: current voice first
+// (grandfathering), then pinned voices in catalog order, capped — and with NO
+// fill-to-cap padding, which is what makes the "empty-pin floor" real (0 pins →
+// current + door only). Omitting pinnedIds must leave every existing path
+// (server-featured + heuristic) untouched.
+
+describe("curateShortlist with user pins (pinnedIds)", () => {
+  it("draws membership from the pinned set, current-first, with no padding", () => {
+    const pinned = new Set(["onyx", "sage"]); // two pins
+    const result = curateShortlist(curated, "alloy", CLAUDE_MENU_CAP, pinned);
+    // current (Alloy, grandfathered) + the two pins in catalog order — NOT padded to 4.
+    expect(result.voices.map((v) => v.id)).toEqual(["alloy", "onyx", "sage"]);
+  });
+
+  it("pins the current voice first even when it is not in the pinned set (grandfathering)", () => {
+    const pinned = new Set(["onyx"]);
+    const result = curateShortlist(curated, "nova", CLAUDE_MENU_CAP, pinned);
+    expect(result.voices[0].id).toBe("nova");
+    expect(result.voices.map((v) => v.id)).toContain("onyx");
+  });
+
+  it("does not duplicate the current voice when it is also pinned", () => {
+    const pinned = new Set(["alloy", "onyx"]);
+    const result = curateShortlist(curated, "alloy", CLAUDE_MENU_CAP, pinned);
+    expect(result.voices.filter((v) => v.id === "alloy").length).toBe(1);
+  });
+
+  it("caps a large pinned set at the menu cap (the menu never scales)", () => {
+    const pinned = new Set([
+      "ig1TeITnnNlsJtfHxJlW",
+      "bWJPewAagbymiJXZcxnh",
+      "coral",
+      "onyx",
+      "sage",
+      "shimmer",
+    ]); // six pins
+    const result = curateShortlist(curated, null, CLAUDE_MENU_CAP, pinned);
+    expect(result.voices.length).toBe(CLAUDE_MENU_CAP);
+  });
+
+  it("orders pinned voices by catalog (server) order, not by pinned-set order", () => {
+    const pinned = new Set(["shimmer", "onyx"]); // deliberately reversed
+    const result = curateShortlist(curated, null, PI_MENU_CAP, pinned);
+    const onyxIdx = result.voices.findIndex((v) => v.id === "onyx");
+    const shimmerIdx = result.voices.findIndex((v) => v.id === "shimmer");
+    expect(onyxIdx).toBeGreaterThanOrEqual(0);
+    expect(onyxIdx).toBeLessThan(shimmerIdx); // onyx precedes shimmer in server order
+  });
+
+  it("yields the current voice only when the pinned set is empty (empty-pin floor)", () => {
+    const result = curateShortlist(curated, "alloy", CLAUDE_MENU_CAP, new Set());
+    // The "More voices…" door is added by the menu, not curation — curation
+    // legitimately returns just the grandfathered current voice.
+    expect(result.voices.map((v) => v.id)).toEqual(["alloy"]);
+  });
+
+  it("can be empty when pins are empty and there is no current voice (menu shows just the door)", () => {
+    const result = curateShortlist(curated, null, CLAUDE_MENU_CAP, new Set());
+    expect(result.voices).toEqual([]);
+    expect(result.hiddenCount).toBe(curated.length);
+  });
+
+  it("excludes a deprecated pinned voice unless it is the current voice", () => {
+    const withDeprecated = curated.map((v) =>
+      v.id === "onyx" ? withManifest(v, { deprecated: true }) : v
+    );
+    const pinned = new Set(["onyx", "sage"]);
+    const result = curateShortlist(withDeprecated, null, CLAUDE_MENU_CAP, pinned);
+    expect(result.voices.map((v) => v.id)).not.toContain("onyx");
+    expect(result.voices.map((v) => v.id)).toContain("sage");
+  });
+
+  it("leaves the un-pinned path (undefined pinnedIds) exactly as before", () => {
+    // Regression guard: omitting pinnedIds reproduces the server-featured path.
+    const result = curateShortlist(curated, null, PI_MENU_CAP);
+    expect(result.voices.map((v) => v.name)).toEqual([
+      "Paola",
+      "Joey",
+      "Onyx",
+      "Sage",
+    ]);
+  });
+});
+
 describe("curateShortlist grandfathering (deprecated voices)", () => {
   it("excludes a deprecated voice even when the server featured it", () => {
     const withDeprecated = curated.map((v) =>

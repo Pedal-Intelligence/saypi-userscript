@@ -152,11 +152,20 @@ function pickHdFeatured(
  * featured pair + value voices by popularity rank — then fill any spare
  * capacity in server order (covers single-tier catalogs and short featured
  * sets). Deprecated voices are dropped first, except the current one.
+ *
+ * `pinnedIds` (Phase-2 user pins) overrides shortlist membership when the user
+ * has curated their own: membership IS the pinned set, in catalog order, with
+ * the current voice still pinned first. In that mode there is NO fill-to-cap
+ * padding — an empty pinned set legitimately yields just the current voice, and
+ * the "More voices…" door (added by the menu, not here) keeps it non-empty. A
+ * null/absent `pinnedIds` leaves every existing path exactly as it was, so a
+ * user who has never pinned sees the unchanged server-featured behaviour.
  */
 export function curateShortlist(
   voices: SpeechSynthesisVoiceRemote[],
   currentVoiceId: string | null,
-  cap: number
+  cap: number,
+  pinnedIds?: ReadonlySet<string> | null
 ): CuratedShortlist {
   const catalog = visibleCatalog(voices, currentVoiceId);
   // Once the server serves `featured`, it drives shortlist membership; until
@@ -181,25 +190,34 @@ export function curateShortlist(
     : undefined;
   if (current) take(current);
 
-  if (serverCurated) {
-    catalog.filter((voice) => voice.featured).forEach(take);
+  if (pinnedIds) {
+    // User-curated membership: the pinned set in catalog order, current-first
+    // (already taken above). Deliberately NOT filled to the cap — the pins
+    // ARE the shortlist.
+    catalog.filter((voice) => pinnedIds.has(voice.id)).forEach(take);
   } else {
-    pickHdFeatured(catalog.filter((v) => getVoiceTier(v) === "hd")).forEach(
-      take
-    );
+    if (serverCurated) {
+      catalog.filter((voice) => voice.featured).forEach(take);
+    } else {
+      pickHdFeatured(catalog.filter((v) => getVoiceTier(v) === "hd")).forEach(
+        take
+      );
 
-    catalog
-      .map((voice, serverIndex) => ({ voice, serverIndex }))
-      .filter(({ voice }) => getVoiceTier(voice) === "everyday")
-      .sort(
-        (a, b) =>
-          everydayRank(a.voice) - everydayRank(b.voice) ||
-          a.serverIndex - b.serverIndex
-      )
-      .forEach(({ voice }) => take(voice));
+      catalog
+        .map((voice, serverIndex) => ({ voice, serverIndex }))
+        .filter(({ voice }) => getVoiceTier(voice) === "everyday")
+        .sort(
+          (a, b) =>
+            everydayRank(a.voice) - everydayRank(b.voice) ||
+            a.serverIndex - b.serverIndex
+        )
+        .forEach(({ voice }) => take(voice));
+    }
+
+    // Fill any spare capacity in server order (server-featured + heuristic
+    // paths only; pin mode owns its own membership).
+    catalog.forEach(take);
   }
-
-  catalog.forEach(take);
 
   return {
     voices: shortlist,
