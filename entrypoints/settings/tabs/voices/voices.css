@@ -1,43 +1,16 @@
-/* Voices tab — the full per-host catalog behind the in-page menus'
-   "More voices…" door */
-#voice-host-pills {
-  display: flex;
-  gap: 0.5rem;
-  margin: 0.5rem 0 0.75rem;
+/* Voices tab — ONE unified cross-host catalog behind the in-page menus'
+   "More voices…" door. Each row curates its own per-host shortlist via pin
+   toggles (2026-07-05 shortlist redesign). */
+
+.voices-pin-explainer {
+  margin: 0.35rem 0 0.75rem;
 }
-.voice-host-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  border: 1px solid #d1d5db;
-  border-radius: 9999px;
-  background: transparent;
-  padding: 0.25rem 0.9rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
+
 .voice-host-logo {
   width: 16px;
   height: 16px;
   border-radius: 4px;
   object-fit: contain;
-}
-/* The active pill takes on its assistant's brand palette (#473): Pi's forest
-   green on cream, Claude's terracotta on ivory. Weight + border + aria-selected
-   carry the state too — color is an accent, never the only signal. */
-.voice-host-pill.active {
-  background: #e5e7eb;
-  font-weight: 600;
-}
-#voice-host-pi.active {
-  background: #f5efe1;
-  border-color: #12805c;
-  color: #0b5c41;
-}
-#voice-host-claude.active {
-  background: #f8f0e9;
-  border-color: #d97757;
-  color: #ae5630;
 }
 .voice-shelf {
   margin-bottom: 0.75rem;
@@ -62,9 +35,9 @@
 .voice-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.4rem 0.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding: 0.45rem 0.25rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 .voice-row:last-child {
@@ -74,8 +47,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  /* Push the trailing controls (▶ preview + Use/badge) together to the right,
-     regardless of how many there are. */
+  /* Push the trailing controls (▶ preview + per-host groups) to the right. */
   margin-right: auto;
 }
 .voice-preview {
@@ -103,6 +75,53 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Per-host controls: one group per host that serves the voice. */
+.voice-row-hosts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  flex-shrink: 0;
+}
+.voice-host-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.voice-host-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Pin toggle — outline when off, brand-tinted fill when pinned. aria-pressed
+   carries the state to assistive tech; colour is an accent, never the only
+   signal (the filled pin icon + border weight read without colour). */
+.voice-pin {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+}
+.voice-pin:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.voice-pin.pinned {
+  color: #ae5630;
+  border-color: #d97757;
+  background: #f8f0e9;
+}
+
 .voice-use {
   flex-shrink: 0;
   border: 1px solid #d1d5db;

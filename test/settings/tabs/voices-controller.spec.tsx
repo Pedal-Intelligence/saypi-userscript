@@ -2,40 +2,64 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/preact";
 import { VoicesPanel } from "../../../entrypoints/settings/tabs/voices/VoicesPanel";
 import { VoicesController } from "../../../entrypoints/settings/tabs/voices/voices-controller";
-import {
-  ElevenLabsVoice,
-  claudeMockVoices,
-  openAiMockVoices,
-  mockVoices,
-} from "../../data/Voices";
 import { SpeechSynthesisVoiceRemote } from "../../../src/tts/SpeechModel";
+import type { HostPinOverlay } from "../../../src/tts/VoicePins";
 
-const flipDayClaude: SpeechSynthesisVoiceRemote[] = [
-  ...claudeMockVoices,
-  ...openAiMockVoices,
-];
+// The Voices tab is now ONE unified cross-host catalog (no per-host pills):
+// each row carries per-host pin toggles + a per-host Use action. These tests
+// drive the controller through injected deps and assert the unified DOM.
 
-function makeDeps(overrides: Partial<Record<string, any>> = {}) {
+function mkVoice(
+  id: string,
+  over: Partial<SpeechSynthesisVoiceRemote> = {}
+): SpeechSynthesisVoiceRemote {
   return {
-    getVoices: vi.fn(async (host: string) =>
-      host === "claude" ? flipDayClaude : mockVoices
-    ),
-    getVoice: vi.fn(async () => null as SpeechSynthesisVoiceRemote | null),
-    setVoice: vi.fn(async () => {}),
-    isAuthenticated: vi.fn(() => true),
-    playPreview: vi.fn((_voice: SpeechSynthesisVoiceRemote) => {}),
-    ...overrides,
-  };
+    id,
+    name: id.charAt(0).toUpperCase() + id.slice(1),
+    powered_by: "OpenAI",
+    price_per_thousand_chars_in_credits: 50,
+    default: false,
+    lang: "en",
+    localService: false,
+    voiceURI: `https://api.saypi.ai/voices/${id}`,
+    ...over,
+  } as SpeechSynthesisVoiceRemote;
 }
 
-function voiceWithSample(
-  id: string,
-  name: string,
-  sampleUrl?: string
-): SpeechSynthesisVoiceRemote {
-  const v = new ElevenLabsVoice(id, name);
-  v.sample_url = sampleUrl;
-  return v;
+interface DepsConfig {
+  pi?: SpeechSynthesisVoiceRemote[];
+  claude?: SpeechSynthesisVoiceRemote[];
+  piCurrent?: SpeechSynthesisVoiceRemote | null;
+  claudeCurrent?: SpeechSynthesisVoiceRemote | null;
+  piOverlay?: HostPinOverlay | null;
+  claudeOverlay?: HostPinOverlay | null;
+  authenticated?: boolean;
+  overrides?: Record<string, any>;
+}
+
+function makeDeps(cfg: DepsConfig = {}) {
+  const byHost: Record<string, SpeechSynthesisVoiceRemote[]> = {
+    pi: cfg.pi ?? [],
+    claude: cfg.claude ?? [],
+  };
+  const currentByHost: Record<string, SpeechSynthesisVoiceRemote | null> = {
+    pi: cfg.piCurrent ?? null,
+    claude: cfg.claudeCurrent ?? null,
+  };
+  const overlayByHost: Record<string, HostPinOverlay | null> = {
+    pi: cfg.piOverlay ?? null,
+    claude: cfg.claudeOverlay ?? null,
+  };
+  return {
+    getVoices: vi.fn(async (host: string) => byHost[host]),
+    getVoice: vi.fn(async (host: string) => currentByHost[host]),
+    setVoice: vi.fn(async () => {}),
+    isAuthenticated: vi.fn(() => cfg.authenticated ?? true),
+    playPreview: vi.fn((_v: SpeechSynthesisVoiceRemote) => {}),
+    loadPins: vi.fn(async (host: string) => overlayByHost[host]),
+    setPinned: vi.fn(async () => {}),
+    ...cfg.overrides,
+  };
 }
 
 async function mount(deps = makeDeps()) {
@@ -49,259 +73,292 @@ function flushAsync(): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
+const q = (c: HTMLElement, sel: string) =>
+  c.querySelector(sel) as HTMLElement | null;
+const rowOf = (c: HTMLElement, id: string) =>
+  q(c, `#voice-catalog [data-voice-id='${id}']`);
+const hostGroup = (c: HTMLElement, id: string, host: string) =>
+  q(
+    c,
+    `#voice-catalog [data-voice-id='${id}'] .voice-host-controls[data-host='${host}']`
+  );
+
 beforeEach(() => {
   document.body.innerHTML = "";
 });
 afterEach(() => cleanup());
 
-describe("VoicesController", () => {
-  it("loads the Pi catalog by default and renders a row per voice", async () => {
-    const { container, deps } = await mount();
+describe("VoicesController — unified catalog", () => {
+  it("fetches every host and renders one row per unioned voice", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin"), mkVoice("paola")],
+      claude: [mkVoice("marin"), mkVoice("jarnathan")],
+    });
+    const { container } = await mount(deps);
     expect(deps.getVoices).toHaveBeenCalledWith("pi");
-    const rows = container.querySelectorAll("#voice-catalog .voice-row");
-    expect(rows.length).toBe(mockVoices.length);
-  });
-
-  it("switches host when the Claude pill is clicked", async () => {
-    const { container, deps } = await mount();
-    (container.querySelector("#voice-host-claude") as HTMLElement).click();
-    await flushAsync();
     expect(deps.getVoices).toHaveBeenCalledWith("claude");
-    const rows = container.querySelectorAll("#voice-catalog .voice-row");
-    expect(rows.length).toBe(flipDayClaude.length);
+    const ids = [...container.querySelectorAll("#voice-catalog .voice-row")].map(
+      (r) => (r as HTMLElement).dataset.voiceId
+    );
+    // union: pi order first (marin, paola), then claude-only (jarnathan)
+    expect(ids).toEqual(["marin", "paola", "jarnathan"]);
   });
 
-  it("mirrors the active pill into aria-selected, not just the color accent (#473)", async () => {
-    const { container } = await mount();
-    const pi = container.querySelector("#voice-host-pi")!;
-    const claude = container.querySelector("#voice-host-claude")!;
-    expect(pi.getAttribute("aria-selected")).toBe("true");
-    expect(claude.getAttribute("aria-selected")).toBe("false");
-    (claude as HTMLElement).click();
-    await flushAsync();
-    expect(pi.getAttribute("aria-selected")).toBe("false");
-    expect(claude.getAttribute("aria-selected")).toBe("true");
+  it("keeps rendering the other host when one host's fetch fails (no all-or-nothing)", async () => {
+    const deps = makeDeps({
+      overrides: {
+        getVoices: vi.fn(async (host: string) => {
+          if (host === "pi") throw new Error("network");
+          return [mkVoice("marin")];
+        }),
+      },
+    });
+    const { container } = await mount(deps);
+    expect(rowOf(container, "marin")).toBeTruthy();
+    expect(hostGroup(container, "marin", "claude")).toBeTruthy();
+    expect(hostGroup(container, "marin", "pi")).toBeNull();
   });
 
   it("groups a mixed-tier catalog into HD and Everyday shelves", async () => {
-    const { container } = await mount();
-    (container.querySelector("#voice-host-claude") as HTMLElement).click();
-    await flushAsync();
+    const deps = makeDeps({
+      claude: [
+        mkVoice("jarnathan", {
+          powered_by: "ElevenLabs",
+          price_per_thousand_chars_in_credits: 1000,
+        }),
+        mkVoice("nova"),
+      ],
+    });
+    const { container } = await mount(deps);
     const shelves = [
       ...container.querySelectorAll("#voice-catalog .voice-shelf-title"),
     ].map((el) => el.getAttribute("data-i18n"));
     expect(shelves).toEqual(["voicesShelfHd", "voicesShelfEveryday"]);
-    const hdShelf = container.querySelector("#voice-catalog .voice-shelf-hd")!;
-    expect(hdShelf.querySelector("[data-voice-id='c6SfcYrb2t09NHXiT80T']")).toBeTruthy();
-    const everydayShelf = container.querySelector(
-      "#voice-catalog .voice-shelf-everyday"
-    )!;
-    expect(everydayShelf.querySelector("[data-voice-id='coral']")).toBeTruthy();
-  });
-
-  it("renders a flat list without shelf headers for a single-tier catalog", async () => {
-    const { container } = await mount();
     expect(
-      container.querySelector("#voice-catalog .voice-shelf-title")
-    ).toBeNull();
+      q(container, "#voice-catalog .voice-shelf-hd [data-voice-id='jarnathan']")
+    ).toBeTruthy();
     expect(
-      container.querySelector("#voice-catalog .voice-row")
+      q(
+        container,
+        "#voice-catalog .voice-shelf-everyday [data-voice-id='nova']"
+      )
     ).toBeTruthy();
   });
 
-  it("selects a voice for the active host when its Use button is clicked", async () => {
-    const { container, deps } = await mount();
-    (container.querySelector("#voice-host-claude") as HTMLElement).click();
-    await flushAsync();
-    const coralRow = container.querySelector(
-      "#voice-catalog [data-voice-id='coral']"
-    ) as HTMLElement;
-    (coralRow.querySelector("button.voice-use") as HTMLElement).click();
-    await flushAsync();
-    expect(deps.setVoice).toHaveBeenCalledWith(
-      expect.objectContaining({ id: "coral" }),
-      "claude"
-    );
-  });
-
-  it("marks the stored voice's row as current instead of offering Use", async () => {
-    const jessica = claudeMockVoices.find((v) => v.name === "Jessica")!;
-    const deps = makeDeps({ getVoice: vi.fn(async () => jessica) });
+  it("renders a flat list without shelf headers for a single-tier catalog", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("nova")] });
     const { container } = await mount(deps);
-    (container.querySelector("#voice-host-claude") as HTMLElement).click();
-    await flushAsync();
-    const row = container.querySelector(
-      "#voice-catalog [data-voice-id='g6xIsTj2HwM6VR4iXFCw']"
-    ) as HTMLElement;
-    expect(row.classList.contains("current")).toBe(true);
-    expect(row.querySelector("button.voice-use")).toBeNull();
+    expect(q(container, "#voice-catalog .voice-shelf-title")).toBeNull();
+    expect(q(container, "#voice-catalog .voice-row")).toBeTruthy();
   });
+});
 
-  it("shows a sign-in prompt when the catalog comes back empty while signed out", async () => {
+describe("VoicesController — per-host Use / current (Record<host,voice> preserved)", () => {
+  it("selects a voice for the RIGHT host when that host's Use button is clicked", async () => {
     const deps = makeDeps({
-      getVoices: vi.fn(async () => []),
-      isAuthenticated: vi.fn(() => false),
+      pi: [mkVoice("marin")],
+      claude: [mkVoice("marin")],
     });
     const { container } = await mount(deps);
-    const empty = container.querySelector("#voice-catalog .voice-catalog-empty");
-    expect(empty).toBeTruthy();
-    expect(empty?.getAttribute("data-i18n")).toBe("signInForTTS");
+    const use = q(
+      container,
+      "[data-voice-id='marin'] .voice-host-controls[data-host='claude'] button.voice-use"
+    );
+    use!.click();
+    await flushAsync();
+    expect(deps.setVoice).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "marin" }),
+      "claude"
+    );
+    expect(deps.setVoice).not.toHaveBeenCalledWith(expect.anything(), "pi");
+  });
+
+  it("marks the host's current voice with a badge instead of a Use button, per host", async () => {
+    const marin = mkVoice("marin");
+    const deps = makeDeps({
+      pi: [marin, mkVoice("nova")],
+      claude: [mkVoice("marin"), mkVoice("nova")],
+      piCurrent: marin, // current on pi only
+    });
+    const { container } = await mount(deps);
+    const piGroup = hostGroup(container, "marin", "pi")!;
+    const claudeGroup = hostGroup(container, "marin", "claude")!;
+    expect(piGroup.querySelector(".voice-current-badge")).toBeTruthy();
+    expect(piGroup.querySelector("button.voice-use")).toBeNull();
+    expect(claudeGroup.querySelector("button.voice-use")).toBeTruthy();
+    expect(claudeGroup.querySelector(".voice-current-badge")).toBeNull();
+  });
+});
+
+describe("VoicesController — pins", () => {
+  it("renders a pin toggle per serveable host, pressed for server-featured voices", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin", { featured: true }), mkVoice("ash")],
+    });
+    const { container } = await mount(deps);
+    expect(
+      q(
+        container,
+        "[data-voice-id='marin'] [data-host='pi'] button.voice-pin"
+      )?.getAttribute("aria-pressed")
+    ).toBe("true");
+    expect(
+      q(
+        container,
+        "[data-voice-id='ash'] [data-host='pi'] button.voice-pin"
+      )?.getAttribute("aria-pressed")
+    ).toBe("false");
+  });
+
+  it("shows a pin toggle only for the hosts that serve the voice", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("paola")], // Pi-only
+      claude: [mkVoice("jarnathan")],
+    });
+    const { container } = await mount(deps);
+    expect(
+      q(container, "[data-voice-id='paola'] [data-host='pi'] button.voice-pin")
+    ).toBeTruthy();
+    expect(q(container, "[data-voice-id='paola'] [data-host='claude']")).toBeNull();
+  });
+
+  it("flips the pin in place (aria-pressed) and persists — without re-fetching the catalog", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin", { featured: true })] });
+    const { container } = await mount(deps);
+    const getVoicesCallsBefore = deps.getVoices.mock.calls.length;
+    const pin = q(
+      container,
+      "[data-voice-id='marin'] [data-host='pi'] button.voice-pin"
+    )!;
+    expect(pin.getAttribute("aria-pressed")).toBe("true");
+    pin.click();
+    await flushAsync();
+    expect(pin.getAttribute("aria-pressed")).toBe("false");
+    expect(deps.setPinned).toHaveBeenCalledWith("pi", "marin", ["marin"], false);
+    // no re-render (a full re-render would re-call getVoices)
+    expect(deps.getVoices.mock.calls.length).toBe(getVoicesCallsBefore);
+  });
+
+  it("pins a non-featured voice on click", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin", { featured: true }), mkVoice("ash")],
+    });
+    const { container } = await mount(deps);
+    const pin = q(
+      container,
+      "[data-voice-id='ash'] [data-host='pi'] button.voice-pin"
+    )!;
+    pin.click();
+    await flushAsync();
+    expect(pin.getAttribute("aria-pressed")).toBe("true");
+    expect(deps.setPinned).toHaveBeenCalledWith("pi", "ash", ["marin"], true);
+  });
+
+  it("reflects the user's stored overlay in the initial pin state", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin", { featured: true }), mkVoice("ash")],
+      piOverlay: { pinned: ["ash"], unpinned: ["marin"] },
+    });
+    const { container } = await mount(deps);
+    expect(
+      q(
+        container,
+        "[data-voice-id='marin'] [data-host='pi'] button.voice-pin"
+      )?.getAttribute("aria-pressed")
+    ).toBe("false");
+    expect(
+      q(
+        container,
+        "[data-voice-id='ash'] [data-host='pi'] button.voice-pin"
+      )?.getAttribute("aria-pressed")
+    ).toBe("true");
+  });
+});
+
+describe("VoicesController — empty states", () => {
+  it("prompts sign-in when both catalogs come back empty while signed out", async () => {
+    const deps = makeDeps({ authenticated: false });
+    const { container } = await mount(deps);
+    expect(
+      q(container, "#voice-catalog .voice-catalog-empty")?.getAttribute("data-i18n")
+    ).toBe("signInForTTS");
   });
 
   it("does NOT tell a signed-in user to sign in when the catalog is empty (fetch failure)", async () => {
-    const deps = makeDeps({ getVoices: vi.fn(async () => []) }); // authenticated
+    const deps = makeDeps({ authenticated: true });
     const { container } = await mount(deps);
-    const empty = container.querySelector("#voice-catalog .voice-catalog-empty");
-    expect(empty).toBeTruthy();
-    expect(empty?.getAttribute("data-i18n")).toBe("voicesNoneAvailable");
+    expect(
+      q(container, "#voice-catalog .voice-catalog-empty")?.getAttribute("data-i18n")
+    ).toBe("voicesNoneAvailable");
   });
+});
 
-  // The live pi catalog carries two distinct voices both named "Paola"
-  // (classic + eleven_v3). Only one has a server description, so rows
-  // without one must fall back to language-coverage metadata — otherwise the
-  // user sees two identical bare rows (#474).
-  describe("identically-named voices (#474)", () => {
-    const paolaClassic = new ElevenLabsVoice(
-      "ig1TeITnnNlsJtfHxJlW",
-      "Paola",
-      undefined,
-      undefined,
-      undefined,
-      ["en", "ja", "zh"]
+describe("VoicesController — preview (▶) and subtitles (ported)", () => {
+  it("renders a ▶ only on rows whose voice has a sample_url, and previews without selecting", async () => {
+    const withClip = mkVoice("nova", {
+      sample_url: "https://api.saypi.ai/voices/nova/sample.mp3",
+    } as any);
+    const noClip = mkVoice("ash");
+    const deps = makeDeps({ pi: [withClip, noClip] });
+    const { container } = await mount(deps);
+    const previewBtn = q(container, "[data-voice-id='nova'] button.voice-preview");
+    expect(previewBtn).toBeTruthy();
+    expect(q(container, "[data-voice-id='ash'] button.voice-preview")).toBeNull();
+    previewBtn!.click();
+    await flushAsync();
+    expect(deps.playPreview).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "nova" })
     );
-    const paolaV3 = new ElevenLabsVoice(
-      "paola-v3",
-      "Paola",
-      "F",
-      undefined,
-      "Paola on ElevenLabs' most expressive model, with expanded language coverage.",
-      ["en", "ja", "zh", "is"]
-    );
-
-    it("falls back to a languages subtitle so twin names stay distinguishable", async () => {
-      const deps = makeDeps({
-        getVoices: vi.fn(async () => [paolaClassic, paolaV3]),
-      });
-      const { container } = await mount(deps);
-      const subtitleOf = (id: string) =>
-        container.querySelector(
-          `#voice-catalog [data-voice-id='${id}'] .voice-row-desc`
-        )?.textContent ?? "";
-      expect(subtitleOf("paola-v3")).toContain("most expressive");
-      expect(subtitleOf("ig1TeITnnNlsJtfHxJlW")).not.toBe("");
-      expect(subtitleOf("ig1TeITnnNlsJtfHxJlW")).not.toBe(
-        subtitleOf("paola-v3")
-      );
-    });
-
-    it("shows no subtitle when there is neither description nor language data", async () => {
-      const bare = new ElevenLabsVoice("v1", "Solo");
-      const deps = makeDeps({ getVoices: vi.fn(async () => [bare]) });
-      const { container } = await mount(deps);
-      expect(
-        container.querySelector(
-          "#voice-catalog [data-voice-id='v1'] .voice-row-desc"
-        )
-      ).toBeNull();
-    });
+    expect(deps.setVoice).not.toHaveBeenCalled();
   });
 
-  // Choice by ear (design §4): a free canned preview clip, rendered only when
-  // the server serves a sample_url — a separate target from "Use this voice".
-  describe("voice preview (▶)", () => {
-    it("renders a ▶ button only on rows whose voice has a sample_url", async () => {
-      const withClip = voiceWithSample(
-        "withclip",
-        "Nova",
-        "https://api.saypi.ai/voices/nova/sample.mp3"
-      );
-      const noClip = voiceWithSample("noclip", "Ash", undefined);
-      const deps = makeDeps({ getVoices: vi.fn(async () => [withClip, noClip]) });
-      const { container } = await mount(deps);
-      const previewOf = (id: string) =>
-        container.querySelector(
-          `#voice-catalog [data-voice-id='${id}'] button.voice-preview`
-        );
-      expect(previewOf("withclip")).toBeTruthy();
-      expect(previewOf("noclip")).toBeNull();
-    });
-
-    it("plays the sample without selecting the voice when ▶ is clicked", async () => {
-      const withClip = voiceWithSample(
-        "withclip",
-        "Nova",
-        "https://api.saypi.ai/voices/nova/sample.mp3"
-      );
-      const deps = makeDeps({ getVoices: vi.fn(async () => [withClip]) });
-      const { container } = await mount(deps);
-      const btn = container.querySelector(
-        "#voice-catalog [data-voice-id='withclip'] button.voice-preview"
-      ) as HTMLElement;
-      btn.click();
-      await flushAsync();
-      expect(deps.playPreview).toHaveBeenCalledTimes(1);
-      expect(deps.playPreview).toHaveBeenCalledWith(
-        expect.objectContaining({ id: "withclip" })
-      );
-      // Preview must not select — that is the "Use this voice" button's job.
-      expect(deps.setVoice).not.toHaveBeenCalled();
-    });
-
-    it("offers ▶ on the current voice's row too (the 'Your voice' card previews)", async () => {
-      const current = voiceWithSample(
-        "withclip",
-        "Nova",
-        "https://api.saypi.ai/voices/nova/sample.mp3"
-      );
-      const deps = makeDeps({
-        getVoices: vi.fn(async () => [current]),
-        getVoice: vi.fn(async () => current),
-      });
-      const { container } = await mount(deps);
-      const row = container.querySelector(
-        "#voice-catalog [data-voice-id='withclip']"
-      ) as HTMLElement;
-      expect(row.classList.contains("current")).toBe(true);
-      expect(row.querySelector("button.voice-preview")).toBeTruthy();
-    });
+  it("falls back to a languages subtitle when a voice has no description (#474 twin names)", async () => {
+    const bare = mkVoice("paola", { languages: ["en", "ja", "zh"] } as any);
+    const deps = makeDeps({ pi: [bare] });
+    const { container } = await mount(deps);
+    const desc = q(container, "[data-voice-id='paola'] .voice-row-desc");
+    expect(desc?.textContent ?? "").not.toBe("");
   });
 
-  // Retirement (design §5): a deprecated voice drops out of the catalog for new
-  // selectors, but a user already on one keeps seeing and using it forever
-  // (grandfathering — never a silent swap).
-  describe("deprecated voices (grandfathering)", () => {
-    function deprecate(
-      v: SpeechSynthesisVoiceRemote
-    ): SpeechSynthesisVoiceRemote {
-      v.deprecated = true;
-      return v;
-    }
+  it("shows no subtitle when a voice has neither description nor language data", async () => {
+    const solo = mkVoice("solo"); // no description, no languages
+    const deps = makeDeps({ pi: [solo] });
+    const { container } = await mount(deps);
+    expect(q(container, "[data-voice-id='solo'] .voice-row-desc")).toBeNull();
+  });
 
-    it("hides a deprecated voice from the catalog", async () => {
-      const live = new ElevenLabsVoice("live", "Live");
-      const retired = deprecate(new ElevenLabsVoice("retired", "Retired"));
-      const deps = makeDeps({ getVoices: vi.fn(async () => [live, retired]) });
-      const { container } = await mount(deps);
-      expect(
-        container.querySelector("#voice-catalog [data-voice-id='live']")
-      ).toBeTruthy();
-      expect(
-        container.querySelector("#voice-catalog [data-voice-id='retired']")
-      ).toBeNull();
-    });
+  it("offers ▶ on a row whose voice is a host's current selection (the card previews too)", async () => {
+    const current = mkVoice("nova", {
+      sample_url: "https://api.saypi.ai/voices/nova/sample.mp3",
+    } as any);
+    const deps = makeDeps({ pi: [current], piCurrent: current });
+    const { container } = await mount(deps);
+    expect(
+      hostGroup(container, "nova", "pi")?.querySelector(".voice-current-badge")
+    ).toBeTruthy();
+    expect(
+      rowOf(container, "nova")?.querySelector("button.voice-preview")
+    ).toBeTruthy();
+  });
+});
 
-    it("keeps rendering a deprecated voice that is the user's current selection", async () => {
-      const retired = deprecate(new ElevenLabsVoice("retired", "Retired"));
-      const deps = makeDeps({
-        getVoices: vi.fn(async () => [retired]),
-        getVoice: vi.fn(async () => retired),
-      });
-      const { container } = await mount(deps);
-      const row = container.querySelector(
-        "#voice-catalog [data-voice-id='retired']"
-      ) as HTMLElement;
-      expect(row).toBeTruthy();
-      expect(row.classList.contains("current")).toBe(true);
+describe("VoicesController — deprecated grandfathering (ported)", () => {
+  it("hides a deprecated voice from the catalog", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("live"), mkVoice("retired", { deprecated: true })],
     });
+    const { container } = await mount(deps);
+    expect(rowOf(container, "live")).toBeTruthy();
+    expect(rowOf(container, "retired")).toBeNull();
+  });
+
+  it("keeps rendering a deprecated voice that is the host's current selection", async () => {
+    const retired = mkVoice("retired", { deprecated: true });
+    const deps = makeDeps({ pi: [retired], piCurrent: retired });
+    const { container } = await mount(deps);
+    expect(rowOf(container, "retired")).toBeTruthy();
+    expect(
+      hostGroup(container, "retired", "pi")?.querySelector(".voice-current-badge")
+    ).toBeTruthy();
   });
 });
