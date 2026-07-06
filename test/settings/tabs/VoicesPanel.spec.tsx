@@ -17,20 +17,14 @@ describe("VoicesPanel", () => {
     ).toBeTruthy();
   });
 
-  it("explains the per-host pin toggles", () => {
+  it("renders the studio container VoicesController targets", () => {
     const { container } = render(<VoicesPanel />);
+    expect(container.querySelector("#voice-studio")).toBeTruthy();
+    // The 2c unified-catalog container and its pin explainer are gone — the
+    // studio shows the pin payoff (menu slots) instead of explaining it.
+    expect(container.querySelector("#voice-catalog")).toBeNull();
     expect(
-      container.querySelector(
-        "#voices-preference [data-i18n='voicesPinExplainer']",
-      ),
-    ).toBeTruthy();
-  });
-
-  it("renders the unified catalog container VoicesController targets, with no host pills", () => {
-    const { container } = render(<VoicesPanel />);
-    expect(container.querySelector("#voice-catalog")).toBeTruthy();
-    // The per-host pill tablist is gone — the catalog is one unified list.
-    expect(container.querySelector("#voice-host-pills")).toBeNull();
-    expect(container.querySelector(".voice-host-pill")).toBeNull();
+      container.querySelector("[data-i18n='voicesPinExplainer']"),
+    ).toBeNull();
   });
 });
