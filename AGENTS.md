@@ -47,6 +47,8 @@ Beyond this founder-gated set, **`doc/codebase-caution-map.md`** maps the wider 
 
 **Escalate to the founder only for:** product/UX taste calls (what/whether to build), credentials/resources you lack, **store releases**, contract changes that require the server side to change, gate-weakening or release-machinery edits, irreversible actions, or anything risking customer trust. Otherwise proceed. Escalate **immediately — not in the handoff —** anything that looks like a live user-facing failure of a *shipped* version (see `doc/release/incident-response.md`); everything else batches. End every session with a handoff: shipped / in-flight / waiting-on-human / built-but-unreleased.
 
+**Founder-attention marker (`awaiting-founder`).** Anything blocked on a founder decision or sign-off — a high-blast-radius PR awaiting approval, a governance proposal awaiting a verdict — must carry the **`awaiting-founder` label** (works on issues and PRs alike). Applying it fires `.github/workflows/awaiting-founder-notify.yaml`, which @-mentions the founder so a GitHub notification lands; state *what is being asked* in a comment when you apply it, and remove the label once the founder has decided. Standing queue (check it rather than assuming nothing waits): `gh issue list -R Pedal-Intelligence/saypi-userscript --label awaiting-founder` and `gh pr list -R Pedal-Intelligence/saypi-userscript --label awaiting-founder`, or [the label view](https://github.com/Pedal-Intelligence/saypi-userscript/issues?q=is%3Aopen+label%3Aawaiting-founder).
+
 ### Issue Authoring Standard
 - **Problem:** one-sentence summary of what's wrong.
 - **Scope:** which surfaces/flows are affected (and what's explicitly out of scope).
