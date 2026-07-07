@@ -29,6 +29,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+          ACTOR: ${{ github.actor }}
         run: |
           gh api "repos/${{ github.repository }}/issues/${NUMBER}/comments" \
-            -f body="@rosscado — this is now **awaiting a founder decision or sign-off** (\`awaiting-founder\` applied by @${{ github.actor }}). See the latest comment/description for what's being asked. Standing queue: [open items with this label](https://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Aawaiting-founder)."
+            -f body="@rosscado — this is now **awaiting a founder decision or sign-off** (\`awaiting-founder\` applied by @${ACTOR}). See the latest comment/description for what's being asked. Standing queue: [open items with this label](https://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Aawaiting-founder)."
