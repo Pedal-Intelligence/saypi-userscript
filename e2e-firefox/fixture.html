@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firefox smoke fixture — universal dictation</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    input { width: 100%; padding: 12px; font-size: 16px; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <h1>Universal dictation smoke fixture</h1>
+  <p>
+    A minimal plain-HTTP page served on localhost. The universal dictation
+    content script (entrypoints/saypi-universal.content.ts) matches
+    <code>http://*/*</code>, so it must inject here and decorate the focused
+    input below with a <code>.saypi-dictation-button</code>.
+  </p>
+  <label for="smoke-input">Say something</label>
+  <input id="smoke-input" type="text" name="smoke" autocomplete="off" />
+</body>
+</html>

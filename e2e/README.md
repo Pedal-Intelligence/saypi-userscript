@@ -12,6 +12,10 @@ It proves the bits unit tests can't: that the bundled content script actually
 decorates a chatbot page, and that a spoken clip travels the full voice-input
 pipeline (fake mic → VAD → STT → prompt) end to end.
 
+> **Firefox:** this harness is Chromium-only (Playwright cannot load Firefox
+> extensions). The Firefox MV2 build has its own separate, **advisory** smoke
+> lane — see [e2e-firefox/README.md](../e2e-firefox/README.md) (#527).
+
 > **Status: REQUIRED.** The CI job ([.github/workflows/e2e.yaml](../.github/workflows/e2e.yaml))
 > runs on every PR and push to `main` and is a **required** status check — a red
 > E2E run blocks merge. It is still **not** part of the `npm test` aggregate (it
