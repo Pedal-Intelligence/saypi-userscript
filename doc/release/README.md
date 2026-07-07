@@ -27,6 +27,9 @@ auto-update**, and store-submission plumbing is founder-gated.
   `package-extension.sh` / `npm run source-archive`; does not reimplement the build.
 - `scripts/release-lib.mjs` — pure, unit-tested logic (version decision, payload
   categorization, changelog digest, packet rendering). Tests: `test/scripts/release-lib.spec.ts`.
+- `scripts/store-status.mjs` / `scripts/store-status-lib.mjs` — read-only per-store review
+  status check (`npm run release:status`, #529; see "Checking review status" below).
+  Tests: `test/scripts/store-status-lib.spec.ts`.
 - `doc/release/stores.json` — single source of truth for store identity + per-store facts.
   Consumed by the packet generator and any future browser-driver / API path.
 - `doc/release/{chrome-web-store,edge-addons,firefox-amo}.md` — per-store submission detail.
@@ -61,6 +64,7 @@ npm run release:tag -- <version> --yes     # = … tag <version> --yes
 npm run release:finalize -- <version> --yes  # = … finalize <version> --yes
 npm run release:submit -- <store> --dry-run  # ⛔ #412: auth-check a store's publishing API
 npm run release:submit -- <store> --yes      # ⛔ #412: headless API submission (founder-only)
+npm run release:status                       # read-only: review/publish status per store (#529)
 ```
 
 Run from the **main checkout on `main`** — a real release is cut from main and the build
@@ -127,6 +131,33 @@ to v<x>` commit whose package.json matches) and tags *that* — not `HEAD`, whic
 merges may have moved past — and refuses if it can't find a matching commit. `finalize` pushes
 origin/main + the tag, then **cuts the GitHub release** from `_locales/en/release_notes.txt`
 (pass `--no-gh-release` to skip; refine the release title/body on GitHub afterward).
+
+## Checking review status (read-only, any time) — #529
+
+`npm run release:status` (= `node scripts/store-status.mjs [--json] [--stall-days N]`)
+reports where each store actually stands, so a stalled review is noticed on purpose rather
+than incidentally. For every store in `stores.json` it hits **read-only** endpoints with the
+same credentials `release:submit` uses (env vars / `.env.publish`,
+per [`publishing-credentials.md`](publishing-credentials.md)) and prints a compact table:
+live version · review state · last update · a **stall flag**.
+
+- **Chrome:** OAuth token + CWS V2 `:fetchStatus` — published version and any
+  `PENDING_REVIEW`/`REJECTED` submitted revision.
+- **Edge:** the publish-API credentials probe (catches the ~72-day key expiry) + the public
+  product-details endpoint for the live version. Edge's API exposes **no review state**, so
+  stalls there are inferred from release lag (below).
+- **Firefox (AMO):** JWT-authed v5 addon detail + versions list — live version plus any
+  listed version still `unreviewed` in the queue, with its submission date.
+
+**Stall flag** (default threshold 14 days, `--stall-days N`): a submission in review longer
+than the threshold, **or** a store whose live version is still behind the latest release tag
+even though that release is older than the threshold — the second rule is what catches Edge,
+which offers no review-state visibility at all.
+
+Degrades gracefully: a store whose credential env vars are absent is reported **SKIPPED**
+(exit 0, no request made) — only a failed check (bad auth/network) exits 1. The tool never
+uploads/publishes anything, never reads `.env.production`, and logs env var **names** only.
+Intended future use: a scheduled routine that runs this and files an issue on a stall (#525).
 
 ## Future: one-click automation via publishing APIs (#412)
 The 1.11.0 wet run established that **browser-driving is a dead end for releases:**
