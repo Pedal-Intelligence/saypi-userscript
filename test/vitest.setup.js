@@ -43,6 +43,14 @@ Object.defineProperties(global, {
   Blob: { value: dom.window.Blob },
   Audio: { value: dom.window.Audio || vi.fn() },
   FormData: { value: dom.window.FormData, writable: true, configurable: true },
+  // JSDOM ships a working in-memory localStorage; expose it like the rest of
+  // the window surface (the settings voices studio persists its last host).
+  // Writable/configurable: several suites install their own localStorage mock.
+  localStorage: {
+    value: dom.window.localStorage,
+    writable: true,
+    configurable: true,
+  },
 });
 
 // Ensure tests can override these globals when needed

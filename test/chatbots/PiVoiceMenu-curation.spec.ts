@@ -100,7 +100,7 @@ describe("PiVoiceMenu shortlist cap + door", () => {
     ) as HTMLButtonElement;
     expect(door).not.toBeNull();
     door.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 
   it("still shows the door when the catalog fits the cap — it's the path to the catalog, not an overflow marker (#472)", () => {
@@ -112,7 +112,7 @@ describe("PiVoiceMenu shortlist cap + door", () => {
     ) as HTMLButtonElement;
     expect(door).not.toBeNull();
     door.click();
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 });
 

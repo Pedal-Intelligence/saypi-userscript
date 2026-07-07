@@ -173,7 +173,7 @@ describe("PiVoiceMenu — 'More voices' door in Pi's live in-chat menu (#491, do
     const door = ac.querySelector(".saypi-more-voices") as HTMLElement;
     door.click();
 
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 
   it("Enter/Space activate the door (it matches Pi's div-rows, so needs keyboard a11y)", () => {
@@ -190,7 +190,7 @@ describe("PiVoiceMenu — 'More voices' door in Pi's live in-chat menu (#491, do
       new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true })
     );
 
-    expect(openSettingsMock).toHaveBeenCalledWith("voices");
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 
   it("clones a native row's styling so it renders as a Pi-native option, not foreign chrome", () => {

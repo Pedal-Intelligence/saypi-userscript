@@ -1,142 +1,516 @@
-/* Voices tab — ONE unified cross-host catalog behind the in-page menus'
-   "More voices…" door. Each row curates its own per-host shortlist via pin
-   toggles (2026-07-05 shortlist redesign). */
+/* Voices tab — the host-scoped "studio" behind the in-page menus' "More
+   voices…" doors (2026-07-07 Host Studio redesign): host switcher → stage
+   (current voice, tinted by its identity gradient) → menu slots (the literal
+   in-chat menu) → explore shelves of identity cards. Light-only, matching
+   the settings shell. */
 
-.voices-pin-explainer {
-  margin: 0.35rem 0 0.75rem;
+#voice-studio {
+  max-width: 900px;
+  margin-top: 0.75rem;
 }
 
+/* The settings content column is fixed at 504px (global.css) — right for the
+   form-style tabs, cramped for the studio's card grids. Widen the column only
+   while the Voices tab is the active panel. Engines without :has() keep the
+   504px column: narrower, never broken. */
+.content:has(#tab-voices:not(.hidden)) {
+  width: min(940px, 100%);
+}
+
+/* --- host switcher -------------------------------------------------------- */
+
+.voice-host-switcher {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #e5e3dc;
+  border-radius: 9999px;
+  background: #ffffff;
+  margin-bottom: 14px;
+}
+.voice-host-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #6f6a61;
+  font-size: 13px;
+  cursor: pointer;
+}
+.voice-host-tab[aria-pressed="true"] {
+  background: #2c5a42;
+  color: #ffffff;
+  font-weight: 600;
+}
+.voice-host-tab:focus-visible {
+  outline: 2px solid #2c5a42;
+  outline-offset: 2px;
+}
 .voice-host-logo {
   width: 16px;
   height: 16px;
   border-radius: 4px;
   object-fit: contain;
+  /* White chip behind the mark: Pi's dark glyph stays legible on the active
+     (dark green) pill. */
+  background: #ffffff;
+  padding: 1px;
 }
-.voice-shelf {
-  margin-bottom: 0.75rem;
+
+.voice-studio-loading {
+  opacity: 0.55;
 }
-.voice-shelf-header {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.25rem;
-}
-.voice-shelf-title {
-  font-weight: 600;
+.voice-studio-empty {
+  padding: 0.75rem 0.25rem;
   font-size: 0.9rem;
+  color: #6f6a61;
 }
-.voice-shelf-blurb {
-  font-size: 0.8rem;
+
+/* --- the stage -------------------------------------------------------------
+   The current voice's identity gradient tints the room via --stage-from/-to
+   (set inline by the controller). Both stops are mixed toward near-black so
+   the white text stays readable on any voice color (Shimmer is pale gold);
+   the plain-gradient declaration first is the fallback for engines without
+   color-mix. */
+
+.voice-stage {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 24px 26px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  color: #ffffff;
+  background: linear-gradient(118deg, var(--stage-from, #155e63), var(--stage-to, #0f2e2b));
+  background: linear-gradient(
+    118deg,
+    color-mix(in srgb, var(--stage-from, #155e63) 58%, #0e1a18),
+    color-mix(in srgb, var(--stage-to, #0f2e2b) 68%, #0b1412) 62%,
+    #0a100f
+  );
 }
-.voice-list {
+.voice-stage.voice-stage-empty {
+  display: block;
+  color: #6f6a61;
+  background: #f4f4f2;
+  border: 1px dashed #d9d6cd;
+  font-size: 0.9rem;
+  padding: 18px 20px;
+}
+.voice-stage-meta {
+  min-width: 0;
+}
+.voice-stage-eyebrow {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 5px;
+}
+.voice-stage-name {
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.voice-stage-tagline {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 3px;
+}
+.voice-stage-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 13px;
+}
+.voice-stage-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #14201e;
+  padding: 7px 15px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.voice-stage-play::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 8px solid #14201e;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.voice-stage-play:hover {
+  background: #f1efe9;
+}
+.voice-stage-lang {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.92);
+}
+.voice-stage .voice-tier-chip {
+  position: static;
+}
+
+/* --- orbs (identity mark = play button) ------------------------------------ */
+
+.voice-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  box-shadow:
+    inset 0 -8px 14px rgba(0, 0, 0, 0.22),
+    inset 0 6px 10px rgba(255, 255, 255, 0.22),
+    0 4px 12px rgba(20, 20, 10, 0.18);
+  transition: transform 0.15s ease;
+}
+button.voice-orb:hover {
+  transform: scale(1.06);
+}
+.voice-orb:focus-visible {
+  outline: 2px solid #1f1e1b;
+  outline-offset: 2px;
+}
+.voice-orb-static {
+  cursor: default;
+}
+.voice-orb-lg {
+  width: 88px;
+  height: 88px;
+}
+.voice-orb-md {
+  width: 56px;
+  height: 56px;
+}
+.voice-orb-sm {
+  width: 30px;
+  height: 30px;
+  box-shadow:
+    inset 0 -4px 7px rgba(0, 0, 0, 0.2),
+    0 2px 6px rgba(20, 20, 10, 0.15);
+}
+
+.voice-orb-tri {
+  width: 0;
+  height: 0;
+  border-left: 12px solid rgba(255, 255, 255, 0.95);
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  margin-left: 3px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+.voice-orb-lg .voice-orb-tri {
+  border-left-width: 17px;
+  border-top-width: 10px;
+  border-bottom-width: 10px;
+}
+.voice-orb-sm .voice-orb-tri {
+  border-left-width: 8px;
+  border-top-width: 5px;
+  border-bottom-width: 5px;
+  margin-left: 2px;
+}
+
+.voice-orb-eq {
+  display: none;
+  align-items: center;
+  gap: 2.5px;
+  height: 18px;
+}
+.voice-orb-sm .voice-orb-eq {
+  height: 11px;
+  gap: 1.5px;
+}
+.voice-orb-eq i {
+  width: 3.5px;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 2px;
+  transform-origin: center;
+  animation: voice-orb-eq 0.8s ease-in-out infinite;
+}
+.voice-orb-sm .voice-orb-eq i {
+  width: 2.5px;
+}
+.voice-orb-eq i:nth-child(2) {
+  animation-delay: 0.14s;
+}
+.voice-orb-eq i:nth-child(3) {
+  animation-delay: 0.28s;
+}
+.voice-orb.playing .voice-orb-tri {
+  display: none;
+}
+.voice-orb.playing .voice-orb-eq {
+  display: flex;
+}
+@keyframes voice-orb-eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voice-orb-eq i {
+    animation: none;
+    transform: scaleY(0.65);
+  }
+  .voice-orb,
+  button.voice-orb:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* --- menu slots ------------------------------------------------------------ */
+
+.voice-slots-section {
+  margin-bottom: 18px;
+}
+.voice-slots-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.voice-slots-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+.voice-slots-hint {
+  font-size: 11.5px;
+  color: #77726a;
+}
+.voice-slots {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-.voice-row {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
-  padding: 0.45rem 0.25rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  gap: 8px;
 }
-.voice-row:last-child {
-  border-bottom: none;
-}
-.voice-row-main {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  /* Push the trailing controls (▶ preview + per-host groups) to the right. */
-  margin-right: auto;
-}
-.voice-preview {
-  flex-shrink: 0;
+.voice-slot {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border: 1px solid #d1d5db;
+  gap: 8px;
+  padding: 6px 12px 6px 7px;
+  border: 1px solid #e5e3dc;
   border-radius: 9999px;
+  background: #ffffff;
+  font-size: 12.5px;
+  font-weight: 550;
+}
+.voice-slot-current {
+  border-color: #8fbca3;
+  background: #f2f8f4;
+}
+.voice-slot-state {
+  font-size: 10.5px;
+  font-weight: 650;
+  color: #2c5a42;
+  white-space: nowrap;
+}
+.voice-slot-remove {
+  border: none;
   background: transparent;
-  color: inherit;
+  color: #9c978c;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 2px;
   cursor: pointer;
 }
-.voice-preview:hover {
-  background: #f3f4f6;
+.voice-slot-remove:hover {
+  color: #4c4842;
 }
-.voice-row-name {
-  font-weight: 500;
+.voice-slot-remove:focus-visible {
+  outline: 2px solid #2c5a42;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
-.voice-row-desc {
-  font-size: 0.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.voice-slots-overflow,
+.voice-slots-builtins {
+  font-size: 11.5px;
+  color: #77726a;
+  margin-top: 7px;
+}
+
+/* --- explore shelves -------------------------------------------------------- */
+
+.voice-shelves {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.voice-shelf-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.voice-shelf-title {
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #6f6a61;
+}
+.voice-shelf-blurb {
+  font-size: 11.5px;
+  color: #77726a;
+}
+.voice-card-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.voice-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 7px;
+  padding: 16px 10px 12px;
+  border: 1px solid #e5e3dc;
+  border-radius: 14px;
+  background: #ffffff;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.voice-card:hover {
+  box-shadow: 0 6px 18px rgba(20, 20, 10, 0.1);
+  transform: translateY(-1px);
+}
+.voice-card-current {
+  box-shadow: 0 0 0 2px rgba(44, 90, 66, 0.35);
+}
+.voice-card-current:hover {
+  box-shadow:
+    0 0 0 2px rgba(44, 90, 66, 0.35),
+    0 6px 18px rgba(20, 20, 10, 0.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .voice-card,
+  .voice-card:hover {
+    transition: none;
+    transform: none;
+  }
+}
+.voice-card > .voice-tier-chip {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+}
+.voice-card-name {
+  font-size: 13.5px;
+  font-weight: 650;
+  margin-top: 2px;
+}
+.voice-card-tagline {
+  font-size: 11px;
+  color: #77726a;
+  line-height: 1.35;
+  min-height: 2.7em;
+}
+.voice-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1px;
+}
+.voice-card-state {
+  font-size: 10.5px;
+  font-weight: 650;
+  color: #2c5a42;
   white-space: nowrap;
 }
 
-/* Per-host controls: one group per host that serves the voice. */
-.voice-row-hosts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.9rem;
-  flex-shrink: 0;
-}
-.voice-host-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-.voice-host-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: #6b7280;
+/* --- shared chips + actions -------------------------------------------------- */
+
+.voice-tier-chip {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: #23211d;
+  color: #f5d78e;
 }
 
-/* Pin toggle — outline when off, brand-tinted fill when pinned. aria-pressed
-   carries the state to assistive tech; colour is an accent, never the only
-   signal (the filled pin icon + border weight read without colour). */
-.voice-pin {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  border: 1px solid #d1d5db;
+.voice-pin-toggle {
+  border: 1px solid #e5e3dc;
   border-radius: 9999px;
-  background: transparent;
-  color: #9ca3af;
+  background: #ffffff;
+  color: #6f6a61;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 550;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s ease, border-color 0.12s ease;
 }
-.voice-pin:hover {
-  background: #f3f4f6;
-  color: #6b7280;
+.voice-pin-toggle:hover:not(:disabled) {
+  border-color: #c8c4ba;
 }
-.voice-pin.pinned {
-  color: #ae5630;
-  border-color: #d97757;
-  background: #f8f0e9;
+.voice-pin-toggle.pinned {
+  background: #e7f2eb;
+  border-color: #8fbca3;
+  color: #2c5a42;
+}
+.voice-pin-toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.voice-pin-toggle:focus-visible,
+.voice-use:focus-visible,
+.voice-stage-play:focus-visible,
+.voice-host-tab:focus-visible {
+  outline: 2px solid #2c5a42;
+  outline-offset: 2px;
 }
 
 .voice-use {
-  flex-shrink: 0;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border: 1px solid #e5e3dc;
+  border-radius: 9999px;
   background: transparent;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.8rem;
+  color: inherit;
+  padding: 3px 10px;
+  font-size: 11px;
   cursor: pointer;
+  white-space: nowrap;
 }
 .voice-use:hover {
-  background: #f3f4f6;
+  background: #f3f2ee;
 }
-.voice-current-badge {
-  flex-shrink: 0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #16a34a;
+
+/* Narrow settings windows: let the stage stack instead of squeezing. */
+@media (max-width: 560px) {
+  .voice-stage {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
 }
