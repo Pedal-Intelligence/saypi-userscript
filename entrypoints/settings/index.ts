@@ -15,6 +15,7 @@ import {
   SETTINGS_DEEP_LINK_KEY,
   parseSettingsDeepLink,
 } from "../../src/popup/popupopener";
+import { settingsWindowGrowthFor } from "../../src/popup/settingsWindowSize";
 
 // Styles
 import "./styles/base.css"; // reset + utilities (replaces the 2.9 MB Tailwind v2 dump)
@@ -148,7 +149,32 @@ class SettingsApp {
 
   private async switchToTab(tabId: string): Promise<void> {
     // Load tab on-demand when user switches to it
+    void this.ensureRoomFor(tabId);
     await this.loadTab(tabId);
+  }
+
+  /**
+   * Adaptive window sizing (macOS System Settings pattern): the compact popup
+   * grows — never shrinks — when a roomy pane (the Voices studio) is shown.
+   * Only applies to the popup window the extension created; when settings
+   * lives in a normal browser tab, the tab manages itself.
+   */
+  private async ensureRoomFor(tabId: string): Promise<void> {
+    try {
+      const win = await browser.windows.getCurrent();
+      if (win.type !== 'popup' || win.id === undefined) return;
+      const growth = settingsWindowGrowthFor(
+        tabId,
+        { width: win.width ?? 0, height: win.height ?? 0 },
+        {
+          availWidth: window.screen.availWidth,
+          availHeight: window.screen.availHeight,
+        }
+      );
+      if (growth) await browser.windows.update(win.id, growth);
+    } catch (e) {
+      // Sizing is a nicety — never let it break the settings page.
+    }
   }
 }
 

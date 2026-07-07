@@ -8,6 +8,8 @@ import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
 import { maybeOpenFirstRunTab } from "../onboarding/firstRun";
 import { seedVoiceDefaultsOnFreshInstall } from "../onboarding/voiceDefaults";
 import { detectPermissionLoss, buildPermissionsUrl, MIC_GRANTED_FLAG } from "../permissions/permissionLossDetection";
+import { SETTINGS_DEEP_LINK_KEY, parseSettingsDeepLink } from "../popup/popupopener";
+import { STUDIO_WINDOW, isRoomySettingsTab } from "../popup/settingsWindowSize";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -54,7 +56,24 @@ async function openSettingsWindow() {
     // We check local storage flag 'shareData'. If it's undefined, consent will show.
     const { shareData } = await browser.storage.local.get('shareData');
     const needsConsent = typeof shareData === 'undefined';
-    const height = needsConsent ? 640 : 512; // taller for consent (640px to match illustration), compact for settings (512px)
+    let width = POPUP_DESKTOP_WIDTH;
+    let height = needsConsent ? 640 : 512; // taller for consent (640px to match illustration), compact for settings (512px)
+
+    // A deep link into a roomy pane (the Voices studio) opens at full size
+    // directly, so the user never sees a compact window jolt larger. The
+    // page-side ensureRoomFor covers every other path (e.g. clicking the
+    // Voices tab later); Chrome clamps oversized windows to the screen.
+    try {
+      const stored = await browser.storage.local.get(SETTINGS_DEEP_LINK_KEY);
+      const link = parseSettingsDeepLink(stored?.[SETTINGS_DEEP_LINK_KEY]);
+      if (link && isRoomySettingsTab(link.tab)) {
+        width = STUDIO_WINDOW.width;
+        height = STUDIO_WINDOW.height;
+      }
+    } catch (e) {
+      // Best-effort sizing; the compact default is always safe.
+    }
+
     // Firefox on Android does not support opening popup windows; open a tab instead
     if (isFirefox() && isMobileDevice()) {
       await browser.tabs.create({ url: popupURL, active: true });
@@ -64,7 +83,7 @@ async function openSettingsWindow() {
     await browser.windows.create({
       url: popupURL,
       type: 'popup',
-      width: POPUP_DESKTOP_WIDTH,
+      width,
       height,
       focused: true
     });
