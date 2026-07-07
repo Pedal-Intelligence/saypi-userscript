@@ -40,6 +40,7 @@ import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveCdpProfileDir, buildCdpChromeArgs, isCloudflareChallenge } from "./layer4cdp-lib.mjs";
 import { HOSTS, parseSweepArgs, summarize, ttsCoverage, SAYPI_TTS_PROVIDER } from "./e2e-host-sweep-lib.mjs";
+import { enforceSpendCap } from "./l4-ledger.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const EXT_DIR = join(repoRoot, ".output", "chrome-mv3-dev");
@@ -330,6 +331,15 @@ async function main() {
   if (opts.unknownHosts.length) log(`ignoring unknown host(s): ${opts.unknownHosts.join(", ")} (known: ${HOSTS.map((h) => h.key).join(", ")})`);
   const profileDir = resolveCdpProfileDir(process.env, homedir());
   if (!existsSync(profileDir)) { log(`no seeded profile at ${profileDir} — run: npm run layer4cdp:seed first`); process.exit(1); }
+
+  // Spend cap + ledger (#533): one sweep = one ledgered run (it drives a real turn on
+  // every selected host). Refuses (exit 2) when over cap unless SAYPI_L4_CAP_OVERRIDE=1.
+  enforceSpendCap({
+    harness: "e2e-host-sweep",
+    target: opts.hosts.join(","),
+    purpose: process.env.SAYPI_L4_PURPOSE ?? (opts.noTurn ? "host sweep --no-turn" : "host sweep (defect hunt)"),
+    log,
+  });
 
   const runStamp = new Date().toISOString().replace(/[:.]/g, "-");
   const outDir = join(repoRoot, ".output", "e2e-host-sweep", runStamp);

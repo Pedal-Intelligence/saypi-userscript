@@ -128,3 +128,26 @@ running `seed`, **Ctrl-C** now shuts Chrome down gracefully too.
   profile with no lockfile — never run two concurrently.
 - **Requires Google Chrome** installed (set `CHROME_PATH` if not at the default).
 - Real-host DOM drifts — confirms behavior, not a frozen contract.
+
+## Costs & caps (#533)
+
+Every real-host run spends the founder's resources (host plan quota, SayPi STT/TTS
+credits), so runs are **ledgered and capped**. `verify` and both sweep harnesses
+record each run — `{timestamp, harness, target, purpose}` — to `.l4-ledger.json` at
+the repo root (gitignored; personal operational data) and **refuse to launch** once a
+cap is reached. Check spend before planning real-host work, and include it in the
+session handoff:
+
+    node scripts/l4-ledger.mjs report
+
+Caps are **PROPOSED defaults pending founder confirmation**: **6 runs per rolling 12h
+session, 25 per rolling 7-day week**. The founder tunes them via
+`SAYPI_L4_CAP_SESSION` / `SAYPI_L4_CAP_WEEK` or the `caps` block in the ledger file
+(env wins). `SAYPI_L4_CAP_OVERRIDE=1` bypasses a refusal — **founder-authorized use
+only**; the run is still ledgered, marked `[OVERRIDE]`. A missing or corrupt ledger
+never blocks a run (first run bootstraps it; corrupt warns and starts fresh).
+`SAYPI_L4_LEDGER_PATH` points at an alternate ledger (tests/dry-runs). Set
+`SAYPI_L4_PURPOSE="why"` so the ledger entry says what the run was for; runs driven
+outside the harnesses (e.g. the MCP dev rig) can be ledgered manually with
+`node scripts/l4-ledger.mjs record --harness dev-rig --purpose "..."`. `seed`,
+`diagnose`, and `self-test` don't send a message and aren't counted.

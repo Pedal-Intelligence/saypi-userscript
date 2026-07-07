@@ -31,6 +31,7 @@ import {
   confirmTurn,
   TURN_MESSAGE_SELECTOR,
 } from "./layer4cdp-lib.mjs";
+import { enforceSpendCap } from "./l4-ledger.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const EXT_DIR = join(repoRoot, ".output", "chrome-mv3-dev");
@@ -235,6 +236,14 @@ async function verify(opts) {
     log(`no seeded profile at ${profileDir} — run: npm run layer4cdp:seed first`);
     process.exit(1);
   }
+  // Spend cap + ledger (#533): a verify run spends real founder resources. Refuses
+  // (exit 2) when over cap unless SAYPI_L4_CAP_OVERRIDE=1 (founder-authorized only).
+  enforceSpendCap({
+    harness: "layer4cdp:verify",
+    target: opts.url,
+    purpose: process.env.SAYPI_L4_PURPOSE ?? (opts.noTurn ? "verify --no-turn" : "verify (synthetic turn)"),
+    log,
+  });
   log(`verify ${opts.url} (CDP, ${opts.headed ? "headed" : "headless"})`);
   const { browser, shutdown } = await launchAttached({ profileDir, headless: !opts.headed });
   let code = 1;

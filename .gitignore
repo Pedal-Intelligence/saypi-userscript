@@ -103,3 +103,6 @@ doc/dom/chatgpt/sidebar.header.menu-tiny.html
 
 # Local tunnel config — never track (carries a personal authtoken)
 ngrok.yml
+
+# Layer-4 real-host spend ledger (#533) — personal operational data, never committed
+.l4-ledger.json

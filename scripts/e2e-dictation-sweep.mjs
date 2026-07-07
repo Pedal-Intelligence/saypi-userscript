@@ -37,6 +37,7 @@ import {
   DEFAULT_BUTTON_TIMEOUT_MS,
   DEFAULT_TRANSCRIPT_TIMEOUT_MS,
 } from "./e2e-dictation-sweep-lib.mjs";
+import { enforceSpendCap } from "./l4-ledger.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const EXT_DIR = join(repoRoot, ".output", "chrome-mv3-dev");
@@ -193,6 +194,15 @@ async function main() {
   if (opts.unknownTargets.length) log(`ignoring unknown target(s): ${opts.unknownTargets.join(", ")} (known: ${TARGETS.map((t) => t.key).join(", ")})`);
   const profileDir = resolveCdpProfileDir(process.env, homedir());
   if (!existsSync(profileDir)) { log(`no seeded profile at ${profileDir} — run: npm run layer4cdp:seed first`); process.exit(1); }
+
+  // Spend cap + ledger (#533): one sweep = one ledgered run (real STT spend on each
+  // field's turn). Refuses (exit 2) when over cap unless SAYPI_L4_CAP_OVERRIDE=1.
+  enforceSpendCap({
+    harness: "e2e-dictation-sweep",
+    target: opts.targets.join(","),
+    purpose: process.env.SAYPI_L4_PURPOSE ?? "dictation sweep (defect hunt)",
+    log,
+  });
 
   const runStamp = new Date().toISOString().replace(/[:.]/g, "-");
   const outDir = join(repoRoot, ".output", "e2e-dictation-sweep", runStamp);
