@@ -1,10 +1,12 @@
-# Release delegation: staged criteria (PROPOSAL)
+# Release delegation: staged criteria
 
-> **STATUS: PROPOSED — not in force.** `AGENTS.md` calls the founder-only release gate "a
-> trust gate the founder may choose to relax with evidence of harness maturity (propose,
-> don't assume)". This document is that proposal (issue #523). Nothing here changes who
-> may run what until the founder records acceptance on #523; on acceptance, the accepted
-> stages become part of the constitution via the usual AGENTS.md PR-with-grant-date.
+> **STATUS: ACCEPTED — all three stages (founder, 2026-07-07,
+> [PR #538](https://github.com/Pedal-Intelligence/saypi-userscript/pull/538): "All
+> stages approved").** Stage 1 is authorized now (operational once the #525 routine
+> activates). Stages 2 and 3 activate **only when their evidence bars below are
+> verifiably met** — the bars are the grant; nothing is skipped by the acceptance.
+> The AGENTS.md release paragraph carries the grant line. Promotion of the
+> secret-scan/path-guard checks (a Stage 2/3 precondition) is tracked in #554.
 
 ## Design constraints (non-negotiable)
 
