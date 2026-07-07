@@ -24,6 +24,8 @@ Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered
 - Request-contract changes with saypi-api that *require the server (saypi-api/saypi-saas) to also change* (new/changed fields/headers the server must parse, origin/CORS, auth). Backward-compatible *adoption* of a contract the server already supports is normal-gate.
 - MV2/MV3 manifest, permissions, or content-script injection scope (`wxt.config.ts`).
 
+This rule has a mechanical half: the **`path-guard` CI check** (`.github/workflows/path-guard.yaml` + `scripts/path-guard-lib.mjs`) fails any PR touching a founder-gated path — auth/JWT, `wxt.config.ts`, release machinery, `.github/workflows/`, and the guard itself — unless the PR carries the **`founder-approved` label, which is applied only on actual founder instruction** (issue #530). Honest limitation: agents operate under the founder's GitHub account, so the label is a ritual guarding against a *forgetful or confused* session, not impersonation. The check starts **advisory**; promoting it to a required branch-protection check is itself a gate change requiring founder sign-off.
+
 Beyond this founder-gated set, **`doc/codebase-caution-map.md`** maps the wider *quiet-and-costly* zone — changes that pass CI but break a real host, one browser, billing/speech-cache hashing, or an i18n key across 31 locales — with a verified "looks-mechanical-is-a-trap" catalog and a re-derivation rubric. Consult it (and give those diffs a second adversarial lens) when a change lands in that zone.
 
 **Hard guardrails (defense-in-depth):**
