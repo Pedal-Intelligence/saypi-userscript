@@ -49,11 +49,22 @@ runs on distinct, non-docs-only PRs.
 
 ## Notes / gotchas
 
-- **Temporary add-on install** (`driver.installAddon(dir, /*temporary=*/true)`)
-  needs no signing and accepts the unpacked build directory (selenium zips it
-  in memory). It survives until the browser session ends — exactly one smoke
-  run. `xpinstall.signatures.required=false` is still set explicitly so a
-  future switch to a packed `.xpi` doesn't trip signature checks.
+- **Temporary add-on install is by PATH, not by upload.** The smoke sends
+  geckodriver's `install addon` command with `path` = the unpacked build dir
+  (the about:debugging "Load Temporary Add-on" mechanism), **not**
+  `driver.installAddon(dir, true)`. The latter base64-zips the directory and
+  geckodriver stages it as a temp XPI that does not reliably survive for later
+  loads: on Firefox 140 ESR the background loads but every content-script
+  injection then fails with `NS_ERROR_FILE_ACCESS_DENIED` ("Unable to load
+  script: moz-extension://…/saypi-universal.js") — the first CI run caught
+  exactly this. Path-based install works on 140 ESR and 152; it needs no
+  signing (`xpinstall.signatures.required=false` is still set defensively) and
+  requires geckodriver + Firefox on the same host as the script (true locally
+  and on CI).
+- **Diagnosability:** `devtools.console.stdout.content=true` plus geckodriver
+  stdio inheritance stream the extension's console (background + content
+  script) into the smoke's own output — a content-script crash shows up in the
+  CI log instead of an opaque "button never appeared".
 - **Hermetic-ish:** Firefox has no `--host-resolver-rules`; the
   `network.dns.localDomains` pref resolves the bundle's real hostnames
   (`api.saypi.ai`, …) to loopback so nothing leaves the machine and fail-soft

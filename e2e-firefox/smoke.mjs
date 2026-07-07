@@ -25,6 +25,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Builder, By } from "selenium-webdriver";
 import firefox from "selenium-webdriver/firefox.js";
+import { Command } from "selenium-webdriver/lib/command.js";
 
 const root = resolve(import.meta.dirname, "..");
 const buildDir = resolve(root, ".output/firefox-mv2-dev");
@@ -78,10 +79,42 @@ async function buildDriver() {
   // doesn't silently start failing on signature checks.
   options.setPreference("xpinstall.signatures.required", false);
   options.setPreference("network.dns.localDomains", SINKHOLED_HOSTS);
+  // Echo page/extension console output to Firefox's stdout, and surface that
+  // stdout (via geckodriver) in this process's output — without this a
+  // content-script crash on CI is an opaque "button never appeared".
+  options.setPreference("devtools.console.stdout.content", true);
   if (process.env.FIREFOX_BIN) {
     options.setBinary(process.env.FIREFOX_BIN);
   }
-  return new Builder().forBrowser("firefox").setFirefoxOptions(options).build();
+  const service = new firefox.ServiceBuilder().setStdio("inherit");
+  return new Builder()
+    .forBrowser("firefox")
+    .setFirefoxOptions(options)
+    .setFirefoxService(service)
+    .build();
+}
+
+/**
+ * Temporary-install the UNPACKED build directory by filesystem path — the same
+ * mechanism as about:debugging's "Load Temporary Add-on".
+ *
+ * Deliberately NOT `driver.installAddon(dir, true)`: that base64-zips the
+ * directory and geckodriver stages the zip as a temp XPI which does not
+ * reliably survive for later loads — on Firefox 140 ESR the background loads
+ * (read at install time) but every content-script injection then fails with
+ * `NS_ERROR_FILE_ACCESS_DENIED` / "Unable to load script:
+ * moz-extension://…/content-scripts/saypi-universal.js" (reproduced locally;
+ * Firefox 152 happened to tolerate it). Passing `path` instead makes Firefox
+ * read the unpacked directory directly, which works on both. Requires
+ * geckodriver + Firefox on the same host as this script — true locally and on
+ * the CI runner.
+ */
+async function installUnpackedAddon(driver, dir) {
+  // "install addon" is registered on the driver's command executor by
+  // selenium-webdriver/firefox.js (POST /session/:id/moz/addon/install).
+  return driver.execute(
+    new Command("install addon").setParameter("path", dir).setParameter("temporary", true),
+  );
 }
 
 /** One decoration probe, evaluated in the page. */
@@ -130,15 +163,14 @@ async function main() {
         `geckodriver via ${process.env.FIREFOX_BIN ? "FIREFOX_BIN" : "system default"}`,
     );
 
-    // Temporary install of the UNPACKED build dir (selenium zips it in memory).
-    // A manifest Firefox rejects fails right here — that failure is itself the
-    // first assertion of this smoke.
+    // Temporary install of the UNPACKED build dir. A manifest Firefox rejects
+    // fails right here — that failure is itself the first assertion of this smoke.
     if (process.env.SAYPI_SMOKE_SKIP_INSTALL === "1") {
       // Fail-path seam: prove the smoke goes red (exit 1 + artifacts) when the
       // extension never decorates. Never set on CI.
       console.warn("[e2e-firefox] SAYPI_SMOKE_SKIP_INSTALL=1 — add-on NOT installed");
     } else {
-      const addonId = await driver.installAddon(buildDir, true);
+      const addonId = await installUnpackedAddon(driver, buildDir);
       console.log(`[e2e-firefox] temporary add-on installed (id: ${addonId})`);
     }
 
