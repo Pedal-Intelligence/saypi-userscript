@@ -137,6 +137,13 @@ interface StudioViewModel {
   /** Host-owned built-ins exist (e.g. Pi's) — they get a note, not cards. */
   hasBuiltins: boolean;
   currentId: string | null;
+  /**
+   * The voice the stage announces: the FRESH catalog entry for the current
+   * id when one exists (the stored preference can be a stale snapshot from
+   * before sample_url/languages existed), else the stored voice itself
+   * (built-ins and grandfathered voices aren't in the catalog).
+   */
+  stagedCurrent: SpeechSynthesisVoiceRemote | null;
   featuredIds: string[];
   /** The resolved pin set (server defaults ⊕ user overlay). */
   pinned: Set<string>;
@@ -289,6 +296,9 @@ export class VoicesController {
     // host's menu and never pinnable — the studio notes them, not cards them.
     const catalog = visible.filter((voice) => !voice.default);
     const hasBuiltins = visible.length > catalog.length;
+    const stagedCurrent = currentId
+      ? visible.find((voice) => voice.id === currentId) ?? data.current
+      : null;
 
     const featuredIds = serverFeaturedIds(catalog);
     const customized = data.overlay !== null;
@@ -327,6 +337,7 @@ export class VoicesController {
       catalog,
       hasBuiltins,
       currentId,
+      stagedCurrent,
       featuredIds,
       pinned,
       seated: shortlist.voices,
@@ -352,7 +363,7 @@ export class VoicesController {
       return;
     }
 
-    body.appendChild(this.renderStage(data.current, vm));
+    body.appendChild(this.renderStage(vm.stagedCurrent, vm));
     body.appendChild(this.renderSlotsSection(vm));
     body.appendChild(this.renderShelves(vm));
   }
@@ -376,7 +387,10 @@ export class VoicesController {
     } else {
       key = "voicesNoneAvailable";
     }
-    empty.setAttribute("data-i18n", key);
+    // data-i18n ONLY on substitution-free text: the bootstrap's replaceI18n()
+    // rewrites [data-i18n] textContent from the bare key, which would wipe
+    // the host name out of substituted strings (the "In 's menu" defect).
+    if (!substitutions) empty.setAttribute("data-i18n", key);
     empty.textContent = getMessage(key, substitutions);
     return empty;
   }
@@ -412,7 +426,7 @@ export class VoicesController {
 
     const eyebrow = document.createElement("div");
     eyebrow.classList.add("voice-stage-eyebrow");
-    eyebrow.setAttribute("data-i18n", "voicesSpeaksWith");
+    // No data-i18n: substituted text (replaceI18n would strip the host name).
     eyebrow.textContent = getMessage("voicesSpeaksWith", [vm.host.label]);
     meta.appendChild(eyebrow);
 
@@ -473,7 +487,7 @@ export class VoicesController {
     head.classList.add("voice-slots-head");
     const title = document.createElement("span");
     title.classList.add("voice-slots-title");
-    title.setAttribute("data-i18n", "voicesInHostMenu");
+    // No data-i18n on substituted text (replaceI18n clobber — see renderEmptyState).
     title.textContent = getMessage("voicesInHostMenu", [vm.host.label]);
     head.appendChild(title);
     const hint = document.createElement("span");
@@ -493,7 +507,6 @@ export class VoicesController {
     if (vm.overflowCount > 0) {
       const overflow = document.createElement("div");
       overflow.classList.add("voice-slots-overflow");
-      overflow.setAttribute("data-i18n", "voicesMenuOverflow");
       overflow.textContent = getMessage("voicesMenuOverflow", [
         String(vm.overflowCount),
         String(vm.host.menuCap),
@@ -504,7 +517,6 @@ export class VoicesController {
     if (vm.hasBuiltins) {
       const builtins = document.createElement("div");
       builtins.classList.add("voice-slots-builtins");
-      builtins.setAttribute("data-i18n", "voicesBuiltinsNote");
       builtins.textContent = getMessage("voicesBuiltinsNote", [vm.host.label]);
       section.appendChild(builtins);
     }

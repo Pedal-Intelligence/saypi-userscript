@@ -210,9 +210,10 @@ describe("VoicesController — stage", () => {
     const stage = q(container, ".voice-stage")!;
     expect(stage.style.getPropertyValue("--stage-from")).toBe("#2DD4BF");
     expect(stage.style.getPropertyValue("--stage-to")).toBe("#0E7490");
-    expect(q(container, ".voice-stage-eyebrow")!.dataset.i18n).toBe(
-      "voicesSpeaksWith"
-    );
+    // Substituted text must NOT carry data-i18n (replaceI18n clobber guard).
+    const eyebrow = q(container, ".voice-stage-eyebrow")!;
+    expect(eyebrow.textContent).toBe("voicesSpeaksWith");
+    expect(eyebrow.dataset.i18n).toBeUndefined();
     expect(q(container, ".voice-stage-name")!.textContent).toBe("Marin");
     expect(q(container, ".voice-stage-tagline")!.dataset.i18n).toBe(
       "voiceTagline_marin"
@@ -235,9 +236,9 @@ describe("VoicesController — stage", () => {
     expect(q(container, ".voice-stage-name")!.textContent).toBe("Aria");
     // built-ins are host-owned: never a card, but the note explains the menu
     expect(cardOf(container, "voice1")).toBeNull();
-    expect(q(container, ".voice-slots-builtins")!.dataset.i18n).toBe(
-      "voicesBuiltinsNote"
-    );
+    const builtins = q(container, ".voice-slots-builtins")!;
+    expect(builtins.textContent).toBe("voicesBuiltinsNote");
+    expect(builtins.dataset.i18n).toBeUndefined();
   });
 });
 
@@ -313,7 +314,8 @@ describe("VoicesController — menu slots (curateShortlist truth)", () => {
     // cap 4: onyx + alloy, coral, marin seated; nova pinned but waiting
     expect(slotIds(container)).toEqual(["onyx", "alloy", "coral", "marin"]);
     const overflow = q(container, ".voice-slots-overflow")!;
-    expect(overflow.dataset.i18n).toBe("voicesMenuOverflow");
+    expect(overflow.textContent).toBe("voicesMenuOverflow");
+    expect(overflow.dataset.i18n).toBeUndefined();
   });
 });
 
@@ -505,11 +507,116 @@ describe("VoicesController — states", () => {
       },
     });
     const { container } = await mount(deps);
-    expect(q(container, ".voice-studio-empty")!.dataset.i18n).toBe(
-      "voicesLoadError"
-    );
+    const error = q(container, ".voice-studio-empty")!;
+    expect(error.textContent).toBe("voicesLoadError");
+    expect(error.dataset.i18n).toBeUndefined(); // substituted → no data-i18n
     hostTab(container, "claude")!.click();
     await flushAsync();
     expect(cardOf(container, "cedar")).toBeTruthy();
+  });
+});
+
+// --- regression: replaceI18n() (settings bootstrap) rewrites every
+// [data-i18n] element's text WITHOUT substitutions. Any studio element whose
+// text carries substitutions must therefore NOT declare data-i18n, or a boot
+// race wipes the host name ("SPEAKS WITH", "In 's menu") and the overflow
+// numbers — the founder-observed defect after #520.
+import { replaceI18n } from "../../../entrypoints/settings/shared/i18n";
+
+describe("VoicesController — replaceI18n clobber immunity", () => {
+  // The global chrome.i18n mock ignores substitutions, which would make a
+  // clobber invisible (same text either way). Interpolate here so a
+  // substitution-less re-render produces observably different text.
+  let originalGetMessage: any;
+  beforeEach(() => {
+    const i18n = (globalThis as any).chrome.i18n;
+    originalGetMessage = i18n.getMessage.getMockImplementation();
+    i18n.getMessage.mockImplementation((key: string, subs?: string | string[]) => {
+      const list = subs === undefined ? [] : Array.isArray(subs) ? subs : [subs];
+      return list.length ? `${key}:${list.join(",")}` : key;
+    });
+  });
+  afterEach(() => {
+    (globalThis as any).chrome.i18n.getMessage.mockImplementation(
+      originalGetMessage
+    );
+  });
+
+  it("keeps substituted text intact when replaceI18n runs after the studio paints", async () => {
+    const deps = makeDeps({
+      pi: [
+        mkVoice("alloy"),
+        mkVoice("coral"),
+        mkVoice("marin"),
+        mkVoice("nova"),
+        mkVoice("onyx"),
+      ],
+      piCurrent: mkVoice("onyx"),
+      piOverlay: { pinned: ["alloy", "coral", "marin", "nova"], unpinned: [] },
+    });
+    const { container } = await mount(deps);
+    const textOf = (sel: string) => q(container, sel)!.textContent;
+    const before = {
+      eyebrow: textOf(".voice-stage-eyebrow"),
+      slotsTitle: textOf(".voice-slots-title"),
+      overflow: textOf(".voice-slots-overflow"),
+    };
+    replaceI18n();
+    expect(textOf(".voice-stage-eyebrow")).toBe(before.eyebrow);
+    expect(textOf(".voice-slots-title")).toBe(before.slotsTitle);
+    expect(textOf(".voice-slots-overflow")).toBe(before.overflow);
+  });
+
+  it("keeps the built-ins note and load-error text intact too", async () => {
+    const withBuiltins = makeDeps({
+      pi: [mkVoice("voice1", { default: true }), mkVoice("marin")],
+    });
+    const { container } = await mount(withBuiltins);
+    const builtinsBefore = q(container, ".voice-slots-builtins")!.textContent;
+    replaceI18n();
+    expect(q(container, ".voice-slots-builtins")!.textContent).toBe(builtinsBefore);
+
+    document.body.innerHTML = "";
+    const failing = makeDeps({
+      overrides: {
+        getVoices: vi.fn(async () => {
+          throw new Error("network");
+        }),
+      },
+    });
+    const { container: c2 } = await mount(failing);
+    const errBefore = q(c2, ".voice-studio-empty")!.textContent;
+    replaceI18n();
+    expect(q(c2, ".voice-studio-empty")!.textContent).toBe(errBefore);
+  });
+});
+
+describe("VoicesController — stale stored voice snapshot (stage freshness)", () => {
+  it("resolves the current voice through the catalog so the stage gets fresh metadata", async () => {
+    // The stored preference can be an old serialized snapshot (no sample_url,
+    // no languages); the catalog entry with the same id is authoritative.
+    const staleAsh = mkVoice("ash", {
+      sample_url: undefined,
+      languages: undefined,
+    });
+    const freshAsh = mkVoice("ash", { languages: ["en", "fr", "de"] });
+    const deps = makeDeps({
+      pi: [freshAsh, mkVoice("marin")],
+      piCurrent: staleAsh,
+    });
+    const { container } = await mount(deps);
+    // stage orb is playable (fresh sample_url), not a static mark
+    expect(q(container, ".voice-stage button[data-orb-voice='ash']")).toBeTruthy();
+    expect(q(container, ".voice-stage-play")).toBeTruthy();
+    expect(q(container, ".voice-stage-lang")).toBeTruthy();
+  });
+
+  it("still stages a stored voice absent from the catalog (built-in / grandfathered)", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin")],
+      piCurrent: mkVoice("voice1", { default: true, name: "Aria" }),
+    });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-stage-name")!.textContent).toBe("Aria");
   });
 });
