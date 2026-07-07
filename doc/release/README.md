@@ -36,6 +36,9 @@ auto-update**, and store-submission plumbing is founder-gated.
   Consumed by the packet generator and any future browser-driver / API path.
 - `doc/release/{chrome-web-store,edge-addons,firefox-amo}.md` — per-store submission detail.
 - `doc/release/version-policy.md` — the derive-don't-assume version rule.
+- `doc/release/kill-switch-policy.md` — the **kill-switch-by-default rule**: which changes
+  must ship behind a server-side flag before store release (crisp test + the OpenAI-voices
+  precedent). The packet's release-level "Kill-switch coverage" check comes from here.
 - `doc/release/brand-voice.md` — Say, Pi voice guide for the "what's new" copy.
 
 ## Commands
@@ -109,7 +112,10 @@ request (`tools/i18n/i18n-translate-release-text.py`).
 ### 4. Generate the submission packet
 `node scripts/release.mjs packet` → `dist/submission-packet-v<x>.md`: one section per store
 with the exact upload file, the "what's new" text, the declarations to re-confirm, and a
-click-by-click checklist (driven by `stores.json`).
+click-by-click checklist (driven by `stores.json`). The packet opens with a release-level
+**Kill-switch coverage** check: every payload change with a user-visible failure mode must be
+neutralizable server-side or its residual risk explicitly accepted —
+per [`kill-switch-policy.md`](kill-switch-policy.md). Work it before submitting anywhere.
 
 ### 5. Submit (founder, per store) ⛔
 Work the packet top to bottom — **Chrome → Edge → Firefox**, one versioned build, same day.
