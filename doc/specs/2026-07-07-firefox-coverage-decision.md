@@ -9,8 +9,8 @@
 
 Firefox ships as a first-class store target (AMO, `gecko@saypi.ai`) but has **zero browser-level
 automated coverage**: the Layer 3 E2E harness (`e2e/`) is Chromium-only because Playwright cannot
-load Firefox extensions, and there is no Firefox job in CI (`.github/workflows/` has only
-`test.yaml` and `e2e.yaml`). An entire shipped browser rides on unit-test faith plus WXT's
+load Firefox extensions, and there is no Firefox job in CI (of the workflows in
+`.github/workflows/`, only `test.yaml` and `e2e.yaml` run tests — neither in Firefox). An entire shipped browser rides on unit-test faith plus WXT's
 build-time manifest checks. #527 frames the decision: (a) add a Firefox smoke-test lane for the
 MV2 build we ship today, or (b) migrate Firefox to MV3 and collapse the dual-manifest burden.
 
