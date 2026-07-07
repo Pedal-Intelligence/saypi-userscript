@@ -1,0 +1,53 @@
+# path-guard — mechanical check for founder-gated (high-blast-radius) paths.
+#
+# Fails any PR that touches a founder-gated path (auth/JWT, wxt.config.ts,
+# release machinery, .github/workflows/, the guard itself — the list lives in
+# scripts/path-guard-lib.mjs) unless the PR carries the `founder-approved`
+# label, which is applied only on actual founder instruction. This is the
+# mechanical half of AGENTS.md's "High-blast-radius changes" rule (issue #530).
+#
+# Re-runs on label changes so applying/removing `founder-approved` immediately
+# flips the check. The classifier scripts run from the BASE branch checkout, so
+# a PR cannot weaken the *classifier* that judges it. Residual limitation, stated
+# honestly: on pull_request events GitHub runs THIS workflow file from the PR's
+# merge commit, so a PR that guts this YAML in place self-greens its own run
+# (the edit is still a gated path — but the gutted run is what reports status).
+# That is inherent to pull_request-triggered checks and acceptable under the
+# guard's threat model: a forgetful/confused session, not an adversary (see the
+# AGENTS.md paragraph, which carries the same candor about impersonation).
+#
+# Advisory for now; promotion to a required branch-protection check is a gate
+# change that needs founder sign-off (tracked in #530).
+name: path-guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  path-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the BASE branch (trusted guard code, not the PR's)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Classify the PR's changed files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FOUNDER_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'founder-approved') }}
+        run: |
+          if [ ! -f scripts/path-guard.mjs ]; then
+            echo "path-guard: guard script not on the base branch yet (bootstrap) — skipping."
+            exit 0
+          fi
+          # Emit previous_filename too: a rename's OLD path must be classified,
+          # or renaming a file out of a gated directory would bypass the guard.
+          gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+            --paginate --jq '.[] | .filename, (.previous_filename // empty)' \
+            | node scripts/path-guard.mjs
