@@ -54,6 +54,7 @@
     "release:finalize": "node scripts/release.mjs finalize",
     "release:submit": "node scripts/release.mjs submit",
     "release:status": "node scripts/store-status.mjs",
+    "release:freshness": "node scripts/store-status.mjs --freshness",
     "prebuild:firefox": "node scripts/validate-env.js --file .env.production --env production && npm run copy-onnx",
     "build:firefox": "wxt build -b firefox",
     "source-archive": "git archive --format=zip -o source-code.zip HEAD",

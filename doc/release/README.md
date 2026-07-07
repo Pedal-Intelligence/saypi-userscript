@@ -28,8 +28,10 @@ auto-update**, and store-submission plumbing is founder-gated.
 - `scripts/release-lib.mjs` — pure, unit-tested logic (version decision, payload
   categorization, changelog digest, packet rendering). Tests: `test/scripts/release-lib.spec.ts`.
 - `scripts/store-status.mjs` / `scripts/store-status-lib.mjs` — read-only per-store review
-  status check (`npm run release:status`, #529; see "Checking review status" below).
-  Tests: `test/scripts/store-status-lib.spec.ts`.
+  status check (`npm run release:status`, #529; see "Checking review status" below) and the
+  credential-freshness check (`npm run release:freshness`, #534; rotation runbook in
+  [`publishing-credentials.md`](publishing-credentials.md) § "Rotation & lifetimes").
+  Tests: `test/scripts/store-status-lib.spec.ts`, `test/scripts/credential-freshness.spec.ts`.
 - `doc/release/stores.json` — single source of truth for store identity + per-store facts.
   Consumed by the packet generator and any future browser-driver / API path.
 - `doc/release/{chrome-web-store,edge-addons,firefox-amo}.md` — per-store submission detail.
@@ -65,6 +67,7 @@ npm run release:finalize -- <version> --yes  # = … finalize <version> --yes
 npm run release:submit -- <store> --dry-run  # ⛔ #412: auth-check a store's publishing API
 npm run release:submit -- <store> --yes      # ⛔ #412: headless API submission (founder-only)
 npm run release:status                       # read-only: review/publish status per store (#529)
+npm run release:freshness                    # read-only: publishing-credential health per store (#534)
 ```
 
 Run from the **main checkout on `main`** — a real release is cut from main and the build
