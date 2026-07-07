@@ -1,0 +1,57 @@
+# Gitleaks configuration for saypi-userscript.
+# Used by CI (.github/workflows/secret-scan.yaml) and local runs — see
+# doc/secret-scanning.md.
+#
+# Discipline: the baseline is CLEAN — `gitleaks dir . --config .gitleaks.toml`
+# must exit 0 on the tree. Every allowlist entry must be as narrow as it can
+# be while staying effective, and MUST carry a comment saying what it matches,
+# why it is safe, and how it was verified. Never allowlist a real credential:
+# if the scan fires on something real, rotate it first, then remove it from
+# the tree (doc/secret-scanning.md, "When the scan fires").
+
+title = "saypi-userscript"
+
+[extend]
+# Start from gitleaks' built-in default ruleset; entries below only narrow it.
+useDefault = true
+
+# --- Scrubbed-fixture placeholder JWT ---------------------------------------
+# The recorded ChatGPT DOM fixtures (doc/dom/chatgpt/*.html) originally
+# captured real session tokens; PR #541 replaced them with one exact fake JWT:
+#   header    {"alg":"none"}
+#   payload   {"sub":"REDACTED","note":"scrubbed-fixture"}
+#   signature the literal string "SCRUBBED"
+# It cannot authenticate anything, but it still trips the `jwt` rule. We
+# allowlist the exact placeholder string (regexTarget "line" so the match is
+# independent of which fragment a rule captures as the secret). A future
+# fixture capture that embeds a REAL token does not contain this string and
+# still fails the scan.
+[[allowlists]]
+description = "Scrubbed-fixture placeholder JWT (alg:none / sub REDACTED / sig SCRUBBED) from PR #541"
+regexTarget = "line"
+regexes = [
+  '''eyJhbGciOiJub25lIn0\.eyJzdWIiOiJSRURBQ1RFRCIsIm5vdGUiOiJzY3J1YmJlZC1maXh0dXJlIn0\.SCRUBBED''',
+]
+
+# --- generic-api-key inside recorded host-page DOM fixtures ------------------
+# doc/dom/**/*.html are verbatim captures of third-party host pages (ChatGPT,
+# Claude, Pi). Their serialized client-side app state contains many
+# high-entropy PUBLIC client-delivered values — A/B experiment variant hashes,
+# feature-gate ids — sitting next to credential-ish keyword names (one flag is
+# literally called "..._leaked_credential_check"), which is exactly what the
+# keyword+entropy `generic-api-key` heuristic fires on. Verified 2026-07-07:
+# each such finding decoded to a public experiment-variant id in a
+# '"..._variant",[...]' list, not a credential; and gitleaks shadows
+# overlapping findings, so suppressing one exact string just surfaces the next
+# candidate in the same 94k-char blob — exact-string allowlisting is unbounded
+# here. Scope: ONLY the generic-api-key rule, ONLY these fixture paths. Every
+# specific rule (jwt, openai-api-key, aws-*, github-*, private-key, ...) still
+# applies to these files, so a real captured token still fails the scan.
+# Belt-and-braces: the DOM capture recorder is to redact tokens/PII at capture
+# time (doc/secret-scanning.md, "Fixture hygiene").
+[[allowlists]]
+description = "generic-api-key keyword+entropy false positives in recorded third-party DOM fixtures (public experiment/gate ids)"
+targetRules = ["generic-api-key"]
+paths = [
+  '''doc/dom/.*\.html$''',
+]
