@@ -15,10 +15,11 @@ time. The easiest way: drop them in a local, gitignored **`.env.publish`** at th
 file. The tool reads only `process.env` and `.env.publish`; it **never** reads `.env.production`,
 and it logs only the *names* of the keys it loaded — never their values.
 
-The same credentials (same env var names, same `.env.publish` auto-load) also power the
-**read-only** review-status check `npm run release:status` (#529) — see "Checking review
-status" in [`README.md`](README.md). That command never uploads or publishes; a store whose
-vars are absent is simply reported SKIPPED.
+The same credentials (same env var names, same `.env.publish` auto-load) also power two
+**read-only** checks: the review-status check `npm run release:status` (#529 — see "Checking
+review status" in [`README.md`](README.md)) and the credential-freshness check
+`npm run release:freshness` (#534 — see "Rotation & lifetimes" below). Neither ever uploads
+or publishes; a store whose vars are absent is simply reported SKIPPED.
 
 ## Usage
 
@@ -88,6 +89,7 @@ change visibility (fine — Say, Pi exists).
 | `EDGE_PRODUCT_ID` | `824c36fe-fd03-4656-8d32-67b0ae2cbdad` |
 | `EDGE_API_KEY` | API key — Partner Center → Edge → **Publish API** → Create API credentials |
 | `EDGE_CLIENT_ID` | Client ID (same page) |
+| `EDGE_KEY_ISSUED` | *(optional)* the date the current API key was created, e.g. `2026-07-07` — the API can't report a key's expiry, so `release:freshness` computes the 72-day countdown from this. Update it every rotation. |
 
 **Auth is v1.1** (header `Authorization: ApiKey <key>`, `X-ClientID: <id>`); the old v1 Entra/OAuth
 model ended 2024-12-31. ⚠️ **API keys expire every ~72 days** — a `401` means "rotate the key in
@@ -106,6 +108,78 @@ Create both at `https://addons.mozilla.org/developers/addon/api/key/`. Submissio
 `--upload-source-code=source-code.zip` satisfies the minified-build source requirement; build steps
 go into the reviewer notes automatically. Listed submissions enter the AMO review queue (not
 instantly public). Ensure `.output/firefox-mv2/manifest.json` carries `gecko@saypi.ai`.
+
+## Rotation & lifetimes (#534)
+
+**Ownership:** the **founder rotates** every publishing credential (each rotation needs a
+dashboard login only the founder holds); the **freshness check reminds**. The scheduled
+weekly maintenance routine (#525) runs `npm run release:freshness -- --json` and pings the
+founder via the awaiting-founder notification pattern when anything comes back `EXPIRED` or
+`EXPIRING_SOON` — so an expiring token becomes a calm heads-up, not a release-day surprise.
+
+```bash
+npm run release:freshness            # human table: per-store credential health
+npm run release:freshness -- --json  # machine-readable, for the #525 routine
+```
+
+The check reuses the exact read-only probes `release:status` already performs — a real CWS
+refresh-token exchange, the Edge dummy-UUID poll probe, a JWT-authed AMO request — and adds
+a **days-since-last-verified** column (state in the gitignored `.credential-freshness.json`;
+timestamps only, never values) plus, for Edge, an **expiry countdown** computed from
+`EDGE_KEY_ISSUED` (see the env-var table above — the Edge API cannot report a key's expiry
+date, so the issued date is recorded manually at each rotation). Exit code: `1` only on
+`EXPIRED`/`ERROR`; `SKIPPED` (no creds available, e.g. an agent checkout) and
+`EXPIRING_SOON` exit `0`.
+
+### 🟢 Chrome — `CWS_REFRESH_TOKEN` (OAuth refresh token)
+
+- **Lifetime hinges on the OAuth app's publishing status** (verified against
+  [Google's OAuth 2.0 docs](https://developers.google.com/identity/protocols/oauth2#expiration),
+  2026-07): an app left in **"Testing"** gets refresh tokens that **expire in 7 days**; an
+  app **"In production"** gets long-lived tokens with **no scheduled expiry**. This runbook's
+  setup (above) directs a self-owned publishing client to be **published to production**, so
+  the intended steady state is long-lived — but a working exchange today can't prove which
+  status the app has. Confirm it in **Google Auth Platform → Audience → Publishing status**;
+  if it still says Testing, publish to production once and remint.
+- **Even a production token dies on:** 6 months of non-use (the weekly freshness run itself
+  keeps it warm), revocation at https://myaccount.google.com/permissions, or the
+  **100-refresh-tokens-per-client-per-account cap** (minting the 101st silently invalidates
+  the oldest — don't script token minting).
+- **Rotation steps:** § "Minting `CWS_REFRESH_TOKEN`" above (Google Cloud Console → OAuth
+  Playground with your own client → exchange → paste into `.env.publish`). ~5 minutes.
+- **Failure signature:** `release:status` / `release:submit --dry-run` → chrome `ERROR:
+  auth failed: Token has been expired or revoked` (`invalid_grant`);
+  `release:freshness` → chrome `EXPIRED` with the remint pointer. A
+  `401 unauthorized_client` instead means the token was presented with a *different*
+  client's id/secret — remint with the current client, don't hunt for an expiry.
+
+### 🔵 Edge — `EDGE_API_KEY` (Publish-API key)
+
+- **Lifetime: 72 days, fixed** — Microsoft cut keys from 2 years to 72 days with the v1.1
+  API-key model ([Edge blog, 2025-01](https://blogs.windows.com/msedgedev/2025/01/08/enhanced-security-for-extensions-with-publish-api-next-steps/):
+  *"The API key is valid for 72 days"*). There is **no programmatic renewal**; Microsoft
+  emails reminders before expiry, and Partner Center shows each key's expiry date.
+- **Rotation steps:** [Partner Center](https://partner.microsoft.com/dashboard/microsoftedge/publishapi)
+  → Microsoft Edge → **Publish API** → create a new API key → update `EDGE_API_KEY` **and
+  `EDGE_KEY_ISSUED`** in `.env.publish`. ~2 minutes, every ~10 weeks.
+- **Failure signature:** any API call (including the read-only probe) returns **HTTP 401**
+  — `release:status` → edge `ERROR: publish-API credentials rejected (401)…`;
+  `release:freshness` → edge `EXPIRED`. With `EDGE_KEY_ISSUED` set, the freshness check
+  flags `EXPIRING_SOON` from 14 days out — i.e. *before* the 401 ever happens.
+
+### 🟠 Firefox — `WEB_EXT_API_KEY` / `WEB_EXT_API_SECRET` (AMO JWT issuer + secret)
+
+- **Lifetime: long-lived.** Mozilla documents **no expiry** for the issuer/secret pair
+  ([AMO API auth docs](https://mozilla.github.io/addons-server/topics/api/auth.html)) —
+  they stay valid until regenerated/revoked at
+  https://addons.mozilla.org/developers/addon/api/key/. (Each *request* signs a fresh JWT
+  from the secret, capped at 5 minutes — that's per-call, not a credential lifetime.)
+- **Rotation steps:** none on a schedule; regenerate at the key-management page above only
+  on suspected exposure, then update both vars in `.env.publish`.
+- **Failure signature:** authenticated AMO requests return **HTTP 401** —
+  `release:freshness` → firefox `EXPIRED` with the regenerate pointer. (`release:status`
+  can partially mask a bad secret because the addon-detail endpoint is public; the
+  freshness probe deliberately uses an auth-*required* endpoint.)
 
 ## How `--dry-run` checks each store
 - **Chrome:** real OAuth token exchange + a read-only `fetchStatus` (prints the current published version).

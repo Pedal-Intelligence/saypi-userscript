@@ -16,7 +16,7 @@
  * Credential env-var sets are reused from release-lib.mjs — same names `release:submit` uses.
  */
 import { createHmac, randomUUID } from "node:crypto";
-import { CWS_ENV, EDGE_ENV, AMO_ENV, compareSemver } from "./release-lib.mjs";
+import { CWS_ENV, EDGE_ENV, AMO_ENV, compareSemver, cwsErrorMessage } from "./release-lib.mjs";
 
 export const STATUS_STORES = ["chrome", "edge", "firefox"];
 
@@ -256,4 +256,273 @@ export function amoAuthHeader({ issuer, secret, now = new Date(), jti = randomUU
 export function edgeCrxIdFromListingUrl(url = "") {
   const seg = String(url).split("?")[0].split("/").filter(Boolean).pop() || "";
   return /^[a-p]{32}$/.test(seg) ? seg : null;
+}
+
+// ── Credential freshness (#534) ──────────────────────────────────────────────────────
+//
+// Pure classification for `store-status.mjs --freshness` (npm run release:freshness):
+// per-store credential health from the SAME read-only probes the status check already
+// performs (CWS refresh-token exchange, Edge dummy-UUID probe, AMO JWT-authed GET),
+// plus a computed Edge key-expiry countdown from the founder-recorded EDGE_KEY_ISSUED
+// (the Edge API exposes no way to read a key's expiry date). Lifetime facts + rotation
+// steps live in doc/release/publishing-credentials.md ("Rotation & lifetimes").
+
+/** Edge Publish-API keys expire every 72 days (MS Edge blog, 2025-01-08; was 2 years). */
+export const EDGE_KEY_LIFETIME_DAYS = 72;
+
+/** The credential that actually rotates, per store — what a freshness verdict is about. */
+export const FRESHNESS_CREDENTIAL = {
+  chrome: "CWS_REFRESH_TOKEN",
+  edge: "EDGE_API_KEY",
+  firefox: "WEB_EXT_API_KEY/SECRET",
+};
+
+/**
+ * @typedef {Object} FreshnessRecord
+ * @property {"chrome"|"edge"|"firefox"} store
+ * @property {string} credential        The rotating credential this verdict is about
+ * @property {"OK"|"EXPIRING_SOON"|"EXPIRED"|"SKIPPED"|"ERROR"} status
+ * @property {boolean} skipped          true when credentials were missing (no request made)
+ * @property {string|null} reason       why the credential is not simply OK
+ * @property {string[]} notes
+ * @property {string|null} expiresAt        (Edge only) computed from EDGE_KEY_ISSUED
+ * @property {number|null} daysUntilExpiry  (Edge only) computed from EDGE_KEY_ISSUED
+ * @property {string|null} lastVerifiedAt   from the freshness state file (applyFreshnessHistory)
+ * @property {number|null} daysSinceVerified
+ */
+
+/** @returns {FreshnessRecord} */
+function baseFreshness(store) {
+  return {
+    store,
+    credential: FRESHNESS_CREDENTIAL[store] || store,
+    status: "OK",
+    skipped: false,
+    reason: null,
+    notes: [],
+    expiresAt: null,
+    daysUntilExpiry: null,
+    lastVerifiedAt: null,
+    daysSinceVerified: null,
+  };
+}
+
+/**
+ * Record for a store we did NOT probe because its credentials are missing. Not an error.
+ * @returns {FreshnessRecord}
+ */
+export function freshnessSkipped(store, missing = []) {
+  return {
+    ...baseFreshness(store),
+    skipped: true,
+    status: "SKIPPED",
+    reason: `missing env: ${missing.join(", ")} (see doc/release/publishing-credentials.md)`,
+  };
+}
+
+/**
+ * Record for a probe that failed for a non-credential reason (network, unexpected shape).
+ * @returns {FreshnessRecord}
+ */
+export function freshnessError(store, message) {
+  return { ...baseFreshness(store), status: "ERROR", reason: message };
+}
+
+/**
+ * Classify the Chrome OAuth refresh-token exchange (the POST to CWS_TOKEN_URL).
+ * A success proves the token works TODAY — it cannot distinguish a long-lived
+ * "In production" token from a "Testing" one that dies in 7 days, so an OK carries
+ * that caveat as a note. Never copies token values into the record.
+ * @param {object} json     token-endpoint response body
+ * @param {boolean} httpOk  res.ok
+ * @returns {FreshnessRecord}
+ */
+export function classifyCwsTokenFreshness(json = {}, httpOk = false) {
+  const r = baseFreshness("chrome");
+  if (httpOk && json.access_token) {
+    r.notes.push(
+      "exchange succeeded — does NOT prove the token is long-lived: confirm the OAuth app is " +
+        '"In production" (Google Auth Platform → Audience), else the token expires in 7 days',
+    );
+    return r;
+  }
+  if (json.error === "invalid_grant") {
+    r.status = "EXPIRED";
+    r.reason =
+      "refresh token expired or revoked (invalid_grant) — remint via the OAuth Playground " +
+      '(publishing-credentials.md § "Minting CWS_REFRESH_TOKEN")';
+    return r;
+  }
+  if (json.error === "unauthorized_client") {
+    r.status = "EXPIRED";
+    r.reason =
+      "token/client mismatch (unauthorized_client) — id, secret, and refresh token must all come " +
+      "from the same OAuth client; remint the token with the current client";
+    return r;
+  }
+  r.status = "ERROR";
+  r.reason = `token exchange failed: ${cwsErrorMessage(json)}`;
+  return r;
+}
+
+/**
+ * Classify the Edge dummy-UUID probe (GET on a poll URL — the same probe `release:status`
+ * and `release:submit --dry-run` use). 401/403 = key rejected; any other response (404 for
+ * the dummy operation id is normal) means the key was accepted.
+ * @param {number} httpStatus
+ * @returns {FreshnessRecord}
+ */
+export function classifyEdgeProbeFreshness(httpStatus) {
+  const r = baseFreshness("edge");
+  if (httpStatus === 401 || httpStatus === 403) {
+    r.status = "EXPIRED";
+    r.reason = `key rejected (HTTP ${httpStatus}) — EDGE_API_KEY expires every ~${EDGE_KEY_LIFETIME_DAYS} days; create a new key in Partner Center → Edge → Publish API (then update EDGE_KEY_ISSUED)`;
+    return r;
+  }
+  if (httpStatus >= 500) {
+    r.status = "ERROR";
+    r.reason = `probe failed server-side (HTTP ${httpStatus}) — no credential verdict`;
+    return r;
+  }
+  r.notes.push(`probe accepted (HTTP ${httpStatus})`);
+  return r;
+}
+
+/**
+ * Classify an AMO request that REQUIRES developer auth (the versions list with
+ * filter=all_with_unlisted). 2xx proves the JWT issuer/secret work; 401/403 = rejected.
+ * @param {number} httpStatus
+ * @returns {FreshnessRecord}
+ */
+export function classifyAmoProbeFreshness(httpStatus) {
+  const r = baseFreshness("firefox");
+  if (httpStatus >= 200 && httpStatus < 300) return r;
+  if (httpStatus === 401 || httpStatus === 403) {
+    r.status = "EXPIRED";
+    r.reason = `JWT credentials rejected (HTTP ${httpStatus}) — regenerate at https://addons.mozilla.org/developers/addon/api/key/`;
+    return r;
+  }
+  r.status = "ERROR";
+  r.reason = `authenticated probe failed (HTTP ${httpStatus}) — no credential verdict`;
+  return r;
+}
+
+/**
+ * Compute the Edge key expiry countdown from the founder-recorded issue date
+ * (EDGE_KEY_ISSUED in .env.publish) — the API can't report it. Null when absent/invalid.
+ * @param {{issued?: string, now?: Date, lifetimeDays?: number}} args
+ * @returns {{issuedAt: string, expiresAt: string, daysUntilExpiry: number, expired: boolean}|null}
+ */
+export function edgeKeyCountdown({ issued, now = new Date(), lifetimeDays = EDGE_KEY_LIFETIME_DAYS } = {}) {
+  const issuedMs = Date.parse(issued ?? "");
+  if (!Number.isFinite(issuedMs)) return null;
+  const expiresMs = issuedMs + lifetimeDays * DAY_MS;
+  return {
+    issuedAt: new Date(issuedMs).toISOString(),
+    expiresAt: new Date(expiresMs).toISOString(),
+    daysUntilExpiry: Math.floor((expiresMs - now.getTime()) / DAY_MS),
+    expired: now.getTime() >= expiresMs,
+  };
+}
+
+/**
+ * Merge the Edge countdown into a probe record. An expired countdown escalates to
+ * EXPIRED even when the probe passed (the probe can lag the actual cutoff); a countdown
+ * inside the warn window escalates OK → EXPIRING_SOON. A probe-EXPIRED verdict is never
+ * downgraded. Without a countdown the record stays probe-result-only, with a note.
+ * @param {FreshnessRecord} record
+ * @param {ReturnType<typeof edgeKeyCountdown>} countdown
+ * @param {{warnDays?: number}} [opts]
+ * @returns {FreshnessRecord}
+ */
+export function applyEdgeCountdown(record, countdown, { warnDays = 14 } = {}) {
+  const out = { ...record, notes: [...record.notes] };
+  if (!countdown) {
+    out.notes.push("EDGE_KEY_ISSUED not set — expiry countdown unavailable (probe result only)");
+    return out;
+  }
+  out.expiresAt = countdown.expiresAt;
+  out.daysUntilExpiry = countdown.daysUntilExpiry;
+  if (out.status !== "OK") return out;
+  if (countdown.expired) {
+    out.status = "EXPIRED";
+    out.reason = `key issued ${countdown.issuedAt.slice(0, 10)} is past its ${EDGE_KEY_LIFETIME_DAYS}-day lifetime — rotate in Partner Center (then update EDGE_KEY_ISSUED)`;
+  } else if (countdown.daysUntilExpiry <= warnDays) {
+    out.status = "EXPIRING_SOON";
+    out.reason = `key expires in ${countdown.daysUntilExpiry} day(s) (${countdown.expiresAt.slice(0, 10)}) — rotate in Partner Center soon`;
+  }
+  return out;
+}
+
+/** A record whose probe actually verified the credential works today. */
+function isVerified(record) {
+  return record.status === "OK" || record.status === "EXPIRING_SOON";
+}
+
+/**
+ * Annotate records with last-verified history from the freshness state file
+ * ({store: {lastVerifiedAt}}). A store verified THIS run reads as verified now;
+ * anything else carries the previous timestamp (or null — never invented).
+ * @param {FreshnessRecord[]} records
+ * @param {Record<string, {lastVerifiedAt?: string}>} [state]
+ * @param {Date} [now]
+ * @returns {FreshnessRecord[]}
+ */
+export function applyFreshnessHistory(records, state = {}, now = new Date()) {
+  return records.map((r) => {
+    const prev = state[r.store]?.lastVerifiedAt ?? null;
+    const at = isVerified(r) ? now.toISOString() : prev;
+    return {
+      ...r,
+      lastVerifiedAt: at,
+      daysSinceVerified: at ? Math.floor((now.getTime() - Date.parse(at)) / DAY_MS) : null,
+    };
+  });
+}
+
+/**
+ * Next contents for the freshness state file: verified-this-run stores stamped `now`,
+ * everything else keeps its previous entry.
+ * @param {Record<string, {lastVerifiedAt?: string}>} state
+ * @param {FreshnessRecord[]} records
+ * @param {Date} [now]
+ */
+export function nextFreshnessState(state = {}, records = [], now = new Date()) {
+  const next = { ...state };
+  for (const r of records) {
+    if (isVerified(r)) next[r.store] = { lastVerifiedAt: now.toISOString() };
+  }
+  return next;
+}
+
+/** Compact fixed-width freshness table: store, credential, status, verified age, expiry. */
+export function renderFreshnessTable(records = []) {
+  const headers = ["store", "credential", "status", "last verified", "expires"];
+  const rows = records.map((r) => [
+    r.store,
+    r.credential,
+    r.status,
+    r.lastVerifiedAt
+      ? `${r.lastVerifiedAt.slice(0, 10)}${r.daysSinceVerified ? ` (${r.daysSinceVerified}d ago)` : " (today)"}`
+      : "never",
+    r.expiresAt
+      ? `${r.expiresAt.slice(0, 10)}${r.daysUntilExpiry != null ? ` (${r.daysUntilExpiry}d)` : ""}`
+      : "—",
+  ]);
+  const widths = headers.map((h, i) => Math.max(h.length, ...rows.map((row) => row[i].length)));
+  const line = (cells) => cells.map((c, i) => c.padEnd(widths[i])).join("  ");
+  const out = [line(headers), line(widths.map((w) => "─".repeat(w))), ...rows.map(line)];
+
+  const details = records
+    .flatMap((r) => [
+      ...(r.reason ? [`${r.store}: ${r.reason}`] : []),
+      ...(r.notes || []).map((n) => `${r.store}: ${n}`),
+    ])
+    .map((d) => `  · ${d}`);
+  return [...out, ...(details.length ? ["", ...details] : [])].join("\n");
+}
+
+/** 1 when any credential is EXPIRED or a probe ERRORed; SKIPPED/EXPIRING_SOON stay 0. */
+export function freshnessExitCode(records = []) {
+  return records.some((r) => r.status === "EXPIRED" || r.status === "ERROR") ? 1 : 0;
 }

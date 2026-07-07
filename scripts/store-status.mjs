@@ -3,6 +3,15 @@
  * store-status — READ-ONLY store-review status check for all three web stores (#529).
  *
  *   node scripts/store-status.mjs [--json] [--stall-days N]     (npm run release:status)
+ *   node scripts/store-status.mjs --freshness [--json]          (npm run release:freshness, #534)
+ *
+ * `--freshness` reuses the same per-store credential probes but reports CREDENTIAL
+ * health instead of review state: does each publishing credential still work, when was
+ * it last verified (state kept in the gitignored .credential-freshness.json), and — for
+ * Edge, whose ~72-day API-key expiry the API can't report — a countdown computed from
+ * the founder-recorded EDGE_KEY_ISSUED. Rotation runbook: doc/release/publishing-
+ * credentials.md ("Rotation & lifetimes"). Exit 1 only on EXPIRED/ERROR; SKIPPED and
+ * EXPIRING_SOON exit 0 (the #525 weekly routine consumes --json and pings the founder).
  *
  * For each store in doc/release/stores.json it hits read-only status endpoints with the
  * SAME credentials `release:submit` uses (env vars / .env.publish — see
@@ -18,7 +27,7 @@
  * It reads only process.env / .env.publish (never .env.production) and logs only the
  * NAMES of env vars, never values.
  */
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve as resolvePath } from "node:path";
@@ -50,6 +59,17 @@ import {
   amoAuthHeader,
   edgeCrxIdFromListingUrl,
   isFinalSemver,
+  freshnessSkipped,
+  freshnessError,
+  classifyCwsTokenFreshness,
+  classifyEdgeProbeFreshness,
+  classifyAmoProbeFreshness,
+  edgeKeyCountdown,
+  applyEdgeCountdown,
+  applyFreshnessHistory,
+  nextFreshnessState,
+  renderFreshnessTable,
+  freshnessExitCode,
 } from "./store-status-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -165,11 +185,106 @@ async function checkFirefox(env, stores) {
 
 const CHECKS = { chrome: checkChrome, edge: checkEdge, firefox: checkFirefox };
 
+// ── Per-store credential-freshness probes (#534 — all read-only) ─────────────────────
+
+async function probeChromeFreshness(env) {
+  const e = requireEnv(CWS_ENV, env);
+  const { res, json } = await getJson(CWS_TOKEN_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: cwsTokenBody({ clientId: e.CWS_CLIENT_ID, clientSecret: e.CWS_CLIENT_SECRET, refreshToken: e.CWS_REFRESH_TOKEN }),
+  });
+  return classifyCwsTokenFreshness(json, res.ok);
+}
+
+async function probeEdgeFreshness(env) {
+  const e = requireEnv(EDGE_ENV, env);
+  const probe = await fetch(edgeUploadPollUrl(e.EDGE_PRODUCT_ID, "00000000-0000-0000-0000-000000000000"), {
+    headers: edgeHeaders({ apiKey: e.EDGE_API_KEY, clientId: e.EDGE_CLIENT_ID }),
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  });
+  // EDGE_KEY_ISSUED (optional, .env.publish): the day the key was created in Partner
+  // Center — the API cannot report a key's expiry date, so the countdown is manual.
+  return applyEdgeCountdown(classifyEdgeProbeFreshness(probe.status), edgeKeyCountdown({ issued: env.EDGE_KEY_ISSUED }));
+}
+
+async function probeFirefoxFreshness(env, stores) {
+  const e = requireEnv(AMO_ENV, env);
+  const guid = stores?.stores?.firefox?.id || "gecko@saypi.ai";
+  // The unlisted-inclusive versions list REQUIRES developer auth, so it's a true
+  // credential probe (the public addon detail would succeed with a missing header).
+  const url = `https://addons.mozilla.org/api/v5/addons/addon/${encodeURIComponent(guid)}/versions/?filter=all_with_unlisted&page_size=1`;
+  const res = await fetch(url, {
+    headers: { Authorization: amoAuthHeader({ issuer: e.WEB_EXT_API_KEY, secret: e.WEB_EXT_API_SECRET }) },
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  });
+  return classifyAmoProbeFreshness(res.status);
+}
+
+const FRESHNESS_PROBES = { chrome: probeChromeFreshness, edge: probeEdgeFreshness, firefox: probeFirefoxFreshness };
+
+// Last-verified history — timestamps only, no secrets; gitignored local state.
+const FRESHNESS_STATE_PATH = join(repoRoot, ".credential-freshness.json");
+
+function loadFreshnessState() {
+  try {
+    return existsSync(FRESHNESS_STATE_PATH) ? JSON.parse(readFileSync(FRESHNESS_STATE_PATH, "utf8")) : {};
+  } catch {
+    return {};
+  }
+}
+
+async function runFreshness(asJson) {
+  const now = new Date();
+  const stores = existsSync(STORES_PATH) ? JSON.parse(readFileSync(STORES_PATH, "utf8")) : null;
+
+  const records = [];
+  for (const store of STATUS_STORES) {
+    const missing = missingCreds(store, process.env);
+    if (missing.length) {
+      info(`${store}: SKIPPED (missing env: ${missing.join(", ")})`);
+      records.push(freshnessSkipped(store, missing));
+      continue;
+    }
+    try {
+      info(`${store}: probing credentials…`);
+      records.push(await FRESHNESS_PROBES[store](process.env, stores));
+    } catch (e) {
+      records.push(freshnessError(store, e?.message || String(e)));
+    }
+  }
+
+  const state = loadFreshnessState();
+  const annotated = applyFreshnessHistory(records, state, now);
+  writeFileSync(FRESHNESS_STATE_PATH, JSON.stringify(nextFreshnessState(state, records, now), null, 2) + "\n");
+
+  if (asJson) {
+    console.log(JSON.stringify({ generatedAt: now.toISOString(), mode: "freshness", stores: annotated }, null, 2));
+  } else {
+    console.log("");
+    console.log(renderFreshnessTable(annotated));
+  }
+
+  const attention = annotated.filter((r) => r.status === "EXPIRED" || r.status === "EXPIRING_SOON");
+  if (attention.length) {
+    info(
+      `\n⚠ ${attention.length} credential(s) need rotation — founder action; see ` +
+        `doc/release/publishing-credentials.md ("Rotation & lifetimes").`,
+    );
+  }
+  process.exit(freshnessExitCode(annotated));
+}
+
 // ── Entry ───────────────────────────────────────────────────────────────────────────
 
 async function main() {
   const argv = process.argv.slice(2);
   const asJson = argv.includes("--json");
+  if (argv.includes("--freshness")) {
+    loadPublishEnv();
+    await runFreshness(asJson);
+    return;
+  }
   const stallDaysArg = argv[argv.indexOf("--stall-days") + 1];
   const stallDays = argv.includes("--stall-days") ? Number(stallDaysArg) : 14;
   if (!Number.isFinite(stallDays) || stallDays <= 0) {
