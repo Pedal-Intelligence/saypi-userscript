@@ -15,6 +15,11 @@ time. The easiest way: drop them in a local, gitignored **`.env.publish`** at th
 file. The tool reads only `process.env` and `.env.publish`; it **never** reads `.env.production`,
 and it logs only the *names* of the keys it loaded — never their values.
 
+The same credentials (same env var names, same `.env.publish` auto-load) also power the
+**read-only** review-status check `npm run release:status` (#529) — see "Checking review
+status" in [`README.md`](README.md). That command never uploads or publishes; a store whose
+vars are absent is simply reported SKIPPED.
+
 ## Usage
 
 ```bash
