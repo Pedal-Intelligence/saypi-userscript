@@ -18,7 +18,7 @@
  * (the overridden run is still ledgered, marked [OVERRIDE]).
  * SAYPI_L4_LEDGER_PATH points at an alternate ledger (tests/dry-runs).
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve as resolvePath } from "node:path";
 import {
@@ -32,7 +32,12 @@ import {
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 
-/** Read the ledger from disk. Never throws: missing → fresh, corrupt → warn + fresh. */
+/**
+ * Read the ledger from disk. Never throws: missing → fresh, corrupt → warn + fresh.
+ * A corrupt file is moved aside to `<path>.corrupt-<timestamp>` before anything can
+ * overwrite it — it is evidence (prior runs, possibly a founder-tightened caps
+ * block) for manual recovery, not junk. The backup pattern is gitignored.
+ */
 export function loadLedger(path) {
   if (!existsSync(path)) return { ledger: parseLedger(null).ledger };
   let text;
@@ -41,7 +46,17 @@ export function loadLedger(path) {
   } catch (err) {
     return { ledger: parseLedger(null).ledger, warning: `could not read ledger (${err.message}) — starting fresh` };
   }
-  return parseLedger(text);
+  const parsed = parseLedger(text);
+  if (parsed.warning) {
+    const backup = `${path}.corrupt-${new Date().toISOString().replace(/[:.]/g, "-")}`;
+    try {
+      renameSync(path, backup);
+      return { ...parsed, warning: `${parsed.warning}; corrupt file preserved at ${backup} (recover any founder-tuned caps from it manually)` };
+    } catch (err) {
+      return { ...parsed, warning: `${parsed.warning}; could NOT preserve the corrupt file (${err.message})` };
+    }
+  }
+  return parsed;
 }
 
 export function saveLedger(path, ledger) {
@@ -77,10 +92,10 @@ export function enforceSpendCap({ harness, target, purpose, env = process.env, n
   for (const w of check.warnings) log(`[l4-ledger] WARN: ${w}`);
   try {
     saveLedger(path, recordRun(ledger, { harness, target, purpose, now, override: !check.ok && override }));
+    log(`[l4-ledger] ledgered ${harness} run (session ${check.sessionCount + 1}/${caps.session}, week ${check.weekCount + 1}/${caps.week}) → ${path}`);
   } catch (err) {
     log(`[l4-ledger] WARN: could not write ledger (${err.message}) — run proceeds unledgered`);
   }
-  log(`[l4-ledger] ledgered ${harness} run (session ${check.sessionCount + 1}/${caps.session}, week ${check.weekCount + 1}/${caps.week}) → ${path}`);
   return check;
 }
 

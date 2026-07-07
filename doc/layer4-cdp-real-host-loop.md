@@ -145,7 +145,10 @@ session, 25 per rolling 7-day week**. The founder tunes them via
 `SAYPI_L4_CAP_SESSION` / `SAYPI_L4_CAP_WEEK` or the `caps` block in the ledger file
 (env wins). `SAYPI_L4_CAP_OVERRIDE=1` bypasses a refusal — **founder-authorized use
 only**; the run is still ledgered, marked `[OVERRIDE]`. A missing or corrupt ledger
-never blocks a run (first run bootstraps it; corrupt warns and starts fresh).
+never blocks a run (first run bootstraps it; a corrupt file warns, is preserved at
+`.l4-ledger.json.corrupt-<timestamp>` — recover founder-tuned caps from it manually —
+and a fresh ledger starts). Note the ledger is advisory by design: `SAYPI_L4_LEDGER_PATH`
+and the cap env vars are unaudited seams, unlike the `[OVERRIDE]`-marked bypass.
 `SAYPI_L4_LEDGER_PATH` points at an alternate ledger (tests/dry-runs). Set
 `SAYPI_L4_PURPOSE="why"` so the ledger entry says what the run was for; runs driven
 outside the harnesses (e.g. the MCP dev rig) can be ledgered manually with

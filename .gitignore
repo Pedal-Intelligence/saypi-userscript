@@ -106,3 +106,4 @@ ngrok.yml
 
 # Layer-4 real-host spend ledger (#533) — personal operational data, never committed
 .l4-ledger.json
+.l4-ledger.json.corrupt-*

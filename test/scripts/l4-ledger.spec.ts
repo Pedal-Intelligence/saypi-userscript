@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { mkdtempSync, writeFileSync, readFileSync } from "node:fs";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { existsSync, mkdtempSync, readdirSync, writeFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import {
@@ -15,7 +15,7 @@ import {
   checkCaps,
   formatReport,
 } from "../../scripts/l4-ledger-lib.mjs";
-import { loadLedger, saveLedger } from "../../scripts/l4-ledger.mjs";
+import { loadLedger, saveLedger, enforceSpendCap } from "../../scripts/l4-ledger.mjs";
 
 const NOW = Date.parse("2026-07-07T12:00:00Z");
 const HOURS = 60 * 60 * 1000;
@@ -202,10 +202,139 @@ describe("l4-ledger (#533 — spend caps + resource ledger for Layer-4 runs)", (
     });
   });
 
+  describe("corrupt-ledger recovery preserves evidence (review nit A)", () => {
+    it("moves the corrupt file aside to <path>.corrupt-<timestamp> with its bytes intact", () => {
+      const dir = mkdtempSync(join(tmpdir(), "l4-ledger-"));
+      const path = join(dir, "ledger.json");
+      writeFileSync(path, "garbage{{{");
+      const { ledger, warning } = loadLedger(path);
+      expect(ledger.runs).toEqual([]); // still fail-open
+      expect(existsSync(path)).toBe(false); // original moved aside, not left to be clobbered
+      const backups = readdirSync(dir).filter((f) => f.startsWith("ledger.json.corrupt-"));
+      expect(backups).toHaveLength(1);
+      expect(readFileSync(join(dir, backups[0]), "utf8")).toBe("garbage{{{");
+      expect(warning).toContain(backups[0]); // the warning says where the evidence went
+    });
+
+    it("never replaces a founder-tightened caps block in a VALID ledger with defaults", () => {
+      const dir = mkdtempSync(join(tmpdir(), "l4-ledger-"));
+      const path = join(dir, "ledger.json");
+      writeFileSync(path, JSON.stringify({ caps: { session: 2, week: 5 }, runs: [] }));
+      enforceSpendCap({
+        harness: "test",
+        target: "t",
+        purpose: "caps preservation",
+        env: { SAYPI_L4_LEDGER_PATH: path },
+        now: NOW,
+        log: () => {},
+      });
+      const saved = JSON.parse(readFileSync(path, "utf8"));
+      expect(saved.caps).toEqual({ session: 2, week: 5 }); // tightened caps survive the save
+      expect(saved.runs).toHaveLength(1);
+      expect(existsSync(path + ".corrupt-")).toBe(false); // no spurious backup for a valid file
+    });
+  });
+
+  describe("enforceSpendCap (review nit B — the enforcement core itself)", () => {
+    const exitError = new Error("process.exit called");
+    afterEach(() => vi.restoreAllMocks());
+
+    function atCapLedgerFile() {
+      const dir = mkdtempSync(join(tmpdir(), "l4-ledger-"));
+      const path = join(dir, "ledger.json");
+      writeFileSync(path, JSON.stringify({ runs: [runAt(1 * HOURS), runAt(2 * HOURS)] }));
+      return path;
+    }
+
+    it("refuses with exit code 2 at cap, without ledgering the refused run", () => {
+      const path = atCapLedgerFile();
+      const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+        throw exitError;
+      });
+      const logs: string[] = [];
+      expect(() =>
+        enforceSpendCap({
+          harness: "test",
+          target: "t",
+          purpose: "refusal",
+          env: { SAYPI_L4_LEDGER_PATH: path, SAYPI_L4_CAP_SESSION: "2" },
+          now: NOW,
+          log: (m: string) => logs.push(m),
+        })
+      ).toThrow(exitError);
+      expect(exitSpy).toHaveBeenCalledWith(2);
+      expect(logs.some((m) => /REFUSING to launch/.test(m))).toBe(true);
+      expect(JSON.parse(readFileSync(path, "utf8")).runs).toHaveLength(2); // refused run NOT appended
+    });
+
+    it("ledgers an over-cap run with override: true under SAYPI_L4_CAP_OVERRIDE=1", () => {
+      const path = atCapLedgerFile();
+      const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+        throw exitError;
+      });
+      const logs: string[] = [];
+      enforceSpendCap({
+        harness: "test",
+        target: "t",
+        purpose: "override",
+        env: { SAYPI_L4_LEDGER_PATH: path, SAYPI_L4_CAP_SESSION: "2", SAYPI_L4_CAP_OVERRIDE: "1" },
+        now: NOW,
+        log: (m: string) => logs.push(m),
+      });
+      expect(exitSpy).not.toHaveBeenCalled();
+      const saved = JSON.parse(readFileSync(path, "utf8"));
+      expect(saved.runs).toHaveLength(3);
+      expect(saved.runs[2].override).toBe(true);
+      expect(logs.some((m) => /CAP OVERRIDDEN/.test(m))).toBe(true);
+    });
+
+    it("under cap: ledgers the run and does not exit", () => {
+      const dir = mkdtempSync(join(tmpdir(), "l4-ledger-"));
+      const path = join(dir, "ledger.json");
+      const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+        throw exitError;
+      });
+      const logs: string[] = [];
+      enforceSpendCap({
+        harness: "layer4cdp:verify",
+        target: "https://pi.ai/talk",
+        purpose: "first run bootstraps",
+        env: { SAYPI_L4_LEDGER_PATH: path },
+        now: NOW,
+        log: (m: string) => logs.push(m),
+      });
+      expect(exitSpy).not.toHaveBeenCalled();
+      expect(JSON.parse(readFileSync(path, "utf8")).runs).toHaveLength(1);
+      expect(logs.some((m) => /ledgered layer4cdp:verify run/.test(m))).toBe(true);
+    });
+
+    it("warns on write failure and does NOT also claim the run was ledgered (review nit C)", () => {
+      const dir = mkdtempSync(join(tmpdir(), "l4-ledger-"));
+      // Point the ledger path AT A DIRECTORY: read fails (EISDIR) → fail-open fresh
+      // ledger; write fails (EISDIR) → warn, run proceeds unledgered.
+      const logs: string[] = [];
+      enforceSpendCap({
+        harness: "test",
+        target: "t",
+        purpose: "write failure",
+        env: { SAYPI_L4_LEDGER_PATH: dir },
+        now: NOW,
+        log: (m: string) => logs.push(m),
+      });
+      expect(logs.some((m) => /could not write ledger/.test(m))).toBe(true);
+      expect(logs.some((m) => /ledgered test run/.test(m))).toBe(false); // no contradictory success line
+    });
+  });
+
   describe("gitignore drift-guard", () => {
     it(".l4-ledger.json is gitignored (personal operational data, never committed)", () => {
       const gitignore = readFileSync(resolve(__dirname, "../../.gitignore"), "utf8");
       expect(gitignore.split("\n")).toContain(".l4-ledger.json");
+    });
+
+    it("corrupt-ledger backups are gitignored too", () => {
+      const gitignore = readFileSync(resolve(__dirname, "../../.gitignore"), "utf8");
+      expect(gitignore.split("\n")).toContain(".l4-ledger.json.corrupt-*");
     });
   });
 });
