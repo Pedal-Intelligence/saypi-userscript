@@ -29,7 +29,8 @@ credentialed session.
    (`doc/release/delegation-criteria.md` once PR #538 lands).
 5. **Store status** — `npm run release:status -- --json` (SKIPPED in cloud; stall
    flags when run locally).
-6. **Credential freshness** — the #534 check, when it exists (SKIPPED in cloud).
+6. **Credential freshness** — the #534 check (`npm run release:freshness -- --json`;
+   SKIPPED in cloud).
 
 Anything needing the founder gets the `awaiting-founder` label + an ask comment (the
 #524 marker convention). All changes via PR; never a push to `main`.
@@ -70,9 +71,46 @@ To activate:
 > isolated branch. Finish with a concise summary; apply awaiting-founder + an ask
 > comment to anything needing the founder.
 
+## The monthly constitution-vs-reality audit
+
+**Cadence:** first Monday of the month, 06:30 UTC (offset from the weekly routine's
+06:00 slot so the two never contend).
+**Where it runs:** a Claude Code cloud routine, same shape and **same activation
+gate** as the weekly routine above (blocked on the founder's GitHub connect; see
+"Activation status"). Cron: `30 6 1-7 * 1` (day-of-month 1–7 AND Monday — on GitHub-
+style cron semantics that ORs DOM/DOW, the prompt below re-checks "is this the first
+Monday?" and exits early otherwise).
+**Interim fallback (active now):** until the cloud routine exists, any session may —
+and should, when a month has elapsed since the newest report in
+`doc/audit-reports/` — run the audit manually from the procedure doc.
+
+**What it does:** exactly `doc/constitution-audit.md` (#535) — the three-lens audit:
+(a) governance docs vs reality, (b) Layer-3 harness health (`npm run e2e:build &&
+npm run test:e2e`, hermetic), (c) Layer-4 harness + ops tooling *static* verification
+(scripts/docs/wiring only — **never a real-host run**). Output: a dated report in
+`doc/audit-reports/YYYY-MM-DD.md` via PR, plus one issue per genuine drift item per
+the Issue Authoring Standard. It distinguishes **drift** (doc claims X, reality is Y
+→ issue) from **in-flight** (correctly awaiting the founder → listed, not filed).
+
+**The routine prompt** (self-contained; keep in sync with `doc/constitution-audit.md`):
+
+> You are the monthly constitution-vs-reality audit for saypi-userscript
+> (Pedal-Intelligence/saypi-userscript), running under the repo's AGENTS.md
+> constitution — read AGENTS.md first and follow it exactly (PR-only, worktree
+> isolation, issue claims, the awaiting-founder marker, never touch
+> .env.production). First check the date: if today is not the first Monday of the
+> month, or doc/audit-reports/ already has a report from the last 21 days, say so
+> and exit. Otherwise execute doc/constitution-audit.md end-to-end: lens (a)
+> governance checklist, lens (b) run `npm ci && npm run e2e:build && npm run
+> test:e2e` and record results, lens (c) static harness/tooling verification —
+> HARD RULE: never run layer4cdp, e2e-host-sweep, e2e-dictation-sweep, or dev-rig,
+> and never message a live chat host. Write doc/audit-reports/<today>.md, open a
+> docs PR, and file one issue per genuine drift item (dedupe against open and
+> recently-closed issues; in-flight awaiting-founder items are listed in the
+> report, never filed as drift). Finish with a concise summary.
+
 ## Adding another routine
 
 Same shape: charter it in this file first (steps, hard rules, cadence), then create it
-via `RemoteTrigger`. Candidates already chartered elsewhere: the monthly
-constitution-vs-reality audit (#535, `doc/constitution-audit.md` once landed), and the
-Stage-1 release-candidate prep (activates with #523).
+via `RemoteTrigger`. Candidate already chartered elsewhere: the Stage-1
+release-candidate prep (activates with #523).
