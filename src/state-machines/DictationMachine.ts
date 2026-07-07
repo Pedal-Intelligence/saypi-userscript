@@ -1724,20 +1724,14 @@ export const machine = setup({
         // Use configured max delay for dictation endpoint detection
         const maxDelay = REFINEMENT_MAX_DELAY_MS;
 
-        // Use pFinishedSpeaking from API, default to 1 if not provided
-        let probabilityFinished = transcriptionEvent.pFinishedSpeaking ?? 1;
-
-        // Use tempo from API, default to 0 if not provided (neutral)
-        let tempo = transcriptionEvent.tempo ?? 0;
-        // Clamp tempo to [0, 1]
-        tempo = Math.max(0, Math.min(1, tempo));
-
+        // Defaulting and clamping of pFinishedSpeaking/tempo live in calculateDelay
+        // (absent score → maximum patience; absent tempo → neutral).
         const scheduledAt = Date.now();
         const timeElapsed = scheduledAt - context.timeLastTranscriptionReceived;
         const finalDelay = calculateDelay(
           context.timeLastTranscriptionReceived,
-          probabilityFinished,
-          tempo,
+          transcriptionEvent.pFinishedSpeaking,
+          transcriptionEvent.tempo,
           maxDelay
         );
 
@@ -1745,8 +1739,8 @@ export const machine = setup({
           "[DictationMachine] refinementDelay:",
           JSON.stringify({
             seq: transcriptionEvent.sequenceNumber,
-            pFinished: probabilityFinished,
-            tempo,
+            pFinished: transcriptionEvent.pFinishedSpeaking,
+            tempo: transcriptionEvent.tempo,
             maxDelay,
             timeElapsed,
             finalDelay,

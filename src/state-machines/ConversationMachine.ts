@@ -736,26 +736,14 @@ const machine = setup({
 
       const maxDelay = 7000; // 7 second max submission delay (lowered from 8s in v1.6.0)
 
-      // Calculate the initial delay based on pFinishedSpeaking
-      let probabilityFinished = 1;
-      if (e.pFinishedSpeaking !== undefined) {
-        probabilityFinished = e.pFinishedSpeaking;
-      }
-
-      // Incorporate the tempo into the delay. If undefined, treat as 0 (neutral)
-      // so we do not zero‑out the delay. In calculateDelay we use (1 - tempo)
-      // as a factor; a default of 1 would make the factor 0 and eliminate
-      // any waiting, which is not desired when tempo is unavailable.
-      let tempo = e.tempo !== undefined ? e.tempo : 0;
-      // Clamp to [0, 1] to avoid unexpected values from upstream
-      tempo = Math.max(0, Math.min(1, tempo));
-
+      // Defaulting and clamping of pFinishedSpeaking/tempo live in calculateDelay
+      // (absent score → maximum patience; absent tempo → neutral).
       const scheduledAt = Date.now();
       const timeElapsed = scheduledAt - context.timeUserStoppedSpeaking;
       const finalDelay = calculateDelay(
         context.timeUserStoppedSpeaking,
-        probabilityFinished,
-        tempo,
+        e.pFinishedSpeaking,
+        e.tempo,
         maxDelay
       );
 
@@ -781,21 +769,17 @@ const machine = setup({
       lastSubmissionScheduledAt = scheduledAt;
 
       // Detailed debug to correlate measured vs expected
-      const tempoFactor = 1 - tempo;
-      const initialDelay = Math.max(maxDelay * probabilityFinished * tempoFactor, 0);
       try {
         logger.debug(
           "[ConversationMachine] submissionDelay:",
           JSON.stringify({
             seq: (e as any).sequenceNumber,
-            pFinished: probabilityFinished,
-            tempo,
-            tempoFactor,
+            pFinished: e.pFinishedSpeaking,
+            tempo: e.tempo,
             maxDelay,
             timeUserStoppedSpeaking: context.timeUserStoppedSpeaking,
             scheduledAt,
             timeElapsed,
-            initialDelay,
             finalDelay,
             nextSubmissionTime,
           })
