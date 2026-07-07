@@ -354,6 +354,11 @@ export function renderPacket({ version, dateISO, baseline, stores, releaseNotes,
     "> One versioned build, submitted to every store the same day. Work top to bottom: Chrome → Edge → Firefox.",
     "> Steps that submit/publish are **irreversible once users auto-update** — they are yours to do, not an agent's.",
     "",
+    "**Pre-submission checks (release-level):**",
+    "- [ ] **Kill-switch coverage** — every payload change with a user-visible failure mode is " +
+      "neutralizable server-side (flag / config / feature-absence on saypi-api) or its residual risk " +
+      "is explicitly accepted. Rule + test: `doc/release/kill-switch-policy.md`.",
+    "",
     "---",
     "",
   );

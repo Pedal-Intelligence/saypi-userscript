@@ -305,6 +305,20 @@ describe("renderPacket", () => {
     expect(md).toContain("- [ ] Submit for review");
     expect(md).toContain("Source archive is mandatory");
   });
+
+  it("renders the release-level kill-switch coverage check before the store sections", () => {
+    const md = renderPacket({
+      version: "1.11.0",
+      dateISO: "2026-06-20",
+      baseline: "1.10.7",
+      stores,
+      releaseNotes: "notes",
+    });
+    expect(md).toContain("- [ ] **Kill-switch coverage**");
+    expect(md).toContain("doc/release/kill-switch-policy.md");
+    // Release-level: appears once, ahead of the first store section.
+    expect(md.indexOf("Kill-switch coverage")).toBeLessThan(md.indexOf("## Chrome Web Store"));
+  });
 });
 
 describe("INTERNAL_SCOPES", () => {
