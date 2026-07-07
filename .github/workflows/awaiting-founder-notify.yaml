@@ -1,0 +1,34 @@
+# Notifies the founder when something is marked as blocked on their decision.
+#
+# Applying the `awaiting-founder` label to an issue or PR posts a comment that
+# @-mentions the founder, which generates a GitHub notification. This is the
+# mechanical half of the "awaiting-founder marker" convention documented in
+# AGENTS.md (issue #524): agents apply the label whenever a high-blast-radius
+# PR needs sign-off or a governance proposal needs a decision.
+#
+# pull_request_target (not pull_request) so the job has a write token for
+# commenting; it never checks out PR code, so there is no execution risk.
+name: awaiting-founder-notify
+
+on:
+  issues:
+    types: [labeled]
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  notify:
+    if: github.event.label.name == 'awaiting-founder'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment to notify the founder
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+        run: |
+          gh api "repos/${{ github.repository }}/issues/${NUMBER}/comments" \
+            -f body="@rosscado — this is now **awaiting a founder decision or sign-off** (\`awaiting-founder\` applied by @${{ github.actor }}). See the latest comment/description for what's being asked. Standing queue: [open items with this label](https://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Aawaiting-founder)."
