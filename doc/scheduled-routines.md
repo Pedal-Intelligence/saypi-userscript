@@ -25,7 +25,8 @@ credentialed session.
    actionable findings only; never bumps anything itself.
 4. **Release readiness** — read-only `npm run release:plan`; reports unreleased
    user-facing merges. Opens release-candidate issues **only if** the founder has
-   accepted Stage 1 of `doc/release/delegation-criteria.md` on issue #523.
+   accepted Stage 1 of the release-delegation proposal on issue #523
+   (`doc/release/delegation-criteria.md` once PR #538 lands).
 5. **Store status** — `npm run release:status -- --json` (SKIPPED in cloud; stall
    flags when run locally).
 6. **Credential freshness** — the #534 check, when it exists (SKIPPED in cloud).
@@ -59,9 +60,9 @@ To activate:
 >
 > Do, in order: (1) backlog triage as chartered; (2) doc-drift spot-check, one issue
 > per confirmed drift per the Issue Authoring Standard; (3) `npm ci`, then
-> `npm audit --omit=dev` + `npm outdated`, issues for actionable findings only;
-> (4) read-only `npm run release:plan`, reporting unreleased user-facing merges — no
-> RC issues unless #523 Stage 1 is founder-accepted; (5) `npm run release:status --
+> `npm audit --omit=dev` + `npm outdated`, issues for actionable findings only —
+> never bump a dependency yourself; (4) read-only `npm run release:plan`, reporting
+> unreleased user-facing merges — no RC issues unless #523 Stage 1 is founder-accepted; (5) `npm run release:status --
 > --json`, expecting SKIPPED without credentials; (6) the #534 credential-freshness
 > check if it exists. HARD RULES: never run Layer-4/real-host harnesses (layer4cdp,
 > e2e-host-sweep, e2e-dictation-sweep, dev-rig) or anything that messages live chat
