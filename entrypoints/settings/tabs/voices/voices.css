@@ -9,6 +9,14 @@
   margin-top: 0.75rem;
 }
 
+/* The settings content column is fixed at 504px (global.css) — right for the
+   form-style tabs, cramped for the studio's card grids. Widen the column only
+   while the Voices tab is the active panel. Engines without :has() keep the
+   504px column: narrower, never broken. */
+.content:has(#tab-voices:not(.hidden)) {
+  width: min(940px, 100%);
+}
+
 /* --- host switcher -------------------------------------------------------- */
 
 .voice-host-switcher {
@@ -46,6 +54,10 @@
   height: 16px;
   border-radius: 4px;
   object-fit: contain;
+  /* White chip behind the mark: Pi's dark glyph stays legible on the active
+     (dark green) pill. */
+  background: #ffffff;
+  padding: 1px;
 }
 
 .voice-studio-loading {
@@ -53,6 +65,8 @@
 }
 .voice-studio-empty {
   padding: 0.75rem 0.25rem;
+  font-size: 0.9rem;
+  color: #6f6a61;
 }
 
 /* --- the stage -------------------------------------------------------------
@@ -73,8 +87,8 @@
   background: linear-gradient(118deg, var(--stage-from, #155e63), var(--stage-to, #0f2e2b));
   background: linear-gradient(
     118deg,
-    color-mix(in srgb, var(--stage-from, #155e63) 42%, #0e1a18),
-    color-mix(in srgb, var(--stage-to, #0f2e2b) 55%, #0b1412) 62%,
+    color-mix(in srgb, var(--stage-from, #155e63) 58%, #0e1a18),
+    color-mix(in srgb, var(--stage-to, #0f2e2b) 68%, #0b1412) 62%,
     #0a100f
   );
 }
@@ -286,6 +300,7 @@ button.voice-orb:hover {
 }
 .voice-slots-hint {
   font-size: 11.5px;
+  color: #77726a;
 }
 .voice-slots {
   list-style: none;
@@ -336,6 +351,7 @@ button.voice-orb:hover {
 .voice-slots-overflow,
 .voice-slots-builtins {
   font-size: 11.5px;
+  color: #77726a;
   margin-top: 7px;
 }
 
@@ -361,6 +377,7 @@ button.voice-orb:hover {
 }
 .voice-shelf-blurb {
   font-size: 11.5px;
+  color: #77726a;
 }
 .voice-card-grid {
   list-style: none;

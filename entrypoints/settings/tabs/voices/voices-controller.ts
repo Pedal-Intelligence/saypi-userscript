@@ -365,7 +365,7 @@ export class VoicesController {
     // a *failed* fetch is a transient error; a genuinely empty catalog is
     // its own (rarer) message — telling either user to sign in would be wrong.
     const empty = document.createElement("div");
-    empty.classList.add("voice-studio-empty", "description");
+    empty.classList.add("voice-studio-empty");
     let key: string;
     let substitutions: string[] | undefined;
     if (!this.deps.isAuthenticated()) {
@@ -477,7 +477,7 @@ export class VoicesController {
     title.textContent = getMessage("voicesInHostMenu", [vm.host.label]);
     head.appendChild(title);
     const hint = document.createElement("span");
-    hint.classList.add("voice-slots-hint", "description");
+    hint.classList.add("voice-slots-hint");
     hint.setAttribute("data-i18n", "voicesMenuHint");
     hint.textContent = getMessage("voicesMenuHint");
     head.appendChild(hint);
@@ -492,7 +492,7 @@ export class VoicesController {
 
     if (vm.overflowCount > 0) {
       const overflow = document.createElement("div");
-      overflow.classList.add("voice-slots-overflow", "description");
+      overflow.classList.add("voice-slots-overflow");
       overflow.setAttribute("data-i18n", "voicesMenuOverflow");
       overflow.textContent = getMessage("voicesMenuOverflow", [
         String(vm.overflowCount),
@@ -503,7 +503,7 @@ export class VoicesController {
 
     if (vm.hasBuiltins) {
       const builtins = document.createElement("div");
-      builtins.classList.add("voice-slots-builtins", "description");
+      builtins.classList.add("voice-slots-builtins");
       builtins.setAttribute("data-i18n", "voicesBuiltinsNote");
       builtins.textContent = getMessage("voicesBuiltinsNote", [vm.host.label]);
       section.appendChild(builtins);
@@ -597,7 +597,7 @@ export class VoicesController {
     title.textContent = getMessage(titleKey);
     head.appendChild(title);
     const blurb = document.createElement("span");
-    blurb.classList.add("voice-shelf-blurb", "description");
+    blurb.classList.add("voice-shelf-blurb");
     blurb.setAttribute("data-i18n", blurbKey);
     blurb.textContent = getMessage(blurbKey);
     head.appendChild(blurb);
