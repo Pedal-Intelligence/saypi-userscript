@@ -16,9 +16,18 @@
  * Credential env-var sets are reused from release-lib.mjs — same names `release:submit` uses.
  */
 import { createHmac, randomUUID } from "node:crypto";
-import { CWS_ENV, EDGE_ENV, AMO_ENV, compareSemver, parseSemver } from "./release-lib.mjs";
+import { CWS_ENV, EDGE_ENV, AMO_ENV, compareSemver } from "./release-lib.mjs";
 
 export const STATUS_STORES = ["chrome", "edge", "firefox"];
+
+/**
+ * Strictly-final X.Y.Z (optionally v-prefixed). release-lib's parseSemver has no end
+ * anchor, so a prerelease tag like v1.14.0-rc.1 would parse as final 1.14.0 and could
+ * false-flag every store in the lag heuristic — versions must pass this guard first.
+ */
+export function isFinalSemver(v) {
+  return /^v?\d+\.\d+\.\d+$/.test(String(v ?? "").trim());
+}
 
 /** Required env var NAMES per store (values are never logged anywhere in this tool). */
 export const STORE_ENV = { chrome: CWS_ENV, edge: EDGE_ENV, firefox: AMO_ENV };
@@ -181,9 +190,9 @@ export function computeStalls(records, { now = new Date(), stallDays = 14, lates
 
     if (
       latestRelease &&
-      parseSemver(latestRelease.version) &&
+      isFinalSemver(latestRelease.version) &&
       r.liveVersion &&
-      parseSemver(r.liveVersion) &&
+      isFinalSemver(r.liveVersion) &&
       compareSemver(r.liveVersion, latestRelease.version) < 0 &&
       days(latestRelease.date) > stallDays
     ) {
@@ -207,7 +216,7 @@ export function renderStatusTable(records = []) {
     r.state,
     r.submittedVersion ? `${r.submittedVersion}${r.submittedAt ? ` @ ${r.submittedAt.slice(0, 10)}` : ""}` : "—",
     r.updatedAt ? r.updatedAt.slice(0, 10) : "—",
-    r.stalled ? "⚠ STALLED" : r.skipped ? "—" : "ok",
+    r.stalled ? "⚠ STALLED" : r.skipped || r.state === "ERROR" ? "—" : "ok",
   ]);
   const widths = headers.map((h, i) => Math.max(h.length, ...rows.map((row) => row[i].length)));
   const line = (cells) => cells.map((c, i) => c.padEnd(widths[i])).join("  ");
@@ -228,12 +237,13 @@ export function renderStatusTable(records = []) {
 /**
  * Build the `Authorization: JWT <token>` header value for AMO API requests.
  * Deterministic given {now, jti} so it's testable; the secret is only used to sign
- * (never embedded). AMO requires exp ≤ iat + 5 minutes.
+ * (never embedded). AMO requires exp ≤ iat + 5 minutes and rejects tokens whose iat is
+ * in the future, so iat is backdated 30s to absorb local clock skew.
  * @param {{issuer: string, secret: string, now?: Date, jti?: string}} args
  */
 export function amoAuthHeader({ issuer, secret, now = new Date(), jti = randomUUID() }) {
   const b64 = (obj) => Buffer.from(JSON.stringify(obj)).toString("base64url");
-  const iat = Math.floor(now.getTime() / 1000);
+  const iat = Math.floor(now.getTime() / 1000) - 30;
   const head = b64({ alg: "HS256", typ: "JWT" });
   const payload = b64({ iss: issuer, jti, iat, exp: iat + 300 });
   const sig = createHmac("sha256", secret).update(`${head}.${payload}`).digest("base64url");

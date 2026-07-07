@@ -49,6 +49,7 @@ import {
   renderStatusTable,
   amoAuthHeader,
   edgeCrxIdFromListingUrl,
+  isFinalSemver,
 } from "./store-status-lib.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -87,11 +88,13 @@ async function getJson(url, init = {}) {
 /** Latest release tag (vX.Y.Z) + its commit date, for the release-lag stall heuristic. */
 function latestReleaseFromGit() {
   try {
+    // Final release tags only — prerelease tags (v1.14.0-rc.1) must not become the
+    // lag-heuristic baseline (parseSemver alone would truncate them to a final).
     const tags = execFileSync("git", ["tag", "-l", "v*"], { cwd: repoRoot, encoding: "utf8" })
       .split("\n")
-      .map((t) => parseSemver(t))
-      .filter(Boolean)
-      .map(formatSemver);
+      .map((t) => t.trim())
+      .filter(isFinalSemver)
+      .map((t) => formatSemver(parseSemver(t)));
     if (!tags.length) return null;
     const version = tags.sort(compareSemver).at(-1);
     const date = execFileSync("git", ["log", "-1", "--format=%cI", `v${version}`], {

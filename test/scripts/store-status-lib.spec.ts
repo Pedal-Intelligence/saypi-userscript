@@ -9,6 +9,8 @@ import {
   renderStatusTable,
   amoAuthHeader,
   edgeCrxIdFromListingUrl,
+  errorRecord,
+  isFinalSemver,
   STATUS_STORES,
 } from "../../scripts/store-status-lib.mjs";
 
@@ -299,6 +301,18 @@ describe("computeStalls", () => {
     expect(out.map((r) => r.stalled)).toEqual([false, false, false]);
   });
 
+  it("ignores a prerelease latest tag in the lag heuristic (never masquerades as a final)", () => {
+    // release-lib's parseSemver has no end anchor, so "1.14.0-rc.1" would parse as 1.14.0;
+    // the lag rule must reject prerelease versions outright.
+    const latestRelease = { version: "1.14.0-rc.1", date: new Date(NOW.getTime() - 20 * DAY).toISOString() };
+    const [r] = computeStalls([base({ store: "edge", liveVersion: "1.11.0" })], {
+      now: NOW,
+      stallDays: 14,
+      latestRelease,
+    });
+    expect(r.stalled).toBe(false);
+  });
+
   it("respects a custom --stall-days threshold", () => {
     const submittedAt = new Date(NOW.getTime() - 5 * DAY).toISOString();
     const [strict] = computeStalls([base({ inReview: true, submittedAt })], { now: NOW, stallDays: 3 });
@@ -330,6 +344,27 @@ describe("renderStatusTable", () => {
     expect(table).toMatch(/SKIPPED/);
     expect(table).toMatch(/STALLED/); // edge lags 1.13.0 released 22 days before NOW
   });
+
+  it("ERROR rows show — (not ok) in the stall column", () => {
+    const table = renderStatusTable(computeStalls([errorRecord("chrome", "auth failed")], { now: NOW }));
+    const row = table.split("\n").find((l) => l.startsWith("chrome"))!;
+    expect(row).toMatch(/ERROR/);
+    expect(row).not.toMatch(/\bok\b/);
+  });
+});
+
+// ── Final-version guard ────────────────────────────────────────────────────────────
+
+describe("isFinalSemver", () => {
+  it("accepts only strictly-final X.Y.Z (optionally v-prefixed)", () => {
+    expect(isFinalSemver("1.13.0")).toBe(true);
+    expect(isFinalSemver("v1.13.0")).toBe(true);
+    expect(isFinalSemver("1.14.0-rc.1")).toBe(false);
+    expect(isFinalSemver("v1.14.0-beta")).toBe(false);
+    expect(isFinalSemver("1.13")).toBe(false);
+    expect(isFinalSemver("")).toBe(false);
+    expect(isFinalSemver(null as unknown as string)).toBe(false);
+  });
 });
 
 // ── AMO JWT (deterministic with injected clock + nonce) ────────────────────────────
@@ -344,7 +379,8 @@ describe("amoAuthHeader", () => {
     const payload = dec(p);
     expect(payload.iss).toBe("user:123:45");
     expect(payload.jti).toBe("nonce-1");
-    expect(payload.iat).toBe(Math.floor(NOW.getTime() / 1000));
+    // iat is backdated 30s so a fast local clock can't put it in AMO's future (401s).
+    expect(payload.iat).toBe(Math.floor(NOW.getTime() / 1000) - 30);
     expect(payload.exp).toBe(payload.iat + 300);
   });
 
