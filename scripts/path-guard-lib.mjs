@@ -20,8 +20,13 @@ export const GATED_PATH_PATTERNS = [
   // Auth / JWT
   "src/JwtManager.ts",
   "src/auth/",
-  // Manifest, permissions, content-script injection scope
+  // Manifest, permissions, content-script injection scope. The `matches`
+  // arrays actually live in the content-script entrypoint shims, not in
+  // wxt.config.ts — gate exactly those two files (NOT all of entrypoints/,
+  // where the settings UI lives and would over-gate routine work).
   "wxt.config.ts",
+  "entrypoints/saypi.content.ts",
+  "entrypoints/saypi-universal.content.ts",
   // Release machinery
   "scripts/release.mjs",
   "scripts/release-lib.mjs",

@@ -67,6 +67,32 @@ describe("classifyChangedFiles", () => {
     ]);
   });
 
+  it("detects the content-script entrypoints (injection scope), but not the rest of entrypoints/", () => {
+    const result = classifyChangedFiles([
+      "entrypoints/saypi.content.ts",
+      "entrypoints/saypi-universal.content.ts",
+      "entrypoints/settings/VoicesPanel.tsx", // settings UI is normal-gate
+      "entrypoints/background.ts", // thin shim, normal-gate
+    ]);
+    expect(result.gated).toEqual([
+      "entrypoints/saypi.content.ts",
+      "entrypoints/saypi-universal.content.ts",
+    ]);
+  });
+
+  it("classifies the OLD path of a rename, so moving a file out of a gated dir is still flagged", () => {
+    // The workflow feeds both `filename` (the new path) and `previous_filename`
+    // (the old path) for renames; the old gated path must trip the guard even
+    // when the new path is un-gated.
+    const renameFeed = [
+      "src/authx/AuthModule.ts", // filename — new, un-gated path
+      "src/auth/AuthModule.ts", // previous_filename — old, gated path
+    ];
+    const result = classifyChangedFiles(renameFeed);
+    expect(result.clean).toBe(false);
+    expect(result.gated).toEqual(["src/auth/AuthModule.ts"]);
+  });
+
   it("detects the guard's own scripts", () => {
     const result = classifyChangedFiles([
       "scripts/path-guard.mjs",
@@ -139,6 +165,8 @@ describe("drift guards (workflow, AGENTS.md, and the lib stay in agreement)", ()
     expect(workflow).toContain("scripts/path-guard.mjs");
     expect(workflow).toContain("founder-approved");
     expect(workflow).toContain("FOUNDER_APPROVED");
+    // Renames must feed the classifier the OLD path too (rename-bypass fix).
+    expect(workflow).toContain("previous_filename");
   });
 
   it("AGENTS.md's founder-gated list and the lib agree on the core entries", () => {
