@@ -33,7 +33,8 @@ behavior inside existing bounds does **not** trip the rule. Pure bug fixes that
 restore intended behavior on an already-shipped surface don't trip it either
 (their regression class is what the test suite and host sweeps cover) — the rule
 targets *new or changed behavior* whose blast radius is unknown until real users
-hit it.
+hit it. Tie-break: if a "fix" rewrites a formula or adds new routing rather than
+restoring prior behavior, classify it as changed behavior and name the lever.
 
 ## What counts as an acceptable switch
 
@@ -48,7 +49,9 @@ update, on a signal the shipped client **already polls or receives per turn**:
 - **Feature-absence on an additive-optional contract**: the client treats an
   optional response field as "feature present when served". Withdrawing the field
   turns the feature off. Live examples: the ▶ voice-preview button renders only
-  when `/voices` serves `sample_url` (`src/tts/VoiceMenu.ts`); the curation
+  when `/voices` serves `sample_url` (`src/chatbots/ClaudeVoiceMenu.ts` and the
+  settings catalog's `entrypoints/settings/tabs/voices/voices-controller.ts`);
+  the curation
   manifest's `section`/`featured`/`deprecated` fields steer the shortlist, and
   the client falls back to its local heuristic when they're absent
   (`src/tts/VoiceCuration.ts`).
