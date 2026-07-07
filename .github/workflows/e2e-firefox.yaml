@@ -1,0 +1,76 @@
+# ADVISORY check: Firefox MV2 smoke lane — first landed slice of the Firefox
+# coverage decision (#527, doc/specs/2026-07-07-firefox-coverage-decision.md).
+#
+# NOT a required status check: a red run is a signal, not a merge block.
+# Promotion to required follows the same bar the Chromium `e2e` job cleared
+# (five consecutive first-attempt-green runs on distinct, non-docs-only PRs).
+#
+# What it does: build the real Firefox MV2 artifact in development mode
+# (.output/firefox-mv2-dev), temporary-install it into headless Firefox via
+# selenium-webdriver 4 + geckodriver, load a localhost fixture page, and assert
+# the universal dictation content script decorates a focused text field with
+# `.saypi-dictation-button`. See e2e-firefox/README.md.
+name: e2e-firefox
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  e2e-firefox:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      # Mirror e2e.yaml's install reliability: prefer the committed lockfile,
+      # but fall back to regenerating it if the cached/offline install is flaky.
+      - name: Install dependencies
+        run: |
+          npm cache clean --force
+          npm install --no-fund --prefer-offline || (
+            echo "Initial install failed, regenerating package-lock.json..."
+            rm -f package-lock.json
+            npm install --no-fund
+          )
+        timeout-minutes: 10
+        env:
+          npm_config_fetch_retries: 5
+          npm_config_fetch_retry_factor: 2
+          npm_config_fetch_retry_mintimeout: 20000
+          npm_config_fetch_retry_maxtimeout: 120000
+
+      # Runner images ship Firefox but have dropped it before
+      # (actions/runner-images#10374) — pin our own install. ESR for stability.
+      # Third-party action pinned by commit SHA (= v1.7.2).
+      - name: Install Firefox (latest ESR)
+        id: firefox
+        uses: browser-actions/setup-firefox@0bc507ddf224827e3b1af68e014d5e42ab93e795 # v1.7.2
+        with:
+          firefox-version: latest-esr
+
+      - name: Build static Firefox MV2 dev extension
+        run: npm run e2e:build:firefox
+
+      - name: Run Firefox smoke
+        run: npm run test:e2e:firefox
+        env:
+          CI: "true"
+          FIREFOX_BIN: ${{ steps.firefox.outputs.firefox-path }}
+
+      - name: Upload smoke artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-firefox-artifacts
+          path: e2e-firefox/artifacts/
+          retention-days: 7
+          if-no-files-found: ignore
