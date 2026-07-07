@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   EDGE_KEY_LIFETIME_DAYS,
   FRESHNESS_CREDENTIAL,
@@ -265,5 +267,12 @@ describe("freshnessExitCode", () => {
   it("1 when any credential is EXPIRED or a check ERRORed", () => {
     expect(freshnessExitCode([classifyEdgeProbeFreshness(401)])).toBe(1);
     expect(freshnessExitCode([freshnessError("chrome", "boom")])).toBe(1);
+  });
+});
+
+describe("freshness state file hygiene", () => {
+  it(".credential-freshness.json is gitignored (timestamps-only state must never be committed)", () => {
+    const gitignore = readFileSync(resolve(__dirname, "../../.gitignore"), "utf8");
+    expect(gitignore.split("\n")).toContain(".credential-freshness.json");
   });
 });
