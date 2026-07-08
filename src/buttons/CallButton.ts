@@ -248,7 +248,10 @@ export class CallButton {
         const svg = callButton.querySelector("svg");
 
         if (!svg) {
-            console.error("SVG element not found within the call button.");
+            // Normal transient during (re)creation: createButton assigns this.element
+            // before the async callInactive/callActive render mounts the SVG, and it
+            // redraws the segments itself once the SVG is in place (#460).
+            logger.debug("Call button SVG not mounted yet; skipping segment redraw.");
             return;
         }
 

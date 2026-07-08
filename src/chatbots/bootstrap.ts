@@ -22,6 +22,9 @@ export class DOMObserver {
   agentNoticeModule: AgentModeNoticeModule;
   private domObserver: MutationObserver | null = null;
   private isObservingDom: boolean = false;
+  // Ancestors already being watched for submit-button re-renders; guards against
+  // stacking a new MutationObserver each time decoratePromptControls re-runs.
+  private submitButtonMonitoredAncestors = new WeakSet<HTMLElement>();
   private domMutationCallback = (mutations: MutationRecord[]) => {
     // Skip decoration work entirely on non-chatable pages
     if (!this.shouldDecorateUI()) {
@@ -85,6 +88,15 @@ export class DOMObserver {
           const chatHistoryObs = this.findChatHistory(removedElement);
           if (chatHistoryObs.found) {
             this.findAndDecorateChatHistory(document.body);
+          }
+          // A host re-render can remove the injected call button while keeping the
+          // decorated prompt element — no finder notices, because the prompt still
+          // reports "already decorated" (#460). Restore the button in place.
+          const callButtonRemoved =
+            removedElement.id === "saypi-callButton" ||
+            removedElement.querySelector?.("#saypi-callButton");
+          if (callButtonRemoved) {
+            this.ensureCallButtonPresent();
           }
         });
     });
@@ -177,6 +189,14 @@ export class DOMObserver {
       if (!this.shouldDecorateUI()) {
         return;
       }
+      // Rescue an undecorated (or de-buttoned) composer. The prompt was the only
+      // decoration target WITHOUT a document-wide re-scan here, so a composer that
+      // mounted while observation was stopped (e.g. the route monitor's 300ms poll
+      // caught a transient non-chatable path during Pi's boot) stayed bare forever —
+      // no call button until a full reload (#460). Does not re-emit content-loaded:
+      // we are already inside that event.
+      this.findAndDecoratePrompt(document.body);
+      this.ensureCallButtonPresent();
       const audioControlsObs = this.findAndDecorateAudioControls(document.body);
       if (audioControlsObs.isReady()) {
         this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
@@ -219,19 +239,24 @@ export class DOMObserver {
    * bootstrap chain. Mirrors startChatHistoryProgressiveSearch's backoff so a
    * composer that hydrates slightly after document_idle is still caught even if
    * its insertion doesn't surface to the MutationObserver as an added node.
+   *
+   * The retry window covers ~30s: a live cold-cache probe of pi.ai/talk measured
+   * the composer mounting at t≈25s (#460), so the old ~7.5s window left the tail
+   * of real first loads with no recovery path. A transiently non-chatable path
+   * skips the scan but keeps the loop alive — Pi's boot can blip through one, and
+   * ending the loop there made the miss permanent.
    */
-  private bootstrapInitialDecoration(attempt = 1, maxAttempts = 10): void {
-    if (!this.shouldDecorateUI()) {
-      return;
-    }
-    const promptObs = this.findAndDecoratePrompt(document.body);
-    if (promptObs.isReady()) {
-      EventBus.emit("saypi:ui:content-loaded");
-      return;
-    }
-    // Already decorated by another path → the chain has already started; stop.
-    if (promptObs.found) {
-      return;
+  private bootstrapInitialDecoration(attempt = 1, maxAttempts = 18): void {
+    if (this.shouldDecorateUI()) {
+      const promptObs = this.findAndDecoratePrompt(document.body);
+      if (promptObs.isReady()) {
+        EventBus.emit("saypi:ui:content-loaded");
+        return;
+      }
+      // Already decorated by another path → the chain has already started; stop.
+      if (promptObs.found) {
+        return;
+      }
     }
     if (attempt < maxAttempts) {
       const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 3000);
@@ -282,6 +307,23 @@ export class DOMObserver {
   // Function to decorate the prompt input element, and other elements that depend on it
   decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
+    this.decoratePromptControls(prompt);
+
+    // Trigger agent mode notice if needed (async call, no need to await)
+    this.agentNoticeModule.showNoticeIfNeeded().catch(error => {
+      console.debug('Failed to show agent notice:', error);
+    });
+  }
+
+  /**
+   * Decorates the containers around an (already id'd) prompt and inserts the call
+   * button. Split out from decoratePrompt so the call button can be restored when
+   * the host re-renders the composer row: a React commit can destroy the injected
+   * button while REUSING the same prompt element — which keeps id=saypi-prompt, so
+   * every finder reports "already decorated" and no other path re-creates it (#460).
+   * Idempotent: safe to re-run against a decorated-but-buttonless composer.
+   */
+  private decoratePromptControls(prompt: HTMLElement): void {
     const promptContainer = this.chatbot.getPromptContainer(prompt);
     if (promptContainer) {
       // Ensure ChatGPT does not get the SayPi control panel decorations (Phase 1)
@@ -300,17 +342,39 @@ export class DOMObserver {
       if (controlsContainer) {
         controlsContainer.id = "saypi-prompt-controls-container";
         const ancestor = this.addIdPromptAncestor(controlsContainer);
-        if (ancestor) this.monitorForSubmitButton(ancestor);
+        if (ancestor && !this.submitButtonMonitoredAncestors.has(ancestor)) {
+          this.submitButtonMonitoredAncestors.add(ancestor);
+          this.monitorForSubmitButton(ancestor);
+        }
         const submitButtonSearch = this.findSubmitButton(controlsContainer);
         const insertionPosition = submitButtonSearch.found ? -1 : 0;
-        buttonModule.createCallButton(controlsContainer, insertionPosition);
+        if (!document.getElementById("saypi-callButton")) {
+          buttonModule.createCallButton(controlsContainer, insertionPosition);
+        }
       }
     }
-    
-    // Trigger agent mode notice if needed (async call, no need to await)
-    this.agentNoticeModule.showNoticeIfNeeded().catch(error => {
-      console.debug('Failed to show agent notice:', error);
-    });
+  }
+
+  /**
+   * Restores the call button if it has been removed from the document while the
+   * decorated prompt is still present (#460). If the prompt itself is gone, the
+   * prompt-removal path in domMutationCallback handles full re-decoration instead.
+   */
+  private ensureCallButtonPresent(): void {
+    if (!this.shouldDecorateUI()) {
+      return;
+    }
+    if (document.getElementById("saypi-callButton")) {
+      return;
+    }
+    const prompt = document.getElementById("saypi-prompt");
+    if (!prompt) {
+      return;
+    }
+    logger.debug(
+      "Call button missing while the prompt persists — restoring it (#460)"
+    );
+    this.decoratePromptControls(prompt);
   }
 
   /**
