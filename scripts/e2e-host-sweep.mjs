@@ -39,7 +39,7 @@ import { createServer } from "node:net";
 import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveCdpProfileDir, buildCdpChromeArgs, isCloudflareChallenge } from "./layer4cdp-lib.mjs";
-import { HOSTS, parseSweepArgs, summarize, ttsCoverage, SAYPI_TTS_PROVIDER } from "./e2e-host-sweep-lib.mjs";
+import { HOSTS, DIAGS, parseSweepArgs, summarize, ttsCoverage, SAYPI_TTS_PROVIDER } from "./e2e-host-sweep-lib.mjs";
 import { enforceSpendCap } from "./l4-ledger.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -84,31 +84,6 @@ function markCleanExit(profileDir) {
   }
 }
 
-// Per-host DOM/selector diagnostics, evaluated in page context. These mirror the
-// selectors SayPi's adapters depend on, so a sweep surfaces drift directly.
-const DIAGS = {
-  pi: () => ({
-    voiceMenus: document.querySelectorAll("#saypi-voice-menu").length,
-    chatHistory: document.querySelectorAll("#saypi-chat-history").length,
-    presentMsgsDecorated: document.querySelectorAll(".present-messages [id*='saypi'], .present-messages [class*='saypi']").length,
-    callButtons: document.querySelectorAll("#saypi-callButton").length,
-  }),
-  claude: () => ({
-    voiceSelectors: document.querySelectorAll("#claude-voice-selector").length,
-    assistantMsgs: document.querySelectorAll(".font-claude-message, [data-testid='assistant-turn']").length,
-    customPlaceholders: document.querySelectorAll(".custom-placeholder, #claude-placeholder").length,
-    nativePlaceholders: [...document.querySelectorAll("p[data-placeholder]")].map((p) => p.getAttribute("data-placeholder")).slice(0, 4),
-    callButtons: document.querySelectorAll("#saypi-callButton").length,
-  }),
-  chatgpt: () => ({
-    turnsByTestid: document.querySelectorAll('article[data-testid^="conversation-turn"]').length,
-    assistantByDataTurn: document.querySelectorAll('article[data-turn="assistant"]').length,
-    assistantByRole: document.querySelectorAll('[data-message-author-role="assistant"]').length,
-    chatHistorySelMatch: document.querySelectorAll('div:has(> article[data-testid^="conversation-turn"])').length,
-    articleCount: document.querySelectorAll("article").length,
-    callButtons: document.querySelectorAll("#saypi-callButton").length,
-  }),
-};
 
 /**
  * Select a faster claude.ai model (Claude-native UI) before the turn so the reply +
