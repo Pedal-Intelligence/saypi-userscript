@@ -127,3 +127,47 @@ export function summarize(evidence = {}) {
     netFailures: Array.isArray(evidence.requestFailed) ? evidence.requestFailed.length : 0,
   };
 }
+
+/**
+ * The chat-history selector chatgpt.com's adapter uses (src/chatbots/ChatGPT.ts
+ * getChatHistorySelector()). Tag-agnostic on purpose: ChatGPT swapped the turn
+ * container from <article> to <section> in 2026-06 while keeping the
+ * data-testid (#362). Kept in sync by test/scripts/e2e-host-sweep-diags.spec.ts.
+ */
+export const CHATGPT_TURN_SELECTOR = '[data-testid^="conversation-turn"]';
+export const CHATGPT_CHAT_HISTORY_SELECTOR = `div:has(> ${CHATGPT_TURN_SELECTOR})`;
+
+/**
+ * Per-host DOM/selector diagnostics, evaluated in page context by the harness.
+ * These mirror the selectors SayPi's adapters depend on, so a sweep surfaces real
+ * drift — and, just as importantly, does NOT manufacture drift by probing a
+ * selector the adapter has already moved off (#560). Each is a self-contained
+ * function: it is stringified and evaluated in the page, so it may not close over
+ * anything from this module.
+ */
+export const DIAGS = {
+  pi: () => ({
+    voiceMenus: document.querySelectorAll("#saypi-voice-menu").length,
+    chatHistory: document.querySelectorAll("#saypi-chat-history").length,
+    presentMsgsDecorated: document.querySelectorAll(".present-messages [id*='saypi'], .present-messages [class*='saypi']").length,
+    callButtons: document.querySelectorAll("#saypi-callButton").length,
+  }),
+  claude: () => ({
+    voiceSelectors: document.querySelectorAll("#claude-voice-selector").length,
+    assistantMsgs: document.querySelectorAll(".font-claude-message, [data-testid='assistant-turn']").length,
+    customPlaceholders: document.querySelectorAll(".custom-placeholder, #claude-placeholder").length,
+    nativePlaceholders: [...document.querySelectorAll("p[data-placeholder]")].map((p) => p.getAttribute("data-placeholder")).slice(0, 4),
+    callButtons: document.querySelectorAll("#saypi-callButton").length,
+  }),
+  chatgpt: () => ({
+    // Tag-agnostic, matching the adapter. The per-tag census below still exposes a
+    // future tag change instead of silently absorbing it.
+    turnsByTestid: document.querySelectorAll('[data-testid^="conversation-turn"]').length,
+    turnTags: [...new Set([...document.querySelectorAll('[data-testid^="conversation-turn"]')].map((t) => t.tagName.toLowerCase()))],
+    assistantByDataTurn: document.querySelectorAll('[data-turn="assistant"]').length,
+    assistantByRole: document.querySelectorAll('[data-message-author-role="assistant"]').length,
+    chatHistorySelMatch: document.querySelectorAll('div:has(> [data-testid^="conversation-turn"])').length,
+    saypiChatHistory: document.querySelectorAll("#saypi-chat-history").length,
+    callButtons: document.querySelectorAll("#saypi-callButton").length,
+  }),
+};
