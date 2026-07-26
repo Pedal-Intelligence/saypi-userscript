@@ -117,25 +117,9 @@ export class UniversalDictationModule {
   }
 
   private decorateExistingElements(): void {
+    // A field that is already focused gets its button shown by decorateInput(),
+    // whichever path decorates it — the initial scan or the observer (#558).
     this.findAndDecorateInputs(document.body);
-    // Check if any input is already focused and show its dictation button
-    this.checkInitialFocusState();
-  }
-
-  private checkInitialFocusState(): void {
-    // Check if there's an already focused element that we just decorated
-    const activeElement = document.activeElement;
-    if (activeElement && activeElement instanceof HTMLElement) {
-      // Find if this active element has been decorated by us
-      for (const target of this.decoratedElements.values()) {
-        if (target.element === activeElement && target.button) {
-          // Show the button for the pre-focused element
-          target.button.style.display = "flex";
-          console.log("Universal Dictation: Showing button for pre-focused element:", activeElement);
-          break;
-        }
-      }
-    }
   }
 
   private findAndDecorateInputs(searchRoot: Element): void {
@@ -190,6 +174,15 @@ export class UniversalDictationModule {
       this.decoratedElements.set(inputElement, target);
       this.positionButton(inputElement, dictationButton);
       this.setupInputEventListeners(target);
+
+      // A field the host focused before we decorated it will never emit another
+      // `focus` event, so the listener just wired up can't reveal the button —
+      // check at decoration time instead (#558). Deliberately not routed through
+      // the listener's showButton(), which would also switch an active dictation
+      // target; decoration is not a user focus gesture.
+      if (document.activeElement === inputElement) {
+        dictationButton.style.display = "flex";
+      }
 
       console.debug("Decorated input element with dictation button:", inputElement);
     } catch (error) {
