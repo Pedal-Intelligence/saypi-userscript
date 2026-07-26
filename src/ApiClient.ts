@@ -31,6 +31,14 @@ export async function callApi(
 }
 
 /**
+ * Statuses the Fetch spec defines as carrying no body — constructing a Response with
+ * any body for one of these throws a TypeError.
+ */
+function isNullBodyStatus(status: number): boolean {
+  return status === 204 || status === 205 || status === 304;
+}
+
+/**
  * Routes API request through background service worker to bypass CSP restrictions
  */
 async function callApiViaBackground(
@@ -52,49 +60,59 @@ async function callApiViaBackground(
         ...serializedRequest
       },
       (response) => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
-          return;
-        }
+        // Anything thrown in here escapes the Promise executor, leaving the caller
+        // hung forever rather than failing — so the whole body is guarded (#557).
+        try {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message));
+            return;
+          }
 
-        if (!response.success) {
-          const error = new Error(response.error || 'Background API request failed');
-          error.name = response.name || 'ApiError';
-          reject(error);
-          return;
-        }
+          if (!response.success) {
+            const error = new Error(response.error || 'Background API request failed');
+            error.name = response.name || 'ApiError';
+            reject(error);
+            return;
+          }
 
-        // Reconstruct Response object from background response
-        const responseData = response.response;
-        const responseHeaders = new Headers(responseData.headers);
+          // Reconstruct Response object from background response
+          const responseData = response.response;
+          const responseHeaders = new Headers(responseData.headers);
 
-        // Respect desired responseType when reconstructing the Response body
-        const desiredType = (options as any)?.responseType as ('json'|'text'|'arrayBuffer'|undefined);
-        let bodyInit: BodyInit | null = null;
-        if (desiredType === 'json') {
-          if (typeof responseData.body === 'string') {
-            bodyInit = responseData.body as string;
+          // Respect desired responseType when reconstructing the Response body
+          const desiredType = (options as any)?.responseType as ('json'|'text'|'arrayBuffer'|undefined);
+          let bodyInit: BodyInit | null = null;
+          if (isNullBodyStatus(responseData.status)) {
+            // 204/205/304 carry no body by definition, and the Response constructor
+            // rejects ANY body for them — including "" and "null" (#557).
+            bodyInit = null;
+          } else if (desiredType === 'json') {
+            if (typeof responseData.body === 'string') {
+              bodyInit = responseData.body as string;
+            } else {
+              bodyInit = JSON.stringify(responseData.body ?? null);
+            }
+            if (!responseHeaders.has('content-type')) {
+              responseHeaders.set('content-type', 'application/json');
+            }
+          } else if (desiredType === 'arrayBuffer') {
+            bodyInit = responseData.body as ArrayBuffer;
           } else {
-            bodyInit = JSON.stringify(responseData.body ?? null);
+            bodyInit = typeof responseData.body === 'string'
+              ? (responseData.body as string)
+              : String(responseData.body ?? '');
           }
-          if (!responseHeaders.has('content-type')) {
-            responseHeaders.set('content-type', 'application/json');
-          }
-        } else if (desiredType === 'arrayBuffer') {
-          bodyInit = responseData.body as ArrayBuffer;
-        } else {
-          bodyInit = typeof responseData.body === 'string'
-            ? (responseData.body as string)
-            : String(responseData.body ?? '');
+
+          const reconstructedResponse = new Response(bodyInit, {
+            status: responseData.status,
+            statusText: responseData.statusText,
+            headers: responseHeaders
+          });
+
+          resolve(reconstructedResponse);
+        } catch (error) {
+          reject(error instanceof Error ? error : new Error(String(error)));
         }
-
-        const reconstructedResponse = new Response(bodyInit, {
-          status: responseData.status,
-          statusText: responseData.statusText,
-          headers: responseHeaders
-        });
-
-        resolve(reconstructedResponse);
       }
     );
   });
