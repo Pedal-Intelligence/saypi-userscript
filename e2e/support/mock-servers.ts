@@ -45,6 +45,9 @@ export async function startMockServers(): Promise<MockServers> {
     const host = (req.headers.host ?? "").toLowerCase();
     // hey.pi.ai first: it is a pi.ai SUBdomain, so the fallthrough would hand it
     // the chat-shaped Pi mock and quietly weaken the chat-adjacent spec (#559).
+    // This ordering protects hey.pi.ai ONLY — the claude branch below is a
+    // substring test, so a future `hey.claude.ai` mapping would fall into the
+    // Claude chat mock and needs its own branch here (and its own MAP).
     const page = host.startsWith("hey.pi.ai")
       ? HEY_PI_PAGE
       : host.includes("claude.ai")
