@@ -411,4 +411,11 @@ async function main() {
   log(`SWEEP DONE — evidence under ${outDir}`);
   process.exit(0);
 }
-main().catch((e) => { log(`fatal: ${e.message}`); process.exit(1); });
+// Run the CLI only when invoked directly — importing this module (the Vitest spec
+// drives the real sweepHost against stub pages) must not launch Chrome. Same idiom
+// as scripts/l4-ledger.mjs.
+if (process.argv[1] && resolvePath(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((e) => { log(`fatal: ${e.message}`); process.exit(1); });
+}
+
+export { sweepHost };
