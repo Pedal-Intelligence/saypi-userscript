@@ -185,9 +185,12 @@ A default sweep is **not free or traceless** — it acts as the founder on real 
   `page.url()` *after* the 25s decoration wait, so a client-side bounce that fires past
   `domcontentloaded` is caught — has never run against a bouncing host. The case that
   motivated it (signed-out `pi.ai/talk` → `hey.pi.ai`) is no longer reproducible: the
-  seeded profile is signed in to pi.ai, so `/talk` doesn't bounce. First real
-  `redirected-off-origin` verdict should be sanity-checked against `01-before.png`
-  rather than trusted outright (#559).
+  seeded profile is signed in to pi.ai, so `/talk` doesn't bounce. Same for the
+  `finally` guard that makes "every undecorated host has a kind" true — the classifier
+  is unit-proven, the harness wiring around it is read, not run (`sweepHost` isn't
+  importable: the script calls `main()` at import). First real `redirected-off-origin`
+  verdict should be sanity-checked against `01-before.png` rather than trusted
+  outright (#559).
 - Built on `scripts/layer4cdp-lib.mjs` (launch/Cloudflare/profile helpers) +
   `scripts/e2e-host-sweep-lib.mjs` (pure: host registry, arg parse, console attribution,
   summary, per-host DOM diagnostics, the undecorated classifier + sign-in probe —

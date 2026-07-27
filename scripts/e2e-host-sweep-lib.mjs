@@ -144,7 +144,7 @@ function originKey(url) {
  * shows sign-up CTAs, and "we were bounced off the chat origin" is the stronger,
  * more actionable fact. Then a corroborated sign-in wall — corroborated means the
  * final URL is an auth route, or the page *title* reads as auth AND a sign-in
- * affordance is on screen. A bare affordance on the requested page is NOT enough:
+ * affordance is present and not hidden. A bare affordance on the requested page is NOT enough:
  * we bias toward DRIFT because a false "signed out" quietly buries the highest-
  * signal defect class this sweep exists to find, while a false "drift" only costs
  * one investigation. The affordance still rides along in the note as a caveat.
