@@ -77,6 +77,10 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!rxjs)"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/\\.worktrees/"
+    ],
     "testEnvironment": "jsdom",
     "extensionsToTreatAsEsm": [
       ".ts"
