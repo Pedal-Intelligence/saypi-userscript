@@ -29,6 +29,7 @@ import { PiAIChatbot } from "../../src/chatbots/Pi";
 import { ClaudeChatbot } from "../../src/chatbots/Claude";
 import ChatGPTChatbot from "../../src/chatbots/ChatGPT";
 import { WebDictationChatbot } from "../../src/chatbots/Web";
+import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 
 /**
  * Drive the hostname through the one seam both the mode gate and the service
@@ -130,10 +131,31 @@ describe("nickname leakage on a chat-adjacent host (#559)", () => {
    * nickname, and the field rides along.
    */
   test("nickname equals the default name, so no nickname field is sent", async () => {
-    const chatbot = withHostname("hey.pi.ai", () =>
-      ChatbotService.getChatbotSync()
-    );
-    await expect(chatbot.getNickname()).resolves.toBe(chatbot.getName());
-    await expect(chatbot.hasNickname()).resolves.toBe(false);
+    // A STORED nickname is what makes this discriminating. Without one,
+    // AbstractChatbots.getNickname() falls back to getName() for every
+    // implementation, so a PiAIChatbot would satisfy these assertions too and the
+    // test would pass with the fix reverted. WebDictationChatbot overrides
+    // getNickname() to ignore preferences entirely — that is the difference being
+    // pinned here.
+    const prefs = UserPreferenceModule.getInstance();
+    const stored = vi
+      .spyOn(prefs, "getNickname")
+      .mockResolvedValue("Piper" as never);
+    try {
+      const chatbot = withHostname("hey.pi.ai", () =>
+        ChatbotService.getChatbotSync()
+      );
+      await expect(chatbot.getNickname()).resolves.toBe(chatbot.getName());
+      await expect(chatbot.hasNickname()).resolves.toBe(false);
+
+      // Guard against the assertions above going vacuous again: with the chat-host
+      // implementation the stored nickname does ride along, which is exactly the
+      // field that used to leak out of hey.pi.ai.
+      const piChatbot = new PiAIChatbot();
+      await expect(piChatbot.getNickname()).resolves.toBe("Piper");
+      await expect(piChatbot.hasNickname()).resolves.toBe(true);
+    } finally {
+      stored.mockRestore();
+    }
   });
 });
