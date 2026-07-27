@@ -104,6 +104,207 @@ export function ttsCoverage(summaries = []) {
 }
 
 /**
+ * Why a host ended the run with nothing decorated. The distinction is the whole
+ * point: only DRIFT is a SayPi defect worth hunting — the others mean the sweep
+ * never got a chat app in front of the extension (#559).
+ */
+export const UNDECORATED_KINDS = {
+  /** The page ended up on a different origin than requested (pi.ai/talk → hey.pi.ai). */
+  REDIRECTED: "redirected-off-origin",
+  /** Right origin, but the host served a sign-in wall instead of the chat app. */
+  SIGNED_OUT: "signed-out",
+  /** The requested page loaded and SayPi still didn't decorate it. THE defect case. */
+  DRIFT: "possible-drift",
+  /** The run never got far enough to judge (Cloudflare challenge, harness error). */
+  ABORTED: "run-aborted",
+  /** Not enough signal to tell (no usable final URL) — read the screenshot. */
+  UNKNOWN: "unknown",
+};
+
+/** Auth-ish route segments every host uses for its sign-in wall. */
+const AUTH_ROUTE = /(^|\/)(login|log-in|signin|sign-in|sign_in|auth|authorize)(\/|$)/i;
+const AUTH_TITLE = /\b(log ?in|sign ?in|sign ?up)\b/i;
+
+/** Origin key for comparison: host without a cosmetic leading "www.". null if unusable. */
+function originKey(url) {
+  try {
+    const u = new URL(String(url));
+    if (!/^https?:$/.test(u.protocol)) return null;
+    return u.host.toLowerCase().replace(/^www\./, "");
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Explain a host that never decorated (#saypi-callButton never appeared), from
+ * what the harness can observe at that moment. Pure.
+ *
+ * Precedence is deliberate. Origin first: a marketing splash like hey.pi.ai also
+ * shows sign-up CTAs, and "we were bounced off the chat origin" is the stronger,
+ * more actionable fact. Then a corroborated sign-in wall — corroborated means the
+ * final URL is an auth route, or the page *title* reads as auth AND a sign-in
+ * affordance is present and not hidden. A bare affordance on the requested page is NOT enough:
+ * we bias toward DRIFT because a false "signed out" quietly buries the highest-
+ * signal defect class this sweep exists to find, while a false "drift" only costs
+ * one investigation. The affordance still rides along in the note as a caveat.
+ *
+ * `abortedBecause` short-circuits everything: the harness has paths that end a run
+ * before the page can be judged at all (a Cloudflare challenge, an exception), and
+ * those must not fall through to a URL-derived verdict — a crashed page reports a
+ * junk URL, which would read as `unknown` and send the reader to a screenshot the
+ * run never took. Every `decorated: false` host gets a kind; none are left null.
+ *
+ * @param {{requestedUrl?: string, finalUrl?: string, title?: string, signInVisible?: boolean,
+ *          abortedBecause?: string}} [input]
+ * @returns {{kind: string, owner: string, redirected: boolean, requestedOrigin: string|null,
+ *            finalOrigin: string|null, finalUrl: string|null, signInAffordance: boolean, note: string}}
+ */
+export function classifyUndecorated(input = {}) {
+  const requestedUrl = input.requestedUrl ?? null;
+  const finalUrl = input.finalUrl ?? null;
+  const title = String(input.title ?? "");
+  const signInAffordance = !!input.signInVisible;
+  const requestedOrigin = originKey(requestedUrl);
+  const finalOrigin = originKey(finalUrl);
+  const base = { requestedOrigin, finalOrigin, finalUrl: finalUrl ?? null, signInAffordance };
+
+  if (input.abortedBecause) {
+    return {
+      ...base,
+      kind: UNDECORATED_KINDS.ABORTED,
+      owner: "automation",
+      redirected: false,
+      note:
+        `not decorated because ${input.abortedBecause} — the run ended before SayPi could be judged ` +
+        `against a chat app, so it says NOTHING about SayPi selector drift. Fix the run ` +
+        `(re-seed with npm run layer4cdp:seed for a Cloudflare block; read notes[]/console for an ` +
+        `error) and re-run before reading anything into this host.`,
+    };
+  }
+
+  if (!requestedOrigin || !finalOrigin) {
+    return {
+      ...base,
+      kind: UNDECORATED_KINDS.UNKNOWN,
+      owner: "unknown",
+      redirected: false,
+      note:
+        `not decorated, and the final URL could not be read (requested ${requestedUrl ?? "?"}, ` +
+        `final ${finalUrl || "(none)"}) — can't tell a redirect / sign-in wall from SayPi selector ` +
+        `drift. Check the 01-before.png screenshot and the console before concluding anything.`,
+    };
+  }
+
+  if (finalOrigin !== requestedOrigin) {
+    return {
+      ...base,
+      kind: UNDECORATED_KINDS.REDIRECTED,
+      owner: "automation",
+      redirected: true,
+      note:
+        `not decorated because the page left the requested origin: ${requestedUrl} → ${finalUrl}. ` +
+        `SayPi never saw the chat app, so this run says NOTHING about SayPi selector drift. ` +
+        `Usually the seeded profile is signed out and the host bounces visitors to an intro/marketing ` +
+        `page; less often the host has moved its chat app. Next step: sign in to the seeded profile ` +
+        `(npm run layer4cdp:seed), re-run, and if it still lands on ${finalOrigin} while signed in, ` +
+        `the host URL in HOSTS is what changed.`,
+    };
+  }
+
+  let finalPath = "/";
+  try {
+    finalPath = new URL(finalUrl).pathname;
+  } catch {
+    /* originKey already proved it parses; keep the default */
+  }
+  if (AUTH_ROUTE.test(finalPath) || (AUTH_TITLE.test(title) && signInAffordance)) {
+    return {
+      ...base,
+      kind: UNDECORATED_KINDS.SIGNED_OUT,
+      owner: "automation",
+      redirected: false,
+      note:
+        `not decorated because ${finalOrigin} served a sign-in wall rather than the chat app ` +
+        `(${finalUrl}${title ? `, title "${title}"` : ""}). The chat DOM never rendered, so this run ` +
+        `says NOTHING about SayPi selector drift. Next step: sign in to the seeded profile ` +
+        `(npm run layer4cdp:seed) and re-run.`,
+    };
+  }
+
+  return {
+    ...base,
+    kind: UNDECORATED_KINDS.DRIFT,
+    owner: "saypi",
+    redirected: false,
+    note:
+      `not decorated on the requested page itself (${finalUrl}) — no redirect off ${requestedOrigin} ` +
+      `and no sign-in wall, so the host app rendered and SayPi failed to decorate it. This is the ` +
+      `genuine-drift case: hunt it (compare domDiagnostics against the adapter's selectors, ` +
+      `corroborate with 01-before.png).` +
+      (signInAffordance
+        ? ` Caveat: a sign-in affordance was on the page and not hidden — confirm the profile is ` +
+          `actually signed in to the host before filing a drift issue.`
+        : ""),
+  };
+}
+
+/**
+ * Was a sign-in affordance on the page, not hidden? Corroborating evidence for
+ * classifyUndecorated. Self-contained: the harness stringifies it and evaluates
+ * it in the page (same rule as DIAGS — it may not close over this module, so the
+ * `hidden` helper lives inside the function body).
+ *
+ * Deliberately narrow — a short, button-shaped "Log in"/"Sign up" label or an auth
+ * href — so prose that merely mentions signing in doesn't fire it. And it skips
+ * anything hidden: every signed-in host ships a login link parked in some collapsed
+ * menu, and counting that would staple a "but a sign-in affordance was there"
+ * caveat onto essentially every genuine drift finding.
+ *
+ * `visible` means exactly "matched and not hidden by display:none /
+ * visibility:hidden / [hidden] / aria-hidden on itself or an ancestor". It does
+ * not model layout (offsetParent/getClientRects report nothing under JSDOM, so
+ * that branch could never be tested), so zero-sized or off-screen-positioned
+ * controls still count.
+ */
+export const SIGN_IN_PROBE = () => {
+  const LABEL = /^(sign[ -]?in|log[ -]?in|sign[ -]?up|register|get started|continue with [a-z]+)$/i;
+  const HREF = /\/(login|log-in|signin|sign-in|sign_in|auth|authorize)(\/|\?|$)/i;
+  // Sign-OUT is auth-shaped but means the opposite (we're signed in) — /api/auth/logout
+  // matches HREF, and letting it through would staple a backwards caveat onto a note.
+  const OUT = /(log|sign)[ -_]?out/i;
+  // Ancestor walk, not just the element: `display` doesn't inherit, so a
+  // <nav style="display:none"> hides its children without touching their own
+  // computed style. (Cost of the walk is why it runs only on label/href matches —
+  // a chat host's sidebar has hundreds of anchors.)
+  // (via document.defaultView, not the bare global: the probe has to work both in
+  // the page and under the JSDOM the unit tests hand-build, which exposes `document`
+  // without a global `getComputedStyle`.)
+  const view = document.defaultView;
+  const hidden = (el) => {
+    if (el.closest("[hidden], [aria-hidden='true']")) return true;
+    if (!view) return false;
+    for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+      const s = view.getComputedStyle(n);
+      if (s.display === "none" || s.visibility === "hidden") return true;
+    }
+    return false;
+  };
+  const labels = [];
+  for (const el of document.querySelectorAll("a, button, [role='button']")) {
+    const text = (el.textContent || "").trim();
+    if (text.length > 40) continue; // prose, not a control
+    const href = el.getAttribute("href") || "";
+    if (OUT.test(text) || OUT.test(href)) continue;
+    if (!LABEL.test(text) && !(href && HREF.test(href))) continue;
+    if (hidden(el)) continue;
+    const label = text || href.slice(0, 80);
+    if (label && !labels.includes(label)) labels.push(label);
+  }
+  return { visible: labels.length > 0, labels: labels.slice(0, 6) };
+};
+
+/**
  * Reduce a captured evidence object to a flat, comparable summary. Pure — takes
  * the shape the harness writes (console[], pageErrors[], requestFailed[], ...).
  */
@@ -114,6 +315,12 @@ export function summarize(evidence = {}) {
   return {
     host: evidence.host ?? null,
     decorated: !!evidence.decorated,
+    // Where the page actually ended up, and why nothing decorated if it didn't.
+    // `finalUrl` is recorded on every run (a healthy claude.ai lands on a
+    // conversation URL); `undecorated` is null exactly when the host decorated.
+    // Together they keep a reader from mistaking a redirect for drift (#559).
+    finalUrl: evidence.finalUrl ?? null,
+    undecorated: evidence.undecorated?.kind ?? null,
     cloudflareBlocked: !!evidence.cloudflareBlocked,
     transcript: evidence.transcript ?? null,
     authStatus: evidence.authStatus ?? null,

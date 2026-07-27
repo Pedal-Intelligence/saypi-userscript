@@ -90,7 +90,7 @@ accepting longer turns / a possible `piThinking` timeout window.
 
 Per host the harness writes to `.output/e2e-host-sweep/<run>/<host>/`:
 `evidence.json` (console / pageErrors / network / requestFailed / domDiagnostics /
-auth+voice / transcript / observe flags) and screenshots
+auth+voice / transcript / observe flags / `finalUrl` + `undecorated`) and screenshots
 (`01-before`, `02-transcript`, `0N-observe…`, `99-final`). A run-level `summary.json`
 holds the per-host `summarize()` rollup.
 
@@ -101,20 +101,43 @@ holds the per-host `summarize()` rollup.
    *false negative* because the composer **clears on auto-submit** — the turn actually
    succeeded. (This exact trap produced a wrong first read on ChatGPT in the sweep that
    first shipped this tool; the screenshot showed the reply had rendered.)
-2. **Attribute to SayPi only.** Hosts emit their own console noise (claude.ai `/v1/toolbox`
+2. **`decorated=false` is not automatically drift — read `undecorated.kind` first.**
+   A host can fail to decorate because SayPi never got a chat app to decorate. The
+   harness classifies it for you from the requested vs. **final** URL (`evidence.finalUrl`
+   — hosts bounce you *after* load, so this is re-read at the decoration deadline) plus
+   any sign-in affordance on the page. Every undecorated host gets one of these five —
+   `undecorated` is null **only** when the host decorated:
+   - `redirected-off-origin` — we left the requested origin (the live case: pi.ai now
+     bounces signed-out visitors from `pi.ai/talk` to the `hey.pi.ai` splash, #559).
+     **Automation/seeding problem** — sign in to the seeded profile and re-run. Says
+     nothing about SayPi.
+   - `signed-out` — right origin, sign-in wall instead of the chat app. Same:
+     automation/seeding, re-seed and re-run.
+   - `possible-drift` — the requested page rendered and SayPi still didn't decorate it.
+     **This is the real defect case** — hunt it against `domDiagnostics`. The classifier
+     deliberately biases here: a sign-in button alone stays `possible-drift` (as a caveat
+     in the note), because a false "signed out" would bury the very defect class this
+     sweep exists to find. The probe behind that caveat counts a control that is not
+     hidden by `display:none` / `visibility:hidden` / `[hidden]` / `aria-hidden`; it does
+     **not** model layout, so a zero-sized or off-screen control still counts.
+   - `run-aborted` — the run ended before the page could be judged at all (a Cloudflare
+     challenge, or an exception mid-host — see `cloudflareBlocked` / `notes[]`). Fix the
+     run and re-run; says nothing about SayPi.
+   - `unknown` — no usable final URL; fall back to `01-before.png`.
+3. **Attribute to SayPi only.** Hosts emit their own console noise (claude.ai `/v1/toolbox`
    405s, ProseMirror warnings, framework deprecations). `summarize()` splits
    `saypiErrors`/`saypiWarnings` from `hostErrors` for you — file SayPi-attributable
    issues, not host noise.
-3. **Beware harness artifacts.** Some signals are produced by the headed/background-tab
+4. **Beware harness artifacts.** Some signals are produced by the headed/background-tab
    harness, not normal use (e.g. an `exitFullscreen` "Document not active" rejection is
    amplified by a non-focused tab). Label these honestly.
-4. **`/transcribe` is invisible to the page listener** — it routes via the background SW
+5. **`/transcribe` is invisible to the page listener** — it routes via the background SW
    (so STT success shows in the console "Transcribed N words" line + the composer, not
    in `network[]`). Don't read its absence as a failure.
-5. **Dedup before filing** — check open **and closed** issues (`gh issue list --state all`);
+6. **Dedup before filing** — check open **and closed** issues (`gh issue list --state all`);
    host DOM-drift is a recurring class (#350/#351/#352/#362), so a "new" drift may be a
    re-occurrence or already tracked.
-6. **Honest per-host reporting.** A host whose core flows are healthy should be reported
+7. **Honest per-host reporting.** A host whose core flows are healthy should be reported
    **clean, with evidence** — do not pad with a low-value issue just to hit a per-host
    count.
 
@@ -157,7 +180,20 @@ A default sweep is **not free or traceless** — it acts as the founder on real 
 - The synthetic source plays **one** utterance per call (`loop:false`); it cannot be
   re-armed mid-call, so **multi-turn** conversations can't be driven synthetically today
   (issue #364). Single-turn per host is what the sweep covers.
+- **The redirect classifier's live path is unproven.** `classifyUndecorated` and the
+  sign-in probe are unit-tested, but the mechanism that feeds them — re-reading
+  `page.url()` *after* the 25s decoration wait, so a client-side bounce that fires past
+  `domcontentloaded` is caught — has never run against a bouncing host. The case that
+  motivated it (signed-out `pi.ai/talk` → `hey.pi.ai`) is no longer reproducible: the
+  seeded profile is signed in to pi.ai, so `/talk` doesn't bounce. The `finally` guard
+  that makes "every undecorated host has a kind" true IS run — `sweepHost` is importable
+  and `…-undecorated-wiring.spec.ts` drives it against stub pages — but only the
+  after-the-wait `page.url()` re-read still awaits a real bouncing host. So the first
+  real `redirected-off-origin` verdict should be sanity-checked against `01-before.png`
+  rather than trusted outright (#559).
 - Built on `scripts/layer4cdp-lib.mjs` (launch/Cloudflare/profile helpers) +
   `scripts/e2e-host-sweep-lib.mjs` (pure: host registry, arg parse, console attribution,
-  summary — unit-tested in `test/scripts/e2e-host-sweep-lib.spec.ts`).
+  summary, per-host DOM diagnostics, the undecorated classifier + sign-in probe —
+  unit-tested in `test/scripts/e2e-host-sweep-lib.spec.ts`,
+  `…-diags.spec.ts`, `…-undecorated.spec.ts`).
 ```
