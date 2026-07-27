@@ -78,6 +78,14 @@ const audioProviders = {
       // released extension previously threw on powered_by="OpenAI").
       case "OpenAI":
       case "ElevenLabs":
+      // 60dB voices are likewise synthesised by the api.saypi.ai backend (which
+      // proxies api.60db.ai server-side) and streamed back over the identical
+      // ?voice_id= contract, so they are SayPi-served too. The literal must
+      // match the `powered_by` the /voices endpoint returns: the unified voice
+      // menu derives the engine logo from it via
+      // icons/logos/<powered_by lowercased>.svg → icons/logos/60db.svg
+      // (see TTSControlsModule.createTtsLogo).
+      case "60dB":
         return audioProviders.SayPi;
       case "inflection.ai":
         return audioProviders.Pi;

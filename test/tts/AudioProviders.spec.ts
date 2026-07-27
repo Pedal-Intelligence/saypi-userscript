@@ -33,6 +33,17 @@ describe('audioProviders', () => {
       expect(audioProviders.retrieveProviderByEngine('inflection.ai')).toBe(audioProviders.Pi);
     });
 
+    it('maps 60dB voices to the SayPi provider (server-side proxy of api.60db.ai)', () => {
+      // 60dB TTS is streamed from api.saypi.ai over the same ?voice_id= stream
+      // contract as ElevenLabs/OpenAI, so 60dB is a SayPi-served voice from the
+      // client's perspective. Explicit case (not the default fallback) so it
+      // routes without emitting the "unrecognised provider" warning.
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      expect(audioProviders.retrieveProviderByEngine('60dB')).toBe(audioProviders.SayPi);
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+    });
+
     it('falls back to SayPi (and warns) instead of throwing on an unrecognised provider', () => {
       // Regression guard for #215/#92: an unknown powered_by used to throw,
       // crashing the synchronous voice-selection path. It must now degrade.
