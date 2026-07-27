@@ -324,6 +324,21 @@ async function sweepHost(ctx, host, url, opts, outDir) {
   } catch (err) {
     ev.notes.push(`error: ${err.message}`);
   } finally {
+    // Invariant: an undecorated host ALWAYS carries a verdict, so "read
+    // undecorated.kind first" never lands on null. The paths that return before
+    // the classifier runs — the Cloudflare block above, the catch, and anything
+    // added later — land here instead of silently reopening the gap (#559).
+    if (!ev.decorated && !ev.undecorated) {
+      ev.undecorated = classifyUndecorated({
+        requestedUrl: url,
+        finalUrl: ev.finalUrl,
+        title: ev.pageTitle,
+        abortedBecause: ev.cloudflareBlocked
+          ? "a Cloudflare challenge blocked the page"
+          : "the run ended before the decoration check finished",
+      });
+      ev.notes.push(ev.undecorated.note);
+    }
     writeFileSync(join(dir, "evidence.json"), JSON.stringify(ev, null, 2));
     await page.close().catch(() => {});
   }

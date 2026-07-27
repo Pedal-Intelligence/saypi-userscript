@@ -105,7 +105,8 @@ holds the per-host `summarize()` rollup.
    A host can fail to decorate because SayPi never got a chat app to decorate. The
    harness classifies it for you from the requested vs. **final** URL (`evidence.finalUrl`
    — hosts bounce you *after* load, so this is re-read at the decoration deadline) plus
-   any sign-in affordance on the page:
+   any sign-in affordance on the page. Every undecorated host gets one of these five —
+   `undecorated` is null **only** when the host decorated:
    - `redirected-off-origin` — we left the requested origin (the live case: pi.ai now
      bounces signed-out visitors from `pi.ai/talk` to the `hey.pi.ai` splash, #559).
      **Automation/seeding problem** — sign in to the seeded profile and re-run. Says
@@ -114,9 +115,14 @@ holds the per-host `summarize()` rollup.
      automation/seeding, re-seed and re-run.
    - `possible-drift` — the requested page rendered and SayPi still didn't decorate it.
      **This is the real defect case** — hunt it against `domDiagnostics`. The classifier
-     deliberately biases here: a visible sign-in button alone stays `possible-drift`
-     (as a caveat in the note), because a false "signed out" would bury the very defect
-     class this sweep exists to find.
+     deliberately biases here: a sign-in button alone stays `possible-drift` (as a caveat
+     in the note), because a false "signed out" would bury the very defect class this
+     sweep exists to find. The probe behind that caveat counts a control that is not
+     hidden by `display:none` / `visibility:hidden` / `[hidden]` / `aria-hidden`; it does
+     **not** model layout, so a zero-sized or off-screen control still counts.
+   - `run-aborted` — the run ended before the page could be judged at all (a Cloudflare
+     challenge, or an exception mid-host — see `cloudflareBlocked` / `notes[]`). Fix the
+     run and re-run; says nothing about SayPi.
    - `unknown` — no usable final URL; fall back to `01-before.png`.
 3. **Attribute to SayPi only.** Hosts emit their own console noise (claude.ai `/v1/toolbox`
    405s, ProseMirror warnings, framework deprecations). `summarize()` splits
@@ -174,6 +180,14 @@ A default sweep is **not free or traceless** — it acts as the founder on real 
 - The synthetic source plays **one** utterance per call (`loop:false`); it cannot be
   re-armed mid-call, so **multi-turn** conversations can't be driven synthetically today
   (issue #364). Single-turn per host is what the sweep covers.
+- **The redirect classifier's live path is unproven.** `classifyUndecorated` and the
+  sign-in probe are unit-tested, but the mechanism that feeds them — re-reading
+  `page.url()` *after* the 25s decoration wait, so a client-side bounce that fires past
+  `domcontentloaded` is caught — has never run against a bouncing host. The case that
+  motivated it (signed-out `pi.ai/talk` → `hey.pi.ai`) is no longer reproducible: the
+  seeded profile is signed in to pi.ai, so `/talk` doesn't bounce. First real
+  `redirected-off-origin` verdict should be sanity-checked against `01-before.png`
+  rather than trusted outright (#559).
 - Built on `scripts/layer4cdp-lib.mjs` (launch/Cloudflare/profile helpers) +
   `scripts/e2e-host-sweep-lib.mjs` (pure: host registry, arg parse, console attribution,
   summary, per-host DOM diagnostics, the undecorated classifier + sign-in probe —

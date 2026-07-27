@@ -130,6 +130,49 @@ describe("classifyUndecorated — the signed-out boundary", () => {
   });
 });
 
+describe("classifyUndecorated — the run never got far enough to judge", () => {
+  // The harness has early returns that leave the page unjudged: the Cloudflare
+  // challenge, and the outer catch when the run blows up mid-page. Those used to
+  // leave `undecorated: null` on an `decorated: false` host — a reader following
+  // "read undecorated.kind first" found nothing there. `abortedBecause` gives
+  // those paths a kind of their own so the field is never empty.
+  it("classifies a Cloudflare block as run-aborted, not drift", () => {
+    const c = classifyUndecorated({
+      requestedUrl: "https://claude.ai/new",
+      finalUrl: "https://claude.ai/new",
+      title: "Just a moment…",
+      abortedBecause: "a Cloudflare challenge blocked the page",
+    });
+
+    expect(c.kind).toBe(UNDECORATED_KINDS.ABORTED);
+    expect(c.owner).toBe("automation");
+    expect(c.redirected).toBe(false);
+    expect(c.note).toContain("a Cloudflare challenge blocked the page");
+    expect(c.note).toMatch(/nothing about saypi/i);
+  });
+
+  it("wins over every other signal — a junk final URL must not become 'unknown'", () => {
+    // A crashed/closed page reports no usable URL. Falling through to `unknown`
+    // would tell the reader to go read a screenshot the run never took.
+    const c = classifyUndecorated({
+      requestedUrl: "https://pi.ai/talk",
+      finalUrl: "",
+      abortedBecause: "the run ended before the decoration check finished",
+    });
+    expect(c.kind).toBe(UNDECORATED_KINDS.ABORTED);
+  });
+
+  it("wins over a URL pair that would otherwise read as a redirect", () => {
+    expect(
+      classifyUndecorated({
+        requestedUrl: "https://pi.ai/talk",
+        finalUrl: "https://hey.pi.ai/",
+        abortedBecause: "the run ended before the decoration check finished",
+      }).kind
+    ).toBe(UNDECORATED_KINDS.ABORTED);
+  });
+});
+
 describe("classifyUndecorated — origin comparison edges", () => {
   it("does not call a cosmetic www. hop a redirect", () => {
     const c = classifyUndecorated({ requestedUrl: "https://pi.ai/talk", finalUrl: "https://www.pi.ai/talk" });
@@ -188,6 +231,38 @@ describe("SIGN_IN_PROBE", () => {
     document.body.innerHTML = `<button>You can sign in later to keep your conversation history</button>`;
     expect(SIGN_IN_PROBE().visible).toBe(false);
   });
+
+  // The probe reports a field called `visible`, and its output staples a caveat
+  // onto a drift note. A login link parked in a collapsed menu is markup every
+  // signed-in host ships — counting it would put "but a sign-in affordance was
+  // there" on essentially every genuine drift finding, i.e. exactly the
+  // misattribution this classifier exists to prevent, in the other direction.
+  it("does not count a sign-in link hidden with display:none", () => {
+    document.body.innerHTML = `
+      <nav style="display:none"><a href="/login">Log in</a></nav>
+      <main><button>Send</button></main>`;
+    expect(SIGN_IN_PROBE()).toEqual({ visible: false, labels: [] });
+  });
+
+  it("does not count one hidden by visibility:hidden, [hidden], or aria-hidden", () => {
+    for (const markup of [
+      `<div style="visibility:hidden"><button>Sign in</button></div>`,
+      `<div hidden><button>Sign in</button></div>`,
+      `<div aria-hidden="true"><button>Sign in</button></div>`,
+    ]) {
+      document.body.innerHTML = markup;
+      expect(SIGN_IN_PROBE().visible).toBe(false);
+    }
+  });
+
+  it("still counts one that is on screen next to hidden ones", () => {
+    document.body.innerHTML = `
+      <nav style="display:none"><a href="/login">Log in</a></nav>
+      <header><button>Sign up</button></header>`;
+    const p = SIGN_IN_PROBE();
+    expect(p.visible).toBe(true);
+    expect(p.labels).toEqual(["Sign up"]);
+  });
 });
 
 describe("summarize carries the undecorated verdict + final URL", () => {
@@ -203,7 +278,20 @@ describe("summarize carries the undecorated verdict + final URL", () => {
     expect(s.undecorated).toBe(UNDECORATED_KINDS.REDIRECTED);
   });
 
-  it("leaves both null on a healthy decorated host", () => {
+  it("still carries finalUrl on a healthy host — only the verdict is null there", () => {
+    // The harness records finalUrl on every run, decorated or not (claude.ai/new
+    // navigates to a conversation URL), so "null on a healthy host" is wrong.
+    const s = summarize({
+      host: "claude",
+      url: "https://claude.ai/new",
+      finalUrl: "https://claude.ai/chat/2f0c1b1e-0000-4000-8000-000000000000",
+      decorated: true,
+    });
+    expect(s.finalUrl).toBe("https://claude.ai/chat/2f0c1b1e-0000-4000-8000-000000000000");
+    expect(s.undecorated).toBeNull();
+  });
+
+  it("defaults both to null when the evidence object omits them", () => {
     const s = summarize({ host: "claude", decorated: true });
     expect(s.undecorated).toBeNull();
     expect(s.finalUrl).toBeNull();
