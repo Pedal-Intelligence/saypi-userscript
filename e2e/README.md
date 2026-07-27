@@ -112,7 +112,7 @@ panel left empty by a chunk/import break.
   context fixture (e2e/fixtures/extension.ts + launch-args.ts)
         │  chromium.launchPersistentContext with:
         │    --load-extension / --disable-extensions-except  -> the dev build
-        │    --host-resolver-rules  MAP pi.ai/claude.ai/api|www|app.saypi.ai/google-analytics.com
+        │    --host-resolver-rules  MAP pi.ai/hey.pi.ai/claude.ai/api|www|app.saypi.ai/google-analytics.com
         │                           -> 127.0.0.1:<port>, then MAP * ~NOTFOUND (fail closed)
         │    --ignore-certificate-errors / --allow-insecure-localhost
         │    --use-fake-device-for-media-stream / --use-fake-ui-for-media-stream
@@ -128,6 +128,10 @@ panel left empty by a chunk/import break.
                           guards the per-test reset the context fixture performs,
                           so no spec's hits/content-type assertion can be
                           satisfied by another spec's traffic (#462)
+     chat-adjacent-dictation.e2e.ts page.goto(https://hey.pi.ai/) -> the CHAT
+                          script's `https://pi.ai/*` doesn't match, so only the
+                          universal script injects -> .saypi-dictation-button
+                          appears and #saypi-callButton does NOT (#559)
      tooltip-contrast.e2e.ts page.goto(https://claude.ai/new) -> body.claude ->
                           the real built CSS renders .saypi-tooltip as an opaque
                           dark pill (guards the host-CSS-var contrast bug)
@@ -149,7 +153,9 @@ the machine — the run is hermetic, even GA beacons are absorbed by the mock AP
 catch-all. The redirect list **fails closed**: the explicit `MAP`s
 (`pi.ai`, `api`/`www`/`app.saypi.ai`, `google-analytics.com`) are followed by a
 trailing `MAP * ~NOTFOUND` sinkhole, so any host *not* explicitly mapped resolves
-to nothing — a future spec that reaches for an unmapped endpoint errors loudly
+to nothing. Note the `MAP`s are **exact-host**, not domain-wide: `MAP pi.ai`
+does not cover `hey.pi.ai`, which is why the chat-adjacent host has its own
+entry. A future spec that reaches for an unmapped endpoint errors loudly
 instead of silently calling the real internet.
 
 ### Files
@@ -165,6 +171,7 @@ instead of silently calling the real internet.
 | `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, hit/content-type diagnostics + per-test reset route, GA catch-all) |
 | `support/mock-pi-page.html` | minimal Pi.ai-shaped DOM the content script decorates |
 | `support/mock-claude-page.html` | minimal claude.ai stand-in (defines no `--black`) for the host-CSS contrast spec |
+| `support/mock-hey-pi-page.html` | Pi's logged-out marketing splash stand-in — an ordinary form field, no composer — for the chat-adjacent dictation spec (#559) |
 | `support/transcribe-response.ts` | the STT contract: shape of the `/transcribe` response |
 | `support/manifest-guard.ts` | `assertDevManifest()` — refuses a non-static / production build |
 | `support/check-servers.mjs` | standalone sanity check for the mock servers |

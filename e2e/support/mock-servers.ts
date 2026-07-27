@@ -9,6 +9,7 @@ const pems = await selfsigned.generate([{ name: "commonName", value: "saypi-e2e"
 const tls = { key: pems.private, cert: pems.cert };
 const PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-pi-page.html"), "utf8");
 const CLAUDE_PAGE = readFileSync(resolve(import.meta.dirname, "mock-claude-page.html"), "utf8");
+const HEY_PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-hey-pi-page.html"), "utf8");
 
 export interface MockServers {
   piPort: number;
@@ -42,7 +43,16 @@ export async function startMockServers(): Promise<MockServers> {
   // content script injects per the manifest match for whichever URL is loaded.
   const piServer = https.createServer(tls, (req, res) => {
     const host = (req.headers.host ?? "").toLowerCase();
-    const page = host.includes("claude.ai") ? CLAUDE_PAGE : PI_PAGE;
+    // hey.pi.ai first: it is a pi.ai SUBdomain, so the fallthrough would hand it
+    // the chat-shaped Pi mock and quietly weaken the chat-adjacent spec (#559).
+    // This ordering protects hey.pi.ai ONLY — the claude branch below is a
+    // substring test, so a future `hey.claude.ai` mapping would fall into the
+    // Claude chat mock and needs its own branch here (and its own MAP).
+    const page = host.startsWith("hey.pi.ai")
+      ? HEY_PI_PAGE
+      : host.includes("claude.ai")
+        ? CLAUDE_PAGE
+        : PI_PAGE;
     res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
     res.end(page);
   });

@@ -11,6 +11,11 @@ export function buildLaunchArgs(o: LaunchArgsOptions): string[] {
     `MAP pi.ai 127.0.0.1:${o.piPort}`,
     // claude.ai shares the page server; it serves the Claude mock by Host header.
     `MAP claude.ai 127.0.0.1:${o.piPort}`,
+    // hey.pi.ai — Pi's logged-out marketing splash. A chat-ADJACENT host: the
+    // chat content script's `https://pi.ai/*` does not match it, so only the
+    // universal script injects and the page must run dictation, not chat (#559).
+    // Same page server, Host-routed to the splash mock.
+    `MAP hey.pi.ai 127.0.0.1:${o.piPort}`,
     `MAP api.saypi.ai 127.0.0.1:${o.apiPort}`,
     `MAP www.saypi.ai 127.0.0.1:${o.apiPort}`,
     `MAP app.saypi.ai 127.0.0.1:${o.apiPort}`,

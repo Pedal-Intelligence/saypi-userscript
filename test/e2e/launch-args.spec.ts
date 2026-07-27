@@ -20,6 +20,9 @@ describe("buildLaunchArgs", () => {
     expect(rule).toContain("MAP pi.ai 127.0.0.1:8443");
     // claude.ai shares the page server (Host-routed to the Claude mock page).
     expect(rule).toContain("MAP claude.ai 127.0.0.1:8443");
+    // hey.pi.ai too — the chat-adjacent host the #559 dictation spec loads. It
+    // is a pi.ai SUBdomain, so it needs its own MAP: `MAP pi.ai` is exact-host.
+    expect(rule).toContain("MAP hey.pi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP api.saypi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP www.saypi.ai 127.0.0.1:8443");
     expect(rule).toContain("MAP app.saypi.ai 127.0.0.1:8443");
