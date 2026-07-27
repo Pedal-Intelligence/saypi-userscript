@@ -4,6 +4,30 @@
  */
 export type ChatbotId = "claude" | "pi" | "chatgpt" | "web";
 
+/**
+ * The exact hostnames of the chat apps SayPi decorates — i.e. the hosts the CHAT
+ * content script is injected into (`CHATBOT_MATCHES` in
+ * `entrypoints/saypi.content.ts`, and the mirror-image `excludeMatches` in
+ * `entrypoints/saypi-universal.content.ts`).
+ *
+ * Both entrypoints import the same `src/saypi.index.js`, so the bundle cannot ask
+ * at runtime which script loaded it; the injection scope has to be restated here
+ * for the mode gate to read. Those entrypoint files are founder-gated, so
+ * `test/chatbots/ChatbotIdentifier-injectionParity.spec.ts` reads them from disk
+ * and fails if this list drifts from them.
+ *
+ * Exact hosts, not registrable domains: a Chrome match pattern of
+ * `https://pi.ai/*` matches the host `pi.ai` and nothing else — not `hey.pi.ai`,
+ * not `www.pi.ai` (see #559).
+ */
+export const CHAT_APP_HOSTNAMES = [
+  "pi.ai",
+  "claude.ai",
+  "chatgpt.com",
+  "chat.com",
+  "chat.openai.com",
+] as const;
+
 export class ChatbotIdentifier {
   /**
    * Identifies which chatbot is being used based on the current URL
@@ -102,17 +126,46 @@ export class ChatbotIdentifier {
     return this.identifyChatbot() === type;
   }
 
+  /**
+   * True when the current page is one of the chat apps SayPi decorates.
+   *
+   * Keyed on the exact hostname rather than `identifyChatbot()`'s registrable
+   * domain: `identifyChatbot()` answers "which product is this?" (attribution),
+   * whereas mode is "does this page have a chat UI to decorate?". Those diverge
+   * on any non-chat subdomain — `hey.pi.ai` is Pi's marketing splash with no
+   * composer, yet it is very much Pi (#559).
+   *
+   * Hostname, not origin: the Layer-3 harness serves the real hostnames over a
+   * local server, so a scheme-sensitive check would silently drop the e2e
+   * fixtures out of chat mode.
+   */
+  static isChatAppHost(hostnameOverride?: string): boolean {
+    const hostname = this.resolveHostname(hostnameOverride);
+    if (!hostname) {
+      return false;
+    }
+    return (CHAT_APP_HOSTNAMES as readonly string[]).includes(hostname);
+  }
+
+  /**
+   * The two mode gates partition every page: exactly one of them is true for any
+   * hostname. Narrowing only `isInChatMode()` would have left `hey.pi.ai` in
+   * NEITHER mode — chat machinery gone AND universal dictation still suppressed.
+   *
+   * The one carve-out, unchanged from before: with no location at all (the
+   * service worker's own `chrome-extension://` scope) there is no page to be in a
+   * mode for, and both gates are false.
+   */
   static isInDictationMode(): boolean {
-    const chatbot = this.identifyChatbot();
-    return chatbot === "web";
+    const hostname = this.resolveHostname();
+    if (!hostname) {
+      return false;
+    }
+    return !this.isChatAppHost(hostname);
   }
 
   static isInChatMode(): boolean {
-    const chatbot = this.identifyChatbot();
-    if (!chatbot) {
-      return false;
-    }
-    return chatbot !== "web";
+    return this.isChatAppHost();
   }
 
 }
