@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /><title>hey.pi.ai mock</title></head>
+  <body>
+    <!--
+      Stand-in for Pi's logged-out marketing splash (hey.pi.ai): a landing page
+      with an ordinary form field and NO chat composer — deliberately nothing
+      matching Pi's prompt selector, so a call button here could only come from
+      the mode gate misfiring.
+
+      The field is present in the initial HTML rather than mounted later: unlike
+      the chat DOMObserver, UniversalDictationModule does an initial scan
+      (decorateExistingElements) as well as observing mutations, so a static
+      field exercises the ordinary path.
+    -->
+    <main>
+      <h1>Hi, I'm Pi.</h1>
+      <p>Your personal AI.</p>
+      <form>
+        <label for="email">Get updates</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+      </form>
+    </main>
+  </body>
+</html>

@@ -62,6 +62,10 @@ const DICTATION_HOSTS = [
   "example.com",
   "saypi.ai",
   "localhost",
+  // The extension service worker's own scope: `chrome-extension://<id>/`, whose
+  // hostname is the 32-char id. It has a host, so it is NOT the "no location"
+  // carve-out below — it is an ordinary non-chat host, as it was before #559.
+  "abcdefghijklmnopabcdefghijklmnop",
 ];
 
 describe("chat mode is gated on the chat-app origins (#559)", () => {
@@ -103,11 +107,13 @@ describe("chat mode is gated on the chat-app origins (#559)", () => {
   );
 
   /**
-   * Carve-out, deliberate and pre-existing: with no location at all (the
-   * extension service worker, whose own scope is `chrome-extension://…`) there
-   * is no page to be in a mode for, so BOTH gates stay false. This is not a hole
-   * in the partition above — it is the "no host" case, and today's behaviour
-   * (`identifyChatbot()` → undefined → both gates false) is preserved verbatim.
+   * Carve-out, deliberate and pre-existing: a context with no `location` binding
+   * at all has no page to be in a mode for, so BOTH gates stay false. This is
+   * not a hole in the partition above — it is the "no host" case, and today's
+   * behaviour (`identifyChatbot()` → undefined → both gates false) is preserved
+   * verbatim. It is NOT the extension service worker: that resolves to its own
+   * `chrome-extension://<id>/` scope, which has a hostname and therefore lands
+   * in dictation mode (covered by the DICTATION_HOSTS row for a dotless host).
    */
   test("no location means neither mode", () => {
     withHostname(null, () => {

@@ -135,9 +135,8 @@ export class ChatbotIdentifier {
    * on any non-chat subdomain — `hey.pi.ai` is Pi's marketing splash with no
    * composer, yet it is very much Pi (#559).
    *
-   * Hostname, not origin: the Layer-3 harness serves the real hostnames over a
-   * local server, so a scheme-sensitive check would silently drop the e2e
-   * fixtures out of chat mode.
+   * Hostname, not origin: the injection scope this mirrors is written as host
+   * match patterns, so a plain host list tracks it 1:1.
    */
   static isChatAppHost(hostnameOverride?: string): boolean {
     const hostname = this.resolveHostname(hostnameOverride);
@@ -152,9 +151,12 @@ export class ChatbotIdentifier {
    * hostname. Narrowing only `isInChatMode()` would have left `hey.pi.ai` in
    * NEITHER mode — chat machinery gone AND universal dictation still suppressed.
    *
-   * The one carve-out, unchanged from before: with no location at all (the
-   * service worker's own `chrome-extension://` scope) there is no page to be in a
-   * mode for, and both gates are false.
+   * The one carve-out, unchanged from before: a context with no `location`
+   * binding at all — no page, no mode, both gates false. Note this is NOT the
+   * extension service worker; as `getGlobalLocation()` says, that resolves to
+   * the worker's own `chrome-extension://<id>/` scope, so it has a hostname, it
+   * is not a chat-app host, and it lands in dictation mode exactly as it did
+   * before this change.
    */
   static isInDictationMode(): boolean {
     const hostname = this.resolveHostname();
