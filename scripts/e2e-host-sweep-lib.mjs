@@ -236,11 +236,15 @@ export function classifyUndecorated(input = {}) {
 export const SIGN_IN_PROBE = () => {
   const LABEL = /^(sign[ -]?in|log[ -]?in|sign[ -]?up|register|get started|continue with [a-z]+)$/i;
   const HREF = /\/(login|log-in|signin|sign-in|sign_in|auth|authorize)(\/|\?|$)/i;
+  // Sign-OUT is auth-shaped but means the opposite (we're signed in) — /api/auth/logout
+  // matches HREF, and letting it through would staple a backwards caveat onto a note.
+  const OUT = /(log|sign)[ -_]?out/i;
   const labels = [];
   for (const el of document.querySelectorAll("a, button, [role='button']")) {
     const text = (el.textContent || "").trim();
     if (text.length > 40) continue; // prose, not a control
     const href = el.getAttribute("href") || "";
+    if (OUT.test(text) || OUT.test(href)) continue;
     if (!LABEL.test(text) && !(href && HREF.test(href))) continue;
     const label = text || href.slice(0, 80);
     if (label && !labels.includes(label)) labels.push(label);

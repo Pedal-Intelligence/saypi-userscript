@@ -176,6 +176,14 @@ describe("SIGN_IN_PROBE", () => {
     expect(SIGN_IN_PROBE().visible).toBe(false);
   });
 
+  it("does not mistake a LOG OUT link for a sign-in wall", () => {
+    // /api/auth/logout is auth-shaped but proves the opposite: we're signed in.
+    // Left unhandled it would staple a backwards caveat onto a drift note.
+    document.body.innerHTML = `
+      <main><button>Send</button><a href="/api/auth/logout">Log out</a></main>`;
+    expect(SIGN_IN_PROBE()).toEqual({ visible: false, labels: [] });
+  });
+
   it("ignores long prose that merely mentions signing in", () => {
     document.body.innerHTML = `<button>You can sign in later to keep your conversation history</button>`;
     expect(SIGN_IN_PROBE().visible).toBe(false);
