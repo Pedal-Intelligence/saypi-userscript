@@ -39,7 +39,16 @@ import { createServer } from "node:net";
 import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveCdpProfileDir, buildCdpChromeArgs, isCloudflareChallenge } from "./layer4cdp-lib.mjs";
-import { HOSTS, DIAGS, parseSweepArgs, summarize, ttsCoverage, SAYPI_TTS_PROVIDER } from "./e2e-host-sweep-lib.mjs";
+import {
+  HOSTS,
+  DIAGS,
+  SIGN_IN_PROBE,
+  parseSweepArgs,
+  summarize,
+  ttsCoverage,
+  classifyUndecorated,
+  SAYPI_TTS_PROVIDER,
+} from "./e2e-host-sweep-lib.mjs";
 import { enforceSpendCap } from "./l4-ledger.mjs";
 
 const repoRoot = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
@@ -200,7 +209,11 @@ async function selectSaypiVoice(page, host) {
 
 async function sweepHost(ctx, host, url, opts, outDir) {
   const ev = {
-    host, url, decorated: false, cloudflareBlocked: false, build: null,
+    // `url` is what we ASKED for; `finalUrl`/`pageTitle` are where we actually ended
+    // up (a host can bounce us elsewhere), and `undecorated` explains a decoration
+    // failure. Without the final URL a redirect is invisible in the JSON (#559).
+    host, url, finalUrl: null, pageTitle: null, undecorated: null, signInAffordances: [],
+    decorated: false, cloudflareBlocked: false, build: null,
     transcript: null, autoSubmitted: false, assistantReplied: false,
     authStatus: null, voiceProvider: null, selectedVoice: null, selectedModel: null,
     console: [], pageErrors: [], network: [], requestFailed: [],
@@ -234,14 +247,31 @@ async function sweepHost(ctx, host, url, opts, outDir) {
   try {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 35_000 }).catch((e) => ev.notes.push(`goto: ${e.message}`));
     const sig = { title: await page.title().catch(() => ""), url: page.url(), html: (await page.content().catch(() => "")).slice(0, 4000) };
+    ev.finalUrl = sig.url; ev.pageTitle = sig.title; // provisional — so even an early return carries them
     if (isCloudflareChallenge(sig)) { ev.cloudflareBlocked = true; log(`${host}: BLOCKED by Cloudflare — re-seed (npm run layer4cdp:seed)`); return ev; }
 
     ev.decorated = await page.waitForSelector("#saypi-callButton", { timeout: 25_000 }).then(() => true).catch(() => false);
+    // Re-read the URL/title AFTER the wait: pi.ai's logged-out bounce to hey.pi.ai is
+    // client-side JS that fires well after domcontentloaded, so `sig` still shows the
+    // requested URL and classifying off it would report the redirect as drift (#559).
+    ev.finalUrl = page.url(); ev.pageTitle = await page.title().catch(() => ev.pageTitle);
     ev.build = await page.evaluate(() => document.documentElement.dataset.saypiBuild ?? "(none)").catch(() => null);
     await page.screenshot({ path: join(dir, "01-before.png") }).catch(() => {});
     ev.domDiagnostics = await page.evaluate(DIAGS[host]).catch((e) => ({ error: e.message }));
 
-    if (!ev.decorated) { ev.notes.push("not decorated — selector drift or logged out"); return ev; }
+    if (!ev.decorated) {
+      const signIn = await page.evaluate(SIGN_IN_PROBE).catch(() => null);
+      ev.signInAffordances = signIn?.labels ?? [];
+      ev.undecorated = classifyUndecorated({
+        requestedUrl: url,
+        finalUrl: ev.finalUrl,
+        title: ev.pageTitle,
+        signInVisible: !!signIn?.visible,
+      });
+      ev.notes.push(ev.undecorated.note);
+      log(`${host}: NOT DECORATED [${ev.undecorated.kind}] — ${ev.undecorated.note}`);
+      return ev;
+    }
 
     // Select a faster claude.ai model (default) so the reply + readback finish in-window.
     if (!opts.noTurn && host === "claude" && opts.claudeModel !== "keep") {
@@ -350,7 +380,7 @@ async function main() {
       const ev = await sweepHost(ctx, key, url, opts, outDir);
       const s = summarize(ev);
       summaries.push(s);
-      log(`${key}: decorated=${s.decorated} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""}${ev.selectedModel ? ` model=${ev.selectedModel}` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
+      log(`${key}: decorated=${s.decorated}${s.undecorated ? ` (${s.undecorated}, final=${s.finalUrl})` : ""} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""}${ev.selectedModel ? ` model=${ev.selectedModel}` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
     }
   } finally {
     writeFileSync(join(outDir, "summary.json"), JSON.stringify(summaries, null, 2));
