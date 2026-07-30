@@ -146,9 +146,11 @@ export function transcriptLanded(value) {
  * Deliberately dismissal-only — no "OK"/"Continue"/"Accept", which on a consent or
  * upsell dialog opt the run *into* something rather than out of it (Mistral's ToS
  * "Accept and continue" is handled explicitly per-target by `dismissModal`, not here).
+ * "Got it" is excluded for the same reason even though it *reads* like a dismissal: it
+ * is the accept-all button on a common genre of cookie banner.
  */
 export const OVERLAY_DISMISS_LABELS =
-  /^\s*(close|close dialog|close modal|dismiss|not now|no thanks|no,? thanks|maybe later|later|skip|skip for now|got it|×|✕)\s*$/i;
+  /^\s*(close|close dialog|close modal|dismiss|not now|no thanks|no,? thanks|maybe later|later|skip|skip for now|×|✕)\s*$/i;
 
 /**
  * Strip the ANSI dim/reset codes Playwright wraps its call log in — the raw message is
@@ -156,6 +158,9 @@ export const OVERLAY_DISMISS_LABELS =
  * cleaned text the classifier reads (one implementation, not two).
  */
 export const stripAnsi = (s) => String(s ?? "").replace(/\[[0-9;]*m/g, "");
+
+/** The phrase Playwright uses to blame an element for eating a click. */
+const MARK = "intercepts pointer events";
 
 /** Opening tags only — `</div>` fails the leading letter check, so closing tags are skipped. */
 const OPEN_TAG = /<([a-zA-Z][a-zA-Z0-9-]*)((?:\s[^<>]*?)?)\/?>/g;
@@ -182,6 +187,38 @@ function condenseTag(tag, attrs) {
 }
 
 /**
+ * How identifying is a condensed element? A human-readable label beats an id beats a
+ * bare class beats a naked tag. This is the ranking that decides which interception
+ * gets reported, and it is the whole reason the reader gets
+ * `img.css-9pa8cd[Introducing Grok 4.5 for Chat]` instead of `div.css-175oi2r`.
+ */
+const identityScore = (el) => (/\[.+\]$/.test(el) ? 3 : el.includes("#") ? 2 : el.includes(".") ? 1 : 0);
+
+/**
+ * Every interception Playwright reported, in log order. Each entry is scoped to the
+ * line that reported it, so an earlier `locator resolved to <textarea …>` line can
+ * never be mistaken for an interceptor — blaming the click's own target would be worse
+ * than the generic note this replaces.
+ */
+function parseInterceptions(text) {
+  const out = [];
+  for (let at = text.indexOf(MARK); at >= 0; at = text.indexOf(MARK, at + MARK.length)) {
+    // The reported line, or (single-line logs) a bounded tail.
+    const lineStart = text.lastIndexOf("\n", at) + 1;
+    const window = text.slice(Math.max(lineStart, at - 700), at);
+    const tags = [...window.matchAll(OPEN_TAG)].map((m) => condenseTag(m[1], m[2] || ""));
+    if (!tags.length) continue;
+    const nested = /\bfrom\s+<[^<>]*>[^<]*(?:<\/[a-zA-Z0-9-]+>)?\s*subtree\s*$/.test(window) && tags.length > 1;
+    out.push({
+      element: nested ? tags[tags.length - 2] : tags[tags.length - 1],
+      container: nested ? tags[tags.length - 1] : null,
+      raw: (window + MARK).replace(/^\s*-\s*/, "").trim().slice(0, 400),
+    });
+  }
+  return out;
+}
+
+/**
  * Pull the blocking element out of a Playwright click failure. Pure.
  *
  * When a click can't land, Playwright's call log already names the culprit —
@@ -190,33 +227,24 @@ function condenseTag(tag, attrs) {
  * specific overlay. That matters: X ships different promo creative for every launch
  * (#569), and a rule matching this image would rot by the next one.
  *
- * The *last* interception in the log wins: Playwright retries for the whole timeout
- * and the final report is the state the click actually died in (X's promo animates,
- * so early lines can blame a transient wrapper `div`). And the window is clipped to
- * the reported line so an earlier `locator resolved to <textarea …>` line can't be
- * misread as the interceptor — blaming the target itself would be worse than the
- * generic note this replaces.
+ * **Which** interception to report is not obvious, and getting it wrong is quiet: the
+ * real 4.7KB log from the run that motivated this carries EIGHT of them, because X's
+ * promo animates. An anonymous wrapper `div.css-175oi2r` is blamed both FIRST and
+ * LAST; the labelled image sits in the middle. So "take the last" — the intuitive
+ * "state the retries died in" rule — yields a name that tells a reader nothing. Rank
+ * by how identifying the element is instead, and break ties toward the freshest.
+ * (The verbatim log is checked in at
+ * test/fixtures/e2e-dictation-sweep/grok-promo-click-error.txt and pinned by the spec
+ * precisely so a shortened fixture can't make a broken rule look right again.)
  *
  * @param {string|null|undefined} message a Playwright error message / call log
  * @returns {{element: string, container: string|null, raw: string}|null}
  */
 export function describeInterceptor(message) {
-  const text = stripAnsi(message);
-  const MARK = "intercepts pointer events";
-  const at = text.lastIndexOf(MARK);
-  if (at < 0) return null;
-  // The reported line, or (single-line logs) a bounded tail — either way, scoped
-  // tightly enough that unrelated earlier tags stay out of it.
-  const lineStart = Math.max(text.lastIndexOf("\n", at) + 1, 0);
-  const window = text.slice(Math.max(lineStart, at - 700), at);
-  const tags = [...window.matchAll(OPEN_TAG)].map((m) => condenseTag(m[1], m[2] || ""));
-  if (!tags.length) return null;
-  const nested = /\bfrom\s+<[^<>]*>[^<]*(?:<\/[a-zA-Z0-9-]+>)?\s*subtree\s*$/.test(window) && tags.length > 1;
-  return {
-    element: nested ? tags[tags.length - 2] : tags[tags.length - 1],
-    container: nested ? tags[tags.length - 1] : null,
-    raw: (window + MARK).replace(/^\s*-\s*/, "").trim().slice(0, 400),
-  };
+  const hits = parseInterceptions(stripAnsi(message));
+  if (!hits.length) return null;
+  // `>=` keeps the freshest of equally-identifying candidates.
+  return hits.reduce((best, hit) => (identityScore(hit.element) >= identityScore(best.element) ? hit : best));
 }
 
 /**
@@ -280,7 +308,11 @@ const verdict = (kind, owner, fieldReached, note, interceptor = null) => ({
  *          buttonAppeared?: boolean, abortedBecause?: string|null}} [input]
  */
 export function classifyFieldOutcome(input = {}) {
-  const focusError = input.focusError || null;
+  // A *string* means the focus click failed — including the empty string. Coercing with
+  // `||` here (or trusting `.catch((e) => e.message)` upstream) turns an `Error("")`
+  // into an apparent success, and the field then classifies as no-button / owner:saypi:
+  // the exact false SayPi defect this function exists to prevent (#569 review).
+  const focusError = typeof input.focusError === "string" ? input.focusError : null;
   const dismissed = input.dismissAttempted ? " after a generic dismiss attempt (Escape + any close/dismiss control)" : "";
 
   if (input.abortedBecause) {
@@ -294,7 +326,7 @@ export function classifyFieldOutcome(input = {}) {
     );
   }
 
-  if (focusError) {
+  if (focusError !== null) {
     const interceptor = describeInterceptor(focusError);
     if (interceptor) {
       return verdict(
@@ -311,7 +343,8 @@ export function classifyFieldOutcome(input = {}) {
         interceptor,
       );
     }
-    if (!/locator resolved to/.test(stripAnsi(focusError))) {
+    const log = stripAnsi(focusError);
+    if (/waiting for locator/.test(log) && !/locator resolved to/.test(log)) {
       return verdict(
         FIELD_OUTCOME_KINDS.FIELD_ABSENT,
         "automation",
@@ -327,10 +360,10 @@ export function classifyFieldOutcome(input = {}) {
       FIELD_OUTCOME_KINDS.FOCUS_FAILED,
       "automation",
       false,
-      `the field resolved but could not be clicked${dismissed} (not a pointer-event interception — read ` +
-        `focusError in evidence.json), so it was never focused and this run says NOTHING about universal ` +
-        `dictation. Re-run; if it repeats, the field may be disabled/covered in a way Playwright reports ` +
-        `differently.`,
+      `the focus click failed for a reason the call log doesn't explain${dismissed} — no pointer-event ` +
+        `interception and no unmatched-selector signature (read focusError in evidence.json; it may be ` +
+        `empty). Nothing was focused, so this run says NOTHING about universal dictation. Re-run; if it ` +
+        `repeats, the field may be disabled or covered in a way Playwright reports differently.`,
     );
   }
 

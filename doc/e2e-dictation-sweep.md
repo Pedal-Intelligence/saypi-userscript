@@ -115,12 +115,22 @@ first — only **`saypi`** is a defect to hunt:
 
 Before giving up on an `overlay-blocked` field the harness makes one generic
 rescue attempt — Escape, then any control whose whole accessible name reads as a
-dismissal (`OVERLAY_DISMISS_LABELS`; never "OK"/"Accept"/"Continue", which would
-opt the run *into* something) — and retries the focus. It deliberately knows
-nothing about any specific overlay: X ships new promo creative with every Grok
-launch, so a rule keyed on one image would rot by the next one. A per-target
-consent dialog that recurs every run belongs in the target's `dismissModal`
-instead.
+dismissal (`OVERLAY_DISMISS_LABELS`; never "OK"/"Accept"/"Continue"/"Got it",
+which would opt the run *into* something) — and retries the focus. It
+deliberately knows nothing about any specific overlay: X ships new promo creative
+with every Grok launch, so a rule keyed on one image would rot by the next one. A
+per-target consent dialog that recurs every run belongs in the target's
+`dismissModal` instead.
+
+The name in the note comes from Playwright's own call log, and `describeInterceptor`
+picks the **most identifying** interception rather than the last one — a real log
+carries many (the checked-in fixture
+`test/fixtures/e2e-dictation-sweep/grok-promo-click-error.txt` has eight), and X's
+animating promo gets an anonymous wrapper `div` blamed both first and last with the
+labelled image in between. Ranking by identity (label > id > class) is what makes the
+note say `img.css-9pa8cd[Introducing Grok 4.5 for Chat]` instead of
+`div.css-175oi2r`. Keep that fixture verbatim if you touch it: a shortened one hid
+this exact bug during review.
 
 ## Analysis discipline (don't skip — this is where false findings come from)
 

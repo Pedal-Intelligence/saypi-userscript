@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
 import {
   TARGETS,
   flattenFields,
@@ -195,56 +196,87 @@ describe("summarizeField", () => {
  * problem, says NOTHING about SayPi) vs. "got in front of the feature and it
  * didn't work" (the defect this sweep exists to find).
  *
- * The error text below is the real one from
- * `.output/e2e-dictation-sweep/2026-07-29T21-25-23-179Z/grok__4/evidence.json`,
- * ANSI dim codes and all — Playwright names the interceptor for us, so nothing
- * needs to match X's specific creative (which will change with the next launch).
+ * The fixture is the **verbatim** Playwright message from that run — extracted from
+ * `.output/e2e-dictation-sweep/2026-07-29T21-25-23-179Z/grok__4/evidence.json`'s
+ * `notes[0]` (minus the harness's own `"focus: "` prefix) and checked in, because
+ * `.output/` is gitignored. ANSI escapes intact: stripping them is the code's job,
+ * not the fixture's.
+ *
+ * **Do not trim it.** The first version of this spec used a hand-shortened excerpt,
+ * and that truncation hid a real bug. The real log carries EIGHT interceptions, and
+ * X's promo animates: the anonymous wrapper `div.css-175oi2r` is blamed both FIRST
+ * and LAST, while the informative labelled image sits in the middle. A "take the last
+ * one" rule looked right against the excerpt and returned `div.css-175oi2r` — useless
+ * to a reader — against reality. The only reason the sweep printed the useful name at
+ * all was that `focusError` happened to be sliced to 4000 chars, clipping the trailing
+ * wrapper: a coincidence, not a design, and one the 30s→10s timeout change could flip.
  */
-const GROK_PROMO_CLICK_ERROR = [
-  "page.click: Timeout 30000ms exceeded.",
-  "Call log:",
-  "\u001b[2m  - waiting for locator('textarea[placeholder]')\u001b[22m",
-  "\u001b[2m    - locator resolved to <textarea dir=\"auto\" spellcheck=\"true\" placeholder=\"Ask anything\" class=\"r-30o5oe r-1dz5y72\">Hello there, this is a quick test of the voice ac…</textarea>\u001b[22m",
-  "\u001b[2m  - attempting click action\u001b[22m",
-  "\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m",
-  "\u001b[2m      - element is visible, enabled and stable\u001b[22m",
-  "\u001b[2m      - scrolling into view if needed\u001b[22m",
-  "\u001b[2m      - done scrolling\u001b[22m",
-  "\u001b[2m      - <div class=\"css-175oi2r r-f4gmv6 r-3pj75a\">…</div> from <div id=\"layers\" class=\"r-zchlnj r-1d2f490\">…</div> subtree intercepts pointer events\u001b[22m",
-  "\u001b[2m    - retrying click action\u001b[22m",
-  "\u001b[2m      - waiting 100ms\u001b[22m",
-  "\u001b[2m    14 × waiting for element to be visible, enabled and stable\u001b[22m",
-  "\u001b[2m       - element is visible, enabled and stable\u001b[22m",
-  "\u001b[2m       - <img draggable=\"false\" class=\"css-9pa8cd\" alt=\"Introducing Grok 4.5 for Chat\" src=\"https://abs.twimg.com/responsive-web/client-web/Grok-Promo-Popup-4-5-Launch.fc2ebfea.png\"/> from <div id=\"layers\" class=\"r-zchlnj r-1d2f490\">…</div> subtree intercepts pointer events\u001b[22m",
-  "\u001b[2m     - retrying click action\u001b[22m",
-  "\u001b[2m       - waiting 500ms\u001b[22m",
-].join("\n");
+const REAL_GROK_LOG = readFileSync(
+  new URL("../fixtures/e2e-dictation-sweep/grok-promo-click-error.txt", import.meta.url),
+  "utf8",
+);
 
 describe("describeInterceptor — name the overlay Playwright already blamed (#569)", () => {
-  it("names the X promo image and the layer it lives in, from the real failure", () => {
-    const i = describeInterceptor(GROK_PROMO_CLICK_ERROR);
+  it("has a verbatim, untrimmed fixture (guards the truncation that hid the bug)", () => {
+    // Pinned so a future "tidy up the fixture" breaks loudly rather than silently
+    // restoring the excerpt that made a broken selection rule look correct.
+    expect(REAL_GROK_LOG.length).toBe(4726);
+    expect(REAL_GROK_LOG.match(/intercepts pointer events/g)).toHaveLength(8);
+    expect(REAL_GROK_LOG).toContain("[2m"); // ANSI intact
+    // The trap itself: the LAST interception blames the anonymous wrapper, not the
+    // labelled promo image.
+    const last = REAL_GROK_LOG.lastIndexOf("intercepts pointer events");
+    expect(REAL_GROK_LOG.slice(last - 300, last)).toContain("css-175oi2r");
+    expect(REAL_GROK_LOG.slice(last - 300, last)).not.toContain("Introducing Grok");
+  });
+
+  it("names the X promo image and the layer it lives in, from the REAL untrimmed log", () => {
+    const i = describeInterceptor(REAL_GROK_LOG);
     expect(i).not.toBeNull();
     // Identity, not creative: tag + class + accessible-ish label, so the note is
     // actionable without the harness knowing anything about this promo.
-    expect(i!.element).toBe('img.css-9pa8cd[Introducing Grok 4.5 for Chat]');
+    expect(i!.element).toBe("img.css-9pa8cd[Introducing Grok 4.5 for Chat]");
     expect(i!.container).toBe("div#layers");
     // No ANSI escapes leak into the human-readable raw line.
-    expect(i!.raw).not.toMatch(/\u001b\[/);
+    expect(i!.raw).not.toMatch(/\[/);
   });
 
   it("does not mistake the resolved target locator for the interceptor", () => {
     // The <textarea> appears EARLIER in the call log than any interceptor; blaming
     // it would be worse than the generic note it replaces.
-    expect(describeInterceptor(GROK_PROMO_CLICK_ERROR)!.element).not.toMatch(/textarea/);
+    expect(describeInterceptor(REAL_GROK_LOG)!.element).not.toMatch(/textarea/);
   });
 
-  it("reports the LAST interception in the log — the one the retries died on", () => {
+  it("prefers the most identifying interception over merely the last one", () => {
+    // A human-readable label beats an id beats a bare class — that's what makes the
+    // note actionable. Taking the last blindly is what broke against the real log.
+    const log = [
+      "  - <img alt=\"Introducing Something\" class=\"promo\"/> from <div id=\"layers\">…</div> subtree intercepts pointer events",
+      "  - retrying click action",
+      "  - <div class=\"css-wrapper\">…</div> from <div id=\"layers\">…</div> subtree intercepts pointer events",
+    ].join("\n");
+    expect(describeInterceptor(log)!.element).toBe("img.promo[Introducing Something]");
+  });
+
+  it("falls back to the last interception when none is more identifying than another", () => {
+    // Class-only throughout: no signal to prefer, so the freshest state wins and the
+    // reader still gets something rather than null.
     const log = [
       "  - <div class=\"early\">…</div> from <div id=\"layers\">…</div> subtree intercepts pointer events",
       "  - retrying click action",
-      "  - <button aria-label=\"Sign up\" class=\"late\">…</button> from <div id=\"layers\">…</div> subtree intercepts pointer events",
+      "  - <div class=\"late\">…</div> from <div id=\"layers\">…</div> subtree intercepts pointer events",
     ].join("\n");
-    expect(describeInterceptor(log)!.element).toBe("button.late[Sign up]");
+    const i = describeInterceptor(log)!;
+    expect(i.element).toBe("div.late");
+    expect(i.container).toBe("div#layers");
+  });
+
+  it("breaks ties toward the freshest interception among equally identifying ones", () => {
+    const log = [
+      "  - <button aria-label=\"Dismiss\" class=\"a\">…</button> from <div id=\"layers\">…</div> subtree intercepts pointer events",
+      "  - <button aria-label=\"Sign up\" class=\"b\">…</button> from <div id=\"layers\">…</div> subtree intercepts pointer events",
+    ].join("\n");
+    expect(describeInterceptor(log)!.element).toBe("button.b[Sign up]");
   });
 
   it("handles an interceptor reported without a `from … subtree` clause", () => {
@@ -274,7 +306,7 @@ describe("describeInterceptor — name the overlay Playwright already blamed (#5
 describe("classifyFieldOutcome — never reached the field vs. reached it and no button (#569)", () => {
   it("calls the real Grok promo-modal failure an overlay block, not a SayPi defect", () => {
     const o = classifyFieldOutcome({
-      focusError: GROK_PROMO_CLICK_ERROR,
+      focusError: REAL_GROK_LOG,
       dismissAttempted: true,
       decorated: true,
       buttonAppeared: false,
@@ -339,7 +371,7 @@ describe("classifyFieldOutcome — never reached the field vs. reached it and no
   it("short-circuits on an aborted run (Cloudflare / harness throw) ahead of every URL-ish verdict", () => {
     const o = classifyFieldOutcome({
       abortedBecause: "the host served a Cloudflare challenge",
-      focusError: GROK_PROMO_CLICK_ERROR,
+      focusError: REAL_GROK_LOG,
       decorated: false,
       buttonAppeared: false,
     });
@@ -355,7 +387,7 @@ describe("classifyFieldOutcome — never reached the field vs. reached it and no
       {},
       { focusError: "" },
       { decorated: true },
-      { focusError: GROK_PROMO_CLICK_ERROR },
+      { focusError: REAL_GROK_LOG },
       { abortedBecause: "boom" },
     ]) {
       const o = classifyFieldOutcome(input as Record<string, unknown>);
@@ -369,7 +401,7 @@ describe("classifyFieldOutcome — never reached the field vs. reached it and no
   it("returns a uniform shape whichever branch fires (so summary.json columns stay stable)", () => {
     const keys = (o: object) => Object.keys(o).sort();
     const reached = classifyFieldOutcome({ decorated: true, buttonAppeared: true });
-    const blocked = classifyFieldOutcome({ focusError: GROK_PROMO_CLICK_ERROR });
+    const blocked = classifyFieldOutcome({ focusError: REAL_GROK_LOG });
     const aborted = classifyFieldOutcome({ abortedBecause: "boom" });
     expect(keys(blocked)).toEqual(keys(reached));
     expect(keys(aborted)).toEqual(keys(reached));
@@ -378,12 +410,30 @@ describe("classifyFieldOutcome — never reached the field vs. reached it and no
 
 describe("OVERLAY_DISMISS_LABELS — the generic, creative-agnostic dismiss step (#569)", () => {
   it("matches the dismissal affordances a promo/interstitial actually ships", () => {
-    for (const label of ["Close", "close", "Dismiss", "Not now", "No thanks", "Maybe later", "Skip", "Got it"]) {
+    for (const label of ["Close", "close", "Dismiss", "Not now", "No thanks", "Maybe later", "Skip", "✕"]) {
       expect(OVERLAY_DISMISS_LABELS.test(label)).toBe(true);
     }
   });
-  it("does not match controls that would take the run somewhere else", () => {
-    for (const label of ["Log in", "Sign up", "Continue with Google", "Send", "Accept and continue", "Try Grok 4.5", "Post"]) {
+  it("does not match controls that would take the run somewhere else, or consent to anything", () => {
+    for (const label of [
+      "Log in",
+      "Sign up",
+      "Continue with Google",
+      "Send",
+      "Accept and continue",
+      "Continue",
+      "OK",
+      "Allow",
+      "Try Grok 4.5",
+      "Post",
+      "Skip to sign up",
+      "Close account",
+      "Log out",
+      // "Got it" is the accept-all button on a common genre of cookie banner, so it
+      // lands on the wrong side of the dismiss-vs-consent line this set draws —
+      // clicking it would opt the run into tracking rather than closing a promo.
+      "Got it",
+    ]) {
       expect(OVERLAY_DISMISS_LABELS.test(label)).toBe(false);
     }
   });

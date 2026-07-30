@@ -163,8 +163,15 @@ async function dismissBlockingOverlay(page) {
  * rather than collapsed into a note.
  */
 async function focusField(page, ev, selector) {
+  // `e.message` can legitimately be "" (some rejections carry no message), and "" is
+  // falsy — which would read as a successful focus and land the field on
+  // no-button/owner:saypi, the false SayPi defect this whole change prevents. Normalise
+  // to a non-empty string so "rejected" is never mistaken for "clicked" (#569 review).
   const attempt = () =>
-    page.click(selector, { timeout: DEFAULT_FOCUS_TIMEOUT_MS }).then(() => null).catch((e) => e.message);
+    page
+      .click(selector, { timeout: DEFAULT_FOCUS_TIMEOUT_MS })
+      .then(() => null)
+      .catch((e) => stripAnsi(e?.message).trim() || "page.click rejected without a message");
 
   let err = await attempt();
   if (err) {
@@ -176,8 +183,10 @@ async function focusField(page, ev, selector) {
     ev.overlayDismissSteps = await dismissBlockingOverlay(page);
     err = await attempt();
   }
-  ev.fieldFocused = !err;
-  ev.focusError = err ? stripAnsi(err).slice(0, 4000) : null;
+  ev.fieldFocused = err === null;
+  // Store the whole call log: the real grok one is ~4.7KB, and clipping it to 4000 is
+  // exactly what accidentally hid the trailing wrapper interception (#569 review).
+  ev.focusError = err === null ? null : err.slice(0, 8000);
   return ev.focusError;
 }
 

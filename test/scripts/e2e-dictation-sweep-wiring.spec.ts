@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { sweepField } from "../../scripts/e2e-dictation-sweep.mjs";
-import { FIELD_OUTCOME_KINDS } from "../../scripts/e2e-dictation-sweep-lib.mjs";
+import { FIELD_OUTCOME_KINDS, OVERLAY_DISMISS_LABELS } from "../../scripts/e2e-dictation-sweep-lib.mjs";
 
 /**
  * The lib spec next door proves the classifier in isolation. This one proves the
@@ -46,14 +46,22 @@ const GROK_ITEM = {
   fieldLabel: "Composer (Ask anything)",
 };
 
-type Calls = { clicks: string[]; escapes: number; screenshots: string[]; dismissLookups: number };
+type Calls = {
+  clicks: string[];
+  escapes: number;
+  screenshots: string[];
+  dismissLookups: number;
+  /** Every getByRole(role, opts) the harness issued — proves WHICH filter it passed. */
+  roleQueries: { role: string; name: unknown }[];
+};
 
 /**
  * Minimal Playwright-page stand-in. `clickResults` is consumed one per field-click
  * attempt: a string rejects that attempt with it, null resolves.
  */
 function stubPage(opts: {
-  clickResults?: (string | null)[];
+  /** One entry per field-click attempt: a string or Error rejects it, null resolves. */
+  clickResults?: (string | Error | null)[];
   buttonAppears?: boolean;
   dismissControlVisible?: boolean;
   content?: string;
@@ -79,6 +87,7 @@ function stubPage(opts: {
       if (selector.includes("saypi-dictation-button")) return undefined;
       opts.calls.clicks.push(selector);
       const next = clickResults.length > 1 ? clickResults.shift() : clickResults[0];
+      if (next instanceof Error) throw next;
       if (next) throw new Error(next);
       return undefined;
     },
@@ -87,8 +96,9 @@ function stubPage(opts: {
         opts.calls.escapes += 1;
       },
     },
-    getByRole: () => {
+    getByRole: (role: string, o: { name?: unknown } = {}) => {
       opts.calls.dismissLookups += 1;
+      opts.calls.roleQueries.push({ role, name: o.name });
       const locator = {
         first: () => locator,
         waitFor: async () => {
@@ -114,7 +124,7 @@ function stubPage(opts: {
   return page;
 }
 
-const freshCalls = (): Calls => ({ clicks: [], escapes: 0, screenshots: [], dismissLookups: 0 });
+const freshCalls = (): Calls => ({ clicks: [], escapes: 0, screenshots: [], dismissLookups: 0, roleQueries: [] });
 
 const run = (page: unknown, outDir: string, item = GROK_ITEM) =>
   sweepField({ newPage: async () => page }, item, outDir, 0);
@@ -217,5 +227,28 @@ describe("sweepField always records an outcome, and never blames SayPi for an un
     expect(ev.outcome!.kind).toBe(FIELD_OUTCOME_KINDS.ABORTED);
     expect(ev.notes.join("\n")).toMatch(/Target closed/);
     expect(evidenceOnDisk(outDir).outcome).not.toBeNull();
+  });
+  it("passes OVERLAY_DISMISS_LABELS itself as the getByRole filter (#569 review)", async () => {
+    // The stub used to ignore getByRole's arguments, so the one safeguard standing
+    // between the rescue and a "Accept all"/"Log in" button went untested where it is
+    // actually applied. Assert the real filter object reaches Playwright.
+    await run(stubPage({ clickResults: [GROK_PROMO_CLICK_ERROR], dismissControlVisible: true, calls }), outDir);
+
+    expect(calls.roleQueries).toHaveLength(1);
+    expect(calls.roleQueries[0].role).toBe("button");
+    expect(calls.roleQueries[0].name).toBe(OVERLAY_DISMISS_LABELS);
+  });
+
+  it("does not call an empty-message click rejection a success (#569 review)", async () => {
+    // `page.click(...).catch((e) => e.message)` yields "" for `new Error("")`, and ""
+    // is falsy — so the focus read as successful and the field classified as
+    // no-button / owner:saypi: the exact false SayPi defect #569 exists to prevent.
+    const ev = await run(stubPage({ clickResults: [new Error(""), new Error("")], calls }), outDir);
+
+    expect(ev.fieldFocused).toBe(false);
+    expect(ev.focusError).toBeTruthy();
+    expect(ev.outcome!.kind).not.toBe(FIELD_OUTCOME_KINDS.NO_BUTTON);
+    expect(ev.outcome!.owner).not.toBe("saypi");
+    expect(ev.outcome!.fieldReached).toBe(false);
   });
 });
