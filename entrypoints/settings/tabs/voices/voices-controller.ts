@@ -1,5 +1,8 @@
 import getMessage from "../../../../src/i18n";
-import { SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
+import {
+  audioProviders,
+  SpeechSynthesisVoiceRemote,
+} from "../../../../src/tts/SpeechModel";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
 import { getJwtManagerSync } from "../../../../src/JwtManager";
@@ -172,8 +175,64 @@ interface StudioViewModel {
     /** current + pins have consumed every seat — no room to pin more. */
     full: boolean;
   } | null;
-  /** Display names appearing more than once (the twin-Paola problem, #474). */
-  dupNames: Set<string>;
+  /**
+   * Display names appearing more than once (the twin-Paola problem, #474),
+   * mapped to how the studio differentiates that whole GROUP. Group-level, not
+   * per-voice: a per-voice rule can land one twin on a language count and the
+   * other on a server description — non-parallel again, just differently.
+   */
+  dupNames: Map<string, DupStrategy>;
+}
+
+/**
+ * How a set of same-named voices is told apart (#474).
+ * - "description": every twin carries its own distinct server description —
+ *   parallel AND the most informative pair the payload can give.
+ * - "languages": no such descriptions, but every twin has a DIFFERENT language
+ *   count — the same sentence with a different number, parallel in a weaker
+ *   register.
+ * - "description" is also the fallback when neither holds: description-first
+ *   per voice, which is non-parallel but at least tells the rows apart.
+ */
+type DupStrategy = "languages" | "description";
+
+/** How many languages the server says a voice speaks (0 when it didn't say). */
+const languageCount = (voice: SpeechSynthesisVoiceRemote): number =>
+  voice.languages?.length ?? 0;
+
+const describedAs = (voice: SpeechSynthesisVoiceRemote): string =>
+  (voice.description ?? "").trim();
+
+const allDistinct = (values: (string | number)[]): boolean =>
+  new Set(values).size === values.length;
+
+/**
+ * Pick the differentiator for one group of same-named voices (#474).
+ *
+ * Order matters, and it is an order of usefulness, not of preference for a
+ * data shape: distinct descriptions say something about how the voices differ;
+ * distinct counts merely differ. A tie in either is disqualifying — two cards
+ * printing the identical sentence differentiate nothing, which is worse than
+ * the non-parallel fallback.
+ */
+function dupStrategyFor(
+  name: string,
+  group: SpeechSynthesisVoiceRemote[]
+): DupStrategy {
+  const descriptions = group.map(describedAs);
+  if (descriptions.every(Boolean) && allDistinct(descriptions))
+    return "description";
+
+  const counts = group.map(languageCount);
+  if (counts.every((n) => n > 1) && allDistinct(counts)) return "languages";
+
+  // Neither axis separates the twins in the same register: the payload has
+  // gone thinner than #474 assumed (a missing `languages`, or twins the server
+  // reports identically). Say so rather than silently going non-parallel.
+  console.warn(
+    `Voice name "${name}" is shared by ${group.length} voices with no parallel differentiator (descriptions: ${JSON.stringify(descriptions)}, language counts: ${JSON.stringify(counts)}); falling back to description-first subtitles (#474).`
+  );
+  return "description";
 }
 
 const escapeCss = (value: string) =>
@@ -355,14 +414,22 @@ export class VoicesController {
           };
         })();
 
-    const nameCounts = new Map<string, number>();
+    // Twin display names (#474). The names themselves stay identical — the
+    // only suffix the payload would support is a model name, which /voices
+    // never serves — so the subtitle is the sole differentiator, and it is
+    // decided once per name group so both twins read in the same register.
+    const byName = new Map<string, SpeechSynthesisVoiceRemote[]>();
     catalog.forEach((voice) => {
       const name = String(voice.name ?? "").toLowerCase();
-      nameCounts.set(name, (nameCounts.get(name) ?? 0) + 1);
+      const group = byName.get(name);
+      if (group) group.push(voice);
+      else byName.set(name, [voice]);
     });
-    const dupNames = new Set(
-      [...nameCounts.entries()].filter(([, n]) => n > 1).map(([name]) => name)
-    );
+    const dupNames = new Map<string, DupStrategy>();
+    byName.forEach((group, name) => {
+      if (group.length < 2) return;
+      dupNames.set(name, dupStrategyFor(name, group));
+    });
 
     return {
       host,
@@ -438,12 +505,7 @@ export class VoicesController {
     const stage = document.createElement("div");
     stage.classList.add("voice-stage");
 
-    if (!current) {
-      stage.classList.add("voice-stage-empty");
-      stage.setAttribute("data-i18n", "voicesNoStageVoice");
-      stage.textContent = getMessage("voicesNoStageVoice");
-      return stage;
-    }
+    if (!current) return this.renderEmptyStage(stage, vm);
 
     const identity = getVoiceIdentity(current);
     stage.style.setProperty("--stage-from", identity.gradient[0]);
@@ -488,14 +550,62 @@ export class VoicesController {
     if (getVoiceTier(current) === "hd") {
       chips.appendChild(this.renderTierChip());
     }
+    // The chip is a second facet of the voice, not an echo of the first: on a
+    // twin the subtitle IS the language sentence (#474), and printing it again
+    // 15px lower makes the hero repeat itself.
     const langs = this.languagesSubtitle(current);
-    if (langs) {
+    if (langs && langs !== subtitle.text) {
       const lang = document.createElement("span");
       lang.classList.add("voice-stage-lang");
       lang.textContent = langs;
       chips.appendChild(lang);
     }
     if (chips.childNodes.length > 0) meta.appendChild(chips);
+
+    stage.appendChild(meta);
+    return stage;
+  }
+
+  /**
+   * The stage with nothing on it — a hero that recruits, not a placeholder
+   * that apologises. Two lines: an imperative headline (host-generic) and one
+   * supporting line that MUST differ per host, because "no voice selected"
+   * means opposite things.
+   *
+   * The choice is a HOST PROPERTY, not an id list: a host that serves its own
+   * audio keeps speaking in its own voice until a Say, Pi voice replaces it; a
+   * host with no voice of its own reads nothing aloud until one is chosen. A
+   * third host therefore needs no new copy and no new branch here.
+   *
+   * The headline is the call to action — no button. The cards are already in
+   * the same viewport of the settings window, so a control whose only job is
+   * to scroll one screen would be chrome; "below" does the orienting work.
+   */
+  private renderEmptyStage(
+    stage: HTMLElement,
+    vm: StudioViewModel
+  ): HTMLElement {
+    stage.classList.add("voice-stage-empty");
+    const meta = document.createElement("div");
+    meta.classList.add("voice-stage-meta");
+
+    const title = document.createElement("div");
+    title.classList.add("voice-stage-empty-title");
+    // No data-i18n on substituted text (replaceI18n clobber — see renderEmptyState).
+    title.textContent = getMessage("voicesStageEmptyTitle", [vm.host.label]);
+    meta.appendChild(title);
+
+    const note = document.createElement("div");
+    note.classList.add("voice-stage-empty-note");
+    const hostServesItsOwnAudio =
+      audioProviders.getDefaultForChatbot(vm.host.id) !== audioProviders.SayPi;
+    note.textContent = getMessage(
+      hostServesItsOwnAudio
+        ? "voicesStageEmptyNoteReplace"
+        : "voicesStageEmptyNoteSilent",
+      [vm.host.label]
+    );
+    meta.appendChild(note);
 
     stage.appendChild(meta);
     return stage;
@@ -609,8 +719,13 @@ export class VoicesController {
     );
 
     if (hd.length > 0 && everyday.length > 0) {
+      // Studio-only blurbs. `hdVoicesAllowanceNote` is deliberately NOT reused
+      // here: it is also the HD chip tooltip and Claude's in-chat menu
+      // footnote, where no Everyday shelf sits beside it to carry the ratio.
+      // Here the HD shelf leads with what you get and the trade is stated once,
+      // one line below, where it reads as a gain.
       shelves.appendChild(
-        this.renderShelf("hd", "voicesShelfHd", "hdVoicesAllowanceNote", hd, vm)
+        this.renderShelf("hd", "voicesShelfHd", "voicesShelfHdBlurb", hd, vm)
       );
       shelves.appendChild(
         this.renderShelf(
@@ -693,6 +808,11 @@ export class VoicesController {
     tagline.classList.add("voice-card-tagline");
     if (subtitle.i18nKey) tagline.setAttribute("data-i18n", subtitle.i18nKey);
     tagline.textContent = subtitle.text;
+    // The card clamps this to two lines (voices.css), and on a twin the clipped
+    // text is the ONLY thing telling two same-named cards apart — nothing else
+    // in the card carries it. `title` is not touched by replaceI18n, so it
+    // survives a re-localization pass; a long locale gets it for free too.
+    if (subtitle.text) tagline.title = subtitle.text;
     card.appendChild(tagline);
 
     const actions = document.createElement("div");
@@ -812,16 +932,25 @@ export class VoicesController {
 
   /**
    * Metadata fallback for voices without an authored tagline — and the
-   * tiebreaker for twin display names (#474): when a name appears twice,
-   * metadata (description/languages) differentiates where a shared persona
-   * tagline can't.
+   * tiebreaker for twin display names (#474), where a shared persona tagline
+   * can't tell two cards apart.
+   *
+   * Which differentiator a twin group uses is decided once, for the whole
+   * group, by dupStrategyFor — a per-voice rule can land one twin on a number
+   * and the other on prose, which is the non-parallelism that made the two
+   * Paolas read as a mistake rather than a choice.
    */
   private subtitleFor(
     voice: SpeechSynthesisVoiceRemote,
-    dupNames: Set<string>
+    dupNames: Map<string, DupStrategy>
   ): { text: string; i18nKey?: string } {
+    const strategy = dupNames.get(String(voice.name ?? "").toLowerCase());
+    if (strategy === "languages") {
+      // Substituted ($count$) → no i18nKey, so replaceI18n can't strip the number.
+      return { text: this.languagesSubtitle(voice) };
+    }
     const meta = voice.description || this.languagesSubtitle(voice);
-    if (dupNames.has(String(voice.name ?? "").toLowerCase()) && meta) {
+    if (strategy === "description" && meta) {
       return { text: meta };
     }
     const identity = getVoiceIdentity(voice);
@@ -835,7 +964,7 @@ export class VoicesController {
   }
 
   private languagesSubtitle(voice: SpeechSynthesisVoiceRemote): string {
-    const count = voice.languages?.length ?? 0;
+    const count = languageCount(voice);
     return count > 1
       ? getMessage("voiceSpeaksNLanguages", [String(count)])
       : "";

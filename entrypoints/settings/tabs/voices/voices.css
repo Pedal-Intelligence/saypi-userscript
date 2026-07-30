@@ -14,6 +14,16 @@
 #tab-voices.tab-panel {
   max-width: none;
 }
+/* ...and the same 504px cap again, one level further in: .user-preference-item
+   is the card every tab wraps its controls in, and uncapping only the panel
+   left the studio at 504 − 2rem padding = 472px — barely half the 940px column
+   settingsWindowSize.ts grows the window to for this tab, and the reason the
+   shelf heads used to run out of room. The studio's own max-width (900px,
+   above) is what actually bounds it. ID+class so it wins wherever tabs.css
+   loads in the cascade; scoped to this card so no other tab moves. */
+#voices-preference.user-preference-item {
+  max-width: none;
+}
 
 /* No per-tab column widening here: `.content` is flex:1 inside the
    full-width .settings-container (global.css), so the studio already gets
@@ -85,6 +95,10 @@
   align-items: center;
   gap: 22px;
   padding: 24px 26px;
+  /* The lg orb (88px) + the stage's own padding. Pinning it here means the
+     empty stage — which has no orb — holds exactly the same room, so switching
+     to a host with no voice yet doesn't collapse the page. */
+  min-height: 136px;
   border-radius: 16px;
   margin-bottom: 16px;
   color: #ffffff;
@@ -96,13 +110,25 @@
     #0a100f
   );
 }
+/* Nothing staged yet: a hero that recruits, not a disabled placeholder. The
+   dashed outline and grey fill this replaced read as an error state. It keeps
+   the stage's full height and gets a gradient of its own, but a deliberately
+   quieter one — an empty stage has no voice identity to draw from, so it must
+   not out-shout a real selected voice. */
 .voice-stage.voice-stage-empty {
-  display: block;
-  color: #6f6a61;
-  background: #f4f4f2;
-  border: 1px dashed #d9d6cd;
-  font-size: 0.9rem;
-  padding: 18px 20px;
+  color: #1f2b26;
+  background: linear-gradient(118deg, #f6f5ef, #eceadf 58%, #e4e2d5);
+}
+.voice-stage-empty-title {
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.voice-stage-empty-note {
+  font-size: 13.5px;
+  color: #5c5a51;
+  margin-top: 6px;
 }
 .voice-stage-meta {
   min-width: 0;
@@ -372,16 +398,26 @@ button.voice-orb:hover {
   gap: 10px;
   margin-bottom: 8px;
 }
+/* The heading leads and the blurb recedes: the heading names the tier, the
+   blurb names the benefit. Before this the ALLCAPS heading and a full
+   explanatory sentence competed at the same visual weight (the blurb was
+   actually the LARGER of the two). The hierarchy is bought by DARKENING the
+   heading — the blurb stays at a WCAG-AA colour, because it is the one place
+   the studio says what HD costs. */
 .voice-shelf-title {
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 750;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #6f6a61;
+  color: #3f3b35;
+  /* The head is a flex row; the default shrink makes the TITLE the thing that
+     gives when the pair is tight, stacking "EVERYDAY / VOICES" beside a
+     two-line blurb. The heading can't lead from two lines. */
+  flex-shrink: 0;
 }
 .voice-shelf-blurb {
-  font-size: 11.5px;
-  color: #77726a;
+  font-size: 11px;
+  color: #77726a; /* 4.8:1 on the white card — AA at this size. */
 }
 .voice-card-grid {
   list-style: none;
@@ -433,17 +469,33 @@ button.voice-orb:hover {
   font-weight: 650;
   margin-top: 2px;
 }
+/* Two lines, always. Grid rows stretch, so ONE voice whose subtitle falls back
+   to a long server description used to grow every sibling card in its row
+   while their Use buttons stayed stranded mid-card. The clamp caps the tallest
+   tagline; min-height still reserves the space so a one-line tagline doesn't
+   shrink its card. */
 .voice-card-tagline {
   font-size: 11px;
   color: #77726a;
   line-height: 1.35;
   min-height: 2.7em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  /* The card centers its children, which would shrink-wrap the clamped box to
+     its longest line; stretching it fixes the wrap point (and the ellipsis) at
+     the card's width. text-align: center still centers the text itself. */
+  align-self: stretch;
 }
+/* margin-top:auto bottoms the actions row out, so the buttons share a baseline
+   across a row even if a card is still taller than its content. */
 .voice-card-actions {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 1px;
+  margin-top: auto;
 }
 .voice-card-state {
   font-size: 10.5px;

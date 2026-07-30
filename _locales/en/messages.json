@@ -985,16 +985,20 @@
     "description": "Subheading for the voice catalog section in the settings AI Chat tab"
   },
   "voicesShelfHd": {
-    "message": "HD — richest sound",
-    "description": "Group heading for premium (HD) voices in the settings voice catalog"
+    "message": "HD voices",
+    "description": "Group heading for premium (HD) voices in the settings voice catalog. Rendered uppercase by CSS."
+  },
+  "voicesShelfHdBlurb": {
+    "message": "Our richest, most expressive sound.",
+    "description": "One-line note beside the HD group heading in the settings Voices studio."
   },
   "voicesShelfEveryday": {
-    "message": "Everyday — sounds great, lasts longer",
-    "description": "Group heading for value-tier voices in the settings voice catalog"
+    "message": "Everyday voices",
+    "description": "Group heading for value-tier voices in the settings voice catalog. Rendered uppercase by CSS."
   },
   "voicesShelfEverydayBlurb": {
-    "message": "Great quality — your monthly allowance lasts about 20× longer.",
-    "description": "One-line note under the Everyday voices group heading in the settings voice catalog"
+    "message": "Natural and clear — you can listen about 20× longer than with HD.",
+    "description": "One-line note beside the Everyday group heading in the settings Voices studio; the one place the studio states how much further this tier goes than HD."
   },
   "voicesUseShort": {
     "message": "Use",
@@ -1116,9 +1120,35 @@
       }
     }
   },
-  "voicesNoStageVoice": {
-    "message": "No voice selected yet — pick one below.",
-    "description": "Stage placeholder in the settings Voices studio when the host has no current voice."
+  "voicesStageEmptyTitle": {
+    "message": "Choose how $host$ sounds",
+    "description": "Headline on the settings Voices studio stage when the host has no SayPi voice selected; $host$ is the assistant (e.g. Pi, Claude). Rendered at name size.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "message": "$host$ uses its own voice until you pick one below.",
+    "description": "Stage note when the host serves its own audio (e.g. Pi), so choosing a Say, Pi voice replaces the host's.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "message": "$host$ won't read replies aloud until you pick one below.",
+    "description": "Stage note when the host has no voice of its own (e.g. Claude), so nothing is read aloud until a Say, Pi voice is chosen.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
   "voicesBuiltinsNote": {
     "message": "$host$'s own built-in voices always appear in its menu too.",
