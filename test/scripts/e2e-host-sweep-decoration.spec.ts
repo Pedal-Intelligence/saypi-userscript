@@ -4,6 +4,7 @@ import {
   DECORATION_PROBE,
   DECORATION_BUDGET_MS,
   describeDecoration,
+  playwrightVisibility,
   classifyUndecorated,
   UNDECORATED_KINDS,
   summarize,
@@ -106,6 +107,60 @@ describe("DECORATION_WATCHER + DECORATION_PROBE record when the call button appe
   });
 });
 
+/**
+ * The predicate the whole contradiction taxonomy rests on. A non-empty bounding box is
+ * NOT Playwright's rule, and the divergence matters: `visibility: hidden` leaves the box
+ * intact, so a full-size hidden button makes the visible-wait time out *correctly*.
+ * Calling that a harness artifact would mis-own case (c) to the harness — the same
+ * inversion this file exists to prevent.
+ *
+ * Rule per playwright-core 1.60.0 `isElementVisible`:
+ *   non-empty box && element.checkVisibility() && computedStyle.visibility === 'visible'
+ */
+describe("playwrightVisibility models Playwright's real rule, not bare geometry (#570)", () => {
+  const box = { x: 8, y: 700, width: 44, height: 44 };
+  const at = (over: Record<string, unknown> = {}) => ({ present: true, box, computed: { display: "block", visibility: "visible", opacity: "1" }, checkVisibility: true, ...over });
+
+  it("is visible with a non-empty box and visibility:visible", () => {
+    expect(playwrightVisibility(at())).toBe(true);
+  });
+
+  it("is NOT visible with a full-size box but visibility:hidden — the case bare geometry gets wrong", () => {
+    expect(playwrightVisibility(at({ computed: { display: "block", visibility: "hidden", opacity: "1" } }))).toBe(false);
+  });
+
+  it("treats visibility:collapse as hidden — Playwright tests === 'visible', not !== 'hidden'", () => {
+    expect(playwrightVisibility(at({ computed: { display: "block", visibility: "collapse", opacity: "1" } }))).toBe(false);
+  });
+
+  it("keeps a fully transparent element visible — opacity is NOT part of the rule", () => {
+    expect(playwrightVisibility(at({ computed: { display: "block", visibility: "visible", opacity: "0" } }))).toBe(true);
+  });
+
+  it("is NOT visible with an empty box, however healthy the style", () => {
+    expect(playwrightVisibility(at({ box: { x: 0, y: 0, width: 0, height: 0 } }))).toBe(false);
+    expect(playwrightVisibility(at({ box: null }))).toBe(false);
+  });
+
+  it("honours the browser's own checkVisibility() when it objects", () => {
+    expect(playwrightVisibility(at({ checkVisibility: false }))).toBe(false);
+    // Absent (older browser) is no objection — Playwright's guard falls through.
+    expect(playwrightVisibility(at({ checkVisibility: null }))).toBe(true);
+  });
+
+  it("returns null — not true — when no computed style could be read", () => {
+    // Playwright treats a null getComputedStyle as visible, but for us a missing style
+    // means the PROBE failed to measure. Asserting unobserved visibility is what got
+    // #570 filed in the first place.
+    expect(playwrightVisibility(at({ computed: null }))).toBeNull();
+  });
+
+  it("is false for an absent element or a missing reading", () => {
+    expect(playwrightVisibility(at({ present: false }))).toBe(false);
+    expect(playwrightVisibility(null)).toBe(false);
+  });
+});
+
 describe("describeDecoration classifies the measurement (#570)", () => {
   const probe = (over: Record<string, unknown> = {}) => ({
     selector: "#saypi-callButton",
@@ -131,6 +186,33 @@ describe("describeDecoration classifies the measurement (#570)", () => {
     // The evidence sentence must carry the numbers a reader needs.
     expect(d.evidence).toContain("771");
     expect(d.evidence).toContain("44");
+  });
+
+  // The blocking gap: `hasBox` alone would call this the harness's fault.
+  it("calls a FULL-SIZE but visibility:hidden button present-but-invisible, owned by SayPi", () => {
+    const d = describeDecoration({
+      probe: probe({ computed: { display: "block", visibility: "hidden", opacity: "1" } }),
+      callButtonsSeen: 1,
+      waitSucceeded: false,
+    });
+    expect(d.hasBox).toBe(true); // geometry says yes...
+    expect(d.playwrightVisible).toBe(false); // ...Playwright's rule says no
+    expect(d.contradiction).toBe("present-but-invisible");
+    expect(d.attributable).toBe("saypi");
+    expect(d.evidence).toContain("visibility=hidden");
+    expect(d.evidence).not.toMatch(/harness\/timing artifact/);
+  });
+
+  it("declines to blame either side when computed style could not be read", () => {
+    const d = describeDecoration({
+      probe: probe({ computed: null }),
+      callButtonsSeen: 1,
+      waitSucceeded: false,
+    });
+    expect(d.playwrightVisible).toBeNull();
+    expect(d.contradiction).toBe("visible-but-missed");
+    expect(d.attributable).toBe("unknown");
+    expect(d.evidence).toMatch(/could NOT be determined/);
   });
 
   it("calls a present-but-boxless button present-but-invisible", () => {
@@ -318,7 +400,11 @@ describe("the three worlds a bare `decorated: false` conflates are all separable
   it("distinguishes (b) from (c) in the prose too, not just in the enum", () => {
     expect(lateArrival.evidence).toMatch(/past the budget/);
     expect(lateArrival.nextStep).toMatch(/LATENCY/);
-    expect(boxless.evidence).toMatch(/no non-empty box/);
+    // (c) must read as a visibility/rendering story, and must NOT borrow (b)'s
+    // late-arrival language — the prose is what a human acts on, so the two staying
+    // textually distinct is part of the fix, not decoration.
+    expect(boxless.evidence).toMatch(/NOT visible by Playwright's rule/);
+    expect(boxless.evidence).not.toMatch(/past the budget/);
     expect(boxless.nextStep).toMatch(/RENDERING/);
   });
 });

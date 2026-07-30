@@ -169,6 +169,12 @@ export const DECORATION_WATCHER = () => {
   const w = window;
   const existing = w.__saypiSweepDecoration;
   if (existing) return existing.installedAtMs;
+  // Main frame only. `addInitScript` also runs in every child frame, and the call button
+  // only ever lives in the top document (`page.waitForSelector` and `page.evaluate`
+  // search the main frame too), so a child-frame watcher could never contribute a
+  // reading — it would just leave a never-disconnecting subtree MutationObserver in each
+  // of the host's iframes for the whole 25s.
+  if (w.top !== w) return null;
   const state = { installedAtMs: performance.now(), firstSeenMs: null, presentAtInstall: false };
   w.__saypiSweepDecoration = state;
   const mark = () => {
@@ -194,14 +200,17 @@ export const DECORATION_WATCHER = () => {
 
 /**
  * Read at the decoration deadline: is the call button there, since when, and — the
- * distinction a bare `false` loses — does it have the non-empty bounding box that
- * Playwright's default `state: 'visible'` requires? `querySelectorAll` (what
- * `domDiagnostics.callButtons` counts) does not care about layout, which is precisely
- * how the two can disagree.
+ * distinction a bare `false` loses — would Playwright have considered it *visible*?
+ * `querySelectorAll` (what `domDiagnostics.callButtons` counts) cares about neither
+ * layout nor style, which is precisely how the two can disagree.
+ *
+ * Captures the three inputs Playwright's own rule uses (see `playwrightVisibility`):
+ * the bounding box, the computed style, and `Element.checkVisibility()` — recording the
+ * browser's own answer beats reimplementing it.
  *
  * Self-contained, same rule as DIAGS/SIGN_IN_PROBE. Under JSDOM
- * `getBoundingClientRect` reports all zeros, so `hasBox` is only meaningful in a real
- * browser (unit tests stub the rect).
+ * `getBoundingClientRect` reports all zeros, so box-derived fields are only meaningful
+ * in a real browser (unit tests stub the rect).
  */
 export const DECORATION_PROBE = () => {
   const el = document.querySelector("#saypi-callButton");
@@ -210,12 +219,23 @@ export const DECORATION_PROBE = () => {
   const round = (n) => (typeof n === "number" && isFinite(n) ? Math.round(n) : null);
   let box = null;
   let computed = null;
+  let checkVisibility = null;
   if (el) {
     const r = typeof el.getBoundingClientRect === "function" ? el.getBoundingClientRect() : null;
     if (r) box = { x: round(r.x), y: round(r.y), width: round(r.width), height: round(r.height) };
     if (view && typeof view.getComputedStyle === "function") {
       const s = view.getComputedStyle(el);
       computed = { display: s.display, visibility: s.visibility, opacity: s.opacity };
+    }
+    // The browser's own answer to Playwright's second gate. Note its DEFAULT options do
+    // NOT consider `visibility` — which is exactly why Playwright pairs it with the
+    // computed-visibility check rather than relying on it alone.
+    if (typeof el.checkVisibility === "function") {
+      try {
+        checkVisibility = !!el.checkVisibility();
+      } catch {
+        checkVisibility = null;
+      }
     }
   }
   return {
@@ -229,9 +249,50 @@ export const DECORATION_PROBE = () => {
     checkedAtMs: round(performance.now()),
     box,
     computed,
+    checkVisibility,
     hasBox: !!(box && box.width > 0 && box.height > 0),
   };
 };
+
+/**
+ * Would Playwright's `state: 'visible'` have considered this reading visible?
+ * `true` / `false` / `null` when it cannot be determined. Pure, so it unit-tests off a
+ * raw probe object with no DOM.
+ *
+ * A non-empty bounding box alone is NOT the rule, and the gap is not academic:
+ * `visibility: hidden` leaves the box intact (unlike `display: none`, which zeroes it),
+ * so a 44×44 but `visibility: hidden` call button makes the visible-wait time out
+ * *correctly* — and calling that a harness artifact would mis-own issue #570's own
+ * case (c) to the harness, the same inversion this file exists to prevent.
+ *
+ * Modelled on playwright-core 1.60.0's `isElementVisible`:
+ *   box.width > 0 && box.height > 0 && element.checkVisibility() && style.visibility === 'visible'
+ * Three details follow from that source and are easy to get wrong:
+ *   - `opacity` is NOT part of it. A fully transparent element is visible to Playwright.
+ *   - the visibility test is `=== 'visible'`, not `!== 'hidden'`, so `collapse` (which
+ *     behaves as hidden on non-table elements) is correctly hidden.
+ *   - `checkVisibility()`'s default options ignore `visibility`; it contributes
+ *     `display:none` ancestors and `content-visibility`. When the browser doesn't expose
+ *     it, Playwright's own guard falls through, so absent === no objection.
+ *
+ * Two deliberate divergences, both erring toward "don't blame the harness":
+ *   - `display: contents` — Playwright recurses into children for a box. A call button
+ *     with `display: contents` is not a real shape, and it generates no box, so we report
+ *     not-visible rather than carrying the recursion.
+ *   - **no computed style read** → `null`, not `true`. Playwright treats a null
+ *     `getComputedStyle` as visible, but for us a missing style means the *probe* failed
+ *     to measure (no `defaultView`, JSDOM, a torn-down frame) — asserting visibility we
+ *     never observed is what got #570 filed in the first place.
+ */
+export function playwrightVisibility(probe) {
+  if (!probe || !probe.present) return false;
+  const box = probe.box ?? null;
+  if (!box || !(box.width > 0) || !(box.height > 0)) return false;
+  if (probe.checkVisibility === false) return false;
+  const visibility = probe.computed?.visibility ?? null;
+  if (visibility === null) return null;
+  return visibility === "visible";
+}
 
 /**
  * Turn the DECORATION_PROBE readings (the one taken at the deadline, plus the miss-only
@@ -243,18 +304,26 @@ export const DECORATION_PROBE = () => {
  * decorated" is disproved by the harness's own evidence, so the miss is a measurement
  * story, not a SayPi-drift story. The four flavours are all worth telling apart:
  *
- *   - `visible-but-missed` — present with a non-empty box at the deadline. The 25s
- *     visible-wait should have resolved. THE 2026-07-29 case (#570): box 44×44,
- *     display=block, first seen at +771ms.
- *   - `present-but-invisible` — in the DOM but boxless / display:none / hidden, so the
- *     visible-wait legitimately failed. Not absence — a rendering question.
+ *   - `visible-but-missed` — present at the deadline AND visible by Playwright's own
+ *     rule (`playwrightVisibility`), so the 25s visible-wait should have resolved. THE
+ *     2026-07-29 case (#570): box 44×44, display=block, first seen at +771ms.
+ *   - `present-but-invisible` — in the DOM but NOT Playwright-visible (boxless,
+ *     `display:none`, or a full-size box with `visibility:hidden`/`collapse`), so the
+ *     visible-wait failed correctly. Not absence — a rendering question.
  *   - `appeared-after-check` — the deadline probe saw nothing, but the grace re-read or
  *     the later `domDiagnostics` census did. The screenshot and diagnostics are captured
  *     AFTER the wait, so this is decoration that finished past the budget — and because
  *     the watcher timed the real first sighting, the number is navigation-relative even
  *     when it lands past the deadline.
- *   - `removed-before-check` — the watcher timed a first sighting, but by the deadline
- *     it was gone (a host re-render tore SayPi's UI out).
+ *   - `removed-before-check` — the watcher had already timed a first sighting by the
+ *     deadline, yet the element was gone then (a host re-render tore SayPi's UI out).
+ *     Checked BEFORE `appeared-after-check`, because a mount-then-teardown that happens
+ *     to be re-added just after the deadline is a teardown story (#392/#393's shape), not
+ *     a slow-bootstrap one — and reporting latency would point the next investigation at
+ *     the wrong thing while the same object carries an early, in-budget `firstSeenMs`.
+ *   - `census-only` — no deadline reading exists (the in-page probe failed) but the
+ *     census/grace read still found the button. The verdict is contradicted, yet there is
+ *     no measurement, so nothing here is evidence about SayPi: fix the run and re-run.
  *
  * A miss with no contradiction leaves DRIFT standing, and the evidence sentence then
  * says out loud that the button never entered the DOM — which is what makes the drift
@@ -286,6 +355,7 @@ export function describeDecoration(input = {}) {
     checkedAtMs: null,
     withinBudget: null,
     hasBox: null,
+    playwrightVisible: null,
     box: null,
     computed: null,
     callButtonsSeen,
@@ -304,6 +374,8 @@ export function describeDecoration(input = {}) {
     "present-but-invisible": "saypi",
     "appeared-after-check": "saypi",
     "removed-before-check": "saypi",
+    // A failed measurement is not evidence about SayPi, in either direction.
+    "census-only": "automation",
   };
   /**
    * What a reader should actually DO about each contradiction. Kept per-flavour on
@@ -328,6 +400,10 @@ export function describeDecoration(input = {}) {
       `attributable to SayPi, but as a TEARDOWN/re-render defect, not selector drift: the call button ` +
       `mounted and then disappeared — find out whether a host re-render tore it out and SayPi failed ` +
       `to re-decorate.`,
+    "census-only":
+      `nothing is attributable either way — the in-page probe failed, so the run recorded no ` +
+      `measurement of the call button, only that something later counted it. Fix the probe failure ` +
+      `(see notes[]) and re-run; do NOT file anything against SayPi from this run.`,
   };
 
   if (!probe) {
@@ -336,9 +412,9 @@ export function describeDecoration(input = {}) {
     return {
       ...base,
       everPresent: censusContradicts ? true : null,
-      contradiction: censusContradicts ? "appeared-after-check" : null,
-      nextStep: censusContradicts ? NEXT_STEP["appeared-after-check"] : "",
-      attributable: censusContradicts ? ATTRIBUTABLE["appeared-after-check"] : null,
+      contradiction: censusContradicts ? "census-only" : null,
+      nextStep: censusContradicts ? NEXT_STEP["census-only"] : "",
+      attributable: censusContradicts ? ATTRIBUTABLE["census-only"] : null,
       evidence:
         `no decoration reading was taken (the in-page probe did not run), so nothing is known ` +
         `about ${CALL_BUTTON_SELECTOR} beyond the wait's own verdict` +
@@ -360,10 +436,16 @@ export function describeDecoration(input = {}) {
         : null;
   const presentAtCheck = !!probe.present;
   const hasBox = !!probe.hasBox && presentAtCheck;
+  // The load-bearing predicate: Playwright's rule, not bare geometry. `hasBox` stays in
+  // the output as the raw fact, but must never stand in for visibility (see
+  // playwrightVisibility) — a full-size `visibility:hidden` button has a box and is not
+  // visible, and conflating them mis-owns a rendering defect to the harness.
+  const pwVisible = playwrightVisibility(probe);
   const everPresent = presentAtCheck || firstSeenMs !== null || callButtonsSeen > 0 || presentAtGrace === true;
   const withinBudget = firstSeenMs === null ? null : firstSeenMs <= budgetMs;
   const style = probe.computed
-    ? `display=${probe.computed.display} visibility=${probe.computed.visibility} opacity=${probe.computed.opacity}`
+    ? `display=${probe.computed.display} visibility=${probe.computed.visibility} opacity=${probe.computed.opacity}` +
+      (probe.checkVisibility === null || probe.checkVisibility === undefined ? "" : ` checkVisibility=${probe.checkVisibility}`)
     : "computed style unavailable";
   const boxText = probe.box ? `${probe.box.width}×${probe.box.height} box at (${probe.box.x},${probe.box.y})` : "no box";
   const when =
@@ -373,11 +455,15 @@ export function describeDecoration(input = {}) {
         ? `at or before +${firstSeenMs}ms (already present when the watcher installed, so that is an upper bound)`
         : `at +${firstSeenMs}ms`;
 
+  // Whether the watcher had ALREADY timed a sighting when the deadline read happened —
+  // `firstSeenMs` above can also come from the grace read, and a first sighting only
+  // discovered later is a late ARRIVAL, not a teardown.
+  const firstSeenAtDeadline = typeof probe.firstSeenMs === "number" ? probe.firstSeenMs : null;
   let contradiction = null;
   if (!waitSucceeded) {
-    if (presentAtCheck) contradiction = hasBox ? "visible-but-missed" : "present-but-invisible";
+    if (presentAtCheck) contradiction = pwVisible === false ? "present-but-invisible" : "visible-but-missed";
+    else if (firstSeenAtDeadline !== null) contradiction = "removed-before-check";
     else if (callButtonsSeen > 0 || presentAtGrace === true) contradiction = "appeared-after-check";
-    else if (firstSeenMs !== null) contradiction = "removed-before-check";
   }
 
   let evidence;
@@ -387,15 +473,22 @@ export function describeDecoration(input = {}) {
       `(read at +${probe.checkedAtMs}ms) with a ${boxText}, ${style}` +
       (when ? `; first seen ${when}` : `; first-appearance time unknown (no watcher)`) +
       `.`;
-    if (contradiction === "visible-but-missed") {
+    if (contradiction === "visible-but-missed" && pwVisible === true) {
       evidence +=
-        ` The element was therefore in the DOM AND had a non-empty box, so the ` +
-        `${budgetMs}ms visible-wait missing it is a harness/timing artifact, not selector drift.`;
+        ` The element was therefore in the DOM AND visible by Playwright's own rule ` +
+        `(non-empty box, visibility:visible), so the ${budgetMs}ms visible-wait missing it ` +
+        `is a harness/timing artifact, not selector drift.`;
+    } else if (contradiction === "visible-but-missed") {
+      evidence +=
+        ` Whether Playwright would have called it visible could NOT be determined (no ` +
+        `computed style was readable), so it was present but ownership of the miss is ` +
+        `undetermined — treat neither the harness nor SayPi as implicated until a re-run ` +
+        `produces a full reading.`;
     } else if (contradiction === "present-but-invisible") {
       evidence +=
-        ` The element was in the DOM but had no non-empty box, which is exactly what ` +
-        `Playwright's default state:'visible' requires — so the miss is a visibility ` +
-        `problem, not absence.`;
+        ` The element was in the DOM but NOT visible by Playwright's rule, which needs a ` +
+        `non-empty box AND computed visibility:visible — so the ${budgetMs}ms wait failed ` +
+        `correctly and the miss is a rendering problem, not absence.`;
     }
   } else if (contradiction === "appeared-after-check") {
     const sawIt = [
@@ -411,10 +504,19 @@ export function describeDecoration(input = {}) {
       `${CALL_BUTTON_SELECTOR} was seen ${when} but was gone by the ${budgetMs}ms deadline ` +
       `(read at +${probe.checkedAtMs}ms), and domDiagnostics counted ${callButtonsSeen ?? 0}. ` +
       `Something removed SayPi's UI after it mounted.`;
+  } else if (probe.watcherInstalledAtMs === null || probe.watcherInstalledAtMs === undefined) {
+    // No watcher ran, so there is no continuous record — only two point observations.
+    // Claiming "never" from those would be the same over-reach as #570's bare `false`.
+    evidence =
+      `${CALL_BUTTON_SELECTOR} was absent at the ${budgetMs}ms deadline (read at ` +
+      `+${probe.checkedAtMs}ms) and domDiagnostics counted ${callButtonsSeen ?? 0}, but the ` +
+      `first-appearance watcher never installed — so this is two point observations, NOT a ` +
+      `continuous record, and it cannot rule out the element having come and gone in between.` +
+      (graceProbe ? ` It was also absent at the +${graceMs}ms grace re-read.` : "");
   } else {
     evidence =
       `${CALL_BUTTON_SELECTOR} never entered the DOM during the ${budgetMs}ms window ` +
-      `(watcher installed at +${probe.watcherInstalledAtMs ?? "?"}ms, deadline read at ` +
+      `(watcher installed at +${probe.watcherInstalledAtMs}ms, deadline read at ` +
       `+${probe.checkedAtMs}ms, domDiagnostics counted ${callButtonsSeen ?? 0})` +
       (graceProbe
         ? `, and it was still absent ${graceProbe.checkedAtMs != null ? `at +${graceProbe.checkedAtMs}ms ` : ""}` +
@@ -438,12 +540,23 @@ export function describeDecoration(input = {}) {
     withinBudget,
     presentAtGrace,
     hasBox,
+    playwrightVisible: pwVisible,
     box: probe.box ?? null,
     computed: probe.computed ?? null,
     contradiction,
     evidence,
     nextStep: contradiction ? NEXT_STEP[contradiction] : "",
-    attributable: contradiction ? ATTRIBUTABLE[contradiction] : null,
+    // `visible-but-missed` is the ONE flavour that blames the harness, and it may only
+    // do so on a *positive* visibility reading. When `playwrightVisibility` came back
+    // null the style was never readable, so we know the element was present and nothing
+    // more — asserting "harness artifact, do not file drift" off an absent measurement
+    // is the same over-reach as #570's bare `false`. The evidence prose hedges to match.
+    attributable:
+      contradiction === "visible-but-missed" && pwVisible !== true
+        ? "unknown"
+        : contradiction
+          ? ATTRIBUTABLE[contradiction]
+          : null,
   };
 }
 
@@ -679,6 +792,9 @@ export function summarize(evidence = {}) {
     decorationEverPresent: evidence.decoration?.everPresent ?? null,
     decorationFirstSeenMs: evidence.decoration?.firstSeenMs ?? null,
     decorationContradiction: evidence.decoration?.contradiction ?? null,
+    // …with its owner, or the rollup silently implies "harness's fault" for the three
+    // SayPi-owned flavours.
+    decorationOwner: evidence.decoration?.attributable ?? null,
     cloudflareBlocked: !!evidence.cloudflareBlocked,
     transcript: evidence.transcript ?? null,
     authStatus: evidence.authStatus ?? null,

@@ -248,6 +248,34 @@ describe("sweepHost records the decoration measurement (#570)", () => {
     expect(hitCalls).toHaveLength(1);
   });
 
+  it("never lets the grace re-read (or the census) flip `decorated` (#570 review)", async () => {
+    // `decorated` is the VERDICT bit — it must keep meaning exactly "the visible-wait
+    // resolved inside the budget". The grace read and the census both routinely find a
+    // button the wait missed; if either could promote `decorated` to true, a real
+    // decoration failure would start reporting as a success and every downstream
+    // consumer (summary.json, the sweep's own tally, the analysis discipline in
+    // doc/e2e-host-sweep.md) would silently inherit the lie. The code is correct today;
+    // this is the regression net, because a mutation that overwrote `ev.decorated`
+    // previously passed the whole suite.
+    const ev = await runSweep(
+      stubPage({
+        // The wait fails, yet EVERY later observation finds the button present.
+        waitForSelector: async () => { throw new Error("not found"); },
+        evaluate: evaluateWith({ probe: missedButPresent, diags: { callButtons: 3 } }),
+      }),
+      outDir
+    );
+
+    expect(ev.decorated).toBe(false);
+    const onDisk = evidenceOnDisk(outDir);
+    expect(onDisk.decorated).toBe(false);
+    // ...while the measurement still records that it WAS there — the whole point of
+    // #570 is that these two coexist rather than one overwriting the other.
+    expect(onDisk.decoration.everPresent).toBe(true);
+    expect(onDisk.decoration.contradiction).toBe("visible-but-missed");
+    expect(onDisk.undecorated.kind).toBe(UNDECORATED_KINDS.INCONSISTENT);
+  });
+
   it("degrades honestly when the probe cannot run", async () => {
     const ev = await runSweep(
       stubPage({
