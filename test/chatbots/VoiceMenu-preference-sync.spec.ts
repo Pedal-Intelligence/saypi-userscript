@@ -24,7 +24,7 @@ vi.mock("../../src/popup/popupopener", () => ({
 }));
 
 import { ClaudeVoiceMenu } from "../../src/chatbots/ClaudeVoiceMenu";
-import { PiVoiceMenu } from "../../src/chatbots/PiVoiceMenu";
+import { GridVoiceSelector } from "../../src/tts/GridVoiceSelector";
 import EventBus from "../../src/events/EventBus";
 import { claudeMockVoices } from "../data/Voices";
 import { ElevenLabsVoice } from "../data/Voices";
@@ -71,8 +71,24 @@ const piVoices = [
   new ElevenLabsVoice("bWJPewAagbymiJXZcxnh", "Joey"),
 ];
 
-function makePiMenu(stored: () => SpeechSynthesisVoiceRemote | null): any {
-  const menu = Object.create(PiVoiceMenu.prototype);
+/**
+ * Pi's in-chat voice menu was retired when Pi consolidated voice choice onto its
+ * settings page (2026-07-30), taking `PiVoiceMenu` with it. The invariant it
+ * used to cover here is not Pi-specific though — it belongs to
+ * GridVoiceSelector, the base every grid surface shares — so it is exercised
+ * through a minimal grid double rather than deleted with the surface.
+ */
+class TestGrid extends GridVoiceSelector {
+  getId() {
+    return "test-grid";
+  }
+  getButtonClasses() {
+    return ["mb-1"];
+  }
+}
+
+function makeGridMenu(stored: () => SpeechSynthesisVoiceRemote | null): any {
+  const menu = Object.create(TestGrid.prototype);
   menu.chatbot = { getID: () => "pi" } as any;
   menu.userPreferences = {
     getVoice: vi.fn(async () => stored()),
@@ -146,12 +162,12 @@ describe("ClaudeVoiceMenu reacts to settings-page voice changes (#475)", () => {
   });
 });
 
-describe("PiVoiceMenu reacts to settings-page voice changes (#475)", () => {
+describe("GridVoiceSelector reacts to settings-page voice changes (#475)", () => {
   it("marks the newly stored voice's button selected on the preference event", async () => {
     const paola = piVoices[0];
     const joey = piVoices[1];
     let stored: SpeechSynthesisVoiceRemote | null = paola;
-    const menu = makePiMenu(() => stored);
+    const menu = makeGridMenu(() => stored);
     menu.renderMenu(piVoices, stored);
     await flushAsync();
 

@@ -71,9 +71,3 @@ button.saypi-voice-preview svg {
   background-color: rgb(255, 255, 200);
   border-color: rgb(255, 255, 200);
 }
-#saypi-voice-menu-controls.saypi-provided-voice {
-  //background-color: #418a2f; // need a button color that indicates the voice is provided by SayPi, but not too jarring
-  button {
-    background-color: inherit;
-  }
-}

@@ -3,7 +3,7 @@ import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../events/EventBus.js";
 import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
 import { Observation } from "../dom/Observation";
-import { PiVoiceSettings } from "./PiVoiceMenu";
+import { PiVoiceSettings } from "./PiVoiceSettings";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";

@@ -4,7 +4,6 @@ import EventBus from "../events/EventBus";
 import { shortenTranscript } from "../TextModule";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
-import { VoiceSelector } from "../tts/VoiceMenu";
 
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
@@ -23,7 +22,6 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getChatHistorySelector(): string;
     abstract getPastChatHistorySelector(): string;
     abstract getRecentChatHistorySelector(): string;
-    abstract getVoiceMenuSelector(): string;
     abstract getVoiceSettingsSelector(): string;
     abstract getDiscoveryPanelSelector(): string;
     abstract getAudioOutputButtonSelector(): string;
@@ -69,7 +67,9 @@ export abstract class AbstractChatbot implements Chatbot {
     }
     abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
-    abstract getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
+    // getVoiceMenu / getVoiceMenuSelector are OPTIONAL on Chatbot and so are
+    // deliberately not declared abstract here: a host with no in-chat voice
+    // surface (Pi) simply omits both. Claude and ChatGPT still implement them.
 
     getID(): string {
       return this.getName().toLowerCase();

@@ -33,7 +33,6 @@ export class WebDictationChatbot implements Chatbot {
   getChatHistorySelector(): string { throw new Error("Not implemented for dictation"); }
   getPastChatHistorySelector(): string { throw new Error("Not implemented for dictation"); }
   getRecentChatHistorySelector(): string { throw new Error("Not implemented for dictation"); }
-  getVoiceMenuSelector(): string { throw new Error("Not implemented for dictation"); }
   getVoiceSettingsSelector(): string { throw new Error("Not implemented for dictation"); }
   getDiscoveryPanelSelector(): string { throw new Error("Not implemented for dictation"); }
   getAudioOutputButtonSelector(): string { throw new Error("Not implemented for dictation"); }
@@ -53,7 +52,6 @@ export class WebDictationChatbot implements Chatbot {
   getPrompt(): any { throw new Error("Not implemented for dictation"); }
   getAssistantResponse(): any { throw new Error("Not implemented for dictation"); }
   getUserMessage(): any { throw new Error("Not implemented for dictation"); }
-  getVoiceMenu(): any { throw new Error("Not implemented for dictation"); }
   getCachedAssistantResponse(): any { throw new Error("Not implemented for dictation"); }
   clearCachedAssistantResponse(): boolean { throw new Error("Not implemented for dictation"); }
   simulateFormSubmit(): boolean { throw new Error("Not implemented for dictation"); }

@@ -23,7 +23,7 @@ vi.mock("../../src/popup/popupopener", () => ({
   openSettings: (...args: unknown[]) => openSettingsMock(...args),
 }));
 
-import { PiVoiceSettings } from "../../src/chatbots/PiVoiceMenu";
+import { PiVoiceSettings } from "../../src/chatbots/PiVoiceSettings";
 
 /**
  * A faithful fixture of pi.ai's CURRENT Voice settings grid (captured live via
