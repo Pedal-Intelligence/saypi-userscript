@@ -1,0 +1,30 @@
+{
+  "onyx": {
+    "sampleRate": 8000,
+    "format": "int16le",
+    "samples": 21696,
+    "spanSeconds": 1.16,
+    "voicedRmsDb": -15.37,
+    "peak": 0.809,
+    "bytes": 43392
+  },
+  "addison": {
+    "sampleRate": 8000,
+    "format": "int16le",
+    "samples": 8917,
+    "spanSeconds": 0.78,
+    "voicedRmsDb": -14.68,
+    "peak": 0.794,
+    "bytes": 17834
+  },
+  "sage": {
+    "sampleRate": 8000,
+    "format": "int16le",
+    "samples": 17664,
+    "spanSeconds": 1.76,
+    "voicedRmsDb": -24.26,
+    "peak": 0.283,
+    "bytes": 35328
+  },
+  "_note": "Decoded from the live api.saypi.ai sample clips on 2026-07-31, 8 kHz mono int16. jsdom cannot decodeAudioData, so voicePrint's DSP is tested against these directly; decodeAudioData itself is the browser-only seam and is mocked."
+}
