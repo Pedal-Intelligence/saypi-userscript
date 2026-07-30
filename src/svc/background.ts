@@ -1,5 +1,5 @@
 import { browser, Browser } from "wxt/browser";
-import { isFirefox, isMobileDevice } from "../UserAgentModule";
+import { isFirefox } from "../UserAgentModule";
 import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 import { authenticate, isPKCESupported } from "../auth/OAuthService";
 import { sendOnboardingHint, voiceGoalFromUrl } from "../auth/OnboardingHint";
@@ -8,8 +8,6 @@ import { pickSyntheticSpeechClip } from "../offscreen/syntheticSpeechPool";
 import { maybeOpenFirstRunTab } from "../onboarding/firstRun";
 import { seedVoiceDefaultsOnFreshInstall } from "../onboarding/voiceDefaults";
 import { detectPermissionLoss, buildPermissionsUrl, MIC_GRANTED_FLAG } from "../permissions/permissionLossDetection";
-import { SETTINGS_DEEP_LINK_KEY, parseSettingsDeepLink } from "../popup/popupopener";
-import { STUDIO_WINDOW, isRoomySettingsTab } from "../popup/settingsWindowSize";
 
 // Track when PKCE authentication is in progress to prevent cookie listener interference
 let isPKCEAuthInProgress = false;
@@ -32,17 +30,13 @@ function getExtensionURL(path: string): string {
   return `${protocol}${browser.runtime.id}/${path}`;
 }
 
-const POPUP_MIN_CONTENT_WIDTH = 736;
-const POPUP_DESKTOP_WIDTH = POPUP_MIN_CONTENT_WIDTH + 6; // The buffer value 6 accounts for window chrome (browser borders and controls) to ensure the content area stays above the 735px mobile breakpoint.
-
-async function openSettingsWindow() {
+async function openSettingsPage() {
   try {
-    const popupURL = getExtensionURL('settings.html');
+    const settingsURL = getExtensionURL('settings.html');
 
-    // Check if settings window/tab already exists
-    const existingTab = await findExistingSettingsTab(popupURL);
+    // Focus an existing settings tab instead of opening a duplicate.
+    const existingTab = await findExistingSettingsTab(settingsURL);
     if (existingTab) {
-      // Focus existing window/tab instead of opening a new one
       if (existingTab.windowId !== undefined) {
         await browser.windows.update(existingTab.windowId, { focused: true });
       }
@@ -52,43 +46,14 @@ async function openSettingsWindow() {
       return;
     }
 
-    // Decide initial height based on whether we need to show consent overlay
-    // We check local storage flag 'shareData'. If it's undefined, consent will show.
-    const { shareData } = await browser.storage.local.get('shareData');
-    const needsConsent = typeof shareData === 'undefined';
-    let width = POPUP_DESKTOP_WIDTH;
-    let height = needsConsent ? 640 : 512; // taller for consent (640px to match illustration), compact for settings (512px)
-
-    // A deep link into a roomy pane (the Voices studio) opens at full size
-    // directly, so the user never sees a compact window jolt larger. The
-    // page-side ensureRoomFor covers every other path (e.g. clicking the
-    // Voices tab later); Chrome clamps oversized windows to the screen.
-    try {
-      const stored = await browser.storage.local.get(SETTINGS_DEEP_LINK_KEY);
-      const link = parseSettingsDeepLink(stored?.[SETTINGS_DEEP_LINK_KEY]);
-      if (link && isRoomySettingsTab(link.tab)) {
-        width = STUDIO_WINDOW.width;
-        height = STUDIO_WINDOW.height;
-      }
-    } catch (e) {
-      // Best-effort sizing; the compact default is always safe.
-    }
-
-    // Firefox on Android does not support opening popup windows; open a tab instead
-    if (isFirefox() && isMobileDevice()) {
-      await browser.tabs.create({ url: popupURL, active: true });
-      return;
-    }
-
-    await browser.windows.create({
-      url: popupURL,
-      type: 'popup',
-      width,
-      height,
-      focused: true
-    });
+    // Settings open as a full browser tab (the standard options-page pattern),
+    // not a separate popup window: the page gets the whole viewport, so none
+    // of the popup-era window sizing (consent height, the Voices studio's
+    // adaptive growth) applies here. Deep links still arrive via the
+    // SETTINGS_DEEP_LINK_KEY storage handoff, which the page reads on boot.
+    await browser.tabs.create({ url: settingsURL, active: true });
   } catch (error) {
-    console.error('Failed to open popup:', error);
+    console.error('Failed to open settings:', error);
   }
 }
 
@@ -136,7 +101,7 @@ const actionNamespaces: Array<
 for (const actionNamespace of actionNamespaces) {
   if (actionNamespace?.onClicked?.addListener) {
     actionNamespace.onClicked.addListener(() => {
-      void openSettingsWindow();
+      void openSettingsPage();
     });
     break;
   }
@@ -1230,7 +1195,7 @@ browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: 
   }
 
   if (message.action === 'openPopup' || message.type === 'openPopup') {
-    openSettingsWindow();
+    openSettingsPage();
   } else if (message.type === 'GET_TTS_QUOTA_DETAILS') {
     // Handle TTS quota details request
     try {
