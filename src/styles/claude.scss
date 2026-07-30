@@ -110,6 +110,31 @@ html body.claude {
     }
   }
 
+  /* Cowork-mode composer: absorb Claude's hidden voice-mode placeholder (#580).
+
+     When the composer's Surface toggle is on Cowork, Claude hides its native
+     "Use voice mode" button without releasing its space: the button's wrapper
+     stays in the controls row as an invisible placeholder (`opacity-0`, still
+     reserving `@[460px]:w-8`), and Claude slides its own neighbours — the model
+     selector and the dictation cluster — 40px right over that space with the
+     container-query utility `@[460px]:translate-x-10`. The slide is paint-only
+     (translate doesn't affect flex layout), so SayPi's controls interleaved
+     between those natives don't move with them: the translated model selector
+     painted straight over the SayPi voice selector (verified live 2026-07-30).
+
+     Rather than mirror the slide (which would hard-code Claude's 40px offset
+     and class names), make the row honest: collapse the invisible placeholder
+     and cancel the compensating slide, so plain flex layout spaces every
+     control — native and SayPi's — the same way in both Chat and Cowork.
+     Guarded on the placeholder's presence, so Chat mode (no `opacity-0` child)
+     keeps its native layout and transitions untouched. */
+  #saypi-prompt-controls-container > .opacity-0 {
+    display: none;
+  }
+  #saypi-prompt-controls-container:has(> .opacity-0) > div {
+    translate: none !important;
+  }
+
   /* the voice selection menu */
   .saypi-audio-controls {
     justify-content: space-between;
