@@ -56,9 +56,36 @@ html {
 
 .settings-container {
   display: flex;
+  /* body.settings-root is a flex container (tabs.css), so this box is a flex
+     ITEM: with width:auto it shrink-to-fits its content, and — being centered
+     via auto margins — it re-centered itself whenever a pane's content width
+     changed (the Voices studio's card text literally moved the sidebar a few
+     pixels on every tab switch). Fill the row instead: constant geometry on
+     every tab, and the studio finally gets the wide column it was designed
+     for. */
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.5rem 0; /* Reduced from 2rem to minimize empty space */
+}
+
+/* Align the header with the settings container (same max-width + centering)
+   instead of a fixed 720px band centered on the viewport. Before, the
+   logo-over-sidebar alignment was a coincidence of the container's
+   shrink-to-fit width; now both boxes share the same geometry at every
+   window size. */
+.settings-header .profile-banner {
+  width: 100%;
+  max-width: 1200px;
+}
+.settings-header::after {
+  width: 100%;
+  max-width: 1200px;
+}
+/* Sit the logo exactly over the sidebar icon column: banner padding-left 8px
+   + 28px here = sidebar's 24px padding + the tab button's 12px padding. */
+.settings-header .profile-banner > .flex {
+  padding-left: 28px;
 }
 
 .sidebar {

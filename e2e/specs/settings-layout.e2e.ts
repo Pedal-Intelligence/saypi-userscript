@@ -36,15 +36,21 @@ test.describe("settings page layout", () => {
 
     const banner = page.locator(".settings-header .profile-banner");
     await expect(banner).toBeVisible();
+    // Track the sidebar too: the 2026-07-30 shunt was the shrink-to-fit
+    // container re-centering (sidebar moved, banner did not), so asserting the
+    // banner alone misses half the failure modes.
+    const chip = page.locator('.tab-button[data-tab="general"]');
 
-    const positions: Record<string, number> = {};
+    const positions: Record<string, string> = {};
     let sawScrollingTab = false;
     for (const tab of TABS) {
       await page.locator(`.tab-button[data-tab="${tab}"]`).click();
       const panel = page.locator(`#tab-${tab}`);
       await expect(panel).toBeVisible();
       await expect(panel.locator(":scope > *")).not.toHaveCount(0);
-      positions[tab] = (await banner.boundingBox())!.x;
+      positions[tab] = `banner:${(await banner.boundingBox())!.x},sidebar:${
+        (await chip.boundingBox())!.x
+      }`;
       const overflows = await page.evaluate(
         () =>
           document.documentElement.scrollHeight >
