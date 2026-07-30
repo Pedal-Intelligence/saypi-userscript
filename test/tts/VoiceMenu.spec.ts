@@ -19,8 +19,7 @@ vi.mock("../../src/JwtManager", () => ({
   }),
 }));
 
-import { VoiceSelector } from "../../src/tts/VoiceMenu";
-import { GridVoiceSelector } from "../../src/tts/GridVoiceSelector";
+import { VoiceSelector, isBuiltInVoiceProvider } from "../../src/tts/VoiceMenu";
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
 import { ClaudeVoiceMenu } from "../../src/chatbots/ClaudeVoiceMenu";
 
@@ -61,52 +60,35 @@ describe("VoiceSelector.ttsRequiresSignIn", () => {
   });
 });
 
-describe("GridVoiceSelector built-in-voice-provider capability detection", () => {
-  // The grid render tops up a chatbot's own built-in voices (e.g. Pi.ai's
-  // account-gated extras) when the chatbot can provide them. This used to be
+describe("built-in-voice-provider capability detection", () => {
+  // Some chatbots ship their own voices with their own free intro clips (Pi).
+  // `introduceVoice` routes to those instead of metered TTS. This used to be
   // gated on `instanceof PiAIChatbot`, which forced VoiceMenu to import the
-  // concrete Pi chatbot and created a VoiceMenu -> Pi -> PiVoiceMenu ->
-  // VoiceMenu import cycle. The gate is a structural capability check, so
-  // any chatbot exposing getExtraVoices()/getVoiceIntroductionUrl() qualifies.
-  class TestGrid extends GridVoiceSelector {
-    getId(): string {
-      return "test-grid-capability";
-    }
-    getButtonClasses(): string[] {
-      return [];
-    }
-  }
-
-  function makeGrid(chatbot: unknown): any {
-    const grid: any = Object.create(TestGrid.prototype);
-    grid.chatbot = chatbot;
-    grid.userPreferences = {
-      getVoice: vi.fn(async () => null),
-      setVoice: vi.fn(async () => {}),
-      unsetVoice: vi.fn(async () => {}),
-    };
-    grid.element = document.createElement("div");
-    return grid;
-  }
-
-  it("requests extra voices from a chatbot that provides its own built-in voices", () => {
-    const getExtraVoices = vi.fn((): SpeechSynthesisVoiceRemote[] => []);
+  // concrete Pi chatbot and created an import cycle back into itself; the gate
+  // is a STRUCTURAL check, so any chatbot exposing both members qualifies.
+  //
+  // Previously exercised through GridVoiceSelector's extras top-up. That base
+  // was retired with Pi's in-chat menu (#578), but the guard is still live —
+  // so it is now tested directly, which is where it always belonged.
+  it("recognises a chatbot that provides its own built-in voices", () => {
     const chatbot = {
-      getExtraVoices,
+      getExtraVoices: vi.fn((): SpeechSynthesisVoiceRemote[] => []),
       getVoiceIntroductionUrl: vi.fn(() => ""),
     };
-    const grid = makeGrid(chatbot);
-    // An empty menu has 0 adopted host rows, i.e. below the 8-voice threshold.
-    grid.renderMenu([], null);
-    expect(getExtraVoices).toHaveBeenCalled();
+    expect(isBuiltInVoiceProvider(chatbot as any)).toBe(true);
   });
 
-  it("does nothing for a chatbot without built-in voices (e.g. Claude)", () => {
-    const chatbot = { getName: () => "Claude" };
-    const grid = makeGrid(chatbot);
-    grid.renderMenu([], null);
-    // No extras requested, so no rows appear in the empty render.
-    expect(grid.element.querySelectorAll("[data-voice-id]").length).toBe(0);
+  it("rejects a chatbot without built-in voices (e.g. Claude)", () => {
+    expect(isBuiltInVoiceProvider({ getName: () => "Claude" } as any)).toBe(false);
+  });
+
+  it("requires BOTH members — a half-implemented chatbot must not qualify", () => {
+    expect(
+      isBuiltInVoiceProvider({ getExtraVoices: vi.fn(() => []) } as any)
+    ).toBe(false);
+    expect(
+      isBuiltInVoiceProvider({ getVoiceIntroductionUrl: vi.fn(() => "") } as any)
+    ).toBe(false);
   });
 });
 
