@@ -220,11 +220,41 @@ describe("VoicesController — stage", () => {
     );
   });
 
-  it("shows an empty stage when the host has no current voice", async () => {
+  it("recruits with a hero when the host has no current voice", async () => {
     const deps = makeDeps({ pi: [mkVoice("marin")] });
     const { container } = await mount(deps);
     const empty = q(container, ".voice-stage-empty")!;
-    expect(empty.dataset.i18n).toBe("voicesNoStageVoice");
+    // Substituted text must NOT carry data-i18n (replaceI18n clobber guard) —
+    // same contract as .voice-stage-eyebrow above.
+    const title = empty.querySelector(".voice-stage-empty-title") as HTMLElement;
+    expect(title.textContent).toBe("voicesStageEmptyTitle");
+    expect(title.dataset.i18n).toBeUndefined();
+    expect(empty.dataset.i18n).toBeUndefined();
+  });
+
+  // "No voice selected" means opposite things per host, so the supporting line
+  // is chosen from a HOST PROPERTY — whether the host serves its own audio —
+  // not from an id list. A third host needs no new copy and no new branch.
+  it("tells a self-voiced host's user that a pick REPLACES the host's voice", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin")] });
+    const { container } = await mount(deps);
+    const note = q(container, ".voice-stage-empty-note")!;
+    expect(note.textContent).toBe("voicesStageEmptyNoteReplace");
+    expect(note.dataset.i18n).toBeUndefined();
+  });
+
+  it("tells a voiceless host's user that nothing is read aloud until they pick", async () => {
+    const deps = makeDeps({ claude: [mkVoice("marin")] });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const note = q(container, ".voice-stage-empty-note")!;
+    expect(note.textContent).toBe("voicesStageEmptyNoteSilent");
+    expect(note.dataset.i18n).toBeUndefined();
+  });
+
+  it("makes the headline the call to action — no button whose only job is to scroll", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin")] });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-stage-empty")!.querySelector("button")).toBeNull();
   });
 
   it("still shows a host-built-in current voice on the stage (not in the catalog)", async () => {
@@ -520,6 +550,51 @@ describe("VoicesController — explore cards", () => {
     ).toBeNull();
   });
 
+  it("labels each shelf with studio-only copy, not the in-chat allowance footnote", async () => {
+    // hdVoicesAllowanceNote is ALSO the HD chip tooltip and Claude's in-chat
+    // menu footnote, where no Everyday shelf sits beside it to carry the ratio.
+    // The studio states the ratio once, on the Everyday side.
+    const deps = makeDeps({ claude: [mkHdVoice("jarnathan"), mkVoice("nova")] });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const blurbKey = (tier: string) =>
+      q(container, `.voice-shelf[data-tier='${tier}'] .voice-shelf-blurb`)!
+        .dataset.i18n;
+    const titleKey = (tier: string) =>
+      q(container, `.voice-shelf[data-tier='${tier}'] .voice-shelf-title`)!
+        .dataset.i18n;
+    expect(titleKey("hd")).toBe("voicesShelfHd");
+    expect(blurbKey("hd")).toBe("voicesShelfHdBlurb");
+    expect(titleKey("everyday")).toBe("voicesShelfEveryday");
+    expect(blurbKey("everyday")).toBe("voicesShelfEverydayBlurb");
+  });
+
+  // Defect 1's fix is pure CSS (clamp the tagline, bottom out the actions), so
+  // the rules themselves are asserted in voices-studio-layout.spec.ts. What a
+  // DOM test CAN prove is the class contract those rules hang off: both a
+  // curated short tagline and a long server description produce the same two
+  // elements, and the actions row is last so `margin-top: auto` can bottom it.
+  it("gives every card the same tagline+actions structure, however long its subtitle", async () => {
+    const deps = makeDeps({
+      claude: [
+        mkVoice("marin"),
+        mkVoice("wander", {
+          name: "Wander",
+          description:
+            "A long, unhurried server description that runs well past two lines in a 150px card and used to stretch its whole grid row.",
+        }),
+      ],
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    for (const id of ["marin", "wander"]) {
+      const card = cardOf(container, id)!;
+      const tagline = card.querySelector(".voice-card-tagline");
+      const actions = card.querySelector(".voice-card-actions");
+      expect(tagline, `${id} should have a tagline element`).toBeTruthy();
+      expect(actions, `${id} should have an actions element`).toBeTruthy();
+      expect(card.lastElementChild, `${id}'s actions must be last`).toBe(actions);
+    }
+  });
+
   it("renders a single-tier catalog as a flat grid without shelf chrome", async () => {
     const deps = makeDeps({ claude: [mkVoice("marin"), mkVoice("nova")] });
     const { container } = await mount(deps, { initialHost: "claude" });
@@ -543,6 +618,128 @@ describe("VoicesController — explore cards", () => {
     ) as HTMLElement;
     expect(multiTagline.textContent).toBe("voiceSpeaksNLanguages");
     expect(multiTagline.dataset.i18n).toBeUndefined();
+  });
+});
+
+/**
+ * #474 — twin display names ("Paola" and "Paola"). The names stay identical:
+ * the only suffix the data would support is a model name, and /voices never
+ * serves one, so printing it would be inventing data. The SUBTITLE is the sole
+ * differentiator, and it must be the same sentence with a different number —
+ * prose on one card and a number on the other is precisely the defect.
+ *
+ * These use an interpolating getMessage so the two counts are observably
+ * different (the shared mock ignores substitutions).
+ */
+describe("VoicesController — twin display names (#474)", () => {
+  let originalGetMessage: any;
+  beforeEach(() => {
+    const i18n = (globalThis as any).chrome.i18n;
+    originalGetMessage = i18n.getMessage.getMockImplementation();
+    i18n.getMessage.mockImplementation((key: string, subs?: string | string[]) => {
+      const list = subs === undefined ? [] : Array.isArray(subs) ? subs : [subs];
+      return list.length ? `${key}:${list.join(",")}` : key;
+    });
+  });
+  afterEach(() => {
+    (globalThis as any).chrome.i18n.getMessage.mockImplementation(
+      originalGetMessage
+    );
+  });
+
+  const langs = (n: number) => Array.from({ length: n }, (_, i) => `l${i}`);
+  const taglineOf = (c: HTMLElement, id: string) =>
+    cardOf(c, id)!.querySelector(".voice-card-tagline")!.textContent;
+
+  const twins = () => [
+    mkHdVoice("paola-classic", {
+      name: "Paola",
+      description:
+        "Warm, versatile Italian voice, equally at home narrating and holding a conversation.",
+      languages: langs(33),
+    }),
+    mkHdVoice("paola-expressive", { name: "Paola", languages: langs(75) }),
+  ];
+
+  it("gives both twins the same sentence with a different number", async () => {
+    const deps = makeDeps({ claude: twins() });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(taglineOf(container, "paola-classic")).toBe(
+      "voiceSpeaksNLanguages:33"
+    );
+    expect(taglineOf(container, "paola-expressive")).toBe(
+      "voiceSpeaksNLanguages:75"
+    );
+  });
+
+  it("never shows a server description on a twin while its sibling shows a count", async () => {
+    const deps = makeDeps({ claude: twins() });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(taglineOf(container, "paola-classic")).not.toMatch(/Warm, versatile/);
+  });
+
+  it("generalises to any duplicate-named pair the server grows into", async () => {
+    // The catalog is server-driven and grows without a client release, so the
+    // rule keys on the name group, not on a hardcoded name.
+    const deps = makeDeps({
+      claude: [
+        mkHdVoice("kai-a", {
+          name: "Kai",
+          description: "A long server description that would break parallelism.",
+          languages: langs(12),
+        }),
+        mkHdVoice("kai-b", { name: "Kai", languages: langs(41) }),
+        mkVoice("marin"),
+      ],
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(taglineOf(container, "kai-a")).toBe("voiceSpeaksNLanguages:12");
+    expect(taglineOf(container, "kai-b")).toBe("voiceSpeaksNLanguages:41");
+    // A non-duplicate name keeps its curated persona tagline.
+    expect(taglineOf(container, "marin")).toBe("voiceTagline_marin");
+  });
+
+  it("decides per name-GROUP: one twin without a count falls the whole group back", async () => {
+    // languagesSubtitle returns "" when count <= 1, so a per-voice rule can
+    // still land one twin on a count and the other on a description —
+    // non-parallel again, just differently.
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const deps = makeDeps({
+      claude: [
+        mkHdVoice("paola-classic", {
+          name: "Paola",
+          description: "Warm, versatile Italian voice.",
+          languages: langs(33),
+        }),
+        mkHdVoice("paola-mono", { name: "Paola" }),
+      ],
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    // At least one row is distinguished, rather than both collapsing to the
+    // shared persona tagline.
+    expect(taglineOf(container, "paola-classic")).toBe(
+      "Warm, versatile Italian voice."
+    );
+    expect(taglineOf(container, "paola-mono")).toBe("voiceTagline_paola");
+    // The fallback means #474 is regressing — the server stopped sending
+    // `languages` — so it must be noisy, not silent.
+    expect(warn).toHaveBeenCalled();
+    expect(String(warn.mock.calls[0][0])).toMatch(/paola/i);
+    warn.mockRestore();
+  });
+
+  it("renders the ▶ sample button on both twin cards", async () => {
+    // A language count is a weak differentiator for a monolingual listener, and
+    // nothing client-side describes how the two actually SOUND — hearing them
+    // is the real tiebreaker.
+    const deps = makeDeps({ claude: twins() });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    for (const id of ["paola-classic", "paola-expressive"]) {
+      expect(
+        cardOf(container, id)!.querySelector("button[data-orb-voice]"),
+        `${id} should be auditionable`
+      ).toBeTruthy();
+    }
   });
 });
 
@@ -672,6 +869,21 @@ describe("VoicesController — replaceI18n clobber immunity", () => {
     expect(textOf(".voice-stage-eyebrow")).toBe(before.eyebrow);
     expect(textOf(".voice-slots-title")).toBe(before.slotsTitle);
     expect(textOf(".voice-slots-overflow")).toBe(before.overflow);
+  });
+
+  it("keeps the empty stage's host name intact", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin")] });
+    const { container } = await mount(deps);
+    const textOf = (sel: string) => q(container, sel)!.textContent;
+    const before = {
+      title: textOf(".voice-stage-empty-title"),
+      note: textOf(".voice-stage-empty-note"),
+    };
+    expect(before.title).toContain("Pi");
+    expect(before.note).toContain("Pi");
+    replaceI18n();
+    expect(textOf(".voice-stage-empty-title")).toBe(before.title);
+    expect(textOf(".voice-stage-empty-note")).toBe(before.note);
   });
 
   it("keeps the built-ins note and load-error text intact too", async () => {
