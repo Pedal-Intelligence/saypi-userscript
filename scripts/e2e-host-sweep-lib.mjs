@@ -106,7 +106,8 @@ export function ttsCoverage(summaries = []) {
 /**
  * Why a host ended the run with nothing decorated. The distinction is the whole
  * point: only DRIFT is a SayPi defect worth hunting — the others mean the sweep
- * never got a chat app in front of the extension (#559).
+ * never got a chat app in front of the extension (#559), or that the harness's own
+ * reading of the page can't be trusted (#570).
  */
 export const UNDECORATED_KINDS = {
   /** The page ended up on a different origin than requested (pi.ai/talk → hey.pi.ai). */
@@ -115,11 +116,336 @@ export const UNDECORATED_KINDS = {
   SIGNED_OUT: "signed-out",
   /** The requested page loaded and SayPi still didn't decorate it. THE defect case. */
   DRIFT: "possible-drift",
+  /**
+   * The "not decorated" verdict is contradicted by the run's OWN evidence — the call
+   * button was present in the DOM (per the deadline probe, the grace re-read, or the
+   * later `domDiagnostics.callButtons` census). Reading this as drift sends someone
+   * hunting a SayPi bug that the same bundle disproves (#570).
+   */
+  INCONSISTENT: "internal-inconsistency",
   /** The run never got far enough to judge (Cloudflare challenge, harness error). */
   ABORTED: "run-aborted",
   /** Not enough signal to tell (no usable final URL) — read the screenshot. */
   UNKNOWN: "unknown",
 };
+
+/**
+ * The selector the sweep treats as proof SayPi decorated a chat host, and the budget
+ * it waits for it. Both mirror `sweepHost`'s `waitForSelector` call — keep them in
+ * sync with it (the budget is quoted in the notes readers act on).
+ */
+export const CALL_BUTTON_SELECTOR = "#saypi-callButton";
+export const DECORATION_BUDGET_MS = 25_000;
+
+/**
+ * On a MISS only, how much longer the harness keeps *looking* (never waiting — the
+ * verdict is already recorded). Purely observational, and the reason it exists is that
+ * a run which stops looking at the deadline structurally cannot tell "never in the DOM"
+ * apart from "in the DOM, just later than the budget": both read as absent. The
+ * post-deadline `domDiagnostics` census widens that window by only a few hundred ms.
+ *
+ * The grace read uses PRESENCE semantics (`state: 'attached'`), not the visible-wait's,
+ * so it answers exactly the question the verdict can't. It does NOT change the 25s
+ * budget or `decorated` — a host that decorates at +27s is still correctly reported as
+ * having failed to decorate in time, now with the number that says why (#570).
+ */
+export const DECORATION_GRACE_MS = 5_000;
+
+/**
+ * Installed in the page BEFORE navigation (`page.addInitScript`), so it can time the
+ * call button's first appearance against the document's own time origin. Also
+ * re-invoked defensively via `page.evaluate` after load in case the init script never
+ * took — hence idempotent, and hence `presentAtInstall`, which tells a reader whether
+ * `firstSeenMs` is a measurement or merely an upper bound.
+ *
+ * Self-contained (stringified and evaluated in the page, same rule as DIAGS): it may
+ * not close over anything from this module, so the selector is inlined.
+ *
+ * Why a watcher at all: `waitForSelector` reports only pass/fail at the deadline. When
+ * it misses, the question that actually needs answering is "was the element EVER
+ * there, and when" — and 25s after the fact only a recorder can say (#570).
+ */
+export const DECORATION_WATCHER = () => {
+  const w = window;
+  const existing = w.__saypiSweepDecoration;
+  if (existing) return existing.installedAtMs;
+  const state = { installedAtMs: performance.now(), firstSeenMs: null, presentAtInstall: false };
+  w.__saypiSweepDecoration = state;
+  const mark = () => {
+    if (state.firstSeenMs !== null) return true;
+    if (!document.querySelector("#saypi-callButton")) return false;
+    state.firstSeenMs = performance.now();
+    return true;
+  };
+  if (mark()) {
+    state.presentAtInstall = true;
+    return state.installedAtMs;
+  }
+  // Observe `document`, not `document.documentElement`: at addInitScript time (before
+  // any page script) the document element may not exist yet, and observing the
+  // document node with subtree covers the whole tree either way. Disconnects on the
+  // first sighting, so the cost on a healthy host is a fraction of a second.
+  const obs = new MutationObserver(() => {
+    if (mark()) obs.disconnect();
+  });
+  obs.observe(document, { childList: true, subtree: true });
+  return state.installedAtMs;
+};
+
+/**
+ * Read at the decoration deadline: is the call button there, since when, and — the
+ * distinction a bare `false` loses — does it have the non-empty bounding box that
+ * Playwright's default `state: 'visible'` requires? `querySelectorAll` (what
+ * `domDiagnostics.callButtons` counts) does not care about layout, which is precisely
+ * how the two can disagree.
+ *
+ * Self-contained, same rule as DIAGS/SIGN_IN_PROBE. Under JSDOM
+ * `getBoundingClientRect` reports all zeros, so `hasBox` is only meaningful in a real
+ * browser (unit tests stub the rect).
+ */
+export const DECORATION_PROBE = () => {
+  const el = document.querySelector("#saypi-callButton");
+  const state = window.__saypiSweepDecoration || null;
+  const view = document.defaultView;
+  const round = (n) => (typeof n === "number" && isFinite(n) ? Math.round(n) : null);
+  let box = null;
+  let computed = null;
+  if (el) {
+    const r = typeof el.getBoundingClientRect === "function" ? el.getBoundingClientRect() : null;
+    if (r) box = { x: round(r.x), y: round(r.y), width: round(r.width), height: round(r.height) };
+    if (view && typeof view.getComputedStyle === "function") {
+      const s = view.getComputedStyle(el);
+      computed = { display: s.display, visibility: s.visibility, opacity: s.opacity };
+    }
+  }
+  return {
+    selector: "#saypi-callButton",
+    count: document.querySelectorAll("#saypi-callButton").length,
+    present: !!el,
+    // ms since the document's time origin (i.e. relative to navigation).
+    firstSeenMs: state ? round(state.firstSeenMs) : null,
+    presentAtInstall: state ? !!state.presentAtInstall : null,
+    watcherInstalledAtMs: state ? round(state.installedAtMs) : null,
+    checkedAtMs: round(performance.now()),
+    box,
+    computed,
+    hasBox: !!(box && box.width > 0 && box.height > 0),
+  };
+};
+
+/**
+ * Turn the DECORATION_PROBE readings (the one taken at the deadline, plus the miss-only
+ * `graceProbe` taken up to DECORATION_GRACE_MS later, plus the run's own
+ * `domDiagnostics.callButtons` census) into the facts the undecorated verdict and its
+ * note are built from. Pure.
+ *
+ * `contradiction` is the load-bearing output: non-null means the harness's "not
+ * decorated" is disproved by the harness's own evidence, so the miss is a measurement
+ * story, not a SayPi-drift story. The four flavours are all worth telling apart:
+ *
+ *   - `visible-but-missed` — present with a non-empty box at the deadline. The 25s
+ *     visible-wait should have resolved. THE 2026-07-29 case (#570): box 44×44,
+ *     display=block, first seen at +771ms.
+ *   - `present-but-invisible` — in the DOM but boxless / display:none / hidden, so the
+ *     visible-wait legitimately failed. Not absence — a rendering question.
+ *   - `appeared-after-check` — the deadline probe saw nothing, but the grace re-read or
+ *     the later `domDiagnostics` census did. The screenshot and diagnostics are captured
+ *     AFTER the wait, so this is decoration that finished past the budget — and because
+ *     the watcher timed the real first sighting, the number is navigation-relative even
+ *     when it lands past the deadline.
+ *   - `removed-before-check` — the watcher timed a first sighting, but by the deadline
+ *     it was gone (a host re-render tore SayPi's UI out).
+ *
+ * A miss with no contradiction leaves DRIFT standing, and the evidence sentence then
+ * says out loud that the button never entered the DOM — which is what makes the drift
+ * verdict trustworthy rather than merely unrefuted.
+ *
+ * @param {{probe?: object|null, graceProbe?: object|null, callButtonsSeen?: number|null,
+ *          waitSucceeded?: boolean, budgetMs?: number, graceMs?: number}} [input]
+ */
+export function describeDecoration(input = {}) {
+  const probe = input.probe ?? null;
+  const callButtonsSeen = typeof input.callButtonsSeen === "number" ? input.callButtonsSeen : null;
+  const graceProbe = input.graceProbe ?? null;
+  const budgetMs = typeof input.budgetMs === "number" ? input.budgetMs : DECORATION_BUDGET_MS;
+  const graceMs = typeof input.graceMs === "number" ? input.graceMs : DECORATION_GRACE_MS;
+  const waitSucceeded = input.waitSucceeded === true;
+  const base = {
+    selector: CALL_BUTTON_SELECTOR,
+    budgetMs,
+    graceMs,
+    probed: !!probe,
+    graceProbed: !!graceProbe,
+    presentAtGrace: graceProbe ? !!graceProbe.present : null,
+    watcherInstalled: null,
+    everPresent: null,
+    presentAtCheck: null,
+    count: null,
+    firstSeenMs: null,
+    firstSeenExact: null,
+    checkedAtMs: null,
+    withinBudget: null,
+    hasBox: null,
+    box: null,
+    computed: null,
+    callButtonsSeen,
+    contradiction: null,
+    evidence: "",
+    nextStep: "",
+    attributable: null,
+  };
+  /**
+   * Who owns each contradiction. `internal-inconsistency` says the verdict can't be
+   * trusted; it does NOT automatically mean "nothing to see here" — three of the four
+   * flavours are real SayPi behaviour that simply isn't selector drift.
+   */
+  const ATTRIBUTABLE = {
+    "visible-but-missed": "automation",
+    "present-but-invisible": "saypi",
+    "appeared-after-check": "saypi",
+    "removed-before-check": "saypi",
+  };
+  /**
+   * What a reader should actually DO about each contradiction. Kept per-flavour on
+   * purpose: two of the four are harness problems, but the other two are genuine SayPi
+   * findings that just aren't *selector drift* — a blanket "not a SayPi issue" would
+   * bury a slow bootstrap or a torn-out UI as cleanly as a false drift buries the real
+   * thing.
+   */
+  const NEXT_STEP = {
+    "visible-but-missed":
+      `the wait itself is what needs explaining, not SayPi: re-run this host (--no-turn is enough) ` +
+      `to see whether it reproduces, and compare the first-sighting time against the budget. Do NOT ` +
+      `file selector drift.`,
+    "present-but-invisible":
+      `attributable to SayPi, but as a RENDERING defect, not selector drift: hunt why the call button ` +
+      `mounted with no non-empty box (zero-sized, display:none, detached container).`,
+    "appeared-after-check":
+      `attributable to SayPi, but as a LATENCY finding, not selector drift: decoration completed after ` +
+      `the budget, so ask why bootstrap took that long on this host (normal is sub-second) before ` +
+      `touching the budget.`,
+    "removed-before-check":
+      `attributable to SayPi, but as a TEARDOWN/re-render defect, not selector drift: the call button ` +
+      `mounted and then disappeared — find out whether a host re-render tore it out and SayPi failed ` +
+      `to re-decorate.`,
+  };
+
+  if (!probe) {
+    // Still surface a contradiction we can see without a probe: the census alone.
+    const censusContradicts = !waitSucceeded && (callButtonsSeen > 0 || !!graceProbe?.present);
+    return {
+      ...base,
+      everPresent: censusContradicts ? true : null,
+      contradiction: censusContradicts ? "appeared-after-check" : null,
+      nextStep: censusContradicts ? NEXT_STEP["appeared-after-check"] : "",
+      attributable: censusContradicts ? ATTRIBUTABLE["appeared-after-check"] : null,
+      evidence:
+        `no decoration reading was taken (the in-page probe did not run), so nothing is known ` +
+        `about ${CALL_BUTTON_SELECTOR} beyond the wait's own verdict` +
+        (censusContradicts
+          ? `, except that domDiagnostics later counted ${callButtonsSeen} of them.`
+          : `.`),
+    };
+  }
+
+  // `presentAtCheck` / box / computed style stay strictly the DEADLINE reading — that is
+  // the "at check time" state the verdict is about. The grace reading only ever adds
+  // knowledge the deadline read couldn't have: that it showed up later, and when.
+  const presentAtGrace = graceProbe ? !!graceProbe.present : null;
+  const firstSeenMs =
+    typeof probe.firstSeenMs === "number"
+      ? probe.firstSeenMs
+      : typeof graceProbe?.firstSeenMs === "number"
+        ? graceProbe.firstSeenMs
+        : null;
+  const presentAtCheck = !!probe.present;
+  const hasBox = !!probe.hasBox && presentAtCheck;
+  const everPresent = presentAtCheck || firstSeenMs !== null || callButtonsSeen > 0 || presentAtGrace === true;
+  const withinBudget = firstSeenMs === null ? null : firstSeenMs <= budgetMs;
+  const style = probe.computed
+    ? `display=${probe.computed.display} visibility=${probe.computed.visibility} opacity=${probe.computed.opacity}`
+    : "computed style unavailable";
+  const boxText = probe.box ? `${probe.box.width}×${probe.box.height} box at (${probe.box.x},${probe.box.y})` : "no box";
+  const when =
+    firstSeenMs === null
+      ? null
+      : probe.presentAtInstall
+        ? `at or before +${firstSeenMs}ms (already present when the watcher installed, so that is an upper bound)`
+        : `at +${firstSeenMs}ms`;
+
+  let contradiction = null;
+  if (!waitSucceeded) {
+    if (presentAtCheck) contradiction = hasBox ? "visible-but-missed" : "present-but-invisible";
+    else if (callButtonsSeen > 0 || presentAtGrace === true) contradiction = "appeared-after-check";
+    else if (firstSeenMs !== null) contradiction = "removed-before-check";
+  }
+
+  let evidence;
+  if (presentAtCheck) {
+    evidence =
+      `${CALL_BUTTON_SELECTOR} was present ×${probe.count} at the ${budgetMs}ms deadline ` +
+      `(read at +${probe.checkedAtMs}ms) with a ${boxText}, ${style}` +
+      (when ? `; first seen ${when}` : `; first-appearance time unknown (no watcher)`) +
+      `.`;
+    if (contradiction === "visible-but-missed") {
+      evidence +=
+        ` The element was therefore in the DOM AND had a non-empty box, so the ` +
+        `${budgetMs}ms visible-wait missing it is a harness/timing artifact, not selector drift.`;
+    } else if (contradiction === "present-but-invisible") {
+      evidence +=
+        ` The element was in the DOM but had no non-empty box, which is exactly what ` +
+        `Playwright's default state:'visible' requires — so the miss is a visibility ` +
+        `problem, not absence.`;
+    }
+  } else if (contradiction === "appeared-after-check") {
+    const sawIt = [
+      presentAtGrace === true ? `the +${graceMs}ms grace re-read found it${when ? ` (first seen ${when})` : ""}` : null,
+      callButtonsSeen > 0 ? `domDiagnostics counted ${callButtonsSeen}` : null,
+    ].filter(Boolean).join(" and ");
+    evidence =
+      `${CALL_BUTTON_SELECTOR} was absent at the ${budgetMs}ms deadline (read at ` +
+      `+${probe.checkedAtMs}ms), but ${sawIt} — both AFTER the wait. Decoration finished ` +
+      `past the budget, so this is slow bootstrap, not a missing selector.`;
+  } else if (contradiction === "removed-before-check") {
+    evidence =
+      `${CALL_BUTTON_SELECTOR} was seen ${when} but was gone by the ${budgetMs}ms deadline ` +
+      `(read at +${probe.checkedAtMs}ms), and domDiagnostics counted ${callButtonsSeen ?? 0}. ` +
+      `Something removed SayPi's UI after it mounted.`;
+  } else {
+    evidence =
+      `${CALL_BUTTON_SELECTOR} never entered the DOM during the ${budgetMs}ms window ` +
+      `(watcher installed at +${probe.watcherInstalledAtMs ?? "?"}ms, deadline read at ` +
+      `+${probe.checkedAtMs}ms, domDiagnostics counted ${callButtonsSeen ?? 0})` +
+      (graceProbe
+        ? `, and it was still absent ${graceProbe.checkedAtMs != null ? `at +${graceProbe.checkedAtMs}ms ` : ""}` +
+          `after a further ${graceMs}ms of looking by DOM PRESENCE rather than visibility. ` +
+          `Absence is therefore measured, not merely unobserved.`
+        : `. No grace re-read was taken, so "never" covers only the budget window.`);
+  }
+  if (withinBudget === false) {
+    evidence += ` Note: the first sighting (+${firstSeenMs}ms) is PAST the ${budgetMs}ms budget.`;
+  }
+
+  return {
+    ...base,
+    watcherInstalled: probe.watcherInstalledAtMs !== null && probe.watcherInstalledAtMs !== undefined,
+    everPresent,
+    presentAtCheck,
+    count: typeof probe.count === "number" ? probe.count : null,
+    firstSeenMs,
+    firstSeenExact: firstSeenMs === null ? null : !probe.presentAtInstall,
+    checkedAtMs: typeof probe.checkedAtMs === "number" ? probe.checkedAtMs : null,
+    withinBudget,
+    presentAtGrace,
+    hasBox,
+    box: probe.box ?? null,
+    computed: probe.computed ?? null,
+    contradiction,
+    evidence,
+    nextStep: contradiction ? NEXT_STEP[contradiction] : "",
+    attributable: contradiction ? ATTRIBUTABLE[contradiction] : null,
+  };
+}
 
 /** Auth-ish route segments every host uses for its sign-in wall. */
 const AUTH_ROUTE = /(^|\/)(login|log-in|signin|sign-in|sign_in|auth|authorize)(\/|$)/i;
@@ -155,8 +481,16 @@ function originKey(url) {
  * junk URL, which would read as `unknown` and send the reader to a screenshot the
  * run never took. Every `decorated: false` host gets a kind; none are left null.
  *
+ * `decoration` (a describeDecoration() result, #570) is consulted LAST, immediately
+ * before DRIFT would be returned. Placing it there is deliberate on both sides: a
+ * contradicted measurement must never be filed as drift, but it must also not outrank
+ * the origin/sign-in facts above it — those describe what page we were even looking at,
+ * and a stale element reading on a marketing splash shouldn't retitle a redirect. When
+ * there is no contradiction, its evidence sentence still rides along on the DRIFT note,
+ * which is what turns "we didn't see it" into "it was never in the DOM".
+ *
  * @param {{requestedUrl?: string, finalUrl?: string, title?: string, signInVisible?: boolean,
- *          abortedBecause?: string}} [input]
+ *          abortedBecause?: string, decoration?: object|null}} [input]
  * @returns {{kind: string, owner: string, redirected: boolean, requestedOrigin: string|null,
  *            finalOrigin: string|null, finalUrl: string|null, signInAffordance: boolean, note: string}}
  */
@@ -167,6 +501,7 @@ export function classifyUndecorated(input = {}) {
   const signInAffordance = !!input.signInVisible;
   const requestedOrigin = originKey(requestedUrl);
   const finalOrigin = originKey(finalUrl);
+  const decoration = input.decoration ?? null;
   const base = { requestedOrigin, finalOrigin, finalUrl: finalUrl ?? null, signInAffordance };
 
   if (input.abortedBecause) {
@@ -232,6 +567,22 @@ export function classifyUndecorated(input = {}) {
     };
   }
 
+  if (decoration && decoration.contradiction) {
+    return {
+      ...base,
+      kind: UNDECORATED_KINDS.INCONSISTENT,
+      owner: decoration.attributable ?? "automation",
+      redirected: false,
+      note:
+        `not decorated according to the ${decoration.budgetMs ?? DECORATION_BUDGET_MS}ms ` +
+        `visible-wait, but the run's own evidence contradicts that verdict ` +
+        `[${decoration.contradiction}]: ${decoration.evidence}` +
+        (decoration.nextStep ? ` Next: ${decoration.nextStep}` : "") +
+        ` Corroborate with 01-before.png and domDiagnostics.callButtons (both captured AFTER the ` +
+        `wait, which is how they can outvote it).`,
+    };
+  }
+
   return {
     ...base,
     kind: UNDECORATED_KINDS.DRIFT,
@@ -242,6 +593,7 @@ export function classifyUndecorated(input = {}) {
       `and no sign-in wall, so the host app rendered and SayPi failed to decorate it. This is the ` +
       `genuine-drift case: hunt it (compare domDiagnostics against the adapter's selectors, ` +
       `corroborate with 01-before.png).` +
+      (decoration?.evidence ? ` Measurement: ${decoration.evidence}` : "") +
       (signInAffordance
         ? ` Caveat: a sign-in affordance was on the page and not hidden — confirm the profile is ` +
           `actually signed in to the host before filing a drift issue.`
@@ -321,6 +673,12 @@ export function summarize(evidence = {}) {
     // Together they keep a reader from mistaking a redirect for drift (#559).
     finalUrl: evidence.finalUrl ?? null,
     undecorated: evidence.undecorated?.kind ?? null,
+    // The decoration measurement (#570), flattened. `decorationContradiction` is the
+    // one to scan a summary.json for: non-null means a "not decorated" the run itself
+    // disproves, so the host's verdict is about the harness, not about SayPi.
+    decorationEverPresent: evidence.decoration?.everPresent ?? null,
+    decorationFirstSeenMs: evidence.decoration?.firstSeenMs ?? null,
+    decorationContradiction: evidence.decoration?.contradiction ?? null,
     cloudflareBlocked: !!evidence.cloudflareBlocked,
     transcript: evidence.transcript ?? null,
     authStatus: evidence.authStatus ?? null,

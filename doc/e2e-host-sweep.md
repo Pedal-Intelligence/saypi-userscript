@@ -90,9 +90,9 @@ accepting longer turns / a possible `piThinking` timeout window.
 
 Per host the harness writes to `.output/e2e-host-sweep/<run>/<host>/`:
 `evidence.json` (console / pageErrors / network / requestFailed / domDiagnostics /
-auth+voice / transcript / observe flags / `finalUrl` + `undecorated`) and screenshots
-(`01-before`, `02-transcript`, `0N-observe…`, `99-final`). A run-level `summary.json`
-holds the per-host `summarize()` rollup.
+auth+voice / transcript / observe flags / `finalUrl` + `undecorated` + `decoration`) and
+screenshots (`01-before`, `02-transcript`, `0N-observe…`, `99-final`). A run-level
+`summary.json` holds the per-host `summarize()` rollup.
 
 ## Analysis discipline (don't skip — this is where false findings come from)
 
@@ -105,7 +105,7 @@ holds the per-host `summarize()` rollup.
    A host can fail to decorate because SayPi never got a chat app to decorate. The
    harness classifies it for you from the requested vs. **final** URL (`evidence.finalUrl`
    — hosts bounce you *after* load, so this is re-read at the decoration deadline) plus
-   any sign-in affordance on the page. Every undecorated host gets one of these five —
+   any sign-in affordance on the page. Every undecorated host gets one of these six —
    `undecorated` is null **only** when the host decorated:
    - `redirected-off-origin` — we left the requested origin (the live case: pi.ai now
      bounces signed-out visitors from `pi.ai/talk` to the `hey.pi.ai` splash, #559).
@@ -120,10 +120,52 @@ holds the per-host `summarize()` rollup.
      sweep exists to find. The probe behind that caveat counts a control that is not
      hidden by `display:none` / `visibility:hidden` / `[hidden]` / `aria-hidden`; it does
      **not** model layout, so a zero-sized or off-screen control still counts.
+   - `internal-inconsistency` — the miss is **contradicted by the run's own evidence**
+     (#570): the call button *was* in the DOM. Never file this as drift; read
+     `decoration.contradiction` for which of the four stories it is, and
+     `decoration.nextStep` for what to do. This is the verdict the 2026-07-29 run should
+     have produced (`callButtons: 1` and a screenshot of the button, filed as
+     `possible-drift`).
    - `run-aborted` — the run ended before the page could be judged at all (a Cloudflare
      challenge, or an exception mid-host — see `cloudflareBlocked` / `notes[]`). Fix the
      run and re-run; says nothing about SayPi.
    - `unknown` — no usable final URL; fall back to `01-before.png`.
+
+   **2b. Then read `evidence.decoration` — the measurement behind the one bit (#570).**
+   `decorated` is a single `waitForSelector("#saypi-callButton", { timeout: 25_000 })`,
+   and its default `state: 'visible'` needs a **non-empty bounding box** —
+   `querySelectorAll` (what `domDiagnostics.callButtons` counts) does not. So the harness
+   also records, every run: whether the button was **ever** in the DOM, **when it first
+   appeared relative to navigation** (`firstSeenMs`, timed by a watcher installed via
+   `addInitScript` *before* the page loads), and its **box + computed
+   display/visibility/opacity at the deadline**. Healthy hosts are sub-second — the
+   direct probe behind #570 measured claude.ai at **+771ms** — so a `firstSeenMs` in the
+   seconds is itself a finding.
+
+   The sequencing matters and is deliberate: **`01-before.png` and `domDiagnostics` are
+   captured AFTER the decoration wait**, which is exactly how they can outvote it. On a
+   miss the harness also keeps *looking* for a bounded 5s more (`DECORATION_GRACE_MS`) by
+   **DOM presence** (`state: 'attached'`) rather than visibility — a run that stops
+   observing at the deadline structurally cannot tell "never in the DOM" from "in the
+   DOM, just later than the budget", since both read as absent. That read costs a healthy
+   host nothing, never changes `decorated`, and leaves the 25s budget alone; it just
+   means a `possible-drift` verdict now rests on **measured** absence.
+
+   When the evidence does outvote the verdict, `describeDecoration()` names which of four
+   stories it is:
+
+   | `decoration.contradiction` | means | owner |
+   |---|---|---|
+   | `visible-but-missed` | present *with* a non-empty box at the deadline — the wait should have resolved | automation (re-run; **not** drift) |
+   | `present-but-invisible` | in the DOM but boxless / `display:none` — the visible-wait failed legitimately | SayPi (a **rendering** defect) |
+   | `appeared-after-check` | absent at the deadline, found by the grace re-read or the later census — decoration finished past the budget (with the real `firstSeenMs`) | SayPi (a **latency** finding) |
+   | `removed-before-check` | timed a first sighting, gone by the deadline | SayPi (a **teardown/re-render** defect) |
+
+   `contradiction: null` on a miss is what makes `possible-drift` trustworthy rather than
+   merely unrefuted: the note then states outright that the button never entered the DOM.
+   `summary.json` carries `decorationEverPresent` / `decorationFirstSeenMs` /
+   `decorationContradiction` so a whole run can be scanned at a glance, and the per-host
+   log line prints `firstSeen=+Nms` plus a loud `⚠️ CONTRADICTED(...)`.
 3. **Attribute to SayPi only.** Hosts emit their own console noise (claude.ai `/v1/toolbox`
    405s, ProseMirror warnings, framework deprecations). `summarize()` splits
    `saypiErrors`/`saypiWarnings` from `hostErrors` for you — file SayPi-attributable
@@ -191,9 +233,18 @@ A default sweep is **not free or traceless** — it acts as the founder on real 
   after-the-wait `page.url()` re-read still awaits a real bouncing host. So the first
   real `redirected-off-origin` verdict should be sanity-checked against `01-before.png`
   rather than trusted outright (#559).
+- **The decoration measurement's `hasBox` is only meaningful in a real browser.**
+  `DECORATION_PROBE` reads `getBoundingClientRect()`, which JSDOM reports as all zeros,
+  so the unit tests stub the rect. And `firstSeenMs` is navigation-relative *provided*
+  the `addInitScript` watcher took: if only the defensive post-load install ran, the
+  reading carries `presentAtInstall: true` / `firstSeenExact: false` and the number is an
+  **upper bound**, which the evidence sentence says out loud. The `visible-but-missed`
+  flavour has not yet been reproduced deliberately — it was inferred from the 2026-07-29
+  bundle, so the first live one is worth checking against `01-before.png` (#570).
 - Built on `scripts/layer4cdp-lib.mjs` (launch/Cloudflare/profile helpers) +
   `scripts/e2e-host-sweep-lib.mjs` (pure: host registry, arg parse, console attribution,
-  summary, per-host DOM diagnostics, the undecorated classifier + sign-in probe —
-  unit-tested in `test/scripts/e2e-host-sweep-lib.spec.ts`,
-  `…-diags.spec.ts`, `…-undecorated.spec.ts`).
+  summary, per-host DOM diagnostics, the undecorated classifier + sign-in probe, the
+  decoration watcher/probe + `describeDecoration` — unit-tested in
+  `test/scripts/e2e-host-sweep-lib.spec.ts`, `…-diags.spec.ts`, `…-undecorated.spec.ts`,
+  `…-decoration.spec.ts`; the `sweepHost` wiring in `…-undecorated-wiring.spec.ts`).
 ```
