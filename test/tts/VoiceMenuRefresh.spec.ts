@@ -29,15 +29,26 @@ vi.mock("../../src/events/EventBus", () => ({
   default: { emit: vi.fn(), on: vi.fn(), off: vi.fn() },
 }));
 
-import { GridVoiceSelector } from "../../src/tts/GridVoiceSelector";
+import { VoiceSelector } from "../../src/tts/VoiceMenu";
 
-class TestGrid extends GridVoiceSelector {
+/**
+ * refreshMenu is VoiceSelector's, not any one surface's — it gathers the
+ * catalog + stored voice + pin overlay and hands them to renderMenu. A minimal
+ * subclass with a recording renderMenu is the right vehicle; this used to
+ * extend GridVoiceSelector, retired with Pi's in-chat menu (#578).
+ */
+class TestGrid extends VoiceSelector {
   getId(): string {
     return "test-grid-refresh";
   }
   getButtonClasses(): string[] {
     return [];
   }
+  // Inert: these cases are about refreshMenu's own behaviour. The pin cases
+  // below spy on this to inspect what refreshMenu hands it. (Instances are
+  // built with Object.create, so no instance fields here — they'd be skipped.)
+  protected renderMenu(): void {}
+  protected applySelectedVoice(): void {}
 }
 
 /**
@@ -103,17 +114,16 @@ describe("refreshMenu with nested (preview) buttons present (#485 tombstone)", (
     await expect(grid.refreshMenu()).resolves.toBeUndefined();
   });
 
-  it("leaves both the host's direct-child button and the nested ▶ in place — renders reconcile, they never bulk-remove", async () => {
+  it("leaves both the host's direct-child button and the nested ▶ in place — it gathers, it never tears down", async () => {
     const { element, directHostBtn, preview } = buildElementWithNestedButton();
     const grid = makeGrid(element);
 
     await grid.refreshMenu();
 
-    // The host's own button survives (it is adopted, not torn down)...
+    // Nothing refreshMenu does may remove a button — neither the host's own
+    // direct child nor a nested ▶ that the old descendant query matched.
     expect(element.contains(directHostBtn)).toBe(true);
-    // ...and the nested preview button is untouched and unclassified as a row.
     expect(element.contains(preview)).toBe(true);
-    expect(preview.hasAttribute("data-saypi-host-voice")).toBe(false);
   });
 });
 

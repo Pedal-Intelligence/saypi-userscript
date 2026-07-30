@@ -24,10 +24,8 @@ vi.mock("../../src/popup/popupopener", () => ({
 }));
 
 import { ClaudeVoiceMenu } from "../../src/chatbots/ClaudeVoiceMenu";
-import { GridVoiceSelector } from "../../src/tts/GridVoiceSelector";
 import EventBus from "../../src/events/EventBus";
 import { claudeMockVoices } from "../data/Voices";
-import { ElevenLabsVoice } from "../data/Voices";
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
 
 // Selecting a voice in the settings catalog reaches the host tab as a
@@ -62,41 +60,6 @@ function makeClaudeMenu(stored: () => SpeechSynthesisVoiceRemote | null): any {
   menu.menuButton = document.createElement("button");
   menu.menuContent = document.createElement("div");
   menu.toggleMenu = vi.fn();
-  (menu as any).registerVoicePreferenceChangeHandler();
-  return menu;
-}
-
-const piVoices = [
-  new ElevenLabsVoice("ig1TeITnnNlsJtfHxJlW", "Paola"),
-  new ElevenLabsVoice("bWJPewAagbymiJXZcxnh", "Joey"),
-];
-
-/**
- * Pi's in-chat voice menu was retired when Pi consolidated voice choice onto its
- * settings page (2026-07-30), taking `PiVoiceMenu` with it. The invariant it
- * used to cover here is not Pi-specific though — it belongs to
- * GridVoiceSelector, the base every grid surface shares — so it is exercised
- * through a minimal grid double rather than deleted with the surface.
- */
-class TestGrid extends GridVoiceSelector {
-  getId() {
-    return "test-grid";
-  }
-  getButtonClasses() {
-    return ["mb-1"];
-  }
-}
-
-function makeGridMenu(stored: () => SpeechSynthesisVoiceRemote | null): any {
-  const menu = Object.create(TestGrid.prototype);
-  menu.chatbot = { getID: () => "pi" } as any;
-  menu.userPreferences = {
-    getVoice: vi.fn(async () => stored()),
-    setVoice: vi.fn(async () => {}),
-    unsetVoice: vi.fn(async () => {}),
-  };
-  menu.element = document.createElement("div");
-  document.body.appendChild(menu.element);
   (menu as any).registerVoicePreferenceChangeHandler();
   return menu;
 }
@@ -159,29 +122,5 @@ describe("ClaudeVoiceMenu reacts to settings-page voice changes (#475)", () => {
     expect(
       menu.menuButton.querySelector(".voice-name")?.textContent
     ).not.toBe("Cassidy");
-  });
-});
-
-describe("GridVoiceSelector reacts to settings-page voice changes (#475)", () => {
-  it("marks the newly stored voice's button selected on the preference event", async () => {
-    const paola = piVoices[0];
-    const joey = piVoices[1];
-    let stored: SpeechSynthesisVoiceRemote | null = paola;
-    const menu = makeGridMenu(() => stored);
-    menu.renderMenu(piVoices, stored);
-    await flushAsync();
-
-    stored = joey;
-    emitVoiceChange(joey.id, "pi");
-    await flushAsync();
-
-    const joeyButton = menu.element.querySelector(
-      `button[data-voice-id="${joey.id}"]`
-    ) as HTMLButtonElement;
-    const paolaButton = menu.element.querySelector(
-      `button[data-voice-id="${paola.id}"]`
-    ) as HTMLButtonElement;
-    expect(joeyButton.classList.contains("selected")).toBe(true);
-    expect(paolaButton.classList.contains("selected")).toBe(false);
   });
 });

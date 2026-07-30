@@ -1,8 +1,10 @@
 // The generic/abstract base for voice selectors. Rendering machinery lives in
-// the surface-specific layers: GridVoiceSelector (Pi's button grids) and
-// ClaudeVoiceMenu (dropdown). This base owns only the cross-surface concerns:
-// event wiring (auth, external preference changes), the gather-then-render
-// refresh cycle, and voice introduction playback.
+// the surface-specific layers: ClaudeVoiceMenu (an in-chat dropdown that
+// renders voice rows) and PiVoiceSettings (door-only — Pi retired its in-chat
+// voice menu, so SayPi just adds a "More voices" door to Pi's settings grid).
+// This base owns only the cross-surface concerns: event wiring (auth, external
+// preference changes), the gather-then-render refresh cycle, and voice
+// introduction playback.
 import { Chatbot } from "../chatbots/Chatbot";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import EventBus from "../events/EventBus";
@@ -67,8 +69,7 @@ export abstract class VoiceSelector {
    * THE single render path: given the fetched catalog + the stored voice,
    * make this selector's DOM reflect them. Must be idempotent — callable
    * repeatedly with the same inputs and converging on the same DOM.
-   * Implementations: GridVoiceSelector (Pi's button grids), ClaudeVoiceMenu
-   * (dropdown).
+   * Implementations: ClaudeVoiceMenu (dropdown), PiVoiceSettings (door only).
    */
   protected abstract renderMenu(
     voices: SpeechSynthesisVoiceRemote[],

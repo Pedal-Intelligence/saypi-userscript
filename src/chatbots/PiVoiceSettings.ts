@@ -1,6 +1,6 @@
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
-import { GridVoiceSelector } from "../tts/GridVoiceSelector";
+import { VoiceSelector } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
@@ -42,8 +42,15 @@ function buildMoreVoicesDoor(template: HTMLElement): HTMLElement {
  * Voices catalog. Inline SayPi voice rows on this surface remain deferred.
  * Though the grid is static, Pi's React can still re-render it (e.g. on
  * selection), so the door is re-injected on grid mutations.
+ *
+ * Extends `VoiceSelector` directly. It used to extend `GridVoiceSelector` — the
+ * row-rendering base built for Pi's in-chat menu — but overrode both of that
+ * base's render methods to nothing, so none of its machinery ever ran. When Pi
+ * retired the in-chat menu (#573) the base lost its last real consumer and was
+ * removed (#578); this surface only ever needed `VoiceSelector`'s id assignment
+ * and auth/preference wiring.
  */
-export class PiVoiceSettings extends GridVoiceSelector {
+export class PiVoiceSettings extends VoiceSelector {
   constructor(
     chatbot: Chatbot,
     userPreferences: UserPreferenceModule,
