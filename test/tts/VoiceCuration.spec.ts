@@ -4,9 +4,17 @@ import {
   curateShortlist,
   visibleCatalog,
   CLAUDE_MENU_CAP,
-  PI_MENU_CAP,
 } from "../../src/tts/VoiceCuration";
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
+
+/**
+ * A representative menu cap for exercising curateShortlist. This used to be
+ * MENU_CAP, which was retired when Pi dropped its in-chat voice menu — these
+ * cases are about the ALGORITHM at a given cap, not about any one host's value,
+ * so a local literal keeps them honest rather than coupling them to whichever
+ * host happens to still have a menu.
+ */
+const MENU_CAP = 4;
 
 // Minimal voice factory matching the GET /voices serialization (saypi-api
 // tts/models.py Voice): only the fields curation reads, plus required
@@ -95,7 +103,7 @@ describe("getVoiceTier", () => {
 
 describe("curateShortlist", () => {
   it("shows the whole catalog with no overflow when it fits the cap (today's Pi set)", () => {
-    const result = curateShortlist(piElevenLabs, null, PI_MENU_CAP);
+    const result = curateShortlist(piElevenLabs, null, MENU_CAP);
     expect(result.voices.map((v) => v.id)).toEqual(piElevenLabs.map((v) => v.id));
     expect(result.hiddenCount).toBe(0);
   });
@@ -108,9 +116,7 @@ describe("curateShortlist", () => {
 
   it("keeps the in-host menus short — 4 rows (2026-07-05 shortlist redesign)", () => {
     // The menu is a handful of sensible defaults + a door, not a browse surface.
-    // Both hosts share the same short cap.
     expect(CLAUDE_MENU_CAP).toBe(4);
-    expect(PI_MENU_CAP).toBe(4);
     // A catalog larger than the cap trims to exactly 4 visible rows.
     expect(curateShortlist(claudeFlipDay, null, CLAUDE_MENU_CAP).voices.length).toBe(4);
   });
@@ -168,7 +174,7 @@ describe("curateShortlist", () => {
     expect(curateShortlist(claudeElevenLabs, null, CLAUDE_MENU_CAP).tiersCoexist).toBe(false);
     expect(curateShortlist(claudeFlipDay, null, CLAUDE_MENU_CAP).tiersCoexist).toBe(true);
     // even when the everyday rows dominate the shortlist, coexistence is a catalog fact
-    expect(curateShortlist(piFlipDay, null, PI_MENU_CAP).tiersCoexist).toBe(true);
+    expect(curateShortlist(piFlipDay, null, MENU_CAP).tiersCoexist).toBe(true);
   });
 
   it("ranks value voices by id, so a server re-skin of display names keeps the order", () => {
@@ -188,7 +194,7 @@ describe("curateShortlist", () => {
   });
 
   it("never features two HD voices with the same display name (Paola flash + Paola v3)", () => {
-    const result = curateShortlist(piFlipDay, null, PI_MENU_CAP);
+    const result = curateShortlist(piFlipDay, null, MENU_CAP);
     const hdNames = result.voices
       .filter((v) => getVoiceTier(v) === "hd")
       .map((v) => v.name);
@@ -196,8 +202,8 @@ describe("curateShortlist", () => {
   });
 
   it("ignores a current voice id that is not in the catalog (e.g. a Pi built-in)", () => {
-    const result = curateShortlist(piFlipDay, "voice3", PI_MENU_CAP);
-    expect(result.voices.length).toBe(PI_MENU_CAP);
+    const result = curateShortlist(piFlipDay, "voice3", MENU_CAP);
+    expect(result.voices.length).toBe(MENU_CAP);
     expect(result.voices.map((v) => v.id)).not.toContain("voice3");
   });
 });
@@ -277,7 +283,7 @@ describe("getVoiceTier with a server section", () => {
 describe("curateShortlist with a server-curated catalog", () => {
   it("draws the shortlist from the server featured set, in server order (capped)", () => {
     // curated features 5 voices; the cap of 4 keeps the first four in server order.
-    const result = curateShortlist(curated, null, PI_MENU_CAP);
+    const result = curateShortlist(curated, null, MENU_CAP);
     expect(result.voices.map((v) => v.name)).toEqual([
       "Paola",
       "Joey",
@@ -323,17 +329,17 @@ describe("curateShortlist with a server-curated catalog", () => {
         section: v.powered_by === "ElevenLabs" ? "hd" : "everyday",
       })
     );
-    const result = curateShortlist(noneFeatured, null, PI_MENU_CAP);
-    expect(result.voices.length).toBe(PI_MENU_CAP);
+    const result = curateShortlist(noneFeatured, null, MENU_CAP);
+    expect(result.voices.length).toBe(MENU_CAP);
     // filled straight down the server order
     expect(result.voices.map((v) => v.id)).toEqual(
-      piFlipDay.slice(0, PI_MENU_CAP).map((v) => v.id)
+      piFlipDay.slice(0, MENU_CAP).map((v) => v.id)
     );
   });
 
   it("still uses the local heuristic for a catalog with no manifest fields", () => {
     // piFlipDay carries no featured field → heuristic path (backward compat)
-    const result = curateShortlist(piFlipDay, null, PI_MENU_CAP);
+    const result = curateShortlist(piFlipDay, null, MENU_CAP);
     const everyday = result.voices
       .filter((v) => getVoiceTier(v) === "everyday")
       .map((v) => v.name);
@@ -385,7 +391,7 @@ describe("curateShortlist with user pins (pinnedIds)", () => {
 
   it("orders pinned voices by catalog (server) order, not by pinned-set order", () => {
     const pinned = new Set(["shimmer", "onyx"]); // deliberately reversed
-    const result = curateShortlist(curated, null, PI_MENU_CAP, pinned);
+    const result = curateShortlist(curated, null, MENU_CAP, pinned);
     const onyxIdx = result.voices.findIndex((v) => v.id === "onyx");
     const shimmerIdx = result.voices.findIndex((v) => v.id === "shimmer");
     expect(onyxIdx).toBeGreaterThanOrEqual(0);
@@ -417,7 +423,7 @@ describe("curateShortlist with user pins (pinnedIds)", () => {
 
   it("leaves the un-pinned path (undefined pinnedIds) exactly as before", () => {
     // Regression guard: omitting pinnedIds reproduces the server-featured path.
-    const result = curateShortlist(curated, null, PI_MENU_CAP);
+    const result = curateShortlist(curated, null, MENU_CAP);
     expect(result.voices.map((v) => v.name)).toEqual([
       "Paola",
       "Joey",

@@ -14,7 +14,6 @@ import {
 } from "../../../../src/tts/VoicePins";
 import {
   CLAUDE_MENU_CAP,
-  PI_MENU_CAP,
   curateShortlist,
   getVoiceTier,
   visibleCatalog,
@@ -36,9 +35,21 @@ const VOICE_HOSTS: ReadonlyArray<{
   id: VoiceHostId;
   label: string;
   logo: string;
-  menuCap: number;
+  /**
+   * How many voices the host's IN-CHAT menu seats, or undefined when the host
+   * has no in-chat voice menu at all.
+   *
+   * This is what makes the shortlist meaningful: the section exists to curate
+   * scarcity — a small, fixed number of seats the user must choose between.
+   * Pi retired its in-chat voice menu on 2026-07-30 (#573), moving voice choice
+   * to its settings page, so on Pi there is no scarcity to manage and nowhere
+   * for a pin to show up. Omitting the cap hides the whole shortlist concept
+   * (section, pin toggles, overflow note) rather than relabelling a control
+   * that would do nothing.
+   */
+  menuCap?: number;
 }> = [
-  { id: "pi", label: "Pi", logo: "/icons/logos/pi.png", menuCap: PI_MENU_CAP },
+  { id: "pi", label: "Pi", logo: "/icons/logos/pi.png" },
   {
     id: "claude",
     label: "Claude",
@@ -147,12 +158,20 @@ interface StudioViewModel {
   featuredIds: string[];
   /** The resolved pin set (server defaults ⊕ user overlay). */
   pinned: Set<string>;
-  /** The literal in-chat menu, in true order. */
-  seated: SpeechSynthesisVoiceRemote[];
-  /** Pins that exist but don't fit the menu cap (legacy overflow). */
-  overflowCount: number;
-  /** current + pins have consumed every seat — no room to pin more. */
-  menuFull: boolean;
+  /**
+   * The host's in-chat menu, or null when the host has none (Pi). Null is the
+   * single signal every menu-dependent affordance keys off, so a menu-less host
+   * can't render half a shortlist.
+   */
+  menu: {
+    cap: number;
+    /** The literal in-chat menu, in true order. */
+    seated: SpeechSynthesisVoiceRemote[];
+    /** Pins that exist but don't fit the menu cap (legacy overflow). */
+    overflowCount: number;
+    /** current + pins have consumed every seat — no room to pin more. */
+    full: boolean;
+  } | null;
   /** Display names appearing more than once (the twin-Paola problem, #474). */
   dupNames: Set<string>;
 }
@@ -305,23 +324,36 @@ export class VoicesController {
     const pinned = customized
       ? resolvePinnedIds(featuredIds, data.overlay)
       : new Set(featuredIds);
-    const shortlist = curateShortlist(
-      catalog,
-      currentId,
-      host.menuCap,
-      customized ? pinned : null
-    );
-    const seatedIds = new Set(shortlist.voices.map((voice) => voice.id));
-    const catalogIds = new Set(catalog.map((voice) => voice.id));
-    const overflowCount = [...pinned].filter(
-      (id) => catalogIds.has(id) && !seatedIds.has(id)
-    ).length;
-    // "Full" counts committed seats only (current + pins) — fill-to-cap
-    // suggestions on an un-customized host must never block pinning.
-    const committedSeats = shortlist.voices.filter(
-      (voice) => voice.id === currentId || pinned.has(voice.id)
-    ).length;
-    const menuFull = committedSeats >= host.menuCap;
+    // Hosts with no in-chat menu skip the shortlist entirely. Any stale pins in
+    // the overlay stay untouched — inert data, restorable if the host ever
+    // reinstates a menu — they simply have nowhere to be shown.
+    const menu = host.menuCap === undefined
+      ? null
+      : (() => {
+          const cap = host.menuCap;
+          const shortlist = curateShortlist(
+            catalog,
+            currentId,
+            cap,
+            customized ? pinned : null
+          );
+          const seatedIds = new Set(shortlist.voices.map((v) => v.id));
+          const catalogIds = new Set(catalog.map((v) => v.id));
+          const overflowCount = [...pinned].filter(
+            (id) => catalogIds.has(id) && !seatedIds.has(id)
+          ).length;
+          // "Full" counts committed seats only (current + pins) — fill-to-cap
+          // suggestions on an un-customized host must never block pinning.
+          const committedSeats = shortlist.voices.filter(
+            (voice) => voice.id === currentId || pinned.has(voice.id)
+          ).length;
+          return {
+            cap,
+            seated: shortlist.voices,
+            overflowCount,
+            full: committedSeats >= cap,
+          };
+        })();
 
     const nameCounts = new Map<string, number>();
     catalog.forEach((voice) => {
@@ -340,9 +372,7 @@ export class VoicesController {
       stagedCurrent,
       featuredIds,
       pinned,
-      seated: shortlist.voices,
-      overflowCount,
-      menuFull,
+      menu,
       dupNames,
     };
   }
@@ -364,7 +394,7 @@ export class VoicesController {
     }
 
     body.appendChild(this.renderStage(vm.stagedCurrent, vm));
-    body.appendChild(this.renderSlotsSection(vm));
+    if (vm.menu) body.appendChild(this.renderSlotsSection(vm, vm.menu));
     body.appendChild(this.renderShelves(vm));
   }
 
@@ -479,7 +509,10 @@ export class VoicesController {
    * on an un-customized host aren't pins, so they get no remove either
    * (unpinning them would be a dead no-op in the overlay model).
    */
-  private renderSlotsSection(vm: StudioViewModel): HTMLElement {
+  private renderSlotsSection(
+    vm: StudioViewModel,
+    menu: NonNullable<StudioViewModel["menu"]>
+  ): HTMLElement {
     const section = document.createElement("div");
     section.classList.add("voice-slots-section");
 
@@ -499,18 +532,23 @@ export class VoicesController {
 
     const list = document.createElement("ul");
     list.classList.add("voice-slots");
-    vm.seated.forEach((voice) => {
+    menu.seated.forEach((voice) => {
       list.appendChild(this.renderSlot(voice, vm));
     });
     section.appendChild(list);
 
-    if (vm.overflowCount > 0) {
+    if (menu.overflowCount > 0) {
       const overflow = document.createElement("div");
       overflow.classList.add("voice-slots-overflow");
-      overflow.textContent = getMessage("voicesMenuOverflow", [
-        String(vm.overflowCount),
-        String(vm.host.menuCap),
-      ]);
+      // Chrome i18n has no plural forms, so the singular is its own key —
+      // otherwise this reads "1 more pinned voices are waiting".
+      overflow.textContent =
+        menu.overflowCount === 1
+          ? getMessage("voicesMenuOverflowOne", [String(menu.cap)])
+          : getMessage("voicesMenuOverflow", [
+              String(menu.overflowCount),
+              String(menu.cap),
+            ]);
       section.appendChild(overflow);
     }
 
@@ -659,7 +697,9 @@ export class VoicesController {
 
     const actions = document.createElement("div");
     actions.classList.add("voice-card-actions");
-    actions.appendChild(this.renderPinToggle(voice, vm));
+    // No menu, no pinning: on a host with nowhere to pin TO, the control would
+    // write an overlay nothing ever reads.
+    if (vm.menu) actions.appendChild(this.renderPinToggle(voice, vm));
     if (isCurrent) {
       const state = document.createElement("span");
       state.classList.add("voice-card-state");
@@ -714,7 +754,7 @@ export class VoicesController {
         [voice.name, vm.host.label]
       )
     );
-    const disabled = !pressed && vm.menuFull;
+    const disabled = !pressed && (vm.menu?.full ?? false);
     toggle.disabled = disabled;
     if (disabled) toggle.title = getMessage("voicesMenuFull");
     else toggle.removeAttribute("title");
@@ -830,7 +870,7 @@ export class VoicesController {
     if (!this.body) return;
     const vm = this.viewModel(this.activeHost, data);
     const slots = this.body.querySelector(".voice-slots-section");
-    if (slots) slots.replaceWith(this.renderSlotsSection(vm));
+    if (slots && vm.menu) slots.replaceWith(this.renderSlotsSection(vm, vm.menu));
     this.body.querySelectorAll<HTMLElement>(".voice-card").forEach((card) => {
       const toggle = card.querySelector<HTMLButtonElement>(".voice-pin-toggle");
       if (!toggle) return;
