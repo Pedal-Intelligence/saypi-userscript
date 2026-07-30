@@ -1,4 +1,17 @@
 /* Global settings page styles */
+
+/* Only some panes are tall enough to scroll (in practice the Voices studio).
+   Where scrollbars take layout space — macOS with a mouse connected,
+   Windows/Linux — the scrollbar popping in/out on tab switch re-centers the
+   header and container by half its width: a visible shunt. Always render the
+   scrollbar track so every tab lays out at the same width. (Not
+   `scrollbar-gutter: stable`: Chromium doesn't reserve the gutter for
+   custom-styled scrollbars.) Overlay-scrollbar environments take no space
+   either way, unchanged. */
+html {
+  overflow-y: scroll;
+}
+
 .settings-root {
   background: #f9fafb;
   /* No min-height - let content determine natural height */
