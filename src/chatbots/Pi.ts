@@ -1,11 +1,8 @@
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
-import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
-import { VoiceSelector } from "../tts/VoiceMenu";
 import { UserPrompt, SidebarConfig } from "./Chatbot";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
-import { PiVoiceMenu } from "./PiVoiceMenu";
 import { PiResponse } from "./pi/PiResponse";
 
 class PiAIChatbot extends AbstractChatbot {
@@ -15,13 +12,6 @@ class PiAIChatbot extends AbstractChatbot {
 
   getID(): string {
     return "pi";
-  }
-
-  getVoiceMenu(
-    preferences: UserPreferenceModule,
-    element: HTMLElement
-  ): VoiceSelector {
-    return new PiVoiceMenu(this, preferences, element);
   }
 
   getPrompt(element: HTMLElement): UserPrompt {
@@ -72,10 +62,15 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getAudioOutputButtonSelector(): string {
-    // Voice on/off button is the first button inside Pi's audio controls.
-    // Pi moved the buttons into an `inline-flex` wrapper and the row container
-    // dropped `items-center` (now `z-10`), so match the wrapper generically.
-    return ".saypi-audio-controls > div > div.relative.flex.justify-end.self-end > div > button";
+    // Empty BY DESIGN (2026-07-30). Pi's audio on/off control is no longer a
+    // decoratable element: it is a checkbox inside a "Chat options" popover
+    // that Pi mounts on open and tears down on close, so there is nothing for
+    // bootstrap's findAudioOutputButton to assign an id to (it treats a blank
+    // selector as "this host has none" and skips). Pi drives it through the
+    // AudioOutputToggle capability instead — see src/chatbots/pi/PiAutoRead.ts.
+    // Returning the old literal here would only re-manufacture a permanently
+    // unmatched selector.
+    return "";
   }
 
   getControlPanelSelector(): string {
@@ -105,9 +100,13 @@ class PiAIChatbot extends AbstractChatbot {
     return path.startsWith("/talk") || path.startsWith("/discover") || path.startsWith("/threads") || path.startsWith("/profile") && !path.endsWith("/account");
   }
 
-  getVoiceMenuSelector(): string {
-    return "div.t-action-m";
-  }
+  // No getVoiceMenu / getVoiceMenuSelector, deliberately: Pi retired its
+  // in-chat voice menu on 2026-07-30 and voice selection now lives only on the
+  // settings page below, where PiVoiceSettings adds the "More voices" door.
+  // Both members are optional on Chatbot, and their ABSENCE is what tells
+  // VoiceMenuUIManager not to synthesise a menu container — which is why SayPi
+  // no longer injects a permanently-empty <div id="saypi-voice-menu"> into
+  // Pi's header.
 
   getVoiceSettingsSelector(): string {
     // Pi's Voice settings page (pi.ai/profile/settings) — re-anchored 2026-07-04

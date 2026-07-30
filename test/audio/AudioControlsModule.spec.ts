@@ -1,7 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type MockInstance,
+} from "vitest";
 import AudioControlsModule from "../../src/audio/AudioControlsModule";
 import EventBus from "../../src/events/EventBus";
 import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
+import { piAutoRead } from "../../src/chatbots/pi/PiAutoRead";
 
 describe("AudioControlsModule", () => {
   let audioControls: AudioControlsModule;
@@ -112,11 +121,12 @@ describe("AudioControlsModule", () => {
     });
 
     it("should not activate audio output if already enabled", () => {
-      // Mock Pi.ai with chat history
-      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("pi");
-      const assistantMsg = document.createElement("div");
-      assistantMsg.className = "assistant-message";
-      document.body.appendChild(assistantMsg);
+      // Claude keeps the decoratable-button contract, so "already enabled" is
+      // still read off the rendered icon here. (Pi's equivalent moved to the
+      // AudioOutputToggle path — covered separately below.)
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("claude");
+      const button = document.getElementById("saypi-audio-output-button")!;
+      const clickSpy = vi.spyOn(button, "click");
 
       // Set audio output button to active state
       const path = document.querySelector("#saypi-audio-output-button svg path");
@@ -127,8 +137,98 @@ describe("AudioControlsModule", () => {
 
       audioControls.activateAudioOutput(true);
 
-      // Should not emit skipNext if already enabled
+      expect(clickSpy).not.toHaveBeenCalled();
       expect(emitSpy).not.toHaveBeenCalledWith("audio:skipNext");
+    });
+  });
+
+  /**
+   * Pi's audio toggle stopped being a decoratable element on 2026-07-30 — it is
+   * now a checkbox inside a popover Pi mounts on demand — so SayPi drives it
+   * through the AudioOutputToggle capability rather than by clicking
+   * `#saypi-audio-output-button`. These pin the DISPATCH: capability when the
+   * host supplies one, decorated button otherwise.
+   */
+  describe("dispatch between the AudioOutputToggle capability and the button", () => {
+    let setEnabled: MockInstance<(enabled: boolean) => Promise<void>>;
+
+    beforeEach(() => {
+      setEnabled = vi
+        .spyOn(piAutoRead, "setAudioOutputEnabled")
+        .mockResolvedValue(undefined);
+    });
+
+    it("drives Pi through the capability, never through the button", () => {
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("pi");
+      vi.spyOn(piAutoRead, "isAudioOutputEnabled").mockReturnValue(false);
+
+      // A decorated button left over from an earlier host state must be ignored.
+      const button = document.createElement("button");
+      button.id = "saypi-audio-output-button";
+      document.body.appendChild(button);
+      const clickSpy = vi.spyOn(button, "click");
+
+      audioControls.activateAudioOutput(true);
+
+      expect(setEnabled).toHaveBeenCalledWith(true);
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it("does not drive Pi when auto-read is already on", () => {
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("pi");
+      vi.spyOn(piAutoRead, "isAudioOutputEnabled").mockReturnValue(true);
+
+      audioControls.activateAudioOutput(true);
+
+      expect(setEnabled).not.toHaveBeenCalled();
+      expect(emitSpy).not.toHaveBeenCalledWith("audio:skipNext");
+    });
+
+    it("still skips Pi's replay of the last message when it does drive it", () => {
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("pi");
+      vi.spyOn(piAutoRead, "isAudioOutputEnabled").mockReturnValue(false);
+      const assistantMsg = document.createElement("div");
+      assistantMsg.className = "assistant-message";
+      document.body.appendChild(assistantMsg);
+
+      audioControls.activateAudioOutput(true);
+
+      expect(emitSpy).toHaveBeenCalledWith("audio:skipNext");
+    });
+
+    it("leaves Claude on the decorated-button path", () => {
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("claude");
+      const button = document.createElement("button");
+      button.id = "saypi-audio-output-button";
+      document.body.appendChild(button);
+      const clickSpy = vi.spyOn(button, "click");
+
+      audioControls.activateAudioOutput(true);
+
+      expect(clickSpy).toHaveBeenCalled();
+      expect(setEnabled).not.toHaveBeenCalled();
+    });
+
+    it("reads Pi's enabled state from the capability, not the button's icon", () => {
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("pi");
+      vi.spyOn(piAutoRead, "isAudioOutputEnabled").mockReturnValue(true);
+
+      // No #saypi-audio-output-button in the DOM at all — the old icon-path
+      // read would have reported false here.
+      expect(audioControls.isAudioOutputEnabled()).toBe(true);
+    });
+
+    it("never rejects when the host surface has drifted", async () => {
+      vi.spyOn(ChatbotIdentifier, "identifyChatbot").mockReturnValue("pi");
+      vi.spyOn(piAutoRead, "isAudioOutputEnabled").mockReturnValue(false);
+      setEnabled.mockRejectedValue(new Error("Pi's kebab moved"));
+      const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      expect(() => audioControls.activateAudioOutput(true)).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(errorSpy).toHaveBeenCalled();
     });
   });
 });

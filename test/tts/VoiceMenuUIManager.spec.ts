@@ -88,3 +88,65 @@ describe("VoiceMenuUIManager.findAndDecorateVoiceMenu idempotency (#321)", () =>
     expect(second.decorated).toBe(true);
   });
 });
+
+/**
+ * A host that has NO in-chat voice menu at all — Pi, since it consolidated
+ * voice choice onto its settings page (2026-07-30). `getVoiceMenu` and
+ * `getVoiceMenuSelector` are optional on `Chatbot`, and their absence is the
+ * signal.
+ *
+ * Before this, Pi's stale `div.t-action-m` selector matched nothing, so the
+ * manager fell through to its CREATE branch and injected a `<div
+ * id="saypi-voice-menu">` into Pi's header that could never be populated —
+ * SayPi leaving a permanently empty element in a host's UI.
+ */
+describe("VoiceMenuUIManager on hosts with no in-chat voice menu", () => {
+  let container: HTMLElement;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  class MenulessChatbot {
+    // Deliberately declares neither getVoiceMenu nor getVoiceMenuSelector.
+  }
+
+  it("creates nothing and reports notFound", () => {
+    const mgr = new VoiceMenuUIManager(new MenulessChatbot() as any, {} as any);
+
+    const obs = mgr.findAndDecorateVoiceMenu(container);
+
+    expect(obs.found).toBe(false);
+    expect(container.children.length).toBe(0);
+  });
+
+  it("stays inert across the repeated calls bootstrap makes on every mutation", () => {
+    const mgr = new VoiceMenuUIManager(new MenulessChatbot() as any, {} as any);
+
+    mgr.findAndDecorateVoiceMenu(container);
+    mgr.findAndDecorateVoiceMenu(container);
+    mgr.findAndDecorateVoiceMenu(container);
+
+    expect(container.querySelectorAll(`#${VOICE_MENU_ID}`).length).toBe(0);
+  });
+
+  it("also stays inert when a host declares a selector but no menu factory", () => {
+    class HalfDeclaredChatbot {
+      getVoiceMenuSelector(): string {
+        return "div.t-action-m";
+      }
+    }
+    const mgr = new VoiceMenuUIManager(
+      new HalfDeclaredChatbot() as any,
+      {} as any
+    );
+
+    expect(mgr.findAndDecorateVoiceMenu(container).found).toBe(false);
+    expect(container.children.length).toBe(0);
+  });
+});

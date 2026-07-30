@@ -354,7 +354,18 @@ export const CHATGPT_CHAT_HISTORY_SELECTOR = `div:has(> ${CHATGPT_TURN_SELECTOR}
  */
 export const DIAGS = {
   pi: () => ({
-    voiceMenus: document.querySelectorAll("#saypi-voice-menu").length,
+    // Pi retired its in-chat voice menu on 2026-07-30 and SayPi stopped
+    // synthesising a container for it, so `#saypi-voice-menu` is now 0 BY
+    // DESIGN on /talk — probing it here would manufacture drift the adapter has
+    // deliberately moved off (#560, #563). What the adapter depends on now is
+    // the "Chat options" kebab, and the auto-read checkbox inside its popover
+    // (only present while open, hence reported separately from the kebab).
+    chatOptionsButtons: document.querySelectorAll('button[aria-label="Chat options"]').length,
+    autoReadItemsWhenOpen: document.querySelectorAll('[data-testid="chat-options-auto-read"]').length,
+    // Voice choice now lives solely on pi.ai/profile/settings; on /talk this is
+    // expected to be 0, and non-zero only on the settings route.
+    voiceSettingsGrids: document.querySelectorAll("#saypi-voice-settings").length,
+    moreVoicesDoors: document.querySelectorAll(".saypi-more-voices").length,
     chatHistory: document.querySelectorAll("#saypi-chat-history").length,
     presentMsgsDecorated: document.querySelectorAll(".present-messages [id*='saypi'], .present-messages [class*='saypi']").length,
     callButtons: document.querySelectorAll("#saypi-callButton").length,

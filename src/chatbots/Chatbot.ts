@@ -12,7 +12,13 @@ export interface Chatbot {
   getChatHistorySelector(): string;
   getPastChatHistorySelector(): string; // can be identical to chat history
   getRecentChatHistorySelector(): string; // can be identical to chat history
-  getVoiceMenuSelector(): string;
+  /**
+   * Selector for the host's own in-chat voice menu container, if it has one.
+   * Optional: a host with no in-chat voice surface (Pi, since 2026-07-30)
+   * omits this and {@link getVoiceMenu} together, and VoiceMenuUIManager then
+   * leaves its DOM alone rather than synthesising an empty container.
+   */
+  getVoiceMenuSelector?(): string;
   getVoiceSettingsSelector(): string;
   getDiscoveryPanelSelector(): string;
   getAudioOutputButtonSelector(): string;
@@ -45,7 +51,8 @@ export interface Chatbot {
   getID(): string; // the name of the chatbot as it appears in URLs, etc., e.g. "pi", "claude"
   getNickname(): Promise<string>; // Returns the user's preferred nickname for the AI assistant, or the default name if not set
   hasNickname(): Promise<boolean>;
-  getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
+  /** Optional — see {@link getVoiceMenuSelector}. Declared together. */
+  getVoiceMenu?(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
 
   // Submit method - chatbot-specific submission logic
   simulateFormSubmit(): boolean;

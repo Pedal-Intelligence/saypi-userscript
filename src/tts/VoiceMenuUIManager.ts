@@ -27,8 +27,18 @@ export class VoiceMenuUIManager {
     // Check if the menu already exists via ID (if previously decorated by this manager perhaps)
     // Note: VoiceSelector implementations might assign IDs, but we search within the container first.
 
+    // Hosts with no in-chat voice surface omit BOTH members (Pi, since its
+    // 2026-07-30 redesign moved voice choice to the settings page only). Bail
+    // before the create branch below: synthesising a container for a menu that
+    // can never be populated is how SayPi ended up injecting a permanently
+    // empty <div id="saypi-voice-menu"> into Pi's header.
+    const voiceMenuSelector = this.chatbot.getVoiceMenuSelector?.();
+    if (!voiceMenuSelector?.trim() || !this.chatbot.getVoiceMenu) {
+      return Observation.notFound("saypi-voice-menu");
+    }
+
     let voiceMenuElement = audioControlsContainer.querySelector(
-      this.chatbot.getVoiceMenuSelector()
+      voiceMenuSelector
     ) as HTMLElement | null;
 
     if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
@@ -37,7 +47,7 @@ export class VoiceMenuUIManager {
         "saypi-voice-menu", // Tentative ID, VoiceSelector constructor will set it properly
         voiceMenuElement
       );
-      this.voiceMenuInstance = this.chatbot.getVoiceMenu(
+      this.voiceMenuInstance = this.chatbot.getVoiceMenu!(
         this.userPreferences,
         voiceMenuElement // Pass the found element
       );

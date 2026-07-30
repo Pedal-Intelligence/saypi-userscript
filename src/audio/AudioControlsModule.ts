@@ -10,6 +10,7 @@ import {
   VoiceFactory,
 } from "../tts/SpeechModel";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import { getAudioOutputToggle } from "../chatbots/AudioOutputToggle";
 
 export default class AudioControlsModule {
   activateAudioInput(enable: boolean): void {
@@ -22,21 +23,45 @@ export default class AudioControlsModule {
   }
 
   activateAudioOutput(enable: boolean): void {
-    if (enable && !this.isAudioOutputEnabled()) {
+    if (!enable) return;
+
+    // Hosts whose audio toggle is a behaviour rather than a decoratable element
+    // own the mechanics themselves (Pi, whose control now lives inside a
+    // popover it mounts on demand). Everyone else keeps the click-the-decorated-
+    // button path.
+    const toggle = getAudioOutputToggle(ChatbotIdentifier.identifyChatbot());
+    if (toggle) {
+      if (toggle.isAudioOutputEnabled()) return;
+      this.skipNextIfHostReplaysLastMessage();
+      // Fire-and-forget: both callers (a ConversationMachine action and
+      // SubmitErrorHandler) are synchronous, and a drifted host surface should
+      // degrade quietly rather than surface an unhandled rejection.
+      toggle.setAudioOutputEnabled(true).catch((error) => {
+        console.error("Failed to enable the host's audio output", error);
+      });
+      return;
+    }
+
+    if (!this.isAudioOutputEnabled()) {
       const audioOutputButton = document.getElementById(
         "saypi-audio-output-button"
       );
       if (audioOutputButton) {
-        // Only skip next audio on Pi.ai when there are existing messages
-        // Pi.ai auto-plays the last message when audio output is enabled,
-        // which we want to prevent during call start in existing threads.
-        // Don't skip on new/empty chats or during page navigation.
-        const chatbotId = ChatbotIdentifier.identifyChatbot();
-        if (chatbotId === "pi" && this.hasChatHistory()) {
-          EventBus.emit("audio:skipNext");
-        }
+        this.skipNextIfHostReplaysLastMessage();
         audioOutputButton.click();
       }
+    }
+  }
+
+  /**
+   * Pi.ai auto-plays the last message when audio output is enabled, which we
+   * want to prevent when starting a call in an existing thread. Don't skip on
+   * new/empty chats or during page navigation.
+   */
+  private skipNextIfHostReplaysLastMessage(): void {
+    const chatbotId = ChatbotIdentifier.identifyChatbot();
+    if (chatbotId === "pi" && this.hasChatHistory()) {
+      EventBus.emit("audio:skipNext");
     }
   }
 
@@ -47,6 +72,11 @@ export default class AudioControlsModule {
   }
 
   isAudioOutputEnabled(): boolean {
+    const toggle = getAudioOutputToggle(ChatbotIdentifier.identifyChatbot());
+    if (toggle) {
+      return toggle.isAudioOutputEnabled();
+    }
+
     const svgPathElement = document.querySelector(
       "#saypi-audio-output-button svg path"
     );
