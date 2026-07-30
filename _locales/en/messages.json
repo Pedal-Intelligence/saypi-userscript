@@ -1096,6 +1096,16 @@
       }
     }
   },
+  "voicesMenuOverflowOne": {
+    "message": "1 more pinned voice is waiting beyond the menu's $cap$ slots.",
+    "description": "Singular of voicesMenuOverflow, used when exactly one pinned voice doesn't fit the in-chat menu; $cap$ is the menu size.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
   "voicesLoadError": {
     "message": "Couldn't load $host$'s voices. Please try again later.",
     "description": "Error state inside one host's studio when that host's voice catalog failed to load; $host$ is the assistant.",

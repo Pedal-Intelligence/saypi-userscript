@@ -25,7 +25,6 @@ export type VoiceTier = "hd" | "everyday";
  * still pins first, so the visible menu is at most current + 3 featured.
  */
 export const CLAUDE_MENU_CAP = 4;
-export const PI_MENU_CAP = 4;
 
 /**
  * Credits/1k chars boundary between value voices (OpenAI: 50) and premium

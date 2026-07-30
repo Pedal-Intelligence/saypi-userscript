@@ -234,15 +234,26 @@ describe("VoicesController — stage", () => {
     });
     const { container } = await mount(deps);
     expect(q(container, ".voice-stage-name")!.textContent).toBe("Aria");
-    // built-ins are host-owned: never a card, but the note explains the menu
+    // built-ins are host-owned: never a card.
     expect(cardOf(container, "voice1")).toBeNull();
+  });
+
+  it("notes host built-ins alongside the menu, on hosts that have a menu", async () => {
+    const deps = makeDeps({
+      claude: [
+        mkVoice("voice1", { default: true, name: "Aria" }),
+        mkVoice("marin"),
+      ],
+      claudeCurrent: mkVoice("voice1", { default: true, name: "Aria" }),
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
     const builtins = q(container, ".voice-slots-builtins")!;
     expect(builtins.textContent).toBe("voicesBuiltinsNote");
     expect(builtins.dataset.i18n).toBeUndefined();
   });
 });
 
-describe("VoicesController — menu slots (curateShortlist truth)", () => {
+describe("VoicesController — menu slots (curateShortlist truth), on hosts WITH a menu", () => {
   const catalog = () => [
     mkVoice("alloy"),
     mkVoice("coral"),
@@ -253,22 +264,22 @@ describe("VoicesController — menu slots (curateShortlist truth)", () => {
 
   it("seats the current voice first, then pins in catalog order", async () => {
     const deps = makeDeps({
-      pi: catalog(),
-      piCurrent: mkVoice("onyx"),
-      piOverlay: { pinned: ["coral", "nova"], unpinned: [] },
+      claude: catalog(),
+      claudeCurrent: mkVoice("onyx"),
+      claudeOverlay: { pinned: ["coral", "nova"], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     expect(slotIds(container)).toEqual(["onyx", "coral", "nova"]);
     expect(q(container, ".voice-slots-overflow")).toBeNull();
   });
 
   it("marks the current slot non-removable — even when deprecated (grandfathering)", async () => {
     const deps = makeDeps({
-      pi: [...catalog(), mkVoice("retired", { deprecated: true })],
-      piCurrent: mkVoice("retired", { deprecated: true }),
-      piOverlay: { pinned: ["coral"], unpinned: [] },
+      claude: [...catalog(), mkVoice("retired", { deprecated: true })],
+      claudeCurrent: mkVoice("retired", { deprecated: true }),
+      claudeOverlay: { pinned: ["coral"], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     expect(slotIds(container)).toEqual(["retired", "coral"]);
     const current = q(container, ".voice-slot-current")!;
     expect(current.dataset.voiceId).toBe("retired");
@@ -280,15 +291,15 @@ describe("VoicesController — menu slots (curateShortlist truth)", () => {
 
   it("removes a pinned voice from the menu via its slot", async () => {
     const deps = makeDeps({
-      pi: catalog(),
-      piCurrent: mkVoice("onyx"),
-      piOverlay: { pinned: ["coral", "nova"], unpinned: [] },
+      claude: catalog(),
+      claudeCurrent: mkVoice("onyx"),
+      claudeOverlay: { pinned: ["coral", "nova"], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     const coralSlot = q(container, ".voice-slot[data-voice-id='coral']")!;
     (coralSlot.querySelector(".voice-slot-remove") as HTMLButtonElement).click();
     await flushAsync();
-    expect(deps.setPinned).toHaveBeenCalledWith("pi", "coral", [], false);
+    expect(deps.setPinned).toHaveBeenCalledWith("claude", "coral", [], false);
     expect(slotIds(container)).toEqual(["onyx", "nova"]);
   });
 
@@ -296,42 +307,137 @@ describe("VoicesController — menu slots (curateShortlist truth)", () => {
     // No overlay + no featured field ⇒ heuristic/fill path seats voices that
     // are not pins; unpinning them would be a dead no-op, so no remove button.
     const deps = makeDeps({
-      pi: catalog(),
-      piCurrent: mkVoice("onyx"),
+      claude: catalog(),
+      claudeCurrent: mkVoice("onyx"),
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     expect(slotIds(container).length).toBeGreaterThan(1);
     expect(qa(container, ".voice-slot-remove").length).toBe(0);
   });
 
   it("surfaces legacy overflow — more pins than the menu can seat", async () => {
     const deps = makeDeps({
-      pi: catalog(),
-      piCurrent: mkVoice("onyx"),
-      piOverlay: { pinned: ["alloy", "coral", "marin", "nova"], unpinned: [] },
+      claude: catalog(),
+      claudeCurrent: mkVoice("onyx"),
+      claudeOverlay: { pinned: ["alloy", "coral", "marin", "nova"], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     // cap 4: onyx + alloy, coral, marin seated; nova pinned but waiting
     expect(slotIds(container)).toEqual(["onyx", "alloy", "coral", "marin"]);
     const overflow = q(container, ".voice-slots-overflow")!;
-    expect(overflow.textContent).toBe("voicesMenuOverflow");
+    // Exactly one waiting: "1 more pinned voices are waiting" was ungrammatical.
+    expect(overflow.textContent).toBe("voicesMenuOverflowOne");
     expect(overflow.dataset.i18n).toBeUndefined();
+  });
+
+  it("uses the plural overflow copy when more than one pin is waiting", async () => {
+    const deps = makeDeps({
+      claude: [...catalog(), mkVoice("sage"), mkVoice("verse")],
+      claudeCurrent: mkVoice("onyx"),
+      claudeOverlay: {
+        pinned: ["alloy", "coral", "marin", "nova", "sage", "verse"],
+        unpinned: [],
+      },
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(q(container, ".voice-slots-overflow")!.textContent).toBe(
+      "voicesMenuOverflow"
+    );
   });
 });
 
+/**
+ * Pi retired its in-chat voice menu on 2026-07-30 (#573), so Pi has no menu to
+ * shortlist INTO — pinning there would be inert, and the section's promise
+ * ("In Pi's menu / What you'll see in chat", listing voices that appear nowhere)
+ * was simply false. A host declares a menu by carrying a `menuCap`; Pi no longer
+ * does, and the whole shortlist concept is hidden for hosts without one.
+ *
+ * These are absence assertions, so they double as a guard against the section
+ * being quietly reinstated for Pi.
+ */
+describe("VoicesController — hosts with NO in-chat menu (Pi)", () => {
+  const catalog = () => [mkVoice("marin"), mkVoice("coral"), mkVoice("nova")];
+
+  it("renders no menu-slots section at all", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-slots-section")).toBeNull();
+    expect(q(container, ".voice-slots")).toBeNull();
+    expect(slotIds(container)).toEqual([]);
+  });
+
+  it("makes no promise about what appears in chat", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-slots-title")).toBeNull();
+    expect(q(container, ".voice-slots-hint")).toBeNull();
+    expect(q(container, ".voice-slots-builtins")).toBeNull();
+  });
+
+  it("offers no pin affordance on voice cards", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    expect(qa(container, ".voice-pin-toggle").length).toBe(0);
+    expect(pinToggleOf(container, "coral")).toBeNull();
+  });
+
+  it("shows no overflow notice however many stale pins the overlay carries", async () => {
+    // Pins survive as inert data (restorable if Pi ever reinstates a menu), but
+    // they must not surface as "waiting beyond the menu's slots".
+    const deps = makeDeps({
+      pi: catalog(),
+      piCurrent: mkVoice("marin"),
+      piOverlay: { pinned: ["coral", "nova"], unpinned: [] },
+    });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-slots-overflow")).toBeNull();
+  });
+
+  it("still stages the current voice and renders the catalog", async () => {
+    // Removing the menu concept must not touch voice SELECTION, which is what
+    // the tab is actually for.
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-stage-name")!.textContent).toBe("Marin");
+    expect(cardOf(container, "coral")).not.toBeNull();
+    expect(cardOf(container, "nova")).not.toBeNull();
+  });
+
+  it("leaves Claude's menu untouched when switching hosts", async () => {
+    const deps = makeDeps({
+      pi: catalog(),
+      piCurrent: mkVoice("marin"),
+      claude: catalog(),
+      claudeCurrent: mkVoice("coral"),
+    });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-slots-section")).toBeNull();
+
+    hostTab(container, "claude")!.click();
+    await flushAsync();
+    await flushAsync();
+
+    expect(q(container, ".voice-slots-section")).not.toBeNull();
+    expect(qa(container, ".voice-pin-toggle").length).toBeGreaterThan(0);
+  });
+});
+
+// Pinning is a menu concept, so these drive Claude — the host that still has an
+// in-chat menu. (Pi's pin-free cards are covered in the "NO in-chat menu" suite.)
 describe("VoicesController — explore cards", () => {
   it("pins a voice from its card, updating the slots in place", async () => {
     const deps = makeDeps({
-      pi: [mkVoice("marin"), mkVoice("ash")],
-      piCurrent: mkVoice("marin"),
-      piOverlay: { pinned: [], unpinned: [] },
+      claude: [mkVoice("marin"), mkVoice("ash")],
+      claudeCurrent: mkVoice("marin"),
+      claudeOverlay: { pinned: [], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     const toggle = pinToggleOf(container, "ash")!;
     expect(toggle.getAttribute("aria-pressed")).toBe("false");
     toggle.click();
     await flushAsync();
-    expect(deps.setPinned).toHaveBeenCalledWith("pi", "ash", [], true);
+    expect(deps.setPinned).toHaveBeenCalledWith("claude", "ash", [], true);
     expect(pinToggleOf(container, "ash")!.getAttribute("aria-pressed")).toBe(
       "true"
     );
@@ -340,14 +446,14 @@ describe("VoicesController — explore cards", () => {
 
   it("reverts the optimistic pin when the write fails", async () => {
     const deps = makeDeps({
-      pi: [mkVoice("marin"), mkVoice("ash")],
-      piCurrent: mkVoice("marin"),
-      piOverlay: { pinned: [], unpinned: [] },
+      claude: [mkVoice("marin"), mkVoice("ash")],
+      claudeCurrent: mkVoice("marin"),
+      claudeOverlay: { pinned: [], unpinned: [] },
       overrides: {
         setPinned: vi.fn(async () => Promise.reject(new Error("boom"))),
       },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     pinToggleOf(container, "ash")!.click();
     await flushAsync();
     expect(pinToggleOf(container, "ash")!.getAttribute("aria-pressed")).toBe(
@@ -358,17 +464,17 @@ describe("VoicesController — explore cards", () => {
 
   it("disables '+ Menu' on unpinned cards when the menu is full", async () => {
     const deps = makeDeps({
-      pi: [
+      claude: [
         mkVoice("alloy"),
         mkVoice("coral"),
         mkVoice("marin"),
         mkVoice("nova"),
         mkVoice("onyx"),
       ],
-      piCurrent: mkVoice("onyx"),
-      piOverlay: { pinned: ["alloy", "coral", "marin"], unpinned: [] },
+      claudeCurrent: mkVoice("onyx"),
+      claudeOverlay: { pinned: ["alloy", "coral", "marin"], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     expect(slotIds(container).length).toBe(4); // full
     const novaToggle = pinToggleOf(container, "nova")!;
     expect(novaToggle.disabled).toBe(true);
@@ -415,15 +521,15 @@ describe("VoicesController — explore cards", () => {
   });
 
   it("renders a single-tier catalog as a flat grid without shelf chrome", async () => {
-    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("nova")] });
-    const { container } = await mount(deps);
+    const deps = makeDeps({ claude: [mkVoice("marin"), mkVoice("nova")] });
+    const { container } = await mount(deps, { initialHost: "claude" });
     expect(qa(container, ".voice-shelf").length).toBe(0);
     expect(qa(container, ".voice-card").length).toBe(2);
   });
 
   it("differentiates twin-named voices by metadata instead of the shared tagline (#474)", async () => {
     const deps = makeDeps({
-      pi: [
+      claude: [
         mkHdVoice("paola-hd", { name: "Paola" }),
         mkHdVoice("paola-multi", {
           name: "Paola",
@@ -431,7 +537,7 @@ describe("VoicesController — explore cards", () => {
         }),
       ],
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     const multiTagline = cardOf(container, "paola-multi")!.querySelector(
       ".voice-card-tagline"
     ) as HTMLElement;
@@ -543,18 +649,19 @@ describe("VoicesController — replaceI18n clobber immunity", () => {
   });
 
   it("keeps substituted text intact when replaceI18n runs after the studio paints", async () => {
+    // Menu-slot text only exists on a host with a menu.
     const deps = makeDeps({
-      pi: [
+      claude: [
         mkVoice("alloy"),
         mkVoice("coral"),
         mkVoice("marin"),
         mkVoice("nova"),
         mkVoice("onyx"),
       ],
-      piCurrent: mkVoice("onyx"),
-      piOverlay: { pinned: ["alloy", "coral", "marin", "nova"], unpinned: [] },
+      claudeCurrent: mkVoice("onyx"),
+      claudeOverlay: { pinned: ["alloy", "coral", "marin", "nova"], unpinned: [] },
     });
-    const { container } = await mount(deps);
+    const { container } = await mount(deps, { initialHost: "claude" });
     const textOf = (sel: string) => q(container, sel)!.textContent;
     const before = {
       eyebrow: textOf(".voice-stage-eyebrow"),
@@ -568,10 +675,11 @@ describe("VoicesController — replaceI18n clobber immunity", () => {
   });
 
   it("keeps the built-ins note and load-error text intact too", async () => {
+    // Built-ins note lives in the menu-slots section → a host with a menu.
     const withBuiltins = makeDeps({
-      pi: [mkVoice("voice1", { default: true }), mkVoice("marin")],
+      claude: [mkVoice("voice1", { default: true }), mkVoice("marin")],
     });
-    const { container } = await mount(withBuiltins);
+    const { container } = await mount(withBuiltins, { initialHost: "claude" });
     const builtinsBefore = q(container, ".voice-slots-builtins")!.textContent;
     replaceI18n();
     expect(q(container, ".voice-slots-builtins")!.textContent).toBe(builtinsBefore);
