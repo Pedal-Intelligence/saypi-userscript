@@ -21,8 +21,8 @@ import {
  * A chatbot that ships its own set of built-in voices, with introduction audio
  * for the default voice (currently only Pi.ai). Declared structurally so the
  * generic {@link VoiceSelector} base class can detect the capability without
- * importing the concrete `PiAIChatbot` — that import created a
- * `VoiceMenu -> Pi -> PiVoiceMenu -> VoiceMenu` cycle.
+ * importing the concrete `PiAIChatbot` — that import closed a cycle back
+ * through Pi's own voice-menu module into this one.
  */
 export interface BuiltInVoiceProvider {
   getExtraVoices(): SpeechSynthesisVoiceRemote[];
