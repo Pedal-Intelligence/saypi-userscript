@@ -9,8 +9,15 @@ export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
   serviceWorker: Worker;
+  /**
+   * Opt-in (test.use): drop Playwright's default --hide-scrollbars so the page
+   * can lay out real (space-taking) scrollbars. Needed by layout-stability
+   * specs; everything else keeps the quieter default.
+   */
+  showScrollbars: boolean;
 }>({
-  context: async ({}, use) => {
+  showScrollbars: [false, { option: true }],
+  context: async ({ showScrollbars }, use) => {
     const piPort = Number(process.env.SAYPI_E2E_PI_PORT);
     const apiPort = Number(process.env.SAYPI_E2E_API_PORT);
     // Isolation by construction (#462): zero the mock API's transcribe state
@@ -25,6 +32,7 @@ export const test = base.extend<{
       channel: "chromium",
       args: buildLaunchArgs({ extensionDir: EXT_DIR, piPort, apiPort, wavPath: WAV }),
       ignoreHTTPSErrors: true,
+      ...(showScrollbars ? { ignoreDefaultArgs: ["--hide-scrollbars"] } : {}),
     });
     await use(context);
     await context.close();
