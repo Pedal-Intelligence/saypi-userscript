@@ -27,9 +27,9 @@ import {
   VoiceHostId,
 } from "./voices-view-model";
 import {
-  AuditionItem,
   AuditionState,
   IDLE_AUDITION,
+  PreviewSequencer,
 } from "./previewSequencer";
 
 export type { VoiceHostId } from "./voices-view-model";
@@ -65,38 +65,12 @@ export interface VoiceStudioDeps {
 }
 
 // The settings page is its own document — no content-script audio-output
-// machine, no live TTS, no active call to collide with — so a preview here
-// plays straight through a single reused <audio> element. Reusing one element
-// gives single-preview semantics for free: starting a new sample stops any
-// in-flight one. The state-callback line is handed to the newest requester so
-// exactly one voice ever shows as playing.
-let previewAudio: HTMLAudioElement | null = null;
-let previewOnState: ((state: AuditionState) => void) | null = null;
-function playPreviewClip(
-  item: AuditionItem,
-  onState: (state: AuditionState) => void
-): void {
-  if (!previewAudio) previewAudio = new Audio();
-  previewAudio.pause();
-  previewOnState?.(IDLE_AUDITION);
-  previewOnState = onState;
-  const audio = previewAudio;
-  const playing: AuditionState = {
-    running: true,
-    playingVoiceId: item.voiceId,
-    loadingVoiceId: null,
-    position: { index: 1, total: 1 },
-    error: null,
-  };
-  audio.onplay = () => previewOnState?.(playing);
-  audio.onpause = () => previewOnState?.(IDLE_AUDITION);
-  audio.onended = () => previewOnState?.(IDLE_AUDITION);
-  audio.onerror = () => previewOnState?.(IDLE_AUDITION);
-  audio.volume = item.gain;
-  audio.src = item.url;
-  // A blocked/failed preview is a non-event, not an error the user must see.
-  void audio.play().catch(() => previewOnState?.(IDLE_AUDITION));
-}
+// machine, no live TTS, no active call to collide with — so auditions play
+// through one page-level sequencer. Built lazily, so importing this module
+// never creates media elements, and kept at module scope so a re-created
+// studio (host switch, tab remount) doesn't orphan audio that is sounding.
+let previewSequencer: PreviewSequencer | null = null;
+let previewSubscription: (() => void) | null = null;
 
 // The settings page runs outside any host tab, so every preference call MUST
 // carry an explicit chatbot id — the no-arg default resolves to "web" here.
@@ -111,10 +85,15 @@ function defaultDeps(): VoiceStudioDeps {
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
     playPreview: (voice, onState) => {
       if (!voice.sample_url) return;
-      playPreviewClip(
+      if (!previewSequencer) previewSequencer = new PreviewSequencer();
+      // One state line, handed to the newest requester. Safe now that the
+      // line carries a snapshot naming the voice rather than a bare boolean.
+      previewSubscription?.();
+      previewSubscription = previewSequencer.subscribe(onState);
+      // gain 1 until the soundprint pass measures voiced RMS (design §5.1).
+      previewSequencer.play([
         { voiceId: voice.id, url: voice.sample_url, gain: 1 },
-        onState
-      );
+      ]);
     },
     loadPins: (host) => loadHostOverlay(host),
     setPinned: (host, voiceId, featuredIds, pin) =>
