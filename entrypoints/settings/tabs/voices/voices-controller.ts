@@ -243,6 +243,12 @@ export class VoicesController {
     body.appendChild(this.renderStage(vm.stagedCurrent, vm));
     if (vm.menu) body.appendChild(this.renderSlotsSection(vm, vm.menu));
     body.appendChild(this.renderShelves(vm));
+
+    // Playback state lives OUTSIDE the DOM — the sequencer owns it, and it
+    // survives this repaint (choosing the voice you are listening to must not
+    // stop the audio, design §5.2). Re-derive the marks from the snapshot, or
+    // a clip goes on sounding with nothing on screen saying so.
+    this.applyAuditionState();
   }
 
   private renderEmptyState(

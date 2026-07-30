@@ -901,6 +901,58 @@ describe("VoicesController — audition (orbs)", () => {
     ).toBeGreaterThan(0);
   });
 
+  /**
+   * DEFECT (b). Audition state lives OUTSIDE the DOM — the sequencer owns it —
+   * so any repaint that rebuilds the body from scratch orphans it. `useVoice`
+   * does exactly that (`body.innerHTML = ""`), and per design §5.2 choosing
+   * the voice you are currently listening to must NOT stop the audio: the
+   * clip keeps sounding while every mark of it has just been destroyed.
+   */
+  it("keeps the playing mark across a repaint, because the audio keeps playing", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin"), mkVoice("ash")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    const [, onState] = deps.playPreview.mock.calls[0];
+    onState(playingState("marin"));
+    expect(
+      qa(container, "[data-orb-voice='marin'].playing").length
+    ).toBeGreaterThan(0);
+
+    (
+      cardOf(container, "ash")!.querySelector(".voice-use") as HTMLButtonElement
+    ).click();
+    await flushAsync();
+
+    expect(
+      qa(container, "[data-orb-voice='marin']").length,
+      "marin still has marks after the repaint"
+    ).toBeGreaterThan(0);
+    expect(
+      qa(container, "[data-orb-voice='marin'].playing").length,
+      "marin's clip is still sounding, so it must still read as playing"
+    ).toBeGreaterThan(0);
+  });
+
+  it("repaints a stopped audition as stopped", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin"), mkVoice("ash")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    const [, onState] = deps.playPreview.mock.calls[0];
+    onState(playingState("marin"));
+    onState(IDLE_AUDITION);
+    (
+      cardOf(container, "ash")!.querySelector(".voice-use") as HTMLButtonElement
+    ).click();
+    await flushAsync();
+    expect(qa(container, "[data-orb-voice].playing").length).toBe(0);
+  });
+
   it("renders no play affordance for voices without a sample clip", async () => {
     const deps = makeDeps({
       pi: [mkVoice("marin"), mkVoice("mystery", { sample_url: undefined })],
