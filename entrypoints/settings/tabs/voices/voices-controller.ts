@@ -26,6 +26,11 @@ import {
   VOICE_HOSTS,
   VoiceHostId,
 } from "./voices-view-model";
+import {
+  AuditionItem,
+  AuditionState,
+  IDLE_AUDITION,
+} from "./previewSequencer";
 
 export type { VoiceHostId } from "./voices-view-model";
 
@@ -35,13 +40,18 @@ export interface VoiceStudioDeps {
   setVoice(voice: SpeechSynthesisVoiceRemote, host: VoiceHostId): Promise<void>;
   isAuthenticated(): boolean;
   /**
-   * Play the voice's free canned sample clip (design §4). Reports playback
-   * state through `onState` so every orb of that voice can animate. No-op
-   * for voices without a sample.
+   * Play the voice's free canned sample clip (design §4), replacing whatever
+   * is playing. No-op for voices without a sample.
+   *
+   * `onState` is a SUBSCRIPTION, not a one-shot: it receives every audition
+   * snapshot until the next `playPreview` call supersedes it. Widened from the
+   * shipped `(playing: boolean)` per-voice line, which could only say "this
+   * voice, on/off" — so a superseded clip's terminal event wrote into the new
+   * voice's UI, and a repaint had nothing to restore itself from.
    */
   playPreview(
     voice: SpeechSynthesisVoiceRemote,
-    onState: (playing: boolean) => void
+    onState: (state: AuditionState) => void
   ): void;
   /** The user's pin overlay for a host, or null when un-customized. */
   loadPins(host: VoiceHostId): Promise<HostPinOverlay | null>;
@@ -61,23 +71,31 @@ export interface VoiceStudioDeps {
 // in-flight one. The state-callback line is handed to the newest requester so
 // exactly one voice ever shows as playing.
 let previewAudio: HTMLAudioElement | null = null;
-let previewOnState: ((playing: boolean) => void) | null = null;
+let previewOnState: ((state: AuditionState) => void) | null = null;
 function playPreviewClip(
-  url: string,
-  onState: (playing: boolean) => void
+  item: AuditionItem,
+  onState: (state: AuditionState) => void
 ): void {
   if (!previewAudio) previewAudio = new Audio();
   previewAudio.pause();
-  previewOnState?.(false);
+  previewOnState?.(IDLE_AUDITION);
   previewOnState = onState;
   const audio = previewAudio;
-  audio.onplay = () => previewOnState?.(true);
-  audio.onpause = () => previewOnState?.(false);
-  audio.onended = () => previewOnState?.(false);
-  audio.onerror = () => previewOnState?.(false);
-  audio.src = url;
+  const playing: AuditionState = {
+    running: true,
+    playingVoiceId: item.voiceId,
+    loadingVoiceId: null,
+    position: { index: 1, total: 1 },
+    error: null,
+  };
+  audio.onplay = () => previewOnState?.(playing);
+  audio.onpause = () => previewOnState?.(IDLE_AUDITION);
+  audio.onended = () => previewOnState?.(IDLE_AUDITION);
+  audio.onerror = () => previewOnState?.(IDLE_AUDITION);
+  audio.volume = item.gain;
+  audio.src = item.url;
   // A blocked/failed preview is a non-event, not an error the user must see.
-  void audio.play().catch(() => previewOnState?.(false));
+  void audio.play().catch(() => previewOnState?.(IDLE_AUDITION));
 }
 
 // The settings page runs outside any host tab, so every preference call MUST
@@ -92,7 +110,11 @@ function defaultDeps(): VoiceStudioDeps {
     setVoice: (voice, host) => prefs.setVoice(voice, host).then(() => {}),
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
     playPreview: (voice, onState) => {
-      if (voice.sample_url) playPreviewClip(voice.sample_url, onState);
+      if (!voice.sample_url) return;
+      playPreviewClip(
+        { voiceId: voice.id, url: voice.sample_url, gain: 1 },
+        onState
+      );
     },
     loadPins: (host) => loadHostOverlay(host),
     setPinned: (host, voiceId, featuredIds, pin) =>
@@ -114,6 +136,8 @@ export class VoicesController {
   private renderToken = 0;
   private activeHost: VoiceHostId;
   private body: HTMLElement | null = null;
+  /** The last audition snapshot — the studio's only playback truth. */
+  private auditionState: AuditionState = IDLE_AUDITION;
   private cache = new Map<VoiceHostId, HostStudioData>();
   private loading = new Map<VoiceHostId, Promise<HostStudioData>>();
 
@@ -700,11 +724,28 @@ export class VoicesController {
   // --- behaviour ------------------------------------------------------------
 
   private audition(voice: SpeechSynthesisVoiceRemote): void {
-    this.deps.playPreview(voice, (playing) => {
-      this.container
-        .querySelectorAll(`[data-orb-voice="${escapeCss(voice.id)}"]`)
-        .forEach((orb) => orb.classList.toggle("playing", playing));
+    this.deps.playPreview(voice, (state) => {
+      this.auditionState = state;
+      this.applyAuditionState();
     });
+  }
+
+  /**
+   * Paint the audition snapshot onto whatever marks are currently in the DOM.
+   *
+   * Clear-all-then-mark-one rather than a per-voice toggle: the snapshot's
+   * whole point is that exactly one voice can be playing, so the DOM is
+   * derived from it wholesale instead of patched per caller.
+   */
+  private applyAuditionState(): void {
+    this.container
+      .querySelectorAll("[data-orb-voice].playing")
+      .forEach((orb) => orb.classList.remove("playing"));
+    const playing = this.auditionState.playingVoiceId;
+    if (!playing) return;
+    this.container
+      .querySelectorAll(`[data-orb-voice="${escapeCss(playing)}"]`)
+      .forEach((orb) => orb.classList.add("playing"));
   }
 
   /**

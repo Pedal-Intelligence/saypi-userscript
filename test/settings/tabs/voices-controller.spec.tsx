@@ -4,6 +4,10 @@ import { VoicesPanel } from "../../../entrypoints/settings/tabs/voices/VoicesPan
 import { VoicesController } from "../../../entrypoints/settings/tabs/voices/voices-controller";
 import { SpeechSynthesisVoiceRemote } from "../../../src/tts/SpeechModel";
 import type { HostPinOverlay } from "../../../src/tts/VoicePins";
+import {
+  AuditionState,
+  IDLE_AUDITION,
+} from "../../../entrypoints/settings/tabs/voices/previewSequencer";
 
 // The Voices tab is the host-scoped "studio" (2026-07-07 redesign): a host
 // switcher scopes the page to one assistant — stage (current voice) → menu
@@ -65,7 +69,10 @@ function makeDeps(cfg: DepsConfig = {}) {
     setVoice: vi.fn(async () => {}),
     isAuthenticated: vi.fn(() => cfg.authenticated ?? true),
     playPreview: vi.fn(
-      (_v: SpeechSynthesisVoiceRemote, _onState: (playing: boolean) => void) => {}
+      (
+        _v: SpeechSynthesisVoiceRemote,
+        _onState: (state: AuditionState) => void
+      ) => {}
     ),
     loadPins: vi.fn(async (host: string) => overlayByHost[host]),
     setPinned: vi.fn(async () => {}),
@@ -100,6 +107,14 @@ const cardOf = (c: HTMLElement, id: string) =>
   q(c, `.voice-card[data-voice-id='${id}']`);
 const pinToggleOf = (c: HTMLElement, id: string) =>
   cardOf(c, id)?.querySelector(".voice-pin-toggle") as HTMLButtonElement | null;
+/** The snapshot the sequencer emits while one voice's clip is sounding. */
+const playingState = (voiceId: string): AuditionState => ({
+  running: true,
+  playingVoiceId: voiceId,
+  loadingVoiceId: null,
+  position: { index: 1, total: 1 },
+  error: null,
+});
 
 beforeEach(() => {
   document.body.innerHTML = "";
@@ -855,14 +870,35 @@ describe("VoicesController — audition (orbs)", () => {
     expect(deps.playPreview).toHaveBeenCalledTimes(1);
     const [voiceArg, onState] = deps.playPreview.mock.calls[0];
     expect(voiceArg.id).toBe("marin");
-    onState(true);
+    onState(playingState("marin"));
     qa(container, "[data-orb-voice='marin']").forEach((orb) =>
       expect(orb.classList.contains("playing")).toBe(true)
     );
-    onState(false);
+    onState(IDLE_AUDITION);
     qa(container, "[data-orb-voice='marin']").forEach((orb) =>
       expect(orb.classList.contains("playing")).toBe(false)
     );
+  });
+
+  // The snapshot names the voice, so the studio paints from it wholesale
+  // instead of trusting each caller's own line — a superseded clip's late
+  // callback can no longer leave the previous voice lit.
+  it("marks only the voice the snapshot names as playing", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin"), mkVoice("ash")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    const [, onState] = deps.playPreview.mock.calls[0];
+    onState(playingState("marin"));
+    (qa(container, "[data-orb-voice='ash']")[0] as HTMLButtonElement).click();
+    const [, onStateAsh] = deps.playPreview.mock.calls[1];
+    onStateAsh(playingState("ash"));
+    expect(qa(container, "[data-orb-voice='marin'].playing").length).toBe(0);
+    expect(
+      qa(container, "[data-orb-voice='ash'].playing").length
+    ).toBeGreaterThan(0);
   });
 
   it("renders no play affordance for voices without a sample clip", async () => {
