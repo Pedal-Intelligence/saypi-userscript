@@ -34,7 +34,13 @@ import {
   flattenFields,
   summarizeField,
   transcriptLanded,
+  stripAnsi,
+  classifyFieldOutcome,
+  describeInterceptor,
+  FIELD_OUTCOME_KINDS,
+  OVERLAY_DISMISS_LABELS,
   DEFAULT_BUTTON_TIMEOUT_MS,
+  DEFAULT_FOCUS_TIMEOUT_MS,
   DEFAULT_TRANSCRIPT_TIMEOUT_MS,
 } from "./e2e-dictation-sweep-lib.mjs";
 import { enforceSpendCap } from "./l4-ledger.mjs";
@@ -117,12 +123,105 @@ async function dismissModalIfPresent(page, dismissModal) {
   return true;
 }
 
+/**
+ * Best-effort, creative-agnostic rescue for an interstitial that's swallowing clicks
+ * (#569: X dropped an "Introducing Grok 4.5 for Chat" promo into `div#layers` and the
+ * composer became unclickable for the whole 30s click timeout).
+ *
+ * Deliberately knows nothing about any specific overlay — X ships new promo creative
+ * with every launch, so a rule keyed on this image/alt text would rot immediately.
+ * Two generic moves only: Escape (the platform-standard dismissal for a modal), then
+ * a control whose *whole* accessible name reads as a dismissal
+ * (`OVERLAY_DISMISS_LABELS` — never "OK"/"Accept"/"Continue", which would opt the run
+ * into something). Per-target consent dialogs stay explicit (`dismissModal`).
+ *
+ * Only ever called after a focus attempt has already failed, so the clean targets
+ * (fixture, mistral) never execute a line of it.
+ * @returns {Promise<string[]>} the steps actually attempted, for the evidence trail
+ */
+async function dismissBlockingOverlay(page) {
+  const steps = [];
+  await page.keyboard.press("Escape").catch(() => {});
+  await page.waitForTimeout(400);
+  steps.push("Escape");
+
+  const btn = page.getByRole("button", { name: OVERLAY_DISMISS_LABELS }).first();
+  const visible = await btn.waitFor({ state: "visible", timeout: 2_000 }).then(() => true).catch(() => false);
+  if (visible) {
+    const name = (await btn.getAttribute("aria-label").catch(() => null)) || (await btn.textContent().catch(() => null)) || "";
+    const clicked = await btn.click({ timeout: 3_000 }).then(() => true).catch(() => false);
+    await page.waitForTimeout(500);
+    steps.push(`${clicked ? "clicked" : "failed to click"} dismiss control "${name.trim().slice(0, 40)}"`);
+  }
+  return steps;
+}
+
+/**
+ * Focus the field, with one overlay-rescue retry. Returns Playwright's error message
+ * from the LAST attempt (null on success) — that message is what `classifyFieldOutcome`
+ * reads to name the interceptor, so it is kept whole (ANSI-stripped) in the evidence
+ * rather than collapsed into a note.
+ */
+async function focusField(page, ev, selector) {
+  // `e.message` can legitimately be "" (some rejections carry no message), and "" is
+  // falsy — which would read as a successful focus and land the field on
+  // no-button/owner:saypi, the false SayPi defect this whole change prevents. Normalise
+  // to a non-empty string so "rejected" is never mistaken for "clicked" (#569 review).
+  const attempt = () =>
+    page
+      .click(selector, { timeout: DEFAULT_FOCUS_TIMEOUT_MS })
+      .then(() => null)
+      .catch((e) => stripAnsi(e?.message).trim() || "page.click rejected without a message");
+
+  let err = await attempt();
+  if (err) {
+    const blocker = describeInterceptor(err);
+    ev.notes.push(
+      `focus attempt 1 failed${blocker ? ` — ${blocker.element} intercepted the click` : ""}; ` +
+        `trying a generic overlay dismissal`,
+    );
+    ev.overlayDismissSteps = await dismissBlockingOverlay(page);
+    err = await attempt();
+  }
+  ev.fieldFocused = err === null;
+  // Store the whole call log: the real grok one is ~4.7KB, and clipping it to 4000 is
+  // exactly what accidentally hid the trailing wrapper interception (#569 review).
+  ev.focusError = err === null ? null : err.slice(0, 8000);
+  return ev.focusError;
+}
+
 async function sweepField(ctx, item, outDir, index) {
+  // The nullable/array fields carry explicit JSDoc types: the Vitest wiring spec reads
+  // this object as the function's return type, and a bare `null` initializer would
+  // infer as literal `null` and make `ev.outcome.kind` un-typeable from TypeScript.
   const ev = {
-    target: item.targetKey, targetLabel: item.targetLabel, field: item.fieldLabel,
-    selector: item.fieldSelector, build: null, decorated: false, cloudflareBlocked: false,
-    buttonAppeared: false, transcriptLanded: false, transcriptText: null,
-    console: [], pageErrors: [], requestFailed: [], notes: [],
+    target: item.targetKey,
+    targetLabel: item.targetLabel,
+    field: item.fieldLabel,
+    selector: item.fieldSelector,
+    /** @type {string|null} */
+    build: null,
+    decorated: false,
+    cloudflareBlocked: false,
+    fieldFocused: false,
+    /** @type {string|null} */
+    focusError: null,
+    /** @type {string[]} */
+    overlayDismissSteps: [],
+    /** @type {ReturnType<typeof classifyFieldOutcome>|null} */
+    outcome: null,
+    buttonAppeared: false,
+    transcriptLanded: false,
+    /** @type {string|null} */
+    transcriptText: null,
+    /** @type {{t: string, text: string}[]} */
+    console: [],
+    /** @type {{message: string, stack: string}[]} */
+    pageErrors: [],
+    /** @type {{url: string, failure: string|undefined}[]} */
+    requestFailed: [],
+    /** @type {string[]} */
+    notes: [],
   };
   const dir = join(outDir, `${item.targetKey}__${index}`);
   mkdirSync(dir, { recursive: true });
@@ -137,7 +236,13 @@ async function sweepField(ctx, item, outDir, index) {
   try {
     await page.goto(item.url, { waitUntil: "domcontentloaded", timeout: 25_000 }).catch((e) => ev.notes.push(`goto: ${e.message}`));
     const sig = { title: await page.title().catch(() => ""), url: page.url(), html: (await page.content().catch(() => "")).slice(0, 4000) };
-    if (isCloudflareChallenge(sig)) { ev.cloudflareBlocked = true; log(`${item.targetKey}: BLOCKED by Cloudflare`); return ev; }
+    if (isCloudflareChallenge(sig)) {
+      ev.cloudflareBlocked = true;
+      ev.outcome = classifyFieldOutcome({ abortedBecause: "the host served a Cloudflare challenge" });
+      ev.notes.push(ev.outcome.note);
+      log(`${item.targetKey}: BLOCKED by Cloudflare`);
+      return ev;
+    }
 
     await dismissModalIfPresent(page, item.dismissModal);
 
@@ -149,17 +254,29 @@ async function sweepField(ctx, item, outDir, index) {
     }
     ev.decorated = !!ev.build;
 
-    await page.click(item.fieldSelector).catch((e) => ev.notes.push(`focus: ${e.message}`));
+    const focusError = await focusField(page, ev, item.fieldSelector);
     await page.screenshot({ path: join(dir, "01-focused.png") }).catch(() => {});
 
-    ev.buttonAppeared = await page
-      .waitForSelector(".saypi-dictation-button:visible", { timeout: DEFAULT_BUTTON_TIMEOUT_MS })
-      .then(() => true)
-      .catch(() => false);
+    // Only wait for the button if there's actually a focused field for it to attach to —
+    // otherwise the 10s wait buys nothing but a `buttonAppeared: false` that reads as a
+    // decoration defect (#569).
+    ev.buttonAppeared = focusError
+      ? false
+      : await page
+          .waitForSelector(".saypi-dictation-button:visible", { timeout: DEFAULT_BUTTON_TIMEOUT_MS })
+          .then(() => true)
+          .catch(() => false);
 
-    if (!ev.buttonAppeared) {
-      ev.notes.push("no .saypi-dictation-button appeared for this field");
-      await page.screenshot({ path: join(dir, "99-no-button.png") }).catch(() => {});
+    ev.outcome = classifyFieldOutcome({
+      focusError,
+      dismissAttempted: ev.overlayDismissSteps.length > 0,
+      decorated: ev.decorated,
+      buttonAppeared: ev.buttonAppeared,
+    });
+
+    if (ev.outcome.kind !== FIELD_OUTCOME_KINDS.REACHED) {
+      ev.notes.push(ev.outcome.note);
+      await page.screenshot({ path: join(dir, `99-${ev.outcome.kind}.png`) }).catch(() => {});
       return ev;
     }
 
@@ -181,6 +298,9 @@ async function sweepField(ctx, item, outDir, index) {
     await page.screenshot({ path: join(dir, "99-final.png") }).catch(() => {});
   } catch (err) {
     ev.notes.push(`error: ${err.message}`);
+    // A throw means nothing downstream was observed — say so, rather than letting a
+    // default `buttonAppeared: false` read as a decoration verdict (#569).
+    ev.outcome = ev.outcome ?? classifyFieldOutcome({ abortedBecause: `the harness threw: ${err.message}` });
   } finally {
     writeFileSync(join(dir, "evidence.json"), JSON.stringify(ev, null, 2));
     await page.close().catch(() => {});
@@ -252,7 +372,8 @@ async function main() {
       const ev = await sweepField(ctx, item, outDir, idx++);
       const s = summarizeField(ev);
       summaries.push(s);
-      log(`${item.targetKey}/${item.fieldLabel}: decorated=${s.decorated} cf=${s.cloudflareBlocked} button=${s.buttonAppeared} transcriptLanded=${s.transcriptLanded} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures}`);
+      log(`${item.targetKey}/${item.fieldLabel}: outcome=${s.outcomeKind} (owner=${s.owner}) reachedField=${s.fieldReached} decorated=${s.decorated} cf=${s.cloudflareBlocked} button=${s.buttonAppeared} transcriptLanded=${s.transcriptLanded} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures}`);
+      if (s.owner && s.owner !== "saypi") log(`   ↳ ${ev.outcome?.note}`);
     }
   } finally {
     writeFileSync(join(outDir, "summary.json"), JSON.stringify(summaries, null, 2));
@@ -261,11 +382,26 @@ async function main() {
     if (fixtureServer) fixtureServer.close();
   }
 
+  // #569: split the failures by owner. A field the harness never reached (host
+  // interstitial, sign-in wall, stale build) is NOT a dictation finding, and lumping it
+  // in with the real ones is how a promo modal becomes an apparent SayPi defect.
   const failed = summaries.filter((s) => !s.transcriptLanded);
-  if (failed.length) {
-    log(`⚠️  ${failed.length}/${summaries.length} field(s) did NOT get a landed transcript — see evidence under ${outDir}.`);
+  const suspect = failed.filter((s) => s.owner === "saypi" || s.owner === null);
+  const unreached = failed.filter((s) => s.owner && s.owner !== "saypi");
+  if (suspect.length) {
+    log(`⚠️  ${suspect.length}/${summaries.length} field(s) reached but did NOT get a landed transcript — hunt these; evidence under ${outDir}.`);
+  }
+  if (unreached.length) {
+    log(`ℹ️  ${unreached.length}/${summaries.length} field(s) were never judged (${unreached.map((s) => `${s.target}:${s.outcomeKind}`).join(", ")}) — NOT dictation findings; fix the run and re-sweep.`);
   }
   log(`SWEEP DONE — evidence under ${outDir}`);
   process.exit(0);
 }
-main().catch((e) => { log(`fatal: ${e.message}`); process.exit(1); });
+// Run the CLI only when invoked directly — importing this module (the Vitest wiring
+// spec drives the real sweepField against stub pages) must not launch Chrome. Same
+// idiom as scripts/e2e-host-sweep.mjs.
+if (process.argv[1] && resolvePath(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((e) => { log(`fatal: ${e.message}`); process.exit(1); });
+}
+
+export { sweepField };

@@ -87,17 +87,60 @@ node scripts/e2e-dictation-sweep.mjs --headless  # re-test headless (real-site t
 
 Per field the harness writes to
 `.output/e2e-dictation-sweep/<run>/<target>__<index>/`: `evidence.json`
-(console / pageErrors / requestFailed / decorated / buttonAppeared /
-transcriptLanded / transcriptText) and screenshots (`01-focused`, `99-final` or
-`99-no-button` on failure). A run-level `summary.json` holds the per-field
-`summarizeField()` rollup.
+(console / pageErrors / requestFailed / decorated / fieldFocused / focusError /
+overlayDismissSteps / **outcome** / buttonAppeared / transcriptLanded /
+transcriptText) and screenshots (`01-focused`, then `99-<outcome.kind>.png` —
+`99-final.png` only on the fully-successful path). A run-level `summary.json`
+holds the per-field `summarizeField()` rollup, which carries `outcomeKind`,
+`owner`, `fieldReached` and `interceptor` alongside the raw booleans.
+
+### Read `outcome` before anything else (#569)
+
+Every swept field carries an `outcome` verdict — `classifyFieldOutcome()` in
+`scripts/e2e-dictation-sweep-lib.mjs`, the dictation counterpart to the host
+sweep's `classifyUndecorated` (#559). It exists because `transcriptLanded: false`
+on its own is not triageable: it conflates "universal dictation is broken here"
+with "the harness never got a focused field in front of it". `owner` answers that
+first — only **`saypi`** is a defect to hunt:
+
+| `outcome.kind` | `owner` | means |
+|---|---|---|
+| `reached` | saypi | field focused, button appeared — `transcriptLanded` is a real product signal |
+| `no-button` | **saypi** | focused a decorated page's field and no `.saypi-dictation-button` appeared — **the defect case** |
+| `overlay-blocked` | host | an interstitial (launch promo, consent, upsell) sat over the field and swallowed every click; the note names the element Playwright blamed |
+| `field-absent` | automation | the field selector never matched — usually a sign-in wall (see Preconditions), sometimes a drifted selector in `TARGETS` |
+| `focus-failed` | automation | the field resolved but couldn't be clicked for some other reason |
+| `not-injected` | automation | no `data-saypi-build` stamp — the content script never ran (stale `e2e:build`, extension disabled, out of injection scope) |
+| `run-aborted` | automation | Cloudflare challenge or a harness throw — nothing about this field was observed |
+
+Before giving up on an `overlay-blocked` field the harness makes one generic
+rescue attempt — Escape, then any control whose whole accessible name reads as a
+dismissal (`OVERLAY_DISMISS_LABELS`; never "OK"/"Accept"/"Continue"/"Got it",
+which would opt the run *into* something) — and retries the focus. It
+deliberately knows nothing about any specific overlay: X ships new promo creative
+with every Grok launch, so a rule keyed on one image would rot by the next one. A
+per-target consent dialog that recurs every run belongs in the target's
+`dismissModal` instead.
+
+The name in the note comes from Playwright's own call log, and `describeInterceptor`
+picks the **most identifying** interception rather than the last one — a real log
+carries many (the checked-in fixture
+`test/fixtures/e2e-dictation-sweep/grok-promo-click-error.txt` has eight), and X's
+animating promo gets an anonymous wrapper `div` blamed both first and last with the
+labelled image in between. Ranking by identity (label > id > class) is what makes the
+note say `img.css-9pa8cd[Introducing Grok 4.5 for Chat]` instead of
+`div.css-175oi2r`. Keep that fixture verbatim if you touch it: a shortened one hid
+this exact bug during review.
 
 ## Analysis discipline (don't skip — this is where false findings come from)
 
-1. **Corroborate every finding with a screenshot AND the console trace before
-   concluding.** A `transcriptLanded=false` could mean a real regression, a button
-   that never appeared, or a harness timing issue (slow real-site content-script
-   injection) — open the screenshot before deciding which.
+1. **Read `outcome.owner` first, then corroborate with the screenshot AND the console
+   trace.** A `transcriptLanded=false` could mean a real regression, a button that
+   never appeared, a host interstitial the harness never got past, or a harness timing
+   issue (slow real-site content-script injection) — the `outcome` table above says
+   which, and the screenshot confirms it. Only `owner: "saypi"` is a candidate finding;
+   an `owner: "host"`/`"automation"` field was **never judged** and must not be
+   reported as a dictation defect (that mistake is exactly #569).
 2. **Attribute to SayPi only.** `summarizeField()` splits `saypiErrors`/
    `saypiWarnings` from `hostErrors` (reusing `e2e-host-sweep-lib.mjs`'s
    `classifyConsoleLine` — Mistral's composer is also ProseMirror, so the same
@@ -115,8 +158,14 @@ transcriptLanded / transcriptText) and screenshots (`01-focused`, `99-final` or
    defect.** Since `grok` is included in the default (no-args) target list but
    requires a one-time manual X sign-in (see Preconditions), a profile that hasn't
    been signed in will legitimately show `buttonAppeared=false`/`transcriptLanded=false`
-   for `grok` while `fixture`/`mistral` stay clean — sign in before concluding
-   there's a regression.
+   for `grok` while `fixture`/`mistral` stay clean — the outcome reads `field-absent`
+   (`owner: automation`); sign in before concluding there's a regression.
+6. **`grok` is also X's billboard.** A *signed-in* `grok` run can still fail
+   `overlay-blocked`: X promotes each Grok launch with a full-screen modal in
+   `div#layers` that swallows clicks at the composer, per-profile and per-campaign
+   (#569, "Introducing Grok 4.5 for Chat"). The harness tries a generic dismissal and
+   then reports the interceptor by name — dismiss it by hand in the seeded profile
+   once, re-run, and only then read anything into the `grok` verdict.
 
 ## Filing
 

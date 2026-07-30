@@ -1,0 +1,61 @@
+page.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('textarea[placeholder]')[22m
+[2m    - locator resolved to <textarea dir="auto" autocorrect="on" autocomplete="on" spellcheck="true" autocapitalize="sentences" placeholder="Ask anything" class="r-30o5oe r-1dz5y72 r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-poiln3 r-xyw6el r-ea455c r-13awgt0 r-ubezar r-1ny4l3l r-13qz1uu r-fdjqy7">Hello there, this is a quick test of the voice ac…</textarea>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div class="css-175oi2r r-f4gmv6 r-3pj75a">…</div> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <img draggable="false" class="css-9pa8cd" alt="Introducing Grok 4.5 for Chat" src="https://abs.twimg.com/responsive-web/client-web/Grok-Promo-Popup-4-5-Launch.fc2ebfea.png"/> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    14 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <img draggable="false" class="css-9pa8cd" alt="Introducing Grok 4.5 for Chat" src="https://abs.twimg.com/responsive-web/client-web/Grok-Promo-Popup-4-5-Launch.fc2ebfea.png"/> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="css-175oi2r r-f4gmv6 r-3pj75a">…</div> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <img draggable="false" class="css-9pa8cd" alt="Introducing Grok 4.5 for Chat" src="https://abs.twimg.com/responsive-web/client-web/Grok-Promo-Popup-4-5-Launch.fc2ebfea.png"/> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <img draggable="false" class="css-9pa8cd" alt="Introducing Grok 4.5 for Chat" src="https://abs.twimg.com/responsive-web/client-web/Grok-Promo-Popup-4-5-Launch.fc2ebfea.png"/> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <img draggable="false" class="css-9pa8cd" alt="Introducing Grok 4.5 for Chat" src="https://abs.twimg.com/responsive-web/client-web/Grok-Promo-Popup-4-5-Launch.fc2ebfea.png"/> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="css-175oi2r r-f4gmv6 r-3pj75a">…</div> from <div id="layers" class="r-zchlnj r-1d2f490 r-u8s1d r-ipm5af">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
