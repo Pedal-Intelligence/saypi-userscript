@@ -43,6 +43,12 @@ import {
   HOSTS,
   DIAGS,
   SIGN_IN_PROBE,
+  DECORATION_WATCHER,
+  DECORATION_PROBE,
+  DECORATION_BUDGET_MS,
+  DECORATION_GRACE_MS,
+  CALL_BUTTON_SELECTOR,
+  describeDecoration,
   parseSweepArgs,
   summarize,
   ttsCoverage,
@@ -213,7 +219,11 @@ async function sweepHost(ctx, host, url, opts, outDir) {
     // up (a host can bounce us elsewhere), and `undecorated` explains a decoration
     // failure. Without the final URL a redirect is invisible in the JSON (#559).
     host, url, finalUrl: null, pageTitle: null, undecorated: null, signInAffordances: [],
-    decorated: false, cloudflareBlocked: false, build: null,
+    // `decorated` is one bit; `decoration` is the measurement behind it — was the call
+    // button EVER in the DOM, when relative to navigation, and with what box/computed
+    // visibility at the deadline. Without it an intermittent miss is undiagnosable
+    // after the fact (#570).
+    decorated: false, decoration: null, cloudflareBlocked: false, build: null,
     transcript: null, autoSubmitted: false, assistantReplied: false,
     authStatus: null, voiceProvider: null, selectedVoice: null, selectedModel: null,
     console: [], pageErrors: [], network: [], requestFailed: [],
@@ -245,12 +255,30 @@ async function sweepHost(ctx, host, url, opts, outDir) {
   });
 
   try {
+    // Install the decoration watcher BEFORE navigating, so a first sighting is timed
+    // against the document's own time origin rather than against whenever the harness
+    // got around to asking (#570). It is idempotent, and re-invoked after load below in
+    // case the init script never took.
+    await page.addInitScript(DECORATION_WATCHER).catch((e) => ev.notes.push(`decoration watcher (init): ${e.message}`));
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 35_000 }).catch((e) => ev.notes.push(`goto: ${e.message}`));
     const sig = { title: await page.title().catch(() => ""), url: page.url(), html: (await page.content().catch(() => "")).slice(0, 4000) };
     ev.finalUrl = sig.url; ev.pageTitle = sig.title; // provisional — so even an early return carries them
     if (isCloudflareChallenge(sig)) { ev.cloudflareBlocked = true; log(`${host}: BLOCKED by Cloudflare — re-seed (npm run layer4cdp:seed)`); return ev; }
 
-    ev.decorated = await page.waitForSelector("#saypi-callButton", { timeout: 25_000 }).then(() => true).catch(() => false);
+    // Belt-and-braces install: harmless if addInitScript already ran it (idempotent),
+    // and the difference shows up honestly in the reading's `presentAtInstall`.
+    await page.evaluate(DECORATION_WATCHER).catch(() => {});
+
+    // NOTE: waitForSelector defaults to `state: 'visible'`, which needs a non-empty
+    // bounding box — `querySelectorAll` (what domDiagnostics counts) does not. That
+    // asymmetry is one of the things the probe below exists to expose. Budget unchanged.
+    ev.decorated = await page.waitForSelector(CALL_BUTTON_SELECTOR, { timeout: DECORATION_BUDGET_MS }).then(() => true).catch(() => false);
+    // Read the decoration measurement at the deadline, before anything else can move
+    // the page on — this is the "at check time" box/visibility the verdict is about.
+    const decorationProbe = await page.evaluate(DECORATION_PROBE).catch((e) => {
+      ev.notes.push(`decoration probe: ${e.message}`);
+      return null;
+    });
     // Re-read the URL/title AFTER the wait: pi.ai's logged-out bounce to hey.pi.ai is
     // client-side JS that fires well after domcontentloaded, so `sig` still shows the
     // requested URL and classifying off it would report the redirect as drift (#559).
@@ -258,6 +286,32 @@ async function sweepHost(ctx, host, url, opts, outDir) {
     ev.build = await page.evaluate(() => document.documentElement.dataset.saypiBuild ?? "(none)").catch(() => null);
     await page.screenshot({ path: join(dir, "01-before.png") }).catch(() => {});
     ev.domDiagnostics = await page.evaluate(DIAGS[host]).catch((e) => ({ error: e.message }));
+
+    // On a MISS only: keep LOOKING a little longer, by DOM presence rather than
+    // visibility. Nothing about the verdict changes — `ev.decorated` is already the 25s
+    // visible-wait's answer and the budget is untouched — but without this a run that
+    // stops observing at the deadline structurally cannot tell "never in the DOM" from
+    // "in the DOM, just later than the budget". The post-deadline census above widens
+    // that window by a few hundred ms; this widens it to a known, bounded amount and
+    // yields the real navigation-relative appearance time from the watcher (#570).
+    let graceProbe = null;
+    if (!ev.decorated) {
+      await page
+        .waitForSelector(CALL_BUTTON_SELECTOR, { state: "attached", timeout: DECORATION_GRACE_MS })
+        .catch(() => {});
+      graceProbe = await page.evaluate(DECORATION_PROBE).catch(() => null);
+    }
+
+    // Fold the deadline probe together with the grace re-read and the census that every
+    // DIAGS entry reports. The screenshot above and this census are captured AFTER the
+    // wait — which is exactly how they came to contradict a `decorated: false` on
+    // 2026-07-29 — so the contradiction is computed here, with every reading in hand.
+    ev.decoration = describeDecoration({
+      probe: decorationProbe,
+      graceProbe,
+      callButtonsSeen: typeof ev.domDiagnostics?.callButtons === "number" ? ev.domDiagnostics.callButtons : null,
+      waitSucceeded: ev.decorated,
+    });
 
     if (!ev.decorated) {
       const signIn = await page.evaluate(SIGN_IN_PROBE).catch(() => null);
@@ -267,6 +321,7 @@ async function sweepHost(ctx, host, url, opts, outDir) {
         finalUrl: ev.finalUrl,
         title: ev.pageTitle,
         signInVisible: !!signIn?.visible,
+        decoration: ev.decoration,
       });
       ev.notes.push(ev.undecorated.note);
       log(`${host}: NOT DECORATED [${ev.undecorated.kind}] — ${ev.undecorated.note}`);
@@ -333,6 +388,7 @@ async function sweepHost(ctx, host, url, opts, outDir) {
         requestedUrl: url,
         finalUrl: ev.finalUrl,
         title: ev.pageTitle,
+        decoration: ev.decoration,
         abortedBecause: ev.cloudflareBlocked
           ? "a Cloudflare challenge blocked the page"
           : "the run ended before the decoration check finished",
@@ -395,7 +451,7 @@ async function main() {
       const ev = await sweepHost(ctx, key, url, opts, outDir);
       const s = summarize(ev);
       summaries.push(s);
-      log(`${key}: decorated=${s.decorated}${s.undecorated ? ` (${s.undecorated}, final=${s.finalUrl})` : ""} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""}${ev.selectedModel ? ` model=${ev.selectedModel}` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
+      log(`${key}: decorated=${s.decorated}${s.decorationFirstSeenMs !== null ? ` firstSeen=+${s.decorationFirstSeenMs}ms` : ""}${s.decorationContradiction ? ` ⚠️ CONTRADICTED(${s.decorationContradiction})` : ""}${s.undecorated ? ` (${s.undecorated}, final=${s.finalUrl})` : ""} cf=${s.cloudflareBlocked} transcript=${!!s.transcript} reply=${ev.assistantReplied} auth=${s.authStatus} voice=${s.voiceProvider}${ev.selectedVoice ? ` (selected:${ev.selectedVoice})` : ""}${ev.selectedModel ? ` model=${ev.selectedModel}` : ""} | saypiErr=${s.saypiErrors} saypiWarn=${s.saypiWarnings} pageErr=${s.pageErrors} netFail=${s.netFailures} | diag=${JSON.stringify(ev.domDiagnostics)}`);
     }
   } finally {
     writeFileSync(join(outDir, "summary.json"), JSON.stringify(summaries, null, 2));
