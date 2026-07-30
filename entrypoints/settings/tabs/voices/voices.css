@@ -9,13 +9,17 @@
   margin-top: 0.75rem;
 }
 
-/* The settings content column is fixed at 504px (global.css) — right for the
-   form-style tabs, cramped for the studio's card grids. Widen the column only
-   while the Voices tab is the active panel. Engines without :has() keep the
-   504px column: narrower, never broken. */
-.content:has(#tab-voices:not(.hidden)) {
-  width: min(940px, 100%);
+/* The generic 504px .tab-panel cap (tabs.css) is right for the form tabs but
+   would squeeze the studio; give the Voices pane the full content column. */
+#tab-voices.tab-panel {
+  max-width: none;
 }
+
+/* No per-tab column widening here: `.content` is flex:1 inside the
+   full-width .settings-container (global.css), so the studio already gets
+   the wide column; #voice-studio's max-width caps it. A Voices-only width
+   rule is exactly what caused the tab-switch sidebar shunt (the container
+   used to shrink-to-fit its content). */
 
 /* --- host switcher -------------------------------------------------------- */
 
