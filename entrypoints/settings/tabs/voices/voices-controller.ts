@@ -186,18 +186,54 @@ interface StudioViewModel {
 
 /**
  * How a set of same-named voices is told apart (#474).
- * - "languages": every twin can render a count, so all of them do — the same
- *   sentence with a different number, which is the only parallel pair the
- *   served `/voices` payload can support.
- * - "description": at least one twin has no count, so the group falls back to
- *   description-first, leaving at least one row distinguished rather than both
- *   collapsing to the shared persona tagline.
+ * - "description": every twin carries its own distinct server description —
+ *   parallel AND the most informative pair the payload can give.
+ * - "languages": no such descriptions, but every twin has a DIFFERENT language
+ *   count — the same sentence with a different number, parallel in a weaker
+ *   register.
+ * - "description" is also the fallback when neither holds: description-first
+ *   per voice, which is non-parallel but at least tells the rows apart.
  */
 type DupStrategy = "languages" | "description";
 
 /** How many languages the server says a voice speaks (0 when it didn't say). */
 const languageCount = (voice: SpeechSynthesisVoiceRemote): number =>
   voice.languages?.length ?? 0;
+
+const describedAs = (voice: SpeechSynthesisVoiceRemote): string =>
+  (voice.description ?? "").trim();
+
+const allDistinct = (values: (string | number)[]): boolean =>
+  new Set(values).size === values.length;
+
+/**
+ * Pick the differentiator for one group of same-named voices (#474).
+ *
+ * Order matters, and it is an order of usefulness, not of preference for a
+ * data shape: distinct descriptions say something about how the voices differ;
+ * distinct counts merely differ. A tie in either is disqualifying — two cards
+ * printing the identical sentence differentiate nothing, which is worse than
+ * the non-parallel fallback.
+ */
+function dupStrategyFor(
+  name: string,
+  group: SpeechSynthesisVoiceRemote[]
+): DupStrategy {
+  const descriptions = group.map(describedAs);
+  if (descriptions.every(Boolean) && allDistinct(descriptions))
+    return "description";
+
+  const counts = group.map(languageCount);
+  if (counts.every((n) => n > 1) && allDistinct(counts)) return "languages";
+
+  // Neither axis separates the twins in the same register: the payload has
+  // gone thinner than #474 assumed (a missing `languages`, or twins the server
+  // reports identically). Say so rather than silently going non-parallel.
+  console.warn(
+    `Voice name "${name}" is shared by ${group.length} voices with no parallel differentiator (descriptions: ${JSON.stringify(descriptions)}, language counts: ${JSON.stringify(counts)}); falling back to description-first subtitles (#474).`
+  );
+  return "description";
+}
 
 const escapeCss = (value: string) =>
   typeof CSS !== "undefined" && CSS.escape
@@ -392,15 +428,7 @@ export class VoicesController {
     const dupNames = new Map<string, DupStrategy>();
     byName.forEach((group, name) => {
       if (group.length < 2) return;
-      const allCountable = group.every((voice) => languageCount(voice) > 1);
-      if (!allCountable) {
-        // The server stopped sending `languages` for at least one twin, which
-        // is #474 regressing — say so rather than silently going non-parallel.
-        console.warn(
-          `Voice name "${name}" is shared by ${group.length} voices but at least one has no language count; falling back to description subtitles (#474).`
-        );
-      }
-      dupNames.set(name, allCountable ? "languages" : "description");
+      dupNames.set(name, dupStrategyFor(name, group));
     });
 
     return {
@@ -522,8 +550,11 @@ export class VoicesController {
     if (getVoiceTier(current) === "hd") {
       chips.appendChild(this.renderTierChip());
     }
+    // The chip is a second facet of the voice, not an echo of the first: on a
+    // twin the subtitle IS the language sentence (#474), and printing it again
+    // 15px lower makes the hero repeat itself.
     const langs = this.languagesSubtitle(current);
-    if (langs) {
+    if (langs && langs !== subtitle.text) {
       const lang = document.createElement("span");
       lang.classList.add("voice-stage-lang");
       lang.textContent = langs;
@@ -777,6 +808,11 @@ export class VoicesController {
     tagline.classList.add("voice-card-tagline");
     if (subtitle.i18nKey) tagline.setAttribute("data-i18n", subtitle.i18nKey);
     tagline.textContent = subtitle.text;
+    // The card clamps this to two lines (voices.css), and on a twin the clipped
+    // text is the ONLY thing telling two same-named cards apart — nothing else
+    // in the card carries it. `title` is not touched by replaceI18n, so it
+    // survives a re-localization pass; a long locale gets it for free too.
+    if (subtitle.text) tagline.title = subtitle.text;
     card.appendChild(tagline);
 
     const actions = document.createElement("div");
@@ -899,11 +935,10 @@ export class VoicesController {
    * tiebreaker for twin display names (#474), where a shared persona tagline
    * can't tell two cards apart.
    *
-   * For a countable twin group the language count WINS over the server
-   * description (the inverse of the pre-#474 order): the long description
-   * exists on only one twin, and prose on one card beside a number on the
-   * other is precisely the non-parallelism that made the two Paolas read as a
-   * mistake rather than a choice.
+   * Which differentiator a twin group uses is decided once, for the whole
+   * group, by dupStrategyFor — a per-voice rule can land one twin on a number
+   * and the other on prose, which is the non-parallelism that made the two
+   * Paolas read as a mistake rather than a choice.
    */
   private subtitleFor(
     voice: SpeechSynthesisVoiceRemote,

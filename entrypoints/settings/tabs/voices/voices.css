@@ -14,6 +14,16 @@
 #tab-voices.tab-panel {
   max-width: none;
 }
+/* ...and the same 504px cap again, one level further in: .user-preference-item
+   is the card every tab wraps its controls in, and uncapping only the panel
+   left the studio at 504 − 2rem padding = 472px — barely half the 940px column
+   settingsWindowSize.ts grows the window to for this tab, and the reason the
+   shelf heads used to run out of room. The studio's own max-width (900px,
+   above) is what actually bounds it. ID+class so it wins wherever tabs.css
+   loads in the cascade; scoped to this card so no other tab moves. */
+#voices-preference.user-preference-item {
+  max-width: none;
+}
 
 /* No per-tab column widening here: `.content` is flex:1 inside the
    full-width .settings-container (global.css), so the studio already gets
@@ -391,17 +401,23 @@ button.voice-orb:hover {
 /* The heading leads and the blurb recedes: the heading names the tier, the
    blurb names the benefit. Before this the ALLCAPS heading and a full
    explanatory sentence competed at the same visual weight (the blurb was
-   actually the LARGER of the two). */
+   actually the LARGER of the two). The hierarchy is bought by DARKENING the
+   heading — the blurb stays at a WCAG-AA colour, because it is the one place
+   the studio says what HD costs. */
 .voice-shelf-title {
   font-size: 11.5px;
   font-weight: 750;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: #3f3b35;
+  /* The head is a flex row; the default shrink makes the TITLE the thing that
+     gives when the pair is tight, stacking "EVERYDAY / VOICES" beside a
+     two-line blurb. The heading can't lead from two lines. */
+  flex-shrink: 0;
 }
 .voice-shelf-blurb {
   font-size: 11px;
-  color: #87817a;
+  color: #77726a; /* 4.8:1 on the white card — AA at this size. */
 }
 .voice-card-grid {
   list-style: none;

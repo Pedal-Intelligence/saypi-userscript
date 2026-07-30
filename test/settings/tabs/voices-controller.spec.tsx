@@ -595,6 +595,27 @@ describe("VoicesController — explore cards", () => {
     }
   });
 
+  // The clamp that keeps a row from going ragged also HIDES text — and on a
+  // twin card the clipped text is the only thing telling two same-named voices
+  // apart. Nothing else in the card exposes it, so the full string has to stay
+  // recoverable (also covers long-locale taglines, which clip where en doesn't).
+  it("keeps a clamped tagline recoverable in full", async () => {
+    const long =
+      "A long, unhurried server description that runs well past two lines in a 150px card and used to stretch its whole grid row.";
+    const deps = makeDeps({
+      claude: [mkVoice("marin"), mkVoice("wander", { name: "Wander", description: long })],
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    for (const id of ["marin", "wander"]) {
+      const tagline = cardOf(container, id)!.querySelector(
+        ".voice-card-tagline"
+      ) as HTMLElement;
+      expect(tagline.title, `${id}'s clipped tagline must stay readable`).toBe(
+        tagline.textContent
+      );
+    }
+  });
+
   it("renders a single-tier catalog as a flat grid without shelf chrome", async () => {
     const deps = makeDeps({ claude: [mkVoice("marin"), mkVoice("nova")] });
     const { container } = await mount(deps, { initialHost: "claude" });
@@ -697,6 +718,82 @@ describe("VoicesController — twin display names (#474)", () => {
     expect(taglineOf(container, "kai-b")).toBe("voiceSpeaksNLanguages:41");
     // A non-duplicate name keeps its curated persona tagline.
     expect(taglineOf(container, "marin")).toBe("voiceTagline_marin");
+  });
+
+  // A count is the fallback differentiator, not the preferred one: when the
+  // server grows per-twin descriptions (the resolution #474 actually asks for)
+  // they are BOTH parallel and more informative, so they must win — otherwise
+  // shipping the server fix would make the studio worse, not better.
+  it("prefers distinct server descriptions over the count when every twin has one", async () => {
+    const deps = makeDeps({
+      claude: [
+        mkHdVoice("paola-narrator", {
+          name: "Paola",
+          description: "Warm Italian narrator.",
+          languages: langs(29),
+        }),
+        mkHdVoice("paola-conversational", {
+          name: "Paola",
+          description: "Expressive Italian conversationalist.",
+          languages: langs(74),
+        }),
+      ],
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(taglineOf(container, "paola-narrator")).toBe("Warm Italian narrator.");
+    expect(taglineOf(container, "paola-conversational")).toBe(
+      "Expressive Italian conversationalist."
+    );
+  });
+
+  it("won't print the same count on both twins when the counts tie", async () => {
+    // Two identical sentences differentiate nothing — worse than the
+    // non-parallel fallback, which at least tells the rows apart.
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const deps = makeDeps({
+      claude: [
+        mkHdVoice("paola-described", {
+          name: "Paola",
+          description: "Warm, versatile Italian voice.",
+          languages: langs(33),
+        }),
+        mkHdVoice("paola-bare", { name: "Paola", languages: langs(33) }),
+      ],
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(taglineOf(container, "paola-described")).not.toBe(
+      taglineOf(container, "paola-bare")
+    );
+    expect(taglineOf(container, "paola-described")).toBe(
+      "Warm, versatile Italian voice."
+    );
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  // The stage prints the subtitle as its tagline AND the language count as a
+  // chip a few pixels below. On a twin those are the same sentence.
+  it("never says the same thing twice on the stage", async () => {
+    const [classic] = twins();
+    const deps = makeDeps({ claude: twins(), claudeCurrent: classic });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const tagline = q(container, ".voice-stage-tagline")!.textContent;
+    expect(tagline).toBe("voiceSpeaksNLanguages:33");
+    expect(q(container, ".voice-stage-lang")?.textContent).not.toBe(tagline);
+  });
+
+  it("still chips the language count when the tagline says something else", async () => {
+    const deps = makeDeps({
+      claude: [mkVoice("marin", { languages: langs(12) })],
+      claudeCurrent: mkVoice("marin", { languages: langs(12) }),
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(q(container, ".voice-stage-tagline")!.textContent).toBe(
+      "voiceTagline_marin"
+    );
+    expect(q(container, ".voice-stage-lang")!.textContent).toBe(
+      "voiceSpeaksNLanguages:12"
+    );
   });
 
   it("decides per name-GROUP: one twin without a count falls the whole group back", async () => {
