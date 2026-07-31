@@ -90,6 +90,22 @@ class FakeAudio {
     queueMicrotask(() => this.fire("pause"));
   }
 
+  /**
+   * A clip that 404s, as the HTML spec actually reports it: "failed with
+   * elements" fires `error` at the element AND rejects every pending `play()`
+   * promise with `NotSupportedError`. ONE bad asset, TWO signals — which is
+   * exactly what a naive failure counter double-counts.
+   */
+  failToLoad(): void {
+    this.readyState = HAVE_NOTHING;
+    this.paused = true;
+    const pending = this.pending;
+    this.pending = null;
+    this.resolvePending = null;
+    this.fire("error");
+    pending?.reject(domError("NotSupportedError"));
+  }
+
   fire(type: string): void {
     if (type === "play") {
       this.resolvePending?.();
@@ -380,6 +396,64 @@ describe("PreviewSequencer — error discrimination (design §5.1)", () => {
     vi.advanceTimersByTime(AUDITION_BEAT_MS);
     await settle();
     expect(elementFor("echo")!.playCalls).toBe(1);
+  });
+
+  /**
+   * One bad asset is ONE failure. A real 404 reports itself twice — the
+   * element fires `error` and the pending play() promise rejects with
+   * NotSupportedError — and counting both trips the two-in-a-row stop on the
+   * very first bad clip, killing a sweep that should have carried on.
+   */
+  it("counts a 404 once, though the element AND the play() promise both report it", async () => {
+    const { sequencer, elementFor } = harness();
+    sequencer.play([item("onyx"), item("echo"), item("ash")]);
+    elementFor("onyx")!.failToLoad();
+    await settle();
+    expect(sequencer.getState().error).toEqual({
+      voiceId: "onyx",
+      kind: "failed",
+    });
+    expect(sequencer.getState().running).toBe(true);
+    vi.advanceTimersByTime(AUDITION_BEAT_MS);
+    await settle();
+    expect(elementFor("echo")!.playCalls).toBe(1);
+  });
+
+  /**
+   * A failed PRELOAD must not condemn the voice AFTER it. The spare buffer
+   * still holds the failed clip, so advancing has to re-point it at the next
+   * item — otherwise the next voice is never fetched, is reported failed by
+   * name, and the sweep halts blaming a clip nobody ever tried to play.
+   */
+  it("re-preloads past a failed preload instead of blaming the next voice", async () => {
+    const { sequencer, elementFor } = harness();
+    sequencer.play([item("onyx"), item("echo"), item("ash")]);
+    elementFor("onyx")!.fire("play");
+    // echo is loading into the OTHER buffer while onyx plays — and 404s there.
+    elementFor("echo")!.failToLoad();
+    elementFor("onyx")!.fire("ended");
+    await settle();
+    vi.advanceTimersByTime(AUDITION_BEAT_MS);
+    await settle();
+
+    // echo is the voice that failed…
+    expect(sequencer.getState().error).toEqual({
+      voiceId: "echo",
+      kind: "failed",
+    });
+    expect(sequencer.getState().running).toBe(true);
+
+    // …and ash, never fetched until now, gets its turn on the next beat.
+    vi.advanceTimersByTime(AUDITION_BEAT_MS);
+    await settle();
+    const ash = elementFor("ash");
+    expect(ash, "ash's clip must actually be loaded").toBeTruthy();
+    expect(sequencer.getState().loadingVoiceId).toBe("ash");
+    ash!.readyState = HAVE_FUTURE_DATA;
+    ash!.fire("canplay");
+    await settle();
+    expect(ash!.playCalls).toBe(1);
+    expect(sequencer.getState().running).toBe(true);
   });
 
   it("stops the sweep after two consecutive failures", async () => {

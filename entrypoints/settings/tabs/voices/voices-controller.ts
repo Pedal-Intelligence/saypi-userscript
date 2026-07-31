@@ -810,6 +810,10 @@ export class VoicesController {
       const name = card.querySelector(".voice-card-name")?.textContent ?? "";
       this.applyPinToggleState(toggle, { id, name }, vm);
     });
+    // The slots section was rebuilt, orbs and all, so its playing marks went
+    // with it — same orphaning as a body repaint (paintBody), same fix. Pinning
+    // a voice must not blank the mark of the one you are listening to.
+    this.applyAuditionState();
   }
 
   /**

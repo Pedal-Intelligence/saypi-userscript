@@ -936,6 +936,40 @@ describe("VoicesController — audition (orbs)", () => {
     ).toBeGreaterThan(0);
   });
 
+  /**
+   * DEFECT (b), the other repaint. `refreshCuration` rebuilds the menu-slot
+   * section in place — orbs and all — so pinning a voice while a sample is
+   * sounding destroys that voice's slot mark while its audio plays on. The
+   * body repaint is not the only path that orphans the snapshot.
+   */
+  it("keeps the playing mark across an in-place curation refresh", async () => {
+    const deps = makeDeps({
+      claude: [mkVoice("marin"), mkVoice("ash")],
+      claudeCurrent: mkVoice("marin"),
+      claudeOverlay: { pinned: [], unpinned: [] },
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    // marin is staged, seated in the menu, AND on a card: three marks.
+    const marks = qa(container, "[data-orb-voice='marin']").length;
+    expect(marks).toBeGreaterThanOrEqual(3);
+    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    const [, onState] = deps.playPreview.mock.calls[0];
+    onState(playingState("marin"));
+    expect(qa(container, "[data-orb-voice='marin'].playing").length).toBe(marks);
+
+    pinToggleOf(container, "ash")!.click();
+    await flushAsync();
+
+    expect(
+      qa(container, "[data-orb-voice='marin']").length,
+      "the slots section was rebuilt, so marin's marks are back"
+    ).toBe(marks);
+    expect(
+      qa(container, "[data-orb-voice='marin'].playing").length,
+      "marin's clip is still sounding, so every mark must still read as playing"
+    ).toBe(marks);
+  });
+
   it("repaints a stopped audition as stopped", async () => {
     const deps = makeDeps({
       pi: [mkVoice("marin"), mkVoice("ash")],

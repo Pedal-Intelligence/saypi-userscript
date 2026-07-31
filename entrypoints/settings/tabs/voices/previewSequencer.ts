@@ -164,6 +164,12 @@ export class PreviewSequencer {
   private heardCurrent = false;
   /** Consecutive clip failures; two in a row stop the sequence. */
   private failureRun = 0;
+  /**
+   * Items already counted as failed in this session. One clip is ONE failure,
+   * but a 404 reports itself TWICE (see `fail`), and each item is attempted at
+   * most once per session — so an index is the whole identity of a failure.
+   */
+  private readonly failed = new Set<number>();
   private preloadFailed = false;
   private beat: ReturnType<typeof setTimeout> | null = null;
 
@@ -271,8 +277,11 @@ export class PreviewSequencer {
     const item = this.items[index];
     if (!item) return;
     const audio = this.buffers[1 - this.active];
-    this.preloadFailed = false;
+    // Already pointed here: keep what we know about it. Clearing the flag on a
+    // no-op would forget that THIS clip has already errored, and the beat would
+    // then wait forever for a `canplay` the element will never fire again.
     if (audio.src === item.url) return;
+    this.preloadFailed = false; // a fresh load — nothing known against it yet
     audio.src = item.url;
     audio.load();
   }
@@ -337,10 +346,18 @@ export class PreviewSequencer {
    * A clip 404'd or failed to decode: mark it and carry on after the beat.
    * Two consecutive failures stop — one bad asset is a note, a run of them is
    * a broken sequence nobody wants to sit through.
+   *
+   * Idempotent per item, because the platform reports one failure twice: per
+   * the HTML spec's "failed with elements" steps, a clip that cannot be
+   * fetched fires `error` at the element AND rejects the pending `play()`
+   * promise with `NotSupportedError`. Counting both would trip the
+   * two-in-a-row stop on the very first bad asset.
    */
   private fail(index: number): void {
     const item = this.items[index];
     if (!item) return;
+    if (this.failed.has(index)) return;
+    this.failed.add(index);
     this.failureRun += 1;
     const error = { voiceId: item.voiceId, kind: "failed" as const };
     if (this.failureRun >= 2 || index + 1 >= this.items.length) {
@@ -348,6 +365,11 @@ export class PreviewSequencer {
       return;
     }
     this.index = index;
+    // Point the spare buffer at the item we are advancing TO. It may still be
+    // holding the clip that just failed — in which case nothing else ever
+    // re-points it, the next voice is never fetched, and the beat either
+    // condemns it unheard or waits forever for a `canplay` on the wrong src.
+    this.preload(index + 1);
     this.emit({
       ...this.state,
       running: true,
@@ -381,6 +403,7 @@ export class PreviewSequencer {
     this.carrying = [null, null];
     this.heardCurrent = false;
     this.failureRun = 0;
+    this.failed.clear();
     this.preloadFailed = false;
     this.buffers.forEach(pauseSafely);
   }
@@ -448,9 +471,11 @@ export class PreviewSequencer {
   }
 
   private onError(slot: number): void {
-    const item = this.itemOf(slot);
-    if (item) {
-      this.fail(this.index);
+    const carried = this.carrying[slot];
+    if (carried && this.itemOf(slot)) {
+      // Blame what this buffer is CARRYING, not `this.index` — which, after a
+      // failed preload, has already moved on to the item that failed to load.
+      this.fail(carried.index);
       return;
     }
     // The PRELOADING buffer failed. Nothing to say yet — it surfaces when the
