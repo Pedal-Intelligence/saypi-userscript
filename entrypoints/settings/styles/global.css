@@ -100,9 +100,13 @@ html {
   max-width: 1000px;
 }
 /* Sit the logo exactly over the sidebar icon column: banner padding-left 8px
-   + 28px here = sidebar's 24px padding + the tab button's 12px padding. */
-.settings-header .profile-banner > .flex {
-  padding-left: 28px;
+   + 28px here = sidebar's 24px padding + the tab button's 12px padding.
+   Desktop-only — the mobile layout drops the sidebar's left padding, so the
+   deeper indent has nothing to align with there. */
+@media (min-width: 736px) {
+  .settings-header .profile-banner > .flex {
+    padding-left: 28px;
+  }
 }
 
 .sidebar {
@@ -135,6 +139,10 @@ html {
 
   .sidebar {
     padding-left: 0;
+    /* The desktop 200px rail would clip the horizontal icon row (tabs.css
+       turns the sidebar into a full-width scrollable row on mobile; this
+       later-loaded file must not narrow it back). */
+    width: 100%;
   }
 
   .content {

@@ -1,11 +1,9 @@
-:root {
-  --popup-min-content-width: 736px; /* Keep in sync with POPUP_MIN_CONTENT_WIDTH in background.ts */
-}
-
 html,
 body {
   width: 100%;
-  min-width: var(--popup-min-content-width); /* Uses CSS custom property for POPUP_MIN_CONTENT_WIDTH */
+  /* No min-width: the popup-era 736px floor (which kept the popup window
+     above the mobile breakpoint) would force horizontal scrolling in a
+     narrow browser tab. Below 735px the mobile layout takes over instead. */
 }
 
 /* Global hidden utility with high specificity */
