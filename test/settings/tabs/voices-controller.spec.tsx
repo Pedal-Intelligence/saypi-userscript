@@ -8,6 +8,7 @@ import {
   AuditionState,
   IDLE_AUDITION,
 } from "../../../entrypoints/settings/tabs/voices/previewSequencer";
+import type { VoicePrint } from "../../../src/tts/voicePrint";
 
 // The Voices tab is the host-scoped "studio" (2026-07-07 redesign): a host
 // switcher scopes the page to one assistant — stage (current voice) → menu
@@ -71,7 +72,8 @@ function makeDeps(cfg: DepsConfig = {}) {
     playPreview: vi.fn(
       (
         _v: SpeechSynthesisVoiceRemote,
-        _onState: (state: AuditionState) => void
+        _onState: (state: AuditionState) => void,
+        _gain?: number
       ) => {}
     ),
     loadPins: vi.fn(async (host: string) => overlayByHost[host]),
@@ -216,15 +218,17 @@ describe("VoicesController — host scope", () => {
 });
 
 describe("VoicesController — stage", () => {
-  it("announces the current voice with its identity gradient and tagline", async () => {
+  it("announces the current voice with its soundprint and tagline", async () => {
     const deps = makeDeps({
       pi: [mkVoice("marin"), mkVoice("coral")],
       piCurrent: mkVoice("marin"),
     });
     const { container } = await mount(deps);
     const stage = q(container, ".voice-stage")!;
-    expect(stage.style.getPropertyValue("--stage-from")).toBe("#2DD4BF");
-    expect(stage.style.getPropertyValue("--stage-to")).toBe("#0E7490");
+    // The stage's mark is the voice's own print, not a hash-derived gradient:
+    // no per-voice colour survives anywhere on this page.
+    expect(stage.querySelector(".voice-print-mark")).toBeTruthy();
+    expect(stage.style.getPropertyValue("--stage-from")).toBe("");
     // Substituted text must NOT carry data-i18n (replaceI18n clobber guard).
     const eyebrow = q(container, ".voice-stage-eyebrow")!;
     expect(eyebrow.textContent).toBe("voicesSpeaksWith");
@@ -848,7 +852,7 @@ describe("VoicesController — twin display names (#474)", () => {
     const { container } = await mount(deps, { initialHost: "claude" });
     for (const id of ["paola-classic", "paola-expressive"]) {
       expect(
-        cardOf(container, id)!.querySelector("button[data-orb-voice]"),
+        cardOf(container, id)!.querySelector("button[data-print-voice]"),
         `${id} should be auditionable`
       ).toBeTruthy();
     }
@@ -863,7 +867,7 @@ describe("VoicesController — audition (orbs)", () => {
       piOverlay: { pinned: ["marin"], unpinned: [] },
     });
     const { container } = await mount(deps);
-    const orbs = qa(container, "[data-orb-voice='marin']");
+    const orbs = qa(container, "[data-print-voice='marin']");
     // stage + slot + card at minimum
     expect(orbs.length).toBeGreaterThanOrEqual(2);
     (orbs[0] as HTMLButtonElement).click();
@@ -871,11 +875,11 @@ describe("VoicesController — audition (orbs)", () => {
     const [voiceArg, onState] = deps.playPreview.mock.calls[0];
     expect(voiceArg.id).toBe("marin");
     onState(playingState("marin"));
-    qa(container, "[data-orb-voice='marin']").forEach((orb) =>
+    qa(container, "[data-print-voice='marin']").forEach((orb) =>
       expect(orb.classList.contains("playing")).toBe(true)
     );
     onState(IDLE_AUDITION);
-    qa(container, "[data-orb-voice='marin']").forEach((orb) =>
+    qa(container, "[data-print-voice='marin']").forEach((orb) =>
       expect(orb.classList.contains("playing")).toBe(false)
     );
   });
@@ -889,15 +893,15 @@ describe("VoicesController — audition (orbs)", () => {
       piCurrent: mkVoice("marin"),
     });
     const { container } = await mount(deps);
-    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    (qa(container, "[data-print-voice='marin']")[0] as HTMLButtonElement).click();
     const [, onState] = deps.playPreview.mock.calls[0];
     onState(playingState("marin"));
-    (qa(container, "[data-orb-voice='ash']")[0] as HTMLButtonElement).click();
+    (qa(container, "[data-print-voice='ash']")[0] as HTMLButtonElement).click();
     const [, onStateAsh] = deps.playPreview.mock.calls[1];
     onStateAsh(playingState("ash"));
-    expect(qa(container, "[data-orb-voice='marin'].playing").length).toBe(0);
+    expect(qa(container, "[data-print-voice='marin'].playing").length).toBe(0);
     expect(
-      qa(container, "[data-orb-voice='ash'].playing").length
+      qa(container, "[data-print-voice='ash'].playing").length
     ).toBeGreaterThan(0);
   });
 
@@ -914,11 +918,11 @@ describe("VoicesController — audition (orbs)", () => {
       piCurrent: mkVoice("marin"),
     });
     const { container } = await mount(deps);
-    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    (qa(container, "[data-print-voice='marin']")[0] as HTMLButtonElement).click();
     const [, onState] = deps.playPreview.mock.calls[0];
     onState(playingState("marin"));
     expect(
-      qa(container, "[data-orb-voice='marin'].playing").length
+      qa(container, "[data-print-voice='marin'].playing").length
     ).toBeGreaterThan(0);
 
     (
@@ -927,11 +931,11 @@ describe("VoicesController — audition (orbs)", () => {
     await flushAsync();
 
     expect(
-      qa(container, "[data-orb-voice='marin']").length,
+      qa(container, "[data-print-voice='marin']").length,
       "marin still has marks after the repaint"
     ).toBeGreaterThan(0);
     expect(
-      qa(container, "[data-orb-voice='marin'].playing").length,
+      qa(container, "[data-print-voice='marin'].playing").length,
       "marin's clip is still sounding, so it must still read as playing"
     ).toBeGreaterThan(0);
   });
@@ -950,22 +954,22 @@ describe("VoicesController — audition (orbs)", () => {
     });
     const { container } = await mount(deps, { initialHost: "claude" });
     // marin is staged, seated in the menu, AND on a card: three marks.
-    const marks = qa(container, "[data-orb-voice='marin']").length;
+    const marks = qa(container, "[data-print-voice='marin']").length;
     expect(marks).toBeGreaterThanOrEqual(3);
-    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    (qa(container, "[data-print-voice='marin']")[0] as HTMLButtonElement).click();
     const [, onState] = deps.playPreview.mock.calls[0];
     onState(playingState("marin"));
-    expect(qa(container, "[data-orb-voice='marin'].playing").length).toBe(marks);
+    expect(qa(container, "[data-print-voice='marin'].playing").length).toBe(marks);
 
     pinToggleOf(container, "ash")!.click();
     await flushAsync();
 
     expect(
-      qa(container, "[data-orb-voice='marin']").length,
+      qa(container, "[data-print-voice='marin']").length,
       "the slots section was rebuilt, so marin's marks are back"
     ).toBe(marks);
     expect(
-      qa(container, "[data-orb-voice='marin'].playing").length,
+      qa(container, "[data-print-voice='marin'].playing").length,
       "marin's clip is still sounding, so every mark must still read as playing"
     ).toBe(marks);
   });
@@ -976,7 +980,7 @@ describe("VoicesController — audition (orbs)", () => {
       piCurrent: mkVoice("marin"),
     });
     const { container } = await mount(deps);
-    (qa(container, "[data-orb-voice='marin']")[0] as HTMLButtonElement).click();
+    (qa(container, "[data-print-voice='marin']")[0] as HTMLButtonElement).click();
     const [, onState] = deps.playPreview.mock.calls[0];
     onState(playingState("marin"));
     onState(IDLE_AUDITION);
@@ -984,21 +988,145 @@ describe("VoicesController — audition (orbs)", () => {
       cardOf(container, "ash")!.querySelector(".voice-use") as HTMLButtonElement
     ).click();
     await flushAsync();
-    expect(qa(container, "[data-orb-voice].playing").length).toBe(0);
+    expect(qa(container, "[data-print-voice].playing").length).toBe(0);
   });
 
-  it("renders no play affordance for voices without a sample clip", async () => {
+  it("renders no mark and no play affordance for voices without a sample clip", async () => {
     const deps = makeDeps({
       pi: [mkVoice("marin"), mkVoice("mystery", { sample_url: undefined })],
     });
     const { container } = await mount(deps);
+    const card = cardOf(container, "mystery")!;
+    expect(card.querySelector("button[data-print-voice]")).toBeNull();
+    // No print at all — never a placeholder shape pretending to be data, and
+    // never a dead control. The row is still usable: it keeps its Use button.
+    expect(card.querySelector(".voice-print-mark")).toBeNull();
+    expect(card.querySelector(".voice-use")).toBeTruthy();
+    // …while a voice WITH a clip gets its print.
     expect(
-      cardOf(container, "mystery")!.querySelector("button[data-orb-voice]")
-    ).toBeNull();
-    // the identity mark still renders, it just isn't a button
-    expect(
-      cardOf(container, "mystery")!.querySelector(".voice-orb")
+      cardOf(container, "marin")!.querySelector("button.voice-print-mark")
     ).toBeTruthy();
+  });
+});
+
+describe("VoicesController — soundprints", () => {
+  /**
+   * A print measured from a real clip. jsdom cannot decode audio, so the
+   * controller's seam is `deps.loadPrint` and the DSP is proven separately in
+   * test/tts/voicePrint.spec.ts against committed PCM.
+   */
+  const mkPrint = (over: Partial<VoicePrint> = {}): VoicePrint => ({
+    f0: Array.from({ length: 120 }, (_, i) => (i % 4 === 3 ? 0 : 92)),
+    amp: Array.from({ length: 120 }, (_, i) => (i % 4 === 3 ? 0 : 0.8)),
+    span: 1.2,
+    medF0: 92,
+    voicedRmsDb: -15.4,
+    ...over,
+  });
+
+  const marksOf = (c: HTMLElement, id: string) =>
+    qa(c, `[data-print-voice='${id}']`);
+  const barsIn = (mark: HTMLElement) =>
+    mark.querySelectorAll(".voice-print-trace rect").length;
+
+  it("starts every mark as the bare reference line, then inks in the trace", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin"), mkVoice("ash")],
+      piCurrent: mkVoice("marin"),
+      piOverlay: { pinned: ["marin"], unpinned: [] },
+      overrides: {
+        loadPrint: vi.fn(async (voice: SpeechSynthesisVoiceRemote) =>
+          voice.id === "marin" ? mkPrint() : null
+        ),
+      },
+    });
+    const { container } = await mount(deps);
+    // The ghost print is the loading state: the chart is already there, so
+    // nothing reflows when the measurement lands.
+    marksOf(container, "marin").forEach((mark) => {
+      expect(mark.querySelector(".voice-print-ref")).toBeTruthy();
+    });
+    await flushAsync();
+
+    const marks = marksOf(container, "marin");
+    expect(marks.length).toBeGreaterThanOrEqual(2); // stage + slot + card
+    marks.forEach((mark) => expect(barsIn(mark)).toBeGreaterThan(4));
+    // A voice whose clip cannot be measured keeps its reference line and gets
+    // no invented mark.
+    marksOf(container, "ash").forEach((mark) => expect(barsIn(mark)).toBe(0));
+  });
+
+  it("plays a measured clip at its own level, and an unmeasured one untouched", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("marin"), mkVoice("ash")],
+      overrides: {
+        loadPrint: vi.fn(async (voice: SpeechSynthesisVoiceRemote) =>
+          // Marin sits 1.6 dB above the −17 dBFS target; Ash never resolves.
+          voice.id === "marin" ? mkPrint({ voicedRmsDb: -15.4 }) : null
+        ),
+      },
+    });
+    const { container } = await mount(deps);
+    await flushAsync();
+
+    (marksOf(container, "marin")[0] as HTMLButtonElement).click();
+    expect(deps.playPreview.mock.calls[0][2]).toBeCloseTo(0.83, 2);
+
+    // Unmeasured plays at 1.0 rather than waiting: a level match must never
+    // delay the audio.
+    (marksOf(container, "ash")[0] as HTMLButtonElement).click();
+    expect(deps.playPreview.mock.calls[1][2]).toBe(1);
+  });
+
+  it("measures a voice once, however many marks and repaints it has", async () => {
+    const loadPrint = vi.fn(async () => mkPrint());
+    const deps = makeDeps({
+      claude: [mkVoice("marin"), mkVoice("ash")],
+      claudeCurrent: mkVoice("marin"),
+      claudeOverlay: { pinned: [], unpinned: [] },
+      overrides: { loadPrint },
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    await flushAsync();
+    // marin is staged, seated in the menu AND on a card — three marks, one decode.
+    expect(marksOf(container, "marin").length).toBeGreaterThanOrEqual(3);
+    expect(loadPrint.mock.calls.filter((c: any[]) => c[0].id === "marin")).toHaveLength(
+      1
+    );
+
+    // A repaint redraws from what is already measured, without re-measuring.
+    (
+      cardOf(container, "ash")!.querySelector(".voice-use") as HTMLButtonElement
+    ).click();
+    await flushAsync();
+    expect(loadPrint.mock.calls.filter((c: any[]) => c[0].id === "marin")).toHaveLength(
+      1
+    );
+    marksOf(container, "marin").forEach((mark) =>
+      expect(barsIn(mark)).toBeGreaterThan(4)
+    );
+  });
+
+  it("draws no print, and asks for none, for a voice with no clip", async () => {
+    const loadPrint = vi.fn(async () => mkPrint());
+    const deps = makeDeps({
+      pi: [mkVoice("mystery", { sample_url: undefined })],
+      overrides: { loadPrint },
+    });
+    const { container } = await mount(deps);
+    await flushAsync();
+    expect(marksOf(container, "mystery")).toHaveLength(0);
+    expect(loadPrint).not.toHaveBeenCalled();
+  });
+
+  it("draws prints even with no print loader wired at all", async () => {
+    // The whole feature degrades to the reference line rather than to an error:
+    // no decoder, no measurement, still a usable page.
+    const deps = makeDeps({ pi: [mkVoice("marin")] });
+    const { container } = await mount(deps);
+    await flushAsync();
+    expect(marksOf(container, "marin").length).toBeGreaterThan(0);
+    marksOf(container, "marin").forEach((mark) => expect(barsIn(mark)).toBe(0));
   });
 });
 
@@ -1145,7 +1273,7 @@ describe("VoicesController — stale stored voice snapshot (stage freshness)", (
     });
     const { container } = await mount(deps);
     // stage orb is playable (fresh sample_url), not a static mark
-    expect(q(container, ".voice-stage button[data-orb-voice='ash']")).toBeTruthy();
+    expect(q(container, ".voice-stage button[data-print-voice='ash']")).toBeTruthy();
     expect(q(container, ".voice-stage-play")).toBeTruthy();
     expect(q(container, ".voice-stage-lang")).toBeTruthy();
   });

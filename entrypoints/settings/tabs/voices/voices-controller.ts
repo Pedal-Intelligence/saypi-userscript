@@ -31,6 +31,18 @@ import {
   IDLE_AUDITION,
   PreviewSequencer,
 } from "./previewSequencer";
+import {
+  gainFor,
+  prefersReducedData,
+  VoicePrint,
+  VoicePrintLoader,
+} from "../../../../src/tts/voicePrint";
+import {
+  createPrintSvg,
+  paintPrintTrace,
+  PRINT_WIDTHS,
+  PrintSize,
+} from "./voicePrintRender";
 
 export type { VoiceHostId } from "./voices-view-model";
 
@@ -51,8 +63,22 @@ export interface VoiceStudioDeps {
    */
   playPreview(
     voice: SpeechSynthesisVoiceRemote,
-    onState: (state: AuditionState) => void
+    onState: (state: AuditionState) => void,
+    /**
+     * Per-clip level match, `<audio>.volume`, attenuate-only (design §5.1).
+     * The studio computes it from the voice's measured print, and passes 1
+     * when the print has not resolved yet — a level match must never delay the
+     * audio.
+     */
+    gain?: number
   ): void;
+  /**
+   * Measure (or recall) the voice's soundprint — the mark drawn from its own
+   * sample clip. Optional, and absent means "this studio draws no prints":
+   * jsdom cannot decode audio at all, so the tests that do not care simply
+   * leave it out rather than mocking a decoder.
+   */
+  loadPrint?(voice: SpeechSynthesisVoiceRemote): Promise<VoicePrint | null>;
   /** The user's pin overlay for a host, or null when un-customized. */
   loadPins(host: VoiceHostId): Promise<HostPinOverlay | null>;
   /** Pin/unpin a voice for a host (featuredIds = that host's default pins). */
@@ -71,6 +97,10 @@ export interface VoiceStudioDeps {
 // studio (host switch, tab remount) doesn't orphan audio that is sounding.
 let previewSequencer: PreviewSequencer | null = null;
 let previewSubscription: (() => void) | null = null;
+// Module-scoped for the same reason, plus one of its own: the print cache is
+// the expensive thing on this page, and a host switch must not throw away the
+// decodes it already paid for.
+let printLoader: VoicePrintLoader | null = null;
 
 // The settings page runs outside any host tab, so every preference call MUST
 // carry an explicit chatbot id — the no-arg default resolves to "web" here.
@@ -83,17 +113,21 @@ function defaultDeps(): VoiceStudioDeps {
       prefs.getVoice(host) as Promise<SpeechSynthesisVoiceRemote | null>,
     setVoice: (voice, host) => prefs.setVoice(voice, host).then(() => {}),
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
-    playPreview: (voice, onState) => {
+    playPreview: (voice, onState, gain = 1) => {
       if (!voice.sample_url) return;
       if (!previewSequencer) previewSequencer = new PreviewSequencer();
       // One state line, handed to the newest requester. Safe now that the
       // line carries a snapshot naming the voice rather than a bare boolean.
       previewSubscription?.();
       previewSubscription = previewSequencer.subscribe(onState);
-      // gain 1 until the soundprint pass measures voiced RMS (design §5.1).
       previewSequencer.play([
-        { voiceId: voice.id, url: voice.sample_url, gain: 1 },
+        { voiceId: voice.id, url: voice.sample_url, gain },
       ]);
+    },
+    loadPrint: (voice) => {
+      if (!voice.sample_url) return Promise.resolve(null);
+      if (!printLoader) printLoader = new VoicePrintLoader();
+      return printLoader.get(voice.id, voice.sample_url);
     },
     loadPins: (host) => loadHostOverlay(host),
     setPinned: (host, voiceId, featuredIds, pin) =>
@@ -104,10 +138,13 @@ function defaultDeps(): VoiceStudioDeps {
 /**
  * Renders the host-scoped voice "studio" in the settings Voices tab
  * (doc/plans/2026-07-07-voices-host-studio-design.md): host switcher → stage
- * (the current voice, tinted with its identity gradient) → menu slots (the
- * literal in-chat menu, from the same curateShortlist the in-host menu calls)
- * → explore shelves. The in-page menus stay short; this surface absorbs the
- * catalog's growth one host at a time.
+ * (the current voice) → menu slots (the literal in-chat menu, from the same
+ * curateShortlist the in-host menu calls) → explore shelves. The in-page menus
+ * stay short; this surface absorbs the catalog's growth one host at a time.
+ *
+ * Every voice's mark is its **soundprint**, drawn from its own sample clip
+ * (2026-07-31 audition-room design §6) — the same measurement that level-
+ * matches its playback.
  */
 export class VoicesController {
   private deps!: VoiceStudioDeps;
@@ -119,6 +156,21 @@ export class VoicesController {
   private auditionState: AuditionState = IDLE_AUDITION;
   private cache = new Map<VoiceHostId, HostStudioData>();
   private loading = new Map<VoiceHostId, Promise<HostStudioData>>();
+  /**
+   * Measured soundprints, by voice id. Host-independent on purpose: a voice is
+   * literally the same clip file on both hosts, so switching host must not
+   * re-decode a thing.
+   */
+  private prints = new Map<string, VoicePrint>();
+  /**
+   * Voices already asked for. One voice can carry three marks (stage, slot,
+   * card) and survive any number of repaints; it is measured once. A voice
+   * that came back without a print stays in here deliberately — a 404 clip
+   * must not be re-fetched every time its row is redrawn.
+   */
+  private printsRequested = new Set<string>();
+  /** Only near-viewport rows are measured; rebuilt with the body. */
+  private printObserver: IntersectionObserver | null = null;
 
   constructor(
     private container: HTMLElement,
@@ -231,6 +283,10 @@ export class VoicesController {
     const body = this.body;
     body.classList.remove("voice-studio-loading");
     body.dataset.host = hostId;
+    // Every mark in here is about to be destroyed; an observer still watching
+    // them would hold the detached nodes and fire for a page that is gone.
+    this.printObserver?.disconnect();
+    this.printObserver = null;
     body.innerHTML = "";
 
     const vm = viewModel(hostId, data);
@@ -279,10 +335,11 @@ export class VoicesController {
   }
 
   /**
-   * The stage: the host's current voice, announced with real presence. The
-   * voice's own identity gradient tints the room via CSS custom properties
-   * (voices.css mixes them toward near-black to keep the text readable on
-   * any voice color).
+   * The stage: the host's current voice, announced with real presence, with
+   * its soundprint drawn wide across the room. The room itself no longer
+   * takes a colour from the voice — there is no per-voice colour anywhere on
+   * this page now, because the mark carries the information colour was only
+   * pretending to.
    */
   private renderStage(
     current: SpeechSynthesisVoiceRemote | null,
@@ -293,11 +350,8 @@ export class VoicesController {
 
     if (!current) return this.renderEmptyStage(stage, vm);
 
-    const identity = getVoiceIdentity(current);
-    stage.style.setProperty("--stage-from", identity.gradient[0]);
-    stage.style.setProperty("--stage-to", identity.gradient[1]);
-
-    stage.appendChild(this.renderOrb(current, "lg"));
+    const mark = this.renderPrintMark(current, "lg");
+    if (mark) stage.appendChild(mark);
 
     const meta = document.createElement("div");
     meta.classList.add("voice-stage-meta");
@@ -466,7 +520,8 @@ export class VoicesController {
     slot.classList.add("voice-slot");
     slot.dataset.voiceId = voice.id;
 
-    slot.appendChild(this.renderOrb(voice, "sm"));
+    const mark = this.renderPrintMark(voice, "sm");
+    if (mark) slot.appendChild(mark);
 
     const name = document.createElement("span");
     name.classList.add("voice-slot-name");
@@ -582,7 +637,8 @@ export class VoicesController {
       card.appendChild(this.renderTierChip());
     }
 
-    card.appendChild(this.renderOrb(voice, "md"));
+    const mark = this.renderPrintMark(voice, "md");
+    if (mark) card.appendChild(mark);
 
     const name = document.createElement("span");
     name.classList.add("voice-card-name");
@@ -674,45 +730,126 @@ export class VoicesController {
   }
 
   /**
-   * The identity mark. With a sample clip it IS the play button (sound first
-   * — design §4); without one it renders as a static mark, never a dead
-   * control. `data-orb-voice` links every mark of one voice so they animate
-   * together while its sample plays.
+   * The mark: this voice's soundprint, drawn from its own sample clip
+   * (design §6). It IS the play button (sound first — design §4).
+   *
+   * A voice with no clip gets **no mark at all** — not a placeholder shape
+   * pretending to be data, and not a dead control. The print starts as the
+   * reference line alone and inks in when the measurement lands, so the
+   * loading state and the not-measured state are the same visual and the row
+   * never reflows.
+   *
+   * `data-print-voice` links every mark of one voice so they all read as
+   * playing together.
    */
-  private renderOrb(
+  private renderPrintMark(
     voice: SpeechSynthesisVoiceRemote,
-    size: "sm" | "md" | "lg"
-  ): HTMLElement {
-    const identity = getVoiceIdentity(voice);
-    const playable = Boolean(voice.sample_url);
-    const orb = document.createElement(playable ? "button" : "div");
-    orb.classList.add("voice-orb", `voice-orb-${size}`);
-    orb.style.background = `linear-gradient(135deg, ${identity.gradient[0]}, ${identity.gradient[1]})`;
-    if (!playable) {
-      orb.classList.add("voice-orb-static");
-      return orb;
-    }
-    const button = orb as HTMLButtonElement;
+    size: PrintSize
+  ): HTMLElement | null {
+    if (!voice.sample_url) return null;
+    const width = PRINT_WIDTHS[size];
+    const button = document.createElement("button");
     button.type = "button";
-    button.dataset.orbVoice = voice.id;
-    button.setAttribute(
-      "aria-label",
-      getMessage("voicesPreview", [voice.name])
-    );
-    button.innerHTML =
-      '<span class="voice-orb-tri" aria-hidden="true"></span>' +
-      '<span class="voice-orb-eq" aria-hidden="true"><i></i><i></i><i></i></span>';
+    button.classList.add("voice-print-mark", `voice-print-${size}`);
+    button.dataset.printVoice = voice.id;
+    button.dataset.printWidth = String(width);
+    button.setAttribute("aria-label", getMessage("voicesPreview", [voice.name]));
+    button.appendChild(createPrintSvg(width));
     button.addEventListener("click", () => this.audition(voice));
+    this.trackPrint(button, voice);
     return button;
+  }
+
+  /**
+   * Paint whatever we already know, then arrange to measure what we don't.
+   *
+   * Measurement is driven by an IntersectionObserver so a 100-voice catalog
+   * decodes only what is on screen, and skipped entirely on a metered
+   * connection — where a clip the user actually plays still resolves its print
+   * on demand, because playing it downloads it anyway.
+   */
+  private trackPrint(
+    mark: HTMLElement,
+    voice: SpeechSynthesisVoiceRemote
+  ): void {
+    const known = this.prints.get(voice.id);
+    if (known) {
+      this.paintPrint(mark, known);
+      return;
+    }
+    if (!this.deps.loadPrint) return;
+    // Metered connection: warm nothing. The print still resolves for any voice
+    // the user actually plays (`audition`), whose clip is downloaded anyway.
+    if (prefersReducedData()) return;
+    if (typeof IntersectionObserver === "undefined") {
+      // No observer to lean on (jsdom, and any browser old enough to lack it):
+      // measure straight away rather than never.
+      void this.measurePrint(voice);
+      return;
+    }
+    if (!this.printObserver) {
+      this.printObserver = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const id = (entry.target as HTMLElement).dataset.printVoice;
+            this.printObserver?.unobserve(entry.target);
+            const target = this.voiceById(id);
+            if (target) void this.measurePrint(target);
+          }
+        },
+        // A screen's worth of lead time: prints land before the row arrives.
+        { rootMargin: "300px" }
+      );
+    }
+    this.printObserver.observe(mark);
+  }
+
+  private voiceById(id: string | undefined): SpeechSynthesisVoiceRemote | null {
+    if (!id) return null;
+    const data = this.cache.get(this.activeHost);
+    return data?.voices.find((voice) => voice.id === id) ?? null;
+  }
+
+  private async measurePrint(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+    if (!this.deps.loadPrint || this.printsRequested.has(voice.id)) return;
+    this.printsRequested.add(voice.id);
+    const print = await this.deps.loadPrint(voice);
+    // No print is a legitimate outcome (no clip, a 404, an undecodable file):
+    // the voice keeps its reference line and never gets a fake mark.
+    if (!print) return;
+    this.prints.set(voice.id, print);
+    this.container
+      .querySelectorAll<HTMLElement>(
+        `[data-print-voice="${escapeCss(voice.id)}"]`
+      )
+      .forEach((mark) => this.paintPrint(mark, print));
+  }
+
+  private paintPrint(mark: HTMLElement, print: VoicePrint): void {
+    const svg = mark.querySelector<SVGSVGElement>(".voice-print");
+    if (!svg) return;
+    paintPrintTrace(svg, print, Number(mark.dataset.printWidth) || undefined);
   }
 
   // --- behaviour ------------------------------------------------------------
 
   private audition(voice: SpeechSynthesisVoiceRemote): void {
-    this.deps.playPreview(voice, (state) => {
-      this.auditionState = state;
-      this.applyAuditionState();
-    });
+    // Level-matched from this voice's own measured RMS, or unattenuated when
+    // the print has not landed yet (design §5.1).
+    const gain = gainFor(this.prints.get(voice.id)?.voicedRmsDb);
+    // The on-demand half of the measurement schedule: a voice the user chose
+    // to hear earns its print even on a metered connection, because playing it
+    // fetches the clip regardless.
+    void this.measurePrint(voice);
+    this.deps.playPreview(
+      voice,
+      (state) => {
+        this.auditionState = state;
+        this.applyAuditionState();
+      },
+      gain
+    );
   }
 
   /**
@@ -724,13 +861,13 @@ export class VoicesController {
    */
   private applyAuditionState(): void {
     this.container
-      .querySelectorAll("[data-orb-voice].playing")
-      .forEach((orb) => orb.classList.remove("playing"));
+      .querySelectorAll("[data-print-voice].playing")
+      .forEach((mark) => mark.classList.remove("playing"));
     const playing = this.auditionState.playingVoiceId;
     if (!playing) return;
     this.container
-      .querySelectorAll(`[data-orb-voice="${escapeCss(playing)}"]`)
-      .forEach((orb) => orb.classList.add("playing"));
+      .querySelectorAll(`[data-print-voice="${escapeCss(playing)}"]`)
+      .forEach((mark) => mark.classList.add("playing"));
   }
 
   /**
@@ -802,7 +939,14 @@ export class VoicesController {
     if (!this.body) return;
     const vm = viewModel(this.activeHost, data);
     const slots = this.body.querySelector(".voice-slots-section");
-    if (slots && vm.menu) slots.replaceWith(this.renderSlotsSection(vm, vm.menu));
+    if (slots && vm.menu) {
+      // This section's marks are leaving the document; stop watching them, or
+      // the observer keeps a growing pile of detached slots alive.
+      slots
+        .querySelectorAll("[data-print-voice]")
+        .forEach((mark) => this.printObserver?.unobserve(mark));
+      slots.replaceWith(this.renderSlotsSection(vm, vm.menu));
+    }
     this.body.querySelectorAll<HTMLElement>(".voice-card").forEach((card) => {
       const toggle = card.querySelector<HTMLButtonElement>(".voice-pin-toggle");
       if (!toggle) return;

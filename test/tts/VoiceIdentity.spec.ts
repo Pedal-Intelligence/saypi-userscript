@@ -1,11 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { getVoiceIdentity } from "../../src/tts/VoiceIdentity";
 
+// The module is now a tagline-key lookup and nothing else: the curated colour
+// table and its djb2 fallback were deleted with the orbs (2026-07-31 design
+// §6.3), because a hash-derived gradient looks like it encodes something about
+// a voice and encodes nothing. The mark is the voice's own soundprint now.
 describe("getVoiceIdentity", () => {
-  it("returns the curated identity for a curated id", () => {
-    const identity = getVoiceIdentity({ id: "marin", name: "Marin" });
-    expect(identity.taglineKey).toBe("voiceTagline_marin");
-    expect(identity.gradient).toEqual(["#2DD4BF", "#0E7490"]);
+  it("returns the curated tagline key for a curated id", () => {
+    expect(getVoiceIdentity({ id: "marin", name: "Marin" }).taglineKey).toBe(
+      "voiceTagline_marin"
+    );
   });
 
   it("falls back to the display name when the id is opaque (ElevenLabs UUIDs)", () => {
@@ -14,7 +18,6 @@ describe("getVoiceIdentity", () => {
       name: "Paola",
     });
     expect(identity.taglineKey).toBe("voiceTagline_paola");
-    expect(identity.gradient).toEqual(["#FCA5A5", "#DC2626"]);
   });
 
   it("matches case-insensitively on id and name", () => {
@@ -23,23 +26,14 @@ describe("getVoiceIdentity", () => {
     );
   });
 
-  it("derives a deterministic fallback for uncurated voices, with no tagline", () => {
-    const first = getVoiceIdentity({ id: "zz-unknown-1", name: "Zeta" });
-    const second = getVoiceIdentity({ id: "zz-unknown-1", name: "Zeta" });
-    expect(first).toEqual(second);
-    expect(first.taglineKey).toBeUndefined();
-    expect(first.gradient[0]).toMatch(/^hsl\(/);
-    expect(first.gradient[1]).toMatch(/^hsl\(/);
-  });
-
-  it("spreads distinct unknown ids across distinct gradients", () => {
-    const a = getVoiceIdentity({ id: "unknown-voice-a", name: "A" });
-    const b = getVoiceIdentity({ id: "unknown-voice-b", name: "B" });
-    expect(a.gradient).not.toEqual(b.gradient);
+  it("leaves an uncurated voice with no tagline, and no invented anything", () => {
+    // The catalog can grow without a client release; an unknown voice falls
+    // back to server metadata for its subtitle rather than to a fabricated
+    // visual identity.
+    expect(getVoiceIdentity({ id: "zz-unknown-1", name: "Zeta" })).toEqual({});
   });
 
   it("survives absent name/id without throwing", () => {
-    const identity = getVoiceIdentity({ id: "", name: undefined as any });
-    expect(identity.gradient).toHaveLength(2);
+    expect(getVoiceIdentity({ id: "", name: undefined as any })).toEqual({});
   });
 });

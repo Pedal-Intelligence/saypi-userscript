@@ -1,8 +1,9 @@
 /* Voices tab — the host-scoped "studio" behind the in-page menus' "More
    voices…" doors (2026-07-07 Host Studio redesign): host switcher → stage
-   (current voice, tinted by its identity gradient) → menu slots (the literal
-   in-chat menu) → explore shelves of identity cards. Light-only, matching
-   the settings shell. */
+   (current voice) → menu slots (the literal in-chat menu) → explore shelves.
+   Every voice's mark is its soundprint, drawn from its own sample clip
+   (2026-07-31 audition-room design §6). Light-only, matching the settings
+   shell. */
 
 #voice-studio {
   max-width: 900px;
@@ -84,31 +85,25 @@
 }
 
 /* --- the stage -------------------------------------------------------------
-   The current voice's identity gradient tints the room via --stage-from/-to
-   (set inline by the controller). Both stops are mixed toward near-black so
-   the white text stays readable on any voice color (Shimmer is pale gold);
-   the plain-gradient declaration first is the fallback for engines without
-   color-mix. */
+   One near-black room for every voice. It used to be tinted per voice from
+   --stage-from/-to, mixed toward black through a color-mix fallback stack so
+   white text stayed readable on any hue — machinery that existed entirely to
+   survive a hash-derived gradient. With the gradients gone the whole stack
+   collapses to the two colours it always resolved to. */
 
 .voice-stage {
   display: flex;
   align-items: center;
   gap: 22px;
   padding: 24px 26px;
-  /* The lg orb (88px) + the stage's own padding. Pinning it here means the
-     empty stage — which has no orb — holds exactly the same room, so switching
-     to a host with no voice yet doesn't collapse the page. */
+  /* Pinned so the empty stage — which has no mark and no chips — holds exactly
+     the same room as a full one, and switching to a host with no voice yet
+     doesn't collapse the page. */
   min-height: 136px;
   border-radius: 16px;
   margin-bottom: 16px;
   color: #ffffff;
-  background: linear-gradient(118deg, var(--stage-from, #155e63), var(--stage-to, #0f2e2b));
-  background: linear-gradient(
-    118deg,
-    color-mix(in srgb, var(--stage-from, #155e63) 58%, #0e1a18),
-    color-mix(in srgb, var(--stage-to, #0f2e2b) 68%, #0b1412) 62%,
-    #0a100f
-  );
+  background: linear-gradient(118deg, #124144, #0e2623 62%, #0a100f);
 }
 /* Nothing staged yet: a hero that recruits, not a disabled placeholder. The
    dashed outline and grey fill this replaced read as an error state. It keeps
@@ -195,121 +190,75 @@
   position: static;
 }
 
-/* --- orbs (identity mark = play button) ------------------------------------ */
+/* --- soundprints (the mark = the play button) -------------------------------
+   Each voice drawn from its OWN sample clip: a pitch trace on a shared 80–288
+   Hz log axis, with one faint reference line at 155 Hz running through every
+   print at the same y. That line is the design move — it registers every
+   independent trace into a single chart, so vertical position means the same
+   thing on every voice.
 
-.voice-orb {
-  position: relative;
-  display: grid;
-  place-items: center;
+   Ink is `currentColor` on the <svg>, so the whole state of a print is one
+   class on its container: resting, or playing. (The third density — "heard" —
+   arrives with the heard store; until then every measured print reads the
+   same.) Colour, deliberately, carries nothing: this replaced 22 hash-derived
+   gradients that looked like they encoded something and encoded nothing. */
+
+.voice-print-mark {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
   border: none;
-  border-radius: 50%;
+  background: transparent;
   padding: 0;
   cursor: pointer;
-  box-shadow:
-    inset 0 -8px 14px rgba(0, 0, 0, 0.22),
-    inset 0 6px 10px rgba(255, 255, 255, 0.22),
-    0 4px 12px rgba(20, 20, 10, 0.18);
-  transition: transform 0.15s ease;
+  color: rgba(21, 23, 26, 0.62);
+  transition: color 0.12s ease;
 }
-button.voice-orb:hover {
-  transform: scale(1.06);
+.voice-print-mark:focus-visible {
+  outline: 2px solid #2c5a42;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
-.voice-orb:focus-visible {
-  outline: 2px solid #1f1e1b;
-  outline-offset: 2px;
+.voice-print-mark:hover,
+.voice-print-mark.playing {
+  color: #15171a;
 }
-.voice-orb-static {
-  cursor: default;
+/* On the stage the ground is near-black, so the same two densities invert. */
+.voice-stage .voice-print-mark {
+  color: rgba(255, 255, 255, 0.62);
 }
-.voice-orb-lg {
-  width: 88px;
-  height: 88px;
-}
-.voice-orb-md {
-  width: 56px;
-  height: 56px;
-}
-.voice-orb-sm {
-  width: 30px;
-  height: 30px;
-  box-shadow:
-    inset 0 -4px 7px rgba(0, 0, 0, 0.2),
-    0 2px 6px rgba(20, 20, 10, 0.15);
+.voice-stage .voice-print-mark:hover,
+.voice-stage .voice-print-mark.playing {
+  color: #ffffff;
 }
 
-.voice-orb-tri {
-  width: 0;
-  height: 0;
-  border-left: 12px solid rgba(255, 255, 255, 0.95);
-  border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent;
-  margin-left: 3px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+.voice-print {
+  display: block;
+  overflow: visible;
 }
-.voice-orb-lg .voice-orb-tri {
-  border-left-width: 17px;
-  border-top-width: 10px;
-  border-bottom-width: 10px;
+/* The trace is the voice; the reference line is the chart it hangs on, so it
+   stays faint and does NOT take the playing state's ink. */
+.voice-print-ref {
+  stroke: #e6e3da;
+  stroke-width: 1;
 }
-.voice-orb-sm .voice-orb-tri {
-  border-left-width: 8px;
-  border-top-width: 5px;
-  border-bottom-width: 5px;
-  margin-left: 2px;
+.voice-stage .voice-print-ref {
+  stroke: rgba(255, 255, 255, 0.22);
 }
-
-.voice-orb-eq {
-  display: none;
-  align-items: center;
-  gap: 2.5px;
-  height: 18px;
+.voice-print-trace {
+  fill: currentColor;
 }
-.voice-orb-sm .voice-orb-eq {
-  height: 11px;
-  gap: 1.5px;
-}
-.voice-orb-eq i {
-  width: 3.5px;
-  height: 100%;
-  background: #ffffff;
-  border-radius: 2px;
-  transform-origin: center;
-  animation: voice-orb-eq 0.8s ease-in-out infinite;
-}
-.voice-orb-sm .voice-orb-eq i {
-  width: 2.5px;
-}
-.voice-orb-eq i:nth-child(2) {
-  animation-delay: 0.14s;
-}
-.voice-orb-eq i:nth-child(3) {
-  animation-delay: 0.28s;
-}
-.voice-orb.playing .voice-orb-tri {
-  display: none;
-}
-.voice-orb.playing .voice-orb-eq {
-  display: flex;
-}
-@keyframes voice-orb-eq {
-  0%,
-  100% {
-    transform: scaleY(0.3);
-  }
-  50% {
-    transform: scaleY(1);
-  }
+/* Slot pills keep roughly their old height; the print scales uniformly
+   (viewBox), so the geometry stays canonical and only the presentation
+   shrinks. Both axes are given, at the print's own ratio, so the scaled trace
+   doesn't sit letterboxed inside a wider box. */
+.voice-print-sm .voice-print {
+  width: 55px;
+  height: 20px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .voice-orb-eq i {
-    animation: none;
-    transform: scaleY(0.65);
-  }
-  .voice-orb,
-  button.voice-orb:hover {
+  .voice-print-mark {
     transition: none;
-    transform: none;
   }
 }
 
