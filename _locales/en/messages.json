@@ -1187,11 +1187,11 @@
     "description": "Accessible name of the settings Voices list (a listbox of every voice, one row each)."
   },
   "voicesArrowAudition": {
-    "message": "Arrow keys play",
+    "message": "Play as you move",
     "description": "Label on the toggle in the Voices control bar that says whether walking the list with the arrow keys plays each voice as focus reaches it."
   },
   "voicesKeyboardHint": {
-    "message": "Space to play · ↑↓ to walk · ⇧Space to switch back",
+    "message": "Press Space to listen, ↑↓ to move between voices, ⇧Space to switch back.",
     "description": "One-line keyboard hint in the settings Voices control bar. The glyphs are keys: Space, the up/down arrows, and Shift+Space."
   },
   "voicesSwitchBackTo": {

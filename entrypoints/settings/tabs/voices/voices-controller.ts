@@ -48,6 +48,7 @@ import {
 import {
   createPrintSvg,
   paintPrintTrace,
+  printInk,
   PRINT_WIDTHS,
 } from "./voicePrintRender";
 
@@ -1389,6 +1390,12 @@ export class VoicesController {
       // because it reads as unavailable.
       if (isHeard(this.heardStore, voice.id)) el.classList.add("heard");
       el.dataset.printWidth = String(PRINT_WIDTHS.lg);
+      // …and the HUE is the pitch, on the same axis the print's height and the
+      // rail's order already use. Applied from `pitchOf`, so a seeded voice is
+      // the right colour on the first paint and only a voice the server added
+      // since the last release ever changes hue (once, when its own audio
+      // lands — the same single move the ordering makes).
+      this.applyRowInk(el, pitchOf(voice, this.prints.get(voice.id)));
       const print = document.createElement("span");
       print.classList.add("voice-row-print");
       print.appendChild(createPrintSvg(PRINT_WIDTHS.lg));
@@ -1645,11 +1652,15 @@ export class VoicesController {
     // the voice keeps its reference line and never gets a fake mark.
     if (!print) return;
     this.prints.set(voice.id, print);
+    const hz = pitchOf(voice, print);
     this.container
       .querySelectorAll<HTMLElement>(
         `[data-print-voice="${escapeCss(voice.id)}"]`
       )
-      .forEach((row) => this.paintPrint(row, print));
+      .forEach((row) => {
+        this.paintPrint(row, print);
+        this.applyRowInk(row, hz);
+      });
     // A live measurement can disagree with the seed — only ever for a voice
     // the server added since the last release, and only once.
     this.requestSettle();
@@ -1659,6 +1670,22 @@ export class VoicesController {
     const svg = row.querySelector<SVGSVGElement>(".voice-print");
     if (!svg) return;
     paintPrintTrace(svg, print, Number(row.dataset.printWidth) || undefined);
+  }
+
+  /**
+   * The row's three inks — never heard / heard / playing — at this voice's
+   * pitch position on the ramp.
+   *
+   * Three custom properties rather than three classes, because the STATE is
+   * still exactly one class on the row (`.heard`, `.playing`) and the print
+   * still fills from `currentColor`. The stylesheet picks which of the three
+   * a row is painting in; this only says what the three are for this voice.
+   */
+  private applyRowInk(row: HTMLElement, hz: number): void {
+    const ink = printInk(hz);
+    row.style.setProperty("--print-ink-rest", ink.rest);
+    row.style.setProperty("--print-ink-heard", ink.heard);
+    row.style.setProperty("--print-ink-play", ink.playing);
   }
 
   /**

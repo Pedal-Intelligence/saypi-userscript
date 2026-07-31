@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import {
+  PRINT_GROUND,
+  printInk,
+} from "../../../entrypoints/settings/tabs/voices/voicePrintRender";
 
 /**
  * CSS contract guards for the settings Voices rail.
@@ -52,6 +56,13 @@ function inkDensity(body: string): number {
   return 1;
 }
 
+/** The custom property a rule paints the print in, and its fallback. */
+function inkVar(body: string): { name: string; fallback: string } {
+  const m = /(?:^|[^-])color:\s*var\((--[\w-]+),\s*(#[0-9a-f]{6})\)/i.exec(body);
+  expect(m, "rule should paint the print from a --print-ink-* custom property").toBeTruthy();
+  return { name: m![1], fallback: m![2].toLowerCase() };
+}
+
 const fontSizePx = (body: string): number => {
   const m = /font-size:\s*([\d.]+)px/.exec(body);
   expect(m, "rule should declare a px font-size").toBeTruthy();
@@ -84,8 +95,10 @@ function contrast(fg: number[], bg: number[]): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-const INK = hexRgb("#15171a");
-const GROUND = hexRgb("#fbfaf7");
+/** Warm near-black, warm paper. The rail is a warm island on the cool shell. */
+const INK = hexRgb("#241d14");
+const GROUND = hexRgb(PRINT_GROUND);
+const RULE = "#eadfcc";
 const ACCENT = "#2c5a42";
 
 describe("the page is a chart, not a directory", () => {
@@ -101,10 +114,10 @@ describe("the page is a chart, not a directory", () => {
     const separators = declarations.match(/border-(?:top|bottom):/g) ?? [];
     expect(separators.length).toBe(2);
     expect(ruleBody(".voice-rail-controls")).toMatch(
-      /border-bottom:\s*1px solid #e6e3da/
+      new RegExp(`border-bottom:\\s*1px solid ${RULE}`)
     );
     expect(ruleBody(".voice-rail-divider")).toMatch(
-      /border-top:\s*1px solid #e6e3da/
+      new RegExp(`border-top:\\s*1px solid ${RULE}`)
     );
   });
 
@@ -117,16 +130,24 @@ describe("the page is a chart, not a directory", () => {
 
   it("carries no per-voice colour anywhere — no gradient, no hue-coded state", () => {
     expect(declarations).not.toMatch(/linear-gradient|radial-gradient|hsl\(/);
-    // ONE green, and only the one green. Everything else on the page is ink,
-    // ground, rule, row-focus or white — the five tokens of design §11.
+    // ONE green, and only the one green. Everything else in the STYLESHEET is
+    // ink, ground, rule, row-focus, white, or one of the three neutral ramp
+    // fallbacks — design §11's five tokens, warmed. The pitch ramp itself is
+    // not here at all: it arrives as custom properties from printInk(), which
+    // is what keeps colour a measured function of pitch rather than a set of
+    // swatches somebody could quietly add a 23rd to.
     expect((declarations.match(/#2c5a42/gi) ?? []).length).toBeGreaterThan(0);
+    const neutral = printInk(155);
     const allowed = new Set([
       "#2c5a42", // accent — now
-      "#15171a", // ink
-      "#fbfaf7", // ground
-      "#e6e3da", // rule
-      "#f1efe9", // row focus
+      "#241d14", // ink (warm near-black)
+      "#fbf7f0", // ground (cream)
+      RULE, // rule
+      "#f3eada", // row focus
       "#ffffff",
+      neutral.rest,
+      neutral.heard,
+      neutral.playing,
     ]);
     for (const hex of declarations.match(/#[0-9a-f]{6}/gi) ?? []) {
       expect(allowed.has(hex.toLowerCase()), `${hex} is not a design token`).toBe(
@@ -134,92 +155,113 @@ describe("the page is a chart, not a directory", () => {
       );
     }
   });
+
+  it("puts the warm ground on the CARD, not on an inner panel", () => {
+    // A cream box inside the shell's white card would read as a box in a box.
+    // The shell's page is a cool #f8fafc, so this is one warm sheet of paper on
+    // a cool desk — the relationship the white card already had.
+    expect(ruleBody("#voices-preference.user-preference-item")).toMatch(
+      /background:\s*#fbf7f0/
+    );
+    expect(ruleBody("#voice-studio")).not.toMatch(/background/);
+  });
 });
 
-describe("ink is one variable in three steps", () => {
+describe("ink is one ramp in three steps", () => {
   // The three steps are the HEARD STATE (design §8) and nothing else: never
-  // heard → heard → playing. Playing is FULL ink and nothing else is, which is
-  // what carries "now" alongside the playhead, colourblind-safe in a way a hue
-  // is not.
-  it("runs never-heard → heard → playing, and stops there", () => {
-    const unheard = inkDensity(ruleBody(".voice-row"));
-    const heard = inkDensity(ruleBody(".voice-row.heard"));
-    const playing = inkDensity(ruleBody(".voice-row.playing"));
-    expect(heard).toBeGreaterThan(unheard);
-    expect(playing).toBeGreaterThan(heard);
-    expect(playing).toBe(1);
-    // Heard gets MORE ink, not less: NN/g Guideline 37 warns off grey for a
-    // visited state (it reads as unavailable), and a voice you have heard is
-    // the one most likely to win.
-    expect(heard).toBeGreaterThanOrEqual(0.7);
+  // heard → heard → playing. They used to be three ALPHAS of one near-black
+  // ink; they are now three measured COLOURS from printInk(), because the ink
+  // is the pitch ramp and a ramp does not survive alpha-scaling (full amber is
+  // 4.2:1 against this ground where full green is 7.6:1, so one alpha scale
+  // would make a deep unheard voice fainter than a bright unheard one).
+  // The RATIOS themselves are asserted in voicePrintRender.spec.ts, where the
+  // ramp now lives; this file's job is that the stylesheet actually spends
+  // them, in the right order, on the right classes.
+  it("paints each state from its own ramp property, never a fourth colour", () => {
+    const unheard = inkVar(ruleBody(".voice-row"));
+    const heard = inkVar(ruleBody(".voice-row.heard"));
+    const playing = inkVar(ruleBody(".voice-row.playing"));
+    expect(unheard.name).toBe("--print-ink-rest");
+    expect(heard.name).toBe("--print-ink-heard");
+    expect(playing.name).toBe("--print-ink-play");
+    // The fallbacks are the NEUTRAL rung — 155 Hz, the reference line, which is
+    // where an unmeasured voice is placed. Pinned to printInk() so the sheet
+    // cannot drift from the ramp it is quoting.
+    const neutral = printInk(155);
+    expect(unheard.fallback).toBe(neutral.rest);
+    expect(heard.fallback).toBe(neutral.heard);
+    expect(playing.fallback).toBe(neutral.playing);
   });
 
   it("spends most of the scale on the step that DEVELOPS the page", () => {
-    // Design §8 puts the three steps at 0.22 / 0.72 / 1.0 — a develop step
-    // more than twice the playing step, because "play one voice and its print
-    // inks in" is the whole of heard state on the rail. Raising the resting
-    // ink to clear WCAG 1.4.11 (see below) squeezed that step from 0.50 to
-    // 0.24 and inverted the design: the smaller half of a 1.4px sparse trace
-    // became the one carrying the memory, and heard rows stopped being
-    // identifiable by eye at 1× even when you knew which ones they were.
-    // The resting floor is fixed and the top is pinned at 1.0, so `heard` is
-    // the only free variable, and it belongs nearer the top.
-    const unheard = inkDensity(ruleBody(".voice-row"));
-    const heard = inkDensity(ruleBody(".voice-row.heard"));
-    const playing = inkDensity(ruleBody(".voice-row.playing"));
-    expect(heard - unheard).toBeGreaterThan(playing - heard);
+    // Design §8's rule, unchanged: a develop step more than twice the playing
+    // step, because "play one voice and its print inks in" is the whole of
+    // heard state on the rail, while what marks the playing row is the green
+    // playhead crossing its trace. Measured here on the fallbacks the SHEET
+    // declares, in CIE L* — the honest metric now that the three states are
+    // three colours rather than three alphas of one ink.
+    const lstar = (hex: string): number => {
+      const y = wcagLuminance(hexRgb(hex));
+      return y > 0.008856 ? 116 * Math.cbrt(y) - 16 : 903.3 * y;
+    };
+    const unheard = lstar(inkVar(ruleBody(".voice-row")).fallback);
+    const heard = lstar(inkVar(ruleBody(".voice-row.heard")).fallback);
+    const playing = lstar(inkVar(ruleBody(".voice-row.playing")).fallback);
+    expect(unheard).toBeGreaterThan(heard);
+    expect(heard).toBeGreaterThan(playing);
+    expect(unheard - heard).toBeGreaterThan((heard - playing) * 2);
   });
 
   it("leaves hover and focus out of the ink entirely", () => {
-    // A fourth density would either sit below `heard` — dimming a print the
+    // A fourth weight would either sit below `heard` — dimming a print the
     // moment you point at it — or above it, at which point pointing at a voice
     // looks like playing it. Standing on a row is its ground, its tagline and
     // its actions; the print keeps saying what it always said.
     expect(ruleBody(".voice-row:hover")).not.toMatch(/(?:^|[^-])color:/);
     expect(ruleBody(".voice-row.focused")).not.toMatch(/(?:^|[^-])color:/);
-    expect(ruleBody(".voice-row:hover")).toMatch(/background:\s*#f1efe9/);
+    expect(ruleBody(".voice-row:hover")).toMatch(/background:\s*#f3eada/);
+  });
+
+  it("rounds the row it grounds, so standing on one is a tile not a scanline", () => {
+    // The 42px band was full-bleed and square-cornered: correct for a waveform
+    // editor, cold for a page about voices. The radius is invisible until the
+    // row has a ground, and the card's 16px padding is what it breathes into.
+    expect(pxOf(ruleBody(".voice-row"), "border-radius")).toBe(12);
+    // …and the focus ring follows it, or it cuts across the corner.
+    expect(
+      pxOf(ruleBody(".voice-rail:focus-visible .voice-row.focused"), "border-radius")
+    ).toBe(12);
   });
 
   it("keeps the soundprint legible at rest, not only under the cursor", () => {
     // The trace is the page's ONLY data and it fills from the row's
     // currentColor, so the never-heard ink is what a first-time reader sees on
     // every row of the page. WCAG 1.4.11 asks 3:1 of a graphic you need in
-    // order to understand the content; below that the traces read as grey dust
-    // and the 1.23:1 reference line becomes the most legible mark on the row —
-    // a chart whose gridlines outrank its data.
-    //
-    // Design §8's 0.22 is 1.60:1, and this floor deliberately overrides it —
-    // confirmed by eye against the live catalog, where the bars (1.4px, with
-    // gaps) lose more to anti-aliasing than the continuous reference line
-    // does, so equal measured contrast is not equal presence. "Develops as you
-    // listen" is only a good idea while the undeveloped state still reads as a
-    // drawing; the heard step (10.3:1 against this 3.2:1) carries it instead.
-    const resting = inkDensity(ruleBody(".voice-row"));
-    // Both grounds: the design's warm #FBFAF7, and the white preference card
-    // the rail actually sits on today (only the control bar took the ground).
-    for (const ground of [[255, 255, 255], GROUND]) {
-      expect(
-        contrast(over(INK, resting, ground), ground),
-        `resting ink ${resting} on rgb(${ground})`
-      ).toBeGreaterThanOrEqual(3);
-    }
+    // order to understand the content; below that the traces read as dust and
+    // the reference line becomes the most legible mark on the row — a chart
+    // whose gridlines outrank its data. The 3.2:1 floor was settled by eye
+    // against the live catalog and survives the warmth pass unchanged; what
+    // changed is that it is now held at BOTH ends of the ramp by construction
+    // (voicePrintRender.spec.ts) rather than by one alpha.
+    const resting = inkVar(ruleBody(".voice-row")).fallback;
+    expect(contrast(hexRgb(resting), GROUND)).toBeGreaterThanOrEqual(3);
     // …and it must still out-contrast the chart it hangs on.
-    expect(
-      contrast(over(INK, resting, [255, 255, 255]), hexRgb("#e6e3da"))
-    ).toBeGreaterThan(2);
+    expect(contrast(hexRgb(resting), hexRgb(RULE))).toBeGreaterThan(2);
   });
 
   it("declares .playing after .heard, because they tie on specificity", () => {
     // Both are (0,2,0), so source order is the whole cascade here: declared
     // the other way round, the voice that is sounding would paint at the heard
-    // density the instant its first qualifying play landed — mid-clip.
+    // weight the instant its first qualifying play landed — mid-clip.
     expect(css.indexOf("\n.voice-row.playing {")).toBeGreaterThan(
       css.indexOf("\n.voice-row.heard {")
     );
   });
 
   it("leaves the reference line out of the playing state — it is the chart, not the voice", () => {
-    expect(ruleBody(".voice-print-ref")).toMatch(/stroke:\s*#e6e3da/);
+    expect(ruleBody(".voice-print-ref")).toMatch(
+      new RegExp(`stroke:\\s*${RULE}`)
+    );
     expect(ruleBody(".voice-print-trace")).toMatch(/fill:\s*currentColor/);
   });
 });
@@ -230,7 +272,7 @@ describe("the control bar pins, and the rows scroll under it", () => {
     expect(bar).toMatch(/position:\s*sticky/);
     expect(bar).toMatch(/top:\s*0/);
     // Translucent would let 42px rows smear through it as they scroll past.
-    expect(bar).toMatch(/background:\s*#fbfaf7/);
+    expect(bar).toMatch(/background:\s*#fbf7f0/);
   });
 
   it("sets every count in tabular numerals, so nothing jitters as it ticks", () => {
@@ -370,9 +412,11 @@ describe("the sweep, its readout, and the Show: filter", () => {
     // Both new controls are outlined with the `border:` shorthand, which is
     // an outline rather than a rule. The count assertion lives above; this
     // pins WHY it still holds.
-    expect(ruleBody(".voice-play-all")).toMatch(/border:\s*1px solid #e6e3da/);
+    expect(ruleBody(".voice-play-all")).toMatch(
+      new RegExp(`border:\\s*1px solid ${RULE}`)
+    );
     expect(ruleBody(".voice-filter-select")).toMatch(
-      /border:\s*1px solid #e6e3da/
+      new RegExp(`border:\\s*1px solid ${RULE}`)
     );
   });
 

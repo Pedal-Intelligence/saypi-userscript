@@ -41,8 +41,8 @@ Settings window is 1120 × 900 when Voices is active. `#voice-studio` keeps its 
 │  Every voice, deepest to brightest. Listen, then choose.   │ Pi │ Claude │ │
 │                                                            └────┴────────┘ │
 │ ─── control bar (sticky, opaque) ────────────────────────────────────────── │
-│  ▶ Play all (22)   ● Arrow keys play   Show: All voices ▾   9 of 22 heard  │
-│  Space to play · ↑↓ to walk · ⇧Space to switch back    ⇄ Onyx ⟷ Coral      │
+│  ▶ Play all (22)   ● Play as you move  Show: All voices ▾   9 of 22 heard  │
+│  Press Space to listen, ↑↓ to move between voices, ⇧Space to switch back.  │
 │ ──────────────────────────────────────────────────────────────────────────  │
 │                                                                            │
 │   ▁▃▅▄▂ ▁▂▄▅▄▃▂▁▂▃▂▁                Onyx                                   │
@@ -98,7 +98,7 @@ The rail is one `role="listbox"` with a roving `tabindex` and `aria-activedescen
 
 ### The arming rule (load-bearing)
 
-**Arrow keys move focus silently until the user has explicitly played something in this session** (Space, a click, or Play all). After that, focus auditions, and a `● Arrow keys play` chip lights in the control bar. `Esc` disarms.
+**Arrow keys move focus silently until the user has explicitly played something in this session** (Space, a click, or Play all). After that, focus auditions, and a `● Play as you move` chip lights in the control bar. `Esc` disarms.
 
 One rule buys three things:
 
@@ -211,9 +211,21 @@ Each voice is drawn from **its own sample clip** as a pitch trace on a **shared 
 - **Pitch → y:** `y(f) = 24 − 22 * (log2(f) − log2(80)) / (log2(288) − log2(80))`, clamped `[2, 24]`. Fixed axis 80–288 Hz for every voice, forever. 155 Hz → y = 12.6, which is where the reference line sits.
 - **Trace width:** `TRACE_W = 300 * min(span, MAX_SPAN) / MAX_SPAN`, `MAX_SPAN = 2.2 s` (a **fixed constant**, not max-of-catalog, so widths never shift when the catalog changes). Ballad (1.97 s) → 269 px; Mark (0.47 s) → 64 px. The SVG element stays 300 px so the column never goes ragged.
 - **Frames:** resample the per-10 ms `(f0, rms)` track to `N = clamp(round(TRACE_W / 2.6), 12, 115)` points, nearest-neighbour.
-- **Each voiced frame i:** `<rect x={i*2.6} y={y − h/2} width="1.4" height={h} rx="0.7"/>` with `h = 2 + 6 * loudNorm`, `loudNorm = clamp(rms_i / p95(rms), 0, 1)`. **Unvoiced frames emit nothing** — the gaps are the consonants and the pause, and they are half the character.
+- **Each voiced frame i:** `<rect x={i*2.6} y={y − h/2} width="2.1" height={h} rx="1.05"/>` with `h = 2.5 + 7.5 * loudNorm`, `loudNorm = clamp(rms_i / p95(rms), 0, 1)`. **Unvoiced frames emit nothing** — the gaps are the consonants and the pause, and they are half the character.
 - Fill comes from `currentColor` on the `<svg>`, so the three ink states (§8) are one class.
 - **Playhead:** rAF `transform: translateX(currentTime / duration * TRACE_W)`. Only on the playing row.
+
+> **Built as a ribbon, not a seismograph** (warmth pass, after the founder review). The bar shipped at `1.4` wide on a `2.6` pitch — a **54 % duty cycle**, which is the visual language of an audio editor: high-density hairlines with air between them. Legible, and cold. Widening the bar to `2.1` (**81 % duty**) makes neighbouring bars very nearly touch, so a sustained passage resolves into one soft continuous band while the per-frame heights still read as rhythm; the amplitude scales 1.25× with it so a 2.1 px bar is a stroke rather than a dot. **The pitch does not move.** Widening the spacing to 4.2 to reach the same ratio would have dropped a full-width trace from 115 frames to 71, and a thinner trace reads *dottier* — the opposite of softer. One consequence, accepted: a full-loudness bar is now 10 px, so a bar centred at the very top or bottom of the 80–288 Hz band overhangs the 26 px print by up to 3 px. The svg is `overflow: visible` inside a 42 px row, which has 8 px of slack either side.
+
+### 6.1a Colour — one ordered ramp keyed to pitch
+
+The mark is drawn in **one ordered ramp — warm amber `#A66A2B` at 80 Hz to the shell's green `#2C5A42` at 288 Hz — keyed to the same fixed axis that decides vertical position.** Colour and height therefore agree by construction: one axis, two encodings.
+
+**Per-voice colour is still banned, and a pitch ramp is a different thing.** The 22 gradient orbs this page deleted were `djb2` **hashes** of the voice id: they looked like they encoded something and encoded nothing, and 22 unrelated hues is a wall of Skittles. A **monotonic function of measured pitch** encodes exactly what the row order already encodes, so the page reads as one gradient down its length rather than as confetti — and it gives the ordering a redundant, **non-positional** encoding, which is an accessibility gain rather than decoration. The test for the ban is unchanged: no hue may carry an identity, a tier, or a state.
+
+Keyed to the **fixed** 80–288 Hz axis, never to the catalog's own min/max — the same argument that makes `MAX_SPAN` a constant. A ramp normalised over the catalog would re-colour every existing voice the day the server adds a deeper one, and a mark that changes when its neighbours change is not a mark.
+
+Implementation lives in `voicePrintRender.ts` as `printPitchT()` / `printInk()`; the controller writes the three resulting colours onto the row as `--print-ink-rest` / `-heard` / `-play`, and the stylesheet picks which one. The svg itself still carries no colour at all, so the whole heard state stays **one class on the row** rather than a repaint of 115 rects.
 
 ### 6.2 Extraction (`src/tts/voicePrint.ts`)
 
@@ -286,13 +298,17 @@ Resolution order per voice: **cached print → seed → 155 Hz placeholder**. In
 
 ## 8. Heard state
 
-**Expression: ink density on the print. No checkmarks anywhere.**
+**Expression: ink weight on the print. No checkmarks anywhere.**
 
-| state | print ink |
-|---|---|
-| never heard | `rgba(21,23,26,0.22)` |
-| heard | `rgba(21,23,26,0.72)` |
-| playing | `#15171A` (1.0) + playhead |
+| state | contrast against the ground | at 80 Hz | at 155 Hz | at 288 Hz |
+|---|---|---|---|---|
+| never heard | 3.2 : 1 | `#C07B33` | `#948C51` | `#4F9973` |
+| heard | 6.4 : 1 | `#7F501F` | `#615C33` | `#32644A` |
+| playing | 8.6 : 1 + playhead | `#663F17` | `#4D4927` | `#26503A` |
+
+> **As-built.** The design drew this as three **alphas** of one near-black ink (`0.22 / 0.72 / 1.0`). Two things moved it. First, at 0.22 the trace measured 1.60:1 against the ground while the reference line it hangs on measured 1.23:1 — the data barely out-ranked the gridline, and a broken 1.4 px mark loses far more to anti-aliasing than a continuous line does, so equal measured contrast is not equal presence. The floor went to **3.2:1** (WCAG 1.4.11's 3:1 for a graphic you need in order to read the content), settled by eye against the live catalog. Second, once the ink became the **pitch ramp** (§6.1a), one alpha scale stopped working at all: full-strength amber is 4.2:1 against this ground where full-strength green is 7.6:1, so a deep unheard voice would have read fainter than a bright unheard voice and the hue would have corrupted the heard state sitting beside it. So each state fixes a **contrast ratio** and lets the ramp choose the hue — hue carries pitch, weight carries memory, cleanly separated, and every row is at equal presence in equal state.
+>
+> The rule §8 actually cares about survives intact: the **develop** step is far the larger of the two — 19 points of CIE L\* against 8, "more than twice" — because "play one voice and its print inks in" is the whole of heard state on the rail, while what marks the playing row is the green playhead crossing its trace. (The old alpha metric is gone with the alphas; L\* is the honest replacement, and the ordering holds in raw contrast ratio too.)
 
 **No suppression threshold.** A first-time visitor sees a page of faint under-drawings, which is *correct*: there is nothing here you know yet. Play one voice and its print inks in — instant comprehension, no explanation needed, no magic constant, and none of the jarring mass-transition a "suppress until N heard" rule produces. The rail literally develops as you work down it.
 
@@ -392,19 +408,24 @@ Copy `VoicePins`' **discipline** (one exported key constant, pure helpers separa
 
 ## 11. Aesthetic direction
 
-**The idea: a chart, not a directory.** Twenty-two ink traces on warm paper, registered against one line, with a single green that means *now*. No colour per voice. No cards. **No rules between rows** — that is the broadsheet tell, and separation comes from the 42 px rhythm and the prints themselves. Exactly two rules exist on the page: under the control bar, and above the "No sample yet" group.
+**The idea: a chart, not a directory.** Twenty-two soundprints on warm paper, registered against one line, with a single green that means *now*. No cards. **No rules between rows** — that is the broadsheet tell, and separation comes from the 42 px rhythm and the prints themselves. Exactly two rules exist on the page: under the control bar, and above the "No sample yet" group.
 
 **Colour** — light theme only, matching the settings shell.
 
 | token | value | use |
 |---|---|---|
-| ground | `#FBFAF7` | page and control bar (opaque, so rows scroll under) |
-| ink | `#15171A` | at 100 / 62 / 38 / 22 / 16 % |
+| ground | `#FBF7F0` | the studio card and its control bar (opaque, so rows scroll under) |
+| ink | `#241D14` | warm near-black. Names at 100 %, everything else at 62 / 38 / 22 % |
 | accent | `#2C5A42` | the shell's existing green. **One meaning: now.** Active host pill, `IN USE` marker + row rule, `Use` button, playhead. Roughly 2 % of pixels. |
-| rule | `#E6E3DA` | the two rules, and the print's reference line |
-| row focus | `#F1EFE9` | focused/hovered row background |
+| rule | `#EADFCC` | the two rules, and the print's reference line |
+| row focus | `#F3EADA` | focused/hovered row background, 12 px radius |
+| print ramp | `#A66A2B` → `#2C5A42` | §6.1a — the trace only, as a function of pitch. Never in the stylesheet. |
 
-There is **no per-voice colour, no gradient, no tier colour, no hue-coded state**. Playing is expressed as *contrast*, the way a waveform editor does it — colourblind-safe, and it lets 22 rows coexist without becoming a wall of Skittles.
+> **As-built (warmth pass).** The first build of this palette was a cool near-black on near-white with 1.4 px monochrome marks, and the founder read the whole page as *"cold and intimidating"* on sight — accurate: it had borrowed the visual language of an audio editor, while Say, Pi's own language (the settings sidebar's mint and lavender icon tiles, generous white, soft corners) is warm and rounded. The function was right and did not change. What changed is the temperature: cream ground on the card rather than white, warm near-black instead of `#15171A`, a softer warmer rule, a 12 px radius on the row so standing on one is a soft tile rather than a scanline, the ribbon of §6.1, the ramp of §6.1a, and the Voices sidebar tile off the default grey onto amber so it stops being the one cold tile in a pastel column.
+>
+> **Warm, but not warmer than the shell can hold.** The settings shell around this card is built on cool greys (`#f8fafc` page, `#e5e7eb`, `#6b7280`). A strongly warm island inside that reads as *mismatched* rather than warm, so the cream is chosen to keep the same relationship the white card already had — one warm sheet of paper on a cool desk — and was checked in situ, not against itself.
+
+There is still **no per-voice colour, no gradient, no tier colour, no hue-coded state**. The one thing colour is allowed to say is *pitch*, on the shared axis, monotonically (§6.1a); heard state is expressed as *weight*, the way a waveform editor does it — which is what lets 22 rows coexist without becoming a wall of Skittles.
 
 **Type** — one family, the shell's `system-ui` stack. **No serif anywhere.**
 
@@ -471,8 +492,8 @@ New keys in `_locales/en/messages.json`. Substituted keys must carry `placeholde
 | `voicesPlayNewN` | `Play new ($count$)` | count |
 | `voicesStopPlayback` | `Stop` | — |
 | `voicesSweepPosition` | `$index$ of $total$` | index, total |
-| `voicesArrowAudition` | `Arrow keys play` | — |
-| `voicesKeyboardHint` | `Space to play · ↑↓ to walk · ⇧Space to switch back` | — |
+| `voicesArrowAudition` | `Play as you move` | — |
+| `voicesKeyboardHint` | `Press Space to listen, ↑↓ to move between voices, ⇧Space to switch back.` | — |
 | `voicesSwitchBackTo` | `Switch back to $name$` | name |
 | `voicesHeardCount` | `$heard$ of $total$ heard` | heard, total |
 | `voicesShowLabel` | `Show` | — |
@@ -491,6 +512,8 @@ New keys in `_locales/en/messages.json`. Substituted keys must carry `placeholde
 | `voicesNowPlaying` | `Playing $name$` | name |
 | `voicesPreviewHeard` | `Play a sample of $name$ (already heard)` | name |
 | `voicesTooManyToPlay` | `That's $count$ voices — about $minutes$ minutes. Narrow the list first.` | count, minutes |
+
+> **As-built (warmth pass).** Two of these were rewritten after the founder review, in the documented brand voice (second person, warm, calm — `doc/release/brand-voice.md`). `Space to play · ↑↓ to walk · ⇧Space to switch back` is three tokens separated by middots: the register of a terminal, and it is the first thing the eye lands on. Same keys, same length, plain verbs, one sentence — and `walk` was a word about the implementation, not about you. `Arrow keys play` named the mechanism; `Play as you move` names what happens to you, and it reads straight into the hint line beneath it. Both are English-only additions (`npm run translate` is founder-gated), so no locale went stale.
 
 **Reused unchanged** (already translated into 31 locales): `voicesSectionTitle`, `voicesUseShort`, `voicesUseOnHost`, `voicesSpeakingNow` (as the `IN USE` badge), `voicesAddToMenuShort`, `voicesInMenuShort`, `voicesAddVoiceToMenu`, `voicesRemoveVoiceFromMenu`, `voicesMenuFull`, `voicesPreview`, `voicesLoadError`, `voicesNoneAvailable`, `signInForTTS`, `voicesBuiltinsNote`, `hdVoicesAllowanceNote`, `voiceSpeaksNLanguages`, and every `voiceTagline_*`.
 

@@ -59,14 +59,26 @@ describe("the rail says what it is", () => {
     expect(en.voicesRailLabel.message).not.toMatch(/\$.+\$/);
   });
 
-  it("states the keyboard in one line, in the order you would learn it", () => {
+  it("states the keyboard as a SENTENCE, not as a cheat sheet", () => {
+    // This line is the first thing the eye lands on, and it shipped as
+    // `Space to play · ↑↓ to walk · ⇧Space to switch back` — three tokens
+    // separated by middots, which is the register of a terminal, and the
+    // founder read the page as "cold and intimidating". Same keys, same
+    // length, plain verbs, one sentence: second person, warm, calm.
     expect(en.voicesKeyboardHint?.message).toBe(
-      "Space to play · ↑↓ to walk · ⇧Space to switch back"
+      "Press Space to listen, ↑↓ to move between voices, ⇧Space to switch back."
     );
+    // No jargon: "walk" was a word about the implementation, not about you.
+    expect(en.voicesKeyboardHint.message).not.toMatch(/walk|·/);
+    // Sentence case — no Title Case, no shouted keys beyond the key names.
+    expect(en.voicesKeyboardHint.message).toMatch(/^Press /);
   });
 
-  it("labels the arming toggle as what it does, not as a mode", () => {
-    expect(en.voicesArrowAudition?.message).toBe("Arrow keys play");
+  it("labels the arming toggle in the second person, not as a mode", () => {
+    // `Arrow keys play` names the mechanism; `Play as you move` names what
+    // happens to YOU, and it reads straight into the hint line beneath it.
+    expect(en.voicesArrowAudition?.message).toBe("Play as you move");
+    expect(en.voicesArrowAudition.message).not.toMatch(/key|mode|auto/i);
   });
 });
 

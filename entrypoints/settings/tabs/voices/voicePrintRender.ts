@@ -37,11 +37,32 @@ export const PRINT_Y_MIN = 2;
 export const PRINT_Y_MAX = 24;
 /** Clip length that fills the full width. A FIXED constant (see the header). */
 export const PRINT_MAX_SPAN_S = 2.2;
-/** Frame-to-frame spacing and bar width, in print units (= px at 1:1). */
+/**
+ * Frame-to-frame spacing and bar width, in print units (= px at 1:1).
+ *
+ * The **duty cycle** — bar width over frame pitch — is what decides whether
+ * the mark reads as a seismograph or as a ribbon. It shipped at 1.4/2.6 = 54 %,
+ * which is the visual language of an audio editor: high-density hairlines with
+ * air between them, legible but cold. At 2.1/2.6 = 81 % neighbouring bars very
+ * nearly touch and the trace resolves into one soft continuous band, while the
+ * per-frame heights still read as rhythm.
+ *
+ * The PITCH is deliberately unchanged. Widening the spacing instead would have
+ * dropped the drawn frame count by a third (300 px / 4.2 = 71 frames against
+ * 115), and a thinner trace reads DOTTIER, which is the opposite of softer.
+ * Every frame the resampler produces still gets a bar; they are simply fatter.
+ */
 export const PRINT_FRAME_PITCH = 2.6;
-export const PRINT_BAR_W = 1.4;
-export const PRINT_BAR_MIN_H = 2;
-export const PRINT_BAR_LOUD_H = 6;
+export const PRINT_BAR_W = 2.1;
+/**
+ * Amplitude, scaled 1.25× with the widening so the ribbon keeps its aspect —
+ * a 2.1 px bar 2 px tall is a dot, not a stroke. A full-loudness bar is now
+ * 10 px in a 26 px band, so a bar centred at the very top or bottom of the
+ * axis overhangs the band by up to 3 px; the svg is `overflow: visible` inside
+ * a 42 px row, which has 8 px of slack either side of the print.
+ */
+export const PRINT_BAR_MIN_H = 2.5;
+export const PRINT_BAR_LOUD_H = 7.5;
 /** Resampled frame count is clamped: fewer reads as dots, more reads as mud. */
 export const PRINT_MIN_FRAMES = 12;
 export const PRINT_MAX_FRAMES = 115;
@@ -70,6 +91,122 @@ export function printY(hz: number): number {
   if (!Number.isFinite(hz) || hz <= 0) return PRINT_REF_Y;
   const t = (Math.log2(hz) - LOG_LO) / LOG_SPAN;
   return Math.min(PRINT_Y_MAX, Math.max(PRINT_Y_MIN, PRINT_Y_MAX - 22 * t));
+}
+
+/* --- the pitch ramp --------------------------------------------------------
+   ONE ordered ramp — warm amber for the deep voices, the shell's green for the
+   bright ones — keyed to the SAME fixed 80–288 Hz axis that decides vertical
+   position. Colour and height therefore agree by construction: one axis, two
+   encodings.
+
+   This is not the per-voice colour the design bans, and the distinction is the
+   whole argument. The 22 gradient orbs this page deleted were `djb2` HASHES of
+   the voice id: they looked like they encoded something and encoded nothing.
+   A monotonic function of measured pitch encodes exactly what the row ORDER
+   already encodes, so the rail reads as one gradient down the page rather than
+   as confetti — and it gives the ordering a redundant, non-positional encoding,
+   which is an accessibility gain rather than decoration.
+
+   Keyed to the FIXED axis, never to the catalog's own min/max, for the same
+   reason PRINT_MAX_SPAN_S is a constant: a ramp normalised over the catalog
+   would re-colour every existing voice the day the server adds a deeper one. */
+
+/** The ramp's anchors. Amber at 80 Hz, the shell's one green at 288 Hz. */
+export const PRINT_RAMP_DEEP = "#a66a2b";
+export const PRINT_RAMP_BRIGHT = "#2c5a42";
+/** The warm ground the studio is painted on, and what the ink is measured against. */
+export const PRINT_GROUND = "#fbf7f0";
+
+/**
+ * The three heard states (§8), expressed as CONTRAST RATIOS against the ground
+ * rather than as opacities of one ink.
+ *
+ * With a single near-black ink, three alphas were three legible weights. With a
+ * ramp they are not: full-strength amber measures 4.2:1 against this ground and
+ * full-strength green 7.6:1, so one alpha scale would make a deep unheard voice
+ * fainter than a bright unheard one — the colour would corrupt the heard-state
+ * reading it sits beside. Fixing the CONTRAST per state instead, and letting the
+ * ramp choose the hue, keeps every row at equal presence in equal state, so hue
+ * carries pitch and weight carries memory, cleanly separated.
+ *
+ * `rest` keeps the 3.2:1 floor the monochrome rail settled on by eye (WCAG
+ * 1.4.11 asks 3:1 of a graphic you need in order to read the content). The
+ * other two are chosen so the DEVELOP step is far the larger of the two — 19
+ * points of CIE L* against 8, matching design §8's "more than twice" — because
+ * "play one voice and its print inks in" is the whole of heard state on the
+ * rail, while what marks the playing row is the green playhead crossing it.
+ */
+export const PRINT_INK_CONTRAST = {
+  rest: 3.2,
+  heard: 6.4,
+  playing: 8.6,
+} as const;
+
+export type PrintInkState = keyof typeof PRINT_INK_CONTRAST;
+export type PrintInk = Record<PrintInkState, string>;
+
+const hexToRgb = (hex: string): number[] =>
+  [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const toLinear = (c: number): number =>
+  c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+const toSrgb = (v: number): number =>
+  v <= 0.00304 ? v * 12.92 : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+const linearOf = (hex: string): number[] =>
+  hexToRgb(hex).map((c) => toLinear(c / 255));
+const luminance = ([r, g, b]: number[]): number =>
+  0.2126 * r + 0.7152 * g + 0.0722 * b;
+const hexOf = (linear: number[]): string =>
+  "#" +
+  linear
+    .map((v) => Math.round(Math.min(1, Math.max(0, toSrgb(v))) * 255))
+    .map((c) => c.toString(16).padStart(2, "0"))
+    .join("");
+
+const RAMP_DEEP_RGB = hexToRgb(PRINT_RAMP_DEEP);
+const RAMP_BRIGHT_RGB = hexToRgb(PRINT_RAMP_BRIGHT);
+const GROUND_Y = luminance(linearOf(PRINT_GROUND));
+
+/**
+ * Where a pitch sits on the ramp, 0 (deepest) to 1 (brightest).
+ *
+ * Derived from `printY` rather than from its own copy of the log axis, so the
+ * colour and the height cannot drift apart: a voice drawn at the top of the
+ * band is, by construction, at the top of the ramp. An unmeasured voice reports
+ * 155 Hz — the reference line — and lands mid-ramp, which is neutral rather
+ * than deep or bright.
+ */
+export function printPitchT(hz: number): number {
+  return (PRINT_Y_MAX - printY(hz)) / (PRINT_Y_MAX - PRINT_Y_MIN);
+}
+
+/**
+ * The ramp colour at `t`, re-exposed to hit an exact contrast ratio.
+ *
+ * The hue comes from a straight sRGB mix of the two anchors — what the approved
+ * render used. The WEIGHT comes from scaling that colour in LINEAR light, which
+ * preserves its chromaticity exactly (it is the same colour at a different
+ * exposure) while moving its luminance to wherever the target ratio wants it.
+ * That makes the state colours a closed form rather than three hand-picked
+ * swatches per hue, so the ramp stays correct if an anchor is ever retuned.
+ */
+function rampInk(t: number, target: number): string {
+  const clamped = Math.min(1, Math.max(0, t));
+  const base = RAMP_DEEP_RGB.map((v, i) =>
+    toLinear((v + (RAMP_BRIGHT_RGB[i] - v) * clamped) / 255)
+  );
+  const want = (GROUND_Y + 0.05) / target - 0.05;
+  const exposure = want / luminance(base);
+  return hexOf(base.map((v) => v * exposure));
+}
+
+/** The three inks a voice's print is drawn in, from its pitch. */
+export function printInk(hz: number): PrintInk {
+  const t = printPitchT(hz);
+  return {
+    rest: rampInk(t, PRINT_INK_CONTRAST.rest),
+    heard: rampInk(t, PRINT_INK_CONTRAST.heard),
+    playing: rampInk(t, PRINT_INK_CONTRAST.playing),
+  };
 }
 
 /** Drawn width of the trace: clip length, against a fixed 2.2 s full scale. */

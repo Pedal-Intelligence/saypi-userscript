@@ -1,10 +1,16 @@
 /* Voices tab — "the rail" (2026-07-31 audition-room design).
-   A chart, not a directory: twenty-two ink traces on warm paper, registered
-   against one reference line, with a single green that means *now*. No colour
-   per voice, no cards, and NO RULES BETWEEN ROWS — separation comes from the
-   42px rhythm and the prints themselves. Exactly two rules exist on the page:
-   under the control bar, and above the "No sample yet" group.
-   Light-only, matching the settings shell. */
+   A chart, not a directory: twenty-two soundprints on warm paper, registered
+   against one reference line, with a single green that means *now*. No cards,
+   and NO RULES BETWEEN ROWS — separation comes from the 42px rhythm and the
+   prints themselves. Exactly two rules exist on the page: under the control
+   bar, and above the "No sample yet" group. Light-only, matching the shell.
+
+   Colour is ONE ORDERED RAMP keyed to pitch — amber for the deep voices, the
+   shell's green for the bright ones — not a per-voice identity. The three
+   inks a row can paint in arrive as custom properties from
+   voicePrintRender.ts's `printInk()`; this sheet only decides WHICH of the
+   three a row is in, which is still exactly one class. See the ramp's own
+   rationale in voicePrintRender.ts. */
 
 #voice-studio {
   max-width: 900px;
@@ -25,6 +31,13 @@
    cascade; scoped to this card so no other tab moves. */
 #voices-preference.user-preference-item {
   max-width: none;
+  /* The studio takes the warm ground, on the CARD rather than on an inner
+     panel — a cream box inside a white box would read as a box in a box. The
+     shell's page is a cool #f8fafc, so this is one warm sheet of paper on a
+     cool desk, which is the relationship the white card already had; it is
+     just paper now. The 16px card padding is what the rounded rows breathe
+     into. */
+  background: #fbf7f0;
 }
 
 /* No per-tab column widening here: `.content` is flex:1 inside the
@@ -53,7 +66,7 @@
    .user-preference-item, so the subtitle would never be seen. */
 .voice-rail-subtitle {
   font-size: 13px;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   margin: 0 0 0 0;
 }
 
@@ -63,7 +76,7 @@
   display: inline-flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid #e6e3da;
+  border: 1px solid #eadfcc;
   border-radius: 9999px;
   background: #ffffff;
 }
@@ -75,7 +88,7 @@
   border: none;
   border-radius: 9999px;
   background: transparent;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   font-size: 12px;
   cursor: pointer;
 }
@@ -101,7 +114,7 @@
 .voice-studio-empty {
   padding: 0.75rem 0.25rem;
   font-size: 0.9rem;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
 }
 
 /* The live region. Visually hidden, never display:none — a display:none live
@@ -127,15 +140,15 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  background: #fbfaf7;
-  border-bottom: 1px solid #e6e3da;
+  background: #fbf7f0;
+  border-bottom: 1px solid #eadfcc;
   /* 44px exactly: 3 + 18 + 1 + 18 + 4. */
   padding: 3px 0 4px;
   display: flex;
   flex-direction: column;
   gap: 1px;
   font-size: 12px;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   font-variant-numeric: tabular-nums;
 }
 .voice-rail-controls-row {
@@ -166,13 +179,13 @@
 }
 .voice-your-voice:hover,
 .voice-compare-swap:hover {
-  color: #15171a;
+  color: #241d14;
 }
 /* The chip is the arming rule made visible AND its permanent escape hatch: it
    lights when arrows are auditioning, and pressing it turns focus-plays off
    for good. One green, one meaning — now. */
 .voice-arrow-chip {
-  border: 1px solid #e6e3da;
+  border: 1px solid #eadfcc;
   border-radius: 9999px;
   padding: 2px 10px 2px 8px;
   background: #ffffff;
@@ -180,7 +193,7 @@
 .voice-arrow-chip::before {
   content: "●";
   margin-right: 5px;
-  color: rgba(21, 23, 26, 0.22);
+  color: rgba(36, 29, 20, 0.22);
 }
 .voice-arrow-chip.lit {
   color: #2c5a42;
@@ -206,17 +219,17 @@
   display: inline-flex;
   align-items: baseline;
   gap: 5px;
-  border: 1px solid #e6e3da;
+  border: 1px solid #eadfcc;
   border-radius: 9999px;
   padding: 2px 10px;
   background: #ffffff;
   font: inherit;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   cursor: pointer;
   white-space: nowrap;
 }
 .voice-play-all:hover {
-  color: #15171a;
+  color: #241d14;
 }
 /* A sweep in progress is the one thing on this bar that is happening NOW, so
    Stop takes the one green — the same rule as the playhead and IN USE. */
@@ -262,7 +275,7 @@
   display: none;
 }
 .voice-filter-select {
-  border: 1px solid #e6e3da;
+  border: 1px solid #eadfcc;
   border-radius: 6px;
   padding: 1px 4px;
   background: #ffffff;
@@ -275,13 +288,13 @@
    control that undoes that choice. Quiet, because it is a caveat about the
    filter, not a warning about the page. */
 .voice-filter-note {
-  color: rgba(21, 23, 26, 0.38);
+  color: rgba(36, 29, 20, 0.38);
 }
 /* Blocked playback, a failed clip and a refused sweep all replace the keyboard
    hint IN PLACE — one line, non-modal, never a dialog, and full ink because
    unlike the hint they are things you have to read. */
 .voice-rail-hint-alert {
-  color: #15171a;
+  color: #241d14;
 }
 
 /* --- the rail --------------------------------------------------------------
@@ -308,30 +321,36 @@
   /* [3px focus rule][14][300px print][20][name 108][12][desc][badges][96][20] */
   padding: 0 20px 0 14px;
   border-left: 3px solid transparent;
+  /* Rounded, so standing on a row is a soft tile rather than a scanline. The
+     radius is invisible until the row has a ground (hover/focus), and the
+     16px card padding is what it breathes into. */
+  border-radius: 12px;
   cursor: pointer;
-  /* NEVER HEARD — the first of the three ink densities (design §8), and the
+  /* NEVER HEARD — the first of the three heard states (design §8), and the
      only one a first visit has. Nothing on this page is known to you yet, and
      the rail says so: a page of under-drawings that develops as you work down
      it, with no suppression threshold and no mass transition when some magic
      count trips.
 
-     0.48, NOT design §8's 0.22, and the difference was settled by looking at
-     the live 22-voice catalog rather than by argument. At 0.22 the trace
-     measures 1.60:1 against the ground while the reference line it hangs on
-     measures 1.23:1 — the data barely out-ranks the gridline, and because the
-     trace is 1.4px bars with gaps while the line is continuous, equal contrast
-     does not mean equal presence: the broken mark loses far more to
-     anti-aliasing. At 1:1 it reads as dust, and it fails WCAG 1.4.11's 3:1 for
-     a graphic you need in order to understand the content. 0.48 is the lowest
-     value that clears 3:1 (3.20:1 here).
+     The three states used to be three ALPHAS of one near-black ink. They are
+     now three measured COLOURS, because the ink is the pitch ramp and a ramp
+     will not survive being alpha-scaled: full amber measures 4.2:1 against
+     this ground where full green measures 7.6:1, so one alpha scale would make
+     a deep unheard voice fainter than a bright unheard voice, and the hue
+     would corrupt the heard reading it sits beside. `printInk()` fixes the
+     CONTRAST per state instead and lets the ramp choose the hue, so every row
+     is at equal presence in equal state.
 
-     Raising the floor is only half the repair, though: it also halved the
-     develop step, and a 0.24 step on this trace did not read at 1×. The heard
-     ink moves with it, to 0.82 (10.3:1 against this 3.2:1) — see `.heard`
-     below. The page-level half of heard memory (the counter, `Not yet heard`,
-     `Play new`) carries the rest, which is the half design §8 itself calls
-     the one to ship if only one ships. */
-  color: rgba(21, 23, 26, 0.48);
+     The floor is unchanged at 3.2:1 — settled by eye against the live catalog,
+     because WCAG 1.4.11 asks 3:1 of a graphic you need in order to read the
+     content, and below that the traces read as dust while the reference line
+     they hang on becomes the most legible mark on the row.
+
+     The fallbacks are the NEUTRAL rung of the ramp (155 Hz, the reference
+     line) — what an unmeasured voice would be given. In practice the
+     controller sets all three on every playable row, from `pitchOf`, before
+     the row is ever painted. */
+  color: var(--print-ink-rest, #948c51);
   transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
 /* No rule between rows. Separation is the rhythm and the prints.
@@ -340,37 +359,27 @@
    for a visited state (it reads as *unavailable*), and dimming is backwards
    anyway: a voice you have heard is the one most likely to win. Hover and
    focus deliberately do NOT touch the ink, so this stays a three-value scale
-   the way a waveform editor's is — colourblind-safe, and readable as a chart
-   across 22 rows. Standing on a row is expressed by its ground, its tagline
-   and its actions; the print keeps saying what it always said.
+   the way a waveform editor's is, and it stays readable as a chart across 22
+   rows. Standing on a row is expressed by its ground, its tagline and its
+   actions; the print keeps saying what it always said.
 
-   0.82, not design §8's 0.72, and for the same reason the resting ink is not
-   0.22: the floor moved, so the step had to. §8 spends 0.50 of the scale on
-   never-heard → heard and 0.28 on heard → playing, because "play one voice and
-   its print inks in" is the whole of heard state ON THE RAIL. Raising the
-   resting ink to clear WCAG 1.4.11 left that step at 0.24 against a 0.28
-   playing step — the develop step became the SMALLER of the two, and on a
-   1.4px sparse trace whose density already varies per voice, heard rows could
-   not be picked out by eye at 1× even knowing which they were. The floor is
-   fixed by contrast and the top is pinned at 1.0, so `heard` is the only free
-   variable and it belongs nearer the top: 0.34 to develop, 0.18 to play.
-
-   PLAYING is the same variable at full, which is what makes playing → heard a
-   fade that explains itself — and it never depended on the size of that fade,
-   because what marks the playing row is the green playhead crossing its trace.
-   It sits last because it ties `.heard` on specificity and source order is
-   what decides. */
+   The DEVELOP step (never-heard → heard) is far the larger of the two — 19
+   points of CIE L* against 8, which is design §8's "more than twice" — because
+   "play one voice and its print inks in" is the whole of heard state ON THE
+   RAIL, while what marks the playing row is the green playhead crossing its
+   trace. `.playing` sits last because it ties `.heard` on specificity and
+   source order is what decides. */
 .voice-row:hover {
-  background: #f1efe9;
+  background: #f3eada;
 }
 .voice-row.focused {
-  background: #f1efe9;
+  background: #f3eada;
 }
 .voice-row.heard {
-  color: rgba(21, 23, 26, 0.82);
+  color: var(--print-ink-heard, #615c33);
 }
 .voice-row.playing {
-  color: #15171a;
+  color: var(--print-ink-play, #4d4927);
 }
 /* The current voice keeps its PITCH POSITION and is marked in place — pinning
    it to the top would break the chart the pitch order creates. */
@@ -397,7 +406,7 @@
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.012em;
-  color: #15171a;
+  color: #241d14;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -408,7 +417,7 @@
   flex: 1 1 auto;
   min-width: 0;
   font-size: 12px;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -426,12 +435,12 @@
    the row is the one you are looking at. */
 .voice-row-desc-dup {
   opacity: 1;
-  color: rgba(21, 23, 26, 0.38);
+  color: rgba(36, 29, 20, 0.38);
   transition: color 0.12s ease-out;
 }
 .voice-row:hover .voice-row-desc-dup,
 .voice-row.focused .voice-row-desc-dup {
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
 }
 .voice-row-badges {
   display: flex;
@@ -472,9 +481,11 @@
    thing on every voice, and the rail reads as one continuous descent.
 
    Ink is `currentColor` from the ROW, so the whole state of a print is one
-   class on its row. Colour, deliberately, carries nothing: this replaced 22
-   hash-derived gradients that looked like they encoded something and encoded
-   nothing. */
+   class on its row. Colour carries PITCH and nothing else — one ordered ramp
+   on the same 80–288 Hz axis the height uses, so the two encodings agree by
+   construction. That is the opposite of the 22 hash-derived gradients this
+   page deleted, which looked like they encoded something and encoded nothing;
+   there is still no per-voice identity colour here. */
 
 .voice-print {
   display: block;
@@ -483,7 +494,7 @@
 /* The trace is the voice; the reference line is the chart it hangs on, so it
    stays faint and does NOT take the playing row's ink. */
 .voice-print-ref {
-  stroke: #e6e3da;
+  stroke: #eadfcc;
   stroke-width: 1;
 }
 .voice-print-trace {
@@ -559,20 +570,20 @@
   flex-wrap: wrap;
   margin-top: 12px;
   padding: 10px 20px 6px 17px;
-  border-top: 1px solid #e6e3da;
+  border-top: 1px solid #eadfcc;
   font-size: 12px;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
 }
 .voice-rail-group-label {
   font-weight: 600;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   font-variant-numeric: tabular-nums;
 }
 .voice-menu-summary {
   margin-top: 10px;
   padding: 0 20px 0 17px;
   font-size: 12px;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   font-variant-numeric: tabular-nums;
 }
 /* The line that makes "✓ In menu" honest when there are more pins than seats.
@@ -587,7 +598,7 @@
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: rgba(21, 23, 26, 0.38);
+  color: rgba(36, 29, 20, 0.38);
   white-space: nowrap;
 }
 
@@ -597,12 +608,12 @@
   padding: 2px 0;
   font-size: 12px;
   line-height: 1.2;
-  color: rgba(21, 23, 26, 0.62);
+  color: rgba(36, 29, 20, 0.62);
   cursor: pointer;
   white-space: nowrap;
 }
 .voice-pin-toggle:hover:not(:disabled) {
-  color: #15171a;
+  color: #241d14;
 }
 .voice-pin-toggle.pinned {
   color: #2c5a42;
@@ -644,6 +655,8 @@
 .voice-rail:focus-visible .voice-row.focused {
   outline: 2px solid #2c5a42;
   outline-offset: -2px;
+  /* Follows the row's own corner, or the ring cuts across it. */
+  border-radius: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {
