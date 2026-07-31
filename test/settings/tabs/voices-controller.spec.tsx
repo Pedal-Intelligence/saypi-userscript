@@ -294,7 +294,7 @@ describe("VoicesController — the rail's order", () => {
     expect(current.classList.contains("voice-row-current")).toBe(true);
     expect(
       current.querySelector(".voice-row-inuse")!.getAttribute("data-i18n")
-    ).toBe("voicesSpeakingNow");
+    ).toBe("voicesInUse");
     // …and nobody else is marked.
     expect(qa(container, ".voice-row-inuse").length).toBe(1);
   });
@@ -318,6 +318,7 @@ describe("VoicesController — the rail's order", () => {
                 f0: [70, 70, 70, 70, 70],
                 amp: [0.8, 0.8, 0.8, 0.8, 0.8],
                 span: 1,
+                lead: 0,
                 medF0: 70, // deeper than Onyx's seeded 92.2
                 voicedRmsDb: -17,
               } as VoicePrint)
@@ -353,6 +354,7 @@ describe("VoicesController — the rail's order", () => {
       f0: [70],
       amp: [0.8],
       span: 1,
+      lead: 0,
       medF0: 70,
       voicedRmsDb: -17,
     } as VoicePrint);
@@ -918,7 +920,10 @@ describe("VoicesController — hosts with NO in-chat menu (Pi)", () => {
     });
     const { container } = await mount(deps);
     const note = q(container, ".voice-rail-builtins")!;
-    expect(note.textContent).toBe("voicesBuiltinsNote");
+    // The MENU-LESS sentence: Pi retired its in-chat voice menu (#573), so the
+    // shipped "…always appear in its menu too" would promise a surface that no
+    // longer exists — on the very paint that deliberately renders no pins.
+    expect(note.textContent).toBe("voicesBuiltinsNoteNoMenu");
     expect(note.dataset.i18n).toBeUndefined();
     // built-ins are host-owned: never a row.
     expect(rowOf(container, "voice1")).toBeNull();
@@ -1120,6 +1125,7 @@ describe("VoicesController — soundprints", () => {
     f0: Array.from({ length: 120 }, (_, i) => (i % 4 === 3 ? 0 : 92)),
     amp: Array.from({ length: 120 }, (_, i) => (i % 4 === 3 ? 0 : 0.8)),
     span: 1.2,
+    lead: 0.3,
     medF0: 92,
     voicedRmsDb: -15.4,
     ...over,
@@ -1601,5 +1607,280 @@ describe("VoicesController — stale stored voice snapshot", () => {
     // Playable from the FRESH sample_url, and ordered by the fresh entry.
     expect(row.dataset.printVoice).toBe("ash");
     expect(rowIds(container)).toEqual(["ash", "marin"]);
+  });
+});
+
+/**
+ * Review round 2 (2026-07-31). Each of these captures a defect four
+ * independent reviewers found in the rail as first built — the class of thing
+ * that passes tsc, passes the DOM assertions above, and is wrong only when a
+ * real person uses the page.
+ */
+describe("VoicesController — the compare readout survives being pressed", () => {
+  const catalog = () => [mkVoice("onyx"), mkVoice("ash"), mkVoice("marin")];
+
+  it("keeps DOM focus on the ⇄ button across the switch it performs", async () => {
+    // Pressing it calls switchBack() → audition() → updateControlBar(), so a
+    // readout that REBUILDS itself removes the element the user is standing on
+    // mid-activation: activeElement falls to <body>, and the next Tab restarts
+    // from the top of the settings document instead of ping-ponging A/B/A/B.
+    // (⇧Space never noticed — focus stays on the listbox.)
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("onyx") });
+    const { container } = await mount(deps);
+    press(container, "ArrowDown");
+    press(container, " ");
+    const swap = q(container, ".voice-compare-swap") as HTMLButtonElement;
+    swap.focus();
+    expect(document.activeElement).toBe(swap);
+
+    swap.click();
+    expect(deps.playPreview.mock.calls[1][0].id).toBe("onyx");
+    expect(document.activeElement, "focus must not fall to <body>").toBe(swap);
+    expect(swap.isConnected).toBe(true);
+    // The same node, now reading the other way round.
+    expect(swap.textContent).toContain("Onyx");
+    expect(swap.textContent).toContain("Ash");
+
+    swap.click();
+    expect(document.activeElement).toBe(swap);
+    expect(deps.playPreview.mock.calls[2][0].id).toBe("ash");
+  });
+});
+
+describe("VoicesController — the compare pair never seeds a dead control", () => {
+  it("offers no ⇄ when the incumbent is a host built-in with no row", async () => {
+    // seedPair took vm.currentId unconditionally while pushPair can only ever
+    // add a voice that just PLAYED — so the seed was the one entry point that
+    // could put an unplayable voice in the pair. switchBack() then bails at
+    // `!row?.playable`, and the button announces "Switch back to Aria" and
+    // does nothing.
+    const aria = mkVoice("voice1", { default: true, name: "Aria" });
+    const deps = makeDeps({
+      pi: [aria, mkVoice("onyx"), mkVoice("ash")],
+      piCurrent: aria,
+    });
+    const { container } = await mount(deps);
+    press(container, " "); // audition the focused row
+    expect(deps.playPreview).toHaveBeenCalledTimes(1);
+    expect(q(container, ".voice-compare-swap")).toBeNull();
+    press(container, " ", { shiftKey: true });
+    expect(deps.playPreview).toHaveBeenCalledTimes(1);
+  });
+
+  it("offers no ⇄ when the incumbent has no sample clip", async () => {
+    // The "No sample yet" group is reachable and keeps a working Use button,
+    // so its voices can be the current one.
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("legacy", { sample_url: undefined })],
+      piCurrent: mkVoice("legacy", { sample_url: undefined }),
+    });
+    const { container } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    expect(deps.playPreview).toHaveBeenCalledTimes(1);
+    expect(q(container, ".voice-compare-swap")).toBeNull();
+  });
+
+  it("still seeds the incumbent when it IS auditionable — the headline gesture", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("ash")],
+      piCurrent: mkVoice("onyx"),
+    });
+    const { container } = await mount(deps);
+    press(container, "ArrowDown");
+    press(container, " "); // ash
+    press(container, " ", { shiftKey: true }); // back to the incumbent
+    expect(deps.playPreview.mock.calls.map((c: any[]) => c[0].id)).toEqual([
+      "ash",
+      "onyx",
+    ]);
+  });
+});
+
+describe("VoicesController — the live region announces changes, not repaints", () => {
+  it("does not re-announce the playing voice when an unrelated row is pinned", async () => {
+    const deps = makeDeps({
+      claude: [mkVoice("ash"), mkVoice("coral"), mkVoice("marin")],
+      claudeCurrent: mkVoice("marin"),
+      claudeOverlay: { pinned: [], unpinned: [] },
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    rowOf(container, "ash")!.click();
+    emit(deps, 0, playingState("ash"));
+    const status = q(container, "#voice-status")!;
+
+    // textContent= removes and re-inserts the text node, which is a childList
+    // mutation inside aria-live="polite" — so an unconditional write makes a
+    // reader say "Playing Ash" again over whatever the user was doing.
+    let mutations = 0;
+    const observer = new MutationObserver((records) => {
+      mutations += records.length;
+    });
+    observer.observe(status, { childList: true, characterData: true, subtree: true });
+
+    pinToggleOf(container, "coral")!.click();
+    await flushAsync();
+    observer.takeRecords().forEach(() => (mutations += 1));
+    observer.disconnect();
+    expect(status.textContent).toContain("voicesNowPlaying");
+    expect(mutations, "an unrelated pin must not re-announce").toBe(0);
+  });
+
+  it("still announces when the playing voice actually changes", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("ash")] });
+    const { container } = await mount(deps);
+    const status = q(container, "#voice-status")!;
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+    expect(status.textContent).not.toBe("");
+    emit(deps, 0, IDLE_AUDITION);
+    expect(status.textContent).toBe("");
+  });
+});
+
+describe("VoicesController — arriving on the tab does not scroll the page away", () => {
+  const spyScroll = () => {
+    const calls: [string | undefined, any][] = [];
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (this: Element, arg?: any) {
+      calls.push([
+        (this as HTMLElement).dataset?.voiceId,
+        arg,
+      ]);
+    } as typeof original;
+    return { calls, restore: () => (Element.prototype.scrollIntoView = original) };
+  };
+
+  it("places focus on the current voice WITHOUT travelling to it", async () => {
+    // The settings page is the scroll container, so centring row 19 of 22 (the
+    // shipped Claude default is Marin) scrolls the tab heading, the subtitle
+    // and the host switcher off-screen before the user has touched anything —
+    // and §9 kept the switcher top-level precisely so "which assistant am I
+    // configuring" is never a footnote.
+    const scroll = spyScroll();
+    try {
+      const deps = makeDeps({
+        pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+        piCurrent: mkVoice("marin"),
+      });
+      const { container } = await mount(deps);
+      expect(focusedId(container)).toBe("marin");
+      expect(scroll.calls, "arrival is not a navigation").toEqual([]);
+    } finally {
+      scroll.restore();
+    }
+  });
+
+  it("brings the focused row into view the moment the reader asks for it", async () => {
+    const scroll = spyScroll();
+    try {
+      const deps = makeDeps({
+        pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+        piCurrent: mkVoice("marin"),
+      });
+      const { container } = await mount(deps);
+      press(container, " ");
+      expect(scroll.calls.map((c) => c[0])).toContain("marin");
+      // `nearest`, never `center`: a row already on screen must not move.
+      expect(scroll.calls.every(([, arg]) => arg?.block !== "center")).toBe(true);
+    } finally {
+      scroll.restore();
+    }
+  });
+
+  it("does not re-centre the page on every repaint", async () => {
+    const scroll = spyScroll();
+    try {
+      const deps = makeDeps({
+        pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+        piCurrent: mkVoice("marin"),
+      });
+      const { container } = await mount(deps);
+      (
+        rowOf(container, "onyx")!.querySelector(".voice-use") as HTMLButtonElement
+      ).click();
+      await flushAsync();
+      expect(scroll.calls.every(([, arg]) => arg?.block !== "center")).toBe(true);
+    } finally {
+      scroll.restore();
+    }
+  });
+});
+
+describe("VoicesController — Use commits to the row you clicked", () => {
+  it("moves focus to the row it was pressed on, not the one focus was left on", async () => {
+    // `.voice-row-actions` is revealed on :hover as well as .focused and the
+    // handler stopPropagation()s, so without an explicit focus the repaint
+    // carries the OLD focused row: the page scrolls back to your previous
+    // voice and the IN USE marker you just created ends up off-screen.
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("ash"), mkVoice("marin")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    expect(focusedId(container)).toBe("marin");
+    (
+      rowOf(container, "onyx")!.querySelector(".voice-use") as HTMLButtonElement
+    ).click();
+    await flushAsync();
+    expect(focusedId(container)).toBe("onyx");
+    expect(
+      rowOf(container, "onyx")!.classList.contains("voice-row-current")
+    ).toBe(true);
+  });
+});
+
+describe("VoicesController — a pin can outrun its seat, and the page says so", () => {
+  it("explains the pinned voice that did not fit, so '✓ In menu' stays honest", async () => {
+    // Reachable with NO user action: the server features four voices and the
+    // current voice takes the first of Claude's four seats.
+    const featured = (id: string) =>
+      mkVoice(id, { featured: true } as Partial<SpeechSynthesisVoiceRemote>);
+    const deps = makeDeps({
+      claude: [
+        featured("alloy"),
+        featured("ash"),
+        featured("ballad"),
+        featured("coral"),
+        mkVoice("marin"),
+      ],
+      claudeCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const overflow = q(container, ".voice-menu-overflow");
+    expect(overflow, "an unexplained overflow is a lying label").toBeTruthy();
+    expect(overflow!.textContent).toContain("voicesMenuOverflow");
+    // Substituted text carries no data-i18n (replaceI18n clobber guard).
+    expect(overflow!.dataset.i18n).toBeUndefined();
+  });
+
+  it("says nothing when every pin has a seat", async () => {
+    const deps = makeDeps({
+      claude: [mkVoice("ash"), mkVoice("coral")],
+      claudeCurrent: mkVoice("ash"),
+      claudeOverlay: { pinned: ["coral"], unpinned: [] },
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(q(container, ".voice-menu-overflow")).toBeNull();
+  });
+});
+
+describe("VoicesController — the IN USE badge does not claim to be speaking", () => {
+  it("marks the selected voice IN USE while a different row plays", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("marin")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+
+    const marin = rowOf(container, "marin")!;
+    expect(marin.querySelector(".voice-row-inuse")!.textContent).toBe(
+      "voicesInUse"
+    );
+    expect(marin.getAttribute("aria-label")).toBe("Marin — voicesInUse");
+    // …and the row that IS sounding is the only one reading as playing.
+    expect(rowOf(container, "onyx")!.classList.contains("playing")).toBe(true);
+    expect(marin.classList.contains("playing")).toBe(false);
   });
 });

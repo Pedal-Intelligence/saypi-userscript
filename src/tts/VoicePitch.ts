@@ -61,13 +61,71 @@ export function seedPitchFor(voice: {
 }
 
 /**
- * The pitch to sort a voice by, most trustworthy source first:
- * measured print → build-time seed → the reference line.
+ * How far a live measurement may sit from the seed and still be treated as
+ * AGREEING with it, in semitones.
+ *
+ * This is what actually delivers §7's promise that no user ever sees a
+ * reorder, and the naive "measured wins" rule does not. The seed was measured
+ * from the same clips with the same estimator, so the disagreement is never
+ * more than estimator noise — but it is never exactly zero either (this repo's
+ * own voicingFloor change moved Onyx 92.2 → 91 Hz, and its fixture span 1.37 →
+ * 1.16 s), and the catalog is full of pairs one or two Hz apart: Shimmer 157.6
+ * / Cedar 160.0, Finn 161.6 / Nova 161.6, Sage 183.9 / Ballad 186.0. A
+ * sub-Hz disagreement is enough to flip a near-tie, so with "measured wins"
+ * three adjacent pairs swap under the reader ~2 s after the tab opens, on
+ * every fresh profile, at exactly the moment they start reading.
+ *
+ * A semitone is 5.95 % — an order of magnitude more than the noise and an
+ * order of magnitude less than a real voice change. Inside it the seed is
+ * kept, so the order painted at 120 ms is the order that stays. Outside it the
+ * measurement wins: a re-rendered clip that genuinely moved a voice still
+ * moves it, once.
+ */
+export const SEED_AGREEMENT_SEMITONES = 1;
+/**
+ * …and the other end of the same band (design §12): a measurement more than a
+ * perfect fifth from the seed is not a voice that changed, it is an estimate
+ * that broke — an octave error is exactly 12 semitones away. Prefer the seed
+ * and say so once, because a silently misplaced voice is confusing and
+ * invisible.
+ */
+export const SEED_OVERRIDE_SEMITONES = 7;
+
+const semitonesApart = (a: number, b: number): number =>
+  Math.abs(12 * Math.log2(a / b));
+
+/** One line per voice per session — a warning nobody can act on twice. */
+const warned = new Set<string>();
+
+/**
+ * The pitch to sort a voice by.
+ *
+ * Measured print → build-time seed → the reference line, with the seed held
+ * against the measurement in both directions: kept when they agree (so the
+ * rail never re-sorts under the reader) and kept when they disagree wildly (so
+ * one bad estimate cannot misplace a voice).
  */
 export function pitchOf(
   voice: { id?: string | null },
   measured?: { medF0: number } | null
 ): number {
-  if (measured && measured.medF0 > 0) return measured.medF0;
-  return seedPitchFor(voice)?.hz ?? SEED_PLACEHOLDER_HZ;
+  const seed = seedPitchFor(voice)?.hz;
+  const hz = measured && measured.medF0 > 0 ? measured.medF0 : 0;
+  if (!hz) return seed ?? SEED_PLACEHOLDER_HZ;
+  // No seed: this voice was added after the release, and its own audio is the
+  // only thing that knows where it belongs. It moves once, on one visit ever.
+  if (seed === undefined) return hz;
+  const apart = semitonesApart(hz, seed);
+  if (apart <= SEED_AGREEMENT_SEMITONES) return seed;
+  if (apart >= SEED_OVERRIDE_SEMITONES) {
+    const id = String(voice?.id ?? "");
+    if (!warned.has(id)) {
+      warned.add(id);
+      console.warn(
+        `Voice "${id}" measured ${hz} Hz against a seeded ${seed} Hz (${apart.toFixed(1)} semitones apart); keeping the seed. Suspect an octave error or a re-rendered sample clip.`
+      );
+    }
+    return seed;
+  }
+  return hz;
 }

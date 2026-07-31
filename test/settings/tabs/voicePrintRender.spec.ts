@@ -43,6 +43,7 @@ const mkPrint = (over: Partial<VoicePrint> = {}): VoicePrint => ({
   f0: [],
   amp: [],
   span: 1,
+  lead: 0,
   medF0: 155,
   voicedRmsDb: -15,
   ...over,
@@ -207,6 +208,28 @@ describe("the svg", () => {
     paintPrintTrace(svg, null, PRINT_WIDTHS.md);
     expect(svg.querySelectorAll(".voice-print-trace rect")).toHaveLength(0);
     expect(svg.querySelector(".voice-print-ref")).toBeTruthy();
+  });
+
+  it("publishes the three numbers the playhead is a clock for", () => {
+    // The head is CSS, but its geometry is measured: how far it travels, how
+    // long that takes, and — the one that registers it against the audio —
+    // when it starts. `.playing` lands at clip t=0 while trace x=0 is the
+    // first VOICED frame, 0.76 s later on Onyx, so without the lead the head
+    // is two thirds across the trace before the voice is audible.
+    const svg = createPrintSvg(PRINT_WIDTHS.lg);
+    const onyx = fixturePrint("onyx");
+    paintPrintTrace(svg, onyx, PRINT_WIDTHS.lg);
+    expect(svg.style.getPropertyValue("--print-span")).toBe(
+      `${onyx.span.toFixed(2)}s`
+    );
+    expect(svg.style.getPropertyValue("--print-lead")).toBe("0.76s");
+    expect(svg.style.getPropertyValue("--print-trace-w")).toMatch(/^\d+\.\dpx$/);
+    // An unmeasured print publishes none of them, so it never gets a head that
+    // would be pretending.
+    paintPrintTrace(svg, null, PRINT_WIDTHS.lg);
+    expect(svg.style.getPropertyValue("--print-lead")).toBe("");
+    expect(svg.style.getPropertyValue("--print-span")).toBe("");
+    expect(svg.style.getPropertyValue("--print-trace-w")).toBe("");
   });
 
   it("takes its ink from currentColor, so state is one class on the container", () => {

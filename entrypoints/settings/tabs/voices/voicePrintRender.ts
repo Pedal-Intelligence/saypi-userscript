@@ -178,12 +178,18 @@ export function createPrintSvg(width: number = PRINT_WIDTHS.md): SVGSVGElement {
 /**
  * Draw (or redraw) a measured print into an existing svg.
  *
- * Also publishes the two numbers the playhead needs — how far it travels
- * (`--print-trace-w`, the drawn trace's width) and how long that takes
- * (`--print-span`, the clip's own measured speech span). Both come from the
- * measurement, so the head is a clock for the drawing rather than a fixed
- * animation pretending to be one; an unmeasured print publishes neither and
- * gets no head.
+ * Also publishes the three numbers the playhead needs — how far it travels
+ * (`--print-trace-w`, the drawn trace's width), how long that takes
+ * (`--print-span`, the clip's own measured speech span) and **when it starts**
+ * (`--print-lead`, the leading silence the trace was trimmed of). All three
+ * come from the measurement, so the head is a clock for the drawing rather
+ * than a fixed animation pretending to be one; an unmeasured print publishes
+ * none of them and gets no head.
+ *
+ * The lead is what registers the clock against the audio. `.playing` lands at
+ * clip t=0, but trace x=0 is the first VOICED frame — 0.76 s later on Onyx.
+ * Without the delay the head is already two thirds across the trace at the
+ * instant the voice becomes audible.
  */
 export function paintPrintTrace(
   svg: SVGSVGElement,
@@ -196,6 +202,7 @@ export function paintPrintTrace(
   if (!print) {
     svg.style.removeProperty("--print-trace-w");
     svg.style.removeProperty("--print-span");
+    svg.style.removeProperty("--print-lead");
     return;
   }
   svg.style.setProperty(
@@ -203,6 +210,7 @@ export function paintPrintTrace(
     `${traceWidth(print.span, width).toFixed(1)}px`
   );
   svg.style.setProperty("--print-span", `${print.span.toFixed(2)}s`);
+  svg.style.setProperty("--print-lead", `${print.lead.toFixed(2)}s`);
   for (const bar of printBars(print, width)) {
     const rect = document.createElementNS(SVG_NS, "rect");
     rect.setAttribute("x", bar.x.toFixed(2));

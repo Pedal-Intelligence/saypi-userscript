@@ -141,8 +141,6 @@ describe("the stage and the slots section are retired", () => {
     "voicesStageEmptyNoteSilent",
     "voicesInHostMenu",
     "voicesMenuHint",
-    "voicesMenuOverflow",
-    "voicesMenuOverflowOne",
   ];
 
   it.each(retired)("%s is no longer rendered by the controller", (key) => {
@@ -166,7 +164,6 @@ describe("the strings the rail still reuses, unchanged in 31 locales", () => {
     "voicesSectionTitle",
     "voicesUseShort",
     "voicesUseOnHost",
-    "voicesSpeakingNow",
     "voicesAddToMenuShort",
     "voicesInMenuShort",
     "voicesAddVoiceToMenu",
@@ -187,7 +184,65 @@ describe("the strings the rail still reuses, unchanged in 31 locales", () => {
     ).toBe(true);
   });
 
-  it("keeps voicesSpeakingNow as the IN USE marker — same promise, new place", () => {
+});
+
+describe("the badge on the current voice says IN USE, not 'Speaking now'", () => {
+  it("gets its own key, because the rail's rows literally speak", () => {
+    // Design §1 and §11 both draw this badge as `IN USE`. Reusing the shipped
+    // `voicesSpeakingNow` was tempting — 31 locales already carry it — but it
+    // was written for `.voice-card-state` on a page with no per-row playing
+    // state to collide with. On the rail, pressing Space on Onyx would leave
+    // the Marin row announcing itself as "Marin — Speaking now" in the accent
+    // that means *now*, while `#voice-status` says "Playing Onyx": two rows
+    // claiming to speak, one of them silent. At rest — nearly all the time —
+    // it would claim speech with nothing playing at all.
+    expect(en.voicesInUse?.message).toBe("In use");
+    expect(en.voicesInUse.message).not.toMatch(/\$.+\$/);
+    expect(controllerSrc).toMatch(/"voicesInUse"/);
+    expect(controllerSrc).not.toMatch(/"voicesSpeakingNow"/);
+    // The key itself stays in the locale — it costs nothing and 31 locales
+    // carry it — it just is not this badge.
     expect(en.voicesSpeakingNow?.message).toBe("Speaking now");
+  });
+});
+
+describe("a menu-less host gets a note about its own built-ins that is true", () => {
+  it("does not promise Pi a menu it retired in 2026 (#573)", () => {
+    // The shipped note ends "…always appear in its menu too", written to
+    // follow a list of menu slots. Pi has no in-chat voice menu, which is why
+    // `vm.menu` is null there and why the same paint renders no pin toggles at
+    // all — so the sentence promised a surface that does not exist, and its
+    // trailing "too" dangled with nothing above it.
+    expect(en.voicesBuiltinsNote?.message).toBe(
+      "$host$'s own built-in voices always appear in its menu too."
+    );
+    expect(en.voicesBuiltinsNoteNoMenu?.message).toBe(
+      "$host$ also has its own built-in voices, which aren't listed here."
+    );
+    expect(en.voicesBuiltinsNoteNoMenu.message).not.toMatch(/menu/i);
+    expect(placeholderSlots("voicesBuiltinsNoteNoMenu")).toEqual([1]);
+    expect(controllerSrc).not.toMatch(
+      /"data-i18n",\s*"voicesBuiltinsNoteNoMenu"/
+    );
+  });
+});
+
+describe("the overflow note comes back, because a pin can outrun its seat", () => {
+  it("is rendered again, and is what makes '✓ In menu' honest", () => {
+    // A row's pin button is labelled from the PIN, which it has to be — it is
+    // the control that flips the pin. But pins can outnumber seats with no
+    // user action at all (four server-featured voices plus a current voice
+    // that takes the first seat), and then a row reads "✓ In menu" while the
+    // summary beneath it lists four other names. This sentence is what closes
+    // that gap; it was retired with the slots SECTION, not with its job.
+    expect(en.voicesMenuOverflowOne?.message).toBe(
+      "1 more pinned voice is waiting beyond the menu's $cap$ slots."
+    );
+    expect(placeholderSlots("voicesMenuOverflowOne")).toEqual([1]);
+    expect(placeholderSlots("voicesMenuOverflow")).toEqual([1, 2]);
+    expect(controllerSrc).toMatch(/"voicesMenuOverflowOne"/);
+    for (const key of ["voicesMenuOverflow", "voicesMenuOverflowOne"]) {
+      expect(controllerSrc).not.toMatch(new RegExp(`"data-i18n",\\s*"${key}"`));
+    }
   });
 });

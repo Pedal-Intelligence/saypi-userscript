@@ -1032,6 +1032,10 @@
     "message": "Speaking now",
     "description": "State label on the host's currently selected voice in the settings Voices studio (menu slot and voice card)."
   },
+  "voicesInUse": {
+    "message": "In use",
+    "description": "Persistent badge on the host's currently selected voice in the settings Voices list, rendered uppercase. Deliberately NOT 'Speaking now': on this page rows play their sample clips, so a selected-but-silent voice must not claim to be speaking while a different row is."
+  },
   "voicesInHostMenu": {
     "message": "In $host$'s menu",
     "description": "Section heading above the menu slots row in the settings Voices studio; $host$ is the assistant.",
@@ -1153,6 +1157,16 @@
   "voicesBuiltinsNote": {
     "message": "$host$'s own built-in voices always appear in its menu too.",
     "description": "Note under the menu slots for hosts that ship native voices (e.g. Pi's 8 built-ins), which the studio doesn't manage; $host$ is the assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "message": "$host$ also has its own built-in voices, which aren't listed here.",
+    "description": "Variant of voicesBuiltinsNote for a host with no in-chat voice menu (Pi retired its menu in 2026), where the original's promise that the built-ins 'appear in its menu' would be false; $host$ is the assistant.",
     "placeholders": {
       "host": {
         "content": "$1",

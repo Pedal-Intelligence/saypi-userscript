@@ -222,7 +222,20 @@
   padding: 0 20px 0 14px;
   border-left: 3px solid transparent;
   cursor: pointer;
-  color: rgba(21, 23, 26, 0.22);
+  /* The resting ink of the soundprint — the page's only data. #15171A crosses
+     WCAG 1.4.11's 3:1 for a graphic you need in order to understand the
+     content at alpha 0.46 on white and 0.46 on the warm ground; 0.48 clears
+     both with headroom, and a trace you cannot tell from its own reference
+     line is not a chart.
+
+     Design §8's 0.22 is the "never heard" value of a THREE-state ink whose
+     other two states arrive with heard memory (slice 4). Until they do, 0.22
+     is not a state — it is the permanent appearance of every row that is not
+     under the cursor, and it measures 1.60:1 against the card, below the
+     1.28:1 reference line it is supposed to be read against. When slice 4
+     lands, "heard" darkens from here; the floor stays at the legibility
+     threshold rather than dropping under it. */
+  color: rgba(21, 23, 26, 0.48);
   transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
 /* No rule between rows. Separation is the rhythm and the prints.
@@ -234,11 +247,11 @@
    `:hover` on specificity and source order is what decides. */
 .voice-row:hover {
   background: #f1efe9;
-  color: rgba(21, 23, 26, 0.5);
+  color: rgba(21, 23, 26, 0.62);
 }
 .voice-row.focused {
   background: #f1efe9;
-  color: rgba(21, 23, 26, 0.5);
+  color: rgba(21, 23, 26, 0.62);
 }
 .voice-row.playing {
   color: #15171a;
@@ -348,16 +361,33 @@
 }
 /* The playhead: a clock, linear, no easing, and only on the playing row. It
    travels the DRAWN trace (--print-trace-w) over the clip's own measured span
-   (--print-span), both published by paintPrintTrace from the measurement — so
-   an unmeasured print, which sets neither, never gets a head that would be
-   pretending. */
+   (--print-span), starting after the clip's own leading silence
+   (--print-lead) — all three published by paintPrintTrace from the
+   measurement, so an unmeasured print, which sets none of them, never gets a
+   head that would be pretending.
+
+   The delay is what makes it a clock rather than a decoration. `.playing`
+   lands at clip t=0, but the trace was trimmed to the speech span, so x=0 is
+   the first VOICED frame: 0.76s into Onyx's 2.71s file. Without the delay the
+   head is 65% across the trace before the voice is audible and parked at the
+   end while it is still speaking. With it, the head leaves x=0 exactly as the
+   voice starts and arrives exactly as it stops — the trailing silence is the
+   only time it sits still, which is honest, because the trace has nothing
+   drawn there either. Longhands, not the shorthand: two var()-valued <time>s
+   in one `animation:` declaration are positional and one reordering edit
+   would silently swap duration for delay. */
 .voice-print-head {
   fill: #2c5a42;
   opacity: 0;
 }
 .voice-row.playing .voice-print-head {
   opacity: 1;
-  animation: voice-print-sweep var(--print-span, 1.5s) linear 1 forwards;
+  animation-name: voice-print-sweep;
+  animation-duration: var(--print-span, 1.5s);
+  animation-delay: var(--print-lead, 0s);
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
 }
 @keyframes voice-print-sweep {
   from {
@@ -393,6 +423,11 @@
   font-size: 12px;
   color: rgba(21, 23, 26, 0.62);
   font-variant-numeric: tabular-nums;
+}
+/* The line that makes "✓ In menu" honest when there are more pins than seats.
+   Its own sentence, set apart from the seat list rather than run into it. */
+.voice-menu-overflow {
+  margin-left: 10px;
 }
 
 /* --- chips + actions -------------------------------------------------------- */

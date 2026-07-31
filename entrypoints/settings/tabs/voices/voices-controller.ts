@@ -206,6 +206,20 @@ export class VoicesController {
    */
   private focusedVoiceId: string | null = null;
   /**
+   * Has the reader gone anywhere on THIS host's rail yet?
+   *
+   * The settings page is the scroll container, so scrolling a row into view
+   * scrolls the whole document — including the heading and the host switcher,
+   * which §9 kept top-level precisely so "which assistant am I configuring" is
+   * never a footnote. Centring the current voice on arrival (Marin is row 19
+   * of 22, the shipped default) takes the tab heading, the subtitle, the
+   * switcher and the app header off-screen before the user has touched
+   * anything. So the first paint of a host places focus without travelling to
+   * it; the `Your voice ↗` control, the first `Space` and the first arrow all
+   * scroll it into view the moment the reader asks to go there.
+   */
+  private landed = false;
+  /**
    * The arming rule (design §3). Arrow keys move focus silently until the user
    * has explicitly played something in this session; after that, focus
    * auditions. Buys screen-reader safety, autoplay sticky activation, and no
@@ -336,6 +350,7 @@ export class VoicesController {
     // the new host has its own incumbent to focus and to seed the pair with.
     this.stopAudition();
     this.focusedVoiceId = null;
+    this.landed = false;
     void this.render();
   }
 
@@ -432,7 +447,11 @@ export class VoicesController {
     const wanted = this.focusedVoiceId ?? vm.currentId;
     const at = this.rows.findIndex((row) => row.voice.id === wanted);
     this.focusIndex = at >= 0 ? at : 0;
-    this.applyFocus({ block: "center" });
+    // `nearest`, never `center`, and not at all on arrival: a repaint is not a
+    // navigation, and every one of them (choosing a voice, a late measurement
+    // settling the order) would otherwise re-centre the page under the reader.
+    this.applyFocus({ block: "nearest", scroll: this.landed });
+    this.landed = true;
 
     // Playback state lives OUTSIDE the DOM — the sequencer owns it, and it
     // survives this repaint (choosing the voice you are listening to must not
@@ -440,7 +459,7 @@ export class VoicesController {
     // a clip goes on sounding with nothing on screen saying so.
     this.applyAuditionState();
 
-    if (keepFocus) rail.focus();
+    if (keepFocus) rail.focus({ preventScroll: true });
   }
 
   private renderEmptyState(
@@ -546,31 +565,55 @@ export class VoicesController {
       chip.classList.toggle("lit", this.arrowAudition && this.armed);
     }
     const compare = bar.querySelector<HTMLElement>(".voice-compare");
-    if (!compare) return;
-    compare.innerHTML = "";
+    if (compare) this.updateCompareReadout(compare);
+  }
+
+  /**
+   * The live `⇄ Onyx ⟷ Coral` readout, PATCHED rather than rebuilt.
+   *
+   * Rebuilding it is the obvious implementation and it breaks the gesture the
+   * readout exists to advertise: pressing the button calls `switchBack()`,
+   * which auditions, which comes straight back here — so a rebuild removes the
+   * element the user is standing on mid-activation, DOM focus falls to
+   * `<body>`, and the next Tab restarts from the top of the settings document
+   * instead of ping-ponging A/B/A/B. (`⇧Space` never noticed, because focus
+   * stays on the listbox.) Patching in place keeps the node, so the button
+   * flips its own label under the user's finger and stays focused.
+   */
+  private updateCompareReadout(compare: HTMLElement): void {
     const [near, far] = this.pair;
+    let swap = compare.querySelector<HTMLButtonElement>(".voice-compare-swap");
     // Nothing to switch back TO yet — and a control that would do nothing is
     // worse than one that has not appeared.
-    if (!near || !far) return;
-    const swap = document.createElement("button");
-    swap.type = "button";
-    swap.classList.add("voice-compare-swap");
+    if (!near || !far) {
+      swap?.remove();
+      return;
+    }
+    if (!swap) {
+      swap = document.createElement("button");
+      swap.type = "button";
+      swap.classList.add("voice-compare-swap");
+      // Glyph text, deliberately untranslated: names are proper nouns and
+      // `⇄`/`⟷` are glyphs (design §13).
+      const glyph = document.createElement("span");
+      glyph.setAttribute("aria-hidden", "true");
+      glyph.classList.add("voice-compare-glyph");
+      glyph.textContent = "⇄";
+      swap.appendChild(glyph);
+      const names = document.createElement("span");
+      names.classList.add("voice-compare-names");
+      swap.appendChild(names);
+      swap.addEventListener("click", () => this.switchBack());
+      compare.appendChild(swap);
+    }
     swap.setAttribute(
       "aria-label",
       getMessage("voicesSwitchBackTo", [this.nameOf(far)])
     );
-    // Glyph text, deliberately untranslated: names are proper nouns and
-    // `⇄`/`⟷` are glyphs (design §13).
-    const glyph = document.createElement("span");
-    glyph.setAttribute("aria-hidden", "true");
-    glyph.classList.add("voice-compare-glyph");
-    glyph.textContent = "⇄";
-    swap.appendChild(glyph);
-    swap.appendChild(
-      document.createTextNode(`${this.nameOf(near)} ⟷ ${this.nameOf(far)}`)
-    );
-    swap.addEventListener("click", () => this.switchBack());
-    compare.appendChild(swap);
+    const names = swap.querySelector<HTMLElement>(".voice-compare-names");
+    if (names) {
+      names.textContent = `${this.nameOf(near)} ⟷ ${this.nameOf(far)}`;
+    }
   }
 
   private nameOf(voiceId: string): string {
@@ -663,8 +706,17 @@ export class VoicesController {
     if (vm.hasBuiltins) {
       const note = document.createElement("span");
       note.classList.add("voice-rail-builtins");
-      // No data-i18n: substituted ($host$) text.
-      note.textContent = getMessage("voicesBuiltinsNote", [vm.host.label]);
+      // The shipped note ends "…always appear in its menu too" — written to
+      // follow a list of menu slots, on a page that had one. On a menu-less
+      // host it promises a surface that no longer exists (Pi retired its
+      // in-chat voice menu on 2026-07-30, #573, which is why `vm.menu` is
+      // null there and why the same paint renders no pin toggles at all), and
+      // the trailing "too" dangles with nothing above it. `vm.menu` is the one
+      // menu-less signal, so it picks the sentence as well.
+      // No data-i18n on either: substituted ($host$) text.
+      note.textContent = vm.menu
+        ? getMessage("voicesBuiltinsNote", [vm.host.label])
+        : getMessage("voicesBuiltinsNoteNoMenu", [vm.host.label]);
       divider.appendChild(note);
     }
     return divider;
@@ -701,9 +753,7 @@ export class VoicesController {
     // badges and its two buttons.
     el.setAttribute(
       "aria-label",
-      isCurrent
-        ? `${voice.name} — ${getMessage("voicesSpeakingNow")}`
-        : voice.name
+      isCurrent ? `${voice.name} — ${getMessage("voicesInUse")}` : voice.name
     );
     if (inNoSampleGroup) {
       el.setAttribute("aria-describedby", "voice-nosample-label");
@@ -719,7 +769,7 @@ export class VoicesController {
       el.appendChild(print);
       el.addEventListener("click", () => {
         this.focusRow(index, { block: "nearest" });
-        this.rail?.focus();
+        this.rail?.focus({ preventScroll: true });
         this.audition(voice);
       });
     } else {
@@ -731,7 +781,7 @@ export class VoicesController {
       el.appendChild(gap);
       el.addEventListener("click", () => {
         this.focusRow(index, { block: "nearest" });
-        this.rail?.focus();
+        this.rail?.focus({ preventScroll: true });
       });
     }
 
@@ -758,10 +808,21 @@ export class VoicesController {
     badges.classList.add("voice-row-badges");
     if (getVoiceTier(voice) === "hd") badges.appendChild(this.renderTierChip());
     if (isCurrent) {
+      // IN USE, not "Speaking now" (design §1/§11 draw this badge as `IN USE`).
+      // Reusing the shipped `voicesSpeakingNow` was tempting — 31 locales
+      // already carry it — but it was accurate on `.voice-card-state`, a page
+      // with no per-row playing state to collide with. Here rows literally
+      // speak: press Space on Onyx and the Marin row would announce itself as
+      // "Marin — Speaking now" in the accent that means *now*, while `#voice-
+      // status` says "Playing Onyx". Two rows claiming to speak, one of them
+      // silent, and in the resting state — which is nearly all of the time —
+      // the badge claims speech when nothing is playing at all. It is also
+      // ~2× the width the 96px actions row was drawn around, which is what
+      // truncated the current voice's tagline mid-word.
       const inUse = document.createElement("span");
       inUse.classList.add("voice-row-inuse");
-      inUse.setAttribute("data-i18n", "voicesSpeakingNow");
-      inUse.textContent = getMessage("voicesSpeakingNow");
+      inUse.setAttribute("data-i18n", "voicesInUse");
+      inUse.textContent = getMessage("voicesInUse");
       badges.appendChild(inUse);
     }
     el.appendChild(badges);
@@ -784,6 +845,14 @@ export class VoicesController {
       use.textContent = getMessage("voicesUseShort");
       use.addEventListener("click", (event) => {
         event.stopPropagation();
+        // Committing to a row IS standing on it. The actions are revealed on
+        // :hover as well as .focused, and this handler stops the click from
+        // reaching the row's own listener — so without this, clicking Use on a
+        // merely-hovered row leaves focus on wherever it was, and the repaint
+        // that follows carries THAT row's focus and scrolls the page back to
+        // it: the new IN USE marker you just created ends up off-screen and
+        // the keyboard is on a different voice than the one you chose.
+        this.focusRow(index, { block: "nearest" });
         void this.useVoice(voice);
       });
       actions.appendChild(use);
@@ -867,6 +936,30 @@ export class VoicesController {
         .map((voice) => voice.name)
         .join(", ")}`;
       line.appendChild(names);
+    }
+    // The one line that makes "✓ In menu" honest, and the reason these two
+    // keys come back off §13's retired list.
+    //
+    // A row's pin button is labelled from `vm.pinned`, not from `vm.menu
+    // .seated`, and it has to be: it is the control that flips the pin, so it
+    // must report the pin. But pins can outnumber the seats — the server marks
+    // four voices `featured` and the user's current voice takes the first seat,
+    // or the user pins four on Claude and then uses a fifth — and then a row
+    // reads "✓ In menu" while the summary directly beneath it lists four other
+    // names. `overflowCount` was still computed and had no consumer anywhere;
+    // on `main` it rendered exactly this sentence, which is what explained the
+    // gap. No data-i18n: substituted text.
+    if (vm.menu.overflowCount > 0) {
+      const overflow = document.createElement("span");
+      overflow.classList.add("voice-menu-overflow");
+      overflow.textContent =
+        vm.menu.overflowCount === 1
+          ? getMessage("voicesMenuOverflowOne", [String(vm.menu.cap)])
+          : getMessage("voicesMenuOverflow", [
+              String(vm.menu.overflowCount),
+              String(vm.menu.cap),
+            ]);
+      line.appendChild(overflow);
     }
     return line;
   }
@@ -1080,7 +1173,11 @@ export class VoicesController {
 
   private focusRow(
     index: number,
-    opts: { block?: ScrollLogicalPosition; audition?: boolean } = {}
+    opts: {
+      block?: ScrollLogicalPosition;
+      audition?: boolean;
+      scroll?: boolean;
+    } = {}
   ): void {
     if (index < 0 || index >= this.rows.length) return;
     this.focusIndex = index;
@@ -1093,7 +1190,9 @@ export class VoicesController {
     }
   }
 
-  private applyFocus(opts: { block?: ScrollLogicalPosition } = {}): void {
+  private applyFocus(
+    opts: { block?: ScrollLogicalPosition; scroll?: boolean } = {}
+  ): void {
     this.rows.forEach((row, index) => {
       const focused = index === this.focusIndex;
       row.el.classList.toggle("focused", focused);
@@ -1112,7 +1211,9 @@ export class VoicesController {
       else this.rail.removeAttribute("aria-activedescendant");
     }
     // jsdom has no layout and therefore no scrollIntoView.
-    row?.el.scrollIntoView?.({ block: opts.block ?? "nearest" });
+    if (opts.scroll !== false) {
+      row?.el.scrollIntoView?.({ block: opts.block ?? "nearest" });
+    }
     this.updateControlBar();
   }
 
@@ -1123,7 +1224,7 @@ export class VoicesController {
     const at = this.rows.findIndex((row) => row.voice.id === currentId);
     if (at < 0) return;
     this.focusRow(at, { block: "center" });
-    this.rail?.focus();
+    this.rail?.focus({ preventScroll: true });
   }
 
   private useFocused(): void {
@@ -1137,6 +1238,11 @@ export class VoicesController {
   private toggleFocusedAudition(): void {
     const row = this.rows[this.focusIndex];
     if (!row?.playable) return;
+    // The first thing the reader does is the first time they ask to travel:
+    // arrival deliberately left focus off-screen rather than scrolling the
+    // heading away, so playing a voice you cannot see is the one case to
+    // close. Idempotent — the row is already focused.
+    this.applyFocus({ block: "nearest" });
     // Space ARMS the rail either way — the reader has said "play things".
     this.armed = true;
     if (this.auditionState.playingVoiceId === row.voice.id) {
@@ -1215,11 +1321,23 @@ export class VoicesController {
   /**
    * Seeded with the incumbent, once per host: the first `↓` `⇧Space` is then
    * incumbent-vs-challenger — the actual decision — with zero setup.
+   *
+   * Only ever with an AUDITIONABLE incumbent, and that guard is the whole
+   * difference between the design's headline gesture and a dead control. The
+   * pair's other slot is only ever filled by `pushPair` from a voice that just
+   * played, so it can't be unplayable; the seed is the one entry point that
+   * does not go through playback. A host built-in, a stale stored preference
+   * and a `sample_url`-less voice are all current voices with no playable row
+   * — and seeding any of them renders `⇄ Onyx ⟷ Aria` with a "Switch back to
+   * Aria" label over a `switchBack()` that bails silently.
    */
   private seedPair(hostId: VoiceHostId, vm: StudioViewModel): void {
     if (this.pairHost === hostId) return;
     this.pairHost = hostId;
-    this.pair = [vm.currentId, null];
+    const incumbent = vm.catalog.find(
+      (voice) => voice.id === vm.currentId && !!voice.sample_url
+    );
+    this.pair = [incumbent?.id ?? null, null];
   }
 
   /**
@@ -1233,10 +1351,9 @@ export class VoicesController {
     this.container
       .querySelectorAll("[data-print-voice].playing")
       .forEach((row) => row.classList.remove("playing"));
-    const status = this.container.querySelector<HTMLElement>("#voice-status");
     const playing = this.auditionState.playingVoiceId;
     if (!playing) {
-      if (status) status.textContent = "";
+      this.announce("");
       // A reorder that waited for the audio to stop can land now.
       if (this.orderDirty) this.requestSettle();
       return;
@@ -1246,11 +1363,24 @@ export class VoicesController {
       .forEach((row) => row.classList.add("playing"));
     // The one thing worth announcing. `#voice-status` carries no data-i18n:
     // this string is substituted, and replaceI18n would erase the name.
-    if (status) {
-      status.textContent = getMessage("voicesNowPlaying", [
-        this.nameOf(playing),
-      ]);
-    }
+    this.announce(getMessage("voicesNowPlaying", [this.nameOf(playing)]));
+  }
+
+  /**
+   * Write the live region ONLY when what it says changes.
+   *
+   * `textContent =` removes the existing text node and inserts a new one, which
+   * is a childList mutation inside `aria-live="polite"` — so an unconditional
+   * write re-announces "Playing Ash" every time anything repaints, including a
+   * pin toggle on an unrelated row and the optimistic-revert that follows a
+   * failed one. This is the same defect §9 moved the live region off
+   * `#voice-studio` to avoid; moving it shrank the payload without making the
+   * write conditional.
+   */
+  private announce(text: string): void {
+    const status = this.container.querySelector<HTMLElement>("#voice-status");
+    if (!status || status.textContent === text) return;
+    status.textContent = text;
   }
 
   // --- subtitles ------------------------------------------------------------

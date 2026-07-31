@@ -150,6 +150,32 @@ describe("ink is one variable in three steps", () => {
     expect(playing).toBe(1);
   });
 
+  it("keeps the soundprint legible at rest, not only under the cursor", () => {
+    // The trace is the page's ONLY data and it fills from the row's
+    // currentColor, so the resting ink is what a reader who is not hovering
+    // anything actually sees on 21 of 22 rows. WCAG 1.4.11 asks 3:1 of a
+    // graphic you need in order to understand the content; below that the
+    // traces read as grey dust and the 1.28:1 reference line becomes the most
+    // legible mark on the row — a chart whose gridlines outrank its data.
+    //
+    // Design §8's 0.22 is the "never heard" step of a three-state ink whose
+    // other two steps arrive with heard memory (slice 4). Until they do it is
+    // not a state, it is the page.
+    const resting = inkDensity(ruleBody(".voice-row"));
+    // Both grounds: the design's warm #FBFAF7, and the white preference card
+    // the rail actually sits on today (only the control bar took the ground).
+    for (const ground of [[255, 255, 255], GROUND]) {
+      expect(
+        contrast(over(INK, resting, ground), ground),
+        `resting ink ${resting} on rgb(${ground})`
+      ).toBeGreaterThanOrEqual(3);
+    }
+    // …and it must still out-contrast the chart it hangs on.
+    expect(
+      contrast(over(INK, resting, [255, 255, 255]), hexRgb("#e6e3da"))
+    ).toBeGreaterThan(2);
+  });
+
   it("declares .playing after :hover, because they tie on specificity", () => {
     expect(css.indexOf("\n.voice-row.playing {")).toBeGreaterThan(
       css.indexOf("\n.voice-row:hover {")
@@ -233,12 +259,26 @@ describe("one green, one meaning: now", () => {
 
 describe("the playhead is a clock, and reduced motion slows it rather than killing it", () => {
   it("travels the DRAWN trace over the clip's own measured span", () => {
-    // Both custom properties are published by paintPrintTrace from the
+    // All three custom properties are published by paintPrintTrace from the
     // measurement, so an unmeasured print never gets a head that pretends.
     const sweep = css.slice(css.indexOf("@keyframes voice-print-sweep"));
     expect(sweep).toMatch(/translateX\(var\(--print-trace-w/);
-    expect(declarations).toMatch(/animation:\s*voice-print-sweep var\(--print-span/);
-    expect(declarations).toMatch(/voice-print-sweep var\(--print-span[^;]*linear/);
+    const head = ruleBody(".voice-row.playing .voice-print-head");
+    expect(head).toMatch(/animation-name:\s*voice-print-sweep/);
+    expect(head).toMatch(/animation-duration:\s*var\(--print-span/);
+    expect(head).toMatch(/animation-timing-function:\s*linear/);
+  });
+
+  it("waits out the clip's leading silence before it starts", () => {
+    // The trace was trimmed to the speech span, so x=0 is the first VOICED
+    // frame — 0.76s into Onyx's 2.71s file, and 0.07s into Addison's. The
+    // animation begins when `.playing` lands, which is clip t=0, so the delay
+    // is the only thing registering the clock against the audio. Longhands,
+    // never the shorthand: two var()-valued <time>s in one `animation:` are
+    // positional, and swapping them silently swaps duration for delay.
+    const head = ruleBody(".voice-row.playing .voice-print-head");
+    expect(head).toMatch(/animation-delay:\s*var\(--print-lead/);
+    expect(head).not.toMatch(/(?:^|[^-])animation:/);
   });
 
   it("hides the head everywhere except the playing row", () => {

@@ -96,6 +96,18 @@ export interface VoicePrint {
   amp: number[];
   /** Seconds from the first to the last gated frame. Print width is clip length. */
   span: number;
+  /**
+   * Seconds of leading silence trimmed off the front — i.e. the clip time at
+   * which frame 0 of `f0`/`amp` was measured.
+   *
+   * Load-bearing, not bookkeeping: the trace starts at the first VOICED frame,
+   * but playback starts at clip t=0, and the gap between those is 0.07–0.76 s
+   * across the committed fixtures (Onyx alone leads with 0.76 s of silence
+   * before a 1.17 s span). Without this the playhead is a clock for a clip that
+   * has not started yet — already 65 % across the trace by the time the voice
+   * is audible. The renderer publishes it as the animation's delay.
+   */
+  lead: number;
   /** Median F0 over voiced frames, Hz. 0 when the clip has no usable pitch. */
   medF0: number;
   /** RMS over gated frames, dBFS. The input to `gainFor`. */
@@ -170,7 +182,7 @@ export function extractVoicePrint(
     rms.push(Math.sqrt(sum / frameLength));
   }
   if (rms.length === 0) {
-    return { f0: [], amp: [], span: 0, medF0: 0, voicedRmsDb: -Infinity };
+    return { f0: [], amp: [], span: 0, lead: 0, medF0: 0, voicedRmsDb: -Infinity };
   }
 
   const p95 = percentileOfSorted([...rms].sort((a, b) => a - b), 0.95);
@@ -192,7 +204,7 @@ export function extractVoicePrint(
     last = n;
   }
   if (first < 0) {
-    return { f0: [], amp: [], span: 0, medF0: 0, voicedRmsDb: -Infinity };
+    return { f0: [], amp: [], span: 0, lead: 0, medF0: 0, voicedRmsDb: -Infinity };
   }
 
   const spanF0: number[] = [];
@@ -220,6 +232,7 @@ export function extractVoicePrint(
     f0: spanF0,
     amp: spanAmp,
     span: round((last - first) * hopSeconds, 2),
+    lead: round(first * hopSeconds, 2),
     medF0:
       voiced.length >= MIN_VOICED_FRAMES
         ? round(percentileOfSorted(voiced, 0.5), 1)
@@ -413,10 +426,16 @@ export function toVoicePrint(raw: unknown): VoicePrint | null {
   if (!f0 || !amp || f0.length !== amp.length || f0.length === 0) return null;
   if (!isFiniteNumber(obj.span) || !isFiniteNumber(obj.medF0)) return null;
   if (!isFiniteNumber(obj.voicedRmsDb)) return null;
+  // `lead` is required, not defaulted to 0: an entry cached by a build that did
+  // not measure it would otherwise come back as "no leading silence" and take
+  // the playhead with it. Rejecting it costs one re-decode and is the only
+  // outcome that cannot draw a wrong clock.
+  if (!isFiniteNumber(obj.lead)) return null;
   return {
     f0,
     amp,
     span: obj.span,
+    lead: obj.lead,
     medF0: obj.medF0,
     voicedRmsDb: obj.voicedRmsDb,
   };

@@ -103,6 +103,26 @@ describe("extractVoicePrint — measured against the real clips", () => {
     expect(addison.medF0 / onyx.medF0).toBeGreaterThan(2.5);
   });
 
+  it("reports the leading silence it trimmed, so the playhead can start on time", () => {
+    // Frame 0 of the trace is the first VOICED frame, but playback starts at
+    // clip t=0, and the gap between them is not small or constant: 0.76 s of
+    // Onyx's 2.71 s file is silence before it speaks — 65 % of a 1.17 s span.
+    // Without this number the head is a clock for a clip that has not started.
+    const onyx = extractVoicePrint(loadFixture("onyx"), PRINT_SAMPLE_RATE);
+    expect(onyx.lead).toBeCloseTo(0.76, 2);
+    // It varies an order of magnitude across the catalog, so no constant can
+    // stand in for it.
+    expect(
+      extractVoicePrint(loadFixture("addison"), PRINT_SAMPLE_RATE).lead
+    ).toBeCloseTo(0.07, 2);
+    expect(
+      extractVoicePrint(loadFixture("sage"), PRINT_SAMPLE_RATE).lead
+    ).toBeCloseTo(0.1, 2);
+    // lead + span never exceeds the clip: both are measured off the same gate.
+    const clipSeconds = facts.onyx.samples / facts.onyx.sampleRate;
+    expect(onyx.lead + onyx.span).toBeLessThan(clipSeconds);
+  });
+
   it("keeps every estimate inside the 60–320 Hz band it searched", () => {
     for (const name of ["onyx", "addison", "sage"]) {
       for (const hz of voicedFrames(
@@ -293,6 +313,7 @@ describe("the print cache", () => {
     f0: [medF0],
     amp: [1],
     span: 1,
+    lead: 0,
     medF0,
     voicedRmsDb: -15,
   });
@@ -356,15 +377,19 @@ describe("the print cache", () => {
     expect(toVoicePrintStore("nope")).toEqual({});
     expect(
       toVoicePrintStore({
-        good: { f0: [92], amp: [1], span: 1, medF0: 92, voicedRmsDb: -15 },
-        mismatched: { f0: [92, 0], amp: [1], span: 1, medF0: 92, voicedRmsDb: -15 },
-        empty: { f0: [], amp: [], span: 0, medF0: 0, voicedRmsDb: -15 },
-        holes: { f0: [92, null], amp: [1, 1], span: 1, medF0: 92, voicedRmsDb: -15 },
+        good: { f0: [92], amp: [1], span: 1, lead: 0.5, medF0: 92, voicedRmsDb: -15 },
+        mismatched: { f0: [92, 0], amp: [1], span: 1, lead: 0, medF0: 92, voicedRmsDb: -15 },
+        empty: { f0: [], amp: [], span: 0, lead: 0, medF0: 0, voicedRmsDb: -15 },
+        holes: { f0: [92, null], amp: [1, 1], span: 1, lead: 0, medF0: 92, voicedRmsDb: -15 },
+        // Cached by a build that did not measure the leading silence: taking
+        // it as 0 would hand the playhead a clock that starts three quarters
+        // of a trace early, so it misses and re-decodes instead.
+        noLead: { f0: [92], amp: [1], span: 1, medF0: 92, voicedRmsDb: -15 },
         partial: { f0: [92], amp: [1] },
         notAnObject: 7,
       })
     ).toEqual({
-      good: { f0: [92], amp: [1], span: 1, medF0: 92, voicedRmsDb: -15 },
+      good: { f0: [92], amp: [1], span: 1, lead: 0.5, medF0: 92, voicedRmsDb: -15 },
     });
   });
 
