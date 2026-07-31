@@ -363,6 +363,8 @@ export class VoicesController {
    * and showing nothing at all.
    */
   private sweeping = false;
+  /** The sweep voice the page has already scrolled to — see `followSweep`. */
+  private sweepFollowedId: string | null = null;
   /**
    * A `Play all` that was refused for being too long (design §10), remembered
    * only long enough to say so. Cleared by the next play or filter change —
@@ -443,6 +445,7 @@ export class VoicesController {
     this.body.classList.add("voice-studio-body");
     studio.appendChild(this.body);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
+    document.addEventListener("keydown", this.onDocumentKeyDown);
     window.addEventListener("pagehide", this.onPageHide);
     // Both read before the first paint, and together: the chip is rendered by
     // the control bar, and a chip that flips a beat after the rail appears is a
@@ -498,9 +501,36 @@ export class VoicesController {
     this.stopAudition();
   };
 
+  /**
+   * `Esc` stops the audio (design §4) — from wherever focus happens to be.
+   *
+   * The rail owns the key while the listbox holds focus, and that is the only
+   * keyboard the rail has. But `▶ Play all` is a SIBLING of the rail inside
+   * the control bar, so a sweep started with the mouse leaves DOM focus on the
+   * button — or, on the platforms that don't focus buttons on click, nowhere
+   * at all — and Escape never traverses the listbox. A minute of audio with no
+   * keyboard way to stop it is exactly what the design rules out, so the page
+   * listens as well.
+   *
+   * The same `disarm()` the rail's own Esc runs — one meaning for the key —
+   * but narrow about when it runs at all: only while something is actually
+   * sounding, and only when the rail has not already claimed the press (its
+   * handler calls preventDefault, so an Esc on the listbox never reaches
+   * here). With nothing playing, Escape belongs to the rest of the settings
+   * page and this listener leaves it alone.
+   */
+  private readonly onDocumentKeyDown = (event: KeyboardEvent): void => {
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (!this.auditionState.running && !this.sweeping) return;
+    event.preventDefault();
+    this.disarm();
+  };
+
   /** Release the page-level listeners this studio installed. */
   destroy(): void {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
+    document.removeEventListener("keydown", this.onDocumentKeyDown);
     window.removeEventListener("pagehide", this.onPageHide);
     // The sequencer outlives this studio (module-scoped, so a host switch or a
     // tab remount never orphans sounding audio) — so a heard subscription left
@@ -924,13 +954,20 @@ export class VoicesController {
     if (options.length < 2) return null;
     const label = document.createElement("label");
     label.classList.add("voice-filter");
+    // ONE flex item for `Show:`, not two. `.voice-filter` is an inline-flex
+    // with a 4px gap, and CSS wraps a bare ":" text node in an anonymous flex
+    // item of its own — so the gap lands on both sides of it and an English UI
+    // ships French spacing: `Show : All voices`. Wrapping keeps the colon
+    // OUTSIDE the [data-i18n] element (whose textContent replaceI18n rewrites
+    // from the bare key, punctuation and all) and inside one flex item.
+    const wrap = document.createElement("span");
+    wrap.classList.add("voice-filter-label");
     const text = document.createElement("span");
     text.setAttribute("data-i18n", "voicesShowLabel");
     text.textContent = getMessage("voicesShowLabel");
-    label.appendChild(text);
-    // Punctuation, outside the [data-i18n] element so replaceI18n cannot eat
-    // it and translators never have to carry a colon.
-    label.appendChild(document.createTextNode(":"));
+    wrap.appendChild(text);
+    wrap.appendChild(document.createTextNode(":"));
+    label.appendChild(wrap);
     const select = document.createElement("select");
     select.classList.add("voice-filter-select");
     options.forEach(({ value, key, disabled }) => {
@@ -1106,7 +1143,18 @@ export class VoicesController {
     let swap = compare.querySelector<HTMLButtonElement>(".voice-compare-swap");
     // Nothing to switch back TO yet — and a control that would do nothing is
     // worse than one that has not appeared.
-    if (!near || !far) {
+    //
+    // Both halves are checked against the PAINTED rail, not just against the
+    // pair, because `Show:` can take either of them off the screen: narrowing
+    // to `HD only` (or to `Not yet heard`, once both have been heard) leaves
+    // two perfectly good ids in the pair and no row for switchBack() to find,
+    // so the bar would go on offering "Switch back to Onyx" over a gesture
+    // that bails silently — the exact dead control seedPair guards its own
+    // entry point against. The pair itself is untouched: widen the filter and
+    // the offer comes straight back.
+    const nearRow = this.playableRowFor(near);
+    const farRow = this.playableRowFor(far);
+    if (!nearRow || !farRow) {
       swap?.remove();
       return;
     }
@@ -1129,16 +1177,28 @@ export class VoicesController {
     }
     swap.setAttribute(
       "aria-label",
-      getMessage("voicesSwitchBackTo", [this.nameOf(far)])
+      getMessage("voicesSwitchBackTo", [this.nameOf(farRow.voice.id)])
     );
     const names = swap.querySelector<HTMLElement>(".voice-compare-names");
     if (names) {
-      names.textContent = `${this.nameOf(near)} ⟷ ${this.nameOf(far)}`;
+      names.textContent = `${this.nameOf(nearRow.voice.id)} ⟷ ${this.nameOf(
+        farRow.voice.id
+      )}`;
     }
   }
 
   private nameOf(voiceId: string): string {
     return this.nameById.get(voiceId) ?? voiceId;
+  }
+
+  /**
+   * The painted row a voice can actually be auditioned from — the one test
+   * every play gesture has to pass, and therefore the one test the controls
+   * that offer it have to pass too.
+   */
+  private playableRowFor(voiceId: string | null): RailRow | undefined {
+    if (!voiceId) return undefined;
+    return this.rows.find((row) => row.voice.id === voiceId && row.playable);
   }
 
   // --- the rail -------------------------------------------------------------
@@ -1174,10 +1234,10 @@ export class VoicesController {
    * What the rail actually shows, in order: the pitch chart, narrowed by the
    * `Show:` control.
    *
-   * One function rather than two call sites doing the same two steps, because
-   * `settleOrder` compares what it WOULD paint against what it DID: filter in
-   * one place only and the two answers diverge, so every late measurement
-   * looks like a reorder and repaints the rail under the reader.
+   * Called on the way to PAINTING only. `settleOrder` deliberately does not
+   * come through here — it asks about pitch order alone, over the rows already
+   * painted, because `Not yet heard` makes this list a function of the heard
+   * store and a mark landing mid-listen would otherwise read as a re-sort.
    */
   private railOrder(
     catalog: SpeechSynthesisVoiceRemote[]
@@ -1623,7 +1683,20 @@ export class VoicesController {
     const data = this.cache.get(this.activeHost);
     if (!data || !this.body || this.rows.length === 0) return;
     const vm = viewModel(this.activeHost, data);
-    const next = this.railOrder(vm.catalog).map((voice) => voice.id);
+    // PITCH order only, over the rows that are actually on screen.
+    //
+    // Comparing the FILTERED list folds membership into a test that is only
+    // about order — and `Not yet heard` changes membership the moment a clip
+    // passes the heard threshold. So a mark the reader had just earned read as
+    // a re-sort: the rail was rebuilt without the voice they were listening
+    // to, focus fell back to the top, and the counter went BACKWARDS, which is
+    // the page appearing to forget the mark it had just made. The filter is
+    // applied at the next real repaint (a host switch, a `Show:` change, a
+    // commit), which is the same rule design §8 states for the rail itself.
+    const painted = new Set(this.paintedOrder);
+    const next = this.orderCatalog(vm.catalog)
+      .map((voice) => voice.id)
+      .filter((id) => painted.has(id));
     const same =
       next.length === this.paintedOrder.length &&
       next.every((id, i) => id === this.paintedOrder[i]);
@@ -1825,10 +1898,8 @@ export class VoicesController {
    * never moves. That is what "without losing your place" means concretely.
    */
   private switchBack(): void {
-    const other = this.pair[1];
-    if (!other) return;
-    const row = this.rows.find((candidate) => candidate.voice.id === other);
-    if (!row?.playable) return;
+    const row = this.playableRowFor(this.pair[1]);
+    if (!row) return;
     this.armed = true;
     this.audition(row.voice);
   }
@@ -2070,10 +2141,40 @@ export class VoicesController {
     this.markRows(this.auditionState.loadingVoiceId, "loading");
     const playing = this.auditionState.playingVoiceId;
     this.markRows(playing, "playing");
+    this.followSweep(playing);
     this.syncStatus();
     this.updateControlBar();
     // A reorder that waited for the audio to stop can land now.
     if (!playing && this.orderDirty) this.requestSettle();
+  }
+
+  /**
+   * Keep a running sweep's voice on screen.
+   *
+   * `Play all` is the half of the feature you WATCH — the print inks in and
+   * the playhead crosses the trace — and on the 22-voice catalog, in the
+   * 1120 × 900 window the extension opens for Voices, the last five rows sit
+   * below the fold: without this they sound with no row lit, no playhead and
+   * no ink, leaving `20 of 22` as the only sign anything is happening.
+   *
+   * ONLY while a sweep runs. A single audition must move neither focus nor
+   * scroll — that is what `⇧Space` "without losing your place" means — and
+   * focus is not moved here either: the queue index and the focus stay
+   * independent. `nearest` scrolls the minimum, so a rail that fits never
+   * moves at all, and only a row that has actually left the viewport pulls the
+   * page. Once per voice, because every repaint re-derives from the snapshot.
+   */
+  private followSweep(playing: string | null): void {
+    if (!this.sweeping) {
+      this.sweepFollowedId = null;
+      return;
+    }
+    if (!playing || playing === this.sweepFollowedId) return;
+    this.sweepFollowedId = playing;
+    // jsdom has no layout and therefore no scrollIntoView.
+    this.rows
+      .find((row) => row.voice.id === playing)
+      ?.el.scrollIntoView?.({ block: "nearest" });
   }
 
   private markRows(voiceId: string | null, className: string): void {

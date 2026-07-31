@@ -72,11 +72,23 @@ class FakeAudio {
       this.rejectPlayWith = null;
       return Promise.reject(rejection);
     }
-    // Resolves when the element actually starts (the test fires "play").
+    // Resolves when the element actually STARTS — the spec resolves pending
+    // play promises in the same "notify about playing" step that fires
+    // `playing`, not when the `play` event is queued.
     return new Promise<void>((resolve, reject) => {
       this.pending = { reject };
       this.resolvePending = resolve;
     });
+  }
+
+  /**
+   * The element begins to sound: `play` (queued by play() whatever the
+   * readyState) and then `playing` (which waits for data). A clip that is
+   * still buffering fires only the first — which is the whole distinction.
+   */
+  begin(): void {
+    this.fire("play");
+    this.fire("playing");
   }
 
   pause(): void {
@@ -107,7 +119,7 @@ class FakeAudio {
   }
 
   fire(type: string): void {
-    if (type === "play") {
+    if (type === "playing") {
       this.resolvePending?.();
       this.resolvePending = null;
       this.pending = null;
@@ -239,12 +251,12 @@ describe("PreviewSequencer — the session token is the whole cancellation model
   it("never lets a superseded clip's terminal handler write into the voice that replaced it", async () => {
     const { sequencer, elementFor } = harness();
     sequencer.play([item("marin")]);
-    elementFor("marin")!.fire("play");
+    elementFor("marin")!.begin();
     expect(sequencer.getState().playingVoiceId).toBe("marin");
 
     // The user presses ↓ fast: coral supersedes marin mid-clip.
     sequencer.play([item("coral")]);
-    elementFor("coral")!.fire("play");
+    elementFor("coral")!.begin();
     expect(sequencer.getState().playingVoiceId).toBe("coral");
 
     // marin's pause event (and its rejected play() promise) land AFTER coral
@@ -258,9 +270,9 @@ describe("PreviewSequencer — the session token is the whole cancellation model
   it("ignores a superseded play()'s AbortError instead of reporting an error", async () => {
     const { sequencer, elementFor, seen } = harness();
     sequencer.play([item("marin")]);
-    elementFor("marin")!.fire("play");
+    elementFor("marin")!.begin();
     sequencer.play([item("coral")]);
-    elementFor("coral")!.fire("play");
+    elementFor("coral")!.begin();
     await settle();
     expect(seen.some((state) => state.error !== null)).toBe(false);
   });
@@ -268,11 +280,11 @@ describe("PreviewSequencer — the session token is the whole cancellation model
   it("never lets a superseded sequence's pending beat advance the new one", async () => {
     const { sequencer, elementFor, totalPlays } = harness();
     sequencer.play([item("onyx"), item("echo")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     elementFor("onyx")!.fire("ended");
     // The beat for echo is now armed. Before it fires, the user clicks coral.
     sequencer.play([item("coral")]);
-    elementFor("coral")!.fire("play");
+    elementFor("coral")!.begin();
     await settle();
     const playsBefore = totalPlays();
     vi.advanceTimersByTime(AUDITION_BEAT_MS * 3);
@@ -284,7 +296,7 @@ describe("PreviewSequencer — the session token is the whole cancellation model
   it("stop() silences every buffer and reports idle", async () => {
     const { sequencer, created, elementFor } = harness();
     sequencer.play([item("onyx"), item("echo")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     sequencer.stop();
     await settle();
     expect(sequencer.getState()).toEqual({
@@ -298,11 +310,87 @@ describe("PreviewSequencer — the session token is the whole cancellation model
   });
 });
 
+describe("PreviewSequencer — playing means SOUNDING, not play() called", () => {
+  /**
+   * Per the HTML spec's play() algorithm the `play` event is queued the
+   * instant play() is called, whatever the readyState — it is `playing` that
+   * waits for data. Reading the first as "this voice is sounding" inks the
+   * row, starts the playhead's `--print-span` clock and announces "Playing X"
+   * ahead of the audio by the whole load latency (~200 ms cold; seconds on a
+   * slow link), and hides the loading pulse design §5.1 specifies for exactly
+   * that gap. The asymmetry proved it: sweep items 1..N already gate on
+   * `readyState >= HAVE_FUTURE_DATA`, while item 0 and every single audition
+   * did not.
+   */
+  it("keeps a cold clip in the loading state until it actually starts", () => {
+    const { sequencer, elementFor } = harness({ audioReadyState: HAVE_NOTHING });
+    sequencer.play([item("onyx")]);
+    expect(sequencer.getState().loadingVoiceId).toBe("onyx");
+
+    elementFor("onyx")!.fire("play");
+    expect(sequencer.getState().playingVoiceId).toBeNull();
+    expect(sequencer.getState().loadingVoiceId).toBe("onyx");
+
+    elementFor("onyx")!.fire("playing");
+    expect(sequencer.getState().playingVoiceId).toBe("onyx");
+    expect(sequencer.getState().loadingVoiceId).toBeNull();
+  });
+
+  it("says so when a clip stalls mid-play, and again when it resumes", () => {
+    const { sequencer, elementFor } = harness();
+    sequencer.play([item("onyx")]);
+    elementFor("onyx")!.begin();
+    elementFor("onyx")!.fire("waiting");
+    expect(sequencer.getState().playingVoiceId).toBeNull();
+    expect(sequencer.getState().loadingVoiceId).toBe("onyx");
+
+    elementFor("onyx")!.fire("playing");
+    expect(sequencer.getState().playingVoiceId).toBe("onyx");
+    expect(sequencer.getState().loadingVoiceId).toBeNull();
+  });
+
+  it("leaves a finished clip finished, whatever the element says next", () => {
+    const { sequencer, elementFor } = harness();
+    sequencer.play([item("onyx"), item("echo")]);
+    elementFor("onyx")!.begin();
+    elementFor("onyx")!.fire("ended");
+    // The beat owns what happens now; a trailing `waiting` must not put the
+    // voice that just finished back into the loading pulse.
+    elementFor("onyx")!.fire("waiting");
+    expect(sequencer.getState().loadingVoiceId).toBeNull();
+  });
+
+  it("does not clear the failure run until a clip is actually sounding", async () => {
+    // A clip that gets as far as play() and then dies must still count toward
+    // the two-consecutive-failures stop, or a sweep down a broken CDN never
+    // ends.
+    const { sequencer, elementFor, totalPlays } = harness();
+    sequencer.play([item("onyx"), item("echo"), item("ash")]);
+    elementFor("onyx")!.fire("error");
+    await settle();
+    vi.advanceTimersByTime(AUDITION_BEAT_MS);
+    await settle();
+
+    elementFor("echo")!.fire("play"); // queued by play(), before any data
+    elementFor("echo")!.failToLoad();
+    await settle();
+    const playsBefore = totalPlays();
+    vi.advanceTimersByTime(AUDITION_BEAT_MS * 3);
+    await settle();
+    expect(sequencer.getState().running).toBe(false);
+    expect(sequencer.getState().error).toEqual({
+      voiceId: "echo",
+      kind: "failed",
+    });
+    expect(totalPlays()).toBe(playsBefore);
+  });
+});
+
 describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
   it("preloads the next clip into the other element while this one plays", () => {
     const { sequencer, created, elementFor } = harness();
     sequencer.play([item("onyx"), item("echo")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     // Two elements, so setting the next src cannot kill the current clip.
     expect(created.length).toBe(2);
     expect(elementFor("echo")).toBeTruthy();
@@ -314,7 +402,7 @@ describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
   it("starts the next clip one beat after the last one ended", async () => {
     const { sequencer, elementFor } = harness();
     sequencer.play([item("onyx"), item("echo")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     elementFor("onyx")!.fire("ended");
     await settle();
 
@@ -325,7 +413,7 @@ describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
     vi.advanceTimersByTime(1);
     await settle();
     expect(elementFor("echo")!.playCalls).toBe(1);
-    elementFor("echo")!.fire("play");
+    elementFor("echo")!.begin();
     expect(sequencer.getState().playingVoiceId).toBe("echo");
     expect(sequencer.getState().position).toEqual({ index: 2, total: 2 });
   });
@@ -335,7 +423,7 @@ describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
       audioReadyState: HAVE_NOTHING,
     });
     sequencer.play([item("onyx"), item("echo")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     elementFor("onyx")!.fire("ended");
     await settle();
     vi.advanceTimersByTime(AUDITION_BEAT_MS);
@@ -363,7 +451,7 @@ describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
 
     for (const [index, voiceId] of queue.entries()) {
       const playing = elementFor(voiceId)!;
-      playing.fire("play");
+      playing.begin();
       expect(sequencer.getState().playingVoiceId).toBe(voiceId);
       expect(sequencer.getState().position).toEqual({
         index: index + 1,
@@ -389,7 +477,7 @@ describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
   it("ends the sequence after the last clip", async () => {
     const { sequencer, elementFor } = harness();
     sequencer.play([item("onyx")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     elementFor("onyx")!.fire("ended");
     await settle();
     vi.advanceTimersByTime(AUDITION_BEAT_MS * 2);
@@ -463,7 +551,7 @@ describe("PreviewSequencer — error discrimination (design §5.1)", () => {
   it("re-preloads past a failed preload instead of blaming the next voice", async () => {
     const { sequencer, elementFor } = harness();
     sequencer.play([item("onyx"), item("echo"), item("ash")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     // echo is loading into the OTHER buffer while onyx plays — and 404s there.
     elementFor("echo")!.failToLoad();
     elementFor("onyx")!.fire("ended");
@@ -518,7 +606,7 @@ describe("PreviewSequencer — error discrimination (design §5.1)", () => {
     await settle();
     vi.advanceTimersByTime(AUDITION_BEAT_MS);
     await settle();
-    elementFor("echo")!.fire("play");
+    elementFor("echo")!.begin();
     elementFor("echo")!.fire("ended");
     await settle();
     vi.advanceTimersByTime(AUDITION_BEAT_MS);
@@ -539,7 +627,7 @@ describe("PreviewSequencer — heard emission (design §8)", () => {
     sequencer.play([item("marin")]);
     const audio = elementFor("marin")!;
     audio.duration = 1.11;
-    audio.fire("play");
+    audio.begin();
     audio.currentTime = 0.71;
     audio.fire("timeupdate");
     expect(heard).toEqual([]);
@@ -553,7 +641,7 @@ describe("PreviewSequencer — heard emission (design §8)", () => {
   it("emits heard on a clip that finishes without a qualifying timeupdate", () => {
     const { sequencer, elementFor, heard } = harness();
     sequencer.play([item("marin")]);
-    elementFor("marin")!.fire("play");
+    elementFor("marin")!.begin();
     elementFor("marin")!.fire("ended");
     expect(heard).toEqual(["marin"]);
   });
@@ -569,12 +657,12 @@ describe("PreviewSequencer — heard emission (design §8)", () => {
   it("emits once per item across a sequence", async () => {
     const { sequencer, elementFor, heard } = harness();
     sequencer.play([item("onyx"), item("echo")]);
-    elementFor("onyx")!.fire("play");
+    elementFor("onyx")!.begin();
     elementFor("onyx")!.fire("ended");
     await settle();
     vi.advanceTimersByTime(AUDITION_BEAT_MS);
     await settle();
-    elementFor("echo")!.fire("play");
+    elementFor("echo")!.begin();
     elementFor("echo")!.fire("ended");
     expect(heard).toEqual(["onyx", "echo"]);
   });

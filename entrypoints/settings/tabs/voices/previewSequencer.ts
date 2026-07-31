@@ -178,7 +178,15 @@ export class PreviewSequencer {
     this.buffers = [create(), create()];
     this.buffers.forEach((audio, slot) => {
       audio.preload = "auto";
-      audio.addEventListener("play", () => this.onPlay(slot));
+      // `playing`, NOT `play`. The HTML spec's play() algorithm queues `play`
+      // the instant play() is called, whatever the readyState — it is
+      // `playing` that waits for data (and that resolves the play() promise).
+      // Reading `play` as "this voice is sounding" would ink the row, start
+      // the playhead's clock and announce "Playing X" a whole load latency
+      // ahead of the audio (~200 ms on a cold cache, seconds on a slow link),
+      // and would hide the loading pulse §5.1 specifies for exactly that gap.
+      audio.addEventListener("playing", () => this.onPlaying(slot));
+      audio.addEventListener("waiting", () => this.onWaiting(slot));
       audio.addEventListener("pause", () => this.onPause(slot));
       audio.addEventListener("timeupdate", () => this.onTimeUpdate(slot));
       audio.addEventListener("ended", () => this.onEnded(slot));
@@ -427,7 +435,13 @@ export class PreviewSequencer {
     return this.items[carried.index] ?? null;
   }
 
-  private onPlay(slot: number): void {
+  /**
+   * The element is actually sounding. This is also where the failure run is
+   * cleared: a clip that got as far as `play()` and then died must still count
+   * toward the two-consecutive-failures stop, or a sweep down a broken CDN
+   * never ends.
+   */
+  private onPlaying(slot: number): void {
     const item = this.itemOf(slot);
     if (!item) return;
     this.failureRun = 0;
@@ -437,6 +451,21 @@ export class PreviewSequencer {
       playingVoiceId: item.voiceId,
       loadingVoiceId: null,
       error: null,
+    });
+  }
+
+  /** Playback stopped for data mid-clip: the gap is visible, not mysterious. */
+  private onWaiting(slot: number): void {
+    const item = this.itemOf(slot);
+    if (!item) return;
+    // A `waiting` trailing a finished clip would put the voice that just ended
+    // back into the loading pulse for the length of the beat.
+    if (this.buffers[slot].ended) return;
+    this.emit({
+      ...this.state,
+      running: true,
+      playingVoiceId: null,
+      loadingVoiceId: item.voiceId,
     });
   }
 

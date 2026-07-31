@@ -103,6 +103,16 @@ function makeDeps(cfg: DepsConfig = {}) {
   };
 }
 
+/**
+ * Every controller this file mounts, torn down after each case.
+ *
+ * The studio installs PAGE-level listeners (visibilitychange, pagehide, and
+ * the Escape that stops a mouse-started sweep), so a controller left mounted
+ * goes on hearing the next test's events — and the first one to claim a key
+ * decides what the rest of them see.
+ */
+const mounted: VoicesController[] = [];
+
 async function mount(deps = makeDeps(), opts?: { initialHost?: string | null }) {
   const { container } = render(<VoicesPanel />);
   const controller = new VoicesController(
@@ -110,6 +120,7 @@ async function mount(deps = makeDeps(), opts?: { initialHost?: string | null }) 
     deps as any,
     opts
   );
+  mounted.push(controller);
   await controller.init();
   return { container: container as HTMLElement, controller, deps };
 }
@@ -172,7 +183,10 @@ beforeEach(() => {
   // left behind by one file's last test would silently steer the next one's.
   (chrome.storage.local as any)._reset?.();
 });
-afterEach(() => cleanup());
+afterEach(() => {
+  mounted.splice(0).forEach((controller) => controller.destroy());
+  cleanup();
+});
 
 describe("VoicesController — host scope", () => {
   it("renders the host switcher in the heading row and fetches only the in-scope host", async () => {
@@ -1770,6 +1784,30 @@ describe("VoicesController — the compare pair never seeds a dead control", () 
       "onyx",
     ]);
   });
+
+  it("takes the ⇄ away when the Show: filter removes a voice it names", async () => {
+    // The same dead control, reached through the other door. seedPair guards
+    // the one entry point that does not go through playback — but nothing
+    // re-checked the pair against the rows the FILTER repainted, so the bar
+    // went on offering "Switch back to Onyx" over a switchBack() that bails at
+    // `!row?.playable`.
+    const deps = makeDeps({ pi: twoTiers(), piCurrent: mkVoice("onyx") });
+    const { container } = await mount(deps);
+    rowOf(container, "coral")!.click(); // pair = [coral, onyx]
+    expect(q(container, ".voice-compare-swap")).toBeTruthy();
+
+    chooseFilter(container, "hd");
+    expect(rowIds(container)).not.toContain("onyx");
+    expect(q(container, ".voice-compare-swap")).toBeNull();
+    const plays = deps.playPreview.mock.calls.length;
+    press(container, " ", { shiftKey: true });
+    expect(deps.playPreview.mock.calls.length).toBe(plays);
+
+    // …and it comes back the moment both voices are on the rail again: the
+    // pair itself is untouched, only the offer to use it.
+    chooseFilter(container, "all");
+    expect(q(container, ".voice-compare-swap")).toBeTruthy();
+  });
 });
 
 describe("VoicesController — the live region announces changes, not repaints", () => {
@@ -2001,6 +2039,29 @@ const loadingAt = (voiceId: string, index: number, total: number): AuditionState
   error: null,
 });
 
+/**
+ * Escape pressed while something OTHER than the rail holds focus — which is
+ * where a mouse-started sweep leaves it.
+ */
+function escapeFrom(target: EventTarget): void {
+  target.dispatchEvent(
+    new window.KeyboardEvent("keydown", {
+      key: "Escape",
+      bubbles: true,
+      cancelable: true,
+    })
+  );
+}
+
+/** Which rows the page scrolled to. jsdom has no layout and no scrollIntoView. */
+function trackScrolls(c: HTMLElement): string[] {
+  const scrolled: string[] = [];
+  qa(c, ".voice-row").forEach((row) => {
+    (row as any).scrollIntoView = () => scrolled.push(row.dataset.voiceId!);
+  });
+  return scrolled;
+}
+
 /** Choose a `Show:` option the way a user does. */
 function chooseFilter(c: HTMLElement, value: string): void {
   const select = filterSelect(c)!;
@@ -2092,6 +2153,86 @@ describe("VoicesController — Play all walks the list, once", () => {
     press(container, "Escape");
     expect(deps.stopPreview).toHaveBeenCalled();
     expect(sweepLabel(container)).toBe("voicesPlayAllN");
+  });
+
+  it("stops on Esc when the sweep was started with the mouse", async () => {
+    // The rail's keydown is the ONLY keydown, and it early-returns unless the
+    // listbox is the target — but `▶ Play all` is a SIBLING of the rail, so
+    // clicking it leaves DOM focus on the button and Escape never traverses
+    // the listbox at all. A minute of audio with no way to stop it from the
+    // keyboard is exactly what design §4's "`Esc` stops" rules out.
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    const button = sweepButton(container)!;
+    button.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    button.focus();
+    escapeFrom(button);
+    expect(deps.stopPreview).toHaveBeenCalled();
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+  });
+
+  it("stops on Esc when the click left focus nowhere at all", async () => {
+    // Not every platform focuses a button on click; then the event starts at
+    // <body> and never comes near the studio.
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    escapeFrom(document.body);
+    expect(deps.stopPreview).toHaveBeenCalled();
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+  });
+
+  it("leaves Esc alone when there is nothing playing to stop", async () => {
+    // The page listens for the key, but it is the rail's key: with no audio
+    // running it must not swallow Escape from the rest of the settings page.
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    await mount(deps);
+    const event = new window.KeyboardEvent("keydown", {
+      key: "Escape",
+      bubbles: true,
+      cancelable: true,
+    });
+    document.body.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+    expect(deps.stopPreview).not.toHaveBeenCalled();
+  });
+
+  it("brings the voice it is playing into view, wherever the reader is standing", async () => {
+    // The sweep is the half of the feature you WATCH: the print inks in, the
+    // playhead crosses the trace. On the shipped 22-voice catalog the last
+    // rows sit below the fold, so without this the sweep's final quarter
+    // happens off-screen with only the counter to say so.
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("nova"), mkVoice("coral"), mkVoice("marin")],
+    });
+    const { container } = await mount(deps);
+    const scrolled = trackScrolls(container);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("marin", 4, 4));
+    expect(scrolled).toEqual(["marin"]);
+    // Focus is still the reader's — the queue index, the focus and the pair
+    // stay three independent things.
+    expect(focusedId(container)).toBe("onyx");
+    // Any repaint re-derives the rows from the same snapshot; it must not
+    // scroll again for a voice already followed.
+    emitSweep(deps, 0, sweepingAt("marin", 4, 4));
+    expect(scrolled).toEqual(["marin"]);
+  });
+
+  it("never scrolls for a single audition — ⇧Space must not move the page", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+      piCurrent: mkVoice("onyx"),
+    });
+    const { container } = await mount(deps);
+    press(container, "ArrowDown");
+    press(container, " "); // coral — moving focus scrolls, and may
+    const scrolled = trackScrolls(container);
+    press(container, " ", { shiftKey: true }); // onyx — focus does NOT move
+    emit(deps, 1, playingState("onyx"));
+    expect(scrolled).toEqual([]);
   });
 
   it("cancels the sweep and plays the row you touched — one meaning per gesture", async () => {
@@ -2245,6 +2386,27 @@ describe("VoicesController — the Show: filter", () => {
 
     chooseFilter(container, "everyday");
     expect(rowIds(container).sort()).toEqual(["coral", "onyx"]);
+  });
+
+  it("reads `Show:`, with the colon attached to the word", async () => {
+    // `.voice-filter` is `display:inline-flex; gap:4px`, and CSS wraps a bare
+    // ":" text node in its own anonymous flex item — so the gap lands on BOTH
+    // sides of it and an English UI ships French spacing: `Show : All voices`.
+    // The colon still has to stay outside the [data-i18n] element, whose
+    // textContent replaceI18n() rewrites from the bare key.
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    const filter = q(container, ".voice-filter")!;
+    const loose = [...filter.childNodes].some(
+      (node) => node.nodeType === 3 && node.textContent!.trim() !== ""
+    );
+    expect(loose, "the colon must not be a flex item of its own").toBe(false);
+    const label = q(container, ".voice-filter-label")!;
+    expect(label.textContent).toBe("voicesShowLabel:");
+    expect(label.dataset.i18n).toBeUndefined();
+    expect(label.querySelector("[data-i18n]")!.getAttribute("data-i18n")).toBe(
+      "voicesShowLabel"
+    );
   });
 
   it("moves the allowance note onto the HD option, where it is actionable", async () => {
@@ -2671,6 +2833,83 @@ describe("VoicesController — `Not yet heard`", () => {
     hear(deps, "marin");
     expect(rowIds(container)).toHaveLength(3);
     expect(rowOf(container, "marin")!.classList.contains("heard")).toBe(true);
+  });
+
+  it("does not rebuild the rail when a late print settles after a heard mark", async () => {
+    // The reorder check compared what it WOULD paint against what it DID, and
+    // `Not yet heard` makes that comparison depend on the heard store — so a
+    // mark landing between two measurements read as a pitch re-sort: the row
+    // the reader had just auditioned vanished from under them, focus fell back
+    // to the top of the rail, and the counter went BACKWARDS.
+    let resolvePrint!: (p: VoicePrint | null) => void;
+    const deps = makeDeps({
+      pi: four(),
+      heard: { onyx: 1 },
+      overrides: {
+        loadPrint: vi.fn(
+          (voice: SpeechSynthesisVoiceRemote) =>
+            new Promise<VoicePrint | null>((res) => {
+              if (voice.id === "nova") resolvePrint = res;
+              else res(null);
+            })
+        ),
+      },
+    });
+    const { container } = await mount(deps);
+    chooseFilter(container, "unheard");
+    expect(rowIds(container)).toEqual(["nova", "coral", "marin"]);
+
+    rowOf(container, "coral")!.click();
+    hear(deps, "coral");
+    // A print landing is the settle trigger — and this one AGREES with the
+    // seed, so nothing about the pitch order has changed.
+    resolvePrint({
+      f0: [162],
+      amp: [0.8],
+      span: 1,
+      lead: 0,
+      medF0: 161.6,
+      voicedRmsDb: -17,
+    } as VoicePrint);
+    await flushAsync();
+    await flushAsync();
+
+    expect(rowIds(container)).toEqual(["nova", "coral", "marin"]);
+    expect(focusedId(container)).toBe("coral");
+    expect(rowOf(container, "coral")!.classList.contains("heard")).toBe(true);
+  });
+
+  it("still re-sorts for a measurement that really does move a voice", async () => {
+    // The other half of the same guard: a late print that disagrees with the
+    // seed must still settle the order, filter or no filter.
+    let resolvePrint!: (p: VoicePrint | null) => void;
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("newcomer"), mkVoice("marin")],
+      heard: { marin: 1 },
+      overrides: {
+        loadPrint: vi.fn(
+          (voice: SpeechSynthesisVoiceRemote) =>
+            new Promise<VoicePrint | null>((res) => {
+              if (voice.id === "newcomer") resolvePrint = res;
+              else res(null);
+            })
+        ),
+      },
+    });
+    const { container } = await mount(deps);
+    chooseFilter(container, "unheard");
+    expect(rowIds(container)).toEqual(["onyx", "newcomer"]);
+    resolvePrint({
+      f0: [70],
+      amp: [0.8],
+      span: 1,
+      lead: 0,
+      medF0: 70, // deeper than Onyx's seeded 92.2
+      voicedRmsDb: -17,
+    } as VoicePrint);
+    await flushAsync();
+    await flushAsync();
+    expect(rowIds(container)).toEqual(["newcomer", "onyx"]);
   });
 
   it("disables itself once everything has been heard", async () => {

@@ -246,6 +246,11 @@
   gap: 4px;
   white-space: nowrap;
 }
+/* NB the gap above applies between EVERY flex item, including the anonymous
+   one CSS wraps a bare text node in — which is why `Show:` is built as a
+   single `.voice-filter-label` span holding the translated word and the colon
+   together. Left loose, the colon is its own flex item with 4px on each side
+   and the control reads `Show : All voices`. */
 /* `9 of 22 heard`. Tabular figures because it ticks up while you are looking
    at it, and proportional digits would shuffle the words beside it. Absent —
    not "0 of 0" — on a page with nothing auditionable on it. */
@@ -320,11 +325,12 @@
      a graphic you need in order to understand the content. 0.48 is the lowest
      value that clears 3:1 (3.20:1 here).
 
-     The development survives the change, because the ratio does: heard is
-     7.10:1 against this 3.20:1, still more than twice the contrast, and the
-     page-level half of heard memory (the counter, `Not yet heard`, `Play new`)
-     carries the rest — which is the half design §8 itself calls the one to
-     ship if only one ships. */
+     Raising the floor is only half the repair, though: it also halved the
+     develop step, and a 0.24 step on this trace did not read at 1×. The heard
+     ink moves with it, to 0.82 (10.3:1 against this 3.2:1) — see `.heard`
+     below. The page-level half of heard memory (the counter, `Not yet heard`,
+     `Play new`) carries the rest, which is the half design §8 itself calls
+     the one to ship if only one ships. */
   color: rgba(21, 23, 26, 0.48);
   transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
@@ -338,9 +344,22 @@
    across 22 rows. Standing on a row is expressed by its ground, its tagline
    and its actions; the print keeps saying what it always said.
 
+   0.82, not design §8's 0.72, and for the same reason the resting ink is not
+   0.22: the floor moved, so the step had to. §8 spends 0.50 of the scale on
+   never-heard → heard and 0.28 on heard → playing, because "play one voice and
+   its print inks in" is the whole of heard state ON THE RAIL. Raising the
+   resting ink to clear WCAG 1.4.11 left that step at 0.24 against a 0.28
+   playing step — the develop step became the SMALLER of the two, and on a
+   1.4px sparse trace whose density already varies per voice, heard rows could
+   not be picked out by eye at 1× even knowing which they were. The floor is
+   fixed by contrast and the top is pinned at 1.0, so `heard` is the only free
+   variable and it belongs nearer the top: 0.34 to develop, 0.18 to play.
+
    PLAYING is the same variable at full, which is what makes playing → heard a
-   fade to 0.72 that explains itself. It sits last because it ties `.heard` on
-   specificity and source order is what decides. */
+   fade that explains itself — and it never depended on the size of that fade,
+   because what marks the playing row is the green playhead crossing its trace.
+   It sits last because it ties `.heard` on specificity and source order is
+   what decides. */
 .voice-row:hover {
   background: #f1efe9;
 }
@@ -348,7 +367,7 @@
   background: #f1efe9;
 }
 .voice-row.heard {
-  color: rgba(21, 23, 26, 0.72);
+  color: rgba(21, 23, 26, 0.82);
 }
 .voice-row.playing {
   color: #15171a;

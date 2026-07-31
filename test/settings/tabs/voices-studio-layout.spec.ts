@@ -154,6 +154,22 @@ describe("ink is one variable in three steps", () => {
     expect(heard).toBeGreaterThanOrEqual(0.7);
   });
 
+  it("spends most of the scale on the step that DEVELOPS the page", () => {
+    // Design §8 puts the three steps at 0.22 / 0.72 / 1.0 — a develop step
+    // more than twice the playing step, because "play one voice and its print
+    // inks in" is the whole of heard state on the rail. Raising the resting
+    // ink to clear WCAG 1.4.11 (see below) squeezed that step from 0.50 to
+    // 0.24 and inverted the design: the smaller half of a 1.4px sparse trace
+    // became the one carrying the memory, and heard rows stopped being
+    // identifiable by eye at 1× even when you knew which ones they were.
+    // The resting floor is fixed and the top is pinned at 1.0, so `heard` is
+    // the only free variable, and it belongs nearer the top.
+    const unheard = inkDensity(ruleBody(".voice-row"));
+    const heard = inkDensity(ruleBody(".voice-row.heard"));
+    const playing = inkDensity(ruleBody(".voice-row.playing"));
+    expect(heard - unheard).toBeGreaterThan(playing - heard);
+  });
+
   it("leaves hover and focus out of the ink entirely", () => {
     // A fourth density would either sit below `heard` — dimming a print the
     // moment you point at it — or above it, at which point pointing at a voice
@@ -177,7 +193,7 @@ describe("ink is one variable in three steps", () => {
     // gaps) lose more to anti-aliasing than the continuous reference line
     // does, so equal measured contrast is not equal presence. "Develops as you
     // listen" is only a good idea while the undeveloped state still reads as a
-    // drawing; the heard step (7.10:1 against this 3.20:1) carries it instead.
+    // drawing; the heard step (10.3:1 against this 3.2:1) carries it instead.
     const resting = inkDensity(ruleBody(".voice-row"));
     // Both grounds: the design's warm #FBFAF7, and the white preference card
     // the rail actually sits on today (only the control bar took the ground).
