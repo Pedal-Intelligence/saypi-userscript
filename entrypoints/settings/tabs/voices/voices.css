@@ -16,11 +16,11 @@
 }
 /* ...and the same 504px cap again, one level further in: .user-preference-item
    is the card every tab wraps its controls in, and uncapping only the panel
-   left the studio at 504 − 2rem padding = 472px — barely half the 940px column
-   settingsWindowSize.ts grows the window to for this tab, and the reason the
-   shelf heads used to run out of room. The studio's own max-width (900px,
-   above) is what actually bounds it. ID+class so it wins wherever tabs.css
-   loads in the cascade; scoped to this card so no other tab moves. */
+   left the studio at 504 − 2rem padding = 472px — barely half the content
+   column the settings tab gives this pane, and the reason the shelf heads
+   used to run out of room. The studio's own max-width (900px, above) is what
+   actually bounds it. ID+class so it wins wherever tabs.css loads in the
+   cascade; scoped to this card so no other tab moves. */
 #voices-preference.user-preference-item {
   max-width: none;
 }
