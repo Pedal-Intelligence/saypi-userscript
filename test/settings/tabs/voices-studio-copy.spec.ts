@@ -3,18 +3,21 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 /**
- * Copy contract for the settings Voices studio, asserted against the REAL en
+ * Copy contract for the settings Voices rail, asserted against the REAL en
  * locale (the source locale) rather than the test mock, so a re-texted or
  * orphaned key is caught here rather than on a user's screen.
  *
- * Two things this file is really guarding:
- *  - the studio's shelf blurbs are studio-only strings. `hdVoicesAllowanceNote`
- *    is ALSO the HD chip tooltip and Claude's in-chat menu footnote, where no
- *    Everyday shelf sits beside it to carry the ratio — it must keep its text
- *    and its in-chat callers.
- *  - every substituted stage string must exist with a declared `$host$`
- *    placeholder (i18n-validate.cjs enforces the declaration; this pins the
- *    substitution itself, which is what replaceI18n() would otherwise erase).
+ * Three things this file is really guarding:
+ *  - every substituted string the rail renders exists with its `placeholders`
+ *    DECLARED (i18n-validate.cjs enforces the declaration; this pins the
+ *    substitution itself, which is what replaceI18n() would otherwise erase)
+ *    and is phrased to read correctly at 1, because Chrome i18n has no plurals;
+ *  - `hdVoicesAllowanceNote` keeps its text and its in-chat callers — the rail
+ *    dropped the tier shelves, but that key is ALSO the HD chip tooltip and
+ *    Claude's in-chat menu footnote;
+ *  - the keys the rail retired are genuinely unreferenced by the controller.
+ *    They stay in `messages.json` (31 locales already carry them, and they cost
+ *    nothing) but nothing may render them.
  */
 const root = resolve(__dirname, "../../..");
 const en = JSON.parse(
@@ -24,81 +27,100 @@ const controllerSrc = readFileSync(
   resolve(root, "entrypoints/settings/tabs/voices/voices-controller.ts"),
   "utf8"
 );
+const panelSrc = readFileSync(
+  resolve(root, "entrypoints/settings/tabs/voices/VoicesPanel.tsx"),
+  "utf8"
+);
 const claudeMenuSrc = readFileSync(
   resolve(root, "src/chatbots/ClaudeVoiceMenu.ts"),
   "utf8"
 );
 
-describe("Defect 2 — the empty stage recruits", () => {
-  it("has a host-generic imperative headline", () => {
-    expect(en.voicesStageEmptyTitle?.message).toBe("Choose how $host$ sounds");
-    expect(en.voicesStageEmptyTitle.placeholders?.host?.content).toBe("$1");
-  });
+/** Every $placeholder$ a message declares, in declared order. */
+const placeholderSlots = (key: string): number[] =>
+  Object.values(en[key]?.placeholders ?? {}).map((p: any) =>
+    Number(String(p.content).slice(1))
+  );
 
-  it("has a supporting line for hosts that serve their own audio", () => {
-    expect(en.voicesStageEmptyNoteReplace?.message).toBe(
-      "$host$ uses its own voice until you pick one below."
+describe("the rail says what it is", () => {
+  it("invites listening, not browsing", () => {
+    expect(en.voicesSectionDescriptionListen?.message).toBe(
+      "Every voice, deepest to brightest. Listen, then choose."
     );
-    expect(en.voicesStageEmptyNoteReplace.placeholders?.host?.content).toBe("$1");
+    expect(panelSrc).toMatch(/voicesSectionDescriptionListen/);
+    // The old catalog subtitle is no longer rendered anywhere on this tab.
+    expect(panelSrc).not.toMatch(/"voicesSectionDescription"/);
   });
 
-  it("has a supporting line for hosts with no voice of their own", () => {
-    expect(en.voicesStageEmptyNoteSilent?.message).toBe(
-      "$host$ won't read replies aloud until you pick one below."
+  it("names the list by the axis it is ordered on", () => {
+    expect(en.voicesRailLabel?.message).toBe(
+      "Voices, ordered from deepest to brightest"
     );
-    expect(en.voicesStageEmptyNoteSilent.placeholders?.host?.content).toBe("$1");
+    expect(en.voicesRailLabel.message).not.toMatch(/\$.+\$/);
   });
 
-  it("ends both supporting lines on the same clause, so the hosts read as one product", () => {
-    const tail = "until you pick one below.";
-    expect(en.voicesStageEmptyNoteReplace.message.endsWith(tail)).toBe(true);
-    expect(en.voicesStageEmptyNoteSilent.message.endsWith(tail)).toBe(true);
+  it("states the keyboard in one line, in the order you would learn it", () => {
+    expect(en.voicesKeyboardHint?.message).toBe(
+      "Space to play · ↑↓ to walk · ⇧Space to switch back"
+    );
   });
 
-  it("retires voicesNoStageVoice — key deleted and nothing references it", () => {
-    expect(en.voicesNoStageVoice).toBeUndefined();
-    expect(controllerSrc).not.toMatch(/voicesNoStageVoice/);
+  it("labels the arming toggle as what it does, not as a mode", () => {
+    expect(en.voicesArrowAudition?.message).toBe("Arrow keys play");
   });
 });
 
-describe("Defect 3 — tier copy: the heading names the tier, the blurb names the benefit", () => {
-  it("names the HD tier without an em-dash descriptor", () => {
-    expect(en.voicesShelfHd?.message).toBe("HD voices");
+describe("every substituted string declares its placeholders", () => {
+  const substituted = [
+    ["voicesYourVoice", 1],
+    ["voicesSwitchBackTo", 1],
+    ["voicesNoSampleGroup", 1],
+    ["voicesNowPlaying", 1],
+    ["voicesMenuSummary", 3],
+  ] as const;
+
+  it.each(substituted)("%s declares %i placeholder(s), numbered $1..$n", (key, n) => {
+    const slots = placeholderSlots(key);
+    expect(slots.length, `${key} should declare ${n} placeholders`).toBe(n);
+    expect([...slots].sort((a, b) => a - b)).toEqual(
+      Array.from({ length: n }, (_, i) => i + 1)
+    );
   });
 
-  it("leads the HD blurb with sound, never with cost", () => {
-    expect(en.voicesShelfHdBlurb?.message).toBe(
-      "Our richest, most expressive sound."
-    );
-    expect(en.voicesShelfHdBlurb.message).not.toMatch(
-      /allowance|credit|faster|cost|price/i
-    );
-    // Substitution-free → data-i18n is safe, so it must declare no placeholder.
-    expect(en.voicesShelfHdBlurb.message).not.toMatch(/\$.+\$/);
+  it("keeps every one of them off a data-i18n element in the controller", () => {
+    // replaceI18n() rewrites [data-i18n] textContent from the bare key, which
+    // erases substitutions on every subsequent tab load. The controller must
+    // therefore never pair a substituted getMessage with setAttribute("data-i18n").
+    for (const [key] of substituted) {
+      expect(
+        controllerSrc,
+        `${key} must not be declared as a data-i18n key`
+      ).not.toMatch(new RegExp(`"data-i18n",\\s*"${key}"`));
+    }
+  });
+});
+
+describe("counts read correctly at 1 — Chrome i18n has no plural forms", () => {
+  it("phrases the no-sample group so one voice is not 'voices'", () => {
+    expect(en.voicesNoSampleGroup?.message).toBe("No sample yet ($count$)");
   });
 
-  it("names the Everyday tier in parallel with HD", () => {
-    expect(en.voicesShelfEveryday?.message).toBe("Everyday voices");
-  });
-
-  it("states the ratio exactly once, on the side where it is a gain", () => {
-    expect(en.voicesShelfEverydayBlurb?.message).toBe(
-      "Natural and clear — you can listen about 20× longer than with HD."
+  it("phrases the menu summary around a bare number, not a pluralised noun", () => {
+    // "3 of 4 seats" reads at every value, including "1 of 4 seats".
+    expect(en.voicesMenuSummary?.message).toBe(
+      "$host$'s menu: $used$ of $cap$ seats"
     );
-    // "Allowance" is the vendor's ledger, not something a listener can picture.
-    expect(en.voicesShelfEverydayBlurb.message).not.toMatch(
-      /allowance|credit/i
-    );
-    // The referent stays explicit: a locale reflow (or a single-tier catalog,
-    // which collapses the shelves into a flat grid) removes the adjacent shelf.
-    expect(en.voicesShelfEverydayBlurb.message).toMatch(/than with HD/);
   });
+});
 
-  it("passes the studio-only blurb keys, not the in-chat allowance footnote", () => {
-    // The quoted form is the key being PASSED to renderShelf; the studio may
-    // still mention the other key in a comment saying why it isn't reused.
-    expect(controllerSrc).toMatch(/"voicesShelfHdBlurb"/);
-    expect(controllerSrc).not.toMatch(/"hdVoicesAllowanceNote"/);
+describe("the tier shelves are gone, but the allowance note is not", () => {
+  it("no longer renders either shelf blurb", () => {
+    // Price is the vendor's axis; the rail sorts on the listener's. The keys
+    // stay in messages.json (31 locales carry them) but nothing renders them.
+    expect(controllerSrc).not.toMatch(/"voicesShelfHdBlurb"/);
+    expect(controllerSrc).not.toMatch(/"voicesShelfEverydayBlurb"/);
+    expect(controllerSrc).not.toMatch(/"voicesShelfHd"/);
+    expect(controllerSrc).not.toMatch(/"voicesShelfEveryday"/);
   });
 
   it("leaves hdVoicesAllowanceNote and its in-chat callers untouched", () => {
@@ -107,5 +129,65 @@ describe("Defect 3 — tier copy: the heading names the tier, the blurb names th
     );
     const callers = claudeMenuSrc.match(/hdVoicesAllowanceNote/g) ?? [];
     expect(callers.length).toBe(2); // HD chip tooltip + menu footnote
+  });
+});
+
+describe("the stage and the slots section are retired", () => {
+  const retired = [
+    "voicesStagePlay",
+    "voicesSpeaksWith",
+    "voicesStageEmptyTitle",
+    "voicesStageEmptyNoteReplace",
+    "voicesStageEmptyNoteSilent",
+    "voicesInHostMenu",
+    "voicesMenuHint",
+    "voicesMenuOverflow",
+    "voicesMenuOverflowOne",
+  ];
+
+  it.each(retired)("%s is no longer rendered by the controller", (key) => {
+    expect(controllerSrc).not.toMatch(new RegExp(`"${key}"`));
+  });
+
+  it("keeps the retired keys in the locale — 31 translations, zero cost", () => {
+    for (const key of retired) {
+      expect(en[key], `${key} should stay in messages.json`).toBeTruthy();
+    }
+  });
+
+  it("retires voicesNoStageVoice — key deleted and nothing references it", () => {
+    expect(en.voicesNoStageVoice).toBeUndefined();
+    expect(controllerSrc).not.toMatch(/voicesNoStageVoice/);
+  });
+});
+
+describe("the strings the rail still reuses, unchanged in 31 locales", () => {
+  const reused = [
+    "voicesSectionTitle",
+    "voicesUseShort",
+    "voicesUseOnHost",
+    "voicesSpeakingNow",
+    "voicesAddToMenuShort",
+    "voicesInMenuShort",
+    "voicesAddVoiceToMenu",
+    "voicesRemoveVoiceFromMenu",
+    "voicesMenuFull",
+    "voicesLoadError",
+    "voicesNoneAvailable",
+    "signInForTTS",
+    "voicesBuiltinsNote",
+    "voiceSpeaksNLanguages",
+  ];
+
+  it.each(reused)("%s is still rendered and still exists", (key) => {
+    expect(en[key], `${key} should exist in en`).toBeTruthy();
+    expect(
+      controllerSrc.includes(`"${key}"`) || panelSrc.includes(`"${key}"`),
+      `${key} should still be rendered`
+    ).toBe(true);
+  });
+
+  it("keeps voicesSpeakingNow as the IN USE marker — same promise, new place", () => {
+    expect(en.voicesSpeakingNow?.message).toBe("Speaking now");
   });
 });

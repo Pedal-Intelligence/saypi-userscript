@@ -1164,6 +1164,80 @@
     "message": "Hear a sample",
     "description": "Button on the settings Voices studio stage that plays the current voice's free sample clip."
   },
+  "voicesSectionDescriptionListen": {
+    "message": "Every voice, deepest to brightest. Listen, then choose.",
+    "description": "Subheading under the Voices settings heading, for the pitch-ordered rail of voices."
+  },
+  "voicesRailLabel": {
+    "message": "Voices, ordered from deepest to brightest",
+    "description": "Accessible name of the settings Voices list (a listbox of every voice, one row each)."
+  },
+  "voicesArrowAudition": {
+    "message": "Arrow keys play",
+    "description": "Label on the toggle in the Voices control bar that says whether walking the list with the arrow keys plays each voice as focus reaches it."
+  },
+  "voicesKeyboardHint": {
+    "message": "Space to play · ↑↓ to walk · ⇧Space to switch back",
+    "description": "One-line keyboard hint in the settings Voices control bar. The glyphs are keys: Space, the up/down arrows, and Shift+Space."
+  },
+  "voicesSwitchBackTo": {
+    "message": "Switch back to $name$",
+    "description": "Accessible label for the compare control in the settings Voices control bar, which replays the other voice of the last two heard; $name$ is that voice.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesYourVoice": {
+    "message": "Your voice: $name$",
+    "description": "Control-bar button in the settings Voices list that moves focus to the row of the voice this host currently uses; $name$ is that voice.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "message": "No sample yet ($count$)",
+    "description": "Heading for the group at the end of the settings Voices list holding voices with no sample clip to play; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "message": "$host$'s menu: $used$ of $cap$ seats",
+    "description": "Summary line under the settings Voices list saying how much of the host's in-chat voice menu is filled; $host$ is the assistant, $used$ how many seats are taken, $cap$ how many there are. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNowPlaying": {
+    "message": "Playing $name$",
+    "description": "Screen-reader announcement when a voice's sample clip starts playing in the settings Voices list; $name$ is the voice.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
   "voiceTagline_alloy": {
     "message": "Balanced and all-purpose",
     "description": "Authored personality tagline for the 'Alloy' voice (settings Voices studio; client-side voice identity map)."

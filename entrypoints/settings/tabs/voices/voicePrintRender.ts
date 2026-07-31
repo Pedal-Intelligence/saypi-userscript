@@ -46,9 +46,17 @@ export const PRINT_BAR_LOUD_H = 6;
 export const PRINT_MIN_FRAMES = 12;
 export const PRINT_MAX_FRAMES = 115;
 
-/** The three widths the studio draws at, replacing the orb's three sizes. */
-export const PRINT_WIDTHS = { sm: 72, md: 118, lg: 300 } as const;
-export type PrintSize = keyof typeof PRINT_WIDTHS;
+/**
+ * The widths the studio draws at. The rail draws every row at `lg` — one
+ * width for the whole page is what lets the shared reference line register
+ * twenty-two traces into a single chart. `md` survives as the functions'
+ * default and as the width the geometry is pinned at in tests. (A third,
+ * 72 px size existed for the menu-slot pills, which the rail retired.)
+ */
+export const PRINT_WIDTHS = { md: 118, lg: 300 } as const;
+
+/** The playhead's width, in print units. A hairline: it is a clock, not a bar. */
+export const PRINT_HEAD_W = 1.5;
 
 const LOG_LO = Math.log2(PRINT_AXIS_LO_HZ);
 const LOG_SPAN = Math.log2(PRINT_AXIS_HI_HZ) - LOG_LO;
@@ -153,10 +161,30 @@ export function createPrintSvg(width: number = PRINT_WIDTHS.md): SVGSVGElement {
   const trace = document.createElementNS(SVG_NS, "g");
   trace.classList.add("voice-print-trace");
   svg.appendChild(trace);
+
+  // The playhead. Present on every print and only *visible* on the playing
+  // row, so nothing is created or destroyed when a clip starts — it is the
+  // one thing on the page that has to be smooth.
+  const head = document.createElementNS(SVG_NS, "rect");
+  head.classList.add("voice-print-head");
+  head.setAttribute("x", "0");
+  head.setAttribute("y", "0");
+  head.setAttribute("width", String(PRINT_HEAD_W));
+  head.setAttribute("height", String(PRINT_HEIGHT));
+  svg.appendChild(head);
   return svg;
 }
 
-/** Draw (or redraw) a measured print into an existing svg. */
+/**
+ * Draw (or redraw) a measured print into an existing svg.
+ *
+ * Also publishes the two numbers the playhead needs — how far it travels
+ * (`--print-trace-w`, the drawn trace's width) and how long that takes
+ * (`--print-span`, the clip's own measured speech span). Both come from the
+ * measurement, so the head is a clock for the drawing rather than a fixed
+ * animation pretending to be one; an unmeasured print publishes neither and
+ * gets no head.
+ */
 export function paintPrintTrace(
   svg: SVGSVGElement,
   print: VoicePrint | null,
@@ -165,7 +193,16 @@ export function paintPrintTrace(
   const trace = svg.querySelector(".voice-print-trace");
   if (!trace) return;
   while (trace.firstChild) trace.removeChild(trace.firstChild);
-  if (!print) return;
+  if (!print) {
+    svg.style.removeProperty("--print-trace-w");
+    svg.style.removeProperty("--print-span");
+    return;
+  }
+  svg.style.setProperty(
+    "--print-trace-w",
+    `${traceWidth(print.span, width).toFixed(1)}px`
+  );
+  svg.style.setProperty("--print-span", `${print.span.toFixed(2)}s`);
   for (const bar of printBars(print, width)) {
     const rect = document.createElementNS(SVG_NS, "rect");
     rect.setAttribute("x", bar.x.toFixed(2));

@@ -1,17 +1,18 @@
-/* Voices tab — the host-scoped "studio" behind the in-page menus' "More
-   voices…" doors (2026-07-07 Host Studio redesign): host switcher → stage
-   (current voice) → menu slots (the literal in-chat menu) → explore shelves.
-   Every voice's mark is its soundprint, drawn from its own sample clip
-   (2026-07-31 audition-room design §6). Light-only, matching the settings
-   shell. */
+/* Voices tab — "the rail" (2026-07-31 audition-room design).
+   A chart, not a directory: twenty-two ink traces on warm paper, registered
+   against one reference line, with a single green that means *now*. No colour
+   per voice, no cards, and NO RULES BETWEEN ROWS — separation comes from the
+   42px rhythm and the prints themselves. Exactly two rules exist on the page:
+   under the control bar, and above the "No sample yet" group.
+   Light-only, matching the settings shell. */
 
 #voice-studio {
   max-width: 900px;
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 /* The generic 504px .tab-panel cap (tabs.css) is right for the form tabs but
-   would squeeze the studio; give the Voices pane the full content column. */
+   would squeeze the rail; give the Voices pane the full content column. */
 #tab-voices.tab-panel {
   max-width: none;
 }
@@ -27,10 +28,34 @@
 }
 
 /* No per-tab column widening here: `.content` is flex:1 inside the
-   full-width .settings-container (global.css), so the studio already gets
+   full-width .settings-container (global.css), so the rail already gets
    the wide column; #voice-studio's max-width caps it. A Voices-only width
-   rule is exactly what caused the tab-switch sidebar shunt (the container
-   used to shrink-to-fit its content). */
+   rule is exactly what caused the tab-switch sidebar shunt (#582/#583). */
+
+/* --- heading row ----------------------------------------------------------
+   The host switcher is demoted to 12px and moved to the top-right, but stays
+   TOP-LEVEL: host is the scope for pins, for the current voice and for the
+   deep link, so burying it in a footer would make "which assistant am I
+   configuring" a footnote on a page whose only commit action is host-scoped. */
+
+.voice-rail-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 900px;
+}
+.voice-rail-headings {
+  min-width: 0;
+}
+/* Not `.description`: preferences.css sets that to display:none inside a
+   .user-preference-item, so the subtitle would never be seen. */
+.voice-rail-subtitle {
+  font-size: 13px;
+  color: rgba(21, 23, 26, 0.62);
+  margin: 0 0 0 0;
+}
 
 /* --- host switcher -------------------------------------------------------- */
 
@@ -38,21 +63,20 @@
   display: inline-flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid #e5e3dc;
+  border: 1px solid #e6e3da;
   border-radius: 9999px;
   background: #ffffff;
-  margin-bottom: 14px;
 }
 .voice-host-tab {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 16px;
+  gap: 6px;
+  padding: 5px 14px;
   border: none;
   border-radius: 9999px;
   background: transparent;
-  color: #6f6a61;
-  font-size: 13px;
+  color: rgba(21, 23, 26, 0.62);
+  font-size: 12px;
   cursor: pointer;
 }
 .voice-host-tab[aria-pressed="true"] {
@@ -60,13 +84,9 @@
   color: #ffffff;
   font-weight: 600;
 }
-.voice-host-tab:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 2px;
-}
 .voice-host-logo {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border-radius: 4px;
   object-fit: contain;
   /* White chip behind the mark: Pi's dark glyph stays legible on the active
@@ -81,481 +101,374 @@
 .voice-studio-empty {
   padding: 0.75rem 0.25rem;
   font-size: 0.9rem;
-  color: #6f6a61;
+  color: rgba(21, 23, 26, 0.62);
 }
 
-/* --- the stage -------------------------------------------------------------
-   One near-black room for every voice. It used to be tinted per voice from
-   --stage-from/-to, mixed toward black through a color-mix fallback stack so
-   white text stayed readable on any hue — machinery that existed entirely to
-   survive a hash-derived gradient. With the gradients gone the whole stack
-   collapses to the two colours it always resolved to. */
+/* The live region. Visually hidden, never display:none — a display:none live
+   region is not announced. */
+.voice-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
-.voice-stage {
+/* --- the control bar -------------------------------------------------------
+   Sticky and OPAQUE, so rows scroll under it rather than through it. Rule 1 of
+   the page's two. */
+
+.voice-rail-controls {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fbfaf7;
+  border-bottom: 1px solid #e6e3da;
+  /* 44px exactly: 3 + 18 + 1 + 18 + 4. */
+  padding: 3px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 12px;
+  color: rgba(21, 23, 26, 0.62);
+  font-variant-numeric: tabular-nums;
+}
+.voice-rail-controls-row {
   display: flex;
   align-items: center;
-  gap: 22px;
-  padding: 24px 26px;
-  /* Pinned so the empty stage — which has no mark and no chips — holds exactly
-     the same room as a full one, and switching to a host with no voice yet
-     doesn't collapse the page. */
-  min-height: 136px;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  color: #ffffff;
-  background: linear-gradient(118deg, #124144, #0e2623 62%, #0a100f);
+  gap: 14px;
+  min-height: 18px;
 }
-/* Nothing staged yet: a hero that recruits, not a disabled placeholder. The
-   dashed outline and grey fill this replaced read as an error state. It keeps
-   the stage's full height and gets a gradient of its own, but a deliberately
-   quieter one — an empty stage has no voice identity to draw from, so it must
-   not out-shout a real selected voice. */
-.voice-stage.voice-stage-empty {
-  color: #1f2b26;
-  background: linear-gradient(118deg, #f6f5ef, #eceadf 58%, #e4e2d5);
+.voice-rail-hint {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.voice-stage-empty-title {
-  font-size: 28px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
+.voice-compare {
+  margin-left: auto;
 }
-.voice-stage-empty-note {
-  font-size: 13.5px;
-  color: #5c5a51;
-  margin-top: 6px;
-}
-.voice-stage-meta {
-  min-width: 0;
-}
-.voice-stage-eyebrow {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
-  margin-bottom: 5px;
-}
-.voice-stage-name {
-  font-size: 28px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-}
-.voice-stage-tagline {
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 3px;
-}
-.voice-stage-chips {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 13px;
-}
-.voice-stage-play {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+
+.voice-your-voice,
+.voice-arrow-chip,
+.voice-compare-swap {
   border: none;
-  border-radius: 9999px;
-  background: #ffffff;
-  color: #14201e;
-  padding: 7px 15px;
-  font-size: 12.5px;
-  font-weight: 700;
+  background: transparent;
+  padding: 2px 0;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
+  white-space: nowrap;
 }
-.voice-stage-play::before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-left: 8px solid #14201e;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
+.voice-your-voice:hover,
+.voice-compare-swap:hover {
+  color: #15171a;
 }
-.voice-stage-play:hover {
-  background: #f1efe9;
-}
-.voice-stage-lang {
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 3px 9px;
+/* The chip is the arming rule made visible AND its permanent escape hatch: it
+   lights when arrows are auditioning, and pressing it turns focus-plays off
+   for good. One green, one meaning — now. */
+.voice-arrow-chip {
+  border: 1px solid #e6e3da;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.16);
-  color: rgba(255, 255, 255, 0.92);
+  padding: 2px 10px 2px 8px;
+  background: #ffffff;
 }
-.voice-stage .voice-tier-chip {
-  position: static;
+.voice-arrow-chip::before {
+  content: "●";
+  margin-right: 5px;
+  color: rgba(21, 23, 26, 0.22);
+}
+.voice-arrow-chip.lit {
+  color: #2c5a42;
+  border-color: #2c5a42;
+}
+.voice-arrow-chip.lit::before {
+  color: #2c5a42;
+}
+.voice-arrow-chip[aria-pressed="false"] {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+.voice-compare-glyph {
+  margin-right: 5px;
 }
 
-/* --- soundprints (the mark = the play button) -------------------------------
+/* --- the rail --------------------------------------------------------------
+   One listbox, one tab stop, 42px rows on an 8px grid. Row columns:
+   [3px focus rule][14][300px print][20][name 108px][12][desc flex][badges][actions 96px][20] */
+
+.voice-rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.voice-rail:focus {
+  outline: none;
+}
+.voice-rail:focus-visible {
+  outline: none;
+}
+
+.voice-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 42px;
+  /* [3px focus rule][14][300px print][20][name 108][12][desc][badges][96][20] */
+  padding: 0 20px 0 14px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  color: rgba(21, 23, 26, 0.22);
+  transition: background-color 0.12s ease-out, color 0.12s ease-out;
+}
+/* No rule between rows. Separation is the rhythm and the prints.
+   Ink is one variable in three steps, the way a waveform editor does it —
+   colourblind-safe, and it lets 22 rows coexist without becoming a wall of
+   Skittles. Playing is FULL ink and nothing else is, so hover has to stop
+   short of it: sharing one value would paint a merely-hovered voice exactly
+   like the one that is actually sounding. `.playing` sits last because it ties
+   `:hover` on specificity and source order is what decides. */
+.voice-row:hover {
+  background: #f1efe9;
+  color: rgba(21, 23, 26, 0.5);
+}
+.voice-row.focused {
+  background: #f1efe9;
+  color: rgba(21, 23, 26, 0.5);
+}
+.voice-row.playing {
+  color: #15171a;
+}
+/* The current voice keeps its PITCH POSITION and is marked in place — pinning
+   it to the top would break the chart the pitch order creates. */
+.voice-row-current {
+  border-left-color: #2c5a42;
+}
+
+.voice-row-print {
+  flex: 0 0 300px;
+  width: 300px;
+  height: 26px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+/* A voice with no clip renders this band EMPTY — no placeholder shape
+   pretending to be data, and visibly different from a print still loading,
+   which already shows its reference line. The band is still reserved, so the
+   names stay on one baseline down the whole rail. */
+.voice-row-name {
+  flex: 0 0 108px;
+  min-width: 0;
+  margin-right: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: #15171a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The tagline is a focused-row affordance now, not a 2.7em block on 22 cards.
+   Opacity, not display, so the row never reflows as focus moves. */
+.voice-row-desc {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 12px;
+  color: rgba(21, 23, 26, 0.62);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+.voice-row:hover .voice-row-desc,
+.voice-row.focused .voice-row-desc {
+  opacity: 1;
+}
+.voice-row-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+.voice-row-inuse {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2c5a42;
+  white-space: nowrap;
+}
+/* Actions render on every row but are only VISIBLE — and only tabbable, which
+   the controller manages — on the row you are looking at. That is what keeps
+   Tab at exactly two extra stops instead of forty-four. */
+.voice-row-actions {
+  flex: 0 0 96px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: 12px;
+  visibility: hidden;
+}
+.voice-row:hover .voice-row-actions,
+.voice-row.focused .voice-row-actions {
+  visibility: visible;
+}
+
+/* --- soundprints -----------------------------------------------------------
    Each voice drawn from its OWN sample clip: a pitch trace on a shared 80–288
    Hz log axis, with one faint reference line at 155 Hz running through every
    print at the same y. That line is the design move — it registers every
    independent trace into a single chart, so vertical position means the same
-   thing on every voice.
+   thing on every voice, and the rail reads as one continuous descent.
 
-   Ink is `currentColor` on the <svg>, so the whole state of a print is one
-   class on its container: resting, or playing. (The third density — "heard" —
-   arrives with the heard store; until then every measured print reads the
-   same.) Colour, deliberately, carries nothing: this replaced 22 hash-derived
-   gradients that looked like they encoded something and encoded nothing.
-
-   Playing is FULL ink and nothing else is, which is what makes it readable
-   without a playhead (that needs the sequencer's currentTime and arrives with
-   the rail). Hover therefore has to stop short of full: sharing one declaration
-   with .playing meant clicking a mark changed nothing under the cursor, and a
-   merely-hovered voice painted identically to the one that was actually
-   sounding. Three steps, one variable, no hue — the way a waveform editor
-   does it. */
-
-.voice-print-mark {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  color: rgba(21, 23, 26, 0.62);
-  transition: color 0.12s ease;
-}
-.voice-print-mark:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-.voice-print-mark:hover {
-  color: rgba(21, 23, 26, 0.82);
-}
-.voice-print-mark.playing {
-  color: #15171a;
-}
-/* On the stage the ground is near-black, so the same three densities invert. */
-.voice-stage .voice-print-mark {
-  color: rgba(255, 255, 255, 0.62);
-}
-.voice-stage .voice-print-mark:hover {
-  color: rgba(255, 255, 255, 0.82);
-}
-.voice-stage .voice-print-mark.playing {
-  color: #ffffff;
-}
+   Ink is `currentColor` from the ROW, so the whole state of a print is one
+   class on its row. Colour, deliberately, carries nothing: this replaced 22
+   hash-derived gradients that looked like they encoded something and encoded
+   nothing. */
 
 .voice-print {
   display: block;
   overflow: visible;
 }
-/* The stage is a flex ROW and its print is 300px — 212px wider than the 88px
-   orb it replaced — while every mark is flex-shrink:0 (right for the 72px slot
-   pill in its own tight row). So on any window narrower than ~950px the fixed
-   mark ate the text block beside it: at 800px the eyebrow, the tagline and the
-   Hear-a-sample pill all wrapped while ~110px of the print stayed empty
-   reference line. The 560px stacking query below was tuned for the orb and
-   never fires in that range. Let the stage's print give way instead — the
-   viewBox means it SCALES rather than crops, so it costs resolution, not
-   information — and cap it at the box so it can't overflow once stacked. */
-.voice-stage > .voice-print-mark {
-  flex-shrink: 1;
-  min-width: 0;
-}
-.voice-stage .voice-print {
-  max-width: 100%;
-  height: auto;
-}
 /* The trace is the voice; the reference line is the chart it hangs on, so it
-   stays faint and does NOT take the playing state's ink. */
+   stays faint and does NOT take the playing row's ink. */
 .voice-print-ref {
   stroke: #e6e3da;
   stroke-width: 1;
 }
-.voice-stage .voice-print-ref {
-  stroke: rgba(255, 255, 255, 0.22);
-}
 .voice-print-trace {
   fill: currentColor;
 }
-/* Slot pills keep roughly their old height; the print scales uniformly
-   (viewBox), so the geometry stays canonical and only the presentation
-   shrinks. Both axes are given, at the print's own ratio, so the scaled trace
-   doesn't sit letterboxed inside a wider box. */
-.voice-print-sm .voice-print {
-  width: 55px;
-  height: 20px;
+/* The playhead: a clock, linear, no easing, and only on the playing row. It
+   travels the DRAWN trace (--print-trace-w) over the clip's own measured span
+   (--print-span), both published by paintPrintTrace from the measurement — so
+   an unmeasured print, which sets neither, never gets a head that would be
+   pretending. */
+.voice-print-head {
+  fill: #2c5a42;
+  opacity: 0;
 }
-@media (prefers-reduced-motion: reduce) {
-  .voice-print-mark {
-    transition: none;
+.voice-row.playing .voice-print-head {
+  opacity: 1;
+  animation: voice-print-sweep var(--print-span, 1.5s) linear 1 forwards;
+}
+@keyframes voice-print-sweep {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--print-trace-w, 0px));
   }
 }
 
-/* --- menu slots ------------------------------------------------------------ */
+/* --- the tail: "No sample yet", built-ins, and the menu summary ------------
+   Rule 2 of the page's two. */
 
-.voice-slots-section {
-  margin-bottom: 18px;
-}
-.voice-slots-head {
+.voice-rail-divider {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  margin-bottom: 8px;
-}
-.voice-slots-title {
-  font-size: 13px;
-  font-weight: 700;
-}
-.voice-slots-hint {
-  font-size: 11.5px;
-  color: #77726a;
-}
-.voice-slots {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 20px 6px 17px;
+  border-top: 1px solid #e6e3da;
+  font-size: 12px;
+  color: rgba(21, 23, 26, 0.62);
 }
-.voice-slot {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 7px;
-  border: 1px solid #e5e3dc;
-  border-radius: 9999px;
-  background: #ffffff;
-  font-size: 12.5px;
-  font-weight: 550;
+.voice-rail-group-label {
+  font-weight: 600;
+  color: rgba(21, 23, 26, 0.62);
+  font-variant-numeric: tabular-nums;
 }
-.voice-slot-current {
-  border-color: #8fbca3;
-  background: #f2f8f4;
-}
-.voice-slot-state {
-  font-size: 10.5px;
-  font-weight: 650;
-  color: #2c5a42;
-  white-space: nowrap;
-}
-.voice-slot-remove {
-  border: none;
-  background: transparent;
-  color: #9c978c;
-  font-size: 15px;
-  line-height: 1;
-  padding: 0 2px;
-  cursor: pointer;
-}
-.voice-slot-remove:hover {
-  color: #4c4842;
-}
-.voice-slot-remove:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-.voice-slots-overflow,
-.voice-slots-builtins {
-  font-size: 11.5px;
-  color: #77726a;
-  margin-top: 7px;
+.voice-menu-summary {
+  margin-top: 10px;
+  padding: 0 20px 0 17px;
+  font-size: 12px;
+  color: rgba(21, 23, 26, 0.62);
+  font-variant-numeric: tabular-nums;
 }
 
-/* --- explore shelves -------------------------------------------------------- */
-
-.voice-shelves {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.voice-shelf-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-/* The heading leads and the blurb recedes: the heading names the tier, the
-   blurb names the benefit. Before this the ALLCAPS heading and a full
-   explanatory sentence competed at the same visual weight (the blurb was
-   actually the LARGER of the two). The hierarchy is bought by DARKENING the
-   heading — the blurb stays at a WCAG-AA colour, because it is the one place
-   the studio says what HD costs. */
-.voice-shelf-title {
-  font-size: 11.5px;
-  font-weight: 750;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #3f3b35;
-  /* The head is a flex row; the default shrink makes the TITLE the thing that
-     gives when the pair is tight, stacking "EVERYDAY / VOICES" beside a
-     two-line blurb. The heading can't lead from two lines. */
-  flex-shrink: 0;
-}
-.voice-shelf-blurb {
-  font-size: 11px;
-  color: #77726a; /* 4.8:1 on the white card — AA at this size. */
-}
-.voice-card-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-}
-.voice-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 7px;
-  /* 30px of top padding is the HD chip's band, reserved on EVERY card. The chip
-     is absolutely positioned at top-left, so it paints over whatever is under
-     it, and the 118px print — unlike the 56px orb it replaced, which started
-     clear at x≈49 — runs from x≈17 and disappears underneath. Measured in the
-     built extension: 19.7 x 10.5px of the print's TOP-LEFT was covered, i.e.
-     everything above ~176 Hz in the first ~7 frames, so the brighter the voice
-     the more of its mark vanished — the exact inverse of what a shared axis is
-     for. Reserved uniformly rather than only on chipped cards, so prints stay
-     on one baseline across a grid row however the tiers are grouped. */
-  padding: 30px 10px 12px;
-  border: 1px solid #e5e3dc;
-  border-radius: 14px;
-  background: #ffffff;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-.voice-card:hover {
-  box-shadow: 0 6px 18px rgba(20, 20, 10, 0.1);
-  transform: translateY(-1px);
-}
-.voice-card-current {
-  box-shadow: 0 0 0 2px rgba(44, 90, 66, 0.35);
-}
-.voice-card-current:hover {
-  box-shadow:
-    0 0 0 2px rgba(44, 90, 66, 0.35),
-    0 6px 18px rgba(20, 20, 10, 0.1);
-}
-@media (prefers-reduced-motion: reduce) {
-  .voice-card,
-  .voice-card:hover {
-    transition: none;
-    transform: none;
-  }
-}
-/* Positioned, so it paints over the print. `top` + the chip's own ~17px must
-   stay inside .voice-card's reserved top padding — see the note there. */
-.voice-card > .voice-tier-chip {
-  position: absolute;
-  top: 9px;
-  left: 9px;
-}
-.voice-card-name {
-  font-size: 13.5px;
-  font-weight: 650;
-  margin-top: 2px;
-}
-/* Two lines, always. Grid rows stretch, so ONE voice whose subtitle falls back
-   to a long server description used to grow every sibling card in its row
-   while their Use buttons stayed stranded mid-card. The clamp caps the tallest
-   tagline; min-height still reserves the space so a one-line tagline doesn't
-   shrink its card. */
-.voice-card-tagline {
-  font-size: 11px;
-  color: #77726a;
-  line-height: 1.35;
-  min-height: 2.7em;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-  /* The card centers its children, which would shrink-wrap the clamped box to
-     its longest line; stretching it fixes the wrap point (and the ellipsis) at
-     the card's width. text-align: center still centers the text itself. */
-  align-self: stretch;
-}
-/* margin-top:auto bottoms the actions row out, so the buttons share a baseline
-   across a row even if a card is still taller than its content. */
-.voice-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: auto;
-}
-.voice-card-state {
-  font-size: 10.5px;
-  font-weight: 650;
-  color: #2c5a42;
-  white-space: nowrap;
-}
-
-/* --- shared chips + actions -------------------------------------------------- */
+/* --- chips + actions -------------------------------------------------------- */
 
 .voice-tier-chip {
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  padding: 2px 6px;
-  border-radius: 5px;
-  background: #23211d;
-  color: #f5d78e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(21, 23, 26, 0.38);
+  white-space: nowrap;
 }
 
 .voice-pin-toggle {
-  border: 1px solid #e5e3dc;
-  border-radius: 9999px;
-  background: #ffffff;
-  color: #6f6a61;
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 550;
+  border: none;
+  background: transparent;
+  padding: 2px 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: rgba(21, 23, 26, 0.62);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.12s ease, border-color 0.12s ease;
 }
 .voice-pin-toggle:hover:not(:disabled) {
-  border-color: #c8c4ba;
+  color: #15171a;
 }
 .voice-pin-toggle.pinned {
-  background: #e7f2eb;
-  border-color: #8fbca3;
   color: #2c5a42;
 }
 .voice-pin-toggle:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
-.voice-pin-toggle:focus-visible,
-.voice-use:focus-visible,
-.voice-stage-play:focus-visible,
-.voice-host-tab:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 2px;
-}
-
+/* The one commit action on the page takes the one green. */
 .voice-use {
-  border: 1px solid #e5e3dc;
-  border-radius: 9999px;
+  border: none;
   background: transparent;
-  color: inherit;
-  padding: 3px 10px;
-  font-size: 11px;
+  padding: 2px 0;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: #2c5a42;
   cursor: pointer;
   white-space: nowrap;
 }
+/* One green means one green: hover underlines rather than inventing a second
+   shade of it. */
 .voice-use:hover {
-  background: #f3f2ee;
+  text-decoration: underline;
 }
 
-/* Narrow settings windows: let the stage stack instead of squeezing. */
-@media (max-width: 560px) {
-  .voice-stage {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+.voice-host-tab:focus-visible,
+.voice-pin-toggle:focus-visible,
+.voice-use:focus-visible,
+.voice-your-voice:focus-visible,
+.voice-arrow-chip:focus-visible,
+.voice-compare-swap:focus-visible {
+  outline: 2px solid #2c5a42;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* The rail is one tab stop, so its focus ring belongs on the ACTIVE ROW —
+   aria-activedescendant means the listbox itself holds DOM focus. */
+.voice-rail:focus-visible .voice-row.focused {
+  outline: 2px solid #2c5a42;
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-row,
+  .voice-row-desc {
+    transition: none;
+  }
+  /* The playhead is NOT removed — it carries information. It advances in 8
+     discrete steps instead of sweeping. (The page it replaced killed its
+     equalizer outright under reduced motion, leaving a near-invisible glyph.) */
+  .voice-row.playing .voice-print-head {
+    animation-timing-function: steps(8, end);
   }
 }

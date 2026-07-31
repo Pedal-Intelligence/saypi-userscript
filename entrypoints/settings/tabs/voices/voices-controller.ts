@@ -1,8 +1,5 @@
 import getMessage from "../../../../src/i18n";
-import {
-  audioProviders,
-  SpeechSynthesisVoiceRemote,
-} from "../../../../src/tts/SpeechModel";
+import { SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
 import { getJwtManagerSync } from "../../../../src/JwtManager";
@@ -14,6 +11,8 @@ import {
 } from "../../../../src/tts/VoicePins";
 import { getVoiceTier } from "../../../../src/tts/VoiceCuration";
 import { getVoiceIdentity } from "../../../../src/tts/VoiceIdentity";
+import { pitchOf } from "../../../../src/tts/VoicePitch";
+import { defaultLocalStorage } from "../../../../src/storage/localKeyStorage";
 import {
   DupStrategy,
   escapeCss,
@@ -41,10 +40,18 @@ import {
   createPrintSvg,
   paintPrintTrace,
   PRINT_WIDTHS,
-  PrintSize,
 } from "./voicePrintRender";
 
 export type { VoiceHostId } from "./voices-view-model";
+
+/**
+ * The permanent escape hatch for anyone who finds focus-plays hostile
+ * (design §3). `chrome.storage.local`, absence means ON.
+ */
+export const VOICES_ARROW_AUDITION_KEY = "voicesArrowAudition";
+
+/** How long a type-ahead buffer survives between keystrokes. */
+const TYPE_AHEAD_MS = 800;
 
 export interface VoiceStudioDeps {
   getVoices(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote[]>;
@@ -66,19 +73,28 @@ export interface VoiceStudioDeps {
     onState: (state: AuditionState) => void,
     /**
      * Per-clip level match, `<audio>.volume`, attenuate-only (design §5.1).
-     * The studio computes it from the voice's measured print, and passes 1
-     * when the print has not resolved yet — a level match must never delay the
+     * The rail computes it from the voice's measured print, and passes 1 when
+     * the print has not resolved yet — a level match must never delay the
      * audio.
      */
     gain?: number
   ): void;
   /**
+   * Silence whatever is sounding. `Space` on the playing row and `Esc` both
+   * need it; optional, because a studio with no player wired (most unit tests)
+   * has nothing to stop.
+   */
+  stopPreview?(): void;
+  /**
    * Measure (or recall) the voice's soundprint — the mark drawn from its own
-   * sample clip. Optional, and absent means "this studio draws no prints":
+   * sample clip. Optional, and absent means "this rail draws no prints":
    * jsdom cannot decode audio at all, so the tests that do not care simply
    * leave it out rather than mocking a decoder.
    */
   loadPrint?(voice: SpeechSynthesisVoiceRemote): Promise<VoicePrint | null>;
+  /** Does walking the rail with the arrow keys audition? (design §3) */
+  loadArrowAudition?(): Promise<boolean>;
+  setArrowAudition?(on: boolean): Promise<void>;
   /** The user's pin overlay for a host, or null when un-customized. */
   loadPins(host: VoiceHostId): Promise<HostPinOverlay | null>;
   /** Pin/unpin a voice for a host (featuredIds = that host's default pins). */
@@ -107,6 +123,7 @@ let printLoader: VoicePrintLoader | null = null;
 function defaultDeps(): VoiceStudioDeps {
   const speech = SpeechSynthesisModule.getInstance();
   const prefs = UserPreferenceModule.getInstance();
+  const storage = defaultLocalStorage();
   return {
     getVoices: (host) => speech.getVoices(host),
     getVoice: (host) =>
@@ -124,27 +141,46 @@ function defaultDeps(): VoiceStudioDeps {
         { voiceId: voice.id, url: voice.sample_url, gain },
       ]);
     },
+    stopPreview: () => previewSequencer?.stop(),
     loadPrint: (voice) => {
       if (!voice.sample_url) return Promise.resolve(null);
       if (!printLoader) printLoader = new VoicePrintLoader();
       return printLoader.get(voice.id, voice.sample_url);
     },
+    // Absence means ON: the toggle only ever writes `false`, so a fresh
+    // profile arrows-and-auditions without a storage round trip deciding it.
+    loadArrowAudition: () =>
+      storage.get(VOICES_ARROW_AUDITION_KEY).then((raw) => raw !== false),
+    setArrowAudition: (on) =>
+      storage.set(VOICES_ARROW_AUDITION_KEY, on).catch(() => {}),
     loadPins: (host) => loadHostOverlay(host),
     setPinned: (host, voiceId, featuredIds, pin) =>
       setVoicePinned(host, voiceId, featuredIds, pin),
   };
 }
 
+/** One painted row, and the little the keyboard needs to know about it. */
+interface RailRow {
+  voice: SpeechSynthesisVoiceRemote;
+  /** DOM id — the `aria-activedescendant` target. */
+  domId: string;
+  /** Has a sample clip: auditionable, pitched, and inside the rail's counts. */
+  playable: boolean;
+  el: HTMLElement;
+}
+
 /**
- * Renders the host-scoped voice "studio" in the settings Voices tab
- * (doc/plans/2026-07-07-voices-host-studio-design.md): host switcher → stage
- * (the current voice) → menu slots (the literal in-chat menu, from the same
- * curateShortlist the in-host menu calls) → explore shelves. The in-page menus
- * stay short; this surface absorbs the catalog's growth one host at a time.
+ * The rail (doc/plans/2026-07-31-voices-audition-room-design.md).
  *
- * Every voice's mark is its **soundprint**, drawn from its own sample clip
- * (2026-07-31 audition-room design §6) — the same measurement that level-
- * matches its playback.
+ * One host-scoped `role="listbox"` of 42 px rows, ordered deepest to
+ * brightest by measured pitch, each drawn as its own soundprint against one
+ * shared reference line. The page is four things: a heading row with the host
+ * switcher, a sticky control bar, the rail, and one summary line.
+ *
+ * The keyboard is the primary interface, not a fallback: `Space` plays the
+ * focused row, arrows walk (silently until the user has explicitly played
+ * something — the arming rule), `⇧Space` plays the other half of the compare
+ * pair without moving focus, `Enter` commits, `Esc` stops and disarms.
  */
 export class VoicesController {
   private deps!: VoiceStudioDeps;
@@ -152,10 +188,48 @@ export class VoicesController {
   private renderToken = 0;
   private activeHost: VoiceHostId;
   private body: HTMLElement | null = null;
-  /** The last audition snapshot — the studio's only playback truth. */
+  /** The last audition snapshot — the rail's only playback truth. */
   private auditionState: AuditionState = IDLE_AUDITION;
   private cache = new Map<VoiceHostId, HostStudioData>();
   private loading = new Map<VoiceHostId, Promise<HostStudioData>>();
+
+  // --- the rail's own state -------------------------------------------------
+
+  private rows: RailRow[] = [];
+  private rail: HTMLElement | null = null;
+  private controls: HTMLElement | null = null;
+  private focusIndex = 0;
+  /**
+   * Which voice focus is on, carried ACROSS repaints. `useVoice` rebuilds the
+   * body from scratch, and landing the reader back at the top of a 22-row rail
+   * because they chose a voice is the whole reason this is not derived.
+   */
+  private focusedVoiceId: string | null = null;
+  /**
+   * The arming rule (design §3). Arrow keys move focus silently until the user
+   * has explicitly played something in this session; after that, focus
+   * auditions. Buys screen-reader safety, autoplay sticky activation, and no
+   * surprise audio on tab open.
+   */
+  private armed = false;
+  /** The persisted half of the same rule: off means arrows NEVER audition. */
+  private arrowAudition = true;
+  /**
+   * The compare pair (design §4): the last two DISTINCT voices auditioned,
+   * most recent first, seeded `[currentVoiceId, null]` so the first `↓`
+   * `⇧Space` is incumbent-vs-challenger with zero setup.
+   */
+  private pair: [string | null, string | null] = [null, null];
+  private pairHost: VoiceHostId | null = null;
+  private typeAhead = "";
+  private typeAheadAt = 0;
+  /** Display names for everything the control bar might have to name. */
+  private nameById = new Map<string, string>();
+  /** The id order currently painted — the input to the reorder check. */
+  private paintedOrder: string[] = [];
+  private orderDirty = false;
+  private settleTimer: ReturnType<typeof setTimeout> | null = null;
+
   /**
    * Measured soundprints, by voice id. Host-independent on purpose: a voice is
    * literally the same clip file on both hosts, so switching host must not
@@ -163,20 +237,18 @@ export class VoicesController {
    */
   private prints = new Map<string, VoicePrint>();
   /**
-   * Voices already asked for. One voice can carry three marks (stage, slot,
-   * card) and survive any number of repaints; it is measured once. A voice
-   * that came back without a print stays in here deliberately — a 404 clip
-   * must not be re-fetched every time its row is redrawn.
+   * Voices already asked for. A voice survives any number of repaints; it is
+   * measured once. A voice that came back without a print stays in here
+   * deliberately — a 404 clip must not be re-fetched every time its row is
+   * redrawn.
    */
   private printsRequested = new Set<string>();
   /** Only near-viewport rows are measured; rebuilt with the body. */
   private printObserver: IntersectionObserver | null = null;
   /**
-   * Which voice each observed mark draws. The observer callback gets a DOM node
-   * and needs the voice back; re-deriving it from the catalog would silently
-   * skip the one voice that is on screen but NOT in the catalog — a
-   * grandfathered or stale stored current voice, which the stage renders from
-   * the preference itself (`stagedCurrent`). Weak, so a detached mark from a
+   * Which voice each observed row draws. The observer callback gets a DOM node
+   * and needs the voice back; carrying the object avoids re-deriving it from
+   * the catalog by id on every intersection. Weak, so a detached row from a
    * previous paint is collected with the node.
    */
   private readonly printTargets = new WeakMap<
@@ -198,15 +270,32 @@ export class VoicesController {
     this.deps = this.injectedDeps ?? defaultDeps();
     const studio = this.container.querySelector<HTMLElement>("#voice-studio");
     if (!studio) return;
+    this.mountSwitcher();
     studio.innerHTML = "";
-    studio.appendChild(this.renderSwitcher());
     this.body = document.createElement("div");
     this.body.classList.add("voice-studio-body");
     studio.appendChild(this.body);
+    // Read before the first paint: the chip is rendered by the control bar, and
+    // a chip that flips a beat after the rail appears is a chip nobody trusts.
+    this.arrowAudition = (await this.deps.loadArrowAudition?.()) ?? true;
     await this.render();
   }
 
   // --- host scope -----------------------------------------------------------
+
+  /**
+   * The switcher lives in the panel's heading row, not in the studio: host is
+   * the scope for pins, the current voice and the deep link, so it stays a
+   * top-level control rather than becoming a footnote (design §9).
+   */
+  private mountSwitcher(): void {
+    const slot =
+      this.container.querySelector<HTMLElement>("#voice-host-switcher") ??
+      this.container.querySelector<HTMLElement>("#voice-studio");
+    if (!slot) return;
+    slot.innerHTML = "";
+    slot.appendChild(this.renderSwitcher());
+  }
 
   private renderSwitcher(): HTMLElement {
     const nav = document.createElement("div");
@@ -243,6 +332,10 @@ export class VoicesController {
     } catch {
       // Last-viewed host is a nicety; never let storage break the studio.
     }
+    // The sequence's items are about to leave the screen (design §5.2), and
+    // the new host has its own incumbent to focus and to seed the pair with.
+    this.stopAudition();
+    this.focusedVoiceId = null;
     void this.render();
   }
 
@@ -295,37 +388,70 @@ export class VoicesController {
     const body = this.body;
     body.classList.remove("voice-studio-loading");
     body.dataset.host = hostId;
-    // Every mark in here is about to be destroyed; an observer still watching
-    // them would hold the detached nodes and fire for a page that is gone.
+    // Everything in here is about to be destroyed, including whatever holds
+    // DOM focus — and a rail you can no longer arrow is a rail that broke
+    // when you pressed Enter on it.
+    const keepFocus =
+      !!document.activeElement && body.contains(document.activeElement);
+    // An observer still watching these rows would hold the detached nodes and
+    // fire for a page that is gone.
     this.printObserver?.disconnect();
     this.printObserver = null;
     body.innerHTML = "";
+    this.rows = [];
+    this.rail = null;
+    this.controls = null;
 
     const vm = viewModel(hostId, data);
+    this.nameById = new Map(vm.catalog.map((voice) => [voice.id, voice.name]));
+    if (vm.stagedCurrent) {
+      this.nameById.set(vm.stagedCurrent.id, vm.stagedCurrent.name);
+    }
 
     if (vm.catalog.length === 0 && !vm.hasBuiltins) {
+      this.paintedOrder = [];
       body.appendChild(this.renderEmptyState(vm, data));
       return;
     }
 
-    body.appendChild(this.renderStage(vm.stagedCurrent, vm));
-    if (vm.menu) body.appendChild(this.renderSlotsSection(vm, vm.menu));
-    body.appendChild(this.renderShelves(vm));
+    this.seedPair(hostId, vm);
+
+    // The rail is built FIRST, even though it paints second: the control bar
+    // offers to jump to the current voice, and it can only honestly offer that
+    // once it knows the current voice has a row (a host built-in does not).
+    const rail = this.renderRail(vm);
+    this.controls = this.renderControlBar(vm);
+    body.appendChild(this.controls);
+    body.appendChild(rail);
+    const summary = this.renderMenuSummary(vm);
+    if (summary) body.appendChild(summary);
+
+    // Focus lands on the current voice — in its own pitch position, NOT pinned
+    // to the top, because pinning it would break the chart the pitch order
+    // creates — and stays wherever the reader left it across a repaint.
+    const wanted = this.focusedVoiceId ?? vm.currentId;
+    const at = this.rows.findIndex((row) => row.voice.id === wanted);
+    this.focusIndex = at >= 0 ? at : 0;
+    this.applyFocus({ block: "center" });
 
     // Playback state lives OUTSIDE the DOM — the sequencer owns it, and it
     // survives this repaint (choosing the voice you are listening to must not
-    // stop the audio, design §5.2). Re-derive the marks from the snapshot, or
+    // stop the audio, design §5.2). Re-derive the rows from the snapshot, or
     // a clip goes on sounding with nothing on screen saying so.
     this.applyAuditionState();
+
+    if (keepFocus) rail.focus();
   }
 
   private renderEmptyState(
     vm: StudioViewModel,
     data: HostStudioData
   ): HTMLElement {
-    // Signed out → the /voices call 401s to []: prompt sign-in. Signed in,
-    // a *failed* fetch is a transient error; a genuinely empty catalog is
-    // its own (rarer) message — telling either user to sign in would be wrong.
+    // The catalog is PUBLIC (design §0: 22 voices with samples, no
+    // credentials), so being signed out is not what empties this page — the
+    // rail renders in full signed out, and `Use` writes a local preference.
+    // This branch is only reached by a genuinely empty response, where a
+    // signed-out user's most likely cause really is the 401 → [] path.
     const empty = document.createElement("div");
     empty.classList.add("voice-studio-empty");
     let key: string;
@@ -346,355 +472,326 @@ export class VoicesController {
     return empty;
   }
 
-  /**
-   * The stage: the host's current voice, announced with real presence, with
-   * its soundprint drawn wide across the room. The room itself no longer
-   * takes a colour from the voice — there is no per-voice colour anywhere on
-   * this page now, because the mark carries the information colour was only
-   * pretending to.
-   */
-  private renderStage(
-    current: SpeechSynthesisVoiceRemote | null,
-    vm: StudioViewModel
-  ): HTMLElement {
-    const stage = document.createElement("div");
-    stage.classList.add("voice-stage");
-
-    if (!current) return this.renderEmptyStage(stage, vm);
-
-    const mark = this.renderPrintMark(current, "lg");
-    if (mark) stage.appendChild(mark);
-
-    const meta = document.createElement("div");
-    meta.classList.add("voice-stage-meta");
-
-    const eyebrow = document.createElement("div");
-    eyebrow.classList.add("voice-stage-eyebrow");
-    // No data-i18n: substituted text (replaceI18n would strip the host name).
-    eyebrow.textContent = getMessage("voicesSpeaksWith", [vm.host.label]);
-    meta.appendChild(eyebrow);
-
-    const name = document.createElement("div");
-    name.classList.add("voice-stage-name");
-    name.textContent = current.name;
-    meta.appendChild(name);
-
-    const subtitle = this.subtitleFor(current, vm.dupNames);
-    if (subtitle.text) {
-      const tagline = document.createElement("div");
-      tagline.classList.add("voice-stage-tagline");
-      if (subtitle.i18nKey) tagline.setAttribute("data-i18n", subtitle.i18nKey);
-      tagline.textContent = subtitle.text;
-      meta.appendChild(tagline);
-    }
-
-    const chips = document.createElement("div");
-    chips.classList.add("voice-stage-chips");
-    if (current.sample_url) {
-      const play = document.createElement("button");
-      play.type = "button";
-      play.classList.add("voice-stage-play");
-      play.setAttribute("data-i18n", "voicesStagePlay");
-      play.textContent = getMessage("voicesStagePlay");
-      play.addEventListener("click", () => this.audition(current));
-      chips.appendChild(play);
-    }
-    if (getVoiceTier(current) === "hd") {
-      chips.appendChild(this.renderTierChip());
-    }
-    // The chip is a second facet of the voice, not an echo of the first: on a
-    // twin the subtitle IS the language sentence (#474), and printing it again
-    // 15px lower makes the hero repeat itself.
-    const langs = this.languagesSubtitle(current);
-    if (langs && langs !== subtitle.text) {
-      const lang = document.createElement("span");
-      lang.classList.add("voice-stage-lang");
-      lang.textContent = langs;
-      chips.appendChild(lang);
-    }
-    if (chips.childNodes.length > 0) meta.appendChild(chips);
-
-    stage.appendChild(meta);
-    return stage;
-  }
+  // --- the control bar ------------------------------------------------------
 
   /**
-   * The stage with nothing on it — a hero that recruits, not a placeholder
-   * that apologises. Two lines: an imperative headline (host-generic) and one
-   * supporting line that MUST differ per host, because "no voice selected"
-   * means opposite things.
-   *
-   * The choice is a HOST PROPERTY, not an id list: a host that serves its own
-   * audio keeps speaking in its own voice until a Say, Pi voice replaces it; a
-   * host with no voice of its own reads nothing aloud until one is chosen. A
-   * third host therefore needs no new copy and no new branch here.
-   *
-   * The headline is the call to action — no button. The cards are already in
-   * the same viewport of the settings window, so a control whose only job is
-   * to scroll one screen would be chrome; "below" does the orienting work.
+   * Sticky, opaque, one rule under it — one of exactly two rules on the page.
+   * Slice 2 carries the four things the rail itself needs: where your voice
+   * is, whether arrows audition, what the keys do, and what the last two
+   * voices you heard were. (Play all, the `Show:` filter and the heard counter
+   * belong to later slices and are deliberately absent rather than dead.)
    */
-  private renderEmptyStage(
-    stage: HTMLElement,
-    vm: StudioViewModel
-  ): HTMLElement {
-    stage.classList.add("voice-stage-empty");
-    const meta = document.createElement("div");
-    meta.classList.add("voice-stage-meta");
+  private renderControlBar(vm: StudioViewModel): HTMLElement {
+    const bar = document.createElement("div");
+    bar.classList.add("voice-rail-controls");
 
-    const title = document.createElement("div");
-    title.classList.add("voice-stage-empty-title");
-    // No data-i18n on substituted text (replaceI18n clobber — see renderEmptyState).
-    title.textContent = getMessage("voicesStageEmptyTitle", [vm.host.label]);
-    meta.appendChild(title);
+    const top = document.createElement("div");
+    top.classList.add("voice-rail-controls-row");
 
-    const note = document.createElement("div");
-    note.classList.add("voice-stage-empty-note");
-    const hostServesItsOwnAudio =
-      audioProviders.getDefaultForChatbot(vm.host.id) !== audioProviders.SayPi;
-    note.textContent = getMessage(
-      hostServesItsOwnAudio
-        ? "voicesStageEmptyNoteReplace"
-        : "voicesStageEmptyNoteSilent",
-      [vm.host.label]
+    // No dead controls: the jump only exists when there is a row to jump to.
+    // A host built-in (Pi's own voices) is the current voice with no row.
+    const currentHasRow = this.rows.some(
+      (row) => row.voice.id === vm.currentId
     );
-    meta.appendChild(note);
+    if (vm.stagedCurrent && currentHasRow) {
+      const jump = document.createElement("button");
+      jump.type = "button";
+      jump.classList.add("voice-your-voice");
+      // No data-i18n: substituted text (replaceI18n would strip the name).
+      jump.textContent = getMessage("voicesYourVoice", [
+        vm.stagedCurrent.name,
+      ]);
+      const arrow = document.createElement("span");
+      arrow.classList.add("voice-your-voice-arrow");
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = " ↗";
+      jump.appendChild(arrow);
+      jump.addEventListener("click", () => this.jumpToCurrent());
+      top.appendChild(jump);
+    }
 
-    stage.appendChild(meta);
-    return stage;
-  }
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.classList.add("voice-arrow-chip");
+    chip.setAttribute("data-i18n", "voicesArrowAudition");
+    chip.textContent = getMessage("voicesArrowAudition");
+    chip.addEventListener("click", () => this.toggleArrowAudition());
+    top.appendChild(chip);
+    bar.appendChild(top);
 
-  /**
-   * The menu slots: the literal in-chat menu, in true order — rendered from
-   * the same curateShortlist call the in-host menu makes, so what you see
-   * here is exactly what chat shows. The current voice's seat is guaranteed
-   * (grandfathering) and carries no remove control; fill-to-cap suggestions
-   * on an un-customized host aren't pins, so they get no remove either
-   * (unpinning them would be a dead no-op in the overlay model).
-   */
-  private renderSlotsSection(
-    vm: StudioViewModel,
-    menu: NonNullable<StudioViewModel["menu"]>
-  ): HTMLElement {
-    const section = document.createElement("div");
-    section.classList.add("voice-slots-section");
-
-    const head = document.createElement("div");
-    head.classList.add("voice-slots-head");
-    const title = document.createElement("span");
-    title.classList.add("voice-slots-title");
-    // No data-i18n on substituted text (replaceI18n clobber — see renderEmptyState).
-    title.textContent = getMessage("voicesInHostMenu", [vm.host.label]);
-    head.appendChild(title);
+    const bottom = document.createElement("div");
+    bottom.classList.add("voice-rail-controls-row");
     const hint = document.createElement("span");
-    hint.classList.add("voice-slots-hint");
-    hint.setAttribute("data-i18n", "voicesMenuHint");
-    hint.textContent = getMessage("voicesMenuHint");
-    head.appendChild(hint);
-    section.appendChild(head);
-
-    const list = document.createElement("ul");
-    list.classList.add("voice-slots");
-    menu.seated.forEach((voice) => {
-      list.appendChild(this.renderSlot(voice, vm));
-    });
-    section.appendChild(list);
-
-    if (menu.overflowCount > 0) {
-      const overflow = document.createElement("div");
-      overflow.classList.add("voice-slots-overflow");
-      // Chrome i18n has no plural forms, so the singular is its own key —
-      // otherwise this reads "1 more pinned voices are waiting".
-      overflow.textContent =
-        menu.overflowCount === 1
-          ? getMessage("voicesMenuOverflowOne", [String(menu.cap)])
-          : getMessage("voicesMenuOverflow", [
-              String(menu.overflowCount),
-              String(menu.cap),
-            ]);
-      section.appendChild(overflow);
-    }
-
-    if (vm.hasBuiltins) {
-      const builtins = document.createElement("div");
-      builtins.classList.add("voice-slots-builtins");
-      builtins.textContent = getMessage("voicesBuiltinsNote", [vm.host.label]);
-      section.appendChild(builtins);
-    }
-
-    return section;
+    hint.classList.add("voice-rail-hint");
+    hint.setAttribute("data-i18n", "voicesKeyboardHint");
+    hint.textContent = getMessage("voicesKeyboardHint");
+    bottom.appendChild(hint);
+    const compare = document.createElement("span");
+    compare.classList.add("voice-compare");
+    bottom.appendChild(compare);
+    bar.appendChild(bottom);
+    return bar;
   }
 
-  private renderSlot(
-    voice: SpeechSynthesisVoiceRemote,
-    vm: StudioViewModel
-  ): HTMLElement {
-    const slot = document.createElement("li");
-    slot.classList.add("voice-slot");
-    slot.dataset.voiceId = voice.id;
-
-    const mark = this.renderPrintMark(voice, "sm");
-    if (mark) slot.appendChild(mark);
-
-    const name = document.createElement("span");
-    name.classList.add("voice-slot-name");
-    name.textContent = voice.name;
-    slot.appendChild(name);
-
-    if (voice.id === vm.currentId) {
-      slot.classList.add("voice-slot-current");
-      const state = document.createElement("span");
-      state.classList.add("voice-slot-state");
-      state.setAttribute("data-i18n", "voicesSpeakingNow");
-      state.textContent = getMessage("voicesSpeakingNow");
-      slot.appendChild(state);
-    } else if (vm.pinned.has(voice.id)) {
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.classList.add("voice-slot-remove");
-      remove.setAttribute(
-        "aria-label",
-        getMessage("voicesRemoveVoiceFromMenu", [voice.name, vm.host.label])
-      );
-      remove.textContent = "×";
-      remove.addEventListener("click", () => this.togglePinFor(voice));
-      slot.appendChild(remove);
+  /**
+   * Everything in the bar that changes without the rail changing: the chip's
+   * lit state and the compare readout, which fills in as the reader walks.
+   */
+  private updateControlBar(): void {
+    const bar = this.controls;
+    if (!bar) return;
+    const chip = bar.querySelector<HTMLButtonElement>(".voice-arrow-chip");
+    if (chip) {
+      chip.setAttribute("aria-pressed", String(this.arrowAudition));
+      chip.classList.toggle("lit", this.arrowAudition && this.armed);
     }
-    return slot;
-  }
-
-  private renderShelves(vm: StudioViewModel): HTMLElement {
-    const shelves = document.createElement("div");
-    shelves.classList.add("voice-shelves");
-
-    const hd = vm.catalog.filter((voice) => getVoiceTier(voice) === "hd");
-    const everyday = vm.catalog.filter(
-      (voice) => getVoiceTier(voice) === "everyday"
+    const compare = bar.querySelector<HTMLElement>(".voice-compare");
+    if (!compare) return;
+    compare.innerHTML = "";
+    const [near, far] = this.pair;
+    // Nothing to switch back TO yet — and a control that would do nothing is
+    // worse than one that has not appeared.
+    if (!near || !far) return;
+    const swap = document.createElement("button");
+    swap.type = "button";
+    swap.classList.add("voice-compare-swap");
+    swap.setAttribute(
+      "aria-label",
+      getMessage("voicesSwitchBackTo", [this.nameOf(far)])
     );
+    // Glyph text, deliberately untranslated: names are proper nouns and
+    // `⇄`/`⟷` are glyphs (design §13).
+    const glyph = document.createElement("span");
+    glyph.setAttribute("aria-hidden", "true");
+    glyph.classList.add("voice-compare-glyph");
+    glyph.textContent = "⇄";
+    swap.appendChild(glyph);
+    swap.appendChild(
+      document.createTextNode(`${this.nameOf(near)} ⟷ ${this.nameOf(far)}`)
+    );
+    swap.addEventListener("click", () => this.switchBack());
+    compare.appendChild(swap);
+  }
 
-    if (hd.length > 0 && everyday.length > 0) {
-      // Studio-only blurbs. `hdVoicesAllowanceNote` is deliberately NOT reused
-      // here: it is also the HD chip tooltip and Claude's in-chat menu
-      // footnote, where no Everyday shelf sits beside it to carry the ratio.
-      // Here the HD shelf leads with what you get and the trade is stated once,
-      // one line below, where it reads as a gain.
-      shelves.appendChild(
-        this.renderShelf("hd", "voicesShelfHd", "voicesShelfHdBlurb", hd, vm)
-      );
-      shelves.appendChild(
-        this.renderShelf(
-          "everyday",
-          "voicesShelfEveryday",
-          "voicesShelfEverydayBlurb",
-          everyday,
-          vm
-        )
-      );
-    } else {
-      // Single-tier catalog: a flat grid, no shelf chrome.
-      shelves.appendChild(this.renderCardGrid(vm.catalog, vm));
+  private nameOf(voiceId: string): string {
+    return this.nameById.get(voiceId) ?? voiceId;
+  }
+
+  // --- the rail -------------------------------------------------------------
+
+  /**
+   * Sorted ascending by median F0 — the listener's axis, not the vendor's —
+   * with voices that have no clip collected at the end (design §7, §10).
+   *
+   * Pitch resolves measured print → build-time seed → the 155 Hz reference
+   * line, so a known voice sorts instantly and only a voice the server added
+   * since the last release can ever move.
+   */
+  private orderCatalog(
+    catalog: SpeechSynthesisVoiceRemote[]
+  ): SpeechSynthesisVoiceRemote[] {
+    const byName = (a: SpeechSynthesisVoiceRemote, b: SpeechSynthesisVoiceRemote) =>
+      String(a.name ?? "").localeCompare(String(b.name ?? "")) ||
+      a.id.localeCompare(b.id);
+    const pitched = catalog
+      .filter((voice) => !!voice.sample_url)
+      .sort((a, b) => {
+        const delta =
+          pitchOf(a, this.prints.get(a.id)) - pitchOf(b, this.prints.get(b.id));
+        return delta !== 0 ? delta : byName(a, b);
+      });
+    const unpitched = catalog
+      .filter((voice) => !voice.sample_url)
+      .sort(byName);
+    return [...pitched, ...unpitched];
+  }
+
+  private renderRail(vm: StudioViewModel): HTMLElement {
+    const rail = document.createElement("ul");
+    rail.classList.add("voice-rail");
+    rail.setAttribute("role", "listbox");
+    // `data-i18n-attr`, never `data-i18n`: replaceI18n() sets TEXTCONTENT on a
+    // [data-i18n] element, which on the rail would delete every row.
+    rail.setAttribute("data-i18n-attr", "aria-label:voicesRailLabel");
+    rail.setAttribute("aria-label", getMessage("voicesRailLabel"));
+    // Roving tabindex + aria-activedescendant: Tab crosses the whole rail in
+    // ONE stop, not 22, and then reaches the focused row's two buttons.
+    rail.tabIndex = 0;
+    rail.addEventListener("keydown", (event) => this.onRailKeyDown(event));
+    this.rail = rail;
+
+    const ordered = this.orderCatalog(vm.catalog);
+    this.paintedOrder = ordered.map((voice) => voice.id);
+    // orderCatalog puts every clipless voice last, so one index is the whole
+    // boundary: from here on is the "No sample yet" group.
+    const groupAt = ordered.findIndex((voice) => !voice.sample_url);
+    const hasGroup = groupAt >= 0;
+
+    ordered.forEach((voice, index) => {
+      if (index === groupAt) {
+        rail.appendChild(this.renderTailDivider(vm, ordered.length - groupAt));
+      }
+      const row = this.renderRow(voice, vm, index, hasGroup && index >= groupAt);
+      rail.appendChild(row.el);
+      this.rows.push(row);
+    });
+    // Host built-ins are the same case with nothing to list — real, usable,
+    // un-auditionable — so they still want the rule and the note.
+    if (!hasGroup && vm.hasBuiltins) {
+      rail.appendChild(this.renderTailDivider(vm, 0));
     }
-    return shelves;
+    return rail;
   }
 
-  private renderShelf(
-    tierKey: string,
-    titleKey: string,
-    blurbKey: string,
-    voices: SpeechSynthesisVoiceRemote[],
-    vm: StudioViewModel
-  ): HTMLElement {
-    const shelf = document.createElement("section");
-    shelf.classList.add("voice-shelf");
-    shelf.dataset.tier = tierKey;
-
-    const head = document.createElement("div");
-    head.classList.add("voice-shelf-head");
-    const title = document.createElement("span");
-    title.classList.add("voice-shelf-title");
-    title.setAttribute("data-i18n", titleKey);
-    title.textContent = getMessage(titleKey);
-    head.appendChild(title);
-    const blurb = document.createElement("span");
-    blurb.classList.add("voice-shelf-blurb");
-    blurb.setAttribute("data-i18n", blurbKey);
-    blurb.textContent = getMessage(blurbKey);
-    head.appendChild(blurb);
-    shelf.appendChild(head);
-
-    shelf.appendChild(this.renderCardGrid(voices, vm));
-    return shelf;
+  /**
+   * The one rule below the control bar (design §11): the "No sample yet" group
+   * header, and the host-built-ins note, which is exactly the same case —
+   * voices that are real, usable and un-auditionable.
+   */
+  private renderTailDivider(vm: StudioViewModel, count: number): HTMLElement {
+    const divider = document.createElement("li");
+    divider.classList.add("voice-rail-divider");
+    divider.setAttribute("role", "presentation");
+    if (count > 0) {
+      const label = document.createElement("span");
+      label.classList.add("voice-rail-group-label");
+      label.id = "voice-nosample-label";
+      // No data-i18n: substituted ($count$) text.
+      label.textContent = getMessage("voicesNoSampleGroup", [String(count)]);
+      divider.appendChild(label);
+    }
+    if (vm.hasBuiltins) {
+      const note = document.createElement("span");
+      note.classList.add("voice-rail-builtins");
+      // No data-i18n: substituted ($host$) text.
+      note.textContent = getMessage("voicesBuiltinsNote", [vm.host.label]);
+      divider.appendChild(note);
+    }
+    return divider;
   }
 
-  private renderCardGrid(
-    voices: SpeechSynthesisVoiceRemote[],
-    vm: StudioViewModel
-  ): HTMLElement {
-    const grid = document.createElement("ul");
-    grid.classList.add("voice-card-grid");
-    voices.forEach((voice) => grid.appendChild(this.renderCard(voice, vm)));
-    return grid;
-  }
-
-  private renderCard(
+  /**
+   * One 42 px row: the print IS the play target, and so is the rest of the
+   * row — ~860 × 42 px against the 56 px orb it replaced. `Use` and `Menu` sit
+   * at the right edge and stop the click from reaching the row.
+   *
+   * `data-print-voice` is on the ROW, not on an inner button: nesting a button
+   * inside a `role="option"` for the play affordance is what the whole-row
+   * target exists to avoid, and it keeps one selector for "everything that
+   * reads as this voice playing".
+   */
+  private renderRow(
     voice: SpeechSynthesisVoiceRemote,
-    vm: StudioViewModel
-  ): HTMLElement {
-    const card = document.createElement("li");
-    card.classList.add("voice-card");
-    card.dataset.voiceId = voice.id;
+    vm: StudioViewModel,
+    index: number,
+    inNoSampleGroup: boolean
+  ): RailRow {
+    const el = document.createElement("li");
+    el.classList.add("voice-row");
+    el.id = `voice-row-${index}`;
+    el.setAttribute("role", "option");
+    el.setAttribute("aria-selected", "false");
+    el.dataset.voiceId = voice.id;
     const isCurrent = voice.id === vm.currentId;
-    if (isCurrent) card.classList.add("voice-card-current");
-
-    if (getVoiceTier(voice) === "hd") {
-      card.appendChild(this.renderTierChip());
+    if (isCurrent) {
+      el.classList.add("voice-row-current");
+      el.setAttribute("aria-current", "true");
+    }
+    // The option's name is the voice, not the concatenation of its print, its
+    // badges and its two buttons.
+    el.setAttribute(
+      "aria-label",
+      isCurrent
+        ? `${voice.name} — ${getMessage("voicesSpeakingNow")}`
+        : voice.name
+    );
+    if (inNoSampleGroup) {
+      el.setAttribute("aria-describedby", "voice-nosample-label");
     }
 
-    const mark = this.renderPrintMark(voice, "md");
-    if (mark) card.appendChild(mark);
+    const playable = !!voice.sample_url;
+    if (playable) {
+      el.dataset.printVoice = voice.id;
+      el.dataset.printWidth = String(PRINT_WIDTHS.lg);
+      const print = document.createElement("span");
+      print.classList.add("voice-row-print");
+      print.appendChild(createPrintSvg(PRINT_WIDTHS.lg));
+      el.appendChild(print);
+      el.addEventListener("click", () => {
+        this.focusRow(index, { block: "nearest" });
+        this.rail?.focus();
+        this.audition(voice);
+      });
+    } else {
+      // No clip → no print, no play affordance, and never a placeholder shape
+      // pretending to be data. The row keeps its name and its controls.
+      const gap = document.createElement("span");
+      gap.classList.add("voice-row-print");
+      gap.setAttribute("aria-hidden", "true");
+      el.appendChild(gap);
+      el.addEventListener("click", () => {
+        this.focusRow(index, { block: "nearest" });
+        this.rail?.focus();
+      });
+    }
 
     const name = document.createElement("span");
-    name.classList.add("voice-card-name");
+    name.classList.add("voice-row-name");
     name.textContent = voice.name;
-    card.appendChild(name);
+    el.appendChild(name);
 
+    // The tagline is no longer a 2.7 em reserved block on 22 cards; it is one
+    // 12 px line on the focused row, still via subtitleFor so the #474
+    // twin-name logic survives untouched.
     const subtitle = this.subtitleFor(voice, vm.dupNames);
-    const tagline = document.createElement("span");
-    tagline.classList.add("voice-card-tagline");
-    if (subtitle.i18nKey) tagline.setAttribute("data-i18n", subtitle.i18nKey);
-    tagline.textContent = subtitle.text;
-    // The card clamps this to two lines (voices.css), and on a twin the clipped
-    // text is the ONLY thing telling two same-named cards apart — nothing else
-    // in the card carries it. `title` is not touched by replaceI18n, so it
-    // survives a re-localization pass; a long locale gets it for free too.
-    if (subtitle.text) tagline.title = subtitle.text;
-    card.appendChild(tagline);
+    const desc = document.createElement("span");
+    desc.classList.add("voice-row-desc");
+    if (subtitle.i18nKey) desc.setAttribute("data-i18n", subtitle.i18nKey);
+    desc.textContent = subtitle.text;
+    if (subtitle.text) desc.title = subtitle.text;
+    el.appendChild(desc);
 
-    const actions = document.createElement("div");
-    actions.classList.add("voice-card-actions");
+    // Badges live in their OWN nodes, never inside .voice-row-name: the pin
+    // button's accessible label is built from the voice, and a badge smuggled
+    // into the name element used to end up inside it.
+    const badges = document.createElement("span");
+    badges.classList.add("voice-row-badges");
+    if (getVoiceTier(voice) === "hd") badges.appendChild(this.renderTierChip());
+    if (isCurrent) {
+      const inUse = document.createElement("span");
+      inUse.classList.add("voice-row-inuse");
+      inUse.setAttribute("data-i18n", "voicesSpeakingNow");
+      inUse.textContent = getMessage("voicesSpeakingNow");
+      badges.appendChild(inUse);
+    }
+    el.appendChild(badges);
+
+    const actions = document.createElement("span");
+    actions.classList.add("voice-row-actions");
     // No menu, no pinning: on a host with nowhere to pin TO, the control would
     // write an overlay nothing ever reads.
     if (vm.menu) actions.appendChild(this.renderPinToggle(voice, vm));
-    if (isCurrent) {
-      const state = document.createElement("span");
-      state.classList.add("voice-card-state");
-      state.setAttribute("data-i18n", "voicesSpeakingNow");
-      state.textContent = getMessage("voicesSpeakingNow");
-      actions.appendChild(state);
-    } else {
+    if (!isCurrent) {
       const use = document.createElement("button");
       use.type = "button";
       use.classList.add("voice-use");
+      use.tabIndex = -1;
       use.setAttribute(
         "aria-label",
         getMessage("voicesUseOnHost", [voice.name, vm.host.label])
       );
       use.setAttribute("data-i18n", "voicesUseShort");
       use.textContent = getMessage("voicesUseShort");
-      use.addEventListener("click", () => this.useVoice(voice));
+      use.addEventListener("click", (event) => {
+        event.stopPropagation();
+        void this.useVoice(voice);
+      });
       actions.appendChild(use);
     }
-    card.appendChild(actions);
-    return card;
+    el.appendChild(actions);
+
+    if (playable) this.trackPrint(el, voice);
+    return { voice, domId: el.id, playable, el };
   }
 
   private renderPinToggle(
@@ -704,8 +801,12 @@ export class VoicesController {
     const toggle = document.createElement("button");
     toggle.type = "button";
     toggle.classList.add("voice-pin-toggle");
+    toggle.tabIndex = -1;
     this.applyPinToggleState(toggle, voice, vm);
-    toggle.addEventListener("click", () => this.togglePinFor(voice));
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      void this.togglePinFor(voice);
+    });
     return toggle;
   }
 
@@ -742,35 +843,35 @@ export class VoicesController {
   }
 
   /**
-   * The mark: this voice's soundprint, drawn from its own sample clip
-   * (design §6). It IS the play button (sound first — design §4).
-   *
-   * A voice with no clip gets **no mark at all** — not a placeholder shape
-   * pretending to be data, and not a dead control. The print starts as the
-   * reference line alone and inks in when the measurement lands, so the
-   * loading state and the not-measured state are the same visual and the row
-   * never reflows.
-   *
-   * `data-print-voice` links every mark of one voice so they all read as
-   * playing together.
+   * One 12 px line under the rail: membership in the host's in-chat menu,
+   * summarised. It replaces a whole slots SECTION whose two jobs have split —
+   * membership is now the row's `Menu` toggle, and this is the summary.
    */
-  private renderPrintMark(
-    voice: SpeechSynthesisVoiceRemote,
-    size: PrintSize
-  ): HTMLElement | null {
-    if (!voice.sample_url) return null;
-    const width = PRINT_WIDTHS[size];
-    const button = document.createElement("button");
-    button.type = "button";
-    button.classList.add("voice-print-mark", `voice-print-${size}`);
-    button.dataset.printVoice = voice.id;
-    button.dataset.printWidth = String(width);
-    button.setAttribute("aria-label", getMessage("voicesPreview", [voice.name]));
-    button.appendChild(createPrintSvg(width));
-    button.addEventListener("click", () => this.audition(voice));
-    this.trackPrint(button, voice);
-    return button;
+  private renderMenuSummary(vm: StudioViewModel): HTMLElement | null {
+    if (!vm.menu) return null;
+    const line = document.createElement("div");
+    line.classList.add("voice-menu-summary");
+    const text = document.createElement("span");
+    // No data-i18n: substituted ($host$/$used$/$cap$) text.
+    text.textContent = getMessage("voicesMenuSummary", [
+      vm.host.label,
+      String(vm.menu.seated.length),
+      String(vm.menu.cap),
+    ]);
+    line.appendChild(text);
+    if (vm.menu.seated.length > 0) {
+      const names = document.createElement("span");
+      names.classList.add("voice-menu-summary-names");
+      // Untranslated: a comma-joined list of proper nouns (design §13).
+      names.textContent = ` — ${vm.menu.seated
+        .map((voice) => voice.name)
+        .join(", ")}`;
+      line.appendChild(names);
+    }
+    return line;
   }
+
+  // --- soundprints ----------------------------------------------------------
 
   /**
    * Paint whatever we already know, then arrange to measure what we don't.
@@ -781,12 +882,12 @@ export class VoicesController {
    * on demand, because playing it downloads it anyway.
    */
   private trackPrint(
-    mark: HTMLElement,
+    row: HTMLElement,
     voice: SpeechSynthesisVoiceRemote
   ): void {
     const known = this.prints.get(voice.id);
     if (known) {
-      this.paintPrint(mark, known);
+      this.paintPrint(row, known);
       return;
     }
     if (!this.deps.loadPrint) return;
@@ -813,8 +914,8 @@ export class VoicesController {
         { rootMargin: "300px" }
       );
     }
-    this.printTargets.set(mark, voice);
-    this.printObserver.observe(mark);
+    this.printTargets.set(row, voice);
+    this.printObserver.observe(row);
   }
 
   private async measurePrint(voice: SpeechSynthesisVoiceRemote): Promise<void> {
@@ -829,18 +930,255 @@ export class VoicesController {
       .querySelectorAll<HTMLElement>(
         `[data-print-voice="${escapeCss(voice.id)}"]`
       )
-      .forEach((mark) => this.paintPrint(mark, print));
+      .forEach((row) => this.paintPrint(row, print));
+    // A live measurement can disagree with the seed — only ever for a voice
+    // the server added since the last release, and only once.
+    this.requestSettle();
   }
 
-  private paintPrint(mark: HTMLElement, print: VoicePrint): void {
-    const svg = mark.querySelector<SVGSVGElement>(".voice-print");
+  private paintPrint(row: HTMLElement, print: VoicePrint): void {
+    const svg = row.querySelector<SVGSVGElement>(".voice-print");
     if (!svg) return;
-    paintPrintTrace(svg, print, Number(mark.dataset.printWidth) || undefined);
+    paintPrintTrace(svg, print, Number(row.dataset.printWidth) || undefined);
   }
 
-  // --- behaviour ------------------------------------------------------------
+  /**
+   * Re-sort when a measurement moves a voice — batched, and NEVER while audio
+   * is playing (design §7): re-ordering the rail under a listener mid-clip is
+   * the one thing the build-time seed exists to prevent.
+   */
+  private requestSettle(): void {
+    if (this.settleTimer !== null) return;
+    this.settleTimer = setTimeout(() => {
+      this.settleTimer = null;
+      this.settleOrder();
+    }, 0);
+  }
+
+  private settleOrder(): void {
+    if (this.auditionState.running) {
+      this.orderDirty = true;
+      return;
+    }
+    this.orderDirty = false;
+    const data = this.cache.get(this.activeHost);
+    if (!data || !this.body || this.rows.length === 0) return;
+    const vm = viewModel(this.activeHost, data);
+    const next = this.orderCatalog(vm.catalog).map((voice) => voice.id);
+    const same =
+      next.length === this.paintedOrder.length &&
+      next.every((id, i) => id === this.paintedOrder[i]);
+    if (same) return;
+    this.paintBody(this.activeHost, data);
+  }
+
+  // --- keyboard -------------------------------------------------------------
+
+  /**
+   * The rail's whole keyboard (design §3). One listener on the listbox,
+   * because the rail is one tab stop.
+   */
+  private onRailKeyDown(event: KeyboardEvent): void {
+    // Only when the LISTBOX itself holds focus. Tab moves on to the focused
+    // row's Menu and Use buttons, whose own keydowns bubble through here —
+    // and swallowing Space on a button would stop it activating.
+    if (event.target !== event.currentTarget) return;
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        this.moveFocus(1);
+        return;
+      case "ArrowUp":
+        event.preventDefault();
+        this.moveFocus(-1);
+        return;
+      case "Home":
+        event.preventDefault();
+        this.focusRow(0, { block: "nearest", audition: true });
+        return;
+      case "End":
+        event.preventDefault();
+        this.focusRow(this.brightestIndex(), {
+          block: "nearest",
+          audition: true,
+        });
+        return;
+      case "Enter":
+        event.preventDefault();
+        this.useFocused();
+        return;
+      case "Escape":
+        event.preventDefault();
+        this.disarm();
+        return;
+      case " ":
+      case "Spacebar":
+        event.preventDefault();
+        if (event.shiftKey) this.switchBack();
+        else this.toggleFocusedAudition();
+        return;
+      default:
+        break;
+    }
+    if (event.shiftKey) return;
+    // Type-ahead: worth more at 100 voices than a letter accelerator, which is
+    // why pin has none (M/P collide with Marin and Paola).
+    if (/^[a-z0-9]$/i.test(event.key)) {
+      event.preventDefault();
+      this.typeAheadTo(event.key);
+    }
+  }
+
+  private moveFocus(delta: number): void {
+    if (this.rows.length === 0) return;
+    // Clamped, no wrap: the rail is a chart, and walking off the bright end
+    // back onto the deepest voice is a jump, not a step.
+    const next = Math.min(
+      this.rows.length - 1,
+      Math.max(0, this.focusIndex + delta)
+    );
+    if (next === this.focusIndex) return;
+    this.focusRow(next, { block: "nearest", audition: true });
+  }
+
+  /** The last voice with a clip — "brightest" means measured, not last row. */
+  private brightestIndex(): number {
+    for (let i = this.rows.length - 1; i >= 0; i--) {
+      if (this.rows[i].playable) return i;
+    }
+    return Math.max(0, this.rows.length - 1);
+  }
+
+  private typeAheadTo(key: string): void {
+    const now = Date.now();
+    this.typeAhead =
+      now - this.typeAheadAt > TYPE_AHEAD_MS
+        ? key.toLowerCase()
+        : this.typeAhead + key.toLowerCase();
+    this.typeAheadAt = now;
+    const total = this.rows.length;
+    if (total === 0) return;
+    // The APG rule: a buffer of one repeated character CYCLES through the
+    // voices starting with it, while any other buffer re-matches in place — so
+    // "c" "c" walks Cedar → Coral, and "c" "o" refines to Coral rather than
+    // skipping past it to the next C.
+    const repeated = [...this.typeAhead].every(
+      (char) => char === this.typeAhead[0]
+    );
+    const needle = repeated ? this.typeAhead[0] : this.typeAhead;
+    const from = repeated ? this.focusIndex + 1 : this.focusIndex;
+    for (let step = 0; step < total; step++) {
+      const index = (from + step + total) % total;
+      const name = String(this.rows[index].voice.name ?? "").toLowerCase();
+      if (name.startsWith(needle)) {
+        this.focusRow(index, { block: "nearest", audition: true });
+        return;
+      }
+    }
+  }
+
+  private focusRow(
+    index: number,
+    opts: { block?: ScrollLogicalPosition; audition?: boolean } = {}
+  ): void {
+    if (index < 0 || index >= this.rows.length) return;
+    this.focusIndex = index;
+    this.applyFocus(opts);
+    // The arming rule: focus auditions ONLY once the reader has explicitly
+    // played something this session, and only while the escape hatch is on.
+    if (opts.audition && this.armed && this.arrowAudition) {
+      const row = this.rows[index];
+      if (row.playable) this.audition(row.voice);
+    }
+  }
+
+  private applyFocus(opts: { block?: ScrollLogicalPosition } = {}): void {
+    this.rows.forEach((row, index) => {
+      const focused = index === this.focusIndex;
+      row.el.classList.toggle("focused", focused);
+      row.el.setAttribute("aria-selected", String(focused));
+      // Exactly two extra tab stops, always on the row you are looking at.
+      row.el
+        .querySelectorAll<HTMLButtonElement>(".voice-row-actions button")
+        .forEach((button) => {
+          button.tabIndex = focused ? 0 : -1;
+        });
+    });
+    const row = this.rows[this.focusIndex];
+    this.focusedVoiceId = row?.voice.id ?? null;
+    if (this.rail) {
+      if (row) this.rail.setAttribute("aria-activedescendant", row.domId);
+      else this.rail.removeAttribute("aria-activedescendant");
+    }
+    // jsdom has no layout and therefore no scrollIntoView.
+    row?.el.scrollIntoView?.({ block: opts.block ?? "nearest" });
+    this.updateControlBar();
+  }
+
+  private jumpToCurrent(): void {
+    const data = this.cache.get(this.activeHost);
+    const currentId = data?.current?.id;
+    if (!currentId) return;
+    const at = this.rows.findIndex((row) => row.voice.id === currentId);
+    if (at < 0) return;
+    this.focusRow(at, { block: "center" });
+    this.rail?.focus();
+  }
+
+  private useFocused(): void {
+    const row = this.rows[this.focusIndex];
+    if (!row) return;
+    const data = this.cache.get(this.activeHost);
+    if (data?.current?.id === row.voice.id) return;
+    void this.useVoice(row.voice);
+  }
+
+  private toggleFocusedAudition(): void {
+    const row = this.rows[this.focusIndex];
+    if (!row?.playable) return;
+    // Space ARMS the rail either way — the reader has said "play things".
+    this.armed = true;
+    if (this.auditionState.playingVoiceId === row.voice.id) {
+      this.stopAudition();
+      this.updateControlBar();
+      return;
+    }
+    this.audition(row.voice);
+  }
+
+  /**
+   * `⇧Space` (design §4): play the voice you are NOT on, and swap the pair, so
+   * repeated presses ping-pong A, B, A, B forever. Focus never moves. Scroll
+   * never moves. That is what "without losing your place" means concretely.
+   */
+  private switchBack(): void {
+    const other = this.pair[1];
+    if (!other) return;
+    const row = this.rows.find((candidate) => candidate.voice.id === other);
+    if (!row?.playable) return;
+    this.armed = true;
+    this.audition(row.voice);
+  }
+
+  private disarm(): void {
+    this.stopAudition();
+    this.armed = false;
+    this.updateControlBar();
+  }
+
+  private toggleArrowAudition(): void {
+    this.arrowAudition = !this.arrowAudition;
+    this.updateControlBar();
+    void this.deps.setArrowAudition?.(this.arrowAudition);
+  }
+
+  // --- audition -------------------------------------------------------------
 
   private audition(voice: SpeechSynthesisVoiceRemote): void {
+    // Any explicit play arms the rail (design §3): the first play always
+    // descends from a real gesture, which is what licenses every later one.
+    this.armed = true;
     // Level-matched from this voice's own measured RMS, or unattenuated when
     // the print has not landed yet (design §5.1).
     const gain = gainFor(this.prints.get(voice.id)?.voicedRmsDb);
@@ -848,6 +1186,7 @@ export class VoicesController {
     // to hear earns its print even on a metered connection, because playing it
     // fetches the clip regardless.
     void this.measurePrint(voice);
+    this.pushPair(voice.id);
     this.deps.playPreview(
       voice,
       (state) => {
@@ -856,10 +1195,35 @@ export class VoicesController {
       },
       gain
     );
+    this.updateControlBar();
+  }
+
+  private stopAudition(): void {
+    this.deps.stopPreview?.();
+    // The sequencer's snapshot is the truth when there is one; with no player
+    // wired the rail still has to stop reading as playing.
+    this.auditionState = IDLE_AUDITION;
+    this.applyAuditionState();
+  }
+
+  /** The last two DISTINCT voices auditioned, most recent first. */
+  private pushPair(voiceId: string): void {
+    if (this.pair[0] === voiceId) return;
+    this.pair = [voiceId, this.pair[0]];
   }
 
   /**
-   * Paint the audition snapshot onto whatever marks are currently in the DOM.
+   * Seeded with the incumbent, once per host: the first `↓` `⇧Space` is then
+   * incumbent-vs-challenger — the actual decision — with zero setup.
+   */
+  private seedPair(hostId: VoiceHostId, vm: StudioViewModel): void {
+    if (this.pairHost === hostId) return;
+    this.pairHost = hostId;
+    this.pair = [vm.currentId, null];
+  }
+
+  /**
+   * Paint the audition snapshot onto whatever rows are currently in the DOM.
    *
    * Clear-all-then-mark-one rather than a per-voice toggle: the snapshot's
    * whole point is that exactly one voice can be playing, so the DOM is
@@ -868,18 +1232,33 @@ export class VoicesController {
   private applyAuditionState(): void {
     this.container
       .querySelectorAll("[data-print-voice].playing")
-      .forEach((mark) => mark.classList.remove("playing"));
+      .forEach((row) => row.classList.remove("playing"));
+    const status = this.container.querySelector<HTMLElement>("#voice-status");
     const playing = this.auditionState.playingVoiceId;
-    if (!playing) return;
+    if (!playing) {
+      if (status) status.textContent = "";
+      // A reorder that waited for the audio to stop can land now.
+      if (this.orderDirty) this.requestSettle();
+      return;
+    }
     this.container
       .querySelectorAll(`[data-print-voice="${escapeCss(playing)}"]`)
-      .forEach((mark) => mark.classList.add("playing"));
+      .forEach((row) => row.classList.add("playing"));
+    // The one thing worth announcing. `#voice-status` carries no data-i18n:
+    // this string is substituted, and replaceI18n would erase the name.
+    if (status) {
+      status.textContent = getMessage("voicesNowPlaying", [
+        this.nameOf(playing),
+      ]);
+    }
   }
+
+  // --- subtitles ------------------------------------------------------------
 
   /**
    * Metadata fallback for voices without an authored tagline — and the
    * tiebreaker for twin display names (#474), where a shared persona tagline
-   * can't tell two cards apart.
+   * can't tell two rows apart.
    *
    * Which differentiator a twin group uses is decided once, for the whole
    * group, by dupStrategyFor — a per-voice rule can land one twin on a number
@@ -916,10 +1295,12 @@ export class VoicesController {
       : "";
   }
 
+  // --- commit ---------------------------------------------------------------
+
   /**
-   * Pinning updates in place — the slots section re-renders and every card's
-   * pin button is patched, but the shelves aren't rebuilt, so keyboard focus
-   * and scroll survive the headline interaction. Optimistic: the cached
+   * Pinning updates in place — every row's pin button is patched and the menu
+   * summary re-derived, but the rail isn't rebuilt, so focus, scroll and the
+   * playing row all survive the headline interaction. Optimistic: the cached
    * overlay flips first and reverts if the write fails.
    */
   private async togglePinFor(voice: SpeechSynthesisVoiceRemote): Promise<void> {
@@ -940,35 +1321,38 @@ export class VoicesController {
     }
   }
 
-  /** Re-derive slots + pin-button states from the cached data, in place. */
+  /** Re-derive pin-button states + the menu summary from cached data, in place. */
   private refreshCuration(data: HostStudioData): void {
     if (!this.body) return;
     const vm = viewModel(this.activeHost, data);
-    const slots = this.body.querySelector(".voice-slots-section");
-    if (slots && vm.menu) {
-      // This section's marks are leaving the document; stop watching them, or
-      // the observer keeps a growing pile of detached slots alive.
-      slots
-        .querySelectorAll("[data-print-voice]")
-        .forEach((mark) => this.printObserver?.unobserve(mark));
-      slots.replaceWith(this.renderSlotsSection(vm, vm.menu));
-    }
-    this.body.querySelectorAll<HTMLElement>(".voice-card").forEach((card) => {
-      const toggle = card.querySelector<HTMLButtonElement>(".voice-pin-toggle");
+    // Names come from the VIEW MODEL, never read back out of the DOM. The
+    // shipped studio reconstructed a voice's name from `.voice-card-name`
+    // textContent, so any badge placed inside that element silently corrupted
+    // the pin button's aria-label — a defect that passes tsc and every test
+    // and is wrong only for screen-reader users.
+    const byId = new Map(vm.catalog.map((voice) => [voice.id, voice]));
+    this.rows.forEach((row) => {
+      const toggle = row.el.querySelector<HTMLButtonElement>(
+        ".voice-pin-toggle"
+      );
       if (!toggle) return;
-      const id = card.dataset.voiceId ?? "";
-      const name = card.querySelector(".voice-card-name")?.textContent ?? "";
-      this.applyPinToggleState(toggle, { id, name }, vm);
+      const voice = byId.get(row.voice.id) ?? row.voice;
+      this.applyPinToggleState(toggle, voice, vm);
     });
-    // The slots section was rebuilt, orbs and all, so its playing marks went
-    // with it — same orphaning as a body repaint (paintBody), same fix. Pinning
-    // a voice must not blank the mark of the one you are listening to.
+    const summary = this.body.querySelector(".voice-menu-summary");
+    const next = this.renderMenuSummary(vm);
+    if (summary && next) summary.replaceWith(next);
+    // Nothing above rebuilt a row, so the playing state is intact — but the
+    // summary swap is a DOM mutation, and re-deriving from the snapshot is
+    // cheap insurance that "playing" is never left to a caller's memory.
     this.applyAuditionState();
   }
 
   /**
-   * Selecting a voice moves the stage, the slots, and the card states, so
-   * this one repaints the studio body (from cache — instant).
+   * Selecting a voice moves the IN USE marker, the accent rule and the row's
+   * actions, so this one repaints the body (from cache — instant). Focus is
+   * carried, because a repaint that dumps the reader back at the deepest voice
+   * would punish them for choosing.
    */
   private async useVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
     const host = this.activeHost;
