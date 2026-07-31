@@ -75,4 +75,41 @@ test.describe("settings page layout", () => {
 
     await page.close();
   });
+
+  test("fits small viewports without horizontal overflow", async ({
+    context,
+    extensionId,
+    serviceWorker,
+  }) => {
+    // The popup-era 736px min-width on html/body forced horizontal scrolling
+    // in any narrower tab and kept the ≤735px mobile layout permanently dead.
+    // Now the mobile layout (icon-row sidebar, full-width cards) must engage
+    // instead: every tab at phone width, and the boundary widths, render with
+    // no horizontal overflow.
+    await serviceWorker.evaluate(() =>
+      chrome.storage.local.set({ shareData: false }),
+    );
+    const page = await context.newPage();
+    await page.goto(`chrome-extension://${extensionId}/settings.html`);
+    await page.waitForSelector(".settings-header .profile-banner");
+
+    for (const width of [390, 735, 736]) {
+      await page.setViewportSize({ width, height: 844 });
+      for (const tab of TABS) {
+        await page.locator(`.tab-button[data-tab="${tab}"]`).click();
+        const panel = page.locator(`#tab-${tab}`);
+        await expect(panel).toBeVisible();
+        const overflow = await page.evaluate(
+          () =>
+            document.body.scrollWidth - document.documentElement.clientWidth,
+        );
+        expect(
+          overflow,
+          `horizontal overflow of ${overflow}px on ${tab} at ${width}px`,
+        ).toBeLessThanOrEqual(0);
+      }
+    }
+
+    await page.close();
+  });
 });

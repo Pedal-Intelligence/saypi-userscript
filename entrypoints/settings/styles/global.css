@@ -61,12 +61,29 @@ html {
      via auto margins — it re-centered itself whenever a pane's content width
      changed (the Voices studio's card text literally moved the sidebar a few
      pixels on every tab switch). Fill the row instead: constant geometry on
-     every tab, and the studio finally gets the wide column it was designed
-     for. */
+     every tab.
+
+     The 1000px cap is sized for the tab context: wide enough that the Voices
+     studio's card grid breathes, tight enough that a form tab (200px sidebar
+     + 504px panel) doesn't leave a large dead hole inside the frame — in a
+     full-width tab, leftover space should fall symmetrically OUTSIDE the
+     centered column (Chrome-settings proportions), not pool on its right. */
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0.5rem 0; /* Reduced from 2rem to minimize empty space */
+}
+
+/* In a full browser tab (vs the old snug popup) give the page some vertical
+   breathing room, so the column reads as a centered document rather than
+   popup furniture pressed into a corner. */
+@media (min-width: 1100px) {
+  .settings-header {
+    margin-top: 1.25rem;
+  }
+  .settings-container {
+    padding-top: 0.75rem;
+  }
 }
 
 /* Align the header with the settings container (same max-width + centering)
@@ -76,16 +93,20 @@ html {
    window size. */
 .settings-header .profile-banner {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
 }
 .settings-header::after {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
 }
 /* Sit the logo exactly over the sidebar icon column: banner padding-left 8px
-   + 28px here = sidebar's 24px padding + the tab button's 12px padding. */
-.settings-header .profile-banner > .flex {
-  padding-left: 28px;
+   + 28px here = sidebar's 24px padding + the tab button's 12px padding.
+   Desktop-only — the mobile layout drops the sidebar's left padding, so the
+   deeper indent has nothing to align with there. */
+@media (min-width: 736px) {
+  .settings-header .profile-banner > .flex {
+    padding-left: 28px;
+  }
 }
 
 .sidebar {
@@ -118,6 +139,10 @@ html {
 
   .sidebar {
     padding-left: 0;
+    /* The desktop 200px rail would clip the horizontal icon row (tabs.css
+       turns the sidebar into a full-width scrollable row on mobile; this
+       later-loaded file must not narrow it back). */
+    width: 100%;
   }
 
   .content {

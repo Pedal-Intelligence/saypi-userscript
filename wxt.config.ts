@@ -452,6 +452,16 @@ const configFactory = (
       action: {
         default_title: "Say, Pi",
       },
+      // Register settings.html as the browser-level options page, opened as a
+      // full tab (the standard pattern for rich extension configuration).
+      // This lights up "Options" in the toolbar-icon context menu and the
+      // chrome://extensions details card, and lets code use
+      // runtime.openOptionsPage(). The toolbar click itself is handled by
+      // action.onClicked in the background (no default_popup).
+      options_ui: {
+        page: "settings.html",
+        open_in_tab: true,
+      },
       permissions,
       host_permissions: HOST_PERMISSIONS,
       content_security_policy: {

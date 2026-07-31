@@ -21,8 +21,8 @@ export function parseSettingsDeepLink(
 }
 
 /**
- * Opens the extension's settings popup by sending a message to the background script.
- * The background script will handle opening the popup in the native way.
+ * Opens the extension's settings page (a full browser tab) by sending a
+ * message to the background script, which creates or focuses the tab.
  * @param tab Optional settings tab to open on, with an optional `/detail`
  *            suffix (e.g. "voices/pi" opens the Voices tab scoped to Pi);
  *            defaults to the user's last-viewed tab.
