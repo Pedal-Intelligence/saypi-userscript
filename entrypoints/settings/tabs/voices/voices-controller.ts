@@ -26,7 +26,9 @@ import {
   VoiceHostId,
 } from "./voices-view-model";
 import {
+  AuditionItem,
   AuditionState,
+  AUDITION_BEAT_MS,
   IDLE_AUDITION,
   PreviewSequencer,
 } from "./previewSequencer";
@@ -53,6 +55,44 @@ export const VOICES_ARROW_AUDITION_KEY = "voicesArrowAudition";
 /** How long a type-ahead buffer survives between keystrokes. */
 const TYPE_AHEAD_MS = 800;
 
+/**
+ * Which slice of the catalog the rail is showing — the `Show:` control
+ * (design §4/§10). Deliberately not persisted: a filter you cannot see the
+ * effect of is a list that lies about being the catalog, and unlike the arrow-
+ * audition toggle this one has no permanent-preference character. It resets
+ * with the tab, exactly like the sweep.
+ */
+export type VoiceFilter = "all" | "hd" | "everyday";
+
+/**
+ * `Play all` refuses above this many voices (design §10). Not a technical
+ * limit — the sequencer would happily walk 100 — but the point past which
+ * "listen to all of them" stops being a gesture and becomes a commitment, and
+ * the moment the `Show:` filter is the better answer.
+ */
+export const PLAY_ALL_MAX = 25;
+
+/**
+ * How long one voice occupies a sweep: the catalog's median sample clip
+ * (measured 1.11–2.90 s, design §0) plus the beat the sequencer leaves between
+ * clips. Only ever used to say roughly how long a refused sweep WOULD take, so
+ * a median beats a mean — one long clip must not inflate the estimate.
+ */
+export const SWEEP_CLIP_SECONDS = 2.0;
+
+/**
+ * Roughly how many minutes a sweep of `count` voices would take, floored at 1.
+ *
+ * Whole minutes, and never zero: the refusal only fires above PLAY_ALL_MAX, so
+ * the smallest number this can be asked about is 26 voices ≈ 1 minute. The
+ * string it feeds says "min", not "minutes", precisely because that case is the
+ * common one and Chrome i18n has no plural forms.
+ */
+export function sweepMinutes(count: number): number {
+  const seconds = count * (SWEEP_CLIP_SECONDS + AUDITION_BEAT_MS / 1000);
+  return Math.max(1, Math.round(seconds / 60));
+}
+
 export interface VoiceStudioDeps {
   getVoices(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote[]>;
   getVoice(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote | null>;
@@ -78,6 +118,24 @@ export interface VoiceStudioDeps {
      * audio.
      */
     gain?: number
+  ): void;
+  /**
+   * Walk a whole queue of clips at the sequencer's beat — `▶ Play all`
+   * (design §4).
+   *
+   * Its own entry point rather than a widened `playPreview`, because the two
+   * are different gestures the page reports differently: one audition is
+   * silent about its position and leaves the compare pair alone, a sweep shows
+   * `6 of 22` and a `Stop`. Both land on the same sequencer, which is what
+   * makes "click a row mid-sweep cancels the sweep" free — the session token
+   * does the cancelling.
+   *
+   * Optional: a studio with no player wired renders no `Play all` at all
+   * rather than a control that would do nothing.
+   */
+  playSequence?(
+    items: AuditionItem[],
+    onState: (state: AuditionState) => void
   ): void;
   /**
    * Silence whatever is sounding. `Space` on the playing row and `Esc` both
@@ -118,6 +176,25 @@ let previewSubscription: (() => void) | null = null;
 // decodes it already paid for.
 let printLoader: VoicePrintLoader | null = null;
 
+/**
+ * Hand a queue to the page's one sequencer, replacing whatever it was doing.
+ *
+ * One state line, handed to the newest requester. Safe now that the line
+ * carries a snapshot naming the voice rather than a bare boolean — and it is
+ * what makes an interruption free: `play()` bumps the session token, so the
+ * cancelled sequence's outstanding continuations are already fenced out.
+ */
+function auditionThrough(
+  items: AuditionItem[],
+  onState: (state: AuditionState) => void
+): void {
+  if (items.length === 0) return;
+  if (!previewSequencer) previewSequencer = new PreviewSequencer();
+  previewSubscription?.();
+  previewSubscription = previewSequencer.subscribe(onState);
+  previewSequencer.play(items);
+}
+
 // The settings page runs outside any host tab, so every preference call MUST
 // carry an explicit chatbot id — the no-arg default resolves to "web" here.
 function defaultDeps(): VoiceStudioDeps {
@@ -130,17 +207,16 @@ function defaultDeps(): VoiceStudioDeps {
       prefs.getVoice(host) as Promise<SpeechSynthesisVoiceRemote | null>,
     setVoice: (voice, host) => prefs.setVoice(voice, host).then(() => {}),
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
+    // A single audition IS a one-item sequence — same queue, same beat, same
+    // cancellation — so both entry points are this one call.
     playPreview: (voice, onState, gain = 1) => {
       if (!voice.sample_url) return;
-      if (!previewSequencer) previewSequencer = new PreviewSequencer();
-      // One state line, handed to the newest requester. Safe now that the
-      // line carries a snapshot naming the voice rather than a bare boolean.
-      previewSubscription?.();
-      previewSubscription = previewSequencer.subscribe(onState);
-      previewSequencer.play([
-        { voiceId: voice.id, url: voice.sample_url, gain },
-      ]);
+      auditionThrough(
+        [{ voiceId: voice.id, url: voice.sample_url, gain }],
+        onState
+      );
     },
+    playSequence: (items, onState) => auditionThrough(items, onState),
     stopPreview: () => previewSequencer?.stop(),
     loadPrint: (voice) => {
       if (!voice.sample_url) return Promise.resolve(null);
@@ -237,6 +313,24 @@ export class VoicesController {
   private pairHost: VoiceHostId | null = null;
   private typeAhead = "";
   private typeAheadAt = 0;
+  /**
+   * Is a `Play all` walking the list right now?
+   *
+   * Held here rather than inferred from the snapshot, because the snapshot
+   * cannot tell the two apart: a single audition is a one-item sequence, so it
+   * reports `running` and a `position` of `1 of 1` exactly as a sweep's first
+   * step does. This flag is the difference between showing `6 of 22` + `Stop`
+   * and showing nothing at all.
+   */
+  private sweeping = false;
+  /**
+   * A `Play all` that was refused for being too long (design §10), remembered
+   * only long enough to say so. Cleared by the next play or filter change —
+   * the message is a reply to one press, not a state of the page.
+   */
+  private refusal: { count: number; minutes: number } | null = null;
+  /** Which slice of the catalog the rail is showing (the `Show:` control). */
+  private filter: VoiceFilter = "all";
   /** Display names for everything the control bar might have to name. */
   private nameById = new Map<string, string>();
   /** The id order currently painted — the input to the reorder check. */
@@ -289,10 +383,58 @@ export class VoicesController {
     this.body = document.createElement("div");
     this.body.classList.add("voice-studio-body");
     studio.appendChild(this.body);
+    document.addEventListener("visibilitychange", this.onVisibilityChange);
+    window.addEventListener("pagehide", this.onPageHide);
     // Read before the first paint: the chip is rendered by the control bar, and
     // a chip that flips a beat after the rail appears is a chip nobody trusts.
     this.arrowAudition = (await this.deps.loadArrowAudition?.()) ?? true;
     await this.render();
+  }
+
+  // --- leaving (design §5.2's interruption matrix) --------------------------
+
+  /**
+   * The Voices tab left the screen. Stop EVERYTHING — sequence or lone clip.
+   *
+   * The harder rule of the two, and deliberately so: unlike a hidden window,
+   * where letting a 1.5 s clip finish is less startling than cutting it, a tab
+   * switch takes the whole control bar with it. There is no longer a `Stop` on
+   * screen, and no row inking to say what is sounding, so anything still
+   * playing is audio with no controls — which is the complaint.
+   */
+  onHidden(): void {
+    this.stopAudition();
+    this.updateControlBar();
+  }
+
+  /**
+   * The window went to the background (minimised, or its space switched away).
+   *
+   * Stops the SEQUENCE and lets a lone clip finish: a minute of unattended
+   * audio into a window nobody can see is the surprise-audio complaint, while
+   * chopping one 1.5 s clip mid-word is more startling than letting it end.
+   * The control bar is still on screen and still says `Stop`, which is exactly
+   * what a tab switch takes away.
+   *
+   * Note what is NOT here: `blur`. On macOS the settings popup blurs on almost
+   * any click — including clicks back into the chat window you are choosing a
+   * voice for — so stopping on blur would make the feature feel broken.
+   */
+  private readonly onVisibilityChange = (): void => {
+    if (document.visibilityState !== "hidden") return;
+    this.stopSequence();
+  };
+
+  /** Belt and braces for settings-in-a-tab, where visibilitychange may not fire. */
+  private readonly onPageHide = (): void => {
+    this.stopAudition();
+  };
+
+  /** Release the page-level listeners this studio installed. */
+  destroy(): void {
+    document.removeEventListener("visibilitychange", this.onVisibilityChange);
+    window.removeEventListener("pagehide", this.onPageHide);
+    this.stopAudition();
   }
 
   // --- host scope -----------------------------------------------------------
@@ -406,8 +548,13 @@ export class VoicesController {
     // Everything in here is about to be destroyed, including whatever holds
     // DOM focus — and a rail you can no longer arrow is a rail that broke
     // when you pressed Enter on it.
-    const keepFocus =
-      !!document.activeElement && body.contains(document.activeElement);
+    const active = document.activeElement;
+    const keepFocus = !!active && body.contains(active);
+    // …with one control that must get itself back rather than hand focus to
+    // the rail: changing the `Show:` filter repaints the body, and a select
+    // that jumps focus elsewhere the moment you use it cannot be used twice.
+    const keepFilterFocus =
+      keepFocus && !!active?.classList?.contains("voice-filter-select");
     // An observer still watching these rows would hold the detached nodes and
     // fire for a page that is gone.
     this.printObserver?.disconnect();
@@ -430,6 +577,13 @@ export class VoicesController {
     }
 
     this.seedPair(hostId, vm);
+
+    // A filter the catalog no longer supports (a host switch to a single-tier
+    // catalog, a server change) would leave the rail narrowed by a control
+    // that is no longer on screen to widen it again.
+    if (!this.filterOptions(vm).some((option) => option.value === this.filter)) {
+      this.filter = "all";
+    }
 
     // The rail is built FIRST, even though it paints second: the control bar
     // offers to jump to the current voice, and it can only honestly offer that
@@ -459,7 +613,13 @@ export class VoicesController {
     // a clip goes on sounding with nothing on screen saying so.
     this.applyAuditionState();
 
-    if (keepFocus) rail.focus({ preventScroll: true });
+    if (keepFilterFocus) {
+      body
+        .querySelector<HTMLSelectElement>(".voice-filter-select")
+        ?.focus({ preventScroll: true });
+    } else if (keepFocus) {
+      rail.focus({ preventScroll: true });
+    }
   }
 
   private renderEmptyState(
@@ -495,10 +655,10 @@ export class VoicesController {
 
   /**
    * Sticky, opaque, one rule under it — one of exactly two rules on the page.
-   * Slice 2 carries the four things the rail itself needs: where your voice
-   * is, whether arrows audition, what the keys do, and what the last two
-   * voices you heard were. (Play all, the `Show:` filter and the heard counter
-   * belong to later slices and are deliberately absent rather than dead.)
+   * It carries where your voice is, the sweep and its position, whether arrows
+   * audition, which slice of the catalog is showing, what the keys do, and
+   * what the last two voices you heard were. (The heard counter belongs to
+   * slice 4 and is deliberately absent rather than dead.)
    */
   private renderControlBar(vm: StudioViewModel): HTMLElement {
     const bar = document.createElement("div");
@@ -506,6 +666,17 @@ export class VoicesController {
 
     const top = document.createElement("div");
     top.classList.add("voice-rail-controls-row");
+
+    // Auto-advance is the OTHER comparison gesture (design §4) — but never the
+    // opening one: the page's invitation is to hear ONE voice, not to commit a
+    // minute. No player wired, or nothing auditionable to walk, and the button
+    // does not exist rather than sitting there doing nothing.
+    if (this.deps.playSequence && this.playableRows().length > 0) {
+      top.appendChild(this.renderSweepButton());
+      const position = document.createElement("span");
+      position.classList.add("voice-sweep-position");
+      top.appendChild(position);
+    }
 
     // No dead controls: the jump only exists when there is a row to jump to.
     // A host built-in (Pi's own voices) is the current voice with no row.
@@ -536,6 +707,9 @@ export class VoicesController {
     chip.textContent = getMessage("voicesArrowAudition");
     chip.addEventListener("click", () => this.toggleArrowAudition());
     top.appendChild(chip);
+
+    const filter = this.renderFilter(vm);
+    if (filter) top.appendChild(filter);
     bar.appendChild(top);
 
     const bottom = document.createElement("div");
@@ -549,12 +723,100 @@ export class VoicesController {
     compare.classList.add("voice-compare");
     bottom.appendChild(compare);
     bar.appendChild(bottom);
+
+    // The allowance note is the HD filter's HELPER LINE, not a shelf blurb.
+    // Same sentence, different job: on the retired shelves it was decoration
+    // above a heading nobody asked for, and here it only exists while HD is
+    // the thing you chose to look at — with the control that undoes that
+    // choice sitting directly above it. Actionable rather than ornamental.
+    if (this.filter === "hd") {
+      const note = document.createElement("div");
+      note.classList.add("voice-rail-controls-row", "voice-filter-note");
+      note.setAttribute("data-i18n", "hdVoicesAllowanceNote");
+      note.textContent = getMessage("hdVoicesAllowanceNote");
+      bar.appendChild(note);
+    }
     return bar;
   }
 
   /**
+   * `▶ Play all (N)` / `Stop` — one button, because it is one state with two
+   * faces, and a separate Stop would be a dead control 99 % of the time.
+   *
+   * The label lives in an inner span: `replaceI18n()` sets `textContent` on
+   * whatever carries `data-i18n`, which on the button itself would delete the
+   * glyph beside it.
+   */
+  private renderSweepButton(): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("voice-play-all");
+    const glyph = document.createElement("span");
+    glyph.classList.add("voice-play-glyph");
+    glyph.setAttribute("aria-hidden", "true");
+    button.appendChild(glyph);
+    const label = document.createElement("span");
+    label.classList.add("voice-play-label");
+    button.appendChild(label);
+    button.addEventListener("click", () => this.toggleSweep());
+    return button;
+  }
+
+  /**
+   * The `Show:` filter. Only the options that would actually select something:
+   * a "HD only" on a catalog with no HD voices is a control that empties the
+   * page, and with fewer than two live options there is nothing to choose
+   * between, so the whole control stays away.
+   */
+  private filterOptions(
+    vm: StudioViewModel
+  ): { value: VoiceFilter; key: string }[] {
+    const options: { value: VoiceFilter; key: string }[] = [
+      { value: "all", key: "voicesShowAll" },
+    ];
+    // The same test VoiceCuration uses to decide whether price is even an axis
+    // on this host: one tier alone is not a distinction.
+    if (new Set(vm.catalog.map(getVoiceTier)).size > 1) {
+      options.push({ value: "hd", key: "voicesShowHd" });
+      options.push({ value: "everyday", key: "voicesShowEveryday" });
+    }
+    return options;
+  }
+
+  private renderFilter(vm: StudioViewModel): HTMLElement | null {
+    const options = this.filterOptions(vm);
+    if (options.length < 2) return null;
+    const label = document.createElement("label");
+    label.classList.add("voice-filter");
+    const text = document.createElement("span");
+    text.setAttribute("data-i18n", "voicesShowLabel");
+    text.textContent = getMessage("voicesShowLabel");
+    label.appendChild(text);
+    // Punctuation, outside the [data-i18n] element so replaceI18n cannot eat
+    // it and translators never have to carry a colon.
+    label.appendChild(document.createTextNode(":"));
+    const select = document.createElement("select");
+    select.classList.add("voice-filter-select");
+    options.forEach(({ value, key }) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.setAttribute("data-i18n", key);
+      option.textContent = getMessage(key);
+      select.appendChild(option);
+    });
+    select.value = this.filter;
+    select.addEventListener("change", () =>
+      this.changeFilter(select.value as VoiceFilter)
+    );
+    label.appendChild(select);
+    return label;
+  }
+
+  /**
    * Everything in the bar that changes without the rail changing: the chip's
-   * lit state and the compare readout, which fills in as the reader walks.
+   * lit state, the sweep's face and position, the hint line (which doubles as
+   * the page's one non-modal message slot), and the compare readout, which
+   * fills in as the reader walks.
    */
   private updateControlBar(): void {
     const bar = this.controls;
@@ -564,8 +826,95 @@ export class VoicesController {
       chip.setAttribute("aria-pressed", String(this.arrowAudition));
       chip.classList.toggle("lit", this.arrowAudition && this.armed);
     }
+    this.updateSweepControls(bar);
+    this.updateHint(bar);
     const compare = bar.querySelector<HTMLElement>(".voice-compare");
     if (compare) this.updateCompareReadout(compare);
+  }
+
+  private updateSweepControls(bar: HTMLElement): void {
+    const button = bar.querySelector<HTMLButtonElement>(".voice-play-all");
+    if (button) {
+      button.classList.toggle("sweeping", this.sweeping);
+      const glyph = button.querySelector<HTMLElement>(".voice-play-glyph");
+      if (glyph) glyph.textContent = this.sweeping ? "■" : "▶";
+      const label = button.querySelector<HTMLElement>(".voice-play-label");
+      if (label) {
+        if (this.sweeping) {
+          label.setAttribute("data-i18n", "voicesStopPlayback");
+          label.textContent = getMessage("voicesStopPlayback");
+        } else {
+          // Substituted text carries NO data-i18n: replaceI18n() would rewrite
+          // it from the bare key on the next tab load and erase the count.
+          label.removeAttribute("data-i18n");
+          label.textContent = getMessage("voicesPlayAllN", [
+            String(this.playableRows().length),
+          ]);
+        }
+      }
+    }
+    const position = bar.querySelector<HTMLElement>(".voice-sweep-position");
+    if (!position) return;
+    // Only a sweep has a position worth showing. A single audition is a
+    // one-item sequence and reports `1 of 1`, which is true and useless.
+    const at = this.sweeping ? this.auditionState.position : null;
+    position.textContent = at
+      ? getMessage("voicesSweepPosition", [String(at.index), String(at.total)])
+      : "";
+  }
+
+  /**
+   * The bottom line of the bar: normally the keyboard hint, and otherwise the
+   * page's ONE non-modal message slot (design §10).
+   *
+   * One slot rather than a toast, a banner or a dialog, because every message
+   * it carries is about playback and the controls for playback are right here.
+   * Blocked outranks a failed clip outranks a refused sweep: the first means
+   * nothing will sound at all until you act, the second is about one voice,
+   * and the third is about a button you already know you pressed.
+   */
+  private hintLine(): { text: string; i18nKey?: string; alert: boolean } {
+    const error = this.auditionState.error;
+    if (error?.kind === "blocked") {
+      return {
+        text: getMessage("voicesPlaybackBlocked"),
+        i18nKey: "voicesPlaybackBlocked",
+        alert: true,
+      };
+    }
+    if (error?.kind === "failed") {
+      return {
+        text: getMessage("voicesSampleFailed", [this.nameOf(error.voiceId)]),
+        alert: true,
+      };
+    }
+    if (this.refusal) {
+      return {
+        text: getMessage("voicesTooManyToPlay", [
+          String(this.refusal.count),
+          String(this.refusal.minutes),
+        ]),
+        alert: true,
+      };
+    }
+    return {
+      text: getMessage("voicesKeyboardHint"),
+      i18nKey: "voicesKeyboardHint",
+      alert: false,
+    };
+  }
+
+  private updateHint(bar: HTMLElement): void {
+    const hint = bar.querySelector<HTMLElement>(".voice-rail-hint");
+    if (!hint) return;
+    const line = this.hintLine();
+    if (line.i18nKey) hint.setAttribute("data-i18n", line.i18nKey);
+    else hint.removeAttribute("data-i18n");
+    // Only when it changes: `textContent =` replaces the text node, and this
+    // runs on every arrow key. Rewriting an identical line 22 times down a
+    // walk is churn a screen reader watching the subtree would have to filter.
+    if (hint.textContent !== line.text) hint.textContent = line.text;
+    hint.classList.toggle("voice-rail-hint-alert", line.alert);
   }
 
   /**
@@ -649,6 +998,23 @@ export class VoicesController {
     return [...pitched, ...unpitched];
   }
 
+  /**
+   * What the rail actually shows, in order: the pitch chart, narrowed by the
+   * `Show:` control.
+   *
+   * One function rather than two call sites doing the same two steps, because
+   * `settleOrder` compares what it WOULD paint against what it DID: filter in
+   * one place only and the two answers diverge, so every late measurement
+   * looks like a reorder and repaints the rail under the reader.
+   */
+  private railOrder(
+    catalog: SpeechSynthesisVoiceRemote[]
+  ): SpeechSynthesisVoiceRemote[] {
+    const ordered = this.orderCatalog(catalog);
+    if (this.filter === "all") return ordered;
+    return ordered.filter((voice) => getVoiceTier(voice) === this.filter);
+  }
+
   private renderRail(vm: StudioViewModel): HTMLElement {
     const rail = document.createElement("ul");
     rail.classList.add("voice-rail");
@@ -663,7 +1029,7 @@ export class VoicesController {
     rail.addEventListener("keydown", (event) => this.onRailKeyDown(event));
     this.rail = rail;
 
-    const ordered = this.orderCatalog(vm.catalog);
+    const ordered = this.railOrder(vm.catalog);
     this.paintedOrder = ordered.map((voice) => voice.id);
     // orderCatalog puts every clipless voice last, so one index is the whole
     // boundary: from here on is the "No sample yet" group.
@@ -1070,7 +1436,7 @@ export class VoicesController {
     const data = this.cache.get(this.activeHost);
     if (!data || !this.body || this.rows.length === 0) return;
     const vm = viewModel(this.activeHost, data);
-    const next = this.orderCatalog(vm.catalog).map((voice) => voice.id);
+    const next = this.railOrder(vm.catalog).map((voice) => voice.id);
     const same =
       next.length === this.paintedOrder.length &&
       next.every((id, i) => id === this.paintedOrder[i]);
@@ -1292,12 +1658,36 @@ export class VoicesController {
     void this.deps.setArrowAudition?.(this.arrowAudition);
   }
 
+  /**
+   * Narrow (or widen) the rail. Repaints from cache, so it is instant.
+   *
+   * Stops a running SWEEP, because the queue it was walking is what just left
+   * the screen — but leaves a lone clip alone, the same asymmetry a hidden
+   * window gets. Cutting the voice you are in the middle of judging, because
+   * you reached for the filter, would be the filter breaking the comparison it
+   * exists to make possible.
+   */
+  private changeFilter(next: VoiceFilter): void {
+    if (next === this.filter) return;
+    this.filter = next;
+    this.stopSequence();
+    this.refusal = null;
+    const data = this.cache.get(this.activeHost);
+    if (data) this.paintBody(this.activeHost, data);
+  }
+
   // --- audition -------------------------------------------------------------
 
   private audition(voice: SpeechSynthesisVoiceRemote): void {
     // Any explicit play arms the rail (design §3): the first play always
     // descends from a real gesture, which is what licenses every later one.
     this.armed = true;
+    // Direct manipulation gets exactly one meaning (design §4): touching a row
+    // mid-sweep cancels the sweep and plays THAT row. The sequencer does the
+    // actual cancelling — `play()` bumps its session token — so all this has
+    // to do is stop the page claiming a sweep is under way.
+    this.sweeping = false;
+    this.refusal = null;
     // Level-matched from this voice's own measured RMS, or unattenuated when
     // the print has not landed yet (design §5.1).
     const gain = gainFor(this.prints.get(voice.id)?.voicedRmsDb);
@@ -1319,10 +1709,94 @@ export class VoicesController {
 
   private stopAudition(): void {
     this.deps.stopPreview?.();
+    this.sweeping = false;
     // The sequencer's snapshot is the truth when there is one; with no player
     // wired the rail still has to stop reading as playing.
     this.auditionState = IDLE_AUDITION;
     this.applyAuditionState();
+  }
+
+  // --- the sweep (design §4's `Play all`) -----------------------------------
+
+  /**
+   * The queue `Play all` would walk: the currently painted, currently
+   * FILTERED, currently ordered rows that have a clip.
+   *
+   * Derived from the painted rows rather than the catalog, which is the whole
+   * point — narrowing the list with `Show:` narrows the sweep, and the
+   * refusal above 25 is then something the reader can actually act on.
+   */
+  private playableRows(): RailRow[] {
+    return this.rows.filter((row) => row.playable && !!row.voice.sample_url);
+  }
+
+  private sweepItems(): AuditionItem[] {
+    return this.playableRows().map((row) => ({
+      voiceId: row.voice.id,
+      url: row.voice.sample_url as string,
+      gain: gainFor(this.prints.get(row.voice.id)?.voicedRmsDb),
+    }));
+  }
+
+  private toggleSweep(): void {
+    if (this.sweeping) {
+      this.stopSequence();
+      return;
+    }
+    this.playAll();
+  }
+
+  /**
+   * Walk the filtered list once, at the sequencer's fixed beat.
+   *
+   * ONCE: it never loops, never persists, and never auto-starts. The page's
+   * invitation is to hear one voice — this is the option, not the opening
+   * gesture.
+   */
+  private playAll(): void {
+    const items = this.sweepItems();
+    if (items.length === 0) return;
+    if (items.length > PLAY_ALL_MAX) {
+      this.refuseSweep(items.length);
+      return;
+    }
+    this.refusal = null;
+    // Pressing it is an explicit play, so it arms the rail exactly as Space
+    // does — and it is a real user gesture, which is what licenses every
+    // programmatic play() that follows under Chrome's sticky-activation rule.
+    this.armed = true;
+    this.sweeping = true;
+    // Focus is NOT moved, and is not moved as the queue advances either: the
+    // pair, the focus and the queue index are three independent things, which
+    // is what lets you keep your place while the rail plays itself.
+    this.deps.playSequence?.(items, (state) => {
+      this.auditionState = state;
+      this.applyAuditionState();
+    });
+    this.updateControlBar();
+  }
+
+  /**
+   * Stop the SEQUENCE. Used by the button, by `Esc` via `disarm`, by a filter
+   * change and by a hidden window — all cases where the queue is what has
+   * stopped making sense, and where a lone clip a second from ending is better
+   * left to end.
+   */
+  private stopSequence(): void {
+    if (!this.sweeping) return;
+    this.stopAudition();
+    this.updateControlBar();
+  }
+
+  /**
+   * Too many to sit through (design §10). A refusal, not a disabled button:
+   * a greyed-out `Play all` explains nothing, and the sentence that does
+   * explain it points straight at the control that fixes it, one row above.
+   */
+  private refuseSweep(count: number): void {
+    this.refusal = { count, minutes: sweepMinutes(count) };
+    this.updateControlBar();
+    this.syncStatus();
   }
 
   /** The last two DISTINCT voices auditioned, most recent first. */
@@ -1361,21 +1835,54 @@ export class VoicesController {
    * derived from it wholesale instead of patched per caller.
    */
   private applyAuditionState(): void {
+    // The queue ran out (or stopped itself on a run of failures). The button
+    // has to stop offering to stop something that already has.
+    if (this.sweeping && !this.auditionState.running) this.sweeping = false;
+
     this.container
-      .querySelectorAll("[data-print-voice].playing")
-      .forEach((row) => row.classList.remove("playing"));
+      .querySelectorAll("[data-print-voice].playing, [data-print-voice].loading")
+      .forEach((row) => row.classList.remove("playing", "loading"));
+    // A clip that isn't buffered yet stretches the gap between voices. Saying
+    // so — the next voice's print pulses — is the difference between a beat
+    // that is late and a page that looks like it has stopped working.
+    this.markRows(this.auditionState.loadingVoiceId, "loading");
     const playing = this.auditionState.playingVoiceId;
-    if (!playing) {
-      this.announce("");
-      // A reorder that waited for the audio to stop can land now.
-      if (this.orderDirty) this.requestSettle();
+    this.markRows(playing, "playing");
+    this.syncStatus();
+    this.updateControlBar();
+    // A reorder that waited for the audio to stop can land now.
+    if (!playing && this.orderDirty) this.requestSettle();
+  }
+
+  private markRows(voiceId: string | null, className: string): void {
+    if (!voiceId) return;
+    this.container
+      .querySelectorAll(`[data-print-voice="${escapeCss(voiceId)}"]`)
+      .forEach((row) => row.classList.add(className));
+  }
+
+  /**
+   * What the live region says. `#voice-status` carries no `data-i18n`: every
+   * string here is substituted, and `replaceI18n` would erase the name.
+   *
+   * Deliberately silent DURING a sweep. Naming each of 22 voices into a
+   * polite queue is the same collision the arming rule exists to prevent — the
+   * reader's speech landing on top of the sample it is describing — and by the
+   * time the queue drained it would be minutes behind the audio. A sweep is a
+   * listening exercise; the audio is the output. What still gets announced is
+   * everything that is NOT the audio: blocked playback, a failed clip, and a
+   * refused sweep, none of which the ear can discover on its own.
+   */
+  private syncStatus(): void {
+    if (this.auditionState.error || this.refusal) {
+      this.announce(this.hintLine().text);
       return;
     }
-    this.container
-      .querySelectorAll(`[data-print-voice="${escapeCss(playing)}"]`)
-      .forEach((row) => row.classList.add("playing"));
-    // The one thing worth announcing. `#voice-status` carries no data-i18n:
-    // this string is substituted, and replaceI18n would erase the name.
+    const playing = this.auditionState.playingVoiceId;
+    if (!playing || this.sweeping) {
+      this.announce("");
+      return;
+    }
     this.announce(getMessage("voicesNowPlaying", [this.nameOf(playing)]));
   }
 

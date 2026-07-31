@@ -47,6 +47,8 @@ class SettingsApp {
   private header!: SettingsHeader;
   private tabs: Map<string, TabController> = new Map();
   private navigator!: TabNavigator;
+  /** Which tab is on screen — the only thing `onHidden` needs to know. */
+  private activeTabId: string | null = null;
 
   async init(): Promise<void> {
     console.info("[Settings] Bootstrap starting");
@@ -147,6 +149,19 @@ class SettingsApp {
   }
 
   private async switchToTab(tabId: string): Promise<void> {
+    // Tell the tab we are leaving before we show the next one. Tabs are never
+    // destroyed here — they stay mounted for the life of the page — so this is
+    // the only signal a tab that owns something ongoing (the Voices player)
+    // ever gets that nobody is looking at it. Guarded, because one tab's
+    // teardown must not be able to stop the next tab from opening.
+    if (this.activeTabId !== null && this.activeTabId !== tabId) {
+      try {
+        this.tabs.get(this.activeTabId)?.onHidden?.();
+      } catch (error) {
+        console.warn(`[Settings] ${this.activeTabId} tab failed to hide:`, error);
+      }
+    }
+    this.activeTabId = tabId;
     // Load tab on-demand when user switches to it
     await this.loadTab(tabId);
   }

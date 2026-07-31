@@ -351,6 +351,41 @@ describe("PreviewSequencer — double buffering and the 320 ms beat", () => {
     expect(elementFor("echo")!.playCalls).toBe(1);
   });
 
+  it("keeps alternating past the first handover, on a queue longer than two", async () => {
+    // The case `Play all` is the first thing to reach: with two elements and
+    // four clips, every buffer plays twice, and the ONE thing that must hold
+    // at each step is that the clip after next is loading into the element
+    // that is NOT sounding. An off-by-one in the alternation is invisible on a
+    // two-item sequence and audible as a stall on every step of a real sweep.
+    const { sequencer, created, elementFor } = harness();
+    const queue = ["onyx", "echo", "ash", "coral"];
+    sequencer.play(queue.map((id) => item(id)));
+
+    for (const [index, voiceId] of queue.entries()) {
+      const playing = elementFor(voiceId)!;
+      playing.fire("play");
+      expect(sequencer.getState().playingVoiceId).toBe(voiceId);
+      expect(sequencer.getState().position).toEqual({
+        index: index + 1,
+        total: queue.length,
+      });
+      const next = queue[index + 1];
+      if (next) {
+        // Already fetched, into the other element, while this one sounds.
+        expect(elementFor(next), `${next} should be preloaded`).toBeTruthy();
+        expect(elementFor(next)).not.toBe(playing);
+        expect(elementFor(next)!.playCalls).toBe(index === 0 ? 0 : 1);
+      }
+      playing.fire("ended");
+      await settle();
+      vi.advanceTimersByTime(AUDITION_BEAT_MS);
+      await settle();
+    }
+    // Two elements, four clips, four plays — never a third element.
+    expect(created.length).toBe(2);
+    expect(sequencer.getState().running).toBe(false);
+  });
+
   it("ends the sequence after the last clip", async () => {
     const { sequencer, elementFor } = harness();
     sequencer.play([item("onyx")]);

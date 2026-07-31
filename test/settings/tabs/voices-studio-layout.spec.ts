@@ -298,6 +298,64 @@ describe("the playhead is a clock, and reduced motion slows it rather than killi
     expect(reduced).toMatch(/animation-timing-function:\s*steps\(8/);
     expect(reduced).not.toMatch(/animation:\s*none/);
   });
+
+  it("pulses the print of a clip that has not buffered yet, on the print itself", () => {
+    // The beat is deadline-scheduled, so an unbuffered clip stretches the gap.
+    // Drawing the wait ON the late voice's print is what makes it a wait
+    // rather than a page that has stopped working — and says WHICH voice.
+    const waiting = ruleBody(".voice-row.loading .voice-print-trace");
+    expect(waiting).toMatch(/animation-name:\s*voice-print-pulse/);
+    expect(waiting).toMatch(/animation-iteration-count:\s*infinite/);
+    const pulse = css.slice(css.indexOf("@keyframes voice-print-pulse"));
+    expect(pulse.slice(0, pulse.indexOf("}\n}"))).toMatch(/opacity:\s*0\.4/);
+  });
+
+  it("keeps the waiting state under reduced motion, and only drops the motion", () => {
+    const reduced = css.slice(
+      css.indexOf("@media (prefers-reduced-motion: reduce)")
+    );
+    // animation-NAME: none, never the `animation:` shorthand — the shorthand
+    // in this block would also erase the playhead's longhands above it.
+    expect(reduced).toMatch(/animation-name:\s*none/);
+    expect(reduced).toMatch(/opacity:\s*0\.4/);
+  });
+});
+
+describe("the sweep, its readout, and the Show: filter", () => {
+  it("gives Stop the one green, because a sweep in progress is the page's 'now'", () => {
+    expect(ruleBody(".voice-play-all.sweeping")).toMatch(
+      new RegExp(`color:\\s*${ACCENT}`)
+    );
+    // …and only then. At rest it is the same quiet ink as the rest of the bar.
+    expect(inkDensity(ruleBody(".voice-play-all"))).toBeLessThan(1);
+  });
+
+  it("adds no third horizontal rule — the page still has exactly two", () => {
+    // Both new controls are outlined with the `border:` shorthand, which is
+    // an outline rather than a rule. The count assertion lives above; this
+    // pins WHY it still holds.
+    expect(ruleBody(".voice-play-all")).toMatch(/border:\s*1px solid #e6e3da/);
+    expect(ruleBody(".voice-filter-select")).toMatch(
+      /border:\s*1px solid #e6e3da/
+    );
+  });
+
+  it("sets the allowance note quieter than the hint it sits under", () => {
+    // A caveat about the filter, not a warning about the page.
+    expect(inkDensity(ruleBody(".voice-filter-note"))).toBeLessThan(
+      inkDensity(ruleBody(".voice-rail-controls"))
+    );
+  });
+
+  it("gives the bar's one message slot full ink when it has something to say", () => {
+    // Blocked playback, a failed clip and a refused sweep all land in the hint
+    // line. Unlike the hint, they are things you have to read.
+    expect(inkDensity(ruleBody(".voice-rail-hint-alert"))).toBe(1);
+  });
+
+  it("pushes the filter to the far end of the bar, opposite the sweep", () => {
+    expect(ruleBody(".voice-filter")).toMatch(/margin-left:\s*auto/);
+  });
 });
 
 describe("type", () => {

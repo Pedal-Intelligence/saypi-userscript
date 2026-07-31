@@ -197,6 +197,70 @@
   margin-right: 5px;
 }
 
+/* --- Play all, its position readout, and the Show: filter -------------------
+   Auto-advance is the OTHER comparison gesture, never the opening one: the
+   page invites you to hear ONE voice, and this is the option beside that
+   invitation, not in front of it. */
+
+.voice-play-all {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  border: 1px solid #e6e3da;
+  border-radius: 9999px;
+  padding: 2px 10px;
+  background: #ffffff;
+  font: inherit;
+  color: rgba(21, 23, 26, 0.62);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.voice-play-all:hover {
+  color: #15171a;
+}
+/* A sweep in progress is the one thing on this bar that is happening NOW, so
+   Stop takes the one green — the same rule as the playhead and IN USE. */
+.voice-play-all.sweeping {
+  color: #2c5a42;
+  border-color: #2c5a42;
+}
+.voice-play-glyph {
+  font-size: 9px;
+}
+.voice-sweep-position {
+  white-space: nowrap;
+}
+
+.voice-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.voice-filter-select {
+  border: 1px solid #e6e3da;
+  border-radius: 6px;
+  padding: 1px 4px;
+  background: #ffffff;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+/* The allowance note is the HD filter's HELPER LINE, not a shelf blurb: it
+   exists only while HD is what you chose to look at, directly under the
+   control that undoes that choice. Quiet, because it is a caveat about the
+   filter, not a warning about the page. */
+.voice-filter-note {
+  color: rgba(21, 23, 26, 0.38);
+}
+/* Blocked playback, a failed clip and a refused sweep all replace the keyboard
+   hint IN PLACE — one line, non-modal, never a dialog, and full ink because
+   unlike the hint they are things you have to read. */
+.voice-rail-hint-alert {
+  color: #15171a;
+}
+
 /* --- the rail --------------------------------------------------------------
    One listbox, one tab stop, 42px rows on an 8px grid. Row columns:
    [3px focus rule][14][300px print][20][name 108px][12][desc flex][badges][actions 96px][20] */
@@ -411,6 +475,27 @@
     transform: translateX(var(--print-trace-w, 0px));
   }
 }
+/* The third motion, and the only one that is not on the design's list of two —
+   because §5.1 asks for it by name and it is informational in exactly the same
+   way the playhead is. The beat between clips is deadline-scheduled, so a clip
+   that has not buffered stretches the gap; the next voice's print pulsing is
+   what makes that a wait rather than a page that has stopped working. It is
+   drawn on the print, not on a spinner, so it says WHICH voice is late. */
+.voice-row.loading .voice-print-trace {
+  animation-name: voice-print-pulse;
+  animation-duration: 0.9s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes voice-print-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
 
 /* --- the tail: "No sample yet", built-ins, and the menu summary ------------
    Rule 2 of the page's two. */
@@ -519,5 +604,13 @@
      equalizer outright under reduced motion, leaving a near-invisible glyph.) */
   .voice-row.playing .voice-print-head {
     animation-timing-function: steps(8, end);
+  }
+  /* The waiting print stops pulsing but keeps the dimmed value, so "this voice
+     is still loading" is still legible — the state survives, only the motion
+     goes. Longhand, so the rule that kills the pulse cannot also erase the
+     playhead's four declarations above it. */
+  .voice-row.loading .voice-print-trace {
+    animation-name: none;
+    opacity: 0.4;
   }
 }

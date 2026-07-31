@@ -1252,6 +1252,78 @@
       }
     }
   },
+  "voicesPlayAllN": {
+    "message": "Play all ($count$)",
+    "description": "Button in the settings Voices control bar that plays every voice currently listed, one after another; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesStopPlayback": {
+    "message": "Stop",
+    "description": "Button in the settings Voices control bar that stops the run of samples started by 'Play all'."
+  },
+  "voicesSweepPosition": {
+    "message": "$index$ of $total$",
+    "description": "Live position readout in the settings Voices control bar while 'Play all' walks the list; $index$ is the voice now playing and $total$ how many are queued.",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesShowLabel": {
+    "message": "Show",
+    "description": "Label on the filter in the settings Voices control bar that narrows which voices the list shows."
+  },
+  "voicesShowAll": {
+    "message": "All voices",
+    "description": "Option in the settings Voices 'Show' filter: no filtering, every voice is listed."
+  },
+  "voicesShowHd": {
+    "message": "HD only",
+    "description": "Option in the settings Voices 'Show' filter: list only the premium (HD) voices."
+  },
+  "voicesShowEveryday": {
+    "message": "Everyday only",
+    "description": "Option in the settings Voices 'Show' filter: list only the standard (non-HD) voices."
+  },
+  "voicesPlaybackBlocked": {
+    "message": "Click any voice to enable sound.",
+    "description": "Line in the settings Voices control bar when the browser refused to play a sample because the page has had no user interaction yet."
+  },
+  "voicesSampleFailed": {
+    "message": "Couldn't play $name$'s sample.",
+    "description": "Line in the settings Voices control bar when one voice's sample clip failed to load or play; $name$ is that voice. Non-modal — a run of samples carries on past it.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "message": "That's $count$ voices — about $minutes$ min. Narrow the list first.",
+    "description": "Line in the settings Voices control bar when 'Play all' is pressed on a list too long to sit through; $count$ is how many voices and $minutes$ roughly how many minutes they would take. Abbreviated 'min' so it reads correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
   "voiceTagline_alloy": {
     "message": "Balanced and all-purpose",
     "description": "Authored personality tagline for the 'Alloy' voice (settings Voices studio; client-side voice identity map)."

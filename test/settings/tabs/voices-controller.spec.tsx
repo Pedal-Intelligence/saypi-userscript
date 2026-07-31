@@ -1,10 +1,16 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/preact";
 import { VoicesPanel } from "../../../entrypoints/settings/tabs/voices/VoicesPanel";
-import { VoicesController } from "../../../entrypoints/settings/tabs/voices/voices-controller";
+import {
+  PLAY_ALL_MAX,
+  SWEEP_CLIP_SECONDS,
+  sweepMinutes,
+  VoicesController,
+} from "../../../entrypoints/settings/tabs/voices/voices-controller";
 import { SpeechSynthesisVoiceRemote } from "../../../src/tts/SpeechModel";
 import type { HostPinOverlay } from "../../../src/tts/VoicePins";
 import {
+  AuditionItem,
   AuditionState,
   IDLE_AUDITION,
 } from "../../../entrypoints/settings/tabs/voices/previewSequencer";
@@ -77,6 +83,9 @@ function makeDeps(cfg: DepsConfig = {}) {
         _onState: (state: AuditionState) => void,
         _gain?: number
       ) => {}
+    ),
+    playSequence: vi.fn(
+      (_items: AuditionItem[], _onState: (state: AuditionState) => void) => {}
     ),
     stopPreview: vi.fn(() => {}),
     loadArrowAudition: vi.fn(async () => cfg.arrowAudition ?? true),
@@ -151,6 +160,10 @@ function emit(deps: any, call: number, state: AuditionState): void {
 beforeEach(() => {
   document.body.innerHTML = "";
   localStorage.clear();
+  // The chrome.storage mock in test/vitest.setup.js is MODULE-scoped and
+  // nothing resets it between cases; a print cache or an arrow-audition flag
+  // left behind by one file's last test would silently steer the next one's.
+  (chrome.storage.local as any)._reset?.();
 });
 afterEach(() => cleanup());
 
@@ -770,12 +783,11 @@ describe("VoicesController — the control bar", () => {
     );
   });
 
-  it("shows no Play all, no filter and no heard counter — later slices, not dead controls", async () => {
+  it("shows no heard counter — a later slice, not a dead control", async () => {
     const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("onyx")] });
     const { container } = await mount(deps);
     const bar = q(container, ".voice-rail-controls")!;
-    expect(bar.querySelector("select")).toBeNull();
-    expect(bar.textContent).not.toMatch(/voicesPlayAll|voicesHeardCount/);
+    expect(bar.textContent).not.toMatch(/voicesHeardCount/);
   });
 });
 
@@ -1936,5 +1948,488 @@ describe("VoicesController — the IN USE badge does not claim to be speaking", 
     // …and the row that IS sounding is the only one reading as playing.
     expect(rowOf(container, "onyx")!.classList.contains("playing")).toBe(true);
     expect(marin.classList.contains("playing")).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Slice 3 — auto-advance and filters (design §4, §5.2, §10).
+// ---------------------------------------------------------------------------
+
+/** Everything the sweep button and its readout say, in one look. */
+const sweepButton = (c: HTMLElement) =>
+  q(c, ".voice-play-all") as HTMLButtonElement | null;
+const sweepLabel = (c: HTMLElement) =>
+  q(c, ".voice-play-label")?.textContent ?? null;
+const sweepPosition = (c: HTMLElement) =>
+  q(c, ".voice-sweep-position")?.textContent ?? null;
+const hintOf = (c: HTMLElement) => q(c, ".voice-rail-hint")!;
+const filterSelect = (c: HTMLElement) =>
+  q(c, ".voice-filter-select") as HTMLSelectElement | null;
+
+/** The queue handed to the LAST playSequence call. */
+const queuedItems = (deps: any): AuditionItem[] =>
+  deps.playSequence.mock.calls.at(-1)![0];
+
+/** Hand the controller a sweep snapshot (call #n of playSequence). */
+function emitSweep(deps: any, call: number, state: AuditionState): void {
+  deps.playSequence.mock.calls[call][1](state);
+}
+
+const sweepingAt = (voiceId: string, index: number, total: number): AuditionState => ({
+  running: true,
+  playingVoiceId: voiceId,
+  loadingVoiceId: null,
+  position: { index, total },
+  error: null,
+});
+
+const loadingAt = (voiceId: string, index: number, total: number): AuditionState => ({
+  running: true,
+  playingVoiceId: null,
+  loadingVoiceId: voiceId,
+  position: { index, total },
+  error: null,
+});
+
+/** Choose a `Show:` option the way a user does. */
+function chooseFilter(c: HTMLElement, value: string): void {
+  const select = filterSelect(c)!;
+  select.value = value;
+  select.dispatchEvent(new window.Event("change", { bubbles: true }));
+}
+
+/** A catalog with both tiers, so the `Show:` control has something to offer. */
+const twoTiers = () => [
+  mkVoice("onyx"),
+  mkVoice("coral"),
+  mkHdVoice("mark"),
+  mkHdVoice("jamahal"),
+];
+
+describe("VoicesController — Play all walks the list, once", () => {
+  it("offers the sweep with the number of voices it would play", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    expect(sweepButton(container)).toBeTruthy();
+    // Substituted count → no data-i18n, or replaceI18n would rewrite the
+    // label from the bare key on the next tab load and erase the number.
+    const label = q(container, ".voice-play-label")!;
+    expect(label.dataset.i18n).toBeUndefined();
+    expect(label.textContent).toBe("voicesPlayAllN");
+  });
+
+  it("never auto-starts — the page's invitation is one voice, not a minute", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    await mount(deps);
+    expect(deps.playSequence).not.toHaveBeenCalled();
+  });
+
+  it("queues every playable row, in rail order, with its own attenuation", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("mute", { sample_url: undefined })],
+    });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    const items = queuedItems(deps);
+    // The clipless voice is excluded, so `N of N` never lies — and the order
+    // is the rail's, which is the pitch chart the reader is looking at.
+    expect(items.map((item) => item.voiceId)).toEqual(
+      rowIds(container).filter((id) => id !== "mute")
+    );
+    expect(items.every((item) => item.gain === 1)).toBe(true);
+    // More than one item is the whole point: N+1 prefetch has nothing to do
+    // with a one-item queue.
+    expect(items.length).toBeGreaterThan(1);
+  });
+
+  it("shows the position and a Stop while it runs, and nothing when idle", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    expect(sweepPosition(container)).toBe("");
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    expect(sweepLabel(container)).toBe("voicesStopPlayback");
+    expect(sweepPosition(container)).toBe("voicesSweepPosition");
+    expect(sweepButton(container)!.classList.contains("sweeping")).toBe(true);
+  });
+
+  it("returns to Play all when the queue runs out", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("coral", 2, 2));
+    emitSweep(deps, 0, IDLE_AUDITION);
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+    expect(sweepPosition(container)).toBe("");
+  });
+
+  it("stops when its own Stop is pressed", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    sweepButton(container)!.click();
+    expect(deps.stopPreview).toHaveBeenCalled();
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+    expect(qa(container, ".voice-row.playing")).toHaveLength(0);
+  });
+
+  it("stops on Esc", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    press(container, "Escape");
+    expect(deps.stopPreview).toHaveBeenCalled();
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+  });
+
+  it("cancels the sweep and plays the row you touched — one meaning per gesture", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    rowOf(container, "coral")!.click();
+    expect(deps.playPreview).toHaveBeenCalledTimes(1);
+    expect(deps.playPreview.mock.calls[0][0].id).toBe("coral");
+    // …and the page stops claiming a sweep is under way, so the Stop button
+    // that would now stop a single clip goes back to being an offer.
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+    expect(sweepPosition(container)).toBe("");
+  });
+
+  it("leaves focus and the compare pair exactly where the reader left them", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+    const pairBefore = q(container, ".voice-compare-names")!.textContent;
+
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("coral", 2, 3));
+    // The queue index is not the focus and not the pair: three independent
+    // things, which is what "without losing your place" means concretely.
+    expect(focusedId(container)).toBe("onyx");
+    expect(q(container, ".voice-compare-names")!.textContent).toBe(pairBefore);
+  });
+
+  it("does not render a sweep it could not run", async () => {
+    const noPlayer = makeDeps({ pi: [mkVoice("onyx")] });
+    delete (noPlayer as any).playSequence;
+    const { container } = await mount(noPlayer);
+    expect(sweepButton(container)).toBeNull();
+
+    cleanup();
+    const noClips = makeDeps({
+      pi: [mkVoice("builtin", { sample_url: undefined })],
+    });
+    const second = await mount(noClips);
+    expect(sweepButton(second.container)).toBeNull();
+  });
+});
+
+describe("sweepMinutes — how long a refused sweep would have taken", () => {
+  it("never says zero, and never says a number the sentence cannot carry", () => {
+    // The refusal only fires above the ceiling, so the smallest list it is
+    // ever asked about is 26 voices — which is about one minute. That is why
+    // the string says "min": the plural-less case is the COMMON one.
+    expect(PLAY_ALL_MAX).toBe(25);
+    expect(sweepMinutes(PLAY_ALL_MAX + 1)).toBe(1);
+    expect(sweepMinutes(0)).toBe(1);
+    expect(sweepMinutes(100)).toBe(4);
+    // Monotonic: a longer list never reads as a shorter wait.
+    const steps = [26, 40, 60, 100, 200].map(sweepMinutes);
+    expect([...steps].sort((a, b) => a - b)).toEqual(steps);
+  });
+
+  it("counts the beat between clips, not just the clips", () => {
+    // A 320 ms gap on every voice is 12 s across a 40-voice list — the
+    // difference between "about 1 min" and "about 2 min" on real catalogs.
+    const withoutBeat = Math.round((40 * SWEEP_CLIP_SECONDS) / 60);
+    expect(sweepMinutes(40)).toBeGreaterThan(withoutBeat);
+  });
+});
+
+describe("VoicesController — a sweep that would take too long is refused, not disabled", () => {
+  const many = (n: number) =>
+    Array.from({ length: n }, (_, i) =>
+      mkVoice(`v${String(i).padStart(2, "0")}`)
+    );
+
+  it("says how long it would be and points at the filter", async () => {
+    const deps = makeDeps({ pi: many(26) });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    expect(deps.playSequence).not.toHaveBeenCalled();
+    const hint = hintOf(container);
+    expect(hint.textContent).toBe("voicesTooManyToPlay");
+    // Substituted ($count$/$minutes$) → the hint drops its data-i18n or the
+    // next replaceI18n() would erase both numbers.
+    expect(hint.dataset.i18n).toBeUndefined();
+    expect(hint.classList.contains("voice-rail-hint-alert")).toBe(true);
+    // Announced, because a press that produced no sound and no new screen is
+    // otherwise indistinguishable from a dead button.
+    expect(q(container, "#voice-status")!.textContent).toBe(
+      "voicesTooManyToPlay"
+    );
+  });
+
+  it("plays a list that is exactly at the ceiling", async () => {
+    const deps = makeDeps({ pi: many(25) });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    expect(deps.playSequence).toHaveBeenCalledTimes(1);
+    expect(hintOf(container).textContent).toBe("voicesKeyboardHint");
+  });
+
+  it("takes the refusal back the moment the list is narrowed", async () => {
+    const deps = makeDeps({
+      pi: [...many(26), mkHdVoice("mark"), mkHdVoice("jamahal")],
+    });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    expect(hintOf(container).textContent).toBe("voicesTooManyToPlay");
+    chooseFilter(container, "hd");
+    expect(hintOf(container).textContent).toBe("voicesKeyboardHint");
+    expect(hintOf(container).dataset.i18n).toBe("voicesKeyboardHint");
+  });
+});
+
+describe("VoicesController — a stretched gap is visible rather than mysterious", () => {
+  it("pulses the print of the voice that is still loading", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, loadingAt("coral", 2, 2));
+    expect(rowOf(container, "coral")!.classList.contains("loading")).toBe(true);
+    expect(rowOf(container, "coral")!.classList.contains("playing")).toBe(false);
+
+    emitSweep(deps, 0, sweepingAt("coral", 2, 2));
+    expect(rowOf(container, "coral")!.classList.contains("loading")).toBe(false);
+    expect(rowOf(container, "coral")!.classList.contains("playing")).toBe(true);
+  });
+});
+
+describe("VoicesController — the Show: filter", () => {
+  it("stays away when there is nothing to choose between", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    expect(filterSelect(container)).toBeNull();
+  });
+
+  it("narrows the rail and the sweep together", async () => {
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    expect(rowIds(container)).toHaveLength(4);
+
+    chooseFilter(container, "hd");
+    expect(rowIds(container).sort()).toEqual(["jamahal", "mark"]);
+    sweepButton(container)!.click();
+    expect(queuedItems(deps).map((item) => item.voiceId).sort()).toEqual([
+      "jamahal",
+      "mark",
+    ]);
+
+    chooseFilter(container, "everyday");
+    expect(rowIds(container).sort()).toEqual(["coral", "onyx"]);
+  });
+
+  it("moves the allowance note onto the HD option, where it is actionable", async () => {
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-filter-note")).toBeNull();
+
+    chooseFilter(container, "hd");
+    const note = q(container, ".voice-filter-note")!;
+    expect(note.dataset.i18n).toBe("hdVoicesAllowanceNote");
+
+    chooseFilter(container, "all");
+    expect(q(container, ".voice-filter-note")).toBeNull();
+  });
+
+  it("keeps focus on the select, so it can be used twice", async () => {
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    filterSelect(container)!.focus();
+    chooseFilter(container, "hd");
+    expect(document.activeElement).toBe(filterSelect(container));
+  });
+
+  it("stops a sweep it just emptied, but lets a lone clip finish", async () => {
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("mark", 1, 4));
+    chooseFilter(container, "everyday");
+    expect(deps.stopPreview).toHaveBeenCalledTimes(1);
+
+    // A single audition is left alone: reaching for the filter must not cut
+    // the voice you are in the middle of judging.
+    deps.stopPreview.mockClear();
+    rowOf(container, "coral")!.click();
+    emit(deps, 0, playingState("coral"));
+    chooseFilter(container, "all");
+    expect(deps.stopPreview).not.toHaveBeenCalled();
+  });
+
+  it("widens itself back when the option it is on disappears", async () => {
+    const deps = makeDeps({
+      pi: twoTiers(),
+      claude: [mkVoice("onyx"), mkVoice("coral")],
+    });
+    const { container } = await mount(deps);
+    chooseFilter(container, "hd");
+    expect(rowIds(container)).toHaveLength(2);
+
+    hostTab(container, "claude")!.click();
+    await flushAsync();
+    // Claude's catalog is single-tier here, so "HD only" no longer exists —
+    // and a rail narrowed by a control that is no longer on screen is a rail
+    // the reader cannot widen again.
+    expect(filterSelect(container)).toBeNull();
+    expect(rowIds(container)).toHaveLength(2);
+    expect(rowIds(container).sort()).toEqual(["coral", "onyx"]);
+  });
+});
+
+describe("VoicesController — the states playback can be in", () => {
+  it("swaps the hint for the actionable blocked message", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, {
+      ...IDLE_AUDITION,
+      error: { voiceId: "onyx", kind: "blocked" },
+    });
+    const hint = hintOf(container);
+    expect(hint.textContent).toBe("voicesPlaybackBlocked");
+    // No substitution in this one, so it KEEPS its data-i18n and stays
+    // translated across a tab reload.
+    expect(hint.dataset.i18n).toBe("voicesPlaybackBlocked");
+    expect(q(container, "#voice-status")!.textContent).toBe(
+      "voicesPlaybackBlocked"
+    );
+  });
+
+  it("names the clip that failed, in one non-modal line, while the sweep runs on", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, {
+      running: true,
+      playingVoiceId: null,
+      loadingVoiceId: null,
+      position: { index: 1, total: 2 },
+      error: { voiceId: "onyx", kind: "failed" },
+    });
+    const hint = hintOf(container);
+    expect(hint.textContent).toBe("voicesSampleFailed");
+    expect(hint.dataset.i18n).toBeUndefined();
+    // Non-modal means the sweep is still a sweep: still running, still
+    // stoppable, no dialog in the way.
+    expect(sweepLabel(container)).toBe("voicesStopPlayback");
+  });
+
+  it("gives the line back to the keyboard hint once something plays", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, {
+      ...IDLE_AUDITION,
+      error: { voiceId: "onyx", kind: "blocked" },
+    });
+    emit(deps, 0, playingState("coral"));
+    expect(hintOf(container).textContent).toBe("voicesKeyboardHint");
+    expect(hintOf(container).dataset.i18n).toBe("voicesKeyboardHint");
+  });
+
+  it("says nothing per clip during a sweep — the audio is the output", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    // 22 names into a polite queue is the reader's speech landing on top of
+    // the sample it is describing — the collision the arming rule exists to
+    // prevent — and minutes behind by the end.
+    expect(q(container, "#voice-status")!.textContent).toBe("");
+
+    rowOf(container, "coral")!.click();
+    emit(deps, 0, playingState("coral"));
+    expect(q(container, "#voice-status")!.textContent).toBe("voicesNowPlaying");
+  });
+});
+
+describe("VoicesController — the interruption matrix (design §5.2)", () => {
+  it("stops everything when the settings tab switches away", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container, controller } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+
+    // Even a lone clip: unlike a hidden window, a tab switch takes the Stop
+    // button with it, so anything left sounding has no control on screen.
+    controller.onHidden();
+    expect(deps.stopPreview).toHaveBeenCalledTimes(1);
+    expect(qa(container, ".voice-row.playing")).toHaveLength(0);
+    controller.destroy();
+  });
+
+  it("stops a hidden window's sweep and lets its lone clip finish", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container, controller } = await mount(deps);
+    const setVisibility = (value: string) =>
+      Object.defineProperty(document, "visibilityState", {
+        value,
+        configurable: true,
+      });
+    const hide = () => {
+      setVisibility("hidden");
+      document.dispatchEvent(new window.Event("visibilitychange"));
+      // Put it back immediately: the property is patched onto the shared jsdom
+      // document, and a document left permanently "hidden" would quietly steer
+      // every later case in this file.
+      setVisibility("visible");
+    };
+
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+    hide();
+    // One 1.5 s clip cut mid-word is more startling than one allowed to end.
+    expect(deps.stopPreview).not.toHaveBeenCalled();
+
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+    hide();
+    expect(deps.stopPreview).toHaveBeenCalledTimes(1);
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+    controller.destroy();
+  });
+
+  it("does nothing on window blur, and stops on pagehide", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container, controller } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 2));
+
+    // On macOS the settings popup blurs on almost any click — including a
+    // click back into the chat window you are choosing a voice for.
+    window.dispatchEvent(new window.Event("blur"));
+    expect(deps.stopPreview).not.toHaveBeenCalled();
+
+    window.dispatchEvent(new window.Event("pagehide"));
+    expect(deps.stopPreview).toHaveBeenCalledTimes(1);
+    controller.destroy();
+  });
+
+  it("lets go of its page listeners on destroy", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { controller } = await mount(deps);
+    controller.destroy();
+    deps.stopPreview.mockClear();
+    window.dispatchEvent(new window.Event("pagehide"));
+    expect(deps.stopPreview).not.toHaveBeenCalled();
   });
 });

@@ -77,6 +77,10 @@ describe("every substituted string declares its placeholders", () => {
     ["voicesNoSampleGroup", 1],
     ["voicesNowPlaying", 1],
     ["voicesMenuSummary", 3],
+    ["voicesPlayAllN", 1],
+    ["voicesSweepPosition", 2],
+    ["voicesSampleFailed", 1],
+    ["voicesTooManyToPlay", 2],
   ] as const;
 
   it.each(substituted)("%s declares %i placeholder(s), numbered $1..$n", (key, n) => {
@@ -111,6 +115,21 @@ describe("counts read correctly at 1 — Chrome i18n has no plural forms", () =>
       "$host$'s menu: $used$ of $cap$ seats"
     );
   });
+
+  it("keeps the sweep's own counts on bare numbers", () => {
+    expect(en.voicesPlayAllN?.message).toBe("Play all ($count$)");
+    expect(en.voicesSweepPosition?.message).toBe("$index$ of $total$");
+  });
+
+  it("abbreviates the refusal's minutes, because 1 is its COMMON case", () => {
+    // The refusal only fires above 25 voices, and 26 voices is about one
+    // minute — so "$minutes$ minutes" would read wrong far more often than it
+    // read right. "min" reads at every value, which is the whole rule.
+    expect(en.voicesTooManyToPlay?.message).toBe(
+      "That's $count$ voices — about $minutes$ min. Narrow the list first."
+    );
+    expect(en.voicesTooManyToPlay.message).not.toMatch(/minutes\./);
+  });
 });
 
 describe("the tier shelves are gone, but the allowance note is not", () => {
@@ -129,6 +148,60 @@ describe("the tier shelves are gone, but the allowance note is not", () => {
     );
     const callers = claudeMenuSrc.match(/hdVoicesAllowanceNote/g) ?? [];
     expect(callers.length).toBe(2); // HD chip tooltip + menu footnote
+  });
+
+  it("re-homes the note as the HD FILTER's helper line", () => {
+    // Same sentence, different job. On the retired shelves it sat above a
+    // heading nobody asked for; here it exists only while HD is what you chose
+    // to look at, directly under the control that undoes the choice. It takes
+    // no substitution, so it keeps its data-i18n and stays translated.
+    expect(controllerSrc).toMatch(/"data-i18n",\s*"hdVoicesAllowanceNote"/);
+  });
+});
+
+describe("the sweep and the filter say what they do", () => {
+  it("names the sweep by its outcome, and its stop by the plainest word", () => {
+    expect(en.voicesStopPlayback?.message).toBe("Stop");
+  });
+
+  it("labels the filter as a verb the list obeys", () => {
+    expect(en.voicesShowLabel?.message).toBe("Show");
+    expect(en.voicesShowAll?.message).toBe("All voices");
+    expect(en.voicesShowHd?.message).toBe("HD only");
+    expect(en.voicesShowEveryday?.message).toBe("Everyday only");
+  });
+
+  it("tells a blocked page what to DO, not what went wrong", () => {
+    // Chrome gates media on sticky document activation, so the only useful
+    // sentence is the one naming the gesture that lifts the gate.
+    expect(en.voicesPlaybackBlocked?.message).toBe(
+      "Click any voice to enable sound."
+    );
+    expect(en.voicesPlaybackBlocked.message).not.toMatch(/error|failed/i);
+  });
+
+  it("blames the clip, not the reader, when one sample will not play", () => {
+    expect(en.voicesSampleFailed?.message).toBe(
+      "Couldn't play $name$'s sample."
+    );
+  });
+
+  it("keeps every one of the new substituted strings off data-i18n", () => {
+    for (const key of [
+      "voicesPlayAllN",
+      "voicesSweepPosition",
+      "voicesSampleFailed",
+      "voicesTooManyToPlay",
+    ]) {
+      expect(controllerSrc).not.toMatch(new RegExp(`"data-i18n",\\s*"${key}"`));
+    }
+    // …and the ones that take no substitution KEEP theirs, or they would stop
+    // being translated the moment the tab is loaded a second time. (The hint
+    // line carries its key through `hintLine()`'s `i18nKey`, which is why
+    // voicesPlaybackBlocked is asserted on the DOM in voices-controller.spec
+    // rather than on the source text here.)
+    expect(controllerSrc).toMatch(/"data-i18n",\s*"voicesStopPlayback"/);
+    expect(controllerSrc).toMatch(/i18nKey:\s*"voicesPlaybackBlocked"/);
   });
 });
 

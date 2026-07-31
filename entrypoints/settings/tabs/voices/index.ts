@@ -39,10 +39,20 @@ export class VoicesTab implements TabController {
   }
 
   /**
+   * The user switched to another settings tab. The rail's control bar — and
+   * its Stop button — just left the screen, so whatever it was playing goes
+   * with them (design §5.2). This is the one tab that implements the hook.
+   */
+  onHidden(): void {
+    this.voicesController?.onHidden();
+  }
+
+  /**
    * Clean up when the tab is destroyed. Defensive — the orchestrator keeps
    * tabs mounted (init runs once), but unmount the Preact tree if ever called.
    */
   destroy(): void {
+    this.voicesController?.destroy();
     this.voicesController = null;
     unmountFrom(this.container);
   }
