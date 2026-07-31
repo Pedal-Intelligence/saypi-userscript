@@ -303,6 +303,20 @@
 .voice-row.focused .voice-row-desc {
   opacity: 1;
 }
+/* Twin display names (#474 — the two Paolas) are the exception the demotion
+   needs: their subtitle is the only thing that tells the rows apart, so it
+   never hides. Ink 38 at rest — the HD-badge step, quiet enough to read as a
+   disambiguator rather than a description — rising to the normal ink 62 when
+   the row is the one you are looking at. */
+.voice-row-desc-dup {
+  opacity: 1;
+  color: rgba(21, 23, 26, 0.38);
+  transition: color 0.12s ease-out;
+}
+.voice-row:hover .voice-row-desc-dup,
+.voice-row.focused .voice-row-desc-dup {
+  color: rgba(21, 23, 26, 0.62);
+}
 .voice-row-badges {
   display: flex;
   align-items: center;

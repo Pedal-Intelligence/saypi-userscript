@@ -749,12 +749,25 @@ export class VoicesController {
       el.classList.add("voice-row-current");
       el.setAttribute("aria-current", "true");
     }
+    // The tagline is no longer a 2.7 em reserved block on 22 cards; it is one
+    // 12 px line on the focused row, still via subtitleFor so the #474
+    // twin-name logic survives untouched.
+    const subtitle = this.subtitleFor(voice, vm.dupNames);
+    // …with one exception the demotion cannot swallow. When two voices share a
+    // display name (Pi ships two Paolas), subtitleFor's line is not a blurb —
+    // it is the ONLY thing that tells the rows apart. Hiding it until focus
+    // would put two identical rows on the rail and undo #474, so a twin's
+    // subtitle is always rendered and always in the row's accessible name.
+    // Keyed off dupNames, so it generalises to whatever pair the server grows
+    // into next; the catalog is server-driven and this file never names Paola.
+    const isTwin = vm.dupNames.has(String(voice.name ?? "").toLowerCase());
+
     // The option's name is the voice, not the concatenation of its print, its
     // badges and its two buttons.
-    el.setAttribute(
-      "aria-label",
-      isCurrent ? `${voice.name} — ${getMessage("voicesInUse")}` : voice.name
-    );
+    const label = [voice.name];
+    if (isTwin && subtitle.text) label.push(subtitle.text);
+    if (isCurrent) label.push(getMessage("voicesInUse"));
+    el.setAttribute("aria-label", label.join(" — "));
     if (inNoSampleGroup) {
       el.setAttribute("aria-describedby", "voice-nosample-label");
     }
@@ -790,12 +803,12 @@ export class VoicesController {
     name.textContent = voice.name;
     el.appendChild(name);
 
-    // The tagline is no longer a 2.7 em reserved block on 22 cards; it is one
-    // 12 px line on the focused row, still via subtitleFor so the #474
-    // twin-name logic survives untouched.
-    const subtitle = this.subtitleFor(voice, vm.dupNames);
     const desc = document.createElement("span");
     desc.classList.add("voice-row-desc");
+    // Quiet, not loud: the modifier only lifts the line out of the focus-only
+    // reveal and drops it an ink step, so it disambiguates without becoming
+    // the loudest thing on a deliberately calm page.
+    if (isTwin) desc.classList.add("voice-row-desc-dup");
     if (subtitle.i18nKey) desc.setAttribute("data-i18n", subtitle.i18nKey);
     desc.textContent = subtitle.text;
     if (subtitle.text) desc.title = subtitle.text;

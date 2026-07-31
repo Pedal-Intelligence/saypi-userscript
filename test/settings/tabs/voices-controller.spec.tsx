@@ -1382,6 +1382,60 @@ describe("VoicesController — twin display names (#474)", () => {
     expect(descOf(container, "paola-classic")).not.toMatch(/Warm, versatile/);
   });
 
+  /**
+   * The rail demotes taglines to the focused row (design §9) — right for a
+   * persona blurb, fatal for the one line that tells twins apart. What a
+   * screen reader announces walking the listbox is the row's accessible name,
+   * and two options announcing "Paola" are two options the reader cannot
+   * choose between. The disambiguator has to be IN the name, always.
+   */
+  it("announces twin rows as two distinguishable options", async () => {
+    const deps = makeDeps({ claude: twins() });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const label = (id: string) => rowOf(container, id)!.getAttribute("aria-label");
+    expect(label("paola-classic")).not.toBe(label("paola-expressive"));
+    expect(label("paola-classic")).toContain("Paola");
+    expect(label("paola-classic")).toContain("voiceSpeaksNLanguages:33");
+    expect(label("paola-expressive")).toContain("voiceSpeaksNLanguages:75");
+  });
+
+  it("keeps a twin's disambiguator on the row at rest, not only on focus", async () => {
+    const deps = makeDeps({ claude: twins() });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    for (const id of ["paola-classic", "paola-expressive"]) {
+      expect(
+        rowOf(container, id)!
+          .querySelector(".voice-row-desc")!
+          .classList.contains("voice-row-desc-dup"),
+        `${id}'s subtitle must persist at rest — it is the only thing that tells the two Paolas apart`
+      ).toBe(true);
+    }
+  });
+
+  it("still says IN USE on a twin that is the current voice", async () => {
+    const [classic, expressive] = twins();
+    const deps = makeDeps({
+      claude: [classic, expressive],
+      claudeCurrent: classic,
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const label = rowOf(container, "paola-classic")!.getAttribute("aria-label");
+    expect(label).toContain("voiceSpeaksNLanguages:33");
+    expect(label).toContain("voicesInUse");
+  });
+
+  it("leaves a uniquely-named voice's row quiet — bare name, focus-only tagline", async () => {
+    const deps = makeDeps({ claude: [...twins(), mkVoice("marin")] });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    const marin = rowOf(container, "marin")!;
+    expect(marin.getAttribute("aria-label")).toBe("Marin");
+    expect(
+      marin.querySelector(".voice-row-desc")!.classList.contains(
+        "voice-row-desc-dup"
+      )
+    ).toBe(false);
+  });
+
   it("generalises to any duplicate-named pair the server grows into", async () => {
     const deps = makeDeps({
       claude: [
