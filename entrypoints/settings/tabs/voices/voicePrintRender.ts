@@ -48,9 +48,13 @@ export const PRINT_MAX_SPAN_S = 2.2;
  * per-frame heights still read as rhythm.
  *
  * The PITCH is deliberately unchanged. Widening the spacing instead would have
- * dropped the drawn frame count by a third (300 px / 4.2 = 71 frames against
- * 115), and a thinner trace reads DOTTIER, which is the opposite of softer.
- * Every frame the resampler produces still gets a bar; they are simply fatter.
+ * dropped the drawn frame count by a third (at the then-300 px rail width,
+ * 300/4.2 = 71 frames against 115), and a thinner trace reads DOTTIER, which is
+ * the opposite of softer. Every frame the resampler produces still gets a bar;
+ * they are simply fatter.
+ *
+ * Both are in PRINT UNITS, so they survive the box being narrowed: the duty
+ * cycle is what the eye reads, and it is scale-invariant.
  */
 export const PRINT_FRAME_PITCH = 2.6;
 export const PRINT_BAR_W = 2.1;
@@ -63,7 +67,13 @@ export const PRINT_BAR_W = 2.1;
  */
 export const PRINT_BAR_MIN_H = 2.5;
 export const PRINT_BAR_LOUD_H = 7.5;
-/** Resampled frame count is clamped: fewer reads as dots, more reads as mud. */
+/**
+ * Resampled frame count is clamped: fewer reads as dots, more reads as mud.
+ *
+ * The ceiling is a rule about the DRAWING, not about any particular width, and
+ * at the widths that ship today it no longer binds (a full-span clip draws
+ * 192/2.6 = 74 bars). The floor still does, for clips under ~0.35 s.
+ */
 export const PRINT_MIN_FRAMES = 12;
 export const PRINT_MAX_FRAMES = 115;
 
@@ -73,8 +83,19 @@ export const PRINT_MAX_FRAMES = 115;
  * twenty-two traces into a single chart. `md` survives as the functions'
  * default and as the width the geometry is pinned at in tests. (A third,
  * 72 px size existed for the menu-slot pills, which the rail retired.)
+ *
+ * `lg` was 300 px, chosen when this pane was a ~900 px settings WINDOW. #584
+ * moved settings into a browser tab and #587 deleted the window-sizing
+ * machinery, and the tab gives the pane a fixed 756 px content column — 692 px
+ * of rail, measured identical at viewports 1100 through 1920. At 300 px the
+ * print was spending 43 % of the row and leaving the description 95 px, which
+ * ellipsised 13 of the live catalog's 15 taglines, including both twin-Paola
+ * disambiguators. 192 px is the width that fits the column the page actually
+ * has, and it costs the trace nothing that matters: the axis, the reference
+ * line, the bar heights and the duty cycle are all unchanged, and a full-span
+ * clip still draws 74 bars against a 0.8 s clip's 27.
  */
-export const PRINT_WIDTHS = { md: 118, lg: 300 } as const;
+export const PRINT_WIDTHS = { md: 118, lg: 192 } as const;
 
 /**
  * The playhead's width, in print units. Still a 1.5 px hairline of green — it
@@ -355,6 +376,16 @@ export function printBars(print: VoicePrint, width: number): PrintBar[] {
  * — the ghost print is the placeholder, so there is no skeleton shimmer to
  * build and no second visual to explain. Ink comes from `currentColor`, so the
  * whole state of a print is one class on its container.
+ *
+ * `preserveAspectRatio: none` is what makes the print the row's ELASTIC
+ * element. `voices.css` lets `.voice-row-print` shrink below `width` when the
+ * settings column is too narrow to draw at full size, and every print shrinks
+ * by the same factor, so the chart's proportions hold and only its scale
+ * changes. The default (`xMidYMid meet`) would scale x and y TOGETHER: a 0.8×
+ * box would squash the 26 px pitch band to 21 px and slide the shared
+ * reference line off the y that every row draws it at — which is the one
+ * premise the whole chart rests on. With `none`, x is the only axis that can
+ * move.
  */
 export function createPrintSvg(width: number = PRINT_WIDTHS.md): SVGSVGElement {
   const svg = document.createElementNS(SVG_NS, "svg");
@@ -362,6 +393,7 @@ export function createPrintSvg(width: number = PRINT_WIDTHS.md): SVGSVGElement {
   svg.setAttribute("width", String(width));
   svg.setAttribute("height", String(PRINT_HEIGHT));
   svg.setAttribute("viewBox", `0 0 ${width} ${PRINT_HEIGHT}`);
+  svg.setAttribute("preserveAspectRatio", "none");
   svg.setAttribute("aria-hidden", "true");
   svg.setAttribute("focusable", "false");
 

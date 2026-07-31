@@ -124,15 +124,22 @@ describe("printBars", () => {
     // the visual language of an audio editor: hairlines with air between them.
     // At 81 % the bars very nearly touch and the trace resolves into one soft
     // band. The PITCH must not move with it: widening the spacing to get the
-    // same ratio would drop a full-width trace from 115 frames to 71, and a
-    // thinner trace reads DOTTIER, which is the opposite of softer.
+    // same ratio would drop a full-width trace by a third, and a thinner trace
+    // reads DOTTIER, which is the opposite of softer.
     const duty = PRINT_BAR_W / PRINT_FRAME_PITCH;
     expect(duty).toBeGreaterThan(0.75);
     expect(duty).toBeLessThan(1); // touching outright would erase the rhythm
     expect(PRINT_FRAME_PITCH).toBe(2.6);
-    expect(traceFrameCount(PRINT_MAX_SPAN_S, PRINT_WIDTHS.lg)).toBe(
-      PRINT_MAX_FRAMES
-    );
+    // Narrowing the rail's print to fit the settings TAB's column (300 → 192)
+    // left the pitch and the duty cycle exactly where they were, so the mark
+    // is the same mark at a smaller scale. What it did change is that the
+    // frame CEILING no longer binds — a full-span clip draws 74 bars, not the
+    // clamped 115 — which is why the ribbon stays a ribbon rather than turning
+    // to mud at the smaller size.
+    const full = traceFrameCount(PRINT_MAX_SPAN_S, PRINT_WIDTHS.lg);
+    expect(full).toBe(74);
+    expect(full).toBeLessThan(PRINT_MAX_FRAMES);
+    expect(full).toBeGreaterThan(PRINT_MIN_FRAMES * 4);
   });
 
   it("emits NOTHING for unvoiced frames — the gaps are the consonants", () => {
@@ -225,6 +232,27 @@ describe("the svg", () => {
     expect(svg.getAttribute("aria-hidden")).toBe("true");
     expect(svg.querySelector(".voice-print-ref")).toBeTruthy();
     expect(svg.querySelectorAll(".voice-print-trace rect")).toHaveLength(0);
+  });
+
+  it("squeezes sideways, never vertically, when its box is narrowed", () => {
+    // The print is the row's elastic element (see voices.css): when the
+    // settings column is too narrow to draw it at full size, the CSS lets the
+    // box shrink and the viewBox absorbs it. `preserveAspectRatio: none` is
+    // what makes that safe — the default (`xMidYMid meet`) would scale x and y
+    // TOGETHER, so a 0.8× box would compress the 26px pitch band to 21px and
+    // slide the shared reference line off the y every other row draws it at.
+    // The whole chart rests on that line landing at the same y on every row.
+    for (const width of Object.values(PRINT_WIDTHS)) {
+      const svg = createPrintSvg(width);
+      expect(svg.getAttribute("preserveAspectRatio")).toBe("none");
+      expect(svg.getAttribute("viewBox")).toBe(`0 0 ${width} ${PRINT_HEIGHT}`);
+      // Height is fixed in the viewBox AND on the element, so x is the only
+      // axis a narrowed box can scale.
+      expect(svg.getAttribute("height")).toBe(String(PRINT_HEIGHT));
+      expect(svg.querySelector(".voice-print-ref")!.getAttribute("y1")).toBe(
+        String(PRINT_REF_Y)
+      );
+    }
   });
 
   it("paints, and repaints, the trace in place", () => {

@@ -5,6 +5,7 @@ import {
   PRINT_GROUND,
   PRINT_GROUND_FOCUS,
   PRINT_HEAD_W,
+  PRINT_WIDTHS,
   printInk,
 } from "../../../entrypoints/settings/tabs/voices/voicePrintRender";
 
@@ -77,6 +78,17 @@ const pxOf = (body: string, property: string): number => {
   return Number(m![1]);
 };
 
+/** A rule's `flex: <grow> <shrink> <basis>px` shorthand, parsed. */
+function flexOf(body: string): {
+  grow: number;
+  shrink: number;
+  basis: number;
+} {
+  const m = /(?:^|[^-])flex:\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:px)?/.exec(body);
+  expect(m, "rule should declare a three-value flex shorthand").toBeTruthy();
+  return { grow: Number(m![1]), shrink: Number(m![2]), basis: Number(m![3]) };
+}
+
 /** WCAG 2.x relative luminance of an r,g,b triple in 0–255. */
 function wcagLuminance([r, g, b]: number[]): number {
   const [lr, lg, lb] = [r, g, b]
@@ -128,7 +140,7 @@ describe("the page is a chart, not a directory", () => {
   it("gives 42px rows a 26px print band, on the 8px grid", () => {
     expect(pxOf(ruleBody(".voice-row"), "height")).toBe(42);
     const print = ruleBody(".voice-row-print");
-    expect(pxOf(print, "width")).toBe(300);
+    expect(flexOf(print).basis).toBe(PRINT_WIDTHS.lg);
     expect(pxOf(print, "height")).toBe(26);
   });
 
@@ -168,6 +180,137 @@ describe("the page is a chart, not a directory", () => {
       /background:\s*#fbf7f0/
     );
     expect(ruleBody("#voice-studio")).not.toMatch(/background/);
+  });
+});
+
+/**
+ * The row's width budget, against the column the settings shell actually gives
+ * this pane.
+ *
+ * The rail was designed and tuned inside a 1120 × 900 settings *window*. #584
+ * moved settings into a browser TAB and #587 deleted the window-sizing
+ * machinery, so the pane is now a **fixed 756 px content column** — measured
+ * identical in the built extension at viewports 1100, 1280, 1600 and 1920 —
+ * which leaves the rail 692 px. At the shipped 300 px print that left the
+ * description 95 px and ellipsised 13 of the live catalog's 15 taglines,
+ * including both twin-Paola disambiguators ("Speaks 33 l…" / "Speaks 75 l…"),
+ * which is the one truncation that makes two rows indistinguishable at rest.
+ *
+ * Widening the column for this tab is NOT the fix — that is the #582/#583
+ * regression class and the sheet carries its own warning about it. The row has
+ * to live inside 692 px, so the budget below is an arithmetic contract on the
+ * declared column widths. The string widths are measured, in the built
+ * extension, at the sheet's own 12 px / 400 description face.
+ */
+describe("the row fits the column the settings tab actually gives it", () => {
+  /** Measured: `.voice-rail` is 692 px at every viewport ≥ 1100. */
+  const RAIL_WIDTH = 692;
+  /** Measured widths of the live Pi catalog's descriptions, in px. */
+  const TWIN_DISAMBIGUATOR = 121; // "Speaks 33 languages" — the load-bearing one
+  const LONGEST_TAGLINE = 171; // "Easy, conversational American" (Joey, an HD row)
+  const HD_BADGE = 17.16;
+
+  /** What the description column is actually left with, from the sheet. */
+  function descriptionBudget(badge: number): number {
+    const row = ruleBody(".voice-row");
+    // `padding: 0 20px 0 14px` plus the 3 px focus rule on the left edge.
+    const inner =
+      RAIL_WIDTH -
+      pxOf(row, "border-left") -
+      14 -
+      20;
+    const print = ruleBody(".voice-row-print");
+    const name = ruleBody(".voice-row-name");
+    const actions = ruleBody(".voice-row-actions");
+    return (
+      inner -
+      (flexOf(print).basis + pxOf(print, "margin-right")) -
+      (flexOf(name).basis + pxOf(name, "margin-right")) -
+      (flexOf(actions).basis + pxOf(actions, "margin-left")) -
+      pxOf(ruleBody(".voice-row-badges"), "margin-left") -
+      badge
+    );
+  }
+
+  it("leaves a duplicate-named voice's differentiator fully legible", () => {
+    // #585 gave the two Paolas a subtitle that never hides, because it is the
+    // only thing telling the rows apart. A truncated differentiator does not
+    // differentiate: two rows go back to being one row read twice. Both twins
+    // are HD, so they pay for the badge as well.
+    expect(descriptionBudget(HD_BADGE)).toBeGreaterThan(TWIN_DISAMBIGUATOR);
+    // …and with room for a longer locale, since these strings are translated.
+    expect(descriptionBudget(HD_BADGE)).toBeGreaterThan(
+      TWIN_DISAMBIGUATOR * 1.3
+    );
+  });
+
+  it("leaves the catalog's taglines whole, badge or no badge", () => {
+    expect(descriptionBudget(HD_BADGE)).toBeGreaterThanOrEqual(
+      LONGEST_TAGLINE
+    );
+    expect(descriptionBudget(0)).toBeGreaterThanOrEqual(LONGEST_TAGLINE);
+  });
+});
+
+describe("the row gives up space in a fixed order", () => {
+  // Print first, then the name, and the description LAST — it is the only
+  // thing on the row whose meaning is destroyed by losing width. The print is
+  // the most elastic element on the page: its bars are computed against a
+  // width and the svg carries a viewBox, so a narrower box says exactly what
+  // the wide one said, only smaller.
+  const print = () => ruleBody(".voice-row-print");
+  const name = () => ruleBody(".voice-row-name");
+  const desc = () => ruleBody(".voice-row-desc");
+
+  it("steps the print down with the PAGE, never with the row", () => {
+    // A flex-shrink here would make the print's width a per-row negotiation,
+    // and the rows are not identical: a badge costs its row 29px, so under any
+    // pressure the HD rows would draw their traces ~15 % shorter than the rows
+    // beside them (measured: 143.9px against 169.8px at a 592px rail). Trace
+    // length IS clip length, so that is not a smaller chart, it is a chart
+    // that lies about half its rows.
+    expect(flexOf(print()).shrink).toBe(0);
+    const steps = [
+      ...css.matchAll(
+        /@container \(max-width:\s*(\d+)px\)\s*\{\s*\.voice-row-print\s*\{[^}]*flex-basis:\s*(\d+)px/g
+      ),
+    ].map((m) => [Number(m[1]), Number(m[2])]);
+    expect(steps.length, "the print should step with the container").toBeGreaterThan(0);
+    // Monotonic, and every step below the width it draws at.
+    let width = flexOf(print()).basis;
+    let at = Infinity;
+    for (const [breakpoint, basis] of steps) {
+      expect(breakpoint).toBeLessThan(at);
+      expect(basis).toBeLessThan(width);
+      [at, width] = [breakpoint, basis];
+    }
+    // The rail has to BE a query container, or none of the above ever applies.
+    expect(ruleBody(".voice-rail")).toMatch(/container-type:\s*inline-size/);
+  });
+
+  it("lets the name shrink after it, never before", () => {
+    expect(flexOf(name()).shrink).toBeGreaterThan(0);
+    expect(pxOf(name(), "min-width")).toBeGreaterThan(0);
+    expect(pxOf(name(), "min-width")).toBeLessThan(flexOf(name()).basis);
+  });
+
+  it("gives the description a floor, so it is the last to yield", () => {
+    // A floor above the widest differentiator: even in a window narrow enough
+    // to squeeze the print, the two Paolas stay tellable apart.
+    expect(pxOf(desc(), "min-width")).toBeGreaterThanOrEqual(152);
+  });
+
+  it("bases the description at 0, so a long one never squeezes the print", () => {
+    // THE load-bearing one. `flex-basis: auto` makes the description's base
+    // size its own text, so one 40-character tagline puts the whole row into
+    // deficit and steals from the print — on that row only. Every print would
+    // then be a different width, and the shared reference line only fuses N
+    // traces into one chart because they are all drawn at the SAME width.
+    // Basing at 0 makes the sum of base sizes identical on every row, so the
+    // print's width is a page-level decision and the description simply grows
+    // into whatever is left.
+    expect(flexOf(desc()).basis).toBe(0);
+    expect(flexOf(desc()).grow).toBeGreaterThan(0);
   });
 });
 

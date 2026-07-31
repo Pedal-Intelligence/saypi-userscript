@@ -33,7 +33,9 @@ All taken 2026-07-31 against live `api.saypi.ai` on the founder's machine. An en
 
 ## 1. Page structure
 
-Settings window is 1120 × 900 when Voices is active. `#voice-studio` keeps its 900 px cap. **No new width rules on the content column** — that is the #582/#583 regression class.
+**The binding constraint is a fixed 756 px content column in a browser tab.** This design was drawn against a 1120 × 900 settings *window*; there is no such window any more. #584 moved settings into a browser **tab** and #587 deleted the adaptive window-sizing machinery it made unreachable, so the pane is whatever the settings shell's content column gives it — measured in the built extension at **756 px, identical at viewports 1100, 1280, 1600 and 1920**, leaving `#voice-studio` and the rail **692 px**. `#voice-studio`'s own `max-width: 900px` survives as a cap that nothing currently reaches.
+
+**No new width rules on the content column** — that is the #582/#583 regression class, and it is not this tab's decision to make: the pane's width is a global settings-shell concern now. The row fits 692 px or it gives something up; §11 says what, and in what order.
 
 ```
 ┌─ Voices ───────────────────────────────────────────────────────────────────┐
@@ -201,21 +203,24 @@ Each voice is drawn from **its own sample clip** as a pitch trace on a **shared 
 ### 6.1 Geometry (exact)
 
 ```
-<svg class="voice-print" width="300" height="26" viewBox="0 0 300 26" aria-hidden="true">
-  <line class="voice-print-ref" x1="0" y1="12.6" x2="300" y2="12.6"/>   <!-- 155 Hz -->
+<svg class="voice-print" width="192" height="26" viewBox="0 0 192 26"
+     preserveAspectRatio="none" aria-hidden="true">
+  <line class="voice-print-ref" x1="0" y1="12.6" x2="192" y2="12.6"/>   <!-- 155 Hz -->
   <g class="voice-print-trace"> …one <rect> per voiced frame… </g>
   <rect class="voice-print-head" x="0" y="0" width="1.5" height="26"/>  <!-- playhead -->
 </svg>
 ```
 
+`preserveAspectRatio="none"` is load-bearing, not tidiness: it is what lets §11's narrow-column steps scale the box in **x alone**. The default (`xMidYMid meet`) scales both axes together, so a 0.8× box would squash the 26 px pitch band to 21 px and slide the reference line off the y every other row draws it at — collapsing the one premise this chart rests on.
+
 - **Pitch → y:** `y(f) = 24 − 22 * (log2(f) − log2(80)) / (log2(288) − log2(80))`, clamped `[2, 24]`. Fixed axis 80–288 Hz for every voice, forever. 155 Hz → y = 12.6, which is where the reference line sits.
-- **Trace width:** `TRACE_W = 300 * min(span, MAX_SPAN) / MAX_SPAN`, `MAX_SPAN = 2.2 s` (a **fixed constant**, not max-of-catalog, so widths never shift when the catalog changes). Ballad (1.97 s) → 269 px; Mark (0.47 s) → 64 px. The SVG element stays 300 px so the column never goes ragged.
+- **Trace width:** `TRACE_W = PRINT_W * min(span, MAX_SPAN) / MAX_SPAN`, `MAX_SPAN = 2.2 s` (a **fixed constant**, not max-of-catalog, so widths never shift when the catalog changes). The SVG element stays `PRINT_W` wide so the column never goes ragged. `PRINT_W` is **192** — it was 300 while this design still had a ~900 px pane to draw in; see §11 for why it came down and why every print on the page must be the same width. Measured against the live catalog at 192: Ballad (1.97 s) → 172 px; the shortest clip → 67 px.
 - **Frames:** resample the per-10 ms `(f0, rms)` track to `N = clamp(round(TRACE_W / 2.6), 12, 115)` points, nearest-neighbour.
 - **Each voiced frame i:** `<rect x={i*2.6} y={y − h/2} width="2.1" height={h} rx="1.05"/>` with `h = 2.5 + 7.5 * loudNorm`, `loudNorm = clamp(rms_i / p95(rms), 0, 1)`. **Unvoiced frames emit nothing** — the gaps are the consonants and the pause, and they are half the character.
 - Fill comes from `currentColor` on the `<svg>`, so the three ink states (§8) are one class.
 - **Playhead:** rAF `transform: translateX(currentTime / duration * TRACE_W)`. Only on the playing row.
 
-> **Built as a ribbon, not a seismograph** (warmth pass, after the founder review). The bar shipped at `1.4` wide on a `2.6` pitch — a **54 % duty cycle**, which is the visual language of an audio editor: high-density hairlines with air between them. Legible, and cold. Widening the bar to `2.1` (**81 % duty**) makes neighbouring bars very nearly touch, so a sustained passage resolves into one soft continuous band while the per-frame heights still read as rhythm; the amplitude scales 1.25× with it so a 2.1 px bar is a stroke rather than a dot. **The pitch does not move.** Widening the spacing to 4.2 to reach the same ratio would have dropped a full-width trace from 115 frames to 71, and a thinner trace reads *dottier* — the opposite of softer. One consequence, accepted: a full-loudness bar is now 10 px, so a bar centred at the very top or bottom of the 80–288 Hz band overhangs the 26 px print by up to 3 px. The svg is `overflow: visible` inside a 42 px row, which has 8 px of slack either side.
+> **Built as a ribbon, not a seismograph** (warmth pass, after the founder review). The bar shipped at `1.4` wide on a `2.6` pitch — a **54 % duty cycle**, which is the visual language of an audio editor: high-density hairlines with air between them. Legible, and cold. Widening the bar to `2.1` (**81 % duty**) makes neighbouring bars very nearly touch, so a sustained passage resolves into one soft continuous band while the per-frame heights still read as rhythm; the amplitude scales 1.25× with it so a 2.1 px bar is a stroke rather than a dot. **The pitch does not move.** Widening the spacing to 4.2 to reach the same ratio would have dropped a full-width trace by a third (115 frames to 71, at the 300 px width this was tuned at), and a thinner trace reads *dottier* — the opposite of softer. One consequence, accepted: a full-loudness bar is now 10 px, so a bar centred at the very top or bottom of the 80–288 Hz band overhangs the 26 px print by up to 3 px. The svg is `overflow: visible` inside a 42 px row, which has 8 px of slack either side.
 
 ### 6.1a Colour — one ordered ramp keyed to pitch
 
@@ -444,13 +449,23 @@ There is still **no per-voice colour, no gradient, no tier colour, no hue-coded 
 | section description | 13 px / ink 62 |
 | menu summary | 12 px / ink 62 |
 
-**Spacing** — 8 px grid. Row 42 px with a 26 px print band. Rail gutter 20 px. Control bar 44 px, `position: sticky; top: 0`, opaque, 1 px bottom rule. 24 px between the heading block and the control bar. Column layout inside a row:
+**Spacing** — 8 px grid. Row 42 px with a 26 px print band. Rail gutter 20 px. Control bar 44 px, `position: sticky; top: 0`, opaque, 1 px bottom rule. 24 px between the heading block and the control bar.
+
+**Column layout inside a row — as built**, budgeted against the 692 px rail §1 actually has (the design was first drawn at 300 px / 108 px, for a ~900 px pane that no longer exists; at 692 px that left the description 95 px and ellipsised 13 of the live catalog's 15 taglines, including both twin-Paola disambiguators):
 
 ```
-[3px focus rule][14][300px print][20][name 108px][12][description flex][badges][actions 96px][20]
+[3px focus rule][14][192px print][20][name 96px][12][description flex ≥152][badges][actions 96px][20]
 ```
 
-At 22 voices the rail is 924 px, so ~16 rows are visible in the 900 px window and the rest is a short scroll with the control bar pinned — acceptable, because comparison is one keypress and never requires scrolling back.
+which leaves the description **227 px**, or 198 px on a row carrying an `HD` badge — against a 121 px twin disambiguator and a 171 px longest tagline.
+
+**The yield order, when the column is narrower than that: print, then name, then — last — the description.** A truncated description is the only loss on this row that destroys meaning, because on a duplicate-named voice it *is* the difference between two rows (#585). The print is the most elastic thing on the page: its bars are computed against a width and its svg carries a viewBox, so a narrower box says exactly what the wide one said at a smaller scale.
+
+- **The print steps with the PAGE, never with the row.** `.voice-rail` is a query container and `.voice-row-print` takes `flex: 0 0 192px`, stepping to 152 px below a 648 px rail and 128 px below 608 px. It must *not* take a `flex-shrink`: rows are not identical (a badge costs its row 29 px), so under any pressure the HD rows would draw their traces ~15 % shorter than the rows beside them — measured, 143.9 px against 169.8 px at a 592 px rail. Trace length *is* clip length, so that is not a smaller chart, it is a chart that lies about half its rows. The svg is drawn at 192 print units with `preserveAspectRatio: none`, so a stepped box scales **x alone**: the shared reference line stays on y = 12.6 and the pitch band keeps its 26 px, which is the premise the whole chart rests on.
+- **The name yields second** — `flex: 0 1 96px`, floor 64 px. A name ending 4 px short of its neighbour's costs the page nothing; a trace ending 4 px short is claiming a shorter clip.
+- **The description yields last** — `flex: 1 1 0`, floor 152 px. Basing it at **0** rather than `auto` is what makes that true of the page rather than of one row: at `auto` its base size is its own text, so one 40-character tagline would put that row alone into deficit and take the space back out of its print. The 152 px floor clears the widest twin disambiguator with room for a longer locale, so the two Paolas stay tellable apart at any width this page is drawn at.
+
+At 22 voices the rail is 924 px, so ~16 rows fit a 900 px-tall viewport and the rest is a short scroll with the control bar pinned — acceptable, because comparison is one keypress and never requires scrolling back.
 
 **Motion — exactly two, both informational.**
 1. The playhead: rAF, linear, no easing. It is a clock.
@@ -472,7 +487,7 @@ Nothing else animates. **No hover lift, no scale, no shadow transitions, no fade
 
 **Pitch estimation could still misplace a voice.** Rank agreement was 0.97–0.98 across three settings and no octave errors appeared, but the estimator must keep its guards: median over voiced frames only, correlation threshold 0.30, lag clamp 60–320 Hz, relative voicing gate. If a measured F0 disagrees with the seed by more than a perfect fifth, prefer the seed and log once — a silently misplaced voice is confusing and invisible.
 
-**Row count at 100 voices is unproven ergonomically.** Virtualization above 60 is specified but the founder should see 22 rows at real size (Layer 4 CDP, `loadExtension:false`, popup at 1120 × 900) before slice 2 merges. Rejecting a page at the wireframe stage is far cheaper than after the shelves are deleted.
+**Row count at 100 voices is unproven ergonomically.** Virtualization above 60 is specified but the founder should see 22 rows at real size (Layer 4 CDP, `loadExtension:false`, settings **tab** at its own 756 px content column) before slice 2 merges. Rejecting a page at the wireframe stage is far cheaper than after the shelves are deleted.
 
 **jsdom has no media at all.** `HTMLMediaElement.play()` is unimplemented and returns `undefined` (not a Promise), `duration` is `NaN`, no events fire. So the sequencer must sit **above** `deps.playPreview`, never inside the player, and `qualifiesAsHeard` must be a pure function — then everything is provable at Layer 1/2 by driving the injected callback by hand, exactly as `test/settings/tabs/voices-controller.spec.tsx:560-571` already does.
 
@@ -660,7 +675,7 @@ Extract `previewSequencer.ts` and `voices-view-model.ts` out of the controller. 
 
 *Proves:* the signature works before anything is demolished, and the comparison stops being systematically unfair. Ships two complete wins on its own — the wall of Skittles becomes a wall of real information, and the 4.1 dB non-outlier loudness spread collapses to ~0.
 
-*Tested at:* Layer 1/2 — feature extraction against a committed fixture PCM (assert Onyx's median F0 lands at 92 ± 5 Hz and its span at 1.37 ± 0.05 s), cache key/eviction, `gainFor()` boundaries. Layer 4 CDP for the founder look at 1120 × 900 with the real 22-voice catalog. **This is the slice to show before agreeing to slice 2**, and the cheapest one to redraw.
+*Tested at:* Layer 1/2 — feature extraction against a committed fixture PCM (assert Onyx's median F0 lands at 92 ± 5 Hz and its span at 1.37 ± 0.05 s), cache key/eviction, `gainFor()` boundaries. Layer 4 CDP for the founder look, in the settings tab at its own 756 px content column, with the real 22-voice catalog. **This is the slice to show before agreeing to slice 2**, and the cheapest one to redraw.
 
 *Also here:* file the two saypi-api issues (HD clips off-script; Sage 7 dB quiet) with the measurements attached.
 

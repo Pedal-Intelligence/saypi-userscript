@@ -299,12 +299,32 @@
 
 /* --- the rail --------------------------------------------------------------
    One listbox, one tab stop, 42px rows on an 8px grid. Row columns:
-   [3px focus rule][14][300px print][20][name 108px][12][desc flex][badges][actions 96px][20] */
+   [3px focus rule][14][192px print][20][name 96px][12][desc flex][badges][96][20]
+
+   Those numbers are budgeted against a 692px rail, which is what the settings
+   TAB's fixed 756px content column gives this pane — measured identical at
+   viewports 1100, 1280, 1600 and 1920, because #584 moved settings out of a
+   sized window and #587 deleted the sizing machinery. Widening the column for
+   this tab is not an option (see the note above): the row has to fit 692px.
+
+   THE YIELD ORDER, when it does not: print, then name, then — last, and only
+   once the other two are at their floors — the description. The print is the
+   most elastic thing on the page (its bars are computed against a width and
+   its svg carries a viewBox, so a narrower box says exactly what the wide one
+   said at a smaller scale); a truncated description is the one loss that
+   destroys meaning, because on a duplicate-named voice it IS the difference
+   between two rows. */
 
 .voice-rail {
   list-style: none;
   margin: 0;
   padding: 0;
+  /* The rail is a QUERY CONTAINER so the print's width can step with the
+     column (see `.voice-row-print`). On the rail rather than on #voice-studio
+     because `container-type` implies layout+style containment, and the sticky
+     control bar is a sibling of the rail — nothing that positions itself
+     against the page ends up inside the contained box. */
+  container-type: inline-size;
 }
 .voice-rail:focus {
   outline: none;
@@ -318,7 +338,7 @@
   display: flex;
   align-items: center;
   height: 42px;
-  /* [3px focus rule][14][300px print][20][name 108][12][desc][badges][96][20] */
+  /* [3px focus rule][14][192px print][20][name 96][12][desc][badges][96][20] */
   padding: 0 20px 0 14px;
   border-left: 3px solid transparent;
   /* Rounded, so standing on a row is a soft tile rather than a scanline. The
@@ -394,21 +414,57 @@
   border-left-color: #2c5a42;
 }
 
+/* The print YIELDS FIRST — but at the PAGE's width, never at the row's, which
+   is why this steps on a container query instead of taking a flex-shrink.
+   `flex-shrink` would make the print's width a per-ROW negotiation, and the
+   rows are not identical: a badge costs its row 29px, so under any pressure
+   at all the HD rows would draw their traces ~15 % shorter than the rows
+   beside them (measured: 143.9px against 169.8px at a 592px rail). A trace's
+   LENGTH is its clip's length, so that is not a smaller chart — it is a chart
+   that lies about half its rows. Every print on the page is the same width or
+   the shared reference line is registering nothing.
+
+   Nothing about the MARK changes when the box does. The svg is drawn at 192
+   print units and carries `preserveAspectRatio: none`, so a narrower box
+   scales x alone: the reference line stays on its y, the pitch band keeps its
+   26px, and the duty cycle is scale-invariant. Steps rather than a continuous
+   fit because the box only has to stop crowding the words — it does not have
+   to be pixel-exact — and two steps keep the drawn:rendered ratio near 1:1
+   wherever the page is actually read. (What makes the step real on the svg
+   itself is `.voice-print` below.)
+
+   A voice with no clip renders this band EMPTY — no placeholder shape
+   pretending to be data, and visibly different from a print still loading,
+   which already shows its reference line. The band is still reserved, so the
+   names stay on one baseline down the whole rail. */
 .voice-row-print {
-  flex: 0 0 300px;
-  width: 300px;
+  flex: 0 0 192px;
   height: 26px;
   margin-right: 20px;
   display: flex;
   align-items: center;
 }
-/* A voice with no clip renders this band EMPTY — no placeholder shape
-   pretending to be data, and visibly different from a print still loading,
-   which already shows its reference line. The band is still reserved, so the
-   names stay on one baseline down the whole rail. */
+/* 648px: the rail width at which an HD row's description would otherwise drop
+   under its floor. 608px: the same, one step down. */
+@container (max-width: 648px) {
+  .voice-row-print {
+    flex-basis: 152px;
+  }
+}
+@container (max-width: 608px) {
+  .voice-row-print {
+    flex-basis: 128px;
+  }
+}
+/* 96px, down from 108: the longest name in the live catalog draws at 63px, so
+   this is still ~50 % headroom, and the 12px bought back is 12px the
+   description does not have to give up. Yields SECOND, after the print — and
+   this one CAN take a flex-shrink, because a name that ends 4px short of its
+   neighbour's costs the page nothing, where a trace that ends 4px short is
+   claiming a shorter clip. */
 .voice-row-name {
-  flex: 0 0 108px;
-  min-width: 0;
+  flex: 0 1 96px;
+  min-width: 64px;
   margin-right: 12px;
   font-size: 15px;
   font-weight: 600;
@@ -427,9 +483,27 @@
    400 is normal text, so WCAG 1.4.3 AA wants 4.5. 66 puts it at 4.98:1 where
    it is actually read. Four points of alpha is invisible beside the control
    bar; being under the floor on the row you are standing on is not. */
+/* The description YIELDS LAST, and `flex: 1 1 0` is what makes that true of
+   the PAGE rather than of one row.
+
+   Based at `auto` — its own text — one 40-character tagline puts that row into
+   deficit on its own and steals the space back from the print, so every print
+   ends up a different width and the shared reference line stops fusing N
+   traces into one chart. Based at 0 the sum of base sizes is identical on
+   every row: the print's width is a page-level decision, and the description
+   simply grows into whatever the row has left (215px at the shipped 692px,
+   against 95px before) and ellipsises only when its own text outruns that.
+
+   The 152px floor is the narrow-window guarantee. Below ~1000px of viewport
+   the content column starts giving way, and without a floor the description
+   is the only shrinkable column, so it collapsed to literally 0px — measured.
+   152px clears the widest twin disambiguator (121px, "Speaks 33 languages")
+   with room for a longer locale, so the two Paolas stay tellable apart at any
+   width this page is ever drawn at; the print and the name give up the
+   difference. */
 .voice-row-desc {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1 1 0;
+  min-width: 152px;
   font-size: 12px;
   color: rgba(36, 29, 20, 0.66);
   overflow: hidden;
@@ -462,6 +536,11 @@
   align-items: center;
   gap: 8px;
   margin-left: 12px;
+}
+/* Most rows carry no badge at all, and a gutter before nothing is 12px the
+   description could have had. */
+.voice-row-badges:empty {
+  margin-left: 0;
 }
 .voice-row-inuse {
   font-size: 10px;
@@ -502,9 +581,16 @@
    page deleted, which looked like they encoded something and encoded nothing;
    there is still no per-voice identity colour here. */
 
+/* Drawn at 192 print units and rendered at whatever `.voice-row-print` was
+   able to keep — `width: 100%` plus the svg's own `preserveAspectRatio: none`
+   is the whole of the print's elasticity. `min-width: 0` because a flex item's
+   automatic minimum is its intrinsic width, which would pin the svg at 192 and
+   let it overrun the name instead of yielding. */
 .voice-print {
   display: block;
   overflow: visible;
+  width: 100%;
+  min-width: 0;
 }
 /* The trace is the voice; the reference line is the chart it hangs on, so it
    stays faint and does NOT take the playing row's ink. */
