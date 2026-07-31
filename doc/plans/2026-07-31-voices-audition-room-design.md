@@ -225,6 +225,10 @@ The mark is drawn in **one ordered ramp — warm amber `#A66A2B` at 80 Hz to the
 
 Keyed to the **fixed** 80–288 Hz axis, never to the catalog's own min/max — the same argument that makes `MAX_SPAN` a constant. A ramp normalised over the catalog would re-colour every existing voice the day the server adds a deeper one, and a mark that changes when its neighbours change is not a mark.
 
+**Mixed in Oklch, not in sRGB channels.** Amber and forest green sit on opposite sides of the chroma axis, so a straight channel mix passes through their average — a desaturated khaki. The first build did exactly that and five of the fifteen visible rows (Fable, Alloy, Shimmer, Cedar, Nova) landed near `#918D52`: army-drab, and precisely the band the eye rests on, on a page whose whole brief was warmth. Rotating the **hue** from amber's 64° to green's 159° and carrying the chroma across holds the middle at C ≈ 0.10 instead of 0.075, so the mid-rail reads as olive **gold**. Identical anchors, identical ordering, different path between them.
+
+**The ramp ends on the accent, so the playhead is keylined.** `#2C5A42` at 288 Hz *is* the one green, which made the head green-crossing-green on the brightest voices (ΔE 3.4 in Oklab — one colour to the eye) exactly where "one green means now" is load-bearing. A 1 px stroke in the paper colour is invisible on paper and separates the head from the trace wherever it crosses one, at every pitch rather than only at the amber end. The rect is 2.5 wide so the green core stays the 1.5 px hairline it always was.
+
 Implementation lives in `voicePrintRender.ts` as `printPitchT()` / `printInk()`; the controller writes the three resulting colours onto the row as `--print-ink-rest` / `-heard` / `-play`, and the stylesheet picks which one. The svg itself still carries no colour at all, so the whole heard state stays **one class on the row** rather than a repaint of 115 rects.
 
 ### 6.2 Extraction (`src/tts/voicePrint.ts`)
@@ -300,15 +304,17 @@ Resolution order per voice: **cached print → seed → 155 Hz placeholder**. In
 
 **Expression: ink weight on the print. No checkmarks anywhere.**
 
-| state | contrast against the ground | at 80 Hz | at 155 Hz | at 288 Hz |
+| state | vs the card / vs the focused row | at 80 Hz | at 155 Hz | at 288 Hz |
 |---|---|---|---|---|
-| never heard | 3.2 : 1 | `#C07B33` | `#948C51` | `#4F9973` |
-| heard | 6.4 : 1 | `#7F501F` | `#615C33` | `#32644A` |
-| playing | 8.6 : 1 + playhead | `#663F17` | `#4D4927` | `#26503A` |
+| never heard | 3.6 : 1 / **3.2 : 1** | `#B47330` | `#818737` | `#4A906B` |
+| heard | 6.8 : 1 / 6.1 : 1 | `#7A4D1D` | `#565A22` | `#2F6047` |
+| playing | 9.0 : 1 / 8.0 : 1 + playhead | `#623D15` | `#44481A` | `#254D38` |
 
 > **As-built.** The design drew this as three **alphas** of one near-black ink (`0.22 / 0.72 / 1.0`). Two things moved it. First, at 0.22 the trace measured 1.60:1 against the ground while the reference line it hangs on measured 1.23:1 — the data barely out-ranked the gridline, and a broken 1.4 px mark loses far more to anti-aliasing than a continuous line does, so equal measured contrast is not equal presence. The floor went to **3.2:1** (WCAG 1.4.11's 3:1 for a graphic you need in order to read the content), settled by eye against the live catalog. Second, once the ink became the **pitch ramp** (§6.1a), one alpha scale stopped working at all: full-strength amber is 4.2:1 against this ground where full-strength green is 7.6:1, so a deep unheard voice would have read fainter than a bright unheard voice and the hue would have corrupted the heard state sitting beside it. So each state fixes a **contrast ratio** and lets the ramp choose the hue — hue carries pitch, weight carries memory, cleanly separated, and every row is at equal presence in equal state.
 >
-> The rule §8 actually cares about survives intact: the **develop** step is far the larger of the two — 19 points of CIE L\* against 8, "more than twice" — because "play one voice and its print inks in" is the whole of heard state on the rail, while what marks the playing row is the green playhead crossing its trace. (The old alpha metric is gone with the alphas; L\* is the honest replacement, and the ordering holds in raw contrast ratio too.)
+> **The floor is measured on the DARKER of the two grounds.** A print is painted on two: the card (`#FBF7F0`) and the warmer tile a hovered or focused row takes (`#F3EADA`) — and the controller focuses a row unconditionally at first paint, so the focus ground is not an edge case, it is the row the reader is standing on. That tile is 1.12× darker, worth about 11 % of every ratio. The alpha ink never had the problem, because `rgba()` **composites** against whatever it is painted over and so self-corrected; a fixed colour does not, and a first pass that solved 3.2:1 against the card alone left the focused row at **2.85:1** — under the floor, on the page's only data. The targets above are stated against the card and chosen so the ratio on the focused row is the 3.2:1 that was settled by eye. Both grounds are asserted, at both ends and mid-ramp.
+>
+> The rule §8 actually cares about survives intact: the **develop** step is far the larger of the two — 17.5 points of CIE L\* against 7.5, "more than twice" — because "play one voice and its print inks in" is the whole of heard state on the rail, while what marks the playing row is the green playhead crossing its trace. (The old alpha metric is gone with the alphas; L\* is the honest replacement, and the ordering holds in raw contrast ratio too.)
 
 **No suppression threshold.** A first-time visitor sees a page of faint under-drawings, which is *correct*: there is nothing here you know yet. Play one voice and its print inks in — instant comprehension, no explanation needed, no magic constant, and none of the jarring mass-transition a "suppress until N heard" rule produces. The rail literally develops as you work down it.
 
@@ -415,7 +421,7 @@ Copy `VoicePins`' **discipline** (one exported key constant, pure helpers separa
 | token | value | use |
 |---|---|---|
 | ground | `#FBF7F0` | the studio card and its control bar (opaque, so rows scroll under) |
-| ink | `#241D14` | warm near-black. Names at 100 %, everything else at 62 / 38 / 22 % |
+| ink | `#241D14` | warm near-black. Names at 100 %, everything else at 62 / 38 / 22 % — except the row tagline, which takes **66** because it is the one string that is only ever read on the darker `row focus` ground, where 62 measures 4.41:1 against WCAG 1.4.3's 4.5 for 12 px text |
 | accent | `#2C5A42` | the shell's existing green. **One meaning: now.** Active host pill, `IN USE` marker + row rule, `Use` button, playhead. Roughly 2 % of pixels. |
 | rule | `#EADFCC` | the two rules, and the print's reference line |
 | row focus | `#F3EADA` | focused/hovered row background, 12 px radius |

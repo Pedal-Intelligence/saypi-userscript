@@ -341,16 +341,20 @@
      CONTRAST per state instead and lets the ramp choose the hue, so every row
      is at equal presence in equal state.
 
-     The floor is unchanged at 3.2:1 — settled by eye against the live catalog,
-     because WCAG 1.4.11 asks 3:1 of a graphic you need in order to read the
-     content, and below that the traces read as dust while the reference line
-     they hang on becomes the most legible mark on the row.
+     The floor is the 3.2:1 the monochrome rail settled on by eye, but it is
+     now held ON THE FOCUS GROUND BELOW rather than on the card — which is why
+     printInk's resting target reads 3.6. The alpha ink used to get that for
+     free: rgba() COMPOSITES against whatever it is painted over, so it
+     self-corrected when the row took its tile. A fixed colour does not, and
+     the controller focuses a row unconditionally at first paint, so measuring
+     only against the card would have put the one row the reader is standing
+     on at 2.85:1 — under WCAG 1.4.11, on the page's only data.
 
      The fallbacks are the NEUTRAL rung of the ramp (155 Hz, the reference
      line) — what an unmeasured voice would be given. In practice the
      controller sets all three on every playable row, from `pitchOf`, before
      the row is ever painted. */
-  color: var(--print-ink-rest, #948c51);
+  color: var(--print-ink-rest, #818737);
   transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
 /* No rule between rows. Separation is the rhythm and the prints.
@@ -363,12 +367,15 @@
    rows. Standing on a row is expressed by its ground, its tagline and its
    actions; the print keeps saying what it always said.
 
-   The DEVELOP step (never-heard → heard) is far the larger of the two — 19
-   points of CIE L* against 8, which is design §8's "more than twice" — because
-   "play one voice and its print inks in" is the whole of heard state ON THE
-   RAIL, while what marks the playing row is the green playhead crossing its
-   trace. `.playing` sits last because it ties `.heard` on specificity and
-   source order is what decides. */
+   The DEVELOP step (never-heard → heard) is far the larger of the two — 17.5
+   points of CIE L* against 7.5, which is design §8's "more than twice" —
+   because "play one voice and its print inks in" is the whole of heard state
+   ON THE RAIL, while what marks the playing row is the green playhead crossing
+   its trace. `.playing` sits last because it ties `.heard` on specificity and
+   source order is what decides.
+
+   #f3eada is the DARKER of the two grounds a print is ever drawn on, and the
+   one printInk's floor is measured against — see PRINT_GROUND_FOCUS. */
 .voice-row:hover {
   background: #f3eada;
 }
@@ -376,10 +383,10 @@
   background: #f3eada;
 }
 .voice-row.heard {
-  color: var(--print-ink-heard, #615c33);
+  color: var(--print-ink-heard, #565a22);
 }
 .voice-row.playing {
-  color: var(--print-ink-play, #4d4927);
+  color: var(--print-ink-play, #44481a);
 }
 /* The current voice keeps its PITCH POSITION and is marked in place — pinning
    it to the top would break the chart the pitch order creates. */
@@ -412,12 +419,19 @@
   white-space: nowrap;
 }
 /* The tagline is a focused-row affordance now, not a 2.7em block on 22 cards.
-   Opacity, not display, so the row never reflows as focus moves. */
+   Opacity, not display, so the row never reflows as focus moves.
+
+   Ink 66, not the 62 the rest of the page's secondary text takes, because this
+   is the ONE piece of text that is only ever read on the darker focus ground.
+   62 measures 4.60:1 on the card — fine — but 4.41:1 on #f3eada, and 12px at
+   400 is normal text, so WCAG 1.4.3 AA wants 4.5. 66 puts it at 4.98:1 where
+   it is actually read. Four points of alpha is invisible beside the control
+   bar; being under the floor on the row you are standing on is not. */
 .voice-row-desc {
   flex: 1 1 auto;
   min-width: 0;
   font-size: 12px;
-  color: rgba(36, 29, 20, 0.62);
+  color: rgba(36, 29, 20, 0.66);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -431,8 +445,9 @@
 /* Twin display names (#474 — the two Paolas) are the exception the demotion
    needs: their subtitle is the only thing that tells the rows apart, so it
    never hides. Ink 38 at rest — the HD-badge step, quiet enough to read as a
-   disambiguator rather than a description — rising to the normal ink 62 when
-   the row is the one you are looking at. */
+   disambiguator rather than a description — rising to the tagline's own 66
+   when the row is the one you are looking at, on the same darker ground and
+   for the same reason. */
 .voice-row-desc-dup {
   opacity: 1;
   color: rgba(36, 29, 20, 0.38);
@@ -440,7 +455,7 @@
 }
 .voice-row:hover .voice-row-desc-dup,
 .voice-row.focused .voice-row-desc-dup {
-  color: rgba(36, 29, 20, 0.62);
+  color: rgba(36, 29, 20, 0.66);
 }
 .voice-row-badges {
   display: flex;
@@ -516,9 +531,20 @@
    only time it sits still, which is honest, because the trace has nothing
    drawn there either. Longhands, not the shorthand: two var()-valued <time>s
    in one `animation:` declaration are positional and one reordering edit
-   would silently swap duration for delay. */
+   would silently swap duration for delay.
+
+   The KEYLINE is what the pitch ramp made necessary. The head is the accent
+   green and the ramp ARRIVES at that same green at 288 Hz, so on the brightest
+   voices the head was green crossing green — ΔE 3.4 in Oklab, one colour to
+   the eye, exactly where "one green means now" is doing its work. A 1px stroke
+   in the paper colour is invisible on paper (it IS the paper) and separates the
+   head from the trace wherever it crosses one, at every pitch rather than only
+   at the amber end. Stroke is centred on the edge, so the rect's 2.5 leaves a
+   1.5px green core — the hairline it always was — inside a 1px halo. */
 .voice-print-head {
   fill: #2c5a42;
+  stroke: #fbf7f0;
+  stroke-width: 1;
   opacity: 0;
 }
 .voice-row.playing .voice-print-head {

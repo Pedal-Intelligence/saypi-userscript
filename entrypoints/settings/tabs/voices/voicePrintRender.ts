@@ -76,8 +76,21 @@ export const PRINT_MAX_FRAMES = 115;
  */
 export const PRINT_WIDTHS = { md: 118, lg: 300 } as const;
 
-/** The playhead's width, in print units. A hairline: it is a clock, not a bar. */
-export const PRINT_HEAD_W = 1.5;
+/**
+ * The playhead's width, in print units. Still a 1.5 px hairline of green — it
+ * is a clock, not a bar — but drawn 2.5 wide so `voices.css` can spend 1 px of
+ * it on a PAPER KEYLINE either side (stroke is centred on the edge, so 2.5 with
+ * a 1 px stroke leaves a 1.5 px green core inside a 1 px cream halo).
+ *
+ * The keyline is what the pitch ramp made necessary. The head is the accent
+ * green; the ramp ARRIVES at that same green at 288 Hz, so on the brightest
+ * voices the head was green crossing green — ΔE 3.4 in Oklab, perceptually one
+ * colour, exactly where "one green means now" is doing its work. Against paper
+ * the halo is invisible (it is the paper), so this costs nothing on the 20 px
+ * of head that overhang the ribbon and buys separation on the ~7 px that cross
+ * it, at every pitch rather than only at the amber end.
+ */
+export const PRINT_HEAD_W = 2.5;
 
 const LOG_LO = Math.log2(PRINT_AXIS_LO_HZ);
 const LOG_SPAN = Math.log2(PRINT_AXIS_HI_HZ) - LOG_LO;
@@ -114,8 +127,23 @@ export function printY(hz: number): number {
 /** The ramp's anchors. Amber at 80 Hz, the shell's one green at 288 Hz. */
 export const PRINT_RAMP_DEEP = "#a66a2b";
 export const PRINT_RAMP_BRIGHT = "#2c5a42";
-/** The warm ground the studio is painted on, and what the ink is measured against. */
+/**
+ * The TWO grounds a print is ever painted on.
+ *
+ * `PRINT_GROUND` is the studio card. `PRINT_GROUND_FOCUS` is the row you are
+ * standing on — `voices.css` gives `.voice-row:hover` and `.voice-row.focused`
+ * their own warmer tile, and the controller focuses a row unconditionally at
+ * first paint, so on any visit at least one print is drawn on the darker of
+ * the two. It is 1.12× darker, which costs every ink about 11 % of its ratio.
+ *
+ * That is exactly the trap the alpha ink used to sidestep for free: a
+ * translucent ink COMPOSITES against whatever it is painted over, so it
+ * self-corrected on the focus row. A fixed colour does not, so the floor has
+ * to be held against the DARKER ground explicitly (see `PRINT_INK_CONTRAST`)
+ * or the one row the reader is on is the one row below WCAG 1.4.11.
+ */
 export const PRINT_GROUND = "#fbf7f0";
+export const PRINT_GROUND_FOCUS = "#f3eada";
 
 /**
  * The three heard states (§8), expressed as CONTRAST RATIOS against the ground
@@ -129,17 +157,25 @@ export const PRINT_GROUND = "#fbf7f0";
  * ramp choose the hue, keeps every row at equal presence in equal state, so hue
  * carries pitch and weight carries memory, cleanly separated.
  *
- * `rest` keeps the 3.2:1 floor the monochrome rail settled on by eye (WCAG
- * 1.4.11 asks 3:1 of a graphic you need in order to read the content). The
- * other two are chosen so the DEVELOP step is far the larger of the two — 19
- * points of CIE L* against 8, matching design §8's "more than twice" — because
- * "play one voice and its print inks in" is the whole of heard state on the
- * rail, while what marks the playing row is the green playhead crossing it.
+ * These are ratios against `PRINT_GROUND`, because that is the ground the whole
+ * page shares and the one the exposure in `rampInk` is solved for. **But the
+ * floor is the one on `PRINT_GROUND_FOCUS`**, which is 1.12× darker: `rest` is
+ * 3.6 here so that it is still 3.2 on the focused row, which is the 3.2:1 the
+ * monochrome rail settled on by eye and comfortably over WCAG 1.4.11's 3:1 for
+ * a graphic you need in order to read the content. Measured against the card
+ * alone, 3.2 here would have been 2.85 there — under the floor, on the one row
+ * the reader is standing on.
+ *
+ * `heard` and `playing` then move with it, so the DEVELOP step stays far the
+ * larger of the two — 17.5 points of CIE L* against 7.5, matching design §8's
+ * "more than twice" — because "play one voice and its print inks in" is the
+ * whole of heard state on the rail, while what marks the playing row is the
+ * green playhead crossing it.
  */
 export const PRINT_INK_CONTRAST = {
-  rest: 3.2,
-  heard: 6.4,
-  playing: 8.6,
+  rest: 3.6,
+  heard: 6.8,
+  playing: 9.0,
 } as const;
 
 export type PrintInkState = keyof typeof PRINT_INK_CONTRAST;
@@ -162,8 +198,46 @@ const hexOf = (linear: number[]): string =>
     .map((c) => c.toString(16).padStart(2, "0"))
     .join("");
 
-const RAMP_DEEP_RGB = hexToRgb(PRINT_RAMP_DEEP);
-const RAMP_BRIGHT_RGB = hexToRgb(PRINT_RAMP_BRIGHT);
+/* Oklab, and its polar form. The ramp is mixed in HUE + CHROMA rather than in
+   sRGB channels, which is the difference between a warm ramp and a drab one:
+   amber and forest green sit on opposite sides of the chroma axis in RGB, so a
+   straight channel mix passes through their average — a desaturated khaki. On
+   the live catalog that was a third of the visible rows (Fable, Alloy, Shimmer,
+   Cedar, Nova all landed near #918d52), which is army-drab on a page whose
+   whole brief was warmth. Rotating the HUE from amber's 64° to green's 159°
+   while carrying the chroma across holds the mid at C≈0.10 instead of 0.075, so
+   the middle of the rail reads as olive GOLD. Identical anchors, identical
+   ordering; only the path between them changes. */
+const oklabOf = ([r, g, b]: number[]): number[] => {
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ];
+};
+const linearOfOklab = ([L, a, b]: number[]): number[] => {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ];
+};
+/** Oklab → (L, chroma, hue). */
+const oklchOf = (hex: string): number[] => {
+  const [L, a, b] = oklabOf(linearOf(hex));
+  return [L, Math.hypot(a, b), Math.atan2(b, a)];
+};
+
+const RAMP_DEEP_LCH = oklchOf(PRINT_RAMP_DEEP);
+const RAMP_BRIGHT_LCH = oklchOf(PRINT_RAMP_BRIGHT);
+/** Shorter way round the hue circle — 64° → 159° through yellow-green. */
+const RAMP_DH = ((RAMP_BRIGHT_LCH[2] - RAMP_DEEP_LCH[2] + Math.PI) % (2 * Math.PI)) - Math.PI;
 const GROUND_Y = luminance(linearOf(PRINT_GROUND));
 
 /**
@@ -182,18 +256,22 @@ export function printPitchT(hz: number): number {
 /**
  * The ramp colour at `t`, re-exposed to hit an exact contrast ratio.
  *
- * The hue comes from a straight sRGB mix of the two anchors — what the approved
- * render used. The WEIGHT comes from scaling that colour in LINEAR light, which
- * preserves its chromaticity exactly (it is the same colour at a different
- * exposure) while moving its luminance to wherever the target ratio wants it.
- * That makes the state colours a closed form rather than three hand-picked
- * swatches per hue, so the ramp stays correct if an anchor is ever retuned.
+ * The HUE comes from rotating through Oklch between the two anchors (see the
+ * note above `oklabOf`): perceptual, so the middle of the ramp keeps its
+ * chroma instead of collapsing into the anchors' RGB average.
+ *
+ * The WEIGHT comes from scaling that colour in LINEAR light, which preserves
+ * its chromaticity exactly (it is the same colour at a different exposure)
+ * while moving its luminance to wherever the target ratio wants it. That makes
+ * the state colours a closed form rather than three hand-picked swatches per
+ * hue, so the ramp stays correct if an anchor is ever retuned.
  */
 function rampInk(t: number, target: number): string {
   const clamped = Math.min(1, Math.max(0, t));
-  const base = RAMP_DEEP_RGB.map((v, i) =>
-    toLinear((v + (RAMP_BRIGHT_RGB[i] - v) * clamped) / 255)
-  );
+  const L = RAMP_DEEP_LCH[0] + (RAMP_BRIGHT_LCH[0] - RAMP_DEEP_LCH[0]) * clamped;
+  const c = RAMP_DEEP_LCH[1] + (RAMP_BRIGHT_LCH[1] - RAMP_DEEP_LCH[1]) * clamped;
+  const h = RAMP_DEEP_LCH[2] + RAMP_DH * clamped;
+  const base = linearOfOklab([L, c * Math.cos(h), c * Math.sin(h)]);
   const want = (GROUND_Y + 0.05) / target - 0.05;
   const exposure = want / luminance(base);
   return hexOf(base.map((v) => v * exposure));

@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   PRINT_GROUND,
+  PRINT_GROUND_FOCUS,
+  PRINT_HEAD_W,
   printInk,
 } from "../../../entrypoints/settings/tabs/voices/voicePrintRender";
 
@@ -98,6 +100,8 @@ function contrast(fg: number[], bg: number[]): number {
 /** Warm near-black, warm paper. The rail is a warm island on the cool shell. */
 const INK = hexRgb("#241d14");
 const GROUND = hexRgb(PRINT_GROUND);
+/** The warmer tile a hovered/focused row takes — the DARKER of the two. */
+const FOCUS_GROUND = hexRgb(PRINT_GROUND_FOCUS);
 const RULE = "#eadfcc";
 const ACCENT = "#2c5a42";
 
@@ -219,7 +223,14 @@ describe("ink is one ramp in three steps", () => {
     // its actions; the print keeps saying what it always said.
     expect(ruleBody(".voice-row:hover")).not.toMatch(/(?:^|[^-])color:/);
     expect(ruleBody(".voice-row.focused")).not.toMatch(/(?:^|[^-])color:/);
-    expect(ruleBody(".voice-row:hover")).toMatch(/background:\s*#f3eada/);
+    // …but they DO give the row a ground, and that ground is the one the ramp's
+    // contrast floor is solved against. Pinned to PRINT_GROUND_FOCUS so the
+    // sheet cannot quietly darken the tile out from under the ink.
+    for (const selector of [".voice-row:hover", ".voice-row.focused"]) {
+      expect(ruleBody(selector)).toMatch(
+        new RegExp(`background:\\s*${PRINT_GROUND_FOCUS}`)
+      );
+    }
   });
 
   it("rounds the row it grounds, so standing on one is a tile not a scanline", () => {
@@ -233,20 +244,27 @@ describe("ink is one ramp in three steps", () => {
     ).toBe(12);
   });
 
-  it("keeps the soundprint legible at rest, not only under the cursor", () => {
+  it("keeps the soundprint legible at rest, on EITHER ground it is drawn on", () => {
     // The trace is the page's ONLY data and it fills from the row's
     // currentColor, so the never-heard ink is what a first-time reader sees on
     // every row of the page. WCAG 1.4.11 asks 3:1 of a graphic you need in
     // order to understand the content; below that the traces read as dust and
     // the reference line becomes the most legible mark on the row — a chart
     // whose gridlines outrank its data. The 3.2:1 floor was settled by eye
-    // against the live catalog and survives the warmth pass unchanged; what
-    // changed is that it is now held at BOTH ends of the ramp by construction
-    // (voicePrintRender.spec.ts) rather than by one alpha.
-    const resting = inkVar(ruleBody(".voice-row")).fallback;
-    expect(contrast(hexRgb(resting), GROUND)).toBeGreaterThanOrEqual(3);
+    // against the live catalog and survives the warmth pass unchanged.
+    //
+    // The FOCUS ground is the one that matters and the one this used to miss.
+    // A row always carries `.focused` (the controller applies it at first
+    // paint), and that tile is 1.12× darker than the card, so an ink measured
+    // only against the card sat at 2.85:1 exactly where the reader was looking.
+    // The alpha ink it replaced never had the bug — rgba() composites against
+    // what it is painted over — so this is a floor the ramp has to hold
+    // explicitly. The ratios themselves live in voicePrintRender.spec.ts.
+    const resting = hexRgb(inkVar(ruleBody(".voice-row")).fallback);
+    expect(contrast(resting, GROUND)).toBeGreaterThanOrEqual(3);
+    expect(contrast(resting, FOCUS_GROUND)).toBeGreaterThanOrEqual(3);
     // …and it must still out-contrast the chart it hangs on.
-    expect(contrast(hexRgb(resting), hexRgb(RULE))).toBeGreaterThan(2);
+    expect(contrast(resting, hexRgb(RULE))).toBeGreaterThan(2);
   });
 
   it("declares .playing after .heard, because they tie on specificity", () => {
@@ -323,6 +341,20 @@ describe("one green, one meaning: now", () => {
     expect(ruleBody(".voice-row-inuse")).toMatch(new RegExp(`color:\\s*${ACCENT}`));
     expect(ruleBody(".voice-use")).toMatch(new RegExp(`color:\\s*${ACCENT}`));
     expect(ruleBody(".voice-print-head")).toMatch(new RegExp(`fill:\\s*${ACCENT}`));
+  });
+
+  it("keylines the playhead in paper, because the ramp arrives at the same green", () => {
+    // The one place "one green means now" broke: the ramp's bright anchor IS
+    // the accent, so on the brightest voices the head was green crossing green
+    // (ΔE 3.4 in Oklab — one colour to the eye). A stroke in the ground colour
+    // is invisible on paper and separates the head from the trace wherever it
+    // crosses one, at every pitch rather than only at the amber end. Stroke is
+    // centred on the edge, so the rect has to be 1px wider on each side than
+    // the 1.5px green core the head has always been.
+    const head = ruleBody(".voice-print-head");
+    expect(head).toMatch(new RegExp(`stroke:\\s*${PRINT_GROUND}`));
+    const strokeW = Number(/stroke-width:\s*([\d.]+)/.exec(head)![1]);
+    expect(PRINT_HEAD_W - strokeW).toBe(1.5);
   });
 
   it("sets the badges at 10px/700 uppercase, HD in ink and IN USE in accent", () => {
@@ -464,12 +496,28 @@ describe("type", () => {
     expect(declarations).not.toMatch(/font-family/);
   });
 
-  it("keeps the row description readable on the warm ground (WCAG AA)", () => {
+  it("keeps the row description readable on the ground it is ACTUALLY read on", () => {
     // "Recedes" is a hierarchy instruction, not a licence to go unreadable.
-    const alpha = inkDensity(ruleBody(".voice-row-desc"));
-    expect(contrast(over(INK, alpha, GROUND), GROUND)).toBeGreaterThanOrEqual(
-      4.5
+    //
+    // The tagline is `opacity: 0` at rest and revealed only by hover/focus, so
+    // the FOCUS ground is the only ground it is ever read against — measuring
+    // it against the card was measuring a state that never renders. It is 12px
+    // at 400, which is normal text under WCAG 1.4.3, so the floor is 4.5:1; on
+    // the darker tile the page-wide 62 % ink lands at 4.41, which is why this
+    // one string takes 66 instead.
+    const desc = ruleBody(".voice-row-desc");
+    expect(desc).toMatch(/opacity:\s*0/);
+    const alpha = inkDensity(desc);
+    expect(
+      contrast(over(INK, alpha, FOCUS_GROUND), FOCUS_GROUND)
+    ).toBeGreaterThanOrEqual(4.5);
+    // The twin-name disambiguator (#474) is the same string on the same ground
+    // once you are standing on the row, so it takes the same ink.
+    const dup = /\.voice-row\.focused \.voice-row-desc-dup\s*\{([^}]*)\}/.exec(
+      declarations
     );
+    expect(dup, "focused .voice-row-desc-dup should declare a colour").toBeTruthy();
+    expect(inkDensity(dup![1])).toBe(alpha);
   });
 });
 

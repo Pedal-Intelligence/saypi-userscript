@@ -13,6 +13,8 @@ import {
   PRINT_MAX_SPAN_S,
   PRINT_MIN_FRAMES,
   PRINT_GROUND,
+  PRINT_GROUND_FOCUS,
+  PRINT_HEAD_W,
   PRINT_INK_CONTRAST,
   PRINT_RAMP_BRIGHT,
   PRINT_RAMP_DEEP,
@@ -298,6 +300,19 @@ const warmth = (hex: string): number => {
   const [r, , b] = hue(hex);
   return (r - b) / 255;
 };
+/** Oklab chroma — how far a colour is from grey at its own lightness. */
+function oklabChroma(hex: string): number {
+  const [r, g, b] = hue(hex)
+    .map((c) => c / 255)
+    .map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return Math.hypot(
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
+  );
+}
 
 describe("colour is one ordered ramp keyed to pitch", () => {
   // NOT per-voice identity colour, which this page deleted for good reason: the
@@ -331,25 +346,73 @@ describe("colour is one ordered ramp keyed to pitch", () => {
     expect(warmth(deep.rest)).toBeGreaterThan(0.3);
     expect(warmth(bright.rest)).toBeLessThan(0.25);
     // …and monotonically between them, so the page is a gradient, never a
-    // scatter. Sampled at every 40 Hz across the audible band.
+    // scatter. Sampled at every 10 Hz across the audible band. The tolerance is
+    // one 8-bit step: the ramp is continuous in Oklch and only the final round
+    // to a hex is not, so a 1/255 blip between neighbours is quantisation
+    // rather than a scatter. The span assertion is what stops the tolerance
+    // hiding a ramp that has gone flat.
     const walk = Array.from({ length: 22 }, (_, i) => printInk(80 + i * 10).rest);
     for (let i = 1; i < walk.length; i++) {
-      expect(warmth(walk[i])).toBeLessThanOrEqual(warmth(walk[i - 1]) + 1e-9);
+      expect(warmth(walk[i])).toBeLessThanOrEqual(warmth(walk[i - 1]) + 1 / 255);
+    }
+    expect(warmth(walk[0]) - warmth(walk[walk.length - 1])).toBeGreaterThan(0.4);
+  });
+
+  it("keeps its chroma across the middle instead of going through khaki", () => {
+    // The mud test. Amber and forest green sit on opposite sides of the chroma
+    // axis in sRGB, so a straight channel mix passes through their average — a
+    // desaturated army-drab, which on the live catalog was five of the fifteen
+    // visible rows (Fable, Alloy, Shimmer, Cedar, Nova all landed near
+    // #918d52). That is the least warm band on a page whose brief was warmth.
+    // Rotating the HUE in Oklch and carrying the chroma across instead holds
+    // the middle at olive GOLD. Same anchors, same ordering, different path.
+    const ends = Math.min(
+      oklabChroma(printInk(PRINT_AXIS_LO_HZ).rest),
+      oklabChroma(printInk(PRINT_AXIS_HI_HZ).rest)
+    );
+    for (let hz = 80; hz <= 288; hz += 4) {
+      // A straight sRGB mix bottomed out at 0.65× the weaker anchor; a
+      // perceptual path never dips below either of them by more than a hair.
+      expect(oklabChroma(printInk(hz).rest), `${hz}Hz`).toBeGreaterThan(
+        ends * 0.95
+      );
     }
   });
 
-  it("clears WCAG 1.4.11's 3:1 at BOTH ends and the middle, in all three states", () => {
+  it("clears WCAG 1.4.11's 3:1 on BOTH grounds, at both ends and the middle", () => {
     // The trace is the page's only data, so the never-heard ink is what a
     // first-time reader sees on every row. Below 3:1 the traces read as dust
     // and the reference line becomes the most legible mark on the row — a
     // chart whose gridlines outrank its data. The ends are what a naive tint
     // would break: full-strength amber is only 4.2:1 against this ground.
-    for (const hz of [PRINT_AXIS_LO_HZ, 155, PRINT_AXIS_HI_HZ]) {
-      const ink = printInk(hz);
-      for (const [state, hex] of Object.entries(ink)) {
-        expect(contrast(hex, PRINT_GROUND), `${state} at ${hz}Hz`).toBeGreaterThanOrEqual(3);
+    //
+    // BOTH grounds, because a print is drawn on two: the card, and the warmer
+    // tile a hovered/focused row takes — and the controller focuses a row
+    // unconditionally at first paint, so the focus ground is not an edge case,
+    // it is the row the reader is standing on. That ground is 1.12× darker, so
+    // measuring only against the card was worth about 11 % of a ratio the whole
+    // design is built on. (The alpha ink this replaced never had the problem:
+    // rgba() composites against what it is painted over, so it self-corrected.)
+    for (const ground of [PRINT_GROUND, PRINT_GROUND_FOCUS]) {
+      for (const hz of [PRINT_AXIS_LO_HZ, 155, PRINT_AXIS_HI_HZ]) {
+        const ink = printInk(hz);
+        for (const [state, hex] of Object.entries(ink)) {
+          expect(
+            contrast(hex, ground),
+            `${state} at ${hz}Hz on ${ground}`
+          ).toBeGreaterThanOrEqual(3);
+        }
       }
     }
+    // …and nowhere along the ramp, not just at the three sample points. The
+    // worst point is mid-ramp, which is exactly where three samples miss.
+    let worst = Infinity;
+    for (let hz = 80; hz <= 288; hz += 1) {
+      for (const hex of Object.values(printInk(hz))) {
+        worst = Math.min(worst, contrast(hex, PRINT_GROUND_FOCUS));
+      }
+    }
+    expect(worst).toBeGreaterThanOrEqual(3.2);
   });
 
   it("holds each state at ONE contrast the whole way along the ramp", () => {
@@ -357,14 +420,26 @@ describe("colour is one ordered ramp keyed to pitch", () => {
     // weight moved with pitch too, a deep unheard voice would read fainter
     // than a bright unheard voice and the ramp would corrupt the heard state
     // it sits beside.
+    //
+    // A RELATIVE tolerance, because the only error here is the round to 8-bit
+    // and its cost grows with the ratio: at 3.6:1 it is worth ±0.02, at 9:1 it
+    // is worth ±0.06. An absolute one would either fail at the dark end or wave
+    // through real drift at the light end. 1 % is under half of one 8-bit step.
     for (const [state, target] of Object.entries(PRINT_INK_CONTRAST)) {
-      for (const hz of [80, 110, 155, 200, 288]) {
-        const hex = printInk(hz)[state as keyof typeof PRINT_INK_CONTRAST];
-        expect(contrast(hex, PRINT_GROUND), `${state} at ${hz}Hz`).toBeCloseTo(
-          target,
-          1
-        );
+      const ratios = [80, 110, 155, 200, 288].map((hz) =>
+        contrast(printInk(hz)[state as keyof typeof PRINT_INK_CONTRAST], PRINT_GROUND)
+      );
+      for (const [i, ratio] of ratios.entries()) {
+        expect(
+          Math.abs(ratio - target) / target,
+          `${state} at ${[80, 110, 155, 200, 288][i]}Hz measured ${ratio}`
+        ).toBeLessThan(0.01);
       }
+      // …and, more directly: the spread across the ramp is a rounding artefact,
+      // not a slope. No reader can see 1 % of a contrast ratio.
+      expect(Math.max(...ratios) - Math.min(...ratios)).toBeLessThan(
+        target * 0.02
+      );
     }
   });
 
@@ -375,6 +450,8 @@ describe("colour is one ordered ramp keyed to pitch", () => {
     // green playhead crossing its trace. Measured in CIE L*, which is the
     // honest metric now that the three states are three colours rather than
     // three alphas of one ink — and it holds in raw contrast ratio too.
+    // 17.5 points of L* against 7.5, after raising the resting floor to hold
+    // 3:1 on the darker of the two grounds.
     for (const hz of [PRINT_AXIS_LO_HZ, 155, PRINT_AXIS_HI_HZ]) {
       const { rest, heard, playing } = printInk(hz);
       const develop = lstar(rest) - lstar(heard);
@@ -406,5 +483,17 @@ describe("colour is one ordered ramp keyed to pitch", () => {
   it("anchors on the shell's own green, so the accent is not a second one", () => {
     expect(PRINT_RAMP_BRIGHT).toBe("#2c5a42");
     expect(PRINT_RAMP_DEEP).toBe("#a66a2b");
+  });
+
+  it("leaves the playhead room for a keyline, because the ramp reaches its green", () => {
+    // The head is the accent green; the ramp ENDS on the accent green, so at
+    // the bright end the head was green crossing green (ΔE 3.4 in Oklab — one
+    // colour to the eye) exactly where "one green means now" is load-bearing.
+    // The fix is a 1px paper keyline, which the head has to be wide enough to
+    // carry without losing the 1.5px green core it has always been: stroke is
+    // centred on the edge, so 2.5 − 2×(1/2) = 1.5.
+    expect(PRINT_HEAD_W).toBe(2.5);
+    const bright = printInk(PRINT_AXIS_HI_HZ).playing;
+    expect(contrast(bright, PRINT_RAMP_BRIGHT)).toBeLessThan(1.5);
   });
 });
