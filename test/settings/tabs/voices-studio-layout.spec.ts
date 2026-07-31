@@ -151,8 +151,8 @@ describe("Defect 3 — the shelf heading leads, the blurb recedes", () => {
 });
 
 describe("Defect 4 — the studio gets the column it is sized for", () => {
-  // settingsWindowSize.ts grows the settings window to 1120px for this tab so
-  // the studio can use a wide column, and #voice-studio asks for up to 900px —
+  // The settings tab gives this pane a wide content column, and
+  // #voice-studio asks for up to 900px of it —
   // but its parent .user-preference-item carries the form-tab 504px cap from
   // src/popup/tabs.css, so the studio never got past ~472px. #tab-voices was
   // already uncapped one level up; this is the level that was missed.
