@@ -201,7 +201,15 @@
    class on its container: resting, or playing. (The third density — "heard" —
    arrives with the heard store; until then every measured print reads the
    same.) Colour, deliberately, carries nothing: this replaced 22 hash-derived
-   gradients that looked like they encoded something and encoded nothing. */
+   gradients that looked like they encoded something and encoded nothing.
+
+   Playing is FULL ink and nothing else is, which is what makes it readable
+   without a playhead (that needs the sequencer's currentTime and arrives with
+   the rail). Hover therefore has to stop short of full: sharing one declaration
+   with .playing meant clicking a mark changed nothing under the cursor, and a
+   merely-hovered voice painted identically to the one that was actually
+   sounding. Three steps, one variable, no hue — the way a waveform editor
+   does it. */
 
 .voice-print-mark {
   display: inline-flex;
@@ -219,15 +227,19 @@
   outline-offset: 3px;
   border-radius: 4px;
 }
-.voice-print-mark:hover,
+.voice-print-mark:hover {
+  color: rgba(21, 23, 26, 0.82);
+}
 .voice-print-mark.playing {
   color: #15171a;
 }
-/* On the stage the ground is near-black, so the same two densities invert. */
+/* On the stage the ground is near-black, so the same three densities invert. */
 .voice-stage .voice-print-mark {
   color: rgba(255, 255, 255, 0.62);
 }
-.voice-stage .voice-print-mark:hover,
+.voice-stage .voice-print-mark:hover {
+  color: rgba(255, 255, 255, 0.82);
+}
 .voice-stage .voice-print-mark.playing {
   color: #ffffff;
 }
@@ -235,6 +247,23 @@
 .voice-print {
   display: block;
   overflow: visible;
+}
+/* The stage is a flex ROW and its print is 300px — 212px wider than the 88px
+   orb it replaced — while every mark is flex-shrink:0 (right for the 72px slot
+   pill in its own tight row). So on any window narrower than ~950px the fixed
+   mark ate the text block beside it: at 800px the eyebrow, the tagline and the
+   Hear-a-sample pill all wrapped while ~110px of the print stayed empty
+   reference line. The 560px stacking query below was tuned for the orb and
+   never fires in that range. Let the stage's print give way instead — the
+   viewBox means it SCALES rather than crops, so it costs resolution, not
+   information — and cap it at the box so it can't overflow once stacked. */
+.voice-stage > .voice-print-mark {
+  flex-shrink: 1;
+  min-width: 0;
+}
+.voice-stage .voice-print {
+  max-width: 100%;
+  height: auto;
 }
 /* The trace is the voice; the reference line is the chart it hangs on, so it
    stays faint and does NOT take the playing state's ink. */
@@ -383,7 +412,16 @@
   align-items: center;
   text-align: center;
   gap: 7px;
-  padding: 16px 10px 12px;
+  /* 30px of top padding is the HD chip's band, reserved on EVERY card. The chip
+     is absolutely positioned at top-left, so it paints over whatever is under
+     it, and the 118px print — unlike the 56px orb it replaced, which started
+     clear at x≈49 — runs from x≈17 and disappears underneath. Measured in the
+     built extension: 19.7 x 10.5px of the print's TOP-LEFT was covered, i.e.
+     everything above ~176 Hz in the first ~7 frames, so the brighter the voice
+     the more of its mark vanished — the exact inverse of what a shared axis is
+     for. Reserved uniformly rather than only on chipped cards, so prints stay
+     on one baseline across a grid row however the tiers are grouped. */
+  padding: 30px 10px 12px;
   border: 1px solid #e5e3dc;
   border-radius: 14px;
   background: #ffffff;
@@ -408,6 +446,8 @@
     transform: none;
   }
 }
+/* Positioned, so it paints over the print. `top` + the chip's own ~17px must
+   stay inside .voice-card's reserved top padding — see the note there. */
 .voice-card > .voice-tier-chip {
   position: absolute;
   top: 9px;

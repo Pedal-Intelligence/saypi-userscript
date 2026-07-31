@@ -171,6 +171,18 @@ export class VoicesController {
   private printsRequested = new Set<string>();
   /** Only near-viewport rows are measured; rebuilt with the body. */
   private printObserver: IntersectionObserver | null = null;
+  /**
+   * Which voice each observed mark draws. The observer callback gets a DOM node
+   * and needs the voice back; re-deriving it from the catalog would silently
+   * skip the one voice that is on screen but NOT in the catalog — a
+   * grandfathered or stale stored current voice, which the stage renders from
+   * the preference itself (`stagedCurrent`). Weak, so a detached mark from a
+   * previous paint is collected with the node.
+   */
+  private readonly printTargets = new WeakMap<
+    Element,
+    SpeechSynthesisVoiceRemote
+  >();
 
   constructor(
     private container: HTMLElement,
@@ -792,9 +804,8 @@ export class VoicesController {
         (entries) => {
           for (const entry of entries) {
             if (!entry.isIntersecting) continue;
-            const id = (entry.target as HTMLElement).dataset.printVoice;
             this.printObserver?.unobserve(entry.target);
-            const target = this.voiceById(id);
+            const target = this.printTargets.get(entry.target);
             if (target) void this.measurePrint(target);
           }
         },
@@ -802,13 +813,8 @@ export class VoicesController {
         { rootMargin: "300px" }
       );
     }
+    this.printTargets.set(mark, voice);
     this.printObserver.observe(mark);
-  }
-
-  private voiceById(id: string | undefined): SpeechSynthesisVoiceRemote | null {
-    if (!id) return null;
-    const data = this.cache.get(this.activeHost);
-    return data?.voices.find((voice) => voice.id === id) ?? null;
   }
 
   private async measurePrint(voice: SpeechSynthesisVoiceRemote): Promise<void> {

@@ -22,13 +22,39 @@ const css = readFileSync(
   "utf8"
 );
 
-/** The declarations of a single (flat, un-nested) rule, by exact selector. */
+/**
+ * The declarations of a single (flat, un-nested) rule, by exact selector.
+ *
+ * Anchored to the start of a line, or `.voice-print-mark:hover` would happily
+ * resolve to `.voice-stage .voice-print-mark:hover` — a substring match that
+ * turns "this rule is missing" into a silent pass on a DIFFERENT rule. Comments
+ * are stripped too: this file's rules carry long rationales, and a value quoted
+ * in prose must never satisfy an assertion about a declaration.
+ */
 function ruleBody(selector: string): string {
-  const at = css.indexOf(`${selector} {`);
+  const at = css.indexOf(`\n${selector} {`);
   expect(at, `voices.css should declare ${selector}`).toBeGreaterThan(-1);
   const open = css.indexOf("{", at);
   const close = css.indexOf("}", open);
-  return css.slice(open + 1, close);
+  return css.slice(open + 1, close).replace(/\/\*[\s\S]*?\*\//g, "");
+}
+
+/** The ink a print rule paints at: an alpha, with an opaque hex reading as 1. */
+function inkDensity(body: string): number {
+  const rgba = /(?:^|[^-])color:\s*rgba\([^)]*?,\s*([\d.]+)\s*\)/.exec(body);
+  if (rgba) return Number(rgba[1]);
+  expect(
+    /(?:^|[^-])color:\s*#[0-9a-f]{3,8}/i.test(body),
+    "rule should declare a color"
+  ).toBe(true);
+  return 1;
+}
+
+/** First length in a `padding:`/`top:`-style shorthand, in px. */
+function pxOf(body: string, property: string): number {
+  const m = new RegExp(`(?:^|[^-])${property}:\\s*([\\d.]+)px`).exec(body);
+  expect(m, `rule should declare a px ${property}`).toBeTruthy();
+  return Number(m![1]);
 }
 
 const fontSizePx = (body: string): number => {
@@ -161,5 +187,60 @@ describe("Defect 4 — the studio gets the column it is sized for", () => {
     expect(ruleBody("#voices-preference.user-preference-item")).toMatch(
       /max-width:\s*none/
     );
+  });
+});
+
+describe("Defect 5 — the soundprint has to survive the page around it", () => {
+  // The print replaced a 56/88px orb with a 118/300px mark and the orb's
+  // animated equalizer with a single ink value. Three things that were fine at
+  // orb size stopped being fine, and none of them can be caught by rendering
+  // the DOM: JSDOM never lays out, and it has no cascade to query.
+
+  it("keeps 'playing' the darkest thing on the page, ahead of hover", () => {
+    // Sharing one declaration with :hover made a click change nothing under
+    // the cursor, and painted a merely-hovered voice exactly like the one that
+    // was actually sounding. Playing is full ink and nothing else is — that is
+    // what carries "now" until the playhead (which needs the sequencer's
+    // currentTime) arrives with the rail.
+    const resting = inkDensity(ruleBody(".voice-print-mark"));
+    const hover = inkDensity(ruleBody(".voice-print-mark:hover"));
+    const playing = inkDensity(ruleBody(".voice-print-mark.playing"));
+    expect(hover).toBeGreaterThan(resting);
+    expect(playing).toBeGreaterThan(hover);
+    expect(playing).toBe(1);
+  });
+
+  it("keeps the same three steps inverted on the stage's dark ground", () => {
+    const resting = inkDensity(ruleBody(".voice-stage .voice-print-mark"));
+    const hover = inkDensity(ruleBody(".voice-stage .voice-print-mark:hover"));
+    const playing = inkDensity(
+      ruleBody(".voice-stage .voice-print-mark.playing")
+    );
+    expect(hover).toBeGreaterThan(resting);
+    expect(playing).toBeGreaterThan(hover);
+    expect(playing).toBe(1);
+  });
+
+  it("reserves the HD chip's band above the card's print", () => {
+    // The chip is absolutely positioned, so it paints OVER the print, and the
+    // print now runs from the card's left padding rather than starting clear of
+    // the chip the way the 56px orb did. The card's top padding is where the
+    // print begins, so it has to clear the chip's box (~17px at 9px 800-weight).
+    const chipTop = pxOf(ruleBody(".voice-card > .voice-tier-chip"), "top");
+    expect(pxOf(ruleBody(".voice-card"), "padding")).toBeGreaterThanOrEqual(
+      chipTop + 17
+    );
+  });
+
+  it("lets the stage's print give way rather than crush the text beside it", () => {
+    // 300px of flex-shrink:0 inside a flex row ate the eyebrow, the name and
+    // the tagline on any window narrower than ~950px — and the 560px stacking
+    // query below was tuned for the 88px orb, so it never fired in that range.
+    expect(ruleBody(".voice-stage > .voice-print-mark")).toMatch(
+      /flex-shrink:\s*1/
+    );
+    const print = ruleBody(".voice-stage .voice-print");
+    expect(print).toMatch(/max-width:\s*100%/);
+    expect(print).toMatch(/height:\s*auto/);
   });
 });

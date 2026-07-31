@@ -1128,6 +1128,78 @@ describe("VoicesController — soundprints", () => {
     expect(marksOf(container, "marin").length).toBeGreaterThan(0);
     marksOf(container, "marin").forEach((mark) => expect(barsIn(mark)).toBe(0));
   });
+
+  /**
+   * Real browsers take the IntersectionObserver branch; jsdom has no
+   * IntersectionObserver, so it takes the measure-immediately branch and every
+   * test above this one exercises the path users never hit. Stub it, or the
+   * observed path ships unproven.
+   */
+  describe("driven by the IntersectionObserver, as a real browser does", () => {
+    let observed: Element[];
+    beforeEach(() => {
+      observed = [];
+      (globalThis as any).IntersectionObserver = class {
+        constructor(private cb: IntersectionObserverCallback) {}
+        observe(target: Element) {
+          observed.push(target);
+          this.cb(
+            [{ target, isIntersecting: true } as IntersectionObserverEntry],
+            this as unknown as IntersectionObserver
+          );
+        }
+        unobserve() {}
+        disconnect() {}
+        takeRecords() {
+          return [];
+        }
+      };
+    });
+    afterEach(() => {
+      delete (globalThis as any).IntersectionObserver;
+    });
+
+    it("measures the ordinary catalog voices it sees", async () => {
+      const loadPrint = vi.fn(async () => mkPrint());
+      const deps = makeDeps({
+        pi: [mkVoice("marin"), mkVoice("ash")],
+        overrides: { loadPrint },
+      });
+      const { container } = await mount(deps);
+      await flushAsync();
+      expect(observed.length).toBeGreaterThan(0);
+      marksOf(container, "marin").forEach((mark) =>
+        expect(barsIn(mark)).toBeGreaterThan(4)
+      );
+    });
+
+    it("measures a staged voice that is no longer in the catalog", async () => {
+      // The stage renders the STORED preference when the catalog has no entry
+      // for it (grandfathered, or a voice retired since it was chosen), so a
+      // mark can be on screen for a voice `getVoices` never returned. Deriving
+      // the voice back out of the catalog by its DOM id left exactly that mark
+      // as a bare reference line forever — and jsdom could not see it, because
+      // the no-observer branch is handed the voice object directly.
+      const loadPrint = vi.fn(async () => mkPrint());
+      const deps = makeDeps({
+        pi: [mkVoice("marin")],
+        piCurrent: mkVoice("legacy-voice", { name: "Aria" }),
+        overrides: { loadPrint },
+      });
+      const { container } = await mount(deps);
+      await flushAsync();
+
+      expect(loadPrint.mock.calls.map((c: any[]) => c[0].id)).toContain(
+        "legacy-voice"
+      );
+      const staged = q(
+        container,
+        ".voice-stage [data-print-voice='legacy-voice']"
+      )!;
+      expect(staged).toBeTruthy();
+      expect(barsIn(staged)).toBeGreaterThan(4);
+    });
+  });
 });
 
 describe("VoicesController — states", () => {

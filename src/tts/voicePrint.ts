@@ -42,12 +42,40 @@ export const VOICING_GATE_FLOOR = 1e-4;
 export const F0_MIN_HZ = 60;
 export const F0_MAX_HZ = 320;
 /**
- * Normalised-correlation floor for calling a frame voiced. Guards against the
- * estimator inventing a pitch out of a fricative — and, with the lag clamp and
- * the median-over-voiced-frames rule, against octave errors (validated across
- * three estimator settings: rank agreement 0.97–0.98, no octave errors).
+ * Voicing floor, as a FRACTION of what the analysis window can actually deliver
+ * at the winning lag — not an absolute correlation. Guards against the
+ * estimator inventing a pitch out of a fricative.
+ *
+ * Relative for the same reason `VOICING_GATE_RATIO` is: an absolute threshold
+ * against a quantity whose scale varies per voice throws away exactly the
+ * voices it should be measuring. Here the varying scale is pitch, not loudness.
+ * `corr[lag]` normalises a correlation summed over `frameLength − lag` products
+ * by the FULL frame's energy, so the ceiling falls steeply as the lag grows:
+ * over a 32 ms frame a perfectly periodic tone can only reach 0.52 at 100 Hz,
+ * 0.35 at 80 Hz and 0.14 at 60 Hz (see `voicingCeiling`). Against a flat 0.30 a
+ * deep voice therefore fails the voicing test far more often than a bright one
+ * — measured on the fixtures, Onyx drew 49 of its 73 gated frames (0.67) beside
+ * Addison's 55 of 57 (0.96), and the dropped frames clustered in Onyx's lowest
+ * stretches, so its print went moth-eaten exactly where it went deepest. Scaling
+ * the floor by the ceiling lifts Onyx to 0.95 with its median unmoved (92 → 91
+ * Hz, 0.23 semitones from the seed).
+ *
+ * This changes only which frames are ACCEPTED, never which lag WINS: the argmax
+ * still runs on the lag-0-normalised correlation, which is biased against long
+ * lags, and that bias is the octave-down guard the three-setting validation
+ * (rank agreement 0.97–0.98, no octave errors) rests on. A bias-corrected NCCF
+ * would move the argmax and is the classic source of octave errors; this does
+ * not touch it. Every frame the old floor accepted is still accepted, at the
+ * same pitch — the change is purely additive.
  */
 export const F0_MIN_CORRELATION = 0.3;
+/**
+ * …and however long the lag, the effective floor never drops below this. At the
+ * 60 Hz end of the band the ceiling is 0.14, which would scale the floor down
+ * to 0.04 — permissive enough to call noise a voice. Inert on the whole fixture
+ * set (every accepted frame clears it), so it is a guard rail, not a tuning.
+ */
+export const F0_MIN_CORRELATION_FLOOR = 0.15;
 /** Below this many voiced frames the pitch track is not worth drawing (§6.2 fallback ladder). */
 export const MIN_VOICED_FRAMES = 4;
 
@@ -119,7 +147,8 @@ export function toMono8k(samples: Float32Array, sampleRate: number): Float32Arra
  * 1. Frame at 32 ms / 10 ms hop and take each frame's RMS.
  * 2. Gate at `max(0.12 × p95(rms), 1e-4)` — relative, see `VOICING_GATE_RATIO`.
  * 3. For every gated frame, estimate F0 by autocorrelation over the 60–320 Hz
- *    lag band, accepted at normalised correlation > 0.30.
+ *    lag band, accepted at 0.30 of the correlation that lag can reach — see
+ *    `F0_MIN_CORRELATION`, which is relative for the same reason the gate is.
  * 4. Trim to the speech span and report the median pitch and the voiced RMS.
  */
 export function extractVoicePrint(
@@ -199,16 +228,57 @@ export function extractVoicePrint(
   };
 }
 
+const ceilingCache = new Map<number, Float64Array>();
+
+/**
+ * The highest normalised correlation a *perfectly* periodic frame can reach at
+ * each lag, under this estimator's lag-0 normalisation — i.e. the Hann window's
+ * own normalised autocorrelation, indexed by lag.
+ *
+ * Both halves of the shortfall are in here: the correlation sums only
+ * `frameLength − lag` products while the denominator counts all of them, and
+ * the window tapers, so the surviving products are the quiet ones. It is a
+ * property of the window alone, so one table per frame length serves the whole
+ * catalog; a print is 256 samples, so in practice there is exactly one.
+ */
+export function voicingCeiling(frameLength: number): Float64Array {
+  const cached = ceilingCache.get(frameLength);
+  if (cached) return cached;
+  const hann = new Float64Array(frameLength);
+  for (let i = 0; i < frameLength; i++) {
+    hann[i] = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (frameLength - 1));
+  }
+  let energy = 0;
+  for (let i = 0; i < frameLength; i++) energy += hann[i] * hann[i];
+  const table = new Float64Array(frameLength);
+  for (let lag = 0; lag < frameLength; lag++) {
+    let sum = 0;
+    for (let i = 0; i + lag < frameLength; i++) sum += hann[i] * hann[i + lag];
+    table[lag] = energy > 0 ? sum / energy : 0;
+  }
+  ceilingCache.set(frameLength, table);
+  return table;
+}
+
+/** The correlation a frame at this lag must beat to count as voiced. */
+export function voicingFloor(lag: number, frameLength: number): number {
+  const ceiling = voicingCeiling(frameLength)[lag] ?? 0;
+  return Math.max(F0_MIN_CORRELATION_FLOOR, F0_MIN_CORRELATION * ceiling);
+}
+
 /**
  * F0 of one frame by autocorrelation, or 0 when the frame is not voiced.
  *
  * Normalisation is against lag 0 (not against the overlapping region), which
  * biases *against* long lags — the estimator this repo validated. A
  * bias-corrected NCCF makes low lags cheaper to win and is the classic source
- * of octave-down errors; three settings of THIS estimator produced none, so it
- * is kept exactly as measured. The parabolic step only refines the peak the
- * argmax already chose, which matters at 8 kHz where adjacent lags are ~8 Hz
- * apart up at Addison's 260 Hz.
+ * of octave-down errors; three settings of THIS estimator produced none, so the
+ * peak PICKING is kept exactly as measured. What that bias must not do is decide
+ * whether the winner counts as a voice at all, so the acceptance floor is scaled
+ * by the same bias (`voicingFloor`) — see `F0_MIN_CORRELATION`.
+ *
+ * The parabolic step only refines the peak the argmax already chose, which
+ * matters at 8 kHz where adjacent lags are ~8 Hz apart up at Addison's 260 Hz.
  */
 function estimateF0(
   pcm: Float32Array,
@@ -246,7 +316,7 @@ function estimateF0(
       bestLag = lag;
     }
   }
-  if (bestLag < 0 || best <= F0_MIN_CORRELATION) return 0;
+  if (bestLag < 0 || best <= voicingFloor(bestLag, frameLength)) return 0;
 
   let lag = bestLag;
   if (bestLag > minLag && bestLag < maxLag) {

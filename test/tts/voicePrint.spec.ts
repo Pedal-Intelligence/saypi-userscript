@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
   extractVoicePrint,
+  F0_MIN_CORRELATION,
+  F0_MIN_CORRELATION_FLOOR,
   gainFor,
   loadVoicePrintStore,
   MIN_PREVIEW_GAIN,
@@ -13,6 +15,8 @@ import {
   saveVoicePrint,
   TARGET_VOICED_DB,
   toVoicePrintStore,
+  voicingCeiling,
+  voicingFloor,
   VoicePrint,
   VoicePrintLoader,
   VOICE_PRINTS_KEY,
@@ -60,6 +64,19 @@ const inkedRatio = (print: VoicePrint): number =>
 
 const voicedFrames = (print: VoicePrint): number[] =>
   print.f0.filter((hz) => hz > 0);
+
+/**
+ * Of the frames LOUD enough to draw, how many actually carry a pitch.
+ *
+ * `amp[i] > 0` is exactly "this frame passed the voicing gate" (the extractor
+ * zeroes the others), so this isolates the pitch estimator's hit rate from the
+ * clip's own pause structure — which `inkedRatio` conflates, and which differs
+ * legitimately between voices.
+ */
+const pitchedRatio = (print: VoicePrint): number => {
+  const gated = print.amp.filter((a) => a > 0).length;
+  return gated === 0 ? 0 : voicedFrames(print).length / gated;
+};
 
 describe("extractVoicePrint — measured against the real clips", () => {
   it("puts Onyx, the catalog's deepest voice, at its measured 92 Hz", () => {
@@ -146,6 +163,69 @@ describe("extractVoicePrint — measured against the real clips", () => {
     print.f0.forEach((hz, i) => {
       if (print.amp[i] === 0) expect(hz).toBe(0);
     });
+  });
+
+  /**
+   * The same lesson as the voicing gate, one axis over. `corr[lag]` divides a
+   * correlation summed over `frameLength − lag` products by the WHOLE frame's
+   * energy, so the reachable correlation collapses as the lag grows — 0.52 at
+   * 100 Hz, 0.35 at 80 Hz, 0.14 at 60 Hz over a 32 ms frame. Against a flat
+   * 0.30 floor a deep voice therefore failed the voicing test far more often
+   * than a bright one: Onyx drew 49 of its 73 gated frames where Addison drew
+   * 55 of 57, and the misses clustered in Onyx's lowest stretches, so its print
+   * went moth-eaten exactly where it went deepest — while the page invites you
+   * to read those prints against each other on one axis.
+   */
+  it("draws a deep voice as densely as a bright one (the floor is relative)", () => {
+    const onyx = extractVoicePrint(loadFixture("onyx"), PRINT_SAMPLE_RATE);
+    const sage = extractVoicePrint(loadFixture("sage"), PRINT_SAMPLE_RATE);
+    const addison = extractVoicePrint(loadFixture("addison"), PRINT_SAMPLE_RATE);
+    // Onyx at 92 Hz and Addison at 259 Hz are 2.8 octaves-ish apart and are the
+    // two ends of the catalog; their hit rates have to be within a hair.
+    expect(pitchedRatio(onyx)).toBeGreaterThan(0.9);
+    expect(pitchedRatio(sage)).toBeGreaterThan(0.9);
+    expect(pitchedRatio(addison)).toBeGreaterThan(0.9);
+    expect(
+      Math.abs(pitchedRatio(addison) - pitchedRatio(onyx))
+    ).toBeLessThan(0.1);
+    // …and the ordering axis is unmoved by the extra frames.
+    expect(onyx.medF0).toBeGreaterThan(87);
+    expect(onyx.medF0).toBeLessThan(97);
+    expect(addison.medF0).toBeGreaterThan(250);
+  });
+
+  it("keeps the low end of Onyx's contour instead of dropping out of it", () => {
+    // The dropped frames were not scattered: they were the descent past ~85 Hz,
+    // which is the most characteristic part of the catalog's deepest voice —
+    // and the deeper the frame, the likelier the flat floor was to reject it.
+    // Under the flat floor 10 of Onyx's sub-85 Hz frames survived; now 22 do.
+    const onyx = extractVoicePrint(loadFixture("onyx"), PRINT_SAMPLE_RATE);
+    expect(voicedFrames(onyx).filter((hz) => hz < 85).length).toBeGreaterThan(
+      15
+    );
+  });
+
+  it("scales the voicing floor by what the window can reach at that lag", () => {
+    const frame = Math.round((32 / 1000) * PRINT_SAMPLE_RATE); // 256
+    const ceiling = voicingCeiling(frame);
+    // A frame correlated with itself is the definition of 1.
+    expect(ceiling[0]).toBeCloseTo(1, 6);
+    // …and the reachable correlation falls monotonically with the lag.
+    for (let lag = 1; lag < frame; lag++) {
+      expect(ceiling[lag]).toBeLessThanOrEqual(ceiling[lag - 1] + 1e-12);
+    }
+    const lagOf = (hz: number) => Math.round(PRINT_SAMPLE_RATE / hz);
+    expect(ceiling[lagOf(100)]).toBeCloseTo(0.515, 2);
+    expect(ceiling[lagOf(60)]).toBeCloseTo(0.139, 2);
+    // Which makes the floor a constant FRACTION of the reachable value…
+    expect(voicingFloor(lagOf(200), frame)).toBeCloseTo(
+      F0_MIN_CORRELATION * ceiling[lagOf(200)],
+      6
+    );
+    // …bounded below, so the 60 Hz end can't be talked down to accepting noise.
+    expect(voicingFloor(lagOf(60), frame)).toBe(F0_MIN_CORRELATION_FLOOR);
+    // A bright voice sees essentially the floor it always saw.
+    expect(voicingFloor(lagOf(260), frame)).toBeGreaterThan(0.27);
   });
 
   it("returns an empty print for silence rather than inventing one", () => {
