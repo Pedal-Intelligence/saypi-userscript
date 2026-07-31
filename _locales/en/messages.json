@@ -1381,7 +1381,7 @@
     "description": "Authored personality tagline for the 'Fable' voice (settings Voices studio; client-side voice identity map)."
   },
   "voiceTagline_marin": {
-    "message": "Warm and grounded — a morning-radio calm",
+    "message": "Warm, morning-radio calm",
     "description": "Authored personality tagline for the 'Marin' voice (settings Voices studio; client-side voice identity map)."
   },
   "voiceTagline_nova": {

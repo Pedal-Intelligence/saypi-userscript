@@ -207,7 +207,19 @@ describe("the row fits the column the settings tab actually gives it", () => {
   const RAIL_WIDTH = 692;
   /** Measured widths of the live Pi catalog's descriptions, in px. */
   const TWIN_DISAMBIGUATOR = 121; // "Speaks 33 languages" — the load-bearing one
-  const LONGEST_TAGLINE = 171; // "Easy, conversational American" (Joey, an HD row)
+  /**
+   * "Easy, conversational American" (Joey, an HD row) — measured at 171px.
+   *
+   * This constant went stale once and the test passed green while a real
+   * catalog tagline visibly ellipsised in the UI: Marin used to carry
+   * "Warm and grounded — a morning-radio calm", 40 chars against a 21-char
+   * median, and nothing here noticed. A measured px constant cannot see the
+   * strings it is supposed to be measuring, so the guard below re-derives the
+   * longest tagline from the shipped messages and fails if it outgrows the one
+   * this number was taken from.
+   */
+  const LONGEST_TAGLINE = 171;
+  const LONGEST_TAGLINE_CHARS = "Easy, conversational American".length;
   const HD_BADGE = 17.16;
 
   /** What the description column is actually left with, from the sheet. */
@@ -249,6 +261,30 @@ describe("the row fits the column the settings tab actually gives it", () => {
       LONGEST_TAGLINE
     );
     expect(descriptionBudget(0)).toBeGreaterThanOrEqual(LONGEST_TAGLINE);
+  });
+
+  it("keeps the measured px constant honest against the shipped strings", () => {
+    // The budget above is a px measurement of ONE tagline. It can only stand in
+    // for the whole set while that tagline is still the longest, so re-derive
+    // that from the messages themselves rather than trusting the comment.
+    const messages = JSON.parse(
+      readFileSync(resolve(root, "_locales/en/messages.json"), "utf8")
+    ) as Record<string, { message: string }>;
+    const taglines = Object.entries(messages)
+      .filter(([key]) => key.startsWith("voiceTagline_"))
+      .map(([key, v]) => [key, v.message] as const);
+    expect(taglines.length).toBeGreaterThan(10);
+
+    const longest = taglines.reduce((a, b) =>
+      b[1].length > a[1].length ? b : a
+    );
+    expect(
+      longest[1].length,
+      `${longest[0]} ("${longest[1]}") is now the longest tagline at ` +
+        `${longest[1].length} chars, so LONGEST_TAGLINE's ${LONGEST_TAGLINE}px ` +
+        `no longer bounds the set — re-measure it, or bring the tagline back ` +
+        `into the 2-4 word register its siblings keep.`
+    ).toBeLessThanOrEqual(LONGEST_TAGLINE_CHARS);
   });
 });
 
