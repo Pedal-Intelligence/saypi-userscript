@@ -137,30 +137,47 @@ describe("the page is a chart, not a directory", () => {
 });
 
 describe("ink is one variable in three steps", () => {
-  // Playing is FULL ink and nothing else is — that is what carries "now"
-  // alongside the playhead, and it is colourblind-safe in a way a hue is not.
-  it("keeps 'playing' the darkest thing on the page, ahead of hover and focus", () => {
-    const resting = inkDensity(ruleBody(".voice-row"));
-    const hover = inkDensity(ruleBody(".voice-row:hover"));
-    const focused = inkDensity(ruleBody(".voice-row.focused"));
+  // The three steps are the HEARD STATE (design §8) and nothing else: never
+  // heard → heard → playing. Playing is FULL ink and nothing else is, which is
+  // what carries "now" alongside the playhead, colourblind-safe in a way a hue
+  // is not.
+  it("runs never-heard → heard → playing, and stops there", () => {
+    const unheard = inkDensity(ruleBody(".voice-row"));
+    const heard = inkDensity(ruleBody(".voice-row.heard"));
     const playing = inkDensity(ruleBody(".voice-row.playing"));
-    expect(hover).toBeGreaterThan(resting);
-    expect(focused).toBe(hover);
-    expect(playing).toBeGreaterThan(hover);
+    expect(heard).toBeGreaterThan(unheard);
+    expect(playing).toBeGreaterThan(heard);
     expect(playing).toBe(1);
+    // Heard gets MORE ink, not less: NN/g Guideline 37 warns off grey for a
+    // visited state (it reads as unavailable), and a voice you have heard is
+    // the one most likely to win.
+    expect(heard).toBeGreaterThanOrEqual(0.7);
+  });
+
+  it("leaves hover and focus out of the ink entirely", () => {
+    // A fourth density would either sit below `heard` — dimming a print the
+    // moment you point at it — or above it, at which point pointing at a voice
+    // looks like playing it. Standing on a row is its ground, its tagline and
+    // its actions; the print keeps saying what it always said.
+    expect(ruleBody(".voice-row:hover")).not.toMatch(/(?:^|[^-])color:/);
+    expect(ruleBody(".voice-row.focused")).not.toMatch(/(?:^|[^-])color:/);
+    expect(ruleBody(".voice-row:hover")).toMatch(/background:\s*#f1efe9/);
   });
 
   it("keeps the soundprint legible at rest, not only under the cursor", () => {
     // The trace is the page's ONLY data and it fills from the row's
-    // currentColor, so the resting ink is what a reader who is not hovering
-    // anything actually sees on 21 of 22 rows. WCAG 1.4.11 asks 3:1 of a
-    // graphic you need in order to understand the content; below that the
-    // traces read as grey dust and the 1.28:1 reference line becomes the most
-    // legible mark on the row — a chart whose gridlines outrank its data.
+    // currentColor, so the never-heard ink is what a first-time reader sees on
+    // every row of the page. WCAG 1.4.11 asks 3:1 of a graphic you need in
+    // order to understand the content; below that the traces read as grey dust
+    // and the 1.23:1 reference line becomes the most legible mark on the row —
+    // a chart whose gridlines outrank its data.
     //
-    // Design §8's 0.22 is the "never heard" step of a three-state ink whose
-    // other two steps arrive with heard memory (slice 4). Until they do it is
-    // not a state, it is the page.
+    // Design §8's 0.22 is 1.60:1, and this floor deliberately overrides it —
+    // confirmed by eye against the live catalog, where the bars (1.4px, with
+    // gaps) lose more to anti-aliasing than the continuous reference line
+    // does, so equal measured contrast is not equal presence. "Develops as you
+    // listen" is only a good idea while the undeveloped state still reads as a
+    // drawing; the heard step (7.10:1 against this 3.20:1) carries it instead.
     const resting = inkDensity(ruleBody(".voice-row"));
     // Both grounds: the design's warm #FBFAF7, and the white preference card
     // the rail actually sits on today (only the control bar took the ground).
@@ -176,9 +193,12 @@ describe("ink is one variable in three steps", () => {
     ).toBeGreaterThan(2);
   });
 
-  it("declares .playing after :hover, because they tie on specificity", () => {
+  it("declares .playing after .heard, because they tie on specificity", () => {
+    // Both are (0,2,0), so source order is the whole cascade here: declared
+    // the other way round, the voice that is sounding would paint at the heard
+    // density the instant its first qualifying play landed — mid-clip.
     expect(css.indexOf("\n.voice-row.playing {")).toBeGreaterThan(
-      css.indexOf("\n.voice-row:hover {")
+      css.indexOf("\n.voice-row.heard {")
     );
   });
 
@@ -354,7 +374,20 @@ describe("the sweep, its readout, and the Show: filter", () => {
   });
 
   it("pushes the filter to the far end of the bar, opposite the sweep", () => {
-    expect(ruleBody(".voice-filter")).toMatch(/margin-left:\s*auto/);
+    // On the SLOT, not the control: the option set changes without a repaint
+    // (`Not yet heard` appears the moment anything has been heard), so the
+    // control is replaced in place — and an empty slot must collapse against
+    // the right edge rather than leave the auto margin behind mid-bar.
+    expect(ruleBody(".voice-filter-slot")).toMatch(/margin-left:\s*auto/);
+    expect(ruleBody(".voice-filter")).not.toMatch(/margin-left:\s*auto/);
+  });
+
+  it("sets the heard counter in tabular figures, and hides it when it is empty", () => {
+    // It ticks up while the reader is looking at it; proportional digits would
+    // shuffle the words beside it on every voice.
+    const counter = ruleBody(".voice-heard-count");
+    expect(counter).toMatch(/font-variant-numeric:\s*tabular-nums/);
+    expect(ruleBody(".voice-heard-count:empty")).toMatch(/display:\s*none/);
   });
 });
 

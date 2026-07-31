@@ -78,6 +78,8 @@ describe("every substituted string declares its placeholders", () => {
     ["voicesNowPlaying", 1],
     ["voicesMenuSummary", 3],
     ["voicesPlayAllN", 1],
+    ["voicesPlayNewN", 1],
+    ["voicesHeardCount", 2],
     ["voicesSweepPosition", 2],
     ["voicesSampleFailed", 1],
     ["voicesTooManyToPlay", 2],
@@ -118,7 +120,15 @@ describe("counts read correctly at 1 — Chrome i18n has no plural forms", () =>
 
   it("keeps the sweep's own counts on bare numbers", () => {
     expect(en.voicesPlayAllN?.message).toBe("Play all ($count$)");
+    expect(en.voicesPlayNewN?.message).toBe("Play new ($count$)");
     expect(en.voicesSweepPosition?.message).toBe("$index$ of $total$");
+  });
+
+  it("phrases the heard counter as a ratio, which reads at every value", () => {
+    // "1 of 22 heard" and "22 of 22 heard" are both correct English with no
+    // singular twin — which is the whole rule, Chrome i18n having no plurals.
+    expect(en.voicesHeardCount?.message).toBe("$heard$ of $total$ heard");
+    expect(en.voicesHeardCount.message).not.toMatch(/voices?/i);
   });
 
   it("abbreviates the refusal's minutes, because 1 is its COMMON case", () => {
@@ -167,8 +177,20 @@ describe("the sweep and the filter say what they do", () => {
   it("labels the filter as a verb the list obeys", () => {
     expect(en.voicesShowLabel?.message).toBe("Show");
     expect(en.voicesShowAll?.message).toBe("All voices");
+    expect(en.voicesShowUnheard?.message).toBe("Not yet heard");
     expect(en.voicesShowHd?.message).toBe("HD only");
     expect(en.voicesShowEveryday?.message).toBe("Everyday only");
+  });
+
+  it("names the heard state by the ear, never by a checkmark", () => {
+    // Ink density is the expression (design §8). No string on this page says
+    // "played", "listened", "done" or "✓" — the print says it.
+    for (const key of ["voicesShowUnheard", "voicesHeardCount"]) {
+      expect(en[key].message).not.toMatch(/✓|check|done|complete/i);
+    }
+    expect(controllerSrc).toMatch(/"voicesShowUnheard"/);
+    expect(controllerSrc).toMatch(/"voicesHeardCount"/);
+    expect(controllerSrc).toMatch(/"voicesPlayNewN"/);
   });
 
   it("tells a blocked page what to DO, not what went wrong", () => {

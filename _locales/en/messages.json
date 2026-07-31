@@ -1262,9 +1262,33 @@
       }
     }
   },
+  "voicesPlayNewN": {
+    "message": "Play new ($count$)",
+    "description": "Button in the settings Voices control bar on a return visit: plays only the listed voices you have not listened to yet; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
   "voicesStopPlayback": {
     "message": "Stop",
     "description": "Button in the settings Voices control bar that stops the run of samples started by 'Play all'."
+  },
+  "voicesHeardCount": {
+    "message": "$heard$ of $total$ heard",
+    "description": "Progress readout in the settings Voices control bar: how many of the listed voices the user has already listened to. Bare numbers, so it reads correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
   },
   "voicesSweepPosition": {
     "message": "$index$ of $total$",
@@ -1287,6 +1311,10 @@
   "voicesShowAll": {
     "message": "All voices",
     "description": "Option in the settings Voices 'Show' filter: no filtering, every voice is listed."
+  },
+  "voicesShowUnheard": {
+    "message": "Not yet heard",
+    "description": "Option in the settings Voices 'Show' filter: list only the voices the user has not listened to yet."
   },
   "voicesShowHd": {
     "message": "HD only",

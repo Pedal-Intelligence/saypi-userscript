@@ -231,12 +231,30 @@
   white-space: nowrap;
 }
 
+/* The filter lives in a slot the control bar can refill, because its option
+   set changes without the rail repainting (`Not yet heard` appears the moment
+   anything has been heard). The slot carries the auto margin, so an empty one
+   — a catalog with nothing to filter — collapses against the right edge
+   instead of leaving a gap mid-bar. */
+.voice-filter-slot {
+  display: inline-flex;
+  margin-left: auto;
+}
 .voice-filter {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  margin-left: auto;
   white-space: nowrap;
+}
+/* `9 of 22 heard`. Tabular figures because it ticks up while you are looking
+   at it, and proportional digits would shuffle the words beside it. Absent —
+   not "0 of 0" — on a page with nothing auditionable on it. */
+.voice-heard-count {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.voice-heard-count:empty {
+  display: none;
 }
 .voice-filter-select {
   border: 1px solid #e6e3da;
@@ -286,36 +304,51 @@
   padding: 0 20px 0 14px;
   border-left: 3px solid transparent;
   cursor: pointer;
-  /* The resting ink of the soundprint — the page's only data. #15171A crosses
-     WCAG 1.4.11's 3:1 for a graphic you need in order to understand the
-     content at alpha 0.46 on white and 0.46 on the warm ground; 0.48 clears
-     both with headroom, and a trace you cannot tell from its own reference
-     line is not a chart.
+  /* NEVER HEARD — the first of the three ink densities (design §8), and the
+     only one a first visit has. Nothing on this page is known to you yet, and
+     the rail says so: a page of under-drawings that develops as you work down
+     it, with no suppression threshold and no mass transition when some magic
+     count trips.
 
-     Design §8's 0.22 is the "never heard" value of a THREE-state ink whose
-     other two states arrive with heard memory (slice 4). Until they do, 0.22
-     is not a state — it is the permanent appearance of every row that is not
-     under the cursor, and it measures 1.60:1 against the card, below the
-     1.28:1 reference line it is supposed to be read against. When slice 4
-     lands, "heard" darkens from here; the floor stays at the legibility
-     threshold rather than dropping under it. */
+     0.48, NOT design §8's 0.22, and the difference was settled by looking at
+     the live 22-voice catalog rather than by argument. At 0.22 the trace
+     measures 1.60:1 against the ground while the reference line it hangs on
+     measures 1.23:1 — the data barely out-ranks the gridline, and because the
+     trace is 1.4px bars with gaps while the line is continuous, equal contrast
+     does not mean equal presence: the broken mark loses far more to
+     anti-aliasing. At 1:1 it reads as dust, and it fails WCAG 1.4.11's 3:1 for
+     a graphic you need in order to understand the content. 0.48 is the lowest
+     value that clears 3:1 (3.20:1 here).
+
+     The development survives the change, because the ratio does: heard is
+     7.10:1 against this 3.20:1, still more than twice the contrast, and the
+     page-level half of heard memory (the counter, `Not yet heard`, `Play new`)
+     carries the rest — which is the half design §8 itself calls the one to
+     ship if only one ships. */
   color: rgba(21, 23, 26, 0.48);
   transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
 /* No rule between rows. Separation is the rhythm and the prints.
-   Ink is one variable in three steps, the way a waveform editor does it —
-   colourblind-safe, and it lets 22 rows coexist without becoming a wall of
-   Skittles. Playing is FULL ink and nothing else is, so hover has to stop
-   short of it: sharing one value would paint a merely-hovered voice exactly
-   like the one that is actually sounding. `.playing` sits last because it ties
-   `:hover` on specificity and source order is what decides. */
+
+   HEARD — more ink, not less. NN/g Guideline 37 warns specifically off grey
+   for a visited state (it reads as *unavailable*), and dimming is backwards
+   anyway: a voice you have heard is the one most likely to win. Hover and
+   focus deliberately do NOT touch the ink, so this stays a three-value scale
+   the way a waveform editor's is — colourblind-safe, and readable as a chart
+   across 22 rows. Standing on a row is expressed by its ground, its tagline
+   and its actions; the print keeps saying what it always said.
+
+   PLAYING is the same variable at full, which is what makes playing → heard a
+   fade to 0.72 that explains itself. It sits last because it ties `.heard` on
+   specificity and source order is what decides. */
 .voice-row:hover {
   background: #f1efe9;
-  color: rgba(21, 23, 26, 0.62);
 }
 .voice-row.focused {
   background: #f1efe9;
-  color: rgba(21, 23, 26, 0.62);
+}
+.voice-row.heard {
+  color: rgba(21, 23, 26, 0.72);
 }
 .voice-row.playing {
   color: #15171a;

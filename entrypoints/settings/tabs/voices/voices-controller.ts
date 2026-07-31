@@ -12,6 +12,13 @@ import {
 import { getVoiceTier } from "../../../../src/tts/VoiceCuration";
 import { getVoiceIdentity } from "../../../../src/tts/VoiceIdentity";
 import { pitchOf } from "../../../../src/tts/VoicePitch";
+import {
+  isHeard,
+  loadHeardStore,
+  markHeardAt,
+  recordVoiceHeard,
+  type VoiceHeardStore,
+} from "../../../../src/tts/VoiceHeard";
 import { defaultLocalStorage } from "../../../../src/storage/localKeyStorage";
 import {
   DupStrategy,
@@ -62,7 +69,7 @@ const TYPE_AHEAD_MS = 800;
  * audition toggle this one has no permanent-preference character. It resets
  * with the tab, exactly like the sweep.
  */
-export type VoiceFilter = "all" | "hd" | "everyday";
+export type VoiceFilter = "all" | "unheard" | "hd" | "everyday";
 
 /**
  * `Play all` refuses above this many voices (design §10). Not a technical
@@ -150,6 +157,24 @@ export interface VoiceStudioDeps {
    * leave it out rather than mocking a decoder.
    */
   loadPrint?(voice: SpeechSynthesisVoiceRemote): Promise<VoicePrint | null>;
+  /**
+   * What this profile has already listened to (design §8). Optional: a studio
+   * with no store wired draws every print at the never-heard density, which is
+   * exactly what a first visit looks like.
+   */
+  loadHeard?(): Promise<VoiceHeardStore>;
+  /**
+   * Subscribe to QUALIFYING PLAYS — a clip that actually sounded for long
+   * enough, as opposed to a button that was clicked.
+   *
+   * The sequencer is the only honest emitter of this (design §8), which is why
+   * it is a subscription rather than something the rail decides for itself:
+   * the state line fires identically for pause, ended and error, so a caller
+   * watching playback literally cannot tell why a clip stopped — and clicking
+   * a row is not hearing a voice. Persisting the mark belongs to the same
+   * seam, so the rail never touches storage for it.
+   */
+  onHeard?(fn: (voiceId: string) => void): () => void;
   /** Does walking the rail with the arrow keys audition? (design §3) */
   loadArrowAudition?(): Promise<boolean>;
   setArrowAudition?(on: boolean): Promise<void>;
@@ -184,12 +209,17 @@ let printLoader: VoicePrintLoader | null = null;
  * what makes an interruption free: `play()` bumps the session token, so the
  * cancelled sequence's outstanding continuations are already fenced out.
  */
+function ensureSequencer(): PreviewSequencer {
+  if (!previewSequencer) previewSequencer = new PreviewSequencer();
+  return previewSequencer;
+}
+
 function auditionThrough(
   items: AuditionItem[],
   onState: (state: AuditionState) => void
 ): void {
   if (items.length === 0) return;
-  if (!previewSequencer) previewSequencer = new PreviewSequencer();
+  previewSequencer = ensureSequencer();
   previewSubscription?.();
   previewSubscription = previewSequencer.subscribe(onState);
   previewSequencer.play(items);
@@ -223,6 +253,16 @@ function defaultDeps(): VoiceStudioDeps {
       if (!printLoader) printLoader = new VoicePrintLoader();
       return printLoader.get(voice.id, voice.sample_url);
     },
+    loadHeard: () => loadHeardStore(),
+    // Straight off the sequencer, because it is the one thing that knows a
+    // clip PLAYED. Persisted here rather than in the rail, and never awaited:
+    // the ink is owed to the ear, not to storage, so the row inks in on the
+    // same tick and a failed write costs nothing but a mark (VoiceHeard.ts).
+    onHeard: (fn) =>
+      ensureSequencer().onHeard((voiceId) => {
+        void recordVoiceHeard(voiceId);
+        fn(voiceId);
+      }),
     // Absence means ON: the toggle only ever writes `false`, so a fresh
     // profile arrows-and-auditions without a storage round trip deciding it.
     loadArrowAudition: () =>
@@ -331,6 +371,25 @@ export class VoicesController {
   private refusal: { count: number; minutes: number } | null = null;
   /** Which slice of the catalog the rail is showing (the `Show:` control). */
   private filter: VoiceFilter = "all";
+  /**
+   * What this profile has already heard (design §8) — the print's ink density,
+   * the counter, the `Not yet heard` option and `Play new (N)` all read it.
+   *
+   * Held whole rather than as a set of ids so the rail and the persisted map
+   * are updated through the same pure helper, cap and all.
+   */
+  private heardStore: VoiceHeardStore = {};
+  private unsubscribeHeard: (() => void) | null = null;
+  /**
+   * Ids of the in-scope catalog's AUDITIONABLE voices, from the last paint.
+   *
+   * Catalog-wide on purpose: it is the population the heard filter's own
+   * availability is decided over, and deciding that from the painted rows
+   * would be circular — they are already narrowed by the answer.
+   */
+  private clipVoiceIds: string[] = [];
+  /** Does this catalog carry both tiers? Only then is price an axis at all. */
+  private tierFilter = false;
   /** Display names for everything the control bar might have to name. */
   private nameById = new Map<string, string>();
   /** The id order currently painted — the input to the reorder check. */
@@ -385,9 +444,18 @@ export class VoicesController {
     studio.appendChild(this.body);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
     window.addEventListener("pagehide", this.onPageHide);
-    // Read before the first paint: the chip is rendered by the control bar, and
-    // a chip that flips a beat after the rail appears is a chip nobody trusts.
-    this.arrowAudition = (await this.deps.loadArrowAudition?.()) ?? true;
+    // Both read before the first paint, and together: the chip is rendered by
+    // the control bar, and a chip that flips a beat after the rail appears is a
+    // chip nobody trusts — and the heard marks ARE the ink, so landing them
+    // after the paint would darken half the rail under the reader's eyes.
+    const [arrowAudition, heard] = await Promise.all([
+      this.deps.loadArrowAudition?.() ?? Promise.resolve(true),
+      this.deps.loadHeard?.() ?? Promise.resolve<VoiceHeardStore>({}),
+    ]);
+    this.arrowAudition = arrowAudition;
+    this.heardStore = heard;
+    this.unsubscribeHeard =
+      this.deps.onHeard?.((voiceId) => this.onVoiceHeard(voiceId)) ?? null;
     await this.render();
   }
 
@@ -434,6 +502,11 @@ export class VoicesController {
   destroy(): void {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     window.removeEventListener("pagehide", this.onPageHide);
+    // The sequencer outlives this studio (module-scoped, so a host switch or a
+    // tab remount never orphans sounding audio) — so a heard subscription left
+    // behind would keep inking rows that no longer exist.
+    this.unsubscribeHeard?.();
+    this.unsubscribeHeard = null;
     this.stopAudition();
   }
 
@@ -578,12 +651,23 @@ export class VoicesController {
 
     this.seedPair(hostId, vm);
 
+    // What the `Show:` control can offer, decided from the catalog rather than
+    // from the rows (which are about to be narrowed by the answer).
+    this.clipVoiceIds = vm.catalog
+      .filter((voice) => !!voice.sample_url)
+      .map((voice) => voice.id);
+    // The same test VoiceCuration uses to decide whether price is even an axis
+    // on this host: one tier alone is not a distinction.
+    this.tierFilter = new Set(vm.catalog.map(getVoiceTier)).size > 1;
+
     // A filter the catalog no longer supports (a host switch to a single-tier
-    // catalog, a server change) would leave the rail narrowed by a control
-    // that is no longer on screen to widen it again.
-    if (!this.filterOptions(vm).some((option) => option.value === this.filter)) {
-      this.filter = "all";
-    }
+    // catalog, a server change, or `Not yet heard` once nothing is left
+    // unheard) would leave the rail narrowed by a control that is no longer on
+    // screen to widen it again — or, worse, empty.
+    const chosen = this.filterOptions().find(
+      (option) => option.value === this.filter
+    );
+    if (!chosen || chosen.disabled) this.filter = "all";
 
     // The rail is built FIRST, even though it paints second: the control bar
     // offers to jump to the current voice, and it can only honestly offer that
@@ -655,10 +739,10 @@ export class VoicesController {
 
   /**
    * Sticky, opaque, one rule under it — one of exactly two rules on the page.
-   * It carries where your voice is, the sweep and its position, whether arrows
-   * audition, which slice of the catalog is showing, what the keys do, and
-   * what the last two voices you heard were. (The heard counter belongs to
-   * slice 4 and is deliberately absent rather than dead.)
+   * It carries where your voice is, the sweep and its position, how much of
+   * the rail you have listened to, whether arrows audition, which slice of the
+   * catalog is showing, what the keys do, and what the last two voices you
+   * heard were.
    */
   private renderControlBar(vm: StudioViewModel): HTMLElement {
     const bar = document.createElement("div");
@@ -677,6 +761,14 @@ export class VoicesController {
       position.classList.add("voice-sweep-position");
       top.appendChild(position);
     }
+
+    // `9 of 22 heard` — the half of heard memory that actually makes a hundred
+    // voices tractable (design §8). Filled by updateControlBar, because it
+    // ticks up while the rail is playing itself and the rail is not repainted
+    // for that.
+    const heard = document.createElement("span");
+    heard.classList.add("voice-heard-count");
+    top.appendChild(heard);
 
     // No dead controls: the jump only exists when there is a row to jump to.
     // A host built-in (Pi's own voices) is the current voice with no row.
@@ -708,8 +800,12 @@ export class VoicesController {
     chip.addEventListener("click", () => this.toggleArrowAudition());
     top.appendChild(chip);
 
-    const filter = this.renderFilter(vm);
-    if (filter) top.appendChild(filter);
+    // A slot, not the control: the option set is not static — `Not yet heard`
+    // appears the moment anything has been heard and disables itself once
+    // everything has, neither of which repaints the rail.
+    const filterSlot = document.createElement("span");
+    filterSlot.classList.add("voice-filter-slot");
+    top.appendChild(filterSlot);
     bar.appendChild(top);
 
     const bottom = document.createElement("div");
@@ -767,24 +863,64 @@ export class VoicesController {
    * a "HD only" on a catalog with no HD voices is a control that empties the
    * page, and with fewer than two live options there is nothing to choose
    * between, so the whole control stays away.
+   *
+   * `Not yet heard` follows the same rule from both ends. It appears only once
+   * something HAS been heard — before that it selects the entire rail, which
+   * is what `All voices` already does — and once everything has been heard it
+   * stays, disabled, because that is the page saying you are finished rather
+   * than the option quietly vanishing (design §8).
    */
-  private filterOptions(
-    vm: StudioViewModel
-  ): { value: VoiceFilter; key: string }[] {
-    const options: { value: VoiceFilter; key: string }[] = [
+  private filterOptions(): {
+    value: VoiceFilter;
+    key: string;
+    disabled?: boolean;
+  }[] {
+    const options: { value: VoiceFilter; key: string; disabled?: boolean }[] = [
       { value: "all", key: "voicesShowAll" },
     ];
-    // The same test VoiceCuration uses to decide whether price is even an axis
-    // on this host: one tier alone is not a distinction.
-    if (new Set(vm.catalog.map(getVoiceTier)).size > 1) {
+    const heardIds = this.clipVoiceIds.filter((id) =>
+      isHeard(this.heardStore, id)
+    );
+    if (heardIds.length > 0) {
+      options.push({
+        value: "unheard",
+        key: "voicesShowUnheard",
+        disabled: heardIds.length === this.clipVoiceIds.length,
+      });
+    }
+    if (this.tierFilter) {
       options.push({ value: "hd", key: "voicesShowHd" });
       options.push({ value: "everyday", key: "voicesShowEveryday" });
     }
     return options;
   }
 
-  private renderFilter(vm: StudioViewModel): HTMLElement | null {
-    const options = this.filterOptions(vm);
+  /**
+   * Put the current option set in the bar's filter slot, replacing whatever is
+   * there — but never while the reader is holding the control open, which
+   * would drop the menu out from under them. The next repaint picks it up.
+   */
+  private syncFilter(bar: HTMLElement): void {
+    const slot = bar.querySelector<HTMLElement>(".voice-filter-slot");
+    if (!slot) return;
+    const options = this.filterOptions();
+    const signature = options
+      .map((option) => `${option.value}${option.disabled ? "-off" : ""}`)
+      .join("|");
+    if (slot.dataset.filterSignature === signature) return;
+    const select = slot.querySelector<HTMLSelectElement>(
+      ".voice-filter-select"
+    );
+    if (select && document.activeElement === select) return;
+    slot.dataset.filterSignature = signature;
+    slot.textContent = "";
+    const control = this.renderFilter(options);
+    if (control) slot.appendChild(control);
+  }
+
+  private renderFilter(
+    options: { value: VoiceFilter; key: string; disabled?: boolean }[]
+  ): HTMLElement | null {
     if (options.length < 2) return null;
     const label = document.createElement("label");
     label.classList.add("voice-filter");
@@ -797,9 +933,10 @@ export class VoicesController {
     label.appendChild(document.createTextNode(":"));
     const select = document.createElement("select");
     select.classList.add("voice-filter-select");
-    options.forEach(({ value, key }) => {
+    options.forEach(({ value, key, disabled }) => {
       const option = document.createElement("option");
       option.value = value;
+      if (disabled) option.disabled = true;
       option.setAttribute("data-i18n", key);
       option.textContent = getMessage(key);
       select.appendChild(option);
@@ -827,9 +964,42 @@ export class VoicesController {
       chip.classList.toggle("lit", this.arrowAudition && this.armed);
     }
     this.updateSweepControls(bar);
+    this.updateHeardCount(bar);
+    this.syncFilter(bar);
     this.updateHint(bar);
     const compare = bar.querySelector<HTMLElement>(".voice-compare");
     if (compare) this.updateCompareReadout(compare);
+  }
+
+  /**
+   * How much of the rail you have actually listened to.
+   *
+   * Counted over the PAINTED, auditionable rows — the same population
+   * `Play all (N)` walks — so narrowing with `Show:` narrows both together and
+   * the two numbers beside each other on the bar can never contradict one
+   * another. Voices with no clip are excluded from both, which is what stops
+   * `6 of 12` from lying about a catalog with built-ins in it.
+   */
+  private heardTally(): { heard: number; total: number; unheard: RailRow[] } {
+    const rows = this.playableRows();
+    const unheard = rows.filter(
+      (row) => !isHeard(this.heardStore, row.voice.id)
+    );
+    return { heard: rows.length - unheard.length, total: rows.length, unheard };
+  }
+
+  private updateHeardCount(bar: HTMLElement): void {
+    const counter = bar.querySelector<HTMLElement>(".voice-heard-count");
+    if (!counter) return;
+    const { heard, total } = this.heardTally();
+    // Nothing auditionable is not "0 of 0 heard" — it is a page with no
+    // listening on it, and a zero-of-zero counter is a dead control.
+    // No data-i18n: substituted text, which replaceI18n would erase.
+    const text =
+      total === 0
+        ? ""
+        : getMessage("voicesHeardCount", [String(heard), String(total)]);
+    if (counter.textContent !== text) counter.textContent = text;
   }
 
   private updateSweepControls(bar: HTMLElement): void {
@@ -844,12 +1014,14 @@ export class VoicesController {
           label.setAttribute("data-i18n", "voicesStopPlayback");
           label.textContent = getMessage("voicesStopPlayback");
         } else {
+          const plan = this.sweepPlan();
           // Substituted text carries NO data-i18n: replaceI18n() would rewrite
           // it from the bare key on the next tab load and erase the count.
           label.removeAttribute("data-i18n");
-          label.textContent = getMessage("voicesPlayAllN", [
-            String(this.playableRows().length),
-          ]);
+          label.textContent = getMessage(
+            plan.mode === "new" ? "voicesPlayNewN" : "voicesPlayAllN",
+            [String(plan.rows.length)]
+          );
         }
       }
     }
@@ -1012,7 +1184,16 @@ export class VoicesController {
   ): SpeechSynthesisVoiceRemote[] {
     const ordered = this.orderCatalog(catalog);
     if (this.filter === "all") return ordered;
-    return ordered.filter((voice) => getVoiceTier(voice) === this.filter);
+    if (this.filter === "unheard") {
+      // A voice with no clip cannot have been heard, and is not something
+      // "not yet heard" offers to fix — it would pile the un-auditionable tail
+      // into a list whose whole point is what is left to listen to.
+      return ordered.filter(
+        (voice) => !!voice.sample_url && !isHeard(this.heardStore, voice.id)
+      );
+    }
+    const tier = this.filter;
+    return ordered.filter((voice) => getVoiceTier(voice) === tier);
   }
 
   private renderRail(vm: StudioViewModel): HTMLElement {
@@ -1141,6 +1322,12 @@ export class VoicesController {
     const playable = !!voice.sample_url;
     if (playable) {
       el.dataset.printVoice = voice.id;
+      // The ink density IS the heard state (design §8) — one class on the row,
+      // because the print draws in `currentColor`. Heard gets MORE ink, never
+      // less: dimming what you have listened to is semantically backwards, and
+      // NN/g Guideline 37 warns specifically off grey for a visited state
+      // because it reads as unavailable.
+      if (isHeard(this.heardStore, voice.id)) el.classList.add("heard");
       el.dataset.printWidth = String(PRINT_WIDTHS.lg);
       const print = document.createElement("span");
       print.classList.add("voice-row-print");
@@ -1707,6 +1894,23 @@ export class VoicesController {
     this.updateControlBar();
   }
 
+  /**
+   * A clip PLAYED (design §8) — long enough to count, which is a fact only the
+   * sequencer holds. Everything here is a repaint of what is already on
+   * screen: the row inks in, the counter ticks, and `Play all` may become
+   * `Play new`. The rail is never rebuilt for it, so a mark landing mid-sweep
+   * cannot move a row under the listener.
+   */
+  private onVoiceHeard(voiceId: string): void {
+    const known = isHeard(this.heardStore, voiceId);
+    // A replay refreshes the timestamp — the only reader of which is the
+    // store's own eviction order — and changes nothing on screen.
+    this.heardStore = markHeardAt(this.heardStore, voiceId, Date.now());
+    if (known) return;
+    this.markRows(voiceId, "heard");
+    this.updateControlBar();
+  }
+
   private stopAudition(): void {
     this.deps.stopPreview?.();
     this.sweeping = false;
@@ -1730,8 +1934,26 @@ export class VoicesController {
     return this.rows.filter((row) => row.playable && !!row.voice.sample_url);
   }
 
+  /**
+   * What `Play all` would walk, and what to call it.
+   *
+   * On a return visit with SOME — but not all — of the rail heard, the offer
+   * narrows to what is left: `▶ Play new (13)`. That is the gesture the whole
+   * feature is for. Re-playing the fourteen voices you already rejected is
+   * exactly the tax heard memory exists to remove, and the moment either
+   * extreme is true (nothing heard, or everything heard) "new" would be a
+   * distinction without a difference, so it goes back to `▶ Play all`.
+   */
+  private sweepPlan(): { rows: RailRow[]; mode: "all" | "new" } {
+    const { unheard, total } = this.heardTally();
+    const partial = unheard.length > 0 && unheard.length < total;
+    return partial
+      ? { rows: unheard, mode: "new" }
+      : { rows: this.playableRows(), mode: "all" };
+  }
+
   private sweepItems(): AuditionItem[] {
-    return this.playableRows().map((row) => ({
+    return this.sweepPlan().rows.map((row) => ({
       voiceId: row.voice.id,
       url: row.voice.sample_url as string,
       gain: gainFor(this.prints.get(row.voice.id)?.voicedRmsDb),

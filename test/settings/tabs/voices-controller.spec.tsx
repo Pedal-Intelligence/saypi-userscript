@@ -56,6 +56,8 @@ interface DepsConfig {
   claudeOverlay?: HostPinOverlay | null;
   authenticated?: boolean;
   arrowAudition?: boolean;
+  /** What this profile has already listened to, as VoiceHeard stores it. */
+  heard?: Record<string, number>;
   overrides?: Record<string, any>;
 }
 
@@ -90,6 +92,11 @@ function makeDeps(cfg: DepsConfig = {}) {
     stopPreview: vi.fn(() => {}),
     loadArrowAudition: vi.fn(async () => cfg.arrowAudition ?? true),
     setArrowAudition: vi.fn(async () => {}),
+    loadHeard: vi.fn(async () => cfg.heard ?? {}),
+    // The sequencer's emitter, stubbed: the tests hand the controller a
+    // qualifying play by calling the subscribed function directly, which is
+    // the only honest way to say "a clip PLAYED" in a jsdom with no media.
+    onHeard: vi.fn((_fn: (voiceId: string) => void) => vi.fn()),
     loadPins: vi.fn(async (host: string) => overlayByHost[host]),
     setPinned: vi.fn(async () => {}),
     ...cfg.overrides,
@@ -783,10 +790,13 @@ describe("VoicesController — the control bar", () => {
     );
   });
 
-  it("shows no heard counter — a later slice, not a dead control", async () => {
-    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("onyx")] });
+  it("shows no heard counter on a page with nothing to listen to", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("builtin", { sample_url: undefined })],
+    });
     const { container } = await mount(deps);
     const bar = q(container, ".voice-rail-controls")!;
+    // "0 of 0 heard" is a dead control, not a progress readout.
     expect(bar.textContent).not.toMatch(/voicesHeardCount/);
   });
 });
@@ -2431,5 +2441,353 @@ describe("VoicesController — the interruption matrix (design §5.2)", () => {
     deps.stopPreview.mockClear();
     window.dispatchEvent(new window.Event("pagehide"));
     expect(deps.stopPreview).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Slice 4 — heard memory (design §8).
+//
+// The expression is ink density on the print, never a checkmark: never heard →
+// heard → playing, with heard getting MORE ink rather than less. The page-level
+// half — the counter, the `Not yet heard` option and `Play new (N)` — is what
+// design §8 calls the piece to ship if only one ships.
+// ---------------------------------------------------------------------------
+
+/** A qualifying PLAY, as the sequencer reports one. Not a click. */
+function hear(deps: any, voiceId: string): void {
+  deps.onHeard.mock.calls.at(-1)![0](voiceId);
+}
+
+const heardIds = (c: HTMLElement) =>
+  qa(c, ".voice-row.heard").map((row) => row.dataset.voiceId);
+const heardCount = (c: HTMLElement) =>
+  q(c, ".voice-heard-count")?.textContent ?? null;
+const filterValues = (c: HTMLElement) =>
+  [...(filterSelect(c)?.options ?? [])].map((option) => option.value);
+const unheardOption = (c: HTMLElement) =>
+  [...(filterSelect(c)?.options ?? [])].find(
+    (option) => option.value === "unheard"
+  ) ?? null;
+
+describe("VoicesController — a clip you HEARD, not a button you clicked", () => {
+  it("does not mark a row heard just because it was clicked", async () => {
+    // The regression this whole seam exists to prevent. A click starts a
+    // request to play; whether a clip actually sounded — and for long enough —
+    // is a fact only the sequencer holds, and `onState(false)` fires
+    // identically for pause, ended and error, so no caller can infer it.
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+    expect(deps.playPreview).toHaveBeenCalledTimes(1);
+    expect(heardIds(container)).toEqual([]);
+    expect(heardCount(container)).toBe("voicesHeardCount");
+
+    // …and neither does walking onto it, or pressing Space, or stopping it.
+    press(container, "ArrowDown");
+    press(container, " ");
+    emit(deps, 1, IDLE_AUDITION);
+    expect(heardIds(container)).toEqual([]);
+  });
+
+  it("inks the row the moment the sequencer says the clip played", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    rowOf(container, "onyx")!.click();
+    emit(deps, 0, playingState("onyx"));
+
+    hear(deps, "onyx");
+    expect(heardIds(container)).toEqual(["onyx"]);
+    // Playing is still playing: the two are the same variable, so the fade to
+    // the heard density happens when the clip stops, not when it qualifies.
+    expect(rowOf(container, "onyx")!.classList.contains("playing")).toBe(true);
+    emit(deps, 0, IDLE_AUDITION);
+    expect(rowOf(container, "onyx")!.classList.contains("playing")).toBe(false);
+    expect(rowOf(container, "onyx")!.classList.contains("heard")).toBe(true);
+  });
+
+  it("never rebuilds the rail to ink a row", async () => {
+    // A mark can land mid-sweep. Repainting for it would move rows under a
+    // listener and throw away focus, the compare pair and the print cache.
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    const row = rowOf(container, "coral")!;
+    hear(deps, "coral");
+    expect(rowOf(container, "coral")).toBe(row);
+  });
+
+  it("seeds the ink from storage BEFORE the first paint", async () => {
+    // Marks that land after the paint would darken half the rail under the
+    // reader's eyes; this is why init awaits the store.
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral")],
+      heard: { onyx: 1_700_000_000_000 },
+    });
+    const { container } = await mount(deps);
+    expect(heardIds(container)).toEqual(["onyx"]);
+  });
+
+  it("carries the marks across a repaint", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral")],
+      piCurrent: mkVoice("coral"),
+    });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    // `Use` repaints the body from cache.
+    rowOf(container, "onyx")!
+      .querySelector<HTMLButtonElement>(".voice-use")!
+      .click();
+    await flushAsync();
+    expect(heardIds(container)).toEqual(["onyx"]);
+  });
+
+  it("is global, not per-host: the same clip file on both hosts", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral")],
+      claude: [mkVoice("onyx"), mkVoice("cedar")],
+    });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    hostTab(container, "claude")!.click();
+    await flushAsync();
+    expect(heardIds(container)).toEqual(["onyx"]);
+  });
+
+  it("marks a voice heard during a sweep, one row at a time", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+    });
+    const { container } = await mount(deps);
+    sweepButton(container)!.click();
+    emitSweep(deps, 0, sweepingAt("onyx", 1, 3));
+    hear(deps, "onyx");
+    emitSweep(deps, 0, sweepingAt("coral", 2, 3));
+    hear(deps, "coral");
+    expect(heardIds(container).sort()).toEqual(["coral", "onyx"]);
+    // One path for a single audition and a sweep step — the sequencer serves
+    // both, so nothing here had to know which gesture it was.
+    expect(heardCount(container)).toBe("voicesHeardCount");
+  });
+
+  it("stops listening when the studio is destroyed", async () => {
+    // The sequencer is module-scoped and outlives the studio, so a live
+    // subscription would ink rows that are no longer on the page.
+    const deps = makeDeps({ pi: [mkVoice("onyx")] });
+    const { controller } = await mount(deps);
+    const unsubscribe = deps.onHeard.mock.results[0].value;
+    expect(unsubscribe).not.toHaveBeenCalled();
+    controller.destroy();
+    expect(unsubscribe).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves every print undeveloped when no store is wired", async () => {
+    // Absence of the store is a first visit, not a broken page: the rail still
+    // renders, still counts, and simply never inks anything in.
+    const bare = makeDeps({ pi: [mkVoice("onyx")] });
+    delete (bare as any).loadHeard;
+    delete (bare as any).onHeard;
+    const { container } = await mount(bare);
+    expect(heardIds(container)).toEqual([]);
+    expect(heardCount(container)).toBe("voicesHeardCount");
+    expect(filterSelect(container)).toBeNull();
+  });
+});
+
+describe("VoicesController — the heard counter", () => {
+  it("counts the auditionable rows only, so `n of m` never lies", async () => {
+    const deps = makeDeps({
+      pi: [
+        mkVoice("onyx"),
+        mkVoice("coral"),
+        mkVoice("builtin", { sample_url: undefined }),
+      ],
+      heard: { onyx: 1 },
+    });
+    const { container } = await mount(deps);
+    expect(rowIds(container)).toHaveLength(3);
+    const i18n = (globalThis as any).chrome.i18n.getMessage;
+    const call = i18n.mock.calls
+      .filter((c: any[]) => c[0] === "voicesHeardCount")
+      .at(-1);
+    // The clipless voice is in neither number — it is in the sweep queue
+    // nowhere either, and the two counts on the bar have to agree.
+    expect(call[1]).toEqual(["1", "2"]);
+  });
+
+  it("ticks up without a repaint, and carries no data-i18n", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    const counter = q(container, ".voice-heard-count")!;
+    expect(counter.dataset.i18n).toBeUndefined();
+    const i18n = (globalThis as any).chrome.i18n.getMessage;
+    const lastArgs = () =>
+      i18n.mock.calls.filter((c: any[]) => c[0] === "voicesHeardCount").at(-1)[1];
+    expect(lastArgs()).toEqual(["0", "2"]);
+    hear(deps, "onyx");
+    expect(lastArgs()).toEqual(["1", "2"]);
+    expect(q(container, ".voice-heard-count")).toBe(counter);
+  });
+});
+
+describe("VoicesController — `Not yet heard`", () => {
+  const four = () => [
+    mkVoice("onyx"),
+    mkVoice("coral"),
+    mkVoice("marin"),
+    mkVoice("nova"),
+  ];
+
+  it("stays away until there is something it would actually narrow", async () => {
+    // With nothing heard it selects the whole rail, which is what `All voices`
+    // already does — a dead option, and on a single-tier catalog it would drag
+    // the whole `Show:` control onto a page with nothing to filter.
+    const deps = makeDeps({ pi: four() });
+    const { container } = await mount(deps);
+    expect(filterSelect(container)).toBeNull();
+
+    hear(deps, "onyx");
+    expect(filterValues(container)).toEqual(["all", "unheard"]);
+  });
+
+  it("narrows the rail to what is left", async () => {
+    const deps = makeDeps({ pi: four() });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    hear(deps, "coral");
+    chooseFilter(container, "unheard");
+    expect(rowIds(container).sort()).toEqual(["marin", "nova"]);
+  });
+
+  it("keeps a voice on screen when it is heard mid-list", async () => {
+    // Rows must never vanish from under a listener; the filter applies at the
+    // next paint, and the counter is what moves in the meantime.
+    const deps = makeDeps({ pi: four() });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    chooseFilter(container, "unheard");
+    expect(rowIds(container)).toHaveLength(3);
+    hear(deps, "marin");
+    expect(rowIds(container)).toHaveLength(3);
+    expect(rowOf(container, "marin")!.classList.contains("heard")).toBe(true);
+  });
+
+  it("disables itself once everything has been heard", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    expect(unheardOption(container)!.disabled).toBe(false);
+    hear(deps, "coral");
+    // Present, not vanished: the page saying you are finished.
+    expect(unheardOption(container)!.disabled).toBe(true);
+  });
+
+  it("widens back to All rather than painting an empty rail", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("onyx"), mkVoice("coral")],
+      piCurrent: mkVoice("onyx"),
+    });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    chooseFilter(container, "unheard");
+    expect(rowIds(container)).toEqual(["coral"]);
+
+    // Hearing the last one leaves this filter with nothing to select — and
+    // nothing moves under the listener at the moment it happens.
+    hear(deps, "coral");
+    expect(rowIds(container)).toEqual(["coral"]);
+
+    // The next real repaint is where it resolves, and it resolves to the whole
+    // catalog: an empty rail would be the page lying about being the catalog.
+    rowOf(container, "coral")!
+      .querySelector<HTMLButtonElement>(".voice-use")!
+      .click();
+    await flushAsync();
+    expect(rowIds(container).sort()).toEqual(["coral", "onyx"]);
+    expect(filterSelect(container)!.value).toBe("all");
+  });
+
+  it("never lists a clipless voice as something left to hear", async () => {
+    const deps = makeDeps({
+      pi: [
+        mkVoice("onyx"),
+        mkVoice("coral"),
+        mkVoice("builtin", { sample_url: undefined }),
+      ],
+    });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    chooseFilter(container, "unheard");
+    expect(rowIds(container)).toEqual(["coral"]);
+  });
+
+  it("leaves the tier options alone", async () => {
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    expect(filterValues(container)).toEqual(["all", "hd", "everyday"]);
+    hear(deps, "onyx");
+    expect(filterValues(container)).toEqual(["all", "unheard", "hd", "everyday"]);
+  });
+});
+
+describe("VoicesController — `Play new`", () => {
+  const three = () => [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")];
+
+  it("offers Play all on a first visit and Play new on a return", async () => {
+    const deps = makeDeps({ pi: three() });
+    const { container } = await mount(deps);
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+
+    hear(deps, "onyx");
+    expect(sweepLabel(container)).toBe("voicesPlayNewN");
+    const i18n = (globalThis as any).chrome.i18n.getMessage;
+    expect(
+      i18n.mock.calls.filter((c: any[]) => c[0] === "voicesPlayNewN").at(-1)[1]
+    ).toEqual(["2"]);
+  });
+
+  it("queues only what is left, in rail order", async () => {
+    const deps = makeDeps({ pi: three() });
+    const { container } = await mount(deps);
+    hear(deps, "coral");
+    sweepButton(container)!.click();
+    expect(queuedItems(deps).map((item) => item.voiceId)).toEqual([
+      "onyx",
+      "marin",
+    ]);
+  });
+
+  it("goes back to Play all once nothing is new", async () => {
+    // "New" is a distinction without a difference at both extremes, and a
+    // `Play new (0)` would be a dead button.
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("coral")] });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    expect(sweepLabel(container)).toBe("voicesPlayNewN");
+    hear(deps, "coral");
+    expect(sweepLabel(container)).toBe("voicesPlayAllN");
+    sweepButton(container)!.click();
+    expect(queuedItems(deps).map((item) => item.voiceId).sort()).toEqual([
+      "coral",
+      "onyx",
+    ]);
+  });
+
+  it("carries no data-i18n, so the count survives the next tab load", async () => {
+    const deps = makeDeps({ pi: three() });
+    const { container } = await mount(deps);
+    hear(deps, "onyx");
+    expect(q(container, ".voice-play-label")!.dataset.i18n).toBeUndefined();
+  });
+
+  it("counts against the filtered list it is offering to play", async () => {
+    const deps = makeDeps({ pi: twoTiers() });
+    const { container } = await mount(deps);
+    hear(deps, "mark");
+    chooseFilter(container, "hd");
+    expect(sweepLabel(container)).toBe("voicesPlayNewN");
+    sweepButton(container)!.click();
+    expect(queuedItems(deps).map((item) => item.voiceId)).toEqual(["jamahal"]);
   });
 });
