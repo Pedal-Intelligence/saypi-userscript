@@ -2,6 +2,11 @@
 
 > Settings → Voices, rebuilt as a listening room. Everything on this page is free. Nothing on it costs a credit.
 
+**This is the implementation record** — geometry, storage shapes, call sites, measurements. For what
+the page is *for* and why it is shaped this way, read
+[`doc/voices-audition-room.md`](../voices-audition-room.md) first; the decisions below only make
+sense once you know what they are serving.
+
 ---
 
 ## 0. Measurements this design rests on
