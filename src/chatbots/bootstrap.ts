@@ -22,6 +22,9 @@ export class DOMObserver {
   agentNoticeModule: AgentModeNoticeModule;
   private domObserver: MutationObserver | null = null;
   private isObservingDom: boolean = false;
+  // Bumped by every initial-decoration pass so an older pass's pending retries
+  // stand down instead of racing the newer one (see startInitialDecoration).
+  private decorationGeneration: number = 0;
   private domMutationCallback = (mutations: MutationRecord[]) => {
     // Skip decoration work entirely on non-chatable pages
     if (!this.shouldDecorateUI()) {
@@ -32,22 +35,7 @@ export class DOMObserver {
         .filter((node) => node instanceof HTMLElement)
         .forEach((node) => {
           const addedElement = node as HTMLElement;
-          const promptObs = this.findAndDecoratePrompt(addedElement);
-          this.findAndDecorateControlPanel(addedElement);
-          const sidebarObs = this.findAndDecorateSidebar(addedElement);
-          if (sidebarObs.found && sidebarObs.decorated) {
-            this.findAndDecorateDiscoveryPanel(addedElement);
-          }
-          const audioControlsObs =
-            this.findAndDecorateAudioControls(addedElement);
-          if (audioControlsObs.isReady()) {
-            this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
-              audioControlsObs.target as HTMLElement
-            );
-          }
-          this.findAndDecorateAudioOutputButton(addedElement);
-          this.findAndDecorateChatHistory(addedElement);
-
+          const promptObs = this.decorateElementsUnder(addedElement);
           if (promptObs.isReady()) {
             EventBus.emit("saypi:ui:content-loaded");
           }
@@ -152,6 +140,14 @@ export class DOMObserver {
         // Start/stop observation based on whether the new path is chatable
         if (this.chatbot.isChatablePath(window.location.pathname)) {
           this.startObservingDom();
+          // The chat UI can ALREADY be mounted at this instant, and the observer we
+          // just attached will never replay its insertion. Pi's own boot does exactly
+          // that: pi.ai server-redirects to /redirect (not chatable → no observer, no
+          // initial decoration), the composer mounts there, and only then does the SPA
+          // route to /talk — leaving the composer permanently bare, i.e. no call button
+          // until a full reload (#460). So re-run the same "decorate what is already
+          // here" scan we run at startup.
+          this.startInitialDecoration();
           this.handleRouteChange();
         } else {
           this.stopObservingDom();
@@ -209,22 +205,44 @@ export class DOMObserver {
       // attach and the URL never changes, neither path would ever decorate the
       // prompt. Without this scan the call button (and the rest of the
       // content-loaded chain) never appears. Idempotent and safe to retry.
-      this.bootstrapInitialDecoration();
+      this.startInitialDecoration();
     }
   }
 
   /**
-   * Decorates the prompt that is already present in the DOM at startup, emitting
-   * "saypi:ui:content-loaded" once it is ready to kick off the rest of the
+   * Runs a fresh initial-decoration pass, superseding any pass still retrying.
+   * Called once at startup and again every time the SPA routes ONTO a chatable
+   * path, so rapid navigation can't accumulate retry chains.
+   */
+  private startInitialDecoration(): void {
+    this.decorationGeneration += 1;
+    this.bootstrapInitialDecoration(1, 10, this.decorationGeneration);
+  }
+
+  /**
+   * Decorates everything that is ALREADY present in the DOM, emitting
+   * "saypi:ui:content-loaded" once the prompt is ready to kick off the rest of the
    * bootstrap chain. Mirrors startChatHistoryProgressiveSearch's backoff so a
    * composer that hydrates slightly after document_idle is still caught even if
    * its insertion doesn't surface to the MutationObserver as an added node.
    */
-  private bootstrapInitialDecoration(attempt = 1, maxAttempts = 10): void {
+  private bootstrapInitialDecoration(
+    attempt = 1,
+    maxAttempts = 10,
+    generation = this.decorationGeneration
+  ): void {
+    // A newer pass has started (the SPA routed onto another chatable path); let it
+    // own the retries rather than running two backoff chains against the same DOM.
+    if (generation !== this.decorationGeneration) {
+      return;
+    }
     if (!this.shouldDecorateUI()) {
       return;
     }
-    const promptObs = this.findAndDecoratePrompt(document.body);
+    const promptObs = this.decorateElementsUnder(document.body);
+    // Pi's Voice settings page has no chat prompt, so it is scanned separately —
+    // see the note on the same call in domMutationCallback.
+    this.findAndDecorateVoiceSettings(document.body);
     if (promptObs.isReady()) {
       EventBus.emit("saypi:ui:content-loaded");
       return;
@@ -236,10 +254,41 @@ export class DOMObserver {
     if (attempt < maxAttempts) {
       const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 3000);
       setTimeout(
-        () => this.bootstrapInitialDecoration(attempt + 1, maxAttempts),
+        () => this.bootstrapInitialDecoration(attempt + 1, maxAttempts, generation),
         delay
       );
     }
+  }
+
+  /**
+   * Decorates every target found under `searchRoot`.
+   *
+   * ONE routine serves both entry points — the MutationObserver, which passes a
+   * freshly-added subtree, and the initial/route-entry scan, which passes
+   * document.body. Keeping them literally the same code is the point: a target
+   * that only the added-node path knows how to decorate is a target SayPi loses
+   * forever whenever it arrives while the observer is detached (#460).
+   *
+   * Idempotent — every finder short-circuits on an already-decorated target — so
+   * it is safe to re-run against the whole document as often as needed.
+   * Returns the prompt's Observation, which is what gates "saypi:ui:content-loaded".
+   */
+  private decorateElementsUnder(searchRoot: HTMLElement): Observation {
+    const promptObs = this.findAndDecoratePrompt(searchRoot);
+    this.findAndDecorateControlPanel(searchRoot);
+    const sidebarObs = this.findAndDecorateSidebar(searchRoot);
+    if (sidebarObs.found && sidebarObs.decorated) {
+      this.findAndDecorateDiscoveryPanel(searchRoot);
+    }
+    const audioControlsObs = this.findAndDecorateAudioControls(searchRoot);
+    if (audioControlsObs.isReady()) {
+      this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+        audioControlsObs.target as HTMLElement
+      );
+    }
+    this.findAndDecorateAudioOutputButton(searchRoot);
+    this.findAndDecorateChatHistory(searchRoot);
+    return promptObs;
   }
 
   private startObservingDom(): void {
