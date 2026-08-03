@@ -1033,7 +1033,9 @@ describe("VoicesController — the row", () => {
     });
     const { container } = await mount(deps);
     expect(rowOf(container, "onyx")!.getAttribute("aria-label")).toBe("Onyx");
-    expect(rowOf(container, "marin")!.getAttribute("aria-current")).toBe("true");
+    // The voice in use is the listbox's SELECTION — see "selection is the
+    // commitment, not the cursor" below for why it is not aria-current.
+    expect(rowOf(container, "marin")!.getAttribute("aria-selected")).toBe("true");
   });
 
   it("puts the focused row's two buttons in the tab order, and no others", async () => {
@@ -1145,7 +1147,10 @@ describe("VoicesController — audition state", () => {
 
     rowOf(container, "marin")!.click();
     emit(deps, 0, playingState("marin"));
-    expect(status.textContent).toBe("voicesNowPlaying");
+    // The first play is also the play that ARMS the rail, so this one line
+    // carries the arrows-are-live confirmation too (see "the rail says when
+    // the arrows go live"). Every line after it is the bare announcement.
+    expect(status.textContent).toBe("voicesNowPlaying voicesArrowsLive");
     emit(deps, 0, IDLE_AUDITION);
     expect(status.textContent).toBe("");
   });
@@ -1851,7 +1856,7 @@ describe("VoicesController — the live region announces changes, not repaints",
   });
 });
 
-describe("VoicesController — arriving on the tab does not scroll the page away", () => {
+describe("VoicesController — the page travels the minimum, and never more", () => {
   const spyScroll = () => {
     const calls: [string | undefined, any][] = [];
     const original = Element.prototype.scrollIntoView;
@@ -1864,12 +1869,12 @@ describe("VoicesController — arriving on the tab does not scroll the page away
     return { calls, restore: () => (Element.prototype.scrollIntoView = original) };
   };
 
-  it("places focus on the current voice WITHOUT travelling to it", async () => {
-    // The settings page is the scroll container, so centring row 19 of 22 (the
-    // shipped Claude default is Marin) scrolls the tab heading, the subtitle
-    // and the host switcher off-screen before the user has touched anything —
-    // and §9 kept the switcher top-level precisely so "which assistant am I
-    // configuring" is never a footnote.
+  it("paints the current voice's row WITHOUT travelling to it", async () => {
+    // A paint is not a navigation. The settings page is the scroll container,
+    // so centring row 19 of 22 (the shipped Claude default is Marin) scrolls
+    // the tab heading, the subtitle and the host switcher off-screen before
+    // the user has touched anything — and §9 kept the switcher top-level
+    // precisely so "which assistant am I configuring" is never a footnote.
     const scroll = spyScroll();
     try {
       const deps = makeDeps({
@@ -1914,6 +1919,30 @@ describe("VoicesController — arriving on the tab does not scroll the page away
       ).click();
       await flushAsync();
       expect(scroll.calls.every(([, arg]) => arg?.block !== "center")).toBe(true);
+    } finally {
+      scroll.restore();
+    }
+  });
+
+  it("brings the row it is focusing into view when the TAB is activated", async () => {
+    // Activating the tab IS the reader asking to go there, which is the one
+    // difference from a repaint — and a focus ring below the fold is worse
+    // than a page that moved the minimum to show it. Still `nearest`: a row
+    // already on screen must not move, and the listbox itself is focused with
+    // preventScroll so the browser does not jump to the top of the rail
+    // instead.
+    const scroll = spyScroll();
+    try {
+      const deps = makeDeps({
+        pi: [mkVoice("onyx"), mkVoice("coral"), mkVoice("marin")],
+        piCurrent: mkVoice("marin"),
+      });
+      const { container, controller } = await mount(deps);
+      expect(scroll.calls).toEqual([]);
+      controller.onShown();
+      expect(scroll.calls.map((c) => c[0])).toContain("marin");
+      expect(scroll.calls.every(([, arg]) => arg?.block === "nearest")).toBe(true);
+      expect(document.activeElement).toBe(railOf(container));
     } finally {
       scroll.restore();
     }
@@ -2530,7 +2559,12 @@ describe("VoicesController — the states playback can be in", () => {
 
     rowOf(container, "coral")!.click();
     emit(deps, 0, playingState("coral"));
-    expect(q(container, "#voice-status")!.textContent).toBe("voicesNowPlaying");
+    // …and speaks again the moment a single clip is what is sounding. The
+    // sweep armed the rail, so this is also the first line that can carry the
+    // arrows-are-live confirmation the sweep had nowhere to put.
+    expect(q(container, "#voice-status")!.textContent).toBe(
+      "voicesNowPlaying voicesArrowsLive"
+    );
   });
 });
 
@@ -3028,5 +3062,351 @@ describe("VoicesController — `Play new`", () => {
     expect(sweepLabel(container)).toBe("voicesPlayNewN");
     sweepButton(container)!.click();
     expect(queuedItems(deps).map((item) => item.voiceId)).toEqual(["jamahal"]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Slice 5 — the keyboard actually receives the keyboard.
+//
+// The design's headline claim is "hear a voice: 1 action — Space, focus is
+// already on your current voice's row". It was false: the rail set tabIndex=0,
+// maintained aria-activedescendant and painted a `.focused` row, so it LOOKED
+// focused while DOM focus sat on the sidebar's Voices tab button — the worst of
+// both. Space went to the button and nothing sounded.
+// ---------------------------------------------------------------------------
+
+describe("VoicesController — activating the tab hands the rail the keyboard", () => {
+  const catalog = () => [
+    mkVoice("onyx"),
+    mkVoice("ash"),
+    mkVoice("coral"),
+    mkVoice("marin"),
+  ];
+
+  /** Press a key at whatever actually holds DOM focus — no cheating. */
+  function pressAtFocus(key: string, init: KeyboardEventInit = {}): void {
+    (document.activeElement as HTMLElement).dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+        ...init,
+      })
+    );
+  }
+
+  it("does not take focus merely by painting — the tab may not be on screen", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("coral") });
+    const { container } = await mount(deps);
+    expect(document.activeElement).not.toBe(railOf(container));
+  });
+
+  it("gives the rail real DOM focus when the tab is activated", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("coral") });
+    const { container, controller } = await mount(deps);
+    controller.onShown();
+    expect(document.activeElement).toBe(railOf(container));
+    // …landing on the current voice, which is what makes the claim "focus is
+    // already on your current voice's row" true rather than decorative.
+    expect(railOf(container).getAttribute("aria-activedescendant")).toBe(
+      rowOf(container, "coral")!.id
+    );
+    expect(focusedId(container)).toBe("coral");
+  });
+
+  it("makes Space play with no other interaction — the whole claim", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("coral") });
+    const { controller } = await mount(deps);
+    controller.onShown();
+    pressAtFocus(" ");
+    expect(deps.playPreview).toHaveBeenCalledTimes(1);
+    expect(deps.playPreview.mock.calls[0][0].id).toBe("coral");
+  });
+
+  it("lands on the deepest row when the host has no voice yet", async () => {
+    const deps = makeDeps({ pi: catalog() });
+    const { controller } = await mount(deps);
+    controller.onShown();
+    pressAtFocus(" ");
+    expect(deps.playPreview.mock.calls[0][0].id).toBe("onyx");
+  });
+
+  it("does NOT arm the rail — arriving is not playing", async () => {
+    // The regression that would matter most: if arrival armed the rail, the
+    // first ↓ would audition, and a screen-reader user would be ambushed by
+    // audio for doing nothing but opening a settings tab.
+    const deps = makeDeps({ pi: catalog() });
+    const { container, controller } = await mount(deps);
+    controller.onShown();
+    pressAtFocus("ArrowDown");
+    expect(deps.playPreview).not.toHaveBeenCalled();
+    expect(focusedId(container)).toBe("ash");
+    expect(q(container, ".voice-arrow-chip")!.classList.contains("lit")).toBe(
+      false
+    );
+    // …and the FIRST explicit play still arms it, exactly as before.
+    pressAtFocus(" ");
+    pressAtFocus("ArrowDown");
+    expect(deps.playPreview).toHaveBeenCalledTimes(2);
+  });
+
+  it("waits for the rail when the catalog is still loading (the deep-link path)", async () => {
+    // The shell activates the tab synchronously; VoicesController.init() is
+    // network-bound and is deliberately not awaited, so onShown() routinely
+    // arrives before there is a rail to focus.
+    const { container } = render(<VoicesPanel />);
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const controller = new VoicesController(container as HTMLElement, deps as any);
+    mounted.push(controller);
+    const ready = controller.init();
+    controller.onShown();
+    await ready;
+    expect(document.activeElement).toBe(railOf(container as HTMLElement));
+    expect(focusedId(container as HTMLElement)).toBe("marin");
+  });
+
+  it("drops a pending claim when the tab leaves before it painted", async () => {
+    // Click Voices, change your mind, click About: the late paint must not
+    // reach across and steal focus out of the tab you are now reading.
+    const { container } = render(<VoicesPanel />);
+    const deps = makeDeps({ pi: catalog() });
+    const controller = new VoicesController(container as HTMLElement, deps as any);
+    mounted.push(controller);
+    const ready = controller.init();
+    controller.onShown();
+    controller.onHidden();
+    await ready;
+    expect(document.activeElement).not.toBe(railOf(container as HTMLElement));
+  });
+
+  it("comes back to where the reader left off, not to the top", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("onyx") });
+    const { container, controller } = await mount(deps);
+    controller.onShown();
+    pressAtFocus("ArrowDown");
+    pressAtFocus("ArrowDown");
+    expect(focusedId(container)).toBe("coral");
+    controller.onHidden();
+    controller.onShown();
+    expect(document.activeElement).toBe(railOf(container));
+    expect(focusedId(container)).toBe("coral");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Slice 5 — what the rail tells a screen reader.
+// ---------------------------------------------------------------------------
+
+describe("VoicesController — selection is the commitment, not the cursor", () => {
+  const catalog = () => [
+    mkVoice("onyx"),
+    mkVoice("ash"),
+    mkVoice("coral"),
+    mkVoice("marin"),
+  ];
+
+  it("puts aria-selected on the voice in USE, never on the navigation cursor", async () => {
+    // A listbox's selection is what the user has chosen. Here that is the one
+    // thing `Use` writes — walking the rail chooses nothing, and announcing
+    // "Onyx, selected" because Onyx happens to be the first row is a lie the
+    // reader has no way to check.
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    press(container, "Home");
+    expect(focusedId(container)).toBe("onyx");
+    expect(rowOf(container, "onyx")!.getAttribute("aria-selected")).toBe("false");
+    expect(rowOf(container, "marin")!.getAttribute("aria-selected")).toBe("true");
+    expect(qa(container, '[role="option"][aria-selected="true"]').length).toBe(1);
+  });
+
+  it("selects nothing at all until the host has a voice", async () => {
+    const deps = makeDeps({ pi: catalog() });
+    const { container } = await mount(deps);
+    expect(qa(container, '[role="option"][aria-selected="true"]').length).toBe(0);
+  });
+
+  it("moves the selection when the reader commits", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    press(container, "Home");
+    press(container, "Enter");
+    await flushAsync();
+    expect(rowOf(container, "onyx")!.getAttribute("aria-selected")).toBe("true");
+    expect(rowOf(container, "marin")!.getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("says it once: aria-current is gone now aria-selected is honest", async () => {
+    // Two attributes for one fact is how the page ended up with the louder one
+    // pointing at the wrong thing. The visible IN USE badge and the accessible
+    // name still carry it — this is about not announcing it twice.
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    expect(qa(container, "[aria-current]").length).toBe(0);
+    expect(rowOf(container, "marin")!.classList.contains("voice-row-current")).toBe(
+      true
+    );
+  });
+
+  it("names the heard state, which no amount of ink can say out loud", async () => {
+    const deps = makeDeps({ pi: catalog() });
+    const { container, deps: d } = await mount(deps);
+    expect(rowOf(container, "onyx")!.getAttribute("aria-label")).toBe("Onyx");
+    hear(d, "onyx");
+    expect(rowOf(container, "onyx")!.getAttribute("aria-label")).toBe(
+      "Onyx — voicesHeardMark"
+    );
+    // Unheard rows stay bare: 22 rows announcing their default state is noise,
+    // and the counter in the bar already says how far along the reader is.
+    expect(rowOf(container, "ash")!.getAttribute("aria-label")).toBe("Ash");
+  });
+
+  it("carries heard state across a repaint", async () => {
+    const deps = makeDeps({ pi: catalog(), piCurrent: mkVoice("marin"), heard: { onyx: 1 } });
+    const { container } = await mount(deps);
+    expect(rowOf(container, "onyx")!.getAttribute("aria-label")).toBe(
+      "Onyx — voicesHeardMark"
+    );
+  });
+
+  it("keeps a twin's disambiguator FIRST, ahead of everything else", async () => {
+    // Two rows announcing "Paola" is the regression this page has already had
+    // twice. Whatever else joins the name, the thing that tells them apart is
+    // what the reader must hear first.
+    const pair = [
+      mkHdVoice("paola-classic", {
+        name: "Paola",
+        languages: Array.from({ length: 33 }, (_, i) => `l${i}`),
+      }),
+      mkHdVoice("paola-expressive", {
+        name: "Paola",
+        languages: Array.from({ length: 75 }, (_, i) => `l${i}`),
+      }),
+    ];
+    const deps = makeDeps({ claude: pair, claudeCurrent: pair[0] });
+    const { container, deps: d } = await mount(deps, { initialHost: "claude" });
+    hear(d, "paola-classic");
+    const label = rowOf(container, "paola-classic")!.getAttribute("aria-label")!;
+    expect(label.startsWith("Paola — voiceSpeaksNLanguages")).toBe(true);
+    expect(label.indexOf("voiceSpeaksNLanguages")).toBeLessThan(
+      label.indexOf("voicesHeardMark")
+    );
+    expect(label).toContain("voicesInUse");
+  });
+});
+
+describe("VoicesController — HD's cost is reachable where HD is", () => {
+  const mixed = () => [
+    mkVoice("onyx"),
+    mkHdVoice("jarnathan"),
+    mkVoice("marin"),
+  ];
+
+  it("describes an HD row with the allowance note on ANY filter", async () => {
+    // The note used to render only while `Show: HD only` was chosen — so the
+    // reader who picks an HD voice out of `All voices`, which is the default,
+    // never met the cost at all.
+    const deps = makeDeps({ pi: mixed() });
+    const { container } = await mount(deps);
+    const note = q(container, "#voice-hd-note")!;
+    expect(note.textContent).toBe("hdVoicesAllowanceNote");
+    expect(note.classList.contains("voice-visually-hidden")).toBe(true);
+    expect(
+      rowOf(container, "jarnathan")!.getAttribute("aria-describedby")
+    ).toContain("voice-hd-note");
+    // …and only HD rows. It is a cost, not a page-wide caveat.
+    expect(rowOf(container, "onyx")!.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("renders no note at all on a catalog with nothing to warn about", async () => {
+    const deps = makeDeps({ pi: [mkVoice("onyx"), mkVoice("marin")] });
+    const { container } = await mount(deps);
+    expect(q(container, "#voice-hd-note")).toBeNull();
+  });
+
+  it("puts the same sentence on the visible chip, as the in-chat menu does", async () => {
+    const deps = makeDeps({ pi: mixed() });
+    const { container } = await mount(deps);
+    const chip = rowOf(container, "jarnathan")!.querySelector(
+      ".voice-tier-chip"
+    ) as HTMLElement;
+    expect(chip.title).toBe("hdVoicesAllowanceNote");
+  });
+
+  it("keeps the description alongside the No-sample group's own", async () => {
+    const deps = makeDeps({
+      pi: [mkHdVoice("jarnathan"), mkHdVoice("mystery", { sample_url: undefined })],
+    });
+    const { container } = await mount(deps);
+    const described = rowOf(container, "mystery")!.getAttribute(
+      "aria-describedby"
+    )!;
+    expect(described.split(/\s+/).sort()).toEqual([
+      "voice-hd-note",
+      "voice-nosample-label",
+    ]);
+  });
+
+  it("still gives the HD filter its helper line", async () => {
+    const deps = makeDeps({ pi: mixed() });
+    const { container } = await mount(deps);
+    chooseFilter(container, "hd");
+    expect(q(container, ".voice-filter-note")!.dataset.i18n).toBe(
+      "hdVoicesAllowanceNote"
+    );
+  });
+});
+
+describe("VoicesController — the rail says when the arrows go live", () => {
+  const catalog = () => [mkVoice("onyx"), mkVoice("ash"), mkVoice("coral")];
+
+  it("confirms it once, on the play that arms the rail", async () => {
+    const deps = makeDeps({ pi: catalog() });
+    const { container } = await mount(deps);
+    press(container, " ");
+    emit(deps, 0, playingState("onyx"));
+    const status = q(container, "#voice-status")!;
+    expect(status.textContent).toBe("voicesNowPlaying voicesArrowsLive");
+
+    // …and never again: the reader has been told, and a live region that
+    // repeats itself is the thing polite queues are worst at.
+    press(container, "ArrowDown");
+    emit(deps, 1, playingState("ash"));
+    expect(status.textContent).toBe("voicesNowPlaying");
+
+    // Not even by coming back to the voice that carried it. The line is
+    // latched to one clip, not to a voice.
+    press(container, "ArrowUp");
+    emit(deps, 2, playingState("onyx"));
+    expect(status.textContent).toBe("voicesNowPlaying");
+  });
+
+  it("does not repeat itself when an unrelated repaint re-derives the line", async () => {
+    const deps = makeDeps({
+      claude: catalog(),
+      claudeOverlay: { pinned: [], unpinned: [] },
+    });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    press(container, " ");
+    emit(deps, 0, playingState("onyx"));
+    const status = q(container, "#voice-status")!;
+    let mutations = 0;
+    const observer = new MutationObserver((records) => {
+      mutations += records.length;
+    });
+    observer.observe(status, { childList: true, characterData: true, subtree: true });
+    pinToggleOf(container, "coral")!.click();
+    await flushAsync();
+    observer.takeRecords().forEach(() => (mutations += 1));
+    observer.disconnect();
+    expect(mutations).toBe(0);
+    expect(status.textContent).toBe("voicesNowPlaying voicesArrowsLive");
+  });
+
+  it("stays quiet when the escape hatch is off — the arrows are not going live", async () => {
+    const deps = makeDeps({ pi: catalog(), arrowAudition: false });
+    const { container } = await mount(deps);
+    press(container, " ");
+    emit(deps, 0, playingState("onyx"));
+    expect(q(container, "#voice-status")!.textContent).toBe("voicesNowPlaying");
   });
 });

@@ -166,8 +166,12 @@
   margin-left: auto;
 }
 
+/* The bar's controls are TEXT, not buttons with boxes. `Play all` joined this
+   group when it stopped drawing a pill — see the note above `.voice-play-all`.
+   The chip re-adds an outline below, because its whole job is to show a state. */
 .voice-your-voice,
 .voice-arrow-chip,
+.voice-play-all,
 .voice-compare-swap {
   border: none;
   background: transparent;
@@ -202,9 +206,18 @@
 .voice-arrow-chip.lit::before {
   color: #2c5a42;
 }
+/* OFF, and only off. It used to be struck through, which conventionally means
+   deleted, deprecated or unavailable — none of which is true of a toggle you
+   can press again. The dot goes HOLLOW and the label dims: a shape change as
+   well as a colour one, so the state survives a colourblind reader and a
+   greyscale screenshot, and `aria-pressed` carries the same fact to a screen
+   reader. Three states, one control: hollow (off), grey ● (on, not yet armed),
+   green ● (on and auditioning). */
 .voice-arrow-chip[aria-pressed="false"] {
-  text-decoration: line-through;
-  opacity: 0.7;
+  color: rgba(36, 29, 20, 0.38);
+}
+.voice-arrow-chip[aria-pressed="false"]::before {
+  content: "○";
 }
 .voice-compare-glyph {
   margin-right: 5px;
@@ -213,20 +226,22 @@
 /* --- Play all, its position readout, and the Show: filter -------------------
    Auto-advance is the OTHER comparison gesture, never the opening one: the
    page invites you to hear ONE voice, and this is the option beside that
-   invitation, not in front of it. */
+   invitation, not in front of it.
+
+   It used to draw a pill — 1px outline, white fill, rounded — which made it
+   the only button-shaped thing on the page and therefore its apparent call to
+   action. The page then read as "commit to a minute of audio" while its own
+   design doc rejects exactly that as the opening gesture. So it is now set
+   like the controls it sits among (`Your voice ↗`, the compare swap): plain
+   text, the bar's quiet ink, a ▶ in front of it. Still first in the bar,
+   because the sweep and its `6 of 22` readout belong together and the reading
+   order is a sentence, not a ranking — but no longer louder than the rail. */
 
 .voice-play-all {
   display: inline-flex;
   align-items: baseline;
   gap: 5px;
-  border: 1px solid #eadfcc;
-  border-radius: 9999px;
-  padding: 2px 10px;
-  background: #ffffff;
-  font: inherit;
   color: rgba(36, 29, 20, 0.62);
-  cursor: pointer;
-  white-space: nowrap;
 }
 .voice-play-all:hover {
   color: #241d14;
@@ -412,6 +427,41 @@
    it to the top would break the chart the pitch order creates. */
 .voice-row-current {
   border-left-color: #2c5a42;
+}
+
+/* THE ROW IS THE PLAY TARGET, said on the row you are pointing at.
+   There is deliberately no per-row play BUTTON: nesting one inside a
+   `role="option"` is exactly what the whole-row target exists to avoid, and 22
+   of them would make the resting page a wall — the opposite of "calm at rest,
+   informative on demand". A pseudo-element says the same thing for nothing: it
+   lives in the 14px of padding the row already has, so it costs the print not
+   one pixel and cannot move the shared reference line, and the row's own
+   `aria-label` overrides its contents, so it adds nothing to read. */
+.voice-row[data-print-voice]::before {
+  content: "▶";
+  position: absolute;
+  /* Centred by spanning the row and letting flex do it, NOT by a translate:
+     the page bans transforms outright so that nothing on it can slide. */
+  left: 2px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  font-size: 8px;
+  line-height: 1;
+  color: rgba(36, 29, 20, 0.38);
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+  pointer-events: none;
+}
+.voice-row[data-print-voice]:hover::before,
+.voice-row[data-print-voice].focused::before {
+  opacity: 1;
+}
+/* …except on the row that is already sounding, where Space STOPS rather than
+   plays and a ▶ would be an instruction that is the wrong way round. */
+.voice-row.playing[data-print-voice]::before {
+  opacity: 0;
 }
 
 /* The print YIELDS FIRST — but at the PAGE's width, never at the row's, which
@@ -757,6 +807,7 @@
 .voice-use:focus-visible,
 .voice-your-voice:focus-visible,
 .voice-arrow-chip:focus-visible,
+.voice-play-all:focus-visible,
 .voice-compare-swap:focus-visible {
   outline: 2px solid #2c5a42;
   outline-offset: 2px;
@@ -774,6 +825,9 @@
 @media (prefers-reduced-motion: reduce) {
   .voice-row,
   .voice-row-desc {
+    transition: none;
+  }
+  .voice-row[data-print-voice]::before {
     transition: none;
   }
   /* The playhead is NOT removed — it carries information. It advances in 8

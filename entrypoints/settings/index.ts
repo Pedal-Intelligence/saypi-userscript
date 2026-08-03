@@ -164,6 +164,15 @@ class SettingsApp {
     this.activeTabId = tabId;
     // Load tab on-demand when user switches to it
     await this.loadTab(tabId);
+    // …and only now tell it that it is the tab on screen. After loadTab,
+    // because a tab visited for the first time has no DOM until then; guarded
+    // for the same reason as onHidden, because a tab that cannot greet the
+    // user must still be the tab the user is looking at.
+    try {
+      this.tabs.get(tabId)?.onShown?.();
+    } catch (error) {
+      console.warn(`[Settings] ${tabId} tab failed to show:`, error);
+    }
   }
 }
 

@@ -1252,6 +1252,14 @@
       }
     }
   },
+  "voicesArrowsLive": {
+    "message": "Arrows now play as you move. Esc stops.",
+    "description": "Screen-reader confirmation, appended to the first 'Playing <voice>' announcement in the settings Voices list, saying that the arrow keys have just become audible. Echoes the 'Play as you move' toggle's own wording."
+  },
+  "voicesHeardMark": {
+    "message": "Heard",
+    "description": "Part of a voice row's accessible name in the settings Voices list, marking a voice this profile has already listened to. Visually this is drawn as ink density on the voice's soundprint, which a screen reader cannot see."
+  },
   "voicesPlayAllN": {
     "message": "Play all ($count$)",
     "description": "Button in the settings Voices control bar that plays every voice currently listed, one after another; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",

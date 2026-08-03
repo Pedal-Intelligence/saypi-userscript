@@ -353,3 +353,34 @@ describe("the overflow note comes back, because a pin can outrun its seat", () =
     }
   });
 });
+
+describe("the two things the ink cannot say out loud", () => {
+  it("names the heard state in the page's own word, not a checkmark", () => {
+    // The rail's visual expression of "you have heard this" is ink density,
+    // which a screen reader cannot see. The accessible name has to say it, and
+    // the word is the one the filter already uses ("Not yet heard") — not
+    // "played", not "done", and never a ✓.
+    expect(en.voicesHeardMark?.message).toBe("Heard");
+    expect(en.voicesHeardMark.message).not.toMatch(/✓|check|done|complete/i);
+    expect(controllerSrc).toMatch(/"voicesHeardMark"/);
+  });
+
+  it("confirms the arrows going live in one short sentence, with its way out", () => {
+    // Echoes the chip's own label ("Play as you move") so the confirmation and
+    // the control that undoes it use the same words, and names Esc, because a
+    // rail that has just become audible needs an exit more than an explanation.
+    expect(en.voicesArrowsLive?.message).toBe(
+      "Arrows now play as you move. Esc stops."
+    );
+    expect(en.voicesArrowsLive.message).not.toMatch(/\$.+\$/);
+    expect(controllerSrc).toMatch(/"voicesArrowsLive"/);
+  });
+
+  it("puts HD's cost where the choice is made, not only where HD is filtered", () => {
+    // Same sentence as the HD filter's helper line and Claude's in-chat chip
+    // tooltip. It reaches assistive tech as a DESCRIPTION — spoken after the
+    // name, which is what makes it secondary rather than a headline.
+    expect(controllerSrc).toMatch(/voice-hd-note/);
+    expect(controllerSrc).toMatch(/aria-describedby/);
+  });
+});

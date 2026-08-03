@@ -64,6 +64,13 @@ export const VOICES_ARROW_AUDITION_KEY = "voicesArrowAudition";
 const TYPE_AHEAD_MS = 800;
 
 /**
+ * The id every HD row's `aria-describedby` points at — one hidden sentence for
+ * the whole rail rather than one per row, because it is the same fact about the
+ * same tier and duplicating it 10 times is 10 nodes a reader can land on.
+ */
+const HD_NOTE_ID = "voice-hd-note";
+
+/**
  * Which slice of the catalog the rail is showing — the `Show:` control
  * (design §4/§10). Deliberately not persisted: a filter you cannot see the
  * effect of is a list that lies about being the catalog, and unlike the arrow-
@@ -284,6 +291,16 @@ interface RailRow {
   /** Has a sample clip: auditionable, pitched, and inside the rail's counts. */
   playable: boolean;
   el: HTMLElement;
+  /**
+   * The fixed head of the row's accessible name: the voice, plus a twin's
+   * disambiguator when it has one. Everything after it can change without a
+   * repaint (a clip becomes heard mid-listen), so the name is composed rather
+   * than written once — and this half is deliberately first, because two rows
+   * announcing "Paola" is the regression this page has already had twice.
+   */
+  labelHead: string;
+  /** The half that outlives a repaint but not a commit: `In use`. */
+  labelTail: string[];
 }
 
 /**
@@ -337,14 +354,49 @@ export class VoicesController {
    */
   private landed = false;
   /**
+   * The reader has asked for this tab, and the rail owes them the keyboard.
+   *
+   * A CLAIM rather than a call, because `onShown()` almost always arrives
+   * before there is a rail to focus: the settings shell activates the tab
+   * synchronously, and `init()` is network-bound and deliberately not awaited.
+   * So the claim is banked and honoured by the next paint — and dropped by
+   * `onHidden`, or a late paint would reach across and pull focus out of the
+   * tab the reader moved on to.
+   */
+  private wantsRailFocus = false;
+  /**
    * The arming rule (design §3). Arrow keys move focus silently until the user
    * has explicitly played something in this session; after that, focus
    * auditions. Buys screen-reader safety, autoplay sticky activation, and no
    * surprise audio on tab open.
+   *
+   * Note what does NOT arm it: taking DOM focus. Arriving on the tab is not
+   * playing, and a rail that armed itself on arrival would ambush a screen
+   * reader user with audio for doing nothing but opening a settings tab.
    */
   private armed = false;
   /** The persisted half of the same rule: off means arrows NEVER audition. */
   private arrowAudition = true;
+  /**
+   * Whether the rail has told the reader that ↑↓ have become audible.
+   *
+   * Arming is otherwise invisible except for a chip lighting up in a control
+   * bar the reader may not be looking at — and what it changes is that the
+   * arrow keys now make sound. That is worth one sentence, once: `unsaid` →
+   * `due` the moment arrows actually go live, `due` → `said` on the first
+   * status line that can carry it.
+   */
+  private armedNotice: "unsaid" | "due" | "said" = "unsaid";
+  /**
+   * Which playing voice's status line is carrying that sentence.
+   *
+   * LATCHED to a voice rather than announced and forgotten, because the live
+   * region is re-derived on every repaint: a one-shot append would be undone
+   * by the next unrelated pin toggle, and `announce()` writes on change — so
+   * the reader would hear "Playing Onyx" a second time for no reason. While
+   * the same voice is sounding, the line is a constant.
+   */
+  private armedNoticeFor: string | null = null;
   /**
    * The compare pair (design §4): the last two DISTINCT voices auditioned,
    * most recent first, seeded `[currentVoiceId, null]` so the first `↓`
@@ -475,8 +527,56 @@ export class VoicesController {
    * playing is audio with no controls — which is the complaint.
    */
   onHidden(): void {
+    // Cancel any focus the rail was still owed. Click Voices, change your mind
+    // and click About, and the paint that lands a second later must not pull
+    // the keyboard out of the tab you are now reading.
+    this.wantsRailFocus = false;
     this.stopAudition();
     this.updateControlBar();
+  }
+
+  // --- arriving -------------------------------------------------------------
+
+  /**
+   * The Voices tab is the one on screen, because the reader asked for it.
+   *
+   * This is what makes the design's headline claim true. The rail is a
+   * `role="listbox"` with a roving `aria-activedescendant`, so it LOOKS
+   * focused from its first paint — a `.focused` row, an active descendant, a
+   * `tabIndex` of 0 — while DOM focus sits on the sidebar button that opened
+   * the tab. `Space` then goes to the button and nothing sounds. Nothing in a
+   * class-toggling tab switcher moves focus, and an inactive panel is
+   * `display: none`, so the rail could not have taken focus earlier even if
+   * it had tried.
+   *
+   * Idempotent and re-entrant: coming back to the tab claims focus again, and
+   * lands wherever the reader left off rather than at the top, because
+   * `focusedVoiceId` survives.
+   */
+  onShown(): void {
+    this.wantsRailFocus = true;
+    this.claimRailFocus();
+  }
+
+  /**
+   * Hand the rail the keyboard, if it is still owed and there is a rail.
+   *
+   * `preventScroll`, plus the row's own `nearest` scroll: focusing the listbox
+   * would otherwise scroll the page to the TOP of a 22-row element, which is
+   * both a jump and the wrong place. `applyFocus` moves the minimum that makes
+   * the row the reader is standing on visible — nothing at all when it already
+   * is. That is the one difference between arriving and repainting: a repaint
+   * (`landed`) never travels, because the reader did not ask to go anywhere,
+   * and activating the tab is them asking.
+   *
+   * Only ever reached after a paint, since it needs a rail — which is why it
+   * has nothing to say about `landed`.
+   */
+  private claimRailFocus(): void {
+    if (!this.wantsRailFocus || !this.rail) return;
+    this.wantsRailFocus = false;
+    this.applyFocus({ block: "nearest" });
+    this.rail.focus({ preventScroll: true });
   }
 
   /**
@@ -530,6 +630,7 @@ export class VoicesController {
 
   /** Release the page-level listeners this studio installed. */
   destroy(): void {
+    this.wantsRailFocus = false;
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     document.removeEventListener("keydown", this.onDocumentKeyDown);
     window.removeEventListener("pagehide", this.onPageHide);
@@ -700,6 +801,11 @@ export class VoicesController {
     );
     if (!chosen || chosen.disabled) this.filter = "all";
 
+    // The HD description goes in before anything points at it: the rows are
+    // built carrying `aria-describedby`, and a description that resolves to
+    // nothing is a description a screen reader silently drops.
+    const hdNote = this.renderHdNote(vm);
+    if (hdNote) body.appendChild(hdNote);
     // The rail is built FIRST, even though it paints second: the control bar
     // offers to jump to the current voice, and it can only honestly offer that
     // once it knows the current voice has a row (a host built-in does not).
@@ -735,6 +841,9 @@ export class VoicesController {
     } else if (keepFocus) {
       rail.focus({ preventScroll: true });
     }
+    // An arrival that got here before the catalog did — the usual case, since
+    // the shell activates the tab long before this paint.
+    this.claimRailFocus();
   }
 
   private renderEmptyState(
@@ -1350,13 +1459,26 @@ export class VoicesController {
     el.classList.add("voice-row");
     el.id = `voice-row-${index}`;
     el.setAttribute("role", "option");
-    el.setAttribute("aria-selected", "false");
     el.dataset.voiceId = voice.id;
     const isCurrent = voice.id === vm.currentId;
-    if (isCurrent) {
-      el.classList.add("voice-row-current");
-      el.setAttribute("aria-current", "true");
-    }
+    // THE SELECTION IS THE COMMITMENT, not the cursor.
+    //
+    // `aria-selected` used to track where the arrow keys had got to, so a
+    // screen reader announced "Onyx, selected" because Onyx happens to be the
+    // deepest voice and the reader had chosen nothing. That is the APG's
+    // "selection follows focus" pattern used where it does not apply: it is for
+    // listboxes where moving the cursor IS choosing (a font picker applying as
+    // you walk), and here walking the rail changes nothing — `Use` does, and
+    // only `Use`. Meanwhile the real selection was being reported by a second,
+    // quieter attribute (`aria-current`), so the page said one thing twice and
+    // the louder half pointed at the wrong row.
+    //
+    // Now: exactly one option is selected, and it is the voice in use; none is,
+    // on a host whose voice has never been chosen. The cursor is carried by
+    // `aria-activedescendant` alone, which is what it is for. `aria-current` is
+    // gone — the fact is on the row once, in the attribute a listbox owns.
+    el.setAttribute("aria-selected", String(isCurrent));
+    if (isCurrent) el.classList.add("voice-row-current");
     // The tagline is no longer a 2.7 em reserved block on 22 cards; it is one
     // 12 px line on the focused row, still via subtitleFor so the #474
     // twin-name logic survives untouched.
@@ -1371,13 +1493,23 @@ export class VoicesController {
     const isTwin = vm.dupNames.has(String(voice.name ?? "").toLowerCase());
 
     // The option's name is the voice, not the concatenation of its print, its
-    // badges and its two buttons.
-    const label = [voice.name];
-    if (isTwin && subtitle.text) label.push(subtitle.text);
-    if (isCurrent) label.push(getMessage("voicesInUse"));
-    el.setAttribute("aria-label", label.join(" — "));
-    if (inNoSampleGroup) {
-      el.setAttribute("aria-describedby", "voice-nosample-label");
+    // badges and its two buttons. Composed rather than written once, because
+    // the heard mark can land mid-listen without a repaint (see applyRowLabel).
+    const head = [voice.name];
+    if (isTwin && subtitle.text) head.push(subtitle.text);
+    const labelTail = isCurrent ? [getMessage("voicesInUse")] : [];
+
+    // What a row is DESCRIBED by, as opposed to named: secondary, spoken after
+    // the name, and only for the things the reader could not otherwise find
+    // out. HD's cost is one of them — the note used to render only while
+    // `Show: HD only` was chosen, so anyone picking an HD voice out of `All
+    // voices` (the default) never met it. It belongs to the voice, not to the
+    // filter, so it hangs off every HD row on every filter.
+    const describedBy: string[] = [];
+    if (getVoiceTier(voice) === "hd") describedBy.push(HD_NOTE_ID);
+    if (inNoSampleGroup) describedBy.push("voice-nosample-label");
+    if (describedBy.length > 0) {
+      el.setAttribute("aria-describedby", describedBy.join(" "));
     }
 
     const playable = !!voice.sample_url;
@@ -1493,7 +1625,38 @@ export class VoicesController {
     el.appendChild(actions);
 
     if (playable) this.trackPrint(el, voice);
-    return { voice, domId: el.id, playable, el };
+    const row: RailRow = {
+      voice,
+      domId: el.id,
+      playable,
+      el,
+      labelHead: head.join(" — "),
+      labelTail,
+    };
+    this.applyRowLabel(row);
+    return row;
+  }
+
+  /**
+   * The row's accessible name — the disambiguator first, then the states.
+   *
+   * Heard state is in here because the rail expresses it as INK, and ink is
+   * the one encoding a screen reader cannot read. `9 of 22 heard` in the
+   * control bar says how far along you are; without this, nothing says which
+   * of the rows under your cursor you have already listened to, so the whole
+   * "never re-audition by accident" half of the page was sighted-only.
+   *
+   * Only the positive state is named. Twenty-two rows announcing that they are
+   * in their default state is noise, and it is the same asymmetry the visual
+   * makes — an unheard print is simply the resting drawing.
+   */
+  private applyRowLabel(row: RailRow): void {
+    const parts = [row.labelHead];
+    if (row.playable && isHeard(this.heardStore, row.voice.id)) {
+      parts.push(getMessage("voicesHeardMark"));
+    }
+    parts.push(...row.labelTail);
+    row.el.setAttribute("aria-label", parts.join(" — "));
   }
 
   private renderPinToggle(
@@ -1537,10 +1700,43 @@ export class VoicesController {
     else toggle.removeAttribute("title");
   }
 
+  /**
+   * The HD tier's one consequence, in the ARIA slot for secondary information.
+   *
+   * Visually hidden, and referenced rather than read inline: a description is
+   * spoken after the option's name, after a pause, and can be turned off — so
+   * it is the exact shape of "secondary information at the point of
+   * commitment". The alternative, folding it into the accessible NAME, would
+   * make ten rows announce a sentence about billing before they announce which
+   * voice they are, which is the tier shelves' mistake in a new costume: they
+   * led the premium tier with a penalty, and PR #585 was right to delete them.
+   *
+   * Rendered only when the catalog has HD in it. A note about a tier the host
+   * does not serve is a description nothing points at.
+   */
+  private renderHdNote(vm: StudioViewModel): HTMLElement | null {
+    if (!vm.catalog.some((voice) => getVoiceTier(voice) === "hd")) return null;
+    const note = document.createElement("div");
+    note.id = HD_NOTE_ID;
+    note.classList.add("voice-visually-hidden");
+    note.setAttribute("data-i18n", "hdVoicesAllowanceNote");
+    note.textContent = getMessage("hdVoicesAllowanceNote");
+    return note;
+  }
+
+  /**
+   * The visible half of the same fact. `title` rather than inline text,
+   * matching what ClaudeVoiceMenu already does on its own HD chip — one chip,
+   * one hover, one sentence, wherever in the product you meet it. The chip is
+   * inside a row whose `aria-label` overrides its contents, so this is a
+   * sighted-hover affordance only; the row's description is what carries it to
+   * assistive tech.
+   */
   private renderTierChip(): HTMLElement {
     const chip = document.createElement("span");
     chip.classList.add("voice-tier-chip");
     chip.textContent = "HD";
+    chip.title = getMessage("hdVoicesAllowanceNote");
     return chip;
   }
 
@@ -1862,7 +2058,8 @@ export class VoicesController {
     this.rows.forEach((row, index) => {
       const focused = index === this.focusIndex;
       row.el.classList.toggle("focused", focused);
-      row.el.setAttribute("aria-selected", String(focused));
+      // NB no `aria-selected` here. The cursor is `aria-activedescendant`'s
+      // job; `aria-selected` belongs to the voice the reader committed to.
       // Exactly two extra tab stops, always on the row you are looking at.
       row.el
         .querySelectorAll<HTMLButtonElement>(".voice-row-actions button")
@@ -1910,7 +2107,7 @@ export class VoicesController {
     // close. Idempotent — the row is already focused.
     this.applyFocus({ block: "nearest" });
     // Space ARMS the rail either way — the reader has said "play things".
-    this.armed = true;
+    this.arm();
     if (this.auditionState.playingVoiceId === row.voice.id) {
       this.stopAudition();
       this.updateControlBar();
@@ -1927,8 +2124,26 @@ export class VoicesController {
   private switchBack(): void {
     const row = this.playableRowFor(this.pair[1]);
     if (!row) return;
-    this.armed = true;
+    this.arm();
     this.audition(row.voice);
+  }
+
+  /**
+   * The rail becomes audible (design §3) — the one seam every explicit play
+   * goes through, so there is exactly one place that decides the rail has just
+   * changed what the arrow keys do.
+   *
+   * The notice is queued only when the arrows are ACTUALLY going live: with
+   * the escape hatch off, arming licenses the browser's autoplay policy and
+   * nothing else, and announcing a change that did not happen is worse than
+   * saying nothing.
+   */
+  private arm(): void {
+    if (this.armed) return;
+    this.armed = true;
+    if (this.arrowAudition && this.armedNotice === "unsaid") {
+      this.armedNotice = "due";
+    }
   }
 
   private disarm(): void {
@@ -1939,6 +2154,11 @@ export class VoicesController {
 
   private toggleArrowAudition(): void {
     this.arrowAudition = !this.arrowAudition;
+    // Turning the hatch back on while the rail is already armed is the other
+    // way the arrows go live for the first time.
+    if (this.arrowAudition && this.armed && this.armedNotice === "unsaid") {
+      this.armedNotice = "due";
+    }
     this.updateControlBar();
     void this.deps.setArrowAudition?.(this.arrowAudition);
   }
@@ -1966,7 +2186,7 @@ export class VoicesController {
   private audition(voice: SpeechSynthesisVoiceRemote): void {
     // Any explicit play arms the rail (design §3): the first play always
     // descends from a real gesture, which is what licenses every later one.
-    this.armed = true;
+    this.arm();
     // Direct manipulation gets exactly one meaning (design §4): touching a row
     // mid-sweep cancels the sweep and plays THAT row. The sequencer does the
     // actual cancelling — `play()` bumps its session token — so all this has
@@ -2006,6 +2226,12 @@ export class VoicesController {
     this.heardStore = markHeardAt(this.heardStore, voiceId, Date.now());
     if (known) return;
     this.markRows(voiceId, "heard");
+    // The ink and the name are the same fact in two encodings, so they land on
+    // the same tick — a mark a screen reader only learns about at the next
+    // repaint is a mark it usually never learns about at all.
+    this.rows
+      .filter((row) => row.voice.id === voiceId)
+      .forEach((row) => this.applyRowLabel(row));
     this.updateControlBar();
   }
 
@@ -2084,7 +2310,7 @@ export class VoicesController {
     // Pressing it is an explicit play, so it arms the rail exactly as Space
     // does — and it is a real user gesture, which is what licenses every
     // programmatic play() that follows under Chrome's sticky-activation rule.
-    this.armed = true;
+    this.arm();
     this.sweeping = true;
     // Focus is NOT moved, and is not moved as the queue advances either: the
     // pair, the focus and the queue index are three independent things, which
@@ -2230,10 +2456,28 @@ export class VoicesController {
     }
     const playing = this.auditionState.playingVoiceId;
     if (!playing || this.sweeping) {
+      this.armedNoticeFor = null;
       this.announce("");
       return;
     }
-    this.announce(getMessage("voicesNowPlaying", [this.nameOf(playing)]));
+    // The first clip that arms the rail carries the news that ↑↓ are now live,
+    // on the same line rather than as a second announcement — a polite queue
+    // would deliver two writes as two interruptions, and the second would land
+    // over the sample it is talking about.
+    if (this.armedNotice === "due") {
+      this.armedNotice = "said";
+      this.armedNoticeFor = playing;
+    }
+    const line = getMessage("voicesNowPlaying", [this.nameOf(playing)]);
+    // The latch lasts exactly as long as that one clip. Anything else sounding
+    // — or nothing sounding — drops it for good, so coming back to the voice
+    // you started on later does not hear the confirmation a second time.
+    if (playing !== this.armedNoticeFor) {
+      this.armedNoticeFor = null;
+      this.announce(line);
+      return;
+    }
+    this.announce(`${line} ${getMessage("voicesArrowsLive")}`);
   }
 
   /**

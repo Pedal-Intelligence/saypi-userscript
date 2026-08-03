@@ -162,8 +162,11 @@ but nearly constant) or speaking rate (not populated at all) — it can actually
 measuring it.
 
 Tier survives as a **badge and a filter**, which narrow a continuum, rather than as shelves, which
-chop it. The cost note that used to be a decorative shelf heading now sits on the HD filter, where it
-is actionable at the moment it is relevant.
+chop it. The cost note that used to be a decorative shelf heading is now attached to the *voice*: it
+hangs off every HD row as an ARIA description and off the `HD` chip as a tooltip, on every filter, and
+it is still the HD filter's helper line when you choose that filter. Attaching it only to the filter
+was the first attempt and it had a hole big enough to walk through — the default view is `All
+voices`, so anyone who picked an HD voice without narrowing first never met the cost at all.
 
 ### Each voice is drawn from its own clip
 
@@ -186,13 +189,36 @@ which is how we discovered that the Everyday clips all read the same line (see �
 heard, without moving focus or scroll. `Enter` commits. That is the whole model, and it makes the
 central act — hear this, hear that, hear this again — a two-finger operation.
 
+**Opening the tab gives the rail the keyboard**, landing on your current voice's row — which is what
+makes "hear a voice: one action" true rather than decorative. This is less obvious than it sounds and
+it was wrong for a while: an inactive settings panel is `display: none`, so the rail *cannot* hold
+focus before its tab is on screen, and a tab switcher that toggles classes hands focus nowhere. The
+rail meanwhile drew everything that *looks* like focus — a roving `aria-activedescendant`, a
+`.focused` row, `tabIndex = 0` — while DOM focus sat on the sidebar button that opened it. `Space`
+went to the button. The fix is a `TabController.onShown` hook, the mirror of the `onHidden` the
+player already needed; the rail banks the claim and honours it on the next paint, because the catalog
+is network-bound and the tab is activated long before there is a rail to focus.
+
+Taking focus is deliberately **not** playing: the arming rule still holds, so arriving on the tab
+never makes a sound, and the first `↓` is silent until you have played something yourself.
+
 Mouse users get the same thing: the entire row is the play target, and the compare control in the bar
-fills in visibly as they walk, which is how they discover it exists.
+fills in visibly as they walk, which is how they discover it exists. The hovered or focused row shows
+a small `▶` in its left gutter to say the row *is* the button — a pseudo-element in padding the row
+already has, not twenty-two nested buttons, which would both shout at rest and put a control inside
+every `role="option"`.
 
 **Arrow keys do not play until you have explicitly played something.** This one rule buys three
 things at once: a screen-reader user is never ambushed by audio, the browser's autoplay policy is
 satisfied by a real gesture before anything chains, and nobody ever gets noise from merely opening
-the page. There is a visible toggle for people who want it off permanently.
+the page. There is a visible toggle for people who want it off permanently — a chip that reads
+`○ Play as you move` when off and `● Play as you move` when on, because the shape has to carry the
+state as well as the colour does. (It used to be struck through when off, which conventionally means
+deleted or unavailable; the control is neither.)
+
+The moment arrows *become* live is a change to what the keyboard does, and the page says so once —
+appended to the first `Playing <voice>`, so it arrives on one line rather than as a second
+interruption landing over the sample it is describing.
 
 ### Comparison has no mode
 
@@ -203,6 +229,28 @@ incumbent-versus-challenger, which is the actual decision, with no setup at all.
 Clips restart rather than resuming mid-phrase. ABX tools carry the playhead across the switch, which
 is right for 30-second excerpts and wrong for 1.5-second ones where the same offset lands on a
 different word. The opening is where a voice's character is clearest anyway.
+
+### Say the same thing twice, but never in the same channel twice
+
+Three of the page's facts are drawn rather than written, and drawing is the one channel a screen
+reader cannot read. So each has exactly one spoken counterpart, and only one:
+
+- **Which voice you have chosen.** The listbox's `aria-selected` marks the voice **in use** — the one
+  thing `Use` writes. It used to track the arrow cursor, so the page announced "Onyx, selected"
+  because Onyx happens to be the deepest voice and you had chosen nothing; the real commitment was
+  reported by a second, quieter attribute. Walking a list is not choosing from it, and
+  "selection follows focus" is for listboxes where moving the cursor *is* choosing. The cursor is
+  carried by `aria-activedescendant` alone, which is what it is for.
+- **What you have already heard.** Ink density is the visual expression, and the row's accessible
+  name says `Heard`. Only the positive state — twenty-two rows announcing their default state is
+  noise, and the counter in the bar already says how far along you are.
+- **What HD costs.** The `HD` chip is the visual mark; the row's `aria-describedby` points at one
+  hidden sentence for the whole rail. A *description*, not part of the name: spoken after the voice,
+  after a pause, and skippable. Folding it into the name would make ten rows announce a sentence
+  about billing before they announce which voice they are, which is the tier shelves' mistake in a
+  new costume.
+
+The rule underneath: if you can see it, you must be able to hear it — and exactly once.
 
 ### The page develops as you listen
 
@@ -248,7 +296,12 @@ or a flat-rate, server-cached preview endpoint. The seam was left in place.
 commit look tidy in a diagram and feel like work. `⇧Space` delivers the same outcome with no stages.
 
 **Auto-advance as the opening gesture.** `Play all` exists, but it is not what the page offers first.
-The invitation is "hear one voice", not "commit to a minute of audio".
+The invitation is "hear one voice", not "commit to a minute of audio". This one needed re-deciding
+after the fact: `Play all` was drawn as a pill — outlined, white-filled, rounded — which made it the
+only button-shaped thing on the page and therefore its apparent call to action, so the page's loudest
+affordance contradicted its own stated intent. It is now set like the controls it sits among: plain
+text, the bar's quiet ink, a `▶` in front of it. Still first in the bar, because it and its `6 of 22`
+readout are one sentence — but no longer louder than the rail.
 
 **A "New" badge on recently added voices.** The catalog carries no date. It would be a claim the data
 cannot support.
@@ -268,6 +321,12 @@ Concrete tests, in rough order of how often they catch things:
 - **Does it re-draw existing voices when the catalog grows?** Scales must be keyed to fixed
   constants. If adding a 23rd voice reflows the other 22, it is wrong.
 - **Can a keyboard-only user do it? Can a screen-reader user do it without being ambushed by audio?**
+- **Does it add a second way to say something the page already says?** Two ARIA attributes for one
+  fact is how the page ended up announcing the wrong row as "selected". Pick the channel the platform
+  owns and use only that one.
+- **Is it drawn but not spoken?** Ink, hue, position and badges are all invisible to a screen reader.
+  Anything the reader needs in order to choose needs a spoken counterpart — in the name if it
+  identifies the row, in a description if it is a consequence of picking it.
 - **Does it survive a 40%-longer translation, and read correctly at a count of 1?**
 - **Does it still work at ~690px?** Do not design against a wide window; there isn't one.
 - **Is colour carrying meaning on its own?** It must always be the third encoding of something, never
@@ -285,9 +344,23 @@ Honest list, for whoever picks this up.
 - **The row is wide and the middle is quiet.** At rest, the space between a voice's name and the
   right edge is empty. It is deliberate (detail on focus only) and it is the thing most likely to
   read as institutional rather than calm. If you want one thing to improve, this is it.
-- **Focus-triggered playback has not been through a real screen reader.** The arming rule is designed
-  to make it safe. It has not been proven with VoiceOver or NVDA. If that goes badly, the fix is to
-  flip arrow-audition to opt-in — a single constant, not a redesign.
+- **The page has still never met a real screen reader.** The gap is narrower than it was — selection
+  now marks the voice in use rather than the arrow cursor, heard state is in the accessible name, HD's
+  cost is an ARIA description, and the moment the arrows become audible is announced — but every one
+  of those was reasoned from the APG and verified with `getAttribute`, not with a reader. What a
+  headless probe cannot tell you is how much of it is *too much*: whether "Marin — Heard — In use,
+  selected" is informative or a mouthful, whether the HD description lands as a footnote or as an
+  interruption, and whether the arming confirmation is heard at all over the sample it rides on. A
+  VoiceOver and NVDA pass is the outstanding work. If focus-triggered playback goes badly there, the
+  fix is still to flip arrow-audition to opt-in — a single constant, not a redesign.
+- **Arriving now travels a little, where it used to travel not at all.** Taking DOM focus uses
+  `preventScroll` on the listbox — otherwise the browser scrolls to the *top* of a 22-row element,
+  which is both a jump and the wrong place — plus the row's own `nearest` scroll. `nearest` moves
+  nothing when the row is already visible, and the minimum when it is not. But "the minimum" for a
+  current voice at row 19 of 22 still takes the heading and the host switcher off-screen, which is
+  precisely what arriving used to avoid by leaving focus unvisited. That trade is deliberate — a
+  focus ring below the fold is worse than a scrolled page — but it is a trade, and the honest fix
+  further out is a shorter route to your own voice rather than a longer scroll to it.
 - **Sticky autoplay activation is designed around, not verified.** The automated harness disables
   autoplay policy outright, so a green test there proves nothing. It needs a real browser check.
 - **Two server-side asks are outstanding**, both with measurements attached: the ten HD clips should

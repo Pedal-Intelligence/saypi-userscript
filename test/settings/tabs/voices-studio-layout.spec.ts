@@ -620,10 +620,11 @@ describe("the sweep, its readout, and the Show: filter", () => {
   });
 
   it("adds no third horizontal rule — the page still has exactly two", () => {
-    // Both new controls are outlined with the `border:` shorthand, which is
-    // an outline rather than a rule. The count assertion lives above; this
-    // pins WHY it still holds.
-    expect(ruleBody(".voice-play-all")).toMatch(
+    // What outlines remain are drawn with the `border:` shorthand, which is an
+    // outline rather than a rule. The count assertion lives above; this pins
+    // WHY it still holds. (`Play all` no longer draws one at all — see "Play
+    // all is an option, not the page's call to action".)
+    expect(ruleBody(".voice-arrow-chip")).toMatch(
       new RegExp(`border:\\s*1px solid ${RULE}`)
     );
     expect(ruleBody(".voice-filter-select")).toMatch(
@@ -730,5 +731,70 @@ describe("the skeleton the rail is painted into", () => {
     // preferences.css sets `.description { display: none }` inside a
     // .user-preference-item, so the rail's subtitle needs its own class.
     expect(ruleBody(".voice-rail-subtitle")).toMatch(/font-size:/);
+  });
+});
+
+describe("the toggle reads as off, not as deleted", () => {
+  it("uses no strikethrough anywhere on the page", () => {
+    // The chip's off state used to be `text-decoration: line-through`, which
+    // conventionally means deleted, deprecated or unavailable. `Play as you
+    // move` is none of those when it is off — it is a control you can press.
+    expect(declarations).not.toMatch(/line-through/);
+  });
+
+  it("says off with a hollow dot and a dimmer label", () => {
+    // A shape change, not only a colour one, so the state survives both a
+    // colourblind reader and a greyscale screenshot. aria-pressed carries it
+    // to a screen reader; this is the visible half.
+    expect(ruleBody('.voice-arrow-chip::before')).toMatch(/content:\s*"●"/);
+    expect(ruleBody('.voice-arrow-chip[aria-pressed="false"]::before')).toMatch(
+      /content:\s*"○"/
+    );
+    expect(
+      inkDensity(ruleBody('.voice-arrow-chip[aria-pressed="false"]'))
+    ).toBeLessThan(inkDensity(ruleBody(".voice-rail-controls")));
+  });
+});
+
+describe("Play all is an option, not the page's call to action", () => {
+  it("draws no box — the invitation is to hear ONE voice", () => {
+    // It was the only outlined, white-filled, button-shaped thing on the page,
+    // which made the loudest affordance the one the design explicitly refuses
+    // to lead with ("Auto-advance as the opening gesture — rejected").
+    const body = ruleBody(".voice-play-all");
+    expect(body).not.toMatch(/border:/);
+    expect(body).not.toMatch(/background:/);
+    expect(body).not.toMatch(/border-radius:/);
+    // …and it stays the bar's quiet ink at rest, like the controls beside it.
+    expect(inkDensity(body)).toBe(
+      inkDensity(ruleBody(".voice-rail-controls"))
+    );
+  });
+
+  it("keeps the one green for the sweep that is actually running", () => {
+    expect(ruleBody(".voice-play-all.sweeping")).toMatch(
+      new RegExp(`color:\\s*${ACCENT}`)
+    );
+  });
+
+  it("says the whole row is the play target, on the row you are pointing at", () => {
+    // NOT 22 persistent buttons: a button nested in a role="option" is exactly
+    // what the whole-row target exists to avoid. A pseudo-element in the 14px
+    // of padding the row already has costs the print nothing and adds nothing
+    // for a screen reader to read.
+    const glyph = ruleBody('.voice-row[data-print-voice]::before');
+    expect(glyph).toMatch(/content:\s*"▶"/);
+    expect(glyph).toMatch(/position:\s*absolute/);
+    expect(glyph).toMatch(/opacity:\s*0/);
+    expect(glyph).toMatch(/pointer-events:\s*none/);
+    expect(
+      ruleBody(
+        '.voice-row[data-print-voice]:hover::before,\n.voice-row[data-print-voice].focused::before'
+      )
+    ).toMatch(/opacity:\s*1/);
+    // A ▶ on a row that is already sounding would be a lie — Space stops it.
+    expect(ruleBody('.voice-row.playing[data-print-voice]::before')).toMatch(
+      /opacity:\s*0/
+    );
   });
 });
