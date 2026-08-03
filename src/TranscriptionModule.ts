@@ -1,6 +1,7 @@
 import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
 import { logger } from "./LoggingModule.js";
+import { ApiError, apiErrorFromResponse } from "./ApiError";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { callApi } from "./ApiClient";
 import EventBus from "./events/EventBus";
@@ -516,7 +517,7 @@ async function uploadAudioForRefinementInternal(
     );
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      throw await apiErrorFromResponse(response);
     }
 
     const responseJson = await response.json();
@@ -640,7 +641,7 @@ async function uploadAudio(
     );
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      throw await apiErrorFromResponse(response);
     }
 
     emitTranscriptionServerTiming(response);
@@ -698,7 +699,21 @@ async function uploadAudio(
       // no need to emit transcription:received event here, it's handled by transcriptionReceived function
     }
   } catch (error: unknown) {
-    if (error instanceof Error) {
+    if (error instanceof ApiError) {
+      // The server told us why it refused. Log its reason rather than a bare
+      // status code, and where signing in is the remedy, prompt for it instead
+      // of leaving the user with dictation that silently stopped working.
+      logger.error(
+        `Transcription refused (${error.status} ${error.code}): ` +
+          `${error.detail ?? "no detail given"}` +
+          (error.retryAfterSeconds !== null
+            ? ` — retry after ${error.retryAfterSeconds}s`
+            : ""),
+      );
+      if (error.isResolvedBySigningIn) {
+        void promptSignInAfterRefusal();
+      }
+    } else if (error instanceof Error) {
       if (error.name === "AbortError") {
         logger.error("Fetch aborted due to timeout", error);
       } else {
@@ -710,6 +725,27 @@ async function uploadAudio(
 
     // re-throw the error if your logic requires it
     throw error;
+  }
+}
+
+/**
+ * Offer sign-in after the server refuses a request in a way an account fixes.
+ *
+ * Free usage works without an account, so the useful response to being refused
+ * is "sign in", not "wait" — and saying nothing at all is the worst option,
+ * since dictation just appears to stop working. Only ever a prompt: it never
+ * blocks, and a failure to show it must not mask the original error.
+ */
+async function promptSignInAfterRefusal(): Promise<void> {
+  try {
+    const { getJwtManagerSync } = await import("./JwtManager");
+    if (getJwtManagerSync().isAuthenticated()) {
+      return; // Already signed in — signing in again is not the remedy.
+    }
+    const { getAuthPromptController } = await import("./auth/AuthPromptController");
+    await getAuthPromptController().forceShowPrompt("soft-modal");
+  } catch (promptError) {
+    logger.debug("Could not surface the sign-in prompt", promptError);
   }
 }
 
