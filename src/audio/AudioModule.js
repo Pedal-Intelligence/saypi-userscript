@@ -14,6 +14,7 @@ import { ttsVolumeForQuietMode } from "../tts/quietVolume.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
+import { createAudioRemovalObserverCallback } from "./audioElementRemoval.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
 
@@ -279,22 +280,20 @@ export default class AudioModule {
     if (this.audioElement) {
       const config = { childList: true, subtree: false };
 
-      this.mutationObserver = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          if (mutation.type === "childList") {
-            for (const removedNode of mutation.removedNodes) {
-              const removedAudioElement = this.findAudioElement(removedNode);
-              if (removedAudioElement && removedAudioElement === this.audioElement) {
-                logger.debug("Audio element removed from the document");
-                this.cleanupAudioElement(this.audioElement);
-                this.audioElement = null;
-                this.listenForAudioElementSwap();
-                return;
-              }
-            }
+      // re-registered on every swap; don't leave the previous observer attached
+      this.mutationObserver?.disconnect();
+
+      this.mutationObserver = new MutationObserver(
+        createAudioRemovalObserverCallback(
+          () => this.audioElement,
+          () => {
+            logger.debug("Audio element removed from the document");
+            this.cleanupAudioElement(this.audioElement);
+            this.audioElement = null;
+            this.listenForAudioElementSwap();
           }
-        }
-      });
+        )
+      );
 
       // Use optional chaining and nullish coalescing for safer access
       const observeTarget = this.audioElement.parentNode ?? document.body;
