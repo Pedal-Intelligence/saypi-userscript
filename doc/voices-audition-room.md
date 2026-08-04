@@ -75,10 +75,18 @@ introduces a per-play cost breaks the page's whole posture. See §6.
 voice, and nothing may re-draw the existing voices when a new one lands. Scales are therefore keyed
 to **fixed constants**, never to the catalog's own min/max.
 
-**The pane is narrow and fixed.** Settings open in a browser tab with a content column that is the
-same width at 1100px and at 1920px. The page gets roughly 690px and cannot ask for more — a
-Voices-only width rule is a known regression class here. Design for a narrow column; do not assume a
-wide one appears on big screens.
+**690px is the pane's ceiling, not its width.** Settings open in a browser tab whose content column
+is the same at 1100px and at 1920px, so the page gets roughly 690px and cannot ask for more — a
+Voices-only width rule is a known regression class here. Do not design against a wide window; there
+isn't one, however big the screen is.
+
+But the move that fixed the ceiling also removed the floor. Settings used to be a popup with a
+736px minimum, which meant the shell's mobile layout could never actually engage; in a tab it does,
+and this pane is now also drawn at ~440px (an ordinary half-screen desktop window — the sidebar is
+still charged for, so the desktop layout at 736px is *narrower* than the mobile one at 700px) and at
+~334px on a phone. So the column is not merely narrow, it is a range, and roughly half of it is
+below what a single row of print, name, badge, description and action can fit in. What the page does
+about that is in §5.
 
 **The two hosts are not symmetric.** Claude has an in-chat voice menu with a small number of seats,
 so pinning means something there. Pi retired its menu, so pinning would be a control that does
@@ -182,6 +190,42 @@ and the eye reads a continuous descent from deep to bright before it reads a sin
 Two voices that sound alike look alike. A fast talker's print is short. A monotone voice is a flat
 ridge. The gaps are consonants and breaths — and the wide gap in the middle is a sentence boundary,
 which is how we discovered that the Everyday clips all read the same line (see §6).
+
+### On a narrow column the row spends height instead
+
+The row above is one line of seven things, and it needs about 600px to be one honestly. Below that —
+a half-screen window, a phone — something has to give, and which thing gives is not a free choice.
+The mark gives first: it is a chart drawn against a fixed axis, so at a smaller scale it says exactly
+what it said before. The name gives second; a name that ends in an ellipsis is a small loss. The
+description gives last and, in practice, never — it is the twins' only difference, and a page with
+two rows both reading *Paola* is not a narrower page, it is a broken one. Which is what the narrow
+column used to produce: below about 580px the description sat on its floor at every width, the
+longer taglines were ellipsised outright, and the twins' disambiguator had exactly zero headroom
+left — on a page whose strings are translated into thirty languages, some 40% longer.
+
+So below roughly 600px of rail the row stops being one line at all. The mark, the name and the
+badges keep the first; the description and the actions take a second, underneath. The split is not
+arbitrary — it is the same *calm at rest, informative on demand* the reveal already encodes, drawn
+in space rather than in opacity. The top line is the row; the bottom line is what the row says when
+you are standing on it.
+
+Two consequences are worth stating, because they are the opposite of what "the mobile layout"
+usually means. The description gets the whole width, so it stops being truncated — at 390px it has
+189px, which is more than a badged row gets in the *full-width desktop* layout, where it sits on its
+152px floor. And the print, no longer sharing a line with it, gets its **full** size back, which is
+also the size it is drawn at: the chart is at its most legible exactly where the window is smallest.
+The control bar needs no rule of its own — it is a handful of short controls whose number depends on
+what the page can currently do, so it simply wraps.
+
+The cost is height. A row grows by about half, and at rest most rows carry an empty second line. That
+is the right way round: this page is a list you scroll, so vertical is the axis it can afford to
+spend, and the alternative is a rail whose rows cannot be told apart.
+
+Two things do not move, at any width. Every print is one width across the whole rail — a per-row
+negotiation would let a badged row draw a shorter trace than its neighbour, and a trace's length is
+its clip's length, so that is not a smaller chart but a chart that lies about half its rows. And the
+shared reference line still sits at one height in every row, because that is the premise everything
+else here rests on.
 
 ### Listening is the primary interaction, and the keyboard is the primary instrument
 
@@ -328,7 +372,9 @@ Concrete tests, in rough order of how often they catch things:
   Anything the reader needs in order to choose needs a spoken counterpart — in the name if it
   identifies the row, in a description if it is a consequence of picking it.
 - **Does it survive a 40%-longer translation, and read correctly at a count of 1?**
-- **Does it still work at ~690px?** Do not design against a wide window; there isn't one.
+- **Does it still work at ~690px — and at ~334px?** There is no wide window to design against, and
+  since #584 there is no narrow floor either: the same pane is drawn at a third of its ceiling. If a
+  new element only fits on one line, say which of the two lines it belongs to.
 - **Is colour carrying meaning on its own?** It must always be the third encoding of something, never
   the first.
 

@@ -334,6 +334,91 @@ test.describe("settings → voices: the audition room", () => {
   });
 
   /**
+   * The same page on a 390px phone, where it has to say all of that in half
+   * the width.
+   *
+   * `settings-layout.e2e.ts` guards the arithmetic — nothing overflows — and
+   * arithmetic alone can be satisfied by a layout that has stopped meaning
+   * anything: descriptions clipped to a floor, or every print shrunk by a
+   * different amount because each row negotiated its own. Both were true here
+   * before the row learned to take a second line, and both are invisible to an
+   * overflow assertion.
+   *
+   * So this asserts what the narrow rail still SAYS. The twins are the point —
+   * two rows both reading `Paola`, told apart by a subtitle that must be whole
+   * and on screen at rest, which is the regression this page has had twice
+   * (#474) and the reason the description is the one column that never yields.
+   * The shared reference line is the other point: one width for every print and
+   * one y for every line, or the traces stop registering into a single chart
+   * and the rail is 22 unrelated pictures.
+   */
+  test("at 390px the twins are still legible and the chart is still one chart", async ({
+    context,
+    extensionId,
+    serviceWorker,
+  }) => {
+    await seedConsentDecision(serviceWorker);
+    const page = await context.newPage();
+    await openVoicesRail(page, extensionId);
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    const rail = await page.evaluate(() =>
+      [
+        ...document.querySelectorAll<HTMLElement>(
+          "#tab-voices .voice-row[data-print-voice]",
+        ),
+      ].map((row) => {
+        const desc = row.querySelector<HTMLElement>(".voice-row-desc")!;
+        const print = row.querySelector<HTMLElement>(".voice-print")!;
+        const ref = row.querySelector<HTMLElement>(".voice-print-ref")!;
+        return {
+          name: row.querySelector(".voice-row-name")?.textContent ?? "",
+          text: desc.textContent ?? "",
+          shownAtRest:
+            getComputedStyle(desc).opacity === "1" &&
+            !row.classList.contains("focused"),
+          clipped: desc.scrollWidth > desc.clientWidth,
+          printWidth: Math.round(print.getBoundingClientRect().width),
+          referenceY: +(
+            ref.getBoundingClientRect().top - row.getBoundingClientRect().top
+          ).toFixed(1),
+        };
+      }),
+    );
+    expect(rail.length).toBe(AUDITIONABLE_COUNT);
+
+    const twins = rail.filter((row) => row.name === "Paola");
+    expect(twins).toHaveLength(2);
+    for (const twin of twins) {
+      expect(
+        twin.shownAtRest,
+        `the narrow rail hides ${twin.name}'s disambiguator until focus — two rows now read the same`,
+      ).toBe(true);
+      expect(
+        twin.clipped,
+        `"${twin.text}" is ellipsised at 390px, which is the twins told apart by an ellipsis`,
+      ).toBe(false);
+    }
+    expect(twins[0].text).not.toBe(twins[1].text);
+    // Not just the twins: at this width no tagline should have to give.
+    expect(
+      rail.filter((row) => row.clipped).map((row) => row.text),
+      "a description is ellipsised at 390px — the description is the column that must not yield",
+    ).toEqual([]);
+
+    expect(
+      [...new Set(rail.map((row) => row.printWidth))],
+      "the prints are not all one width, so trace length no longer means clip length",
+    ).toHaveLength(1);
+    expect(
+      [...new Set(rail.map((row) => row.referenceY))],
+      "the reference line sits at a different height on different rows — the traces no longer register into one chart",
+    ).toHaveLength(1);
+
+    await page.close();
+  });
+
+  /**
    * The voice with no clip.
    *
    * It is a real voice you can still choose, so it renders — below the rule, in

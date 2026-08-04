@@ -45,7 +45,26 @@ function ruleBody(selector: string): string {
   expect(at, `voices.css should declare ${selector}`).toBeGreaterThan(-1);
   const open = css.indexOf("{", at);
   const close = css.indexOf("}", open);
-  return css.slice(open + 1, close).replace(/\/\*[\s\S]*?\*\//g, "");
+  return resolveVars(css.slice(open + 1, close).replace(/\/\*[\s\S]*?\*\//g, ""));
+}
+
+/**
+ * Substitute the sheet's OWN custom properties into a rule body.
+ *
+ * The row names its right-hand column once (`--voice-actions-w`) and spends it
+ * in two rules, which is the point — but it also means a width assertion here
+ * would otherwise read `var(…)` and conclude the declaration is missing. Only
+ * properties this stylesheet declares are substituted, so the print's inks —
+ * `var(--print-ink-rest, …)`, which arrive from printInk() at runtime — are
+ * left alone for `inkVar` to read.
+ */
+const SHEET_VARS = Object.fromEntries(
+  [...css.matchAll(/^\s*(--[\w-]+):\s*([^;]+);/gm)].map((m) => [m[1], m[2].trim()])
+);
+function resolveVars(body: string): string {
+  return body.replace(/var\((--[\w-]+)\)/g, (whole, name) =>
+    name in SHEET_VARS ? SHEET_VARS[name] : whole
+  );
 }
 
 /** The ink a rule paints at: an alpha, with an opaque hex reading as 1. */
@@ -77,6 +96,51 @@ const pxOf = (body: string, property: string): number => {
   expect(m, `rule should declare a px ${property}`).toBeTruthy();
   return Number(m![1]);
 };
+
+/**
+ * The body of one `@container (max-width: Npx)` block, braces balanced.
+ *
+ * A regex cannot do this: these blocks hold several rules each, so `[^}]*`
+ * stops at the first nested rule and a greedy match runs past the block's end.
+ * Both failure modes read as "the declaration isn't there", which is a silent
+ * pass on an assertion about a layout that has been deleted.
+ */
+function containerBlock(breakpoint: number): string {
+  const at = css.indexOf(`@container (max-width: ${breakpoint}px) {`);
+  expect(at, `voices.css should declare a @container at ${breakpoint}px`).toBeGreaterThan(-1);
+  let depth = 0;
+  for (let i = css.indexOf("{", at); i < css.length; i++) {
+    if (css[i] === "{") depth++;
+    else if (css[i] === "}" && --depth === 0)
+      return css.slice(css.indexOf("{", at) + 1, i);
+  }
+  throw new Error(`unbalanced @container block at ${breakpoint}px`);
+}
+
+/** Every container breakpoint that re-sizes the print, widest first. */
+function containerSteps(): [number, number][] {
+  return [...css.matchAll(/@container \(max-width:\s*(\d+)px\)/g)]
+    .map(
+      (m) =>
+        [
+          Number(m[1]),
+          /\.voice-row-print\s*\{[^}]*flex-basis:\s*(\d+)px/.exec(
+            containerBlock(Number(m[1]))
+          )?.[1],
+        ] as const
+    )
+    .filter(([, basis]) => basis !== undefined)
+    .map(([at, basis]) => [at, Number(basis)]);
+}
+
+/** The width below which the row stops being one line. */
+function twoLineBreakpoint(): number {
+  const m = [...css.matchAll(/@container \(max-width:\s*(\d+)px\)/g)]
+    .map((match) => Number(match[1]))
+    .find((at) => /\.voice-row\s*\{[^}]*flex-wrap:\s*wrap/.test(containerBlock(at)));
+  expect(m, "voices.css should wrap the row at some container width").toBeDefined();
+  return m!;
+}
 
 /** A rule's `flex: <grow> <shrink> <basis>px` shorthand, parsed. */
 function flexOf(body: string): {
@@ -306,22 +370,94 @@ describe("the row gives up space in a fixed order", () => {
     // length IS clip length, so that is not a smaller chart, it is a chart
     // that lies about half its rows.
     expect(flexOf(print()).shrink).toBe(0);
-    const steps = [
-      ...css.matchAll(
-        /@container \(max-width:\s*(\d+)px\)\s*\{\s*\.voice-row-print\s*\{[^}]*flex-basis:\s*(\d+)px/g
-      ),
-    ].map((m) => [Number(m[1]), Number(m[2])]);
+    const steps = containerSteps();
     expect(steps.length, "the print should step with the container").toBeGreaterThan(0);
-    // Monotonic, and every step below the width it draws at.
-    let width = flexOf(print()).basis;
-    let at = Infinity;
-    for (const [breakpoint, basis] of steps) {
-      expect(breakpoint).toBeLessThan(at);
-      expect(basis).toBeLessThan(width);
-      [at, width] = [breakpoint, basis];
-    }
+    // Never wider than the width the svg is actually drawn at, at any step:
+    // above it the mark would be rendering beyond its own resolution.
+    const drawnAt = flexOf(print()).basis;
+    expect(drawnAt).toBe(PRINT_WIDTHS.lg);
+    for (const [, basis] of steps) expect(basis).toBeLessThanOrEqual(drawnAt);
+    // And the narrower the column, the smaller the mark — the last word on
+    // this, since the two regimes below each step down internally.
+    expect(steps[steps.length - 1][1]).toBe(
+      Math.min(...steps.map(([, basis]) => basis))
+    );
     // The rail has to BE a query container, or none of the above ever applies.
     expect(ruleBody(".voice-rail")).toMatch(/container-type:\s*inline-size/);
+  });
+
+  it("steps down inside the one-line regime, and starts the two-line one over", () => {
+    // Two regimes, and the print's ladder is not one ladder. While the row is
+    // ONE line the print is what yields, so it steps down as the column
+    // narrows. Below the width where one line stops being honest at all
+    // (#586), the row takes a second line, the description moves off line one
+    // — and the print, no longer sharing with it, gets its FULL drawn width
+    // back before beginning to step again. A narrower window with a bigger
+    // mark looks like a mistake in a diff and is the whole point of the change.
+    const twoLine = twoLineBreakpoint();
+    const steps = containerSteps();
+    const oneLine = steps.filter(([at]) => at > twoLine);
+    const narrow = steps.filter(([at]) => at <= twoLine);
+    expect(oneLine.length, "the one-line regime should still step").toBeGreaterThan(0);
+    expect(narrow.length, "the two-line regime should still step").toBeGreaterThan(0);
+
+    // Within each regime: narrower breakpoint, smaller print.
+    for (const regime of [oneLine, narrow]) {
+      let [at, width] = [Infinity, PRINT_WIDTHS.lg + 1];
+      for (const [breakpoint, basis] of regime) {
+        expect(breakpoint).toBeLessThan(at);
+        expect(basis).toBeLessThan(width);
+        [at, width] = [breakpoint, basis];
+      }
+    }
+    // The restoration itself: the two-line block hands the print its full
+    // width, which is more than the last one-line step left it.
+    const restored = Number(
+      /\.voice-row-print\s*\{[^}]*flex-basis:\s*(\d+)px/.exec(
+        containerBlock(twoLine)
+      )?.[1]
+    );
+    expect(restored).toBe(PRINT_WIDTHS.lg);
+    expect(restored).toBeGreaterThan(oneLine[oneLine.length - 1][1]);
+  });
+
+  it("gives the description a line of its own rather than a share of one", () => {
+    // The narrow layout's load-bearing claim, and the one place it can be
+    // stated as arithmetic. The row wraps; the description is based at the
+    // whole row minus the actions column, which is what forces the break AND
+    // what leaves the actions room beside it; and it is ordered after the
+    // badges so line one keeps them. Its floor goes, because on a line of its
+    // own a floor can only overflow.
+    //
+    // Both spenders of the actions column are checked against the same
+    // declaration rather than against 108, or this stops being one number the
+    // day someone widens the buttons. The rendered proof — nothing ellipsised
+    // at 390px, one reference y, one print width — is in
+    // e2e/specs/voices-rail.e2e.ts, which can lay it out.
+    const narrow = resolveVars(containerBlock(twoLineBreakpoint()));
+    expect(narrow).toMatch(/\.voice-row\s*\{[^}]*flex-wrap:\s*wrap/);
+    const actions = ruleBody(".voice-row-actions");
+    const column = flexOf(actions).basis + pxOf(actions, "margin-left");
+    const basis = /\.voice-row-desc\s*\{[^}]*flex-basis:\s*calc\(([^)]*)\)/.exec(
+      narrow
+    );
+    expect(basis, "the narrow description should be based at row-minus-actions")
+      .toBeTruthy();
+    const subtracted = [...basis![1].matchAll(/(\d+)px/g)].reduce(
+      (sum, m) => sum + Number(m[1]),
+      0
+    );
+    expect(basis![1]).toMatch(/100%/);
+    expect(subtracted).toBe(column);
+    expect(narrow).toMatch(/\.voice-row-desc\s*\{[^}]*min-width:\s*0\s*;/);
+
+    const orderOf = (selector: string): number =>
+      Number(
+        new RegExp(`\\${selector}\\s*\\{[^}]*order:\\s*(\\d+)`).exec(narrow)?.[1]
+      );
+    expect(orderOf(".voice-row-desc")).toBeLessThan(
+      orderOf(".voice-row-actions")
+    );
   });
 
   it("lets the name shrink after it, never before", () => {

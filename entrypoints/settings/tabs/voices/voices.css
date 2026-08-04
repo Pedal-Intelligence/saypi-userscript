@@ -142,7 +142,8 @@
   z-index: 2;
   background: #fbf7f0;
   border-bottom: 1px solid #eadfcc;
-  /* 44px exactly: 3 + 18 + 1 + 18 + 4. */
+  /* 44px when its two rows each hold one line: 3 + 18 + 1 + 18 + 4. Not a
+     fixed height — see the wrap note below. */
   padding: 3px 0 4px;
   display: flex;
   flex-direction: column;
@@ -151,10 +152,18 @@
   color: rgba(36, 29, 20, 0.62);
   font-variant-numeric: tabular-nums;
 }
+/* Wrapping, at every width, with no breakpoint. The bar is a row of short nowrap
+   controls whose count and width both depend on state — `Your voice ↗` only
+   exists when there is a row to jump to, `Play all (22)` grows with the
+   catalog, and every label is translated into ~30 locales, some 40% longer
+   than English. There is no column width at which a fixed single line is safe,
+   so the line is not fixed: the controls reflow, keeping their right-edge
+   alignment, and the bar grows by one 18px line when they must. */
 .voice-rail-controls-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 4px 14px;
   min-height: 18px;
 }
 .voice-rail-hint {
@@ -317,10 +326,14 @@
    [3px focus rule][14][192px print][20][name 96px][12][desc flex][badges][96][20]
 
    Those numbers are budgeted against a 692px rail, which is what the settings
-   TAB's fixed 756px content column gives this pane — measured identical at
-   viewports 1100, 1280, 1600 and 1920, because #584 moved settings out of a
-   sized window and #587 deleted the sizing machinery. Widening the column for
-   this tab is not an option (see the note above): the row has to fit 692px.
+   TAB's fixed 756px content column gives this pane at a full-screen window —
+   measured identical at viewports 1100, 1280, 1600 and 1920, because #584
+   moved settings out of a sized window and #587 deleted the sizing machinery.
+   Widening the column for this tab is not an option (see the note above), so
+   692px is the row's ceiling. It is NOT its floor: the same #584 that fixed
+   the ceiling also let the shell's mobile layout engage, and a half-width
+   desktop window hands this pane as little as 440px. What the row does down
+   there is the narrow block further down.
 
    THE YIELD ORDER, when it does not: print, then name, then — last, and only
    once the other two are at their floors — the description. The print is the
@@ -353,6 +366,12 @@
   display: flex;
   align-items: center;
   height: 42px;
+  /* The right-hand column — the actions' own basis and the gutter before it —
+     named once, because the narrow layout below has to know exactly how much
+     room to leave beside the description and that number lives in a rule forty
+     lines away. Two spenders, one source. */
+  --voice-actions-w: 96px;
+  --voice-actions-gap: 12px;
   /* [3px focus rule][14][192px print][20][name 96][12][desc][badges][96][20] */
   padding: 0 20px 0 14px;
   border-left: 3px solid transparent;
@@ -495,15 +514,13 @@
   align-items: center;
 }
 /* 648px: the rail width at which an HD row's description would otherwise drop
-   under its floor. 608px: the same, one step down. */
+   under its floor.
+   608px is where the same arithmetic runs out — one more step of print buys
+   only 24px and the description is under its floor again 26px later — so that
+   is where the row stops being one line at all. See the narrow block below. */
 @container (max-width: 648px) {
   .voice-row-print {
     flex-basis: 152px;
-  }
-}
-@container (max-width: 608px) {
-  .voice-row-print {
-    flex-basis: 128px;
   }
 }
 /* 96px, down from 108: the longest name in the live catalog draws at 63px, so
@@ -604,17 +621,127 @@
    the controller manages — on the row you are looking at. That is what keeps
    Tab at exactly two extra stops instead of forty-four. */
 .voice-row-actions {
-  flex: 0 0 96px;
+  flex: 0 0 var(--voice-actions-w);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
-  margin-left: 12px;
+  margin-left: var(--voice-actions-gap);
   visibility: hidden;
 }
 .voice-row:hover .voice-row-actions,
 .voice-row.focused .voice-row-actions {
   visibility: visible;
+}
+
+/* --- narrow rails: the row takes a second line -----------------------------
+   The row above is one line of seven things, and below ~608px of rail there is
+   no honest way to keep it that way. The print can step (it does, at 648), the
+   name can shrink (it does, to 64px), and past that the only column left to
+   take from is the description — which is the one column that must not give,
+   because on the twin-named voices it is the ENTIRE difference between two
+   rows that otherwise both read `Paola`. Squeezing it is not a smaller layout,
+   it is a page with two identical rows on it. That is what a 440px rail — an
+   ordinary half-screen desktop window, since #584 — was doing.
+
+   So below 608px the row spends the axis it has plenty of. VERTICAL. Line one
+   is the row at rest: the mark, the name, the badges. Line two is what the row
+   says when you are standing on it: the description, and the actions. The
+   split is not arbitrary — it is the same "calm at rest, informative on
+   demand" the reveal already encodes, drawn spatially instead of in opacity.
+
+   What survives, deliberately:
+   - Every print is still one width, so the shared reference line still
+     registers every trace into one chart. It is a container query, never a
+     flex-shrink, for the reason spelled out above `.voice-row-print`: a badge
+     costs its row 29px, and a per-row negotiation would draw the HD rows'
+     traces shorter than their neighbours', which is a chart that lies.
+   - The trace still measures the clip against the FIXED max span, at whatever
+     width the step chose, so a short clip still draws visibly short.
+   - The yield order is unchanged, and in fact better served: the print steps
+     first, the name yields second (it grows into the line and ellipsises only
+     under a full set of badges on a phone), and the description — now on a
+     line where nothing competes with it — never yields at all. At a 334px
+     rail it gets 189px, against the 152px floor it was pinned to and
+     ellipsising through.
+   - The print gets its FULL 192px back, because line one no longer has to
+     house the description. The mark is drawn at 192 units, so this is also
+     where it renders 1:1. Narrower window, better print.
+
+   The cost is height: 42px becomes 60px, and a rail of 22 voices gets taller
+   than a phone screen. It was already taller than a phone screen. */
+@container (max-width: 608px) {
+  .voice-row {
+    flex-wrap: wrap;
+    /* The height comes from the lines and the padding — 5 + 26 + 6 + 18, ≈60px
+       — rather than being declared, and the lines stack from the TOP. Both of
+       those are the shared reference line talking: pinned to the top with a
+       fixed padding, the print's band starts at the same y in every row even
+       if some future row wraps a line we did not plan for, where a centred
+       stack would have slid that row's trace off the line the rest are drawn
+       on. The gap is 6px because a loud frame can overhang the 26px band by
+       3px, and it has line two directly under it now rather than 8px of row. */
+    align-content: flex-start;
+    row-gap: 6px;
+    height: auto;
+    padding: 5px 20px 5px 14px;
+  }
+  /* Full size again — see the block comment. */
+  .voice-row-print {
+    flex-basis: 192px;
+  }
+  /* The name now takes what line one has left and puts the badges on its right
+     edge, above the actions. `min-width: 0` rather than the 64px floor: with
+     the description gone from this line the name is the last thing that can
+     yield, and an ellipsised name on a 390px phone is a far smaller loss than
+     a row that overflows the page.
+
+     Based at 0, NOT at its text. A wrapping flex container breaks lines on
+     items' hypothetical sizes and only shrinks them afterwards, so a name
+     based at `auto` does not give way to a badge — it pushes the badge onto a
+     line of its own and the row silently becomes three lines with its print in
+     the wrong place. Based at 0 the badges are always on line one and it is
+     the name that gives, which is the yield order this page already has. */
+  .voice-row-name {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  /* Line two, and the thing that MAKES a line two.
+
+     The basis is the whole row minus the actions column, which is both halves
+     of the break at once: too wide to sit on line one beside a print, and
+     exactly narrow enough that the actions fit beside it here. Nothing else
+     expresses both — a zero basis (what it uses on one line) is small enough
+     to fit anywhere, and its own text width is unbounded, so either one lets
+     the browser wrap somewhere the design did not choose.
+
+     `order` rather than DOM order: the markup has the description before the
+     badges, and line one wants the badges. And the 152px floor goes, because
+     that floor is what the description defends itself with when it is
+     COMPETING for a line — here it has one to itself, and a floor is then the
+     only thing left on this layout that could overflow a phone. */
+  .voice-row-desc {
+    order: 2;
+    flex-basis: calc(100% - var(--voice-actions-w) - var(--voice-actions-gap));
+    min-width: 0;
+  }
+  .voice-row-actions {
+    order: 3;
+  }
+  /* The ▶ says "this row is the play target"; it belongs beside the mark, not
+     halfway down a two-line row. Pinned to line one's band. */
+  .voice-row[data-print-voice]::before {
+    bottom: auto;
+    top: 5px;
+    height: 26px;
+  }
+}
+/* One step of print, at the width where holding 192 would start eating the
+   name's own 64px. Below this the row is on a phone. */
+@container (max-width: 404px) {
+  .voice-row-print {
+    flex-basis: 128px;
+  }
 }
 
 /* --- soundprints -----------------------------------------------------------
