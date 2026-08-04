@@ -166,9 +166,11 @@ instead of silently calling the real internet.
 | `fixtures/extension.ts` | `test`/`expect` fixture: resets the mock API's transcribe state (per-test isolation, #462), launches the context, exposes `serviceWorker`/`extensionId` |
 | `fixtures/launch-args.ts` | pure builder for the Chrome launch args (unit-testable) |
 | `fixtures/audio/` | the fake-mic WAV clip + its [README](fixtures/audio/README.md) |
+| `fixtures/voices/` | three real voice-preview MP3s the mock API serves as `sample_url`s + their [README](fixtures/voices/README.md) |
 | `support/global-setup.ts` | build guard + start mock servers + export ports |
 | `support/global-teardown.ts` | close mock servers |
-| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, hit/content-type diagnostics + per-test reset route, GA catch-all) |
+| `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, hit/content-type diagnostics + per-test reset route, `/voices` catalog + `/voices/<id>/sample` clips, GA catch-all) |
+| `support/voice-catalog.ts` | the `GET /voices` fixture: a seven-voice catalog shaped to exercise the Voices rail (both tiers, a duplicate-named pair, a clipless voice, measurable pitch spread) |
 | `support/mock-pi-page.html` | minimal Pi.ai-shaped DOM the content script decorates |
 | `support/mock-claude-page.html` | minimal claude.ai stand-in (defines no `--black`) for the host-CSS contrast spec |
 | `support/mock-hey-pi-page.html` | Pi's logged-out marketing splash stand-in — an ordinary form field, no composer — for the chat-adjacent dictation spec (#559) |

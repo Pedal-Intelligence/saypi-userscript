@@ -3,6 +3,11 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import selfsigned from "selfsigned";
 import { buildTranscribeResponse } from "./transcribe-response.ts";
+import {
+  MOCK_VOICE_CATALOG,
+  SAMPLE_CLIP_BY_VOICE,
+  type SampleClip,
+} from "./voice-catalog.ts";
 
 // selfsigned@5 exposes an async `generate`; resolve once at module load (top-level await, ESM).
 const pems = await selfsigned.generate([{ name: "commonName", value: "saypi-e2e" }], { days: 1 });
@@ -10,6 +15,19 @@ const tls = { key: pems.private, cert: pems.cert };
 const PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-pi-page.html"), "utf8");
 const CLAUDE_PAGE = readFileSync(resolve(import.meta.dirname, "mock-claude-page.html"), "utf8");
 const HEY_PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-hey-pi-page.html"), "utf8");
+
+// The three committed preview clips (~52 KB all told), read once. They must be
+// REAL decodable audio, not a stub: the Voices rail measures every voice by
+// fetching its clip and decoding it, so a placeholder body would leave the rail
+// printless and silently un-testable. See e2e/fixtures/voices/README.md.
+const CLIP_DIR = resolve(import.meta.dirname, "../fixtures/voices");
+const SAMPLE_CLIPS: Record<SampleClip, Buffer> = {
+  onyx: readFileSync(resolve(CLIP_DIR, "onyx.mp3")),
+  alloy: readFileSync(resolve(CLIP_DIR, "alloy.mp3")),
+  addison: readFileSync(resolve(CLIP_DIR, "addison.mp3")),
+};
+
+const VOICES_BY_ID = new Map(MOCK_VOICE_CATALOG.map((voice) => [voice.id, voice]));
 
 export interface MockServers {
   piPort: number;
@@ -82,6 +100,74 @@ export async function startMockServers(): Promise<MockServers> {
         "access-control-allow-origin": "*",
       });
       res.end(JSON.stringify({ hits, lastAudioContentType }));
+      return;
+    }
+    // --- the voice catalog, and the clips it advertises ---------------------
+    //
+    // Both arrive HERE and nowhere else. `/voices` is fetched by the extension's
+    // SERVICE WORKER (`shouldRouteViaBackground` proxies every api.saypi.ai call
+    // through the background worker to escape host-page CSP), so a Playwright
+    // page route would never see it; the clips are fetched by the settings page
+    // itself, twice over — once by `VoicePrintLoader` to measure the soundprint
+    // and once by the `<audio>` element to play it. One mock server is the only
+    // interception point that covers all three.
+    if (req.method === "GET" && req.url && req.url.startsWith("/voices")) {
+      // Parse rather than string-match: the real `sample_url` carries a `?v=`
+      // cache-buster, and `/voices` itself carries `?app=<host>`.
+      const path = new URL(req.url, "https://api.saypi.ai").pathname;
+      const sample = /^\/voices\/([^/]+)\/sample$/.exec(path);
+      if (sample) {
+        const clip = SAMPLE_CLIP_BY_VOICE[decodeURIComponent(sample[1])];
+        if (clip) {
+          res.writeHead(200, {
+            "content-type": "audio/mpeg",
+            "content-length": SAMPLE_CLIPS[clip].length,
+            // Production caches previews for a year (design §3: every preview is
+            // free). Each test gets a fresh browser profile, so this is faithful
+            // without leaking state between specs.
+            "cache-control": "public, max-age=31536000, immutable",
+            "access-control-allow-origin": "*",
+          });
+          res.end(SAMPLE_CLIPS[clip]);
+          return;
+        }
+        // A clip nobody advertises: fail loudly rather than serving silence.
+        res.writeHead(404).end();
+        return;
+      }
+      const single = /^\/voices\/([^/]+)$/.exec(path);
+      if (single) {
+        // GET /voices/<id> — how a STORED voice preference is re-hydrated
+        // (TextToSpeechService.getVoiceById). A spec that seeds a current voice
+        // depends on this; without it the preference reads back as null and the
+        // rail has no voice "in use".
+        const voice = VOICES_BY_ID.get(decodeURIComponent(single[1]));
+        if (!voice) {
+          res.writeHead(404, { "access-control-allow-origin": "*" }).end();
+          return;
+        }
+        res.writeHead(200, {
+          "content-type": "application/json",
+          "access-control-allow-origin": "*",
+        });
+        res.end(JSON.stringify(voice));
+        return;
+      }
+      if (path === "/voices") {
+        // Host-agnostic on purpose: the studio asks per host (`?app=pi` /
+        // `?app=claude`) and the two hosts differ in what they DO with the
+        // catalog (Claude seats an in-chat menu, Pi has none), not in what they
+        // are offered. One catalog keeps that difference attributable to the
+        // client, which is where it lives.
+        res.writeHead(200, {
+          "content-type": "application/json",
+          "access-control-allow-origin": "*",
+          "access-control-allow-credentials": "true",
+        });
+        res.end(JSON.stringify(MOCK_VOICE_CATALOG));
+        return;
+      }
+      res.writeHead(404, { "access-control-allow-origin": "*" }).end();
       return;
     }
     if (req.method === "POST" && req.url && req.url.startsWith("/transcribe")) {
