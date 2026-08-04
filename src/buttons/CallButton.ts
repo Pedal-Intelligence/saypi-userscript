@@ -325,23 +325,40 @@ export class CallButton {
         button.classList.add(...this.chatbot.getExtraCallButtonClasses());
         this.element = button; // Store reference
 
+        // Attach FIRST, then render from state that is available synchronously.
+        // Only the button's LABEL depends on the user's nickname — the icon, the
+        // click handler and the element itself do not — so none of them waits on a
+        // chrome.storage round-trip to reach the DOM. Deferring the insert until
+        // after that await left a window in which a create was in flight while
+        // getElementById("saypi-callButton") still returned null (the guard every
+        // recovery path needs, and a duplicate-button trap for anything that used
+        // it), and a rejected lookup meant the button was never inserted at all
+        // and nobody heard about it (#593).
+        addChild(container, button, position);
+
         // Set initial state based on flag (could be true if module re-initializes during call)
         if (this.callIsActive) {
             this.callActive(button);
         } else {
-            await this.callInactive(button); // Await callInactive
+            // getName() is the same value getNickname() falls back to when no
+            // nickname is set, so for most users this label is already final.
+            this.renderInactive(button, this.chatbot.getName());
         }
-
-        addChild(container, button, position);
 
         // Tooltips (incl. this button's, which carries the `tooltip` class) are
         // handled globally by the body-level portal in src/ui/Tooltip.ts.
 
-        // Ensure segments drawn *after* initial SVG is added by callActive/callInactive
+        // Ensure segments drawn *after* initial SVG is added by callActive/renderInactive
         this.updateButtonSegments();
 
         if (this.callIsActive) {
             AnimationModule.startAnimation("glow");
+        } else {
+            // Refine the label with the stored nickname. The button is already live
+            // and usable; a failure here costs a personalised label, nothing more.
+            await this.callInactive(button).catch((error) => {
+                logger.debug("Could not read the nickname for the call button label", error);
+            });
         }
         return button;
     }
@@ -515,6 +532,15 @@ export class CallButton {
 
     async callInactive(button: HTMLButtonElement | null = this.element) { // Make async
         const nickname = await this.chatbot.getNickname(); // Await nickname
+        this.renderInactive(button, nickname);
+    }
+
+    /**
+     * The synchronous half of callInactive: everything that does not need the
+     * stored nickname. Split out so createButton can mount a complete, clickable
+     * button without waiting on storage (#593).
+     */
+    private renderInactive(button: HTMLButtonElement | null, nickname: string) {
         const label = getMessage("callNotStarted", nickname);
         this.updateCallButton(button, callIconSVG, label, () =>
                 this.sayPiActor.send({ type: "saypi:call" }),

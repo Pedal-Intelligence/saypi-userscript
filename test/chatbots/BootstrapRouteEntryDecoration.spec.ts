@@ -57,7 +57,15 @@ vi.mock("../../src/ui/AgentModeNoticeModule", () => ({
 
 vi.mock("../../src/ButtonModule.js", () => ({
   buttonModule: {
-    createCallButton: vi.fn(),
+    // Inserts a real element, as the production createCallButton does — the
+    // bootstrap now enforces "a decorated composer has a call button" (#593), so a
+    // mock that never inserts one would model a permanently broken host.
+    createCallButton: vi.fn((container: HTMLElement) => {
+      const button = document.createElement("button");
+      button.id = "saypi-callButton";
+      container.appendChild(button);
+      return Promise.resolve(button);
+    }),
     createEnterButton: vi.fn(),
     createExitButton: vi.fn(),
     createMiniSettingsButton: vi.fn(),
@@ -114,7 +122,11 @@ function setPath(path: string): void {
 beforeEach(() => {
   vi.useFakeTimers();
   vi.clearAllMocks();
-  document.body.innerHTML = "";
+  // Fresh body per test: DOMObserver has no teardown, so earlier tests'
+  // MutationObservers would otherwise keep watching the shared body and act on
+  // this test's DOM. Swapping the body leaves them watching a detached node.
+  document.body.remove();
+  document.documentElement.appendChild(document.createElement("body"));
   setPath("/talk");
 });
 
