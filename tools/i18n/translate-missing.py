@@ -40,7 +40,12 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 LOCALES = REPO / "_locales"
-MODEL = os.environ.get("TRANSLATE_MODEL", "gpt-5.2")
+# Measured 2026-08-04 on the real catalog: luna at zero reasoning effort is 2.7x
+# faster than gpt-5.2 for the same placeholder fidelity, at a third of a cent per
+# batch. NOTE: this model rejects reasoning_effort="minimal" — the accepted value
+# is "none". Re-check fidelity with --repair --dry-run after changing either.
+MODEL = os.environ.get("TRANSLATE_MODEL", "gpt-5.6-luna")
+REASONING_EFFORT = os.environ.get("TRANSLATE_REASONING_EFFORT", "none")
 BATCH = 12
 PLACEHOLDER = re.compile(r"\$[A-Za-z0-9_]+\$")
 # Braces are a second substitution syntax used by a few strings ({settingsLink}).
@@ -126,6 +131,8 @@ def translate_batch(entries: dict, language: str, key: str) -> dict:
             {"role": "user", "content": json.dumps(entries, ensure_ascii=False)},
         ],
     }
+    if REASONING_EFFORT:
+        payload["reasoning_effort"] = REASONING_EFFORT
     out = json.loads(strip_fence(call(payload, key)))
     missing = set(entries) - set(out)
     if missing:
@@ -185,6 +192,8 @@ def repair(en: dict, targets: list[str], key: str, dry: bool) -> int:
                     {"role": "user", "content": en[k]["message"]},
                 ],
             }
+            if REASONING_EFFORT:
+                payload["reasoning_effort"] = REASONING_EFFORT
             msg = strip_fence(call(payload, key)).strip().strip('"')
             if tokens(msg) != tokens(en[k]["message"]):
                 print(f"  ✘ {loc}/{k}: repair still wrong — got {sorted(tokens(msg))}", file=sys.stderr)
