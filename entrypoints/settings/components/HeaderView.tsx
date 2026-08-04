@@ -9,6 +9,11 @@
  *
  * The dead `text-normal` class is dropped (not a Tailwind v2 utility — it never
  * styled anything).
+ *
+ * `profile-identity` is the one addition: a stable hook for the `min-width: 0`
+ * in tabs.css that lets the identity group shrink, so long translations
+ * ellipsize instead of shoving the sign-in button off the page. It is a name
+ * for a box that only had structure before (`> .flex > .flex`).
  */
 export function HeaderView() {
   return (
@@ -23,7 +28,7 @@ export function HeaderView() {
         >
           <img class="logo mr-2" data-icon="bubble-green.svg" alt="Say, Pi" />
         </a>
-        <div class="flex items-center flex-grow">
+        <div class="flex items-center flex-grow profile-identity">
           <span class="label-text hidden" data-i18n="profile">
             Profile
           </span>

@@ -203,6 +203,19 @@ section.hidden {
   font-weight: 600;
   color: #0f172a;
 }
+/* The identity group (status/name + divider + the unauthenticated blurb) is a
+   flex ITEM of the header row, so its default `min-width: auto` floors it at
+   its own min-content width — and that min-content includes the full,
+   unwrapped `.unauthenticated-inline` string below. In English that floor
+   (~517px) fits the 720px row; in German it is 750px, so the row could not
+   shrink and the sign-in button was pushed 156px past a 736px viewport (every
+   tab, since the header is shared). Greek/Tamil/Finnish overflowed the same
+   way. Letting the group shrink is what finally arms the ellipsis the blurb
+   has always declared. */
+.settings-header .profile-banner .profile-identity { min-width: 0; }
+/* ...and the sign-in button is the row's actionable control: let the blurb
+   absorb the squeeze rather than wrapping the button's label. */
+.settings-header .profile-banner #auth-button { flex-shrink: 0; }
 .settings-header .profile-banner .unauthenticated-inline {
   margin-left: 12px;
   margin-right: 12px;

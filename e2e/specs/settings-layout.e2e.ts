@@ -1,3 +1,6 @@
+import { readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import type { Page } from "@playwright/test";
 import { test, expect } from "../fixtures/extension";
 
 /**
@@ -17,7 +20,34 @@ import { test, expect } from "../fixtures/extension";
 
 const TABS = ["general", "chat", "dictation", "voices", "about"] as const;
 
+/** Phone width, the last mobile width, and the first desktop width. 736px is
+ *  where the header is tightest: the mobile rules stop hiding the
+ *  unauthenticated blurb, but there is no spare room yet. */
+const WIDTHS = [390, 735, 736] as const;
+
 test.use({ showScrollbars: true });
+
+/**
+ * Walk every tab at every small viewport and require no horizontal overflow.
+ * `label` names the locale under test so a failure says which language broke.
+ */
+async function expectNoOverflowAtSmallViewports(page: Page, label: string) {
+  for (const width of WIDTHS) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const tab of TABS) {
+      await page.locator(`.tab-button[data-tab="${tab}"]`).click();
+      const panel = page.locator(`#tab-${tab}`);
+      await expect(panel).toBeVisible();
+      const overflow = await page.evaluate(
+        () => document.body.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(
+        overflow,
+        `horizontal overflow of ${overflow}px on ${tab} at ${width}px in ${label}`,
+      ).toBeLessThanOrEqual(0);
+    }
+  }
+}
 
 test.describe("settings page layout", () => {
   test("keeps the header anchored across tab switches (no scrollbar shunt)", async ({
@@ -93,23 +123,76 @@ test.describe("settings page layout", () => {
     await page.goto(`chrome-extension://${extensionId}/settings.html`);
     await page.waitForSelector(".settings-header .profile-banner");
 
-    for (const width of [390, 735, 736]) {
-      await page.setViewportSize({ width, height: 844 });
-      for (const tab of TABS) {
-        await page.locator(`.tab-button[data-tab="${tab}"]`).click();
-        const panel = page.locator(`#tab-${tab}`);
-        await expect(panel).toBeVisible();
-        const overflow = await page.evaluate(
-          () =>
-            document.body.scrollWidth - document.documentElement.clientWidth,
-        );
-        expect(
-          overflow,
-          `horizontal overflow of ${overflow}px on ${tab} at ${width}px`,
-        ).toBeLessThanOrEqual(0);
-      }
-    }
+    await expectNoOverflowAtSmallViewports(page, "en");
 
     await page.close();
   });
 });
+
+/**
+ * The same fit guarantee, in a language whose strings are much longer than
+ * English.
+ *
+ * English fit at 736px with ~100px to spare, so the guard above stayed green
+ * while German overflowed by 156px, Greek by 160px, Tamil by 78px and Finnish
+ * by 69px — on every tab, because the offender is the shared header. The
+ * mechanism was the header's identity group defaulting to `min-width: auto`,
+ * which floored the row at the unwrapped width of the "log in to access..."
+ * blurb; see the `.profile-identity` rule in src/popup/tabs.css.
+ *
+ * `--lang` does not change the extension's language, and neither does the
+ * browser UI locale in a headless run: chrome.i18n picks the catalog at load
+ * time. So swap the *built* English catalog for the locale under test, then
+ * prove the swap took by reading a translated string off the page — a silent
+ * fallback to English is exactly what would make this test lie.
+ */
+const BUILT_EN = resolve(
+  import.meta.dirname,
+  "../../.output/chrome-mv3-dev/_locales/en/messages.json",
+);
+const catalogPath = (locale: string) =>
+  resolve(import.meta.dirname, `../../_locales/${locale}/messages.json`);
+
+// de and el are the two worst offenders measured; between them they cover a
+// long-compound language and a non-Latin script.
+for (const locale of ["de", "el"] as const) {
+  test.describe(`settings page layout (${locale} catalog)`, () => {
+    // beforeAll runs before the test-scoped `context` fixture launches the
+    // browser, so the extension is loaded with the swapped catalog already in
+    // place. Nothing races it: this project runs e2e with workers: 1.
+    test.beforeAll(() => {
+      writeFileSync(BUILT_EN, readFileSync(catalogPath(locale)));
+    });
+
+    // Restore from the source catalog, not from a snapshot taken here: the
+    // build copies _locales verbatim, so this is exact and cannot bake in a
+    // stale swap left behind by an interrupted run.
+    test.afterAll(() => {
+      writeFileSync(BUILT_EN, readFileSync(catalogPath("en")));
+    });
+
+    test("fits small viewports without horizontal overflow", async ({
+      context,
+      extensionId,
+      serviceWorker,
+    }) => {
+      await serviceWorker.evaluate(() =>
+        chrome.storage.local.set({ shareData: false }),
+      );
+      const page = await context.newPage();
+      await page.goto(`chrome-extension://${extensionId}/settings.html`);
+      await page.waitForSelector(".settings-header .profile-banner");
+
+      const expected = JSON.parse(readFileSync(catalogPath(locale), "utf8"))
+        .signIn.message as string;
+      await expect(
+        page.locator("#auth-button"),
+        `the ${locale} catalog did not take — the page is still English, so this test would prove nothing`,
+      ).toHaveText(expected);
+
+      await expectNoOverflowAtSmallViewports(page, locale);
+
+      await page.close();
+    });
+  });
+}
