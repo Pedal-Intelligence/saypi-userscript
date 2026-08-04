@@ -64,6 +64,45 @@ try {
   );
   assert(servers.transcribeHits() === 0, `expected in-process hit counter 0 after reset, got ${servers.transcribeHits()}`);
 
+  // 4) /voices serves a catalog shaped like the real one, with the three cases
+  //    the Voices rail's design turns on: both tiers, a duplicate-named pair
+  //    told apart only by language count, and a voice with no clip.
+  const voicesRes = await fetch(`https://127.0.0.1:${servers.apiPort}/voices?app=pi`);
+  const catalog = await voicesRes.json();
+  assert(voicesRes.status === 200, `/voices status was ${voicesRes.status}`);
+  assert(Array.isArray(catalog) && catalog.length > 0, "/voices should return a non-empty array");
+  const tiers = new Set(catalog.map((v) => v.section));
+  assert(tiers.has("hd") && tiers.has("everyday"), `/voices should span both tiers, got ${[...tiers]}`);
+  const paolas = catalog.filter((v) => v.name === "Paola");
+  assert(paolas.length === 2, `expected a duplicate-named pair, got ${paolas.length} Paolas`);
+  assert(
+    paolas[0].languages.length !== paolas[1].languages.length,
+    "the duplicate-named pair must differ by language count (the #474 differentiator)",
+  );
+  assert(
+    catalog.some((v) => !v.sample_url),
+    "/voices should include a voice with no sample_url (the 'No sample yet' group)",
+  );
+
+  // 5) Every advertised sample_url serves real, decodable MP3 bytes. A stub body
+  //    would leave every soundprint unmeasured and the rail silently untested.
+  for (const voice of catalog.filter((v) => v.sample_url)) {
+    const path = new URL(voice.sample_url).pathname;
+    const clipRes = await fetch(`https://127.0.0.1:${servers.apiPort}${path}`);
+    assert(clipRes.status === 200, `${path} status was ${clipRes.status}`);
+    assert(
+      clipRes.headers.get("content-type") === "audio/mpeg",
+      `${path} content-type was ${clipRes.headers.get("content-type")}`,
+    );
+    const bytes = Buffer.from(await clipRes.arrayBuffer());
+    assert(bytes.length > 8_000, `${path} returned only ${bytes.length} bytes`);
+    assert(bytes.subarray(0, 3).toString("latin1") === "ID3", `${path} is not an MP3 (no ID3 header)`);
+  }
+
+  // 6) …and an unadvertised clip 404s rather than serving silence.
+  const missingRes = await fetch(`https://127.0.0.1:${servers.apiPort}/voices/not-a-voice/sample`);
+  assert(missingRes.status === 404, `unknown sample should 404, got ${missingRes.status}`);
+
   console.log("servers OK");
 } finally {
   await servers.close();

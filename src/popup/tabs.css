@@ -252,6 +252,9 @@ section.hidden {
 .tab-button[data-tab="general"] .icon-circle { background:#e8f6e4; color:#418a2f; }
 .tab-button[data-tab="chat"] .icon-circle { background:#ede9fe; color:#6d28d9; }
 .tab-button[data-tab="dictation"] .icon-circle { background:#dcfce7; color:#15803d; }
+/* Voices was the one tab left on the default grey, next to a page whose whole
+   subject is warmth; amber ties it to the deep end of the rail's pitch ramp. */
+.tab-button[data-tab="voices"] .icon-circle { background:#fdf0d9; color:#a66a2b; }
 .tab-button[data-tab="about"] .icon-circle { background:#e5e7eb; color:#374151; }
 
 /* Ensure card-like rows fill width on phones, overriding fixed widths declared elsewhere */

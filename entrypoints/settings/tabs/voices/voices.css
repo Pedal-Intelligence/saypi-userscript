@@ -1,16 +1,24 @@
-/* Voices tab — the host-scoped "studio" behind the in-page menus' "More
-   voices…" doors (2026-07-07 Host Studio redesign): host switcher → stage
-   (current voice, tinted by its identity gradient) → menu slots (the literal
-   in-chat menu) → explore shelves of identity cards. Light-only, matching
-   the settings shell. */
+/* Voices tab — "the rail" (2026-07-31 audition-room design).
+   A chart, not a directory: twenty-two soundprints on warm paper, registered
+   against one reference line, with a single green that means *now*. No cards,
+   and NO RULES BETWEEN ROWS — separation comes from the 42px rhythm and the
+   prints themselves. Exactly two rules exist on the page: under the control
+   bar, and above the "No sample yet" group. Light-only, matching the shell.
+
+   Colour is ONE ORDERED RAMP keyed to pitch — amber for the deep voices, the
+   shell's green for the bright ones — not a per-voice identity. The three
+   inks a row can paint in arrive as custom properties from
+   voicePrintRender.ts's `printInk()`; this sheet only decides WHICH of the
+   three a row is in, which is still exactly one class. See the ramp's own
+   rationale in voicePrintRender.ts. */
 
 #voice-studio {
   max-width: 900px;
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 /* The generic 504px .tab-panel cap (tabs.css) is right for the form tabs but
-   would squeeze the studio; give the Voices pane the full content column. */
+   would squeeze the rail; give the Voices pane the full content column. */
 #tab-voices.tab-panel {
   max-width: none;
 }
@@ -23,13 +31,84 @@
    cascade; scoped to this card so no other tab moves. */
 #voices-preference.user-preference-item {
   max-width: none;
+  /* The studio takes the warm ground, on the CARD rather than on an inner
+     panel — a cream box inside a white box would read as a box in a box. The
+     shell's page is a cool #f8fafc, so this is one warm sheet of paper on a
+     cool desk, which is the relationship the white card already had; it is
+     just paper now. The 16px card padding is what the rounded rows breathe
+     into. */
+  background: #fbf7f0;
 }
 
 /* No per-tab column widening here: `.content` is flex:1 inside the
-   full-width .settings-container (global.css), so the studio already gets
+   full-width .settings-container (global.css), so the rail already gets
    the wide column; #voice-studio's max-width caps it. A Voices-only width
-   rule is exactly what caused the tab-switch sidebar shunt (the container
-   used to shrink-to-fit its content). */
+   rule is exactly what caused the tab-switch sidebar shunt (#582/#583). */
+
+/* --- NOTHING OUTSIDE THE RAIL MAY EXPORT A WIDTH ---------------------------
+   The rail is immune to this by construction and always was: `container-type:
+   inline-size` gives it inline-size containment, so its rows — nowrap names,
+   nowrap descriptions, nowrap badges — contribute *nothing* to how wide this
+   pane says it wants to be. Everything else here (the heading row, the control
+   bar, the tail) sits in ordinary flow, where a single `white-space: nowrap`
+   string is a hard floor under the pane's min-content width.
+
+   That floor is not a local problem, because the settings shell hands it
+   straight to the page. `.content` is `flex: 1` with `width: 504px`, so its
+   automatic minimum size is `min(504px, its contents' min-content)`: whatever
+   this pane's longest unbreakable line is, the column refuses to shrink below
+   it, and past ~736px of window the column plus the sidebar is wider than the
+   viewport. Horizontal scroll, on a settings page.
+
+   It cost 27px of that on a Linux CI runner and 0px on the author's Mac, off
+   the same build — the keyboard hint was one nowrap line of ~426px, and the
+   runner's system-ui draws it wider than SF Pro does. Re-tuning the numbers
+   would only move the cliff: the same strings are about to be translated into
+   ~30 locales, several of them 30-40% longer than English.
+
+   So, outside the rail, TEXT WRAPS — and `overflow-wrap: anywhere` is the part
+   that makes that structural instead of another calibration. It is the one
+   wrapping mode that lowers an element's *min-content* size to a single
+   character, so no word, in any locale, in any face, can set this pane's
+   width. Nothing about the resting page changes: a wrapping flex container
+   breaks between whole controls long before it breaks inside one, so a control
+   only ever splits mid-word when it alone is wider than the column — which is
+   exactly the last resort it should be.
+
+   One thing left in here genuinely cannot wrap: `<select>`, whose intrinsic
+   width is its longest option. That is a bounded floor (~140px under a
+   simulated 40%-longer locale, against the 264px rail a 320px phone gives) and
+   it is measured, not assumed — `voices-rail.e2e.ts` renders the whole pane in
+   an inflated locale and a wider face and asserts the page never scrolls
+   sideways. */
+#tab-voices {
+  overflow-wrap: anywhere;
+}
+
+/* --- heading row ----------------------------------------------------------
+   The host switcher is demoted to 12px and moved to the top-right, but stays
+   TOP-LEVEL: host is the scope for pins, for the current voice and for the
+   deep link, so burying it in a footer would make "which assistant am I
+   configuring" a footnote on a page whose only commit action is host-scoped. */
+
+.voice-rail-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 900px;
+}
+.voice-rail-headings {
+  min-width: 0;
+}
+/* Not `.description`: preferences.css sets that to display:none inside a
+   .user-preference-item, so the subtitle would never be seen. */
+.voice-rail-subtitle {
+  font-size: 13px;
+  color: rgba(36, 29, 20, 0.62);
+  margin: 0 0 0 0;
+}
 
 /* --- host switcher -------------------------------------------------------- */
 
@@ -37,21 +116,20 @@
   display: inline-flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid #e5e3dc;
+  border: 1px solid #eadfcc;
   border-radius: 9999px;
   background: #ffffff;
-  margin-bottom: 14px;
 }
 .voice-host-tab {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 16px;
+  gap: 6px;
+  padding: 5px 14px;
   border: none;
   border-radius: 9999px;
   background: transparent;
-  color: #6f6a61;
-  font-size: 13px;
+  color: rgba(36, 29, 20, 0.62);
+  font-size: 12px;
   cursor: pointer;
 }
 .voice-host-tab[aria-pressed="true"] {
@@ -59,13 +137,9 @@
   color: #ffffff;
   font-weight: 600;
 }
-.voice-host-tab:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 2px;
-}
 .voice-host-logo {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border-radius: 4px;
   object-fit: contain;
   /* White chip behind the mark: Pi's dark glyph stays legible on the active
@@ -80,493 +154,957 @@
 .voice-studio-empty {
   padding: 0.75rem 0.25rem;
   font-size: 0.9rem;
-  color: #6f6a61;
+  color: rgba(36, 29, 20, 0.62);
 }
 
-/* --- the stage -------------------------------------------------------------
-   The current voice's identity gradient tints the room via --stage-from/-to
-   (set inline by the controller). Both stops are mixed toward near-black so
-   the white text stays readable on any voice color (Shimmer is pale gold);
-   the plain-gradient declaration first is the fallback for engines without
-   color-mix. */
-
-.voice-stage {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  padding: 24px 26px;
-  /* The lg orb (88px) + the stage's own padding. Pinning it here means the
-     empty stage — which has no orb — holds exactly the same room, so switching
-     to a host with no voice yet doesn't collapse the page. */
-  min-height: 136px;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  color: #ffffff;
-  background: linear-gradient(118deg, var(--stage-from, #155e63), var(--stage-to, #0f2e2b));
-  background: linear-gradient(
-    118deg,
-    color-mix(in srgb, var(--stage-from, #155e63) 58%, #0e1a18),
-    color-mix(in srgb, var(--stage-to, #0f2e2b) 68%, #0b1412) 62%,
-    #0a100f
-  );
-}
-/* Nothing staged yet: a hero that recruits, not a disabled placeholder. The
-   dashed outline and grey fill this replaced read as an error state. It keeps
-   the stage's full height and gets a gradient of its own, but a deliberately
-   quieter one — an empty stage has no voice identity to draw from, so it must
-   not out-shout a real selected voice. */
-.voice-stage.voice-stage-empty {
-  color: #1f2b26;
-  background: linear-gradient(118deg, #f6f5ef, #eceadf 58%, #e4e2d5);
-}
-.voice-stage-empty-title {
-  font-size: 28px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-}
-.voice-stage-empty-note {
-  font-size: 13.5px;
-  color: #5c5a51;
-  margin-top: 6px;
-}
-.voice-stage-meta {
-  min-width: 0;
-}
-.voice-stage-eyebrow {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
-  margin-bottom: 5px;
-}
-.voice-stage-name {
-  font-size: 28px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-}
-.voice-stage-tagline {
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 3px;
-}
-.voice-stage-chips {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 13px;
-}
-.voice-stage-play {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  border: none;
-  border-radius: 9999px;
-  background: #ffffff;
-  color: #14201e;
-  padding: 7px 15px;
-  font-size: 12.5px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.voice-stage-play::before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-left: 8px solid #14201e;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-}
-.voice-stage-play:hover {
-  background: #f1efe9;
-}
-.voice-stage-lang {
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.16);
-  color: rgba(255, 255, 255, 0.92);
-}
-.voice-stage .voice-tier-chip {
-  position: static;
-}
-
-/* --- orbs (identity mark = play button) ------------------------------------ */
-
-.voice-orb {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  border: none;
-  border-radius: 50%;
+/* The live region. Visually hidden, never display:none — a display:none live
+   region is not announced. */
+.voice-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
   padding: 0;
-  cursor: pointer;
-  box-shadow:
-    inset 0 -8px 14px rgba(0, 0, 0, 0.22),
-    inset 0 6px 10px rgba(255, 255, 255, 0.22),
-    0 4px 12px rgba(20, 20, 10, 0.18);
-  transition: transform 0.15s ease;
-}
-button.voice-orb:hover {
-  transform: scale(1.06);
-}
-.voice-orb:focus-visible {
-  outline: 2px solid #1f1e1b;
-  outline-offset: 2px;
-}
-.voice-orb-static {
-  cursor: default;
-}
-.voice-orb-lg {
-  width: 88px;
-  height: 88px;
-}
-.voice-orb-md {
-  width: 56px;
-  height: 56px;
-}
-.voice-orb-sm {
-  width: 30px;
-  height: 30px;
-  box-shadow:
-    inset 0 -4px 7px rgba(0, 0, 0, 0.2),
-    0 2px 6px rgba(20, 20, 10, 0.15);
-}
-
-.voice-orb-tri {
-  width: 0;
-  height: 0;
-  border-left: 12px solid rgba(255, 255, 255, 0.95);
-  border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent;
-  margin-left: 3px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
-}
-.voice-orb-lg .voice-orb-tri {
-  border-left-width: 17px;
-  border-top-width: 10px;
-  border-bottom-width: 10px;
-}
-.voice-orb-sm .voice-orb-tri {
-  border-left-width: 8px;
-  border-top-width: 5px;
-  border-bottom-width: 5px;
-  margin-left: 2px;
-}
-
-.voice-orb-eq {
-  display: none;
-  align-items: center;
-  gap: 2.5px;
-  height: 18px;
-}
-.voice-orb-sm .voice-orb-eq {
-  height: 11px;
-  gap: 1.5px;
-}
-.voice-orb-eq i {
-  width: 3.5px;
-  height: 100%;
-  background: #ffffff;
-  border-radius: 2px;
-  transform-origin: center;
-  animation: voice-orb-eq 0.8s ease-in-out infinite;
-}
-.voice-orb-sm .voice-orb-eq i {
-  width: 2.5px;
-}
-.voice-orb-eq i:nth-child(2) {
-  animation-delay: 0.14s;
-}
-.voice-orb-eq i:nth-child(3) {
-  animation-delay: 0.28s;
-}
-.voice-orb.playing .voice-orb-tri {
-  display: none;
-}
-.voice-orb.playing .voice-orb-eq {
-  display: flex;
-}
-@keyframes voice-orb-eq {
-  0%,
-  100% {
-    transform: scaleY(0.3);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .voice-orb-eq i {
-    animation: none;
-    transform: scaleY(0.65);
-  }
-  .voice-orb,
-  button.voice-orb:hover {
-    transition: none;
-    transform: none;
-  }
-}
-
-/* --- menu slots ------------------------------------------------------------ */
-
-.voice-slots-section {
-  margin-bottom: 18px;
-}
-.voice-slots-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.voice-slots-title {
-  font-size: 13px;
-  font-weight: 700;
-}
-.voice-slots-hint {
-  font-size: 11.5px;
-  color: #77726a;
-}
-.voice-slots {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.voice-slot {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 7px;
-  border: 1px solid #e5e3dc;
-  border-radius: 9999px;
-  background: #ffffff;
-  font-size: 12.5px;
-  font-weight: 550;
-}
-.voice-slot-current {
-  border-color: #8fbca3;
-  background: #f2f8f4;
-}
-.voice-slot-state {
-  font-size: 10.5px;
-  font-weight: 650;
-  color: #2c5a42;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
+  border: 0;
 }
-.voice-slot-remove {
+
+/* --- the control bar -------------------------------------------------------
+   Sticky and OPAQUE, so rows scroll under it rather than through it. Rule 1 of
+   the page's two. */
+
+.voice-rail-controls {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fbf7f0;
+  border-bottom: 1px solid #eadfcc;
+  /* 44px when its two rows each hold one line: 3 + 18 + 1 + 18 + 4. Not a
+     fixed height — see the wrap note below. */
+  padding: 3px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 12px;
+  color: rgba(36, 29, 20, 0.62);
+  font-variant-numeric: tabular-nums;
+}
+/* Wrapping, at every width, with no breakpoint. The bar is a row of short
+   controls whose count and width both depend on state — `Your voice ↗` only
+   exists when there is a row to jump to, `Play all (22)` grows with the
+   catalog, and every label is translated into ~30 locales, some 40% longer
+   than English. There is no column width at which a fixed single line is safe,
+   so the line is not fixed: the controls reflow, keeping their right-edge
+   alignment, and the bar grows by one 18px line when they must.
+
+   Two levels of giving way, in this order. The container wraps BETWEEN
+   controls first — a flex line is broken on items' hypothetical sizes, which
+   are their full labels — and only a control that is wider than the whole
+   column on its own ever breaks INSIDE itself. So dropping `white-space:
+   nowrap` from these labels changed nothing about how the bar reads at any
+   width the page is drawn at; it removed the floor they were putting under the
+   pane. See "nothing outside the rail may export a width" at the top. */
+.voice-rail-controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  min-height: 18px;
+}
+/* `.voice-rail-hint` needs no rule of its own any more, and that is the fix:
+   it used to be one nowrap, ellipsised line, which made it both the longest
+   unbreakable string on the page (426px of a 428px rail — the whole of the
+   pane's min-content width) and the one place an alert the reader has to act
+   on could be cut off mid-sentence. It wraps now, like everything else outside
+   the rail, and the bar grows the line it was already built to grow. */
+.voice-compare {
+  margin-left: auto;
+}
+
+/* The bar's controls are TEXT, not buttons with boxes. `Play all` joined this
+   group when it stopped drawing a pill — see the note above `.voice-play-all`.
+   The chip re-adds an outline below, because its whole job is to show a state. */
+.voice-your-voice,
+.voice-arrow-chip,
+.voice-play-all,
+.voice-compare-swap {
   border: none;
   background: transparent;
-  color: #9c978c;
-  font-size: 15px;
-  line-height: 1;
-  padding: 0 2px;
+  padding: 2px 0;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
 }
-.voice-slot-remove:hover {
-  color: #4c4842;
+.voice-your-voice:hover,
+.voice-compare-swap:hover {
+  color: #241d14;
 }
-.voice-slot-remove:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 2px;
-  border-radius: 4px;
+/* The chip is the arming rule made visible AND its permanent escape hatch: it
+   lights when arrows are auditioning, and pressing it turns focus-plays off
+   for good. One green, one meaning — now. */
+.voice-arrow-chip {
+  border: 1px solid #eadfcc;
+  border-radius: 9999px;
+  padding: 2px 10px 2px 8px;
+  background: #ffffff;
 }
-.voice-slots-overflow,
-.voice-slots-builtins {
-  font-size: 11.5px;
-  color: #77726a;
-  margin-top: 7px;
+.voice-arrow-chip::before {
+  content: "●";
+  margin-right: 5px;
+  color: rgba(36, 29, 20, 0.22);
+}
+.voice-arrow-chip.lit {
+  color: #2c5a42;
+  border-color: #2c5a42;
+}
+.voice-arrow-chip.lit::before {
+  color: #2c5a42;
+}
+/* OFF, and only off. It used to be struck through, which conventionally means
+   deleted, deprecated or unavailable — none of which is true of a toggle you
+   can press again. The dot goes HOLLOW and the label dims: a shape change as
+   well as a colour one, so the state survives a colourblind reader and a
+   greyscale screenshot, and `aria-pressed` carries the same fact to a screen
+   reader. Three states, one control: hollow (off), grey ● (on, not yet armed),
+   green ● (on and auditioning). */
+.voice-arrow-chip[aria-pressed="false"] {
+  color: rgba(36, 29, 20, 0.38);
+}
+.voice-arrow-chip[aria-pressed="false"]::before {
+  content: "○";
+}
+.voice-compare-glyph {
+  margin-right: 5px;
 }
 
-/* --- explore shelves -------------------------------------------------------- */
+/* --- Play all, its position readout, and the Show: filter -------------------
+   Auto-advance is the OTHER comparison gesture, never the opening one: the
+   page invites you to hear ONE voice, and this is the option beside that
+   invitation, not in front of it.
 
-.voice-shelves {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.voice-shelf-head {
-  display: flex;
+   It used to draw a pill — 1px outline, white fill, rounded — which made it
+   the only button-shaped thing on the page and therefore its apparent call to
+   action. The page then read as "commit to a minute of audio" while its own
+   design doc rejects exactly that as the opening gesture. So it is now set
+   like the controls it sits among (`Your voice ↗`, the compare swap): plain
+   text, the bar's quiet ink, a ▶ in front of it. Still first in the bar,
+   because the sweep and its `6 of 22` readout belong together and the reading
+   order is a sentence, not a ranking — but no longer louder than the rail. */
+
+.voice-play-all {
+  display: inline-flex;
   align-items: baseline;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 5px;
+  color: rgba(36, 29, 20, 0.62);
 }
-/* The heading leads and the blurb recedes: the heading names the tier, the
-   blurb names the benefit. Before this the ALLCAPS heading and a full
-   explanatory sentence competed at the same visual weight (the blurb was
-   actually the LARGER of the two). The hierarchy is bought by DARKENING the
-   heading — the blurb stays at a WCAG-AA colour, because it is the one place
-   the studio says what HD costs. */
-.voice-shelf-title {
-  font-size: 11.5px;
-  font-weight: 750;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #3f3b35;
-  /* The head is a flex row; the default shrink makes the TITLE the thing that
-     gives when the pair is tight, stacking "EVERYDAY / VOICES" beside a
-     two-line blurb. The heading can't lead from two lines. */
-  flex-shrink: 0;
+.voice-play-all:hover {
+  color: #241d14;
 }
-.voice-shelf-blurb {
-  font-size: 11px;
-  color: #77726a; /* 4.8:1 on the white card — AA at this size. */
+/* A sweep in progress is the one thing on this bar that is happening NOW, so
+   Stop takes the one green — the same rule as the playhead and IN USE. */
+.voice-play-all.sweeping {
+  color: #2c5a42;
+  border-color: #2c5a42;
 }
-.voice-card-grid {
+.voice-play-glyph {
+  font-size: 9px;
+}
+
+/* The filter lives in a slot the control bar can refill, because its option
+   set changes without the rail repainting (`Not yet heard` appears the moment
+   anything has been heard). The slot carries the auto margin, so an empty one
+   — a catalog with nothing to filter — collapses against the right edge
+   instead of leaving a gap mid-bar. */
+.voice-filter-slot {
+  display: inline-flex;
+  margin-left: auto;
+}
+.voice-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+/* NB the gap above applies between EVERY flex item, including the anonymous
+   one CSS wraps a bare text node in — which is why `Show:` is built as a
+   single `.voice-filter-label` span holding the translated word and the colon
+   together. Left loose, the colon is its own flex item with 4px on each side
+   and the control reads `Show : All voices`. */
+/* `9 of 22 heard`. Tabular figures because it ticks up while you are looking
+   at it, and proportional digits would shuffle the words beside it. Absent —
+   not "0 of 0" — on a page with nothing auditionable on it. */
+.voice-heard-count {
+  font-variant-numeric: tabular-nums;
+}
+.voice-heard-count:empty {
+  display: none;
+}
+.voice-filter-select {
+  border: 1px solid #eadfcc;
+  border-radius: 6px;
+  padding: 1px 4px;
+  background: #ffffff;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+/* The allowance note is the HD filter's HELPER LINE, not a shelf blurb: it
+   exists only while HD is what you chose to look at, directly under the
+   control that undoes that choice. Quiet, because it is a caveat about the
+   filter, not a warning about the page. */
+.voice-filter-note {
+  color: rgba(36, 29, 20, 0.38);
+}
+/* Blocked playback, a failed clip and a refused sweep all replace the keyboard
+   hint IN PLACE — one line, non-modal, never a dialog, and full ink because
+   unlike the hint they are things you have to read. */
+.voice-rail-hint-alert {
+  color: #241d14;
+}
+
+/* --- the rail --------------------------------------------------------------
+   One listbox, one tab stop, 42px rows on an 8px grid. Row columns:
+   [3px focus rule][14][192px print][20][name 96px][12][desc flex][badges][96][20]
+
+   Those numbers are budgeted against a 692px rail, which is what the settings
+   TAB's fixed 756px content column gives this pane at a full-screen window —
+   measured identical at viewports 1100, 1280, 1600 and 1920, because #584
+   moved settings out of a sized window and #587 deleted the sizing machinery.
+   Widening the column for this tab is not an option (see the note above), so
+   692px is the row's ceiling. It is NOT its floor: the same #584 that fixed
+   the ceiling also let the shell's mobile layout engage, and a half-width
+   desktop window hands this pane as little as 440px. What the row does down
+   there is the narrow block further down.
+
+   THE YIELD ORDER, when it does not: print, then name, then — last, and only
+   once the other two are at their floors — the description. The print is the
+   most elastic thing on the page (its bars are computed against a width and
+   its svg carries a viewBox, so a narrower box says exactly what the wide one
+   said at a smaller scale); a truncated description is the one loss that
+   destroys meaning, because on a duplicate-named voice it IS the difference
+   between two rows. */
+
+.voice-rail {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+  /* The rail is a QUERY CONTAINER so the print's width can step with the
+     column (see `.voice-row-print`). On the rail rather than on #voice-studio
+     because `container-type` implies layout+style containment, and the sticky
+     control bar is a sibling of the rail — nothing that positions itself
+     against the page ends up inside the contained box. */
+  container-type: inline-size;
 }
-.voice-card {
+.voice-rail:focus {
+  outline: none;
+}
+.voice-rail:focus-visible {
+  outline: none;
+}
+
+.voice-row {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 7px;
-  padding: 16px 10px 12px;
-  border: 1px solid #e5e3dc;
-  border-radius: 14px;
-  background: #ffffff;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  height: 42px;
+  /* The right-hand column — the actions' own basis and the gutter before it —
+     named once, because the narrow layout below has to know exactly how much
+     room to leave beside the description and that number lives in a rule forty
+     lines away. Two spenders, one source. */
+  --voice-actions-w: 96px;
+  --voice-actions-gap: 12px;
+  /* [3px focus rule][14][192px print][20][name 96][12][desc][badges][96][20] */
+  padding: 0 20px 0 14px;
+  border-left: 3px solid transparent;
+  /* Rounded, so standing on a row is a soft tile rather than a scanline. The
+     radius is invisible until the row has a ground (hover/focus), and the
+     16px card padding is what it breathes into. */
+  border-radius: 12px;
+  cursor: pointer;
+  /* NEVER HEARD — the first of the three heard states (design §8), and the
+     only one a first visit has. Nothing on this page is known to you yet, and
+     the rail says so: a page of under-drawings that develops as you work down
+     it, with no suppression threshold and no mass transition when some magic
+     count trips.
+
+     The three states used to be three ALPHAS of one near-black ink. They are
+     now three measured COLOURS, because the ink is the pitch ramp and a ramp
+     will not survive being alpha-scaled: full amber measures 4.2:1 against
+     this ground where full green measures 7.6:1, so one alpha scale would make
+     a deep unheard voice fainter than a bright unheard voice, and the hue
+     would corrupt the heard reading it sits beside. `printInk()` fixes the
+     CONTRAST per state instead and lets the ramp choose the hue, so every row
+     is at equal presence in equal state.
+
+     The floor is the 3.2:1 the monochrome rail settled on by eye, but it is
+     now held ON THE FOCUS GROUND BELOW rather than on the card — which is why
+     printInk's resting target reads 3.6. The alpha ink used to get that for
+     free: rgba() COMPOSITES against whatever it is painted over, so it
+     self-corrected when the row took its tile. A fixed colour does not, and
+     the controller focuses a row unconditionally at first paint, so measuring
+     only against the card would have put the one row the reader is standing
+     on at 2.85:1 — under WCAG 1.4.11, on the page's only data.
+
+     The fallbacks are the NEUTRAL rung of the ramp (155 Hz, the reference
+     line) — what an unmeasured voice would be given. In practice the
+     controller sets all three on every playable row, from `pitchOf`, before
+     the row is ever painted. */
+  color: var(--print-ink-rest, #818737);
+  transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
-.voice-card:hover {
-  box-shadow: 0 6px 18px rgba(20, 20, 10, 0.1);
-  transform: translateY(-1px);
+/* No rule between rows. Separation is the rhythm and the prints.
+
+   HEARD — more ink, not less. NN/g Guideline 37 warns specifically off grey
+   for a visited state (it reads as *unavailable*), and dimming is backwards
+   anyway: a voice you have heard is the one most likely to win. Hover and
+   focus deliberately do NOT touch the ink, so this stays a three-value scale
+   the way a waveform editor's is, and it stays readable as a chart across 22
+   rows. Standing on a row is expressed by its ground, its tagline and its
+   actions; the print keeps saying what it always said.
+
+   The DEVELOP step (never-heard → heard) is far the larger of the two — 17.5
+   points of CIE L* against 7.5, which is design §8's "more than twice" —
+   because "play one voice and its print inks in" is the whole of heard state
+   ON THE RAIL, while what marks the playing row is the green playhead crossing
+   its trace. `.playing` sits last because it ties `.heard` on specificity and
+   source order is what decides.
+
+   #f3eada is the DARKER of the two grounds a print is ever drawn on, and the
+   one printInk's floor is measured against — see PRINT_GROUND_FOCUS. */
+.voice-row:hover {
+  background: #f3eada;
 }
-.voice-card-current {
-  box-shadow: 0 0 0 2px rgba(44, 90, 66, 0.35);
+.voice-row.focused {
+  background: #f3eada;
 }
-.voice-card-current:hover {
-  box-shadow:
-    0 0 0 2px rgba(44, 90, 66, 0.35),
-    0 6px 18px rgba(20, 20, 10, 0.1);
+.voice-row.heard {
+  color: var(--print-ink-heard, #565a22);
 }
-@media (prefers-reduced-motion: reduce) {
-  .voice-card,
-  .voice-card:hover {
-    transition: none;
-    transform: none;
-  }
+.voice-row.playing {
+  color: var(--print-ink-play, #44481a);
 }
-.voice-card > .voice-tier-chip {
+/* The current voice keeps its PITCH POSITION and is marked in place — pinning
+   it to the top would break the chart the pitch order creates. */
+.voice-row-current {
+  border-left-color: #2c5a42;
+}
+
+/* THE ROW IS THE PLAY TARGET, said on the row you are pointing at.
+   There is deliberately no per-row play BUTTON: nesting one inside a
+   `role="option"` is exactly what the whole-row target exists to avoid, and 22
+   of them would make the resting page a wall — the opposite of "calm at rest,
+   informative on demand". A pseudo-element says the same thing for nothing: it
+   lives in the 14px of padding the row already has, so it costs the print not
+   one pixel and cannot move the shared reference line, and the row's own
+   `aria-label` overrides its contents, so it adds nothing to read. */
+.voice-row[data-print-voice]::before {
+  content: "▶";
   position: absolute;
-  top: 9px;
-  left: 9px;
-}
-.voice-card-name {
-  font-size: 13.5px;
-  font-weight: 650;
-  margin-top: 2px;
-}
-/* Two lines, always. Grid rows stretch, so ONE voice whose subtitle falls back
-   to a long server description used to grow every sibling card in its row
-   while their Use buttons stayed stranded mid-card. The clamp caps the tallest
-   tagline; min-height still reserves the space so a one-line tagline doesn't
-   shrink its card. */
-.voice-card-tagline {
-  font-size: 11px;
-  color: #77726a;
-  line-height: 1.35;
-  min-height: 2.7em;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-  /* The card centers its children, which would shrink-wrap the clamped box to
-     its longest line; stretching it fixes the wrap point (and the ellipsis) at
-     the card's width. text-align: center still centers the text itself. */
-  align-self: stretch;
-}
-/* margin-top:auto bottoms the actions row out, so the buttons share a baseline
-   across a row even if a card is still taller than its content. */
-.voice-card-actions {
+  /* Centred by spanning the row and letting flex do it, NOT by a translate:
+     the page bans transforms outright so that nothing on it can slide. */
+  left: 2px;
+  top: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: auto;
+  font-size: 8px;
+  line-height: 1;
+  color: rgba(36, 29, 20, 0.38);
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+  pointer-events: none;
 }
-.voice-card-state {
-  font-size: 10.5px;
-  font-weight: 650;
+.voice-row[data-print-voice]:hover::before,
+.voice-row[data-print-voice].focused::before {
+  opacity: 1;
+}
+/* …except on the row that is already sounding, where Space STOPS rather than
+   plays and a ▶ would be an instruction that is the wrong way round. */
+.voice-row.playing[data-print-voice]::before {
+  opacity: 0;
+}
+
+/* The print YIELDS FIRST — but at the PAGE's width, never at the row's, which
+   is why this steps on a container query instead of taking a flex-shrink.
+   `flex-shrink` would make the print's width a per-ROW negotiation, and the
+   rows are not identical: a badge costs its row 29px, so under any pressure
+   at all the HD rows would draw their traces ~15 % shorter than the rows
+   beside them (measured: 143.9px against 169.8px at a 592px rail). A trace's
+   LENGTH is its clip's length, so that is not a smaller chart — it is a chart
+   that lies about half its rows. Every print on the page is the same width or
+   the shared reference line is registering nothing.
+
+   Nothing about the MARK changes when the box does. The svg is drawn at 192
+   print units and carries `preserveAspectRatio: none`, so a narrower box
+   scales x alone: the reference line stays on its y, the pitch band keeps its
+   26px, and the duty cycle is scale-invariant. Steps rather than a continuous
+   fit because the box only has to stop crowding the words — it does not have
+   to be pixel-exact — and two steps keep the drawn:rendered ratio near 1:1
+   wherever the page is actually read. (What makes the step real on the svg
+   itself is `.voice-print` below.)
+
+   A voice with no clip renders this band EMPTY — no placeholder shape
+   pretending to be data, and visibly different from a print still loading,
+   which already shows its reference line. The band is still reserved, so the
+   names stay on one baseline down the whole rail. */
+.voice-row-print {
+  flex: 0 0 192px;
+  height: 26px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+/* 648px: the rail width at which an HD row's description would otherwise drop
+   under its floor.
+   608px is where the same arithmetic runs out — one more step of print buys
+   only 24px and the description is under its floor again 26px later — so that
+   is where the row stops being one line at all. See the narrow block below. */
+@container (max-width: 648px) {
+  .voice-row-print {
+    flex-basis: 152px;
+  }
+}
+/* 96px, down from 108: the longest name in the live catalog draws at 63px, so
+   this is still ~50 % headroom, and the 12px bought back is 12px the
+   description does not have to give up. Yields SECOND, after the print — and
+   this one CAN take a flex-shrink, because a name that ends 4px short of its
+   neighbour's costs the page nothing, where a trace that ends 4px short is
+   claiming a shorter clip. */
+.voice-row-name {
+  flex: 0 1 96px;
+  min-width: 64px;
+  margin-right: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: #241d14;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The tagline is a focused-row affordance now, not a 2.7em block on 22 cards.
+   Opacity, not display, so the row never reflows as focus moves.
+
+   Ink 66, not the 62 the rest of the page's secondary text takes, because this
+   is the ONE piece of text that is only ever read on the darker focus ground.
+   62 measures 4.60:1 on the card — fine — but 4.41:1 on #f3eada, and 12px at
+   400 is normal text, so WCAG 1.4.3 AA wants 4.5. 66 puts it at 4.98:1 where
+   it is actually read. Four points of alpha is invisible beside the control
+   bar; being under the floor on the row you are standing on is not. */
+/* The description YIELDS LAST, and `flex: 1 1 0` is what makes that true of
+   the PAGE rather than of one row.
+
+   Based at `auto` — its own text — one 40-character tagline puts that row into
+   deficit on its own and steals the space back from the print, so every print
+   ends up a different width and the shared reference line stops fusing N
+   traces into one chart. Based at 0 the sum of base sizes is identical on
+   every row: the print's width is a page-level decision, and the description
+   simply grows into whatever the row has left (215px at the shipped 692px,
+   against 95px before) and ellipsises only when its own text outruns that.
+
+   The 152px floor is the narrow-window guarantee. Below ~1000px of viewport
+   the content column starts giving way, and without a floor the description
+   is the only shrinkable column, so it collapsed to literally 0px — measured.
+   152px clears the widest twin disambiguator (121px, "Speaks 33 languages")
+   with room for a longer locale, so the two Paolas stay tellable apart at any
+   width this page is ever drawn at; the print and the name give up the
+   difference. */
+.voice-row-desc {
+  flex: 1 1 0;
+  min-width: 152px;
+  font-size: 12px;
+  color: rgba(36, 29, 20, 0.66);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+.voice-row:hover .voice-row-desc,
+.voice-row.focused .voice-row-desc {
+  opacity: 1;
+}
+/* Twin display names (#474 — the two Paolas) are the exception the demotion
+   needs: their subtitle is the only thing that tells the rows apart, so it
+   never hides. Ink 38 at rest — the HD-badge step, quiet enough to read as a
+   disambiguator rather than a description — rising to the tagline's own 66
+   when the row is the one you are looking at, on the same darker ground and
+   for the same reason. */
+.voice-row-desc-dup {
+  opacity: 1;
+  color: rgba(36, 29, 20, 0.38);
+  transition: color 0.12s ease-out;
+  /* AND IT WRAPS, where every other line on the row ellipsises.
+
+     This is the twins' second exception, and it exists for the same reason as
+     the first: an ellipsis on a line whose whole job is to be different from
+     the line above it is the same broken page as no line at all. `Speaks 33
+     languages` wants 121px in this face; the 152px floor above clears it on
+     one line, and at 320px — where the row is two lines and the description
+     shares its line with the actions' 108px reservation — it gets 104 and was
+     losing its last word. Measured on the author's own machine, in English.
+
+     Ellipsising was never a number that could be re-tuned into safety. It is
+     the SHAPE of the failure that is wrong: `white-space: nowrap` means the
+     line fits or it doesn't, so its safety margin is an arithmetic claim about
+     one string in one face, re-litigated by every locale and every runner. A
+     line that wraps has no such claim to make — there is no width at which it
+     loses a word, in any of the ~30 languages this string is about to be
+     written in, in any face. `anywhere` closes the last hole: it is the only
+     wrapping mode whose min-content is a single character, so even a compound
+     with no break opportunity in it cannot be cut.
+
+     It costs nothing where the description already fits, which is nearly
+     everywhere: one line stays one line. Where it doesn't fit, the twin's row
+     takes a second line of 12px text — inside the row's own 42px on the
+     one-line layout, and growing the row on the narrow one, which is the axis
+     that layout already spends. Ordinary taglines keep the ellipsis on
+     purpose: they are one voice's description rather than two rows' only
+     difference, and wrapping all 22 of them would make every row taller at
+     rest to save a word nobody is reading yet. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.voice-row:hover .voice-row-desc-dup,
+.voice-row.focused .voice-row-desc-dup {
+  color: rgba(36, 29, 20, 0.66);
+}
+/* --- and the row's own version of the same rule ----------------------------
+   "Nothing outside the rail may export a width" (top of this file) is about
+   the PAGE. Inside the rail, containment means a row that outgrows its line
+   can never scroll the document — so the identical mistake fails silently
+   instead, by painting outside the card.
+
+   It was doing exactly that. Between a 609px and a 649px rail — an ordinary
+   ~700px window, which is where the mobile shell's full-width column lands —
+   the one-line layout has to draw a print (152), a name at its 64px floor, a
+   description at its 152px floor, a full set of badges and a 96px actions
+   column. In English that fits. With `HD` and `In use` in a language 40%
+   longer it is 36px short, and because every remaining item refused to
+   shrink, the 36px came off the END: the `Use` button, drawn 20px outside the
+   card. Measured, in a simulated locale, on this machine.
+
+   The refusal is `min-width: auto` — a flex item's automatic minimum is its
+   own content, so `flex: 0 0 96px` is a floor of `max(96px, whatever is
+   inside)` and a nowrap badge is a floor of its own string. Same defect as the
+   keyboard hint, one containment boundary further in.
+
+   So the two decorative columns yield, and in a stated order. The badges give
+   first — a clipped `In use` is a decoration losing its tail, and the row's
+   aria-label still says it in full. The actions give second and only if the
+   badges were not enough, because a commit control ellipsised to `Us…` is a
+   real loss — but it is a smaller one than a commit control painted over the
+   card's edge, and the button keeps its position, its hit area and its
+   `aria-label`. What does NOT give is anything above them in the yield order:
+   the print's width is a page-level decision, the name keeps its 64px, and the
+   description keeps the 152px floor the twins depend on.
+
+   The point of doing it this way is that the row's minimum stops being
+   text-derived. It is now [34 padding][192 print][20][64 name][12][152 desc]
+   [12][96 actions][12] = 594px — nine constants and not one string — against
+   the 608px at which the row takes a second line. Every width the one-line
+   layout is drawn at can draw the widest row it has, in any locale, in any
+   face, and `voices-studio-layout.spec.ts` recomputes that sum from this
+   stylesheet rather than restating it. */
+.voice-row-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+  min-width: 0;
+}
+.voice-tier-chip, .voice-row-inuse {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Most rows carry no badge at all, and a gutter before nothing is 12px the
+   description could have had. */
+.voice-row-badges:empty {
+  margin-left: 0;
+}
+.voice-row-inuse {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: #2c5a42;
   white-space: nowrap;
 }
+/* Actions render on every row but are only VISIBLE — and only tabbable, which
+   the controller manages — on the row you are looking at. That is what keeps
+   Tab at exactly two extra stops instead of forty-four. */
+.voice-row-actions {
+  flex: 0 0 var(--voice-actions-w);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: var(--voice-actions-gap);
+  visibility: hidden;
+  /* The declared basis IS the width. Without this, `min-width: auto` quietly
+     turns `flex: 0 0 96px` into `max(96px, the buttons' own width)`, and a
+     longer word for `Use` widens the one column the narrow layout does its
+     arithmetic against (`calc(100% - var(--voice-actions-w) …)`) — the
+     description's line stops adding up and the row overflows. See the badges
+     above. */
+  min-width: 0;
+}
+.voice-row:hover .voice-row-actions,
+.voice-row.focused .voice-row-actions {
+  visibility: visible;
+}
 
-/* --- shared chips + actions -------------------------------------------------- */
+/* --- narrow rails: the row takes a second line -----------------------------
+   The row above is one line of seven things, and below ~608px of rail there is
+   no honest way to keep it that way. The print can step (it does, at 648), the
+   name can shrink (it does, to 64px), and past that the only column left to
+   take from is the description — which is the one column that must not give,
+   because on the twin-named voices it is the ENTIRE difference between two
+   rows that otherwise both read `Paola`. Squeezing it is not a smaller layout,
+   it is a page with two identical rows on it. That is what a 440px rail — an
+   ordinary half-screen desktop window, since #584 — was doing.
+
+   So below 608px the row spends the axis it has plenty of. VERTICAL. Line one
+   is the row at rest: the mark, the name, the badges. Line two is what the row
+   says when you are standing on it: the description, and the actions. The
+   split is not arbitrary — it is the same "calm at rest, informative on
+   demand" the reveal already encodes, drawn spatially instead of in opacity.
+
+   What survives, deliberately:
+   - Every print is still one width, so the shared reference line still
+     registers every trace into one chart. It is a container query, never a
+     flex-shrink, for the reason spelled out above `.voice-row-print`: a badge
+     costs its row 29px, and a per-row negotiation would draw the HD rows'
+     traces shorter than their neighbours', which is a chart that lies.
+   - The trace still measures the clip against the FIXED max span, at whatever
+     width the step chose, so a short clip still draws visibly short.
+   - The yield order is unchanged, and in fact better served: the print steps
+     first, the name yields second (it grows into the line and ellipsises only
+     under a full set of badges on a phone), and the description — now on a
+     line where nothing competes with it — never yields at all. At a 334px
+     rail it gets 189px, against the 152px floor it was pinned to and
+     ellipsising through.
+   - The print gets its FULL 192px back, because line one no longer has to
+     house the description. The mark is drawn at 192 units, so this is also
+     where it renders 1:1. Narrower window, better print.
+
+   The cost is height: 42px becomes 60px, and a rail of 22 voices gets taller
+   than a phone screen. It was already taller than a phone screen. */
+@container (max-width: 608px) {
+  .voice-row {
+    flex-wrap: wrap;
+    /* The height comes from the lines and the padding — 5 + 26 + 6 + 18, ≈60px
+       — rather than being declared, and the lines stack from the TOP. Both of
+       those are the shared reference line talking: pinned to the top with a
+       fixed padding, the print's band starts at the same y in every row even
+       if some future row wraps a line we did not plan for, where a centred
+       stack would have slid that row's trace off the line the rest are drawn
+       on. The gap is 6px because a loud frame can overhang the 26px band by
+       3px, and it has line two directly under it now rather than 8px of row. */
+    align-content: flex-start;
+    row-gap: 6px;
+    height: auto;
+    padding: 5px 20px 5px 14px;
+  }
+  /* Full size again — see the block comment. */
+  .voice-row-print {
+    flex-basis: 192px;
+  }
+  /* The name now takes what line one has left and puts the badges on its right
+     edge, above the actions. `min-width: 0` rather than the 64px floor: with
+     the description gone from this line the name is the last thing that can
+     yield, and an ellipsised name on a 390px phone is a far smaller loss than
+     a row that overflows the page.
+
+     Based at 0, NOT at its text. A wrapping flex container breaks lines on
+     items' hypothetical sizes and only shrinks them afterwards, so a name
+     based at `auto` does not give way to a badge — it pushes the badge onto a
+     line of its own and the row silently becomes three lines with its print in
+     the wrong place. Based at 0 the badges are always on line one and it is
+     the name that gives, which is the yield order this page already has. */
+  .voice-row-name {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  /* Line two, and the thing that MAKES a line two.
+
+     The basis is the whole row minus the actions column, which is both halves
+     of the break at once: too wide to sit on line one beside a print, and
+     exactly narrow enough that the actions fit beside it here. Nothing else
+     expresses both — a zero basis (what it uses on one line) is small enough
+     to fit anywhere, and its own text width is unbounded, so either one lets
+     the browser wrap somewhere the design did not choose.
+
+     `order` rather than DOM order: the markup has the description before the
+     badges, and line one wants the badges. And the 152px floor goes, because
+     that floor is what the description defends itself with when it is
+     COMPETING for a line — here it has one to itself, and a floor is then the
+     only thing left on this layout that could overflow a phone. */
+  .voice-row-desc {
+    order: 2;
+    flex-basis: calc(100% - var(--voice-actions-w) - var(--voice-actions-gap));
+    min-width: 0;
+  }
+  .voice-row-actions {
+    order: 3;
+  }
+  /* The ▶ says "this row is the play target"; it belongs beside the mark, not
+     halfway down a two-line row. Pinned to line one's band. */
+  .voice-row[data-print-voice]::before {
+    bottom: auto;
+    top: 5px;
+    height: 26px;
+  }
+}
+/* One step of print, at the width where holding 192 would start eating the
+   name's own 64px. Below this the row is on a phone. */
+@container (max-width: 404px) {
+  .voice-row-print {
+    flex-basis: 128px;
+  }
+}
+
+/* --- soundprints -----------------------------------------------------------
+   Each voice drawn from its OWN sample clip: a pitch trace on a shared 80–288
+   Hz log axis, with one faint reference line at 155 Hz running through every
+   print at the same y. That line is the design move — it registers every
+   independent trace into a single chart, so vertical position means the same
+   thing on every voice, and the rail reads as one continuous descent.
+
+   Ink is `currentColor` from the ROW, so the whole state of a print is one
+   class on its row. Colour carries PITCH and nothing else — one ordered ramp
+   on the same 80–288 Hz axis the height uses, so the two encodings agree by
+   construction. That is the opposite of the 22 hash-derived gradients this
+   page deleted, which looked like they encoded something and encoded nothing;
+   there is still no per-voice identity colour here. */
+
+/* Drawn at 192 print units and rendered at whatever `.voice-row-print` was
+   able to keep — `width: 100%` plus the svg's own `preserveAspectRatio: none`
+   is the whole of the print's elasticity. `min-width: 0` because a flex item's
+   automatic minimum is its intrinsic width, which would pin the svg at 192 and
+   let it overrun the name instead of yielding. */
+.voice-print {
+  display: block;
+  overflow: visible;
+  width: 100%;
+  min-width: 0;
+}
+/* The trace is the voice; the reference line is the chart it hangs on, so it
+   stays faint and does NOT take the playing row's ink. */
+.voice-print-ref {
+  stroke: #eadfcc;
+  stroke-width: 1;
+}
+.voice-print-trace {
+  fill: currentColor;
+}
+/* The playhead: a clock, linear, no easing, and only on the playing row. It
+   travels the DRAWN trace (--print-trace-w) over the clip's own measured span
+   (--print-span), starting after the clip's own leading silence
+   (--print-lead) — all three published by paintPrintTrace from the
+   measurement, so an unmeasured print, which sets none of them, never gets a
+   head that would be pretending.
+
+   The delay is what makes it a clock rather than a decoration. `.playing`
+   lands at clip t=0, but the trace was trimmed to the speech span, so x=0 is
+   the first VOICED frame: 0.76s into Onyx's 2.71s file. Without the delay the
+   head is 65% across the trace before the voice is audible and parked at the
+   end while it is still speaking. With it, the head leaves x=0 exactly as the
+   voice starts and arrives exactly as it stops — the trailing silence is the
+   only time it sits still, which is honest, because the trace has nothing
+   drawn there either. Longhands, not the shorthand: two var()-valued <time>s
+   in one `animation:` declaration are positional and one reordering edit
+   would silently swap duration for delay.
+
+   The KEYLINE is what the pitch ramp made necessary. The head is the accent
+   green and the ramp ARRIVES at that same green at 288 Hz, so on the brightest
+   voices the head was green crossing green — ΔE 3.4 in Oklab, one colour to
+   the eye, exactly where "one green means now" is doing its work. A 1px stroke
+   in the paper colour is invisible on paper (it IS the paper) and separates the
+   head from the trace wherever it crosses one, at every pitch rather than only
+   at the amber end. Stroke is centred on the edge, so the rect's 2.5 leaves a
+   1.5px green core — the hairline it always was — inside a 1px halo. */
+.voice-print-head {
+  fill: #2c5a42;
+  stroke: #fbf7f0;
+  stroke-width: 1;
+  opacity: 0;
+}
+.voice-row.playing .voice-print-head {
+  opacity: 1;
+  animation-name: voice-print-sweep;
+  animation-duration: var(--print-span, 1.5s);
+  animation-delay: var(--print-lead, 0s);
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+@keyframes voice-print-sweep {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--print-trace-w, 0px));
+  }
+}
+/* The third motion, and the only one that is not on the design's list of two —
+   because §5.1 asks for it by name and it is informational in exactly the same
+   way the playhead is. The beat between clips is deadline-scheduled, so a clip
+   that has not buffered stretches the gap; the next voice's print pulsing is
+   what makes that a wait rather than a page that has stopped working. It is
+   drawn on the print, not on a spinner, so it says WHICH voice is late. */
+.voice-row.loading .voice-print-trace {
+  animation-name: voice-print-pulse;
+  animation-duration: 0.9s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes voice-print-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* --- the tail: "No sample yet", built-ins, and the menu summary ------------
+   Rule 2 of the page's two. */
+
+.voice-rail-divider {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding: 10px 20px 6px 17px;
+  border-top: 1px solid #eadfcc;
+  font-size: 12px;
+  color: rgba(36, 29, 20, 0.62);
+}
+.voice-rail-group-label {
+  font-weight: 600;
+  color: rgba(36, 29, 20, 0.62);
+  font-variant-numeric: tabular-nums;
+}
+.voice-menu-summary {
+  margin-top: 10px;
+  padding: 0 20px 0 17px;
+  font-size: 12px;
+  color: rgba(36, 29, 20, 0.62);
+  font-variant-numeric: tabular-nums;
+}
+/* The line that makes "✓ In menu" honest when there are more pins than seats.
+   Its own sentence, set apart from the seat list rather than run into it. */
+.voice-menu-overflow {
+  margin-left: 10px;
+}
+
+/* --- chips + actions -------------------------------------------------------- */
 
 .voice-tier-chip {
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  padding: 2px 6px;
-  border-radius: 5px;
-  background: #23211d;
-  color: #f5d78e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(36, 29, 20, 0.38);
+  white-space: nowrap;
 }
 
 .voice-pin-toggle {
-  border: 1px solid #e5e3dc;
-  border-radius: 9999px;
-  background: #ffffff;
-  color: #6f6a61;
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 550;
+  border: none;
+  background: transparent;
+  padding: 2px 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: rgba(36, 29, 20, 0.62);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.12s ease, border-color 0.12s ease;
+  /* Last in the yield order, and only reached when the badges have already
+     given everything they have — see `.voice-row-badges`. Nowrap stays: these
+     are two-word controls that should break their LABEL before they break
+     their line. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .voice-pin-toggle:hover:not(:disabled) {
-  border-color: #c8c4ba;
+  color: #241d14;
 }
 .voice-pin-toggle.pinned {
-  background: #e7f2eb;
-  border-color: #8fbca3;
   color: #2c5a42;
 }
 .voice-pin-toggle:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
-.voice-pin-toggle:focus-visible,
-.voice-use:focus-visible,
-.voice-stage-play:focus-visible,
-.voice-host-tab:focus-visible {
-  outline: 2px solid #2c5a42;
-  outline-offset: 2px;
-}
-
+/* The one commit action on the page takes the one green. */
 .voice-use {
-  border: 1px solid #e5e3dc;
-  border-radius: 9999px;
+  border: none;
   background: transparent;
-  color: inherit;
-  padding: 3px 10px;
-  font-size: 11px;
+  padding: 2px 0;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: #2c5a42;
   cursor: pointer;
   white-space: nowrap;
+  /* As `.voice-pin-toggle`. The full sentence is on the button's aria-label
+     (`Use <voice> on <host>`), so an ellipsised label costs the reader a tail
+     and costs a screen reader nothing. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+/* One green means one green: hover underlines rather than inventing a second
+   shade of it. */
 .voice-use:hover {
-  background: #f3f2ee;
+  text-decoration: underline;
 }
 
-/* Narrow settings windows: let the stage stack instead of squeezing. */
-@media (max-width: 560px) {
-  .voice-stage {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+.voice-host-tab:focus-visible,
+.voice-pin-toggle:focus-visible,
+.voice-use:focus-visible,
+.voice-your-voice:focus-visible,
+.voice-arrow-chip:focus-visible,
+.voice-play-all:focus-visible,
+.voice-compare-swap:focus-visible {
+  outline: 2px solid #2c5a42;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* The rail is one tab stop, so its focus ring belongs on the ACTIVE ROW —
+   aria-activedescendant means the listbox itself holds DOM focus. */
+.voice-rail:focus-visible .voice-row.focused {
+  outline: 2px solid #2c5a42;
+  outline-offset: -2px;
+  /* Follows the row's own corner, or the ring cuts across it. */
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-row,
+  .voice-row-desc {
+    transition: none;
+  }
+  .voice-row[data-print-voice]::before {
+    transition: none;
+  }
+  /* The playhead is NOT removed — it carries information. It advances in 8
+     discrete steps instead of sweeping. (The page it replaced killed its
+     equalizer outright under reduced motion, leaving a near-invisible glyph.) */
+  .voice-row.playing .voice-print-head {
+    animation-timing-function: steps(8, end);
+  }
+  /* The waiting print stops pulsing but keeps the dimmed value, so "this voice
+     is still loading" is still legible — the state survives, only the motion
+     goes. Longhand, so the rule that kills the pulse cannot also erase the
+     playhead's four declarations above it. */
+  .voice-row.loading .voice-print-trace {
+    animation-name: none;
+    opacity: 0.4;
   }
 }

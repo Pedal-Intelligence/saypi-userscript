@@ -39,10 +39,34 @@ export class VoicesTab implements TabController {
   }
 
   /**
+   * The user switched to another settings tab. The rail's control bar — and
+   * its Stop button — just left the screen, so whatever it was playing goes
+   * with them (design §5.2). This is the one tab that implements the hook.
+   */
+  onHidden(): void {
+    this.voicesController?.onHidden();
+  }
+
+  /**
+   * The user switched TO this tab — by clicking Voices, or by arriving on it
+   * through a "voices/<host>" deep link, both of which run the same path.
+   *
+   * The rail is a keyboard instrument, and until this hook existed nothing
+   * ever gave it DOM focus: the sidebar button kept it, so `Space` went to the
+   * button and the page's headline gesture did nothing. The controller decides
+   * where to land (the current voice's row) and whether it is safe to claim
+   * focus yet — the catalog is network-bound, so there is often no rail here.
+   */
+  onShown(): void {
+    this.voicesController?.onShown();
+  }
+
+  /**
    * Clean up when the tab is destroyed. Defensive — the orchestrator keeps
    * tabs mounted (init runs once), but unmount the Preact tree if ever called.
    */
   destroy(): void {
+    this.voicesController?.destroy();
     this.voicesController = null;
     unmountFrom(this.container);
   }

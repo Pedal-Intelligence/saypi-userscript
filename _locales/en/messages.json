@@ -1032,6 +1032,10 @@
     "message": "Speaking now",
     "description": "State label on the host's currently selected voice in the settings Voices studio (menu slot and voice card)."
   },
+  "voicesInUse": {
+    "message": "In use",
+    "description": "Persistent badge on the host's currently selected voice in the settings Voices list, rendered uppercase. Deliberately NOT 'Speaking now': on this page rows play their sample clips, so a selected-but-silent voice must not claim to be speaking while a different row is."
+  },
   "voicesInHostMenu": {
     "message": "In $host$'s menu",
     "description": "Section heading above the menu slots row in the settings Voices studio; $host$ is the assistant.",
@@ -1160,9 +1164,201 @@
       }
     }
   },
+  "voicesBuiltinsNoteNoMenu": {
+    "message": "$host$ also has its own built-in voices, which aren't listed here.",
+    "description": "Variant of voicesBuiltinsNote for a host with no in-chat voice menu (Pi retired its menu in 2026), where the original's promise that the built-ins 'appear in its menu' would be false; $host$ is the assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesStagePlay": {
     "message": "Hear a sample",
     "description": "Button on the settings Voices studio stage that plays the current voice's free sample clip."
+  },
+  "voicesSectionDescriptionListen": {
+    "message": "Every voice, deepest to brightest. Listen, then choose.",
+    "description": "Subheading under the Voices settings heading, for the pitch-ordered rail of voices."
+  },
+  "voicesRailLabel": {
+    "message": "Voices, ordered from deepest to brightest",
+    "description": "Accessible name of the settings Voices list (a listbox of every voice, one row each)."
+  },
+  "voicesArrowAudition": {
+    "message": "Play as you move",
+    "description": "Label on the toggle in the Voices control bar that says whether walking the list with the arrow keys plays each voice as focus reaches it."
+  },
+  "voicesKeyboardHint": {
+    "message": "Press Space to listen, ↑↓ to move between voices, ⇧Space to switch back.",
+    "description": "One-line keyboard hint in the settings Voices control bar. The glyphs are keys: Space, the up/down arrows, and Shift+Space."
+  },
+  "voicesSwitchBackTo": {
+    "message": "Switch back to $name$",
+    "description": "Accessible label for the compare control in the settings Voices control bar, which replays the other voice of the last two heard; $name$ is that voice.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesYourVoice": {
+    "message": "Your voice: $name$",
+    "description": "Control-bar button in the settings Voices list that moves focus to the row of the voice this host currently uses; $name$ is that voice.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "message": "No sample yet ($count$)",
+    "description": "Heading for the group at the end of the settings Voices list holding voices with no sample clip to play; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "message": "$host$'s menu: $used$ of $cap$ seats",
+    "description": "Summary line under the settings Voices list saying how much of the host's in-chat voice menu is filled; $host$ is the assistant, $used$ how many seats are taken, $cap$ how many there are. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNowPlaying": {
+    "message": "Playing $name$",
+    "description": "Screen-reader announcement when a voice's sample clip starts playing in the settings Voices list; $name$ is the voice.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesArrowsLive": {
+    "message": "Arrows now play as you move. Esc stops.",
+    "description": "Screen-reader confirmation, appended to the first 'Playing <voice>' announcement in the settings Voices list, saying that the arrow keys have just become audible. Echoes the 'Play as you move' toggle's own wording."
+  },
+  "voicesHeardMark": {
+    "message": "Heard",
+    "description": "Part of a voice row's accessible name in the settings Voices list, marking a voice this profile has already listened to. Visually this is drawn as ink density on the voice's soundprint, which a screen reader cannot see."
+  },
+  "voicesPlayAllN": {
+    "message": "Play all ($count$)",
+    "description": "Button in the settings Voices control bar that plays every voice currently listed, one after another; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "message": "Play new ($count$)",
+    "description": "Button in the settings Voices control bar on a return visit: plays only the listed voices you have not listened to yet; $count$ is how many. Phrased to read correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesStopPlayback": {
+    "message": "Stop",
+    "description": "Button in the settings Voices control bar that stops the run of samples started by 'Play all'."
+  },
+  "voicesHeardCount": {
+    "message": "$heard$ of $total$ heard",
+    "description": "Progress readout in the settings Voices control bar: how many of the listed voices the user has already listened to. Bare numbers, so it reads correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSweepPosition": {
+    "message": "$index$ of $total$",
+    "description": "Live position readout in the settings Voices control bar while 'Play all' walks the list; $index$ is the voice now playing and $total$ how many are queued.",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesShowLabel": {
+    "message": "Show",
+    "description": "Label on the filter in the settings Voices control bar that narrows which voices the list shows."
+  },
+  "voicesShowAll": {
+    "message": "All voices",
+    "description": "Option in the settings Voices 'Show' filter: no filtering, every voice is listed."
+  },
+  "voicesShowUnheard": {
+    "message": "Not yet heard",
+    "description": "Option in the settings Voices 'Show' filter: list only the voices the user has not listened to yet."
+  },
+  "voicesShowHd": {
+    "message": "HD only",
+    "description": "Option in the settings Voices 'Show' filter: list only the premium (HD) voices."
+  },
+  "voicesShowEveryday": {
+    "message": "Everyday only",
+    "description": "Option in the settings Voices 'Show' filter: list only the standard (non-HD) voices."
+  },
+  "voicesPlaybackBlocked": {
+    "message": "Click any voice to enable sound.",
+    "description": "Line in the settings Voices control bar when the browser refused to play a sample because the page has had no user interaction yet."
+  },
+  "voicesSampleFailed": {
+    "message": "Couldn't play $name$'s sample.",
+    "description": "Line in the settings Voices control bar when one voice's sample clip failed to load or play; $name$ is that voice. Non-modal — a run of samples carries on past it.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "message": "That's $count$ voices — about $minutes$ min. Narrow the list first.",
+    "description": "Line in the settings Voices control bar when 'Play all' is pressed on a list too long to sit through; $count$ is how many voices and $minutes$ roughly how many minutes they would take. Abbreviated 'min' so it reads correctly at 1 — Chrome i18n has no plural forms.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
   },
   "voiceTagline_alloy": {
     "message": "Balanced and all-purpose",
@@ -1193,7 +1389,7 @@
     "description": "Authored personality tagline for the 'Fable' voice (settings Voices studio; client-side voice identity map)."
   },
   "voiceTagline_marin": {
-    "message": "Warm and grounded — a morning-radio calm",
+    "message": "Warm, morning-radio calm",
     "description": "Authored personality tagline for the 'Marin' voice (settings Voices studio; client-side voice identity map)."
   },
   "voiceTagline_nova": {

@@ -1,16 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import {
+  PRINT_GROUND,
+  PRINT_GROUND_FOCUS,
+  PRINT_HEAD_W,
+  PRINT_WIDTHS,
+  printInk,
+} from "../../../entrypoints/settings/tabs/voices/voicePrintRender";
 
 /**
- * CSS contract guards for the settings Voices studio.
+ * CSS contract guards for the settings Voices rail.
  *
- * A JSDOM test can render the studio's DOM but never lays it out, so the three
- * layout defects these guard cannot be caught by asserting geometry. They are
- * caught here instead, by reading the shipped stylesheet back and asserting the
- * declarations the fixes consist of. The matching DOM-side class contract (that
- * the elements these rules target actually exist, on every card) lives in
- * voices-controller.spec.tsx.
+ * A JSDOM test can render the rail's DOM but never lays it out, so the design
+ * decisions that live entirely in the stylesheet cannot be caught by asserting
+ * geometry. They are caught here instead, by reading the shipped stylesheet
+ * back and asserting the declarations the design consists of. The matching
+ * DOM-side class contract (that the elements these rules target actually
+ * exist) lives in voices-controller.spec.tsx.
  *
  * What this proves: the rules are present with the right values.
  * What it does NOT prove: that the rendered result looks right. Real-browser
@@ -21,14 +28,61 @@ const css = readFileSync(
   resolve(root, "entrypoints/settings/tabs/voices/voices.css"),
   "utf8"
 );
+/** The whole sheet with its (long, rationale-carrying) comments removed. */
+const declarations = css.replace(/\/\*[\s\S]*?\*\//g, "");
 
-/** The declarations of a single (flat, un-nested) rule, by exact selector. */
+/**
+ * The declarations of a single (flat, un-nested) rule, by exact selector.
+ *
+ * Anchored to the start of a line, or `.voice-row:hover` would happily resolve
+ * to `.voice-rail:focus-visible .voice-row:hover` — a substring match that
+ * turns "this rule is missing" into a silent pass on a DIFFERENT rule.
+ * Comments are stripped too: this file's rules carry long rationales, and a
+ * value quoted in prose must never satisfy an assertion about a declaration.
+ */
 function ruleBody(selector: string): string {
-  const at = css.indexOf(`${selector} {`);
+  const at = css.indexOf(`\n${selector} {`);
   expect(at, `voices.css should declare ${selector}`).toBeGreaterThan(-1);
   const open = css.indexOf("{", at);
   const close = css.indexOf("}", open);
-  return css.slice(open + 1, close);
+  return resolveVars(css.slice(open + 1, close).replace(/\/\*[\s\S]*?\*\//g, ""));
+}
+
+/**
+ * Substitute the sheet's OWN custom properties into a rule body.
+ *
+ * The row names its right-hand column once (`--voice-actions-w`) and spends it
+ * in two rules, which is the point — but it also means a width assertion here
+ * would otherwise read `var(…)` and conclude the declaration is missing. Only
+ * properties this stylesheet declares are substituted, so the print's inks —
+ * `var(--print-ink-rest, …)`, which arrive from printInk() at runtime — are
+ * left alone for `inkVar` to read.
+ */
+const SHEET_VARS = Object.fromEntries(
+  [...css.matchAll(/^\s*(--[\w-]+):\s*([^;]+);/gm)].map((m) => [m[1], m[2].trim()])
+);
+function resolveVars(body: string): string {
+  return body.replace(/var\((--[\w-]+)\)/g, (whole, name) =>
+    name in SHEET_VARS ? SHEET_VARS[name] : whole
+  );
+}
+
+/** The ink a rule paints at: an alpha, with an opaque hex reading as 1. */
+function inkDensity(body: string): number {
+  const rgba = /(?:^|[^-])color:\s*rgba\([^)]*?,\s*([\d.]+)\s*\)/.exec(body);
+  if (rgba) return Number(rgba[1]);
+  expect(
+    /(?:^|[^-])color:\s*#[0-9a-f]{3,8}/i.test(body),
+    "rule should declare a color"
+  ).toBe(true);
+  return 1;
+}
+
+/** The custom property a rule paints the print in, and its fallback. */
+function inkVar(body: string): { name: string; fallback: string } {
+  const m = /(?:^|[^-])color:\s*var\((--[\w-]+),\s*(#[0-9a-f]{6})\)/i.exec(body);
+  expect(m, "rule should paint the print from a --print-ink-* custom property").toBeTruthy();
+  return { name: m![1], fallback: m![2].toLowerCase() };
 }
 
 const fontSizePx = (body: string): number => {
@@ -37,129 +91,968 @@ const fontSizePx = (body: string): number => {
   return Number(m![1]);
 };
 
-/** The `color:` literal of a rule (not `background-color:` etc.). */
-function colorOf(body: string): string {
-  const m = /(?:^|[^-])color:\s*(#[0-9a-f]{6})/i.exec(body);
-  expect(m, "rule should declare a hex color").toBeTruthy();
-  return m![1];
+const pxOf = (body: string, property: string): number => {
+  const m = new RegExp(`(?:^|[^-])${property}:\\s*([\\d.]+)px`).exec(body);
+  expect(m, `rule should declare a px ${property}`).toBeTruthy();
+  return Number(m![1]);
+};
+
+/**
+ * The body of one `@container (max-width: Npx)` block, braces balanced.
+ *
+ * A regex cannot do this: these blocks hold several rules each, so `[^}]*`
+ * stops at the first nested rule and a greedy match runs past the block's end.
+ * Both failure modes read as "the declaration isn't there", which is a silent
+ * pass on an assertion about a layout that has been deleted.
+ */
+function containerBlock(breakpoint: number): string {
+  const at = css.indexOf(`@container (max-width: ${breakpoint}px) {`);
+  expect(at, `voices.css should declare a @container at ${breakpoint}px`).toBeGreaterThan(-1);
+  let depth = 0;
+  for (let i = css.indexOf("{", at); i < css.length; i++) {
+    if (css[i] === "{") depth++;
+    else if (css[i] === "}" && --depth === 0)
+      return css.slice(css.indexOf("{", at) + 1, i);
+  }
+  throw new Error(`unbalanced @container block at ${breakpoint}px`);
 }
 
-/** Relative brightness of a #rrggbb literal — lower is darker (leads). */
-function luminance(body: string): number {
-  const hex = colorOf(body);
-  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+/** Every container breakpoint that re-sizes the print, widest first. */
+function containerSteps(): [number, number][] {
+  return [...css.matchAll(/@container \(max-width:\s*(\d+)px\)/g)]
+    .map(
+      (m) =>
+        [
+          Number(m[1]),
+          /\.voice-row-print\s*\{[^}]*flex-basis:\s*(\d+)px/.exec(
+            containerBlock(Number(m[1]))
+          )?.[1],
+        ] as const
+    )
+    .filter(([, basis]) => basis !== undefined)
+    .map(([at, basis]) => [at, Number(basis)]);
 }
 
-/** WCAG 2.x relative luminance (gamma-corrected), unlike the raw brightness above. */
-function wcagLuminance(hex: string): number {
-  const [r, g, b] = [1, 3, 5]
-    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+/** The width below which the row stops being one line. */
+function twoLineBreakpoint(): number {
+  const m = [...css.matchAll(/@container \(max-width:\s*(\d+)px\)/g)]
+    .map((match) => Number(match[1]))
+    .find((at) => /\.voice-row\s*\{[^}]*flex-wrap:\s*wrap/.test(containerBlock(at)));
+  expect(m, "voices.css should wrap the row at some container width").toBeDefined();
+  return m!;
+}
+
+/** A rule's `flex: <grow> <shrink> <basis>px` shorthand, parsed. */
+function flexOf(body: string): {
+  grow: number;
+  shrink: number;
+  basis: number;
+} {
+  const m = /(?:^|[^-])flex:\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:px)?/.exec(body);
+  expect(m, "rule should declare a three-value flex shorthand").toBeTruthy();
+  return { grow: Number(m![1]), shrink: Number(m![2]), basis: Number(m![3]) };
+}
+
+/** WCAG 2.x relative luminance of an r,g,b triple in 0–255. */
+function wcagLuminance([r, g, b]: number[]): number {
+  const [lr, lg, lb] = [r, g, b]
+    .map((c) => c / 255)
     .map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return 0.2126 * lr + 0.7152 * lg + 0.0722 * lb;
 }
 
-/** WCAG contrast ratio between two #rrggbb literals. */
-function contrast(fg: string, bg: string): number {
+const hexRgb = (hex: string): number[] =>
+  [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+
+/** Composite a translucent ink over an opaque ground. */
+const over = (ink: number[], alpha: number, ground: number[]): number[] =>
+  ink.map((c, i) => alpha * c + (1 - alpha) * ground[i]);
+
+function contrast(fg: number[], bg: number[]): number {
   const [hi, lo] = [wcagLuminance(fg), wcagLuminance(bg)].sort((a, b) => b - a);
   return (hi + 0.05) / (lo + 0.05);
 }
 
-describe("Defect 1 — voice cards must not go ragged", () => {
-  // A voice whose subtitle falls back to a long server `description` (the
-  // second Paola) stretches its grid row; because grid rows stretch, every
-  // sibling card grows too while their Use buttons stay stranded mid-card.
-  const tagline = () => ruleBody(".voice-card-tagline");
-  const actions = () => ruleBody(".voice-card-actions");
+/** Warm near-black, warm paper. The rail is a warm island on the cool shell. */
+const INK = hexRgb("#241d14");
+const GROUND = hexRgb(PRINT_GROUND);
+/** The warmer tile a hovered/focused row takes — the DARKER of the two. */
+const FOCUS_GROUND = hexRgb(PRINT_GROUND_FOCUS);
+const RULE = "#eadfcc";
+const ACCENT = "#2c5a42";
 
-  it("clamps the card tagline to two lines", () => {
-    const body = tagline();
-    expect(body).toMatch(/display:\s*-webkit-box/);
-    expect(body).toMatch(/-webkit-box-orient:\s*vertical/);
-    expect(body).toMatch(/-webkit-line-clamp:\s*2/);
-    // The standard property alongside the prefixed one, so the clamp survives
-    // an engine that drops the -webkit- alias.
-    expect(body).toMatch(/[^-]line-clamp:\s*2/);
-    expect(body).toMatch(/overflow:\s*hidden/);
+describe("the page is a chart, not a directory", () => {
+  it("puts no rule between rows — separation is the 42px rhythm", () => {
+    const row = ruleBody(".voice-row");
+    expect(row).not.toMatch(/border-bottom/);
+    expect(row).not.toMatch(/border-top/);
+    // The only border a row carries is the focus/accent rule on its left edge.
+    expect(row).toMatch(/border-left:\s*3px solid transparent/);
   });
 
-  it("still reserves the tagline's space so short taglines don't shrink a card", () => {
-    expect(tagline()).toMatch(/min-height:/);
+  it("has exactly two horizontal rules: under the control bar, above the tail", () => {
+    const separators = declarations.match(/border-(?:top|bottom):/g) ?? [];
+    expect(separators.length).toBe(2);
+    expect(ruleBody(".voice-rail-controls")).toMatch(
+      new RegExp(`border-bottom:\\s*1px solid ${RULE}`)
+    );
+    expect(ruleBody(".voice-rail-divider")).toMatch(
+      new RegExp(`border-top:\\s*1px solid ${RULE}`)
+    );
   });
 
-  it("bottoms out the actions row so every Use button shares a baseline", () => {
-    expect(actions()).toMatch(/margin-top:\s*auto/);
+  it("gives 42px rows a 26px print band, on the 8px grid", () => {
+    expect(pxOf(ruleBody(".voice-row"), "height")).toBe(42);
+    const print = ruleBody(".voice-row-print");
+    expect(flexOf(print).basis).toBe(PRINT_WIDTHS.lg);
+    expect(pxOf(print, "height")).toBe(26);
+  });
+
+  it("carries no per-voice colour anywhere — no gradient, no hue-coded state", () => {
+    expect(declarations).not.toMatch(/linear-gradient|radial-gradient|hsl\(/);
+    // ONE green, and only the one green. Everything else in the STYLESHEET is
+    // ink, ground, rule, row-focus, white, or one of the three neutral ramp
+    // fallbacks — design §11's five tokens, warmed. The pitch ramp itself is
+    // not here at all: it arrives as custom properties from printInk(), which
+    // is what keeps colour a measured function of pitch rather than a set of
+    // swatches somebody could quietly add a 23rd to.
+    expect((declarations.match(/#2c5a42/gi) ?? []).length).toBeGreaterThan(0);
+    const neutral = printInk(155);
+    const allowed = new Set([
+      "#2c5a42", // accent — now
+      "#241d14", // ink (warm near-black)
+      "#fbf7f0", // ground (cream)
+      RULE, // rule
+      "#f3eada", // row focus
+      "#ffffff",
+      neutral.rest,
+      neutral.heard,
+      neutral.playing,
+    ]);
+    for (const hex of declarations.match(/#[0-9a-f]{6}/gi) ?? []) {
+      expect(allowed.has(hex.toLowerCase()), `${hex} is not a design token`).toBe(
+        true
+      );
+    }
+  });
+
+  it("puts the warm ground on the CARD, not on an inner panel", () => {
+    // A cream box inside the shell's white card would read as a box in a box.
+    // The shell's page is a cool #f8fafc, so this is one warm sheet of paper on
+    // a cool desk — the relationship the white card already had.
+    expect(ruleBody("#voices-preference.user-preference-item")).toMatch(
+      /background:\s*#fbf7f0/
+    );
+    expect(ruleBody("#voice-studio")).not.toMatch(/background/);
   });
 });
 
-describe("Defect 2 — the empty stage is a hero, not an error state", () => {
-  const emptyStage = () => ruleBody(".voice-stage.voice-stage-empty");
+/**
+ * The row's width budget, against the column the settings shell actually gives
+ * this pane.
+ *
+ * The rail was designed and tuned inside a 1120 × 900 settings *window*. #584
+ * moved settings into a browser TAB and #587 deleted the window-sizing
+ * machinery, so the pane is now a **fixed 756 px content column** — measured
+ * identical in the built extension at viewports 1100, 1280, 1600 and 1920 —
+ * which leaves the rail 692 px. At the shipped 300 px print that left the
+ * description 95 px and ellipsised 13 of the live catalog's 15 taglines,
+ * including both twin-Paola disambiguators ("Speaks 33 l…" / "Speaks 75 l…"),
+ * which is the one truncation that makes two rows indistinguishable at rest.
+ *
+ * Widening the column for this tab is NOT the fix — that is the #582/#583
+ * regression class and the sheet carries its own warning about it. The row has
+ * to live inside 692 px, so the budget below is an arithmetic contract on the
+ * declared column widths. The string widths are measured, in the built
+ * extension, at the sheet's own 12 px / 400 description face.
+ */
+describe("the row fits the column the settings tab actually gives it", () => {
+  /** Measured: `.voice-rail` is 692 px at every viewport ≥ 1100. */
+  const RAIL_WIDTH = 692;
+  /** Measured widths of the live Pi catalog's descriptions, in px. */
+  const TWIN_DISAMBIGUATOR = 121; // "Speaks 33 languages" — the load-bearing one
+  /**
+   * "Easy, conversational American" (Joey, an HD row) — measured at 171px.
+   *
+   * This constant went stale once and the test passed green while a real
+   * catalog tagline visibly ellipsised in the UI: Marin used to carry
+   * "Warm and grounded — a morning-radio calm", 40 chars against a 21-char
+   * median, and nothing here noticed. A measured px constant cannot see the
+   * strings it is supposed to be measuring, so the guard below re-derives the
+   * longest tagline from the shipped messages and fails if it outgrows the one
+   * this number was taken from.
+   */
+  const LONGEST_TAGLINE = 171;
+  const LONGEST_TAGLINE_CHARS = "Easy, conversational American".length;
+  const HD_BADGE = 17.16;
 
-  it("drops the dashed outline and the grey fill that read as 'disabled'", () => {
-    const body = emptyStage();
-    expect(body).not.toMatch(/dashed/);
-    expect(body).not.toMatch(/background:\s*#f4f4f2/i);
-  });
-
-  it("keeps a stage-shaped gradient rather than a flat box", () => {
-    expect(emptyStage()).toMatch(/background:\s*linear-gradient/);
-  });
-
-  it("holds the same room as a real stage, so switching hosts doesn't jump", () => {
-    expect(ruleBody(".voice-stage")).toMatch(/min-height:/);
-  });
-
-  it("sets the headline at name size and the note at tagline size", () => {
-    expect(fontSizePx(ruleBody(".voice-stage-empty-title"))).toBe(
-      fontSizePx(ruleBody(".voice-stage-name"))
+  /** What the description column is actually left with, from the sheet. */
+  function descriptionBudget(badge: number): number {
+    const row = ruleBody(".voice-row");
+    // `padding: 0 20px 0 14px` plus the 3 px focus rule on the left edge.
+    const inner =
+      RAIL_WIDTH -
+      pxOf(row, "border-left") -
+      14 -
+      20;
+    const print = ruleBody(".voice-row-print");
+    const name = ruleBody(".voice-row-name");
+    const actions = ruleBody(".voice-row-actions");
+    return (
+      inner -
+      (flexOf(print).basis + pxOf(print, "margin-right")) -
+      (flexOf(name).basis + pxOf(name, "margin-right")) -
+      (flexOf(actions).basis + pxOf(actions, "margin-left")) -
+      pxOf(ruleBody(".voice-row-badges"), "margin-left") -
+      badge
     );
-    expect(fontSizePx(ruleBody(".voice-stage-empty-note"))).toBe(
-      fontSizePx(ruleBody(".voice-stage-tagline"))
-    );
-  });
-});
+  }
 
-describe("Defect 3 — the shelf heading leads, the blurb recedes", () => {
-  it("does not let the blurb out-size the heading", () => {
-    expect(fontSizePx(ruleBody(".voice-shelf-title"))).toBeGreaterThan(
-      fontSizePx(ruleBody(".voice-shelf-blurb"))
-    );
-  });
-
-  it("keeps the heading darker than the blurb", () => {
-    expect(luminance(ruleBody(".voice-shelf-title"))).toBeLessThan(
-      luminance(ruleBody(".voice-shelf-blurb"))
+  it("leaves a duplicate-named voice's differentiator fully legible", () => {
+    // #585 gave the two Paolas a subtitle that never hides, because it is the
+    // only thing telling the rows apart. A truncated differentiator does not
+    // differentiate: two rows go back to being one row read twice. Both twins
+    // are HD, so they pay for the badge as well.
+    expect(descriptionBudget(HD_BADGE)).toBeGreaterThan(TWIN_DISAMBIGUATOR);
+    // …and with room for a longer locale, since these strings are translated.
+    expect(descriptionBudget(HD_BADGE)).toBeGreaterThan(
+      TWIN_DISAMBIGUATOR * 1.3
     );
   });
 
-  // "Recedes" is a hierarchy instruction, not a licence to go unreadable: the
-  // blurb is the ONLY place the studio states what HD costs, and it sits on the
-  // white .user-preference-item card (src/popup/tabs.css). At 11px it is normal
-  // text for WCAG, so AA is 4.5:1 — the hierarchy has to come from the heading
-  // getting darker, not the blurb getting paler.
-  it("keeps the blurb readable (WCAG AA) on the card it sits on", () => {
+  it("leaves the catalog's taglines whole, badge or no badge", () => {
+    expect(descriptionBudget(HD_BADGE)).toBeGreaterThanOrEqual(
+      LONGEST_TAGLINE
+    );
+    expect(descriptionBudget(0)).toBeGreaterThanOrEqual(LONGEST_TAGLINE);
+  });
+
+  it("keeps the measured px constant honest against the shipped strings", () => {
+    // The budget above is a px measurement of ONE tagline. It can only stand in
+    // for the whole set while that tagline is still the longest, so re-derive
+    // that from the messages themselves rather than trusting the comment.
+    const messages = JSON.parse(
+      readFileSync(resolve(root, "_locales/en/messages.json"), "utf8")
+    ) as Record<string, { message: string }>;
+    const taglines = Object.entries(messages)
+      .filter(([key]) => key.startsWith("voiceTagline_"))
+      .map(([key, v]) => [key, v.message] as const);
+    expect(taglines.length).toBeGreaterThan(10);
+
+    const longest = taglines.reduce((a, b) =>
+      b[1].length > a[1].length ? b : a
+    );
     expect(
-      contrast(colorOf(ruleBody(".voice-shelf-blurb")), "#ffffff")
-    ).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it("keeps the heading on one line so it can lead", () => {
-    // The head is a flex row; without this the TITLE is what gives when the
-    // pair overflows, stacking "EVERYDAY / VOICES" beside a two-line blurb.
-    expect(ruleBody(".voice-shelf-title")).toMatch(/flex-shrink:\s*0/);
+      longest[1].length,
+      `${longest[0]} ("${longest[1]}") is now the longest tagline at ` +
+        `${longest[1].length} chars, so LONGEST_TAGLINE's ${LONGEST_TAGLINE}px ` +
+        `no longer bounds the set — re-measure it, or bring the tagline back ` +
+        `into the 2-4 word register its siblings keep.`
+    ).toBeLessThanOrEqual(LONGEST_TAGLINE_CHARS);
   });
 });
 
-describe("Defect 4 — the studio gets the column it is sized for", () => {
-  // The settings tab gives this pane a wide content column, and
-  // #voice-studio asks for up to 900px of it —
-  // but its parent .user-preference-item carries the form-tab 504px cap from
-  // src/popup/tabs.css, so the studio never got past ~472px. #tab-voices was
-  // already uncapped one level up; this is the level that was missed.
+describe("the row gives up space in a fixed order", () => {
+  // Print first, then the name, and the description LAST — it is the only
+  // thing on the row whose meaning is destroyed by losing width. The print is
+  // the most elastic element on the page: its bars are computed against a
+  // width and the svg carries a viewBox, so a narrower box says exactly what
+  // the wide one said, only smaller.
+  const print = () => ruleBody(".voice-row-print");
+  const name = () => ruleBody(".voice-row-name");
+  const desc = () => ruleBody(".voice-row-desc");
+
+  it("steps the print down with the PAGE, never with the row", () => {
+    // A flex-shrink here would make the print's width a per-row negotiation,
+    // and the rows are not identical: a badge costs its row 29px, so under any
+    // pressure the HD rows would draw their traces ~15 % shorter than the rows
+    // beside them (measured: 143.9px against 169.8px at a 592px rail). Trace
+    // length IS clip length, so that is not a smaller chart, it is a chart
+    // that lies about half its rows.
+    expect(flexOf(print()).shrink).toBe(0);
+    const steps = containerSteps();
+    expect(steps.length, "the print should step with the container").toBeGreaterThan(0);
+    // Never wider than the width the svg is actually drawn at, at any step:
+    // above it the mark would be rendering beyond its own resolution.
+    const drawnAt = flexOf(print()).basis;
+    expect(drawnAt).toBe(PRINT_WIDTHS.lg);
+    for (const [, basis] of steps) expect(basis).toBeLessThanOrEqual(drawnAt);
+    // And the narrower the column, the smaller the mark — the last word on
+    // this, since the two regimes below each step down internally.
+    expect(steps[steps.length - 1][1]).toBe(
+      Math.min(...steps.map(([, basis]) => basis))
+    );
+    // The rail has to BE a query container, or none of the above ever applies.
+    expect(ruleBody(".voice-rail")).toMatch(/container-type:\s*inline-size/);
+  });
+
+  it("steps down inside the one-line regime, and starts the two-line one over", () => {
+    // Two regimes, and the print's ladder is not one ladder. While the row is
+    // ONE line the print is what yields, so it steps down as the column
+    // narrows. Below the width where one line stops being honest at all
+    // (#586), the row takes a second line, the description moves off line one
+    // — and the print, no longer sharing with it, gets its FULL drawn width
+    // back before beginning to step again. A narrower window with a bigger
+    // mark looks like a mistake in a diff and is the whole point of the change.
+    const twoLine = twoLineBreakpoint();
+    const steps = containerSteps();
+    const oneLine = steps.filter(([at]) => at > twoLine);
+    const narrow = steps.filter(([at]) => at <= twoLine);
+    expect(oneLine.length, "the one-line regime should still step").toBeGreaterThan(0);
+    expect(narrow.length, "the two-line regime should still step").toBeGreaterThan(0);
+
+    // Within each regime: narrower breakpoint, smaller print.
+    for (const regime of [oneLine, narrow]) {
+      let [at, width] = [Infinity, PRINT_WIDTHS.lg + 1];
+      for (const [breakpoint, basis] of regime) {
+        expect(breakpoint).toBeLessThan(at);
+        expect(basis).toBeLessThan(width);
+        [at, width] = [breakpoint, basis];
+      }
+    }
+    // The restoration itself: the two-line block hands the print its full
+    // width, which is more than the last one-line step left it.
+    const restored = Number(
+      /\.voice-row-print\s*\{[^}]*flex-basis:\s*(\d+)px/.exec(
+        containerBlock(twoLine)
+      )?.[1]
+    );
+    expect(restored).toBe(PRINT_WIDTHS.lg);
+    expect(restored).toBeGreaterThan(oneLine[oneLine.length - 1][1]);
+  });
+
+  it("gives the description a line of its own rather than a share of one", () => {
+    // The narrow layout's load-bearing claim, and the one place it can be
+    // stated as arithmetic. The row wraps; the description is based at the
+    // whole row minus the actions column, which is what forces the break AND
+    // what leaves the actions room beside it; and it is ordered after the
+    // badges so line one keeps them. Its floor goes, because on a line of its
+    // own a floor can only overflow.
+    //
+    // Both spenders of the actions column are checked against the same
+    // declaration rather than against 108, or this stops being one number the
+    // day someone widens the buttons. The rendered proof — nothing ellipsised
+    // at 390px, one reference y, one print width — is in
+    // e2e/specs/voices-rail.e2e.ts, which can lay it out.
+    const narrow = resolveVars(containerBlock(twoLineBreakpoint()));
+    expect(narrow).toMatch(/\.voice-row\s*\{[^}]*flex-wrap:\s*wrap/);
+    const actions = ruleBody(".voice-row-actions");
+    const column = flexOf(actions).basis + pxOf(actions, "margin-left");
+    const basis = /\.voice-row-desc\s*\{[^}]*flex-basis:\s*calc\(([^)]*)\)/.exec(
+      narrow
+    );
+    expect(basis, "the narrow description should be based at row-minus-actions")
+      .toBeTruthy();
+    const subtracted = [...basis![1].matchAll(/(\d+)px/g)].reduce(
+      (sum, m) => sum + Number(m[1]),
+      0
+    );
+    expect(basis![1]).toMatch(/100%/);
+    expect(subtracted).toBe(column);
+    expect(narrow).toMatch(/\.voice-row-desc\s*\{[^}]*min-width:\s*0\s*;/);
+
+    const orderOf = (selector: string): number =>
+      Number(
+        new RegExp(`\\${selector}\\s*\\{[^}]*order:\\s*(\\d+)`).exec(narrow)?.[1]
+      );
+    expect(orderOf(".voice-row-desc")).toBeLessThan(
+      orderOf(".voice-row-actions")
+    );
+  });
+
+  it("lets the name shrink after it, never before", () => {
+    expect(flexOf(name()).shrink).toBeGreaterThan(0);
+    expect(pxOf(name(), "min-width")).toBeGreaterThan(0);
+    expect(pxOf(name(), "min-width")).toBeLessThan(flexOf(name()).basis);
+  });
+
+  it("gives the description a floor, so it is the last to yield", () => {
+    // A floor above the widest differentiator: even in a window narrow enough
+    // to squeeze the print, the two Paolas stay tellable apart.
+    expect(pxOf(desc(), "min-width")).toBeGreaterThanOrEqual(152);
+  });
+
+  it("bases the description at 0, so a long one never squeezes the print", () => {
+    // THE load-bearing one. `flex-basis: auto` makes the description's base
+    // size its own text, so one 40-character tagline puts the whole row into
+    // deficit and steals from the print — on that row only. Every print would
+    // then be a different width, and the shared reference line only fuses N
+    // traces into one chart because they are all drawn at the SAME width.
+    // Basing at 0 makes the sum of base sizes identical on every row, so the
+    // print's width is a page-level decision and the description simply grows
+    // into whatever is left.
+    expect(flexOf(desc()).basis).toBe(0);
+    expect(flexOf(desc()).grow).toBeGreaterThan(0);
+  });
+});
+
+describe("ink is one ramp in three steps", () => {
+  // The three steps are the HEARD STATE (design §8) and nothing else: never
+  // heard → heard → playing. They used to be three ALPHAS of one near-black
+  // ink; they are now three measured COLOURS from printInk(), because the ink
+  // is the pitch ramp and a ramp does not survive alpha-scaling (full amber is
+  // 4.2:1 against this ground where full green is 7.6:1, so one alpha scale
+  // would make a deep unheard voice fainter than a bright unheard one).
+  // The RATIOS themselves are asserted in voicePrintRender.spec.ts, where the
+  // ramp now lives; this file's job is that the stylesheet actually spends
+  // them, in the right order, on the right classes.
+  it("paints each state from its own ramp property, never a fourth colour", () => {
+    const unheard = inkVar(ruleBody(".voice-row"));
+    const heard = inkVar(ruleBody(".voice-row.heard"));
+    const playing = inkVar(ruleBody(".voice-row.playing"));
+    expect(unheard.name).toBe("--print-ink-rest");
+    expect(heard.name).toBe("--print-ink-heard");
+    expect(playing.name).toBe("--print-ink-play");
+    // The fallbacks are the NEUTRAL rung — 155 Hz, the reference line, which is
+    // where an unmeasured voice is placed. Pinned to printInk() so the sheet
+    // cannot drift from the ramp it is quoting.
+    const neutral = printInk(155);
+    expect(unheard.fallback).toBe(neutral.rest);
+    expect(heard.fallback).toBe(neutral.heard);
+    expect(playing.fallback).toBe(neutral.playing);
+  });
+
+  it("spends most of the scale on the step that DEVELOPS the page", () => {
+    // Design §8's rule, unchanged: a develop step more than twice the playing
+    // step, because "play one voice and its print inks in" is the whole of
+    // heard state on the rail, while what marks the playing row is the green
+    // playhead crossing its trace. Measured here on the fallbacks the SHEET
+    // declares, in CIE L* — the honest metric now that the three states are
+    // three colours rather than three alphas of one ink.
+    const lstar = (hex: string): number => {
+      const y = wcagLuminance(hexRgb(hex));
+      return y > 0.008856 ? 116 * Math.cbrt(y) - 16 : 903.3 * y;
+    };
+    const unheard = lstar(inkVar(ruleBody(".voice-row")).fallback);
+    const heard = lstar(inkVar(ruleBody(".voice-row.heard")).fallback);
+    const playing = lstar(inkVar(ruleBody(".voice-row.playing")).fallback);
+    expect(unheard).toBeGreaterThan(heard);
+    expect(heard).toBeGreaterThan(playing);
+    expect(unheard - heard).toBeGreaterThan((heard - playing) * 2);
+  });
+
+  it("leaves hover and focus out of the ink entirely", () => {
+    // A fourth weight would either sit below `heard` — dimming a print the
+    // moment you point at it — or above it, at which point pointing at a voice
+    // looks like playing it. Standing on a row is its ground, its tagline and
+    // its actions; the print keeps saying what it always said.
+    expect(ruleBody(".voice-row:hover")).not.toMatch(/(?:^|[^-])color:/);
+    expect(ruleBody(".voice-row.focused")).not.toMatch(/(?:^|[^-])color:/);
+    // …but they DO give the row a ground, and that ground is the one the ramp's
+    // contrast floor is solved against. Pinned to PRINT_GROUND_FOCUS so the
+    // sheet cannot quietly darken the tile out from under the ink.
+    for (const selector of [".voice-row:hover", ".voice-row.focused"]) {
+      expect(ruleBody(selector)).toMatch(
+        new RegExp(`background:\\s*${PRINT_GROUND_FOCUS}`)
+      );
+    }
+  });
+
+  it("rounds the row it grounds, so standing on one is a tile not a scanline", () => {
+    // The 42px band was full-bleed and square-cornered: correct for a waveform
+    // editor, cold for a page about voices. The radius is invisible until the
+    // row has a ground, and the card's 16px padding is what it breathes into.
+    expect(pxOf(ruleBody(".voice-row"), "border-radius")).toBe(12);
+    // …and the focus ring follows it, or it cuts across the corner.
+    expect(
+      pxOf(ruleBody(".voice-rail:focus-visible .voice-row.focused"), "border-radius")
+    ).toBe(12);
+  });
+
+  it("keeps the soundprint legible at rest, on EITHER ground it is drawn on", () => {
+    // The trace is the page's ONLY data and it fills from the row's
+    // currentColor, so the never-heard ink is what a first-time reader sees on
+    // every row of the page. WCAG 1.4.11 asks 3:1 of a graphic you need in
+    // order to understand the content; below that the traces read as dust and
+    // the reference line becomes the most legible mark on the row — a chart
+    // whose gridlines outrank its data. The 3.2:1 floor was settled by eye
+    // against the live catalog and survives the warmth pass unchanged.
+    //
+    // The FOCUS ground is the one that matters and the one this used to miss.
+    // A row always carries `.focused` (the controller applies it at first
+    // paint), and that tile is 1.12× darker than the card, so an ink measured
+    // only against the card sat at 2.85:1 exactly where the reader was looking.
+    // The alpha ink it replaced never had the bug — rgba() composites against
+    // what it is painted over — so this is a floor the ramp has to hold
+    // explicitly. The ratios themselves live in voicePrintRender.spec.ts.
+    const resting = hexRgb(inkVar(ruleBody(".voice-row")).fallback);
+    expect(contrast(resting, GROUND)).toBeGreaterThanOrEqual(3);
+    expect(contrast(resting, FOCUS_GROUND)).toBeGreaterThanOrEqual(3);
+    // …and it must still out-contrast the chart it hangs on.
+    expect(contrast(resting, hexRgb(RULE))).toBeGreaterThan(2);
+  });
+
+  it("declares .playing after .heard, because they tie on specificity", () => {
+    // Both are (0,2,0), so source order is the whole cascade here: declared
+    // the other way round, the voice that is sounding would paint at the heard
+    // weight the instant its first qualifying play landed — mid-clip.
+    expect(css.indexOf("\n.voice-row.playing {")).toBeGreaterThan(
+      css.indexOf("\n.voice-row.heard {")
+    );
+  });
+
+  it("leaves the reference line out of the playing state — it is the chart, not the voice", () => {
+    expect(ruleBody(".voice-print-ref")).toMatch(
+      new RegExp(`stroke:\\s*${RULE}`)
+    );
+    expect(ruleBody(".voice-print-trace")).toMatch(/fill:\s*currentColor/);
+  });
+});
+
+describe("nothing outside the rail exports a width", () => {
+  /**
+   * The rail is immune by construction — `container-type: inline-size` gives it
+   * inline-size containment, so its rows contribute nothing to how wide the
+   * pane says it wants to be. Everything else on this page sits in ordinary
+   * flow, where one `white-space: nowrap` string is a hard floor under the
+   * pane's min-content width, and the settings shell hands that floor straight
+   * to the document: `.content` is `flex: 1` with `width: 504px`, so its
+   * automatic minimum size is `min(504px, its contents' min-content)`.
+   *
+   * That is how the keyboard hint — one nowrap line — became 27px of
+   * horizontal scroll on a Linux CI runner and 0px on the author's Mac, off the
+   * same build. The rendered proof lives in `voices-rail.e2e.ts`, which draws
+   * the whole pane in a 40 %-longer locale and a wider face; these two guards
+   * are the cheap ones that fail the moment the rule is re-added.
+   */
+  it("lets every string outside the rail break, in any locale and any face", () => {
+    // `anywhere`, not `break-word`: only `anywhere` lowers an element's
+    // min-content size, which is the entire point — a `break-word` page still
+    // asks for its longest word and still exports a width.
+    expect(ruleBody("#tab-voices")).toMatch(/overflow-wrap:\s*anywhere/);
+  });
+
+  it("keeps nowrap to the rail's own rows, where it costs the page nothing", () => {
+    const nowrap = [...declarations.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter(([, , body]) => /white-space:\s*nowrap/.test(body))
+      .map(([, selector]) => selector.trim());
+    expect(new Set(nowrap)).toEqual(
+      new Set([
+        // Out of flow entirely (position: absolute), so it is invisible to
+        // intrinsic sizing — and nowrap is part of the clip technique.
+        ".voice-visually-hidden",
+        // Inside the rail: contained, and each one is a thing that must not
+        // break — a name, its tagline, a badge, a two-word action.
+        ".voice-row-name",
+        ".voice-row-desc",
+        ".voice-row-inuse",
+        ".voice-tier-chip",
+        ".voice-pin-toggle",
+        ".voice-use",
+      ]),
+    );
+  });
+});
+
+describe("nothing inside a row exports a width either", () => {
+  /**
+   * The same defect, one containment boundary further in — and it fails
+   * silently there, because the rail's `container-type` means a row that
+   * outgrows its line cannot scroll the document. It just paints outside the
+   * card, which is what the `Use` button was doing 20px past the card's edge
+   * between a 609px and a 649px rail in a 40 %-longer locale.
+   *
+   * The cause is `min-width: auto`: a flex item's automatic minimum is its own
+   * content, so `flex: 0 0 96px` means `max(96px, whatever is inside)` and a
+   * nowrap badge means its own string. Each guard below is one item that used
+   * to say "I will not go below my text" on a page whose text is about to be
+   * rewritten in ~30 languages. The rendered proof is in `voices-rail.e2e.ts`.
+   */
+  it.each([
+    [".voice-row-badges", "the badge cluster"],
+    [".voice-row-actions", "the actions column, whose 96px basis IS its width"],
+  ])("lets %s shrink below its content (%s)", (selector) => {
+    expect(ruleBody(selector)).toMatch(/min-width:\s*0/);
+  });
+
+  it("gives the row's decorations somewhere to yield to", () => {
+    // Ellipsis, not a hard clip: these are the two columns the row spends when
+    // it has nothing else left, and a tail that is visibly missing reads very
+    // differently from a word that was never there.
+    for (const selector of [
+      ".voice-tier-chip, .voice-row-inuse",
+      ".voice-pin-toggle",
+      ".voice-use",
+    ]) {
+      const body = ruleBody(selector);
+      expect(body, `${selector} should be able to yield`).toMatch(
+        /min-width:\s*0/,
+      );
+      expect(body).toMatch(/text-overflow:\s*ellipsis/);
+    }
+  });
+
+  /**
+   * With every text-derived floor removed, the one-line row's minimum is four
+   * constants — and it has to come out BELOW the width at which the row takes a
+   * second line, or there is a band where neither layout can draw it. Computed
+   * from the stylesheet rather than restated, so re-tuning any of the four
+   * re-runs the arithmetic.
+   */
+  it("keeps the one-line row's minimum under the two-line breakpoint", () => {
+    const px = (body: string, prop: string) =>
+      Number(new RegExp(`${prop}:\\s*(\\d+)px`).exec(body)?.[1]);
+    const row = ruleBody(".voice-row");
+    const [padTop, padRight, , padLeft] = /padding:\s*([^;]+);/
+      .exec(row)![1]
+      .trim()
+      .split(/\s+/)
+      .map((v) => Number(v.replace("px", "")));
+    expect(padTop).toBe(0);
+    const print = ruleBody(".voice-row-print");
+    const name = ruleBody(".voice-row-name");
+    const desc = ruleBody(".voice-row-desc");
+    const actions = ruleBody(".voice-row-actions");
+    const floor =
+      padLeft +
+      padRight +
+      flexOf(print).basis +
+      px(print, "margin-right") +
+      px(name, "min-width") +
+      px(name, "margin-right") +
+      px(desc, "min-width") +
+      px(ruleBody(".voice-row-badges"), "margin-left") +
+      flexOf(actions).basis +
+      px(actions, "margin-left");
+    expect(
+      floor,
+      `the one-line row cannot draw itself under ${floor}px, but the row only takes a second line below ${twoLineBreakpoint()}px — between the two there is no layout that fits`,
+    ).toBeLessThanOrEqual(twoLineBreakpoint());
+  });
+});
+
+describe("the control bar pins, and the rows scroll under it", () => {
+  it("is sticky and OPAQUE", () => {
+    const bar = ruleBody(".voice-rail-controls");
+    expect(bar).toMatch(/position:\s*sticky/);
+    expect(bar).toMatch(/top:\s*0/);
+    // Translucent would let 42px rows smear through it as they scroll past.
+    expect(bar).toMatch(/background:\s*#fbf7f0/);
+  });
+
+  it("sets every count in tabular numerals, so nothing jitters as it ticks", () => {
+    expect(ruleBody(".voice-rail-controls")).toMatch(
+      /font-variant-numeric:\s*tabular-nums/
+    );
+  });
+});
+
+describe("the focused row is the whole affordance", () => {
+  it("shows the description and the actions only where you are looking", () => {
+    expect(ruleBody(".voice-row-desc")).toMatch(/opacity:\s*0/);
+    // visibility, not display: the row must not reflow as focus moves.
+    expect(ruleBody(".voice-row-actions")).toMatch(/visibility:\s*hidden/);
+    expect(declarations).toMatch(
+      /\.voice-row\.focused \.voice-row-desc[\s\S]*?opacity:\s*1/
+    );
+    expect(declarations).toMatch(
+      /\.voice-row\.focused \.voice-row-actions[\s\S]*?visibility:\s*visible/
+    );
+  });
+
+  it("moves in 120ms ease-out and nothing else animates", () => {
+    // Exactly two motions on the page, both informational: the playhead, and
+    // focus moving rows.
+    expect(ruleBody(".voice-row")).toMatch(/transition:[^;]*0\.12s ease-out/);
+    expect(ruleBody(".voice-row-desc")).toMatch(
+      /transition:\s*opacity 0\.12s ease-out/
+    );
+    expect(declarations).not.toMatch(/translateY|box-shadow:\s*0 \d/);
+  });
+
+  it("rings the ACTIVE ROW, because the listbox is the one thing holding focus", () => {
+    expect(ruleBody(".voice-rail:focus-visible .voice-row.focused")).toMatch(
+      new RegExp(`outline:\\s*2px solid ${ACCENT}`)
+    );
+  });
+});
+
+describe("one green, one meaning: now", () => {
+  it("gives the current voice an accent left rule in its own pitch position", () => {
+    expect(ruleBody(".voice-row-current")).toMatch(
+      new RegExp(`border-left-color:\\s*${ACCENT}`)
+    );
+  });
+
+  it("spends the accent on the IN USE marker, the Use button, and the playhead", () => {
+    expect(ruleBody(".voice-row-inuse")).toMatch(new RegExp(`color:\\s*${ACCENT}`));
+    expect(ruleBody(".voice-use")).toMatch(new RegExp(`color:\\s*${ACCENT}`));
+    expect(ruleBody(".voice-print-head")).toMatch(new RegExp(`fill:\\s*${ACCENT}`));
+  });
+
+  it("keylines the playhead in paper, because the ramp arrives at the same green", () => {
+    // The one place "one green means now" broke: the ramp's bright anchor IS
+    // the accent, so on the brightest voices the head was green crossing green
+    // (ΔE 3.4 in Oklab — one colour to the eye). A stroke in the ground colour
+    // is invisible on paper and separates the head from the trace wherever it
+    // crosses one, at every pitch rather than only at the amber end. Stroke is
+    // centred on the edge, so the rect has to be 1px wider on each side than
+    // the 1.5px green core the head has always been.
+    const head = ruleBody(".voice-print-head");
+    expect(head).toMatch(new RegExp(`stroke:\\s*${PRINT_GROUND}`));
+    const strokeW = Number(/stroke-width:\s*([\d.]+)/.exec(head)![1]);
+    expect(PRINT_HEAD_W - strokeW).toBe(1.5);
+  });
+
+  it("sets the badges at 10px/700 uppercase, HD in ink and IN USE in accent", () => {
+    const inUse = ruleBody(".voice-row-inuse");
+    expect(fontSizePx(inUse)).toBe(10);
+    expect(inUse).toMatch(/text-transform:\s*uppercase/);
+    expect(inkDensity(ruleBody(".voice-tier-chip"))).toBeLessThan(
+      inkDensity(ruleBody(".voice-row-desc"))
+    );
+  });
+});
+
+describe("the playhead is a clock, and reduced motion slows it rather than killing it", () => {
+  it("travels the DRAWN trace over the clip's own measured span", () => {
+    // All three custom properties are published by paintPrintTrace from the
+    // measurement, so an unmeasured print never gets a head that pretends.
+    const sweep = css.slice(css.indexOf("@keyframes voice-print-sweep"));
+    expect(sweep).toMatch(/translateX\(var\(--print-trace-w/);
+    const head = ruleBody(".voice-row.playing .voice-print-head");
+    expect(head).toMatch(/animation-name:\s*voice-print-sweep/);
+    expect(head).toMatch(/animation-duration:\s*var\(--print-span/);
+    expect(head).toMatch(/animation-timing-function:\s*linear/);
+  });
+
+  it("waits out the clip's leading silence before it starts", () => {
+    // The trace was trimmed to the speech span, so x=0 is the first VOICED
+    // frame — 0.76s into Onyx's 2.71s file, and 0.07s into Addison's. The
+    // animation begins when `.playing` lands, which is clip t=0, so the delay
+    // is the only thing registering the clock against the audio. Longhands,
+    // never the shorthand: two var()-valued <time>s in one `animation:` are
+    // positional, and swapping them silently swaps duration for delay.
+    const head = ruleBody(".voice-row.playing .voice-print-head");
+    expect(head).toMatch(/animation-delay:\s*var\(--print-lead/);
+    expect(head).not.toMatch(/(?:^|[^-])animation:/);
+  });
+
+  it("hides the head everywhere except the playing row", () => {
+    expect(ruleBody(".voice-print-head")).toMatch(/opacity:\s*0/);
+    expect(declarations).toMatch(
+      /\.voice-row\.playing \.voice-print-head[\s\S]*?opacity:\s*1/
+    );
+  });
+
+  it("steps the head in 8 instead of removing it", () => {
+    // The shipped page killed its equalizer outright under reduced motion,
+    // leaving a near-invisible 3-bar glyph in a 30px orb. The playhead carries
+    // information, so it is slowed, not deleted.
+    const reduced = css.slice(
+      css.indexOf("@media (prefers-reduced-motion: reduce)")
+    );
+    expect(reduced).toMatch(/animation-timing-function:\s*steps\(8/);
+    expect(reduced).not.toMatch(/animation:\s*none/);
+  });
+
+  it("pulses the print of a clip that has not buffered yet, on the print itself", () => {
+    // The beat is deadline-scheduled, so an unbuffered clip stretches the gap.
+    // Drawing the wait ON the late voice's print is what makes it a wait
+    // rather than a page that has stopped working — and says WHICH voice.
+    const waiting = ruleBody(".voice-row.loading .voice-print-trace");
+    expect(waiting).toMatch(/animation-name:\s*voice-print-pulse/);
+    expect(waiting).toMatch(/animation-iteration-count:\s*infinite/);
+    const pulse = css.slice(css.indexOf("@keyframes voice-print-pulse"));
+    expect(pulse.slice(0, pulse.indexOf("}\n}"))).toMatch(/opacity:\s*0\.4/);
+  });
+
+  it("keeps the waiting state under reduced motion, and only drops the motion", () => {
+    const reduced = css.slice(
+      css.indexOf("@media (prefers-reduced-motion: reduce)")
+    );
+    // animation-NAME: none, never the `animation:` shorthand — the shorthand
+    // in this block would also erase the playhead's longhands above it.
+    expect(reduced).toMatch(/animation-name:\s*none/);
+    expect(reduced).toMatch(/opacity:\s*0\.4/);
+  });
+});
+
+describe("the sweep, its readout, and the Show: filter", () => {
+  it("gives Stop the one green, because a sweep in progress is the page's 'now'", () => {
+    expect(ruleBody(".voice-play-all.sweeping")).toMatch(
+      new RegExp(`color:\\s*${ACCENT}`)
+    );
+    // …and only then. At rest it is the same quiet ink as the rest of the bar.
+    expect(inkDensity(ruleBody(".voice-play-all"))).toBeLessThan(1);
+  });
+
+  it("adds no third horizontal rule — the page still has exactly two", () => {
+    // What outlines remain are drawn with the `border:` shorthand, which is an
+    // outline rather than a rule. The count assertion lives above; this pins
+    // WHY it still holds. (`Play all` no longer draws one at all — see "Play
+    // all is an option, not the page's call to action".)
+    expect(ruleBody(".voice-arrow-chip")).toMatch(
+      new RegExp(`border:\\s*1px solid ${RULE}`)
+    );
+    expect(ruleBody(".voice-filter-select")).toMatch(
+      new RegExp(`border:\\s*1px solid ${RULE}`)
+    );
+  });
+
+  it("sets the allowance note quieter than the hint it sits under", () => {
+    // A caveat about the filter, not a warning about the page.
+    expect(inkDensity(ruleBody(".voice-filter-note"))).toBeLessThan(
+      inkDensity(ruleBody(".voice-rail-controls"))
+    );
+  });
+
+  it("gives the bar's one message slot full ink when it has something to say", () => {
+    // Blocked playback, a failed clip and a refused sweep all land in the hint
+    // line. Unlike the hint, they are things you have to read.
+    expect(inkDensity(ruleBody(".voice-rail-hint-alert"))).toBe(1);
+  });
+
+  it("pushes the filter to the far end of the bar, opposite the sweep", () => {
+    // On the SLOT, not the control: the option set changes without a repaint
+    // (`Not yet heard` appears the moment anything has been heard), so the
+    // control is replaced in place — and an empty slot must collapse against
+    // the right edge rather than leave the auto margin behind mid-bar.
+    expect(ruleBody(".voice-filter-slot")).toMatch(/margin-left:\s*auto/);
+    expect(ruleBody(".voice-filter")).not.toMatch(/margin-left:\s*auto/);
+  });
+
+  it("sets the heard counter in tabular figures, and hides it when it is empty", () => {
+    // It ticks up while the reader is looking at it; proportional digits would
+    // shuffle the words beside it on every voice.
+    const counter = ruleBody(".voice-heard-count");
+    expect(counter).toMatch(/font-variant-numeric:\s*tabular-nums/);
+    expect(ruleBody(".voice-heard-count:empty")).toMatch(/display:\s*none/);
+  });
+});
+
+describe("type", () => {
+  it("names voices at 15px/600 and describes them at 12px", () => {
+    const name = ruleBody(".voice-row-name");
+    expect(fontSizePx(name)).toBe(15);
+    expect(name).toMatch(/font-weight:\s*600/);
+    expect(name).toMatch(/letter-spacing:\s*-0\.012em/);
+    expect(fontSizePx(ruleBody(".voice-row-desc"))).toBe(12);
+  });
+
+  it("uses no serif anywhere — one family, the shell's", () => {
+    expect(declarations).not.toMatch(/font-family/);
+  });
+
+  it("keeps the row description readable on the ground it is ACTUALLY read on", () => {
+    // "Recedes" is a hierarchy instruction, not a licence to go unreadable.
+    //
+    // The tagline is `opacity: 0` at rest and revealed only by hover/focus, so
+    // the FOCUS ground is the only ground it is ever read against — measuring
+    // it against the card was measuring a state that never renders. It is 12px
+    // at 400, which is normal text under WCAG 1.4.3, so the floor is 4.5:1; on
+    // the darker tile the page-wide 62 % ink lands at 4.41, which is why this
+    // one string takes 66 instead.
+    const desc = ruleBody(".voice-row-desc");
+    expect(desc).toMatch(/opacity:\s*0/);
+    const alpha = inkDensity(desc);
+    expect(
+      contrast(over(INK, alpha, FOCUS_GROUND), FOCUS_GROUND)
+    ).toBeGreaterThanOrEqual(4.5);
+    // The twin-name disambiguator (#474) is the same string on the same ground
+    // once you are standing on the row, so it takes the same ink.
+    const dup = /\.voice-row\.focused \.voice-row-desc-dup\s*\{([^}]*)\}/.exec(
+      declarations
+    );
+    expect(dup, "focused .voice-row-desc-dup should declare a colour").toBeTruthy();
+    expect(inkDensity(dup![1])).toBe(alpha);
+  });
+});
+
+describe("the skeleton the rail is painted into", () => {
+  // The settings tab gives this pane a wide content column, and #voice-studio
+  // asks for up to 900px of it — but its parent .user-preference-item carries
+  // the form-tab 504px cap from src/popup/tabs.css. Both levels have to be
+  // uncapped.
   it("uncaps the Voices preference card, not just the tab panel", () => {
     expect(ruleBody("#tab-voices.tab-panel")).toMatch(/max-width:\s*none/);
     expect(ruleBody("#voices-preference.user-preference-item")).toMatch(
       /max-width:\s*none/
+    );
+  });
+
+  it("caps the rail itself rather than the content column (#582/#583)", () => {
+    // A Voices-only width rule on the column is what caused the tab-switch
+    // sidebar shunt; the studio's own max-width is what bounds it.
+    expect(ruleBody("#voice-studio")).toMatch(/max-width:\s*900px/);
+    expect(declarations).not.toMatch(/\.content\s*\{/);
+  });
+
+  it("hides the live region visually WITHOUT display:none, which mutes it", () => {
+    const hidden = ruleBody(".voice-visually-hidden");
+    expect(hidden).not.toMatch(/display:\s*none/);
+    expect(hidden).toMatch(/position:\s*absolute/);
+    expect(hidden).toMatch(/clip-path:\s*inset\(50%\)/);
+  });
+
+  it("styles the subtitle itself, because .description is display:none in the shell", () => {
+    // preferences.css sets `.description { display: none }` inside a
+    // .user-preference-item, so the rail's subtitle needs its own class.
+    expect(ruleBody(".voice-rail-subtitle")).toMatch(/font-size:/);
+  });
+});
+
+describe("the toggle reads as off, not as deleted", () => {
+  it("uses no strikethrough anywhere on the page", () => {
+    // The chip's off state used to be `text-decoration: line-through`, which
+    // conventionally means deleted, deprecated or unavailable. `Play as you
+    // move` is none of those when it is off — it is a control you can press.
+    expect(declarations).not.toMatch(/line-through/);
+  });
+
+  it("says off with a hollow dot and a dimmer label", () => {
+    // A shape change, not only a colour one, so the state survives both a
+    // colourblind reader and a greyscale screenshot. aria-pressed carries it
+    // to a screen reader; this is the visible half.
+    expect(ruleBody('.voice-arrow-chip::before')).toMatch(/content:\s*"●"/);
+    expect(ruleBody('.voice-arrow-chip[aria-pressed="false"]::before')).toMatch(
+      /content:\s*"○"/
+    );
+    expect(
+      inkDensity(ruleBody('.voice-arrow-chip[aria-pressed="false"]'))
+    ).toBeLessThan(inkDensity(ruleBody(".voice-rail-controls")));
+  });
+});
+
+describe("Play all is an option, not the page's call to action", () => {
+  it("draws no box — the invitation is to hear ONE voice", () => {
+    // It was the only outlined, white-filled, button-shaped thing on the page,
+    // which made the loudest affordance the one the design explicitly refuses
+    // to lead with ("Auto-advance as the opening gesture — rejected").
+    const body = ruleBody(".voice-play-all");
+    expect(body).not.toMatch(/border:/);
+    expect(body).not.toMatch(/background:/);
+    expect(body).not.toMatch(/border-radius:/);
+    // …and it stays the bar's quiet ink at rest, like the controls beside it.
+    expect(inkDensity(body)).toBe(
+      inkDensity(ruleBody(".voice-rail-controls"))
+    );
+  });
+
+  it("keeps the one green for the sweep that is actually running", () => {
+    expect(ruleBody(".voice-play-all.sweeping")).toMatch(
+      new RegExp(`color:\\s*${ACCENT}`)
+    );
+  });
+
+  it("says the whole row is the play target, on the row you are pointing at", () => {
+    // NOT 22 persistent buttons: a button nested in a role="option" is exactly
+    // what the whole-row target exists to avoid. A pseudo-element in the 14px
+    // of padding the row already has costs the print nothing and adds nothing
+    // for a screen reader to read.
+    const glyph = ruleBody('.voice-row[data-print-voice]::before');
+    expect(glyph).toMatch(/content:\s*"▶"/);
+    expect(glyph).toMatch(/position:\s*absolute/);
+    expect(glyph).toMatch(/opacity:\s*0/);
+    expect(glyph).toMatch(/pointer-events:\s*none/);
+    expect(
+      ruleBody(
+        '.voice-row[data-print-voice]:hover::before,\n.voice-row[data-print-voice].focused::before'
+      )
+    ).toMatch(/opacity:\s*1/);
+    // A ▶ on a row that is already sounding would be a lie — Space stops it.
+    expect(ruleBody('.voice-row.playing[data-print-voice]::before')).toMatch(
+      /opacity:\s*0/
     );
   });
 });

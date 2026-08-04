@@ -1,4 +1,8 @@
 import type { SpeechSynthesisVoiceRemote } from "./SpeechModel";
+import {
+  defaultLocalStorage,
+  type KeyValueStorage,
+} from "../storage/localKeyStorage";
 
 /**
  * Per-host voice pins (doc/plans/2026-07-05-voice-shortlist-pins-design.md).
@@ -31,11 +35,15 @@ export interface HostPinOverlay {
 /** hostId → overlay. A host absent from the map is un-customized (default pins). */
 export type VoicePinStore = Record<string, HostPinOverlay>;
 
-/** The slice of chrome.storage.local this module needs (injectable for tests). */
-export interface PinStorage {
-  get(key: string): Promise<unknown>;
-  set(key: string, value: unknown): Promise<void>;
-}
+/**
+ * The slice of chrome.storage.local this module needs (injectable for tests).
+ *
+ * The shape itself now lives in `src/storage/localKeyStorage.ts` — the
+ * soundprint cache wants the same thing, and a third hand-rolled copy of the
+ * guarded `chrome.storage.local` wrapper is exactly the duplication this
+ * re-export exists to prevent. The names stay for compatibility.
+ */
+export type PinStorage = KeyValueStorage;
 
 // --- pure helpers ---------------------------------------------------------
 
@@ -126,34 +134,7 @@ export function togglePin(
 // --- storage-backed helpers (dependency-injected) -------------------------
 
 /** chrome.storage.local wrapper matching PreferenceModule's guarded idiom. */
-export function defaultPinStorage(): PinStorage {
-  return {
-    get: (key) =>
-      new Promise((resolve) => {
-        if (typeof chrome === "undefined" || !chrome.storage || !chrome.storage.local) {
-          resolve(undefined);
-          return;
-        }
-        chrome.storage.local.get([key], (result) => {
-          resolve(
-            chrome.runtime && chrome.runtime.lastError ? undefined : result?.[key]
-          );
-        });
-      }),
-    set: (key, value) =>
-      new Promise((resolve, reject) => {
-        if (typeof chrome === "undefined" || !chrome.storage || !chrome.storage.local) {
-          resolve();
-          return;
-        }
-        chrome.storage.local.set({ [key]: value }, () => {
-          const err = chrome.runtime && chrome.runtime.lastError;
-          if (err) reject(err);
-          else resolve();
-        });
-      }),
-  };
-}
+export const defaultPinStorage = defaultLocalStorage;
 
 async function loadStore(storage: PinStorage): Promise<VoicePinStore> {
   const raw = await storage.get(VOICE_PINS_KEY);
