@@ -25,6 +25,15 @@ export class DOMObserver {
   // Bumped by every initial-decoration pass so an older pass's pending retries
   // stand down instead of racing the newer one (see startInitialDecoration).
   private decorationGeneration: number = 0;
+  // Ancestors already watched for submit-button re-renders. decoratePromptControls
+  // is re-runnable now (#593), and without this each re-run would stack another
+  // MutationObserver on the same row.
+  private submitButtonMonitoredAncestors = new WeakSet<HTMLElement>();
+  // Per-composer budget for call-button restore attempts, reset whenever the
+  // button is present, so repeated losses each get a fresh set of tries while a
+  // permanently-failing create can't spin once per mutation batch (#593).
+  private callButtonRestoreAttempts = new WeakMap<HTMLElement, number>();
+  private static readonly MAX_CALL_BUTTON_RESTORE_ATTEMPTS = 3;
   private domMutationCallback = (mutations: MutationRecord[]) => {
     // Skip decoration work entirely on non-chatable pages
     if (!this.shouldDecorateUI()) {
@@ -85,6 +94,10 @@ export class DOMObserver {
     // hosts whose getVoiceSettingsSelector is empty (ChatGPT) or doesn't match
     // (Claude).
     this.findAndDecorateVoiceSettings(document.body);
+    // A host re-render can drop the injected call button without touching the
+    // prompt, and no finder notices — the prompt still reports "already
+    // decorated". Re-assert the invariant once per batch (#593).
+    this.ensureCallButtonPresent();
   };
   constructor(private chatbot: Chatbot) {
     this.voiceMenuUiMgr = new VoiceMenuUIManager(
@@ -243,6 +256,10 @@ export class DOMObserver {
     // Pi's Voice settings page has no chat prompt, so it is scanned separately —
     // see the note on the same call in domMutationCallback.
     this.findAndDecorateVoiceSettings(document.body);
+    // The composer may have been decorated on a previous pass and since lost its
+    // button (#593) — a state no finder above can detect, and one that route entry
+    // is a natural moment to repair.
+    this.ensureCallButtonPresent();
     if (promptObs.isReady()) {
       EventBus.emit("saypi:ui:content-loaded");
       return;
@@ -331,6 +348,24 @@ export class DOMObserver {
   // Function to decorate the prompt input element, and other elements that depend on it
   decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
+    this.decoratePromptControls(prompt);
+
+    // Trigger agent mode notice if needed (async call, no need to await)
+    this.agentNoticeModule.showNoticeIfNeeded().catch(error => {
+      console.debug('Failed to show agent notice:', error);
+    });
+  }
+
+  /**
+   * Decorates the containers around an (already id'd) prompt and inserts the call
+   * button. Split out from decoratePrompt so the call button can be restored
+   * WITHOUT re-stamping the prompt: `id=saypi-prompt` makes every finder report
+   * "already decorated", so a composer that lost its button had no way back (#593).
+   *
+   * Idempotent — it re-uses an existing call button and an existing submit-button
+   * observer rather than adding a second one.
+   */
+  private decoratePromptControls(prompt: HTMLElement): void {
     const promptContainer = this.chatbot.getPromptContainer(prompt);
     if (promptContainer) {
       // Ensure ChatGPT does not get the SayPi control panel decorations (Phase 1)
@@ -349,17 +384,69 @@ export class DOMObserver {
       if (controlsContainer) {
         controlsContainer.id = "saypi-prompt-controls-container";
         const ancestor = this.addIdPromptAncestor(controlsContainer);
-        if (ancestor) this.monitorForSubmitButton(ancestor);
-        const submitButtonSearch = this.findSubmitButton(controlsContainer);
-        const insertionPosition = submitButtonSearch.found ? -1 : 0;
-        buttonModule.createCallButton(controlsContainer, insertionPosition);
+        if (ancestor && !this.submitButtonMonitoredAncestors.has(ancestor)) {
+          this.submitButtonMonitoredAncestors.add(ancestor);
+          this.monitorForSubmitButton(ancestor);
+        }
+        if (!document.getElementById("saypi-callButton")) {
+          const submitButtonSearch = this.findSubmitButton(controlsContainer);
+          const insertionPosition = submitButtonSearch.found ? -1 : 0;
+          // createButton attaches the element synchronously and only then awaits
+          // the nickname for its label (#593), so the guard above is truthful and
+          // this promise can only fail AFTER the button is in the DOM. Still, a
+          // rejection here must be heard rather than swallowed.
+          Promise.resolve(
+            buttonModule.createCallButton(controlsContainer, insertionPosition)
+          ).catch((error) => {
+            logger.error("Call button creation failed", error);
+          });
+        }
       }
     }
-    
-    // Trigger agent mode notice if needed (async call, no need to await)
-    this.agentNoticeModule.showNoticeIfNeeded().catch(error => {
-      console.debug('Failed to show agent notice:', error);
-    });
+  }
+
+  /**
+   * Enforces the invariant that a decorated composer on a chatable page has a call
+   * button. A host re-render can discard the injected button while REUSING the
+   * prompt element — which keeps `id=saypi-prompt`, so every finder reports
+   * "already decorated" and nothing else would ever put the button back (#593).
+   * Cheap enough to run once per mutation batch: two getElementById lookups and an
+   * early return in the overwhelmingly common case.
+   */
+  private ensureCallButtonPresent(): void {
+    if (!this.shouldDecorateUI()) {
+      return;
+    }
+    const prompt = document.getElementById("saypi-prompt");
+    if (document.getElementById("saypi-callButton")) {
+      // Healthy: clear the budget so a LATER loss gets a full set of attempts.
+      if (prompt) this.callButtonRestoreAttempts.delete(prompt);
+      return;
+    }
+    if (!prompt) {
+      // No decorated composer: the prompt paths above own this case.
+      return;
+    }
+    // Restoring is only worth retrying while it can still work. If creation is
+    // broken outright (no CallButton singleton, say) the button never appears, and
+    // without a bound this check would re-run creation on every mutation batch of
+    // a busy page forever.
+    const attempts = this.callButtonRestoreAttempts.get(prompt) ?? 0;
+    if (attempts >= DOMObserver.MAX_CALL_BUTTON_RESTORE_ATTEMPTS) {
+      return;
+    }
+    this.callButtonRestoreAttempts.set(prompt, attempts + 1);
+    logger.debug("Call button missing from a decorated composer — restoring it");
+    this.decoratePromptControls(prompt);
+    if (
+      !document.getElementById("saypi-callButton") &&
+      attempts + 1 >= DOMObserver.MAX_CALL_BUTTON_RESTORE_ATTEMPTS
+    ) {
+      logger.error(
+        "Could not restore the call button after " +
+          `${DOMObserver.MAX_CALL_BUTTON_RESTORE_ATTEMPTS} attempts; giving up on this composer`
+      );
+    }
   }
 
   /**
