@@ -79,7 +79,23 @@ panel left empty by a chunk/import break.
   as expected — only `pageerror` (a thrown mount/controller) fails it. It seeds
   `chrome.storage.local` with a consent decision so the General tab renders its
   steady state rather than the first-run consent gate (whose hero overlays the
-  sidebar).
+  sidebar). On the Voices tab it goes one step further than "has children" —
+  the mock API now serves a catalog, so it asserts the rail drew every voice in
+  it. That panel's content is network-bound, and a dead fetch used to render an
+  empty state that a child count happily accepted.
+
+- **`specs/voices-rail.e2e.ts` — REQUIRED (in the CI gate).** What the Voices
+  rail *does*, as opposed to whether it mounted: DOM focus landing on the rail
+  when the tab is activated (and `Space` alone then sounding a voice, asserted
+  on the **heard counter**, which only moves past a real playback threshold),
+  the arming rule in both directions, the pitch ordering and the shared
+  reference line measured off laid-out boxes, the twins staying apart at rest,
+  and `Play all` walking the queue. All of it needs a real browser: jsdom has no
+  layout, no `decodeAudioData` and no media element, so the rail's ~2650 unit
+  tests stop exactly where this starts. **It cannot prove sticky autoplay
+  activation** — `launch-args.ts` passes `--autoplay-policy=no-user-gesture-required`
+  to every Layer-3 Chrome, so chained playback is licensed here regardless; see
+  the header comment in the spec.
 
 - **`specs/settings.visual.ts` — ON-DEMAND (NOT in the CI gate).** Pixel
   baselines per tab via `toHaveScreenshot`, with auth/quota/status regions
@@ -141,6 +157,11 @@ panel left empty by a chunk/import break.
      offscreen-shutdown.e2e.ts force the offscreen idle auto-shutdown -> assert
                           the document closes but the live content-script port
                           survives (so VAD_SPEECH_END stays routable) (#308)
+     voices-rail.e2e.ts   settings.html -> Voices -> the mock /voices catalog +
+                          its three real MP3s -> the rail takes DOM focus, Space
+                          sounds a voice (heard counter moves), arrows stay
+                          silent until armed, the prints share one reference
+                          line and ascend by measured pitch, Play all walks
 ```
 
 The pivotal trick is **`--host-resolver-rules`**: the extension is built with the
@@ -178,6 +199,7 @@ instead of silently calling the real internet.
 | `support/manifest-guard.ts` | `assertDevManifest()` — refuses a non-static / production build |
 | `support/check-servers.mjs` | standalone sanity check for the mock servers |
 | `support/dictation.ts` | shared drive-a-turn helpers (`seedAutoSubmitFalse`, `openDecoratedPiPage`, `getTranscribeHits`) used by the dictation + lifecycle specs |
+| `support/voices.ts` | drive-the-rail helpers: `openVoicesRail` (waits out catalog → prints → pitch re-sort, never sleeps) and a MutationObserver-backed **play log**, which is how a spec proves a voice did *not* sound |
 | `support/lifecycle.ts` | MV3 lifecycle drivers (`evictServiceWorker`, `reacquireServiceWorker`, `isWorkerDead`, `triggerOffscreenShutdown`, `hasOffscreenDocument`, `getConnectedTabCount`) — see the section below |
 | `support/lifecycle-targets.ts` | pure CDP-target predicates (`isExtensionServiceWorkerTarget`, `pickExtensionServiceWorkerTarget`); unit-tested in the **required** gate (`test/e2e/lifecycle-targets.spec.ts`) |
 | `specs/*.e2e.ts` | the tests |

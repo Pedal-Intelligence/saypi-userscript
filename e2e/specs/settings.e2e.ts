@@ -1,4 +1,5 @@
 import { test, expect } from "../fixtures/extension";
+import { MOCK_VOICE_CATALOG } from "../support/voice-catalog";
 
 /**
  * Settings page renders end-to-end in a real (headless) browser with the
@@ -64,6 +65,23 @@ test.describe("settings page (Preact migration)", () => {
       await expect(panel).toBeVisible();
       await expect(panel).not.toHaveClass(/\bhidden\b/);
       await expect(panel.locator(":scope > *")).not.toHaveCount(0);
+
+      // Voices is the one panel whose content comes over the network, so
+      // "has children" was the weakest assertion on this page: the mock API
+      // served no /voices route, the tab rendered its own empty state, and
+      // that passed. It now serves a catalog, so this can ask the real
+      // question — did the fetch land and did the rail draw the voices in it?
+      // A broken catalog fetch, a rejected parse or a paint that throws all
+      // leave the rail empty or short, and all of them are invisible to a
+      // child count. (What the rail DOES — focus, the arming rule, the pitch
+      // chart — is voices-rail.e2e.ts; this stays a bootstrap assertion.)
+      if (tab === "voices") {
+        await expect(panel.locator(".voice-rail")).toBeVisible();
+        await expect(panel.locator(".voice-row")).toHaveCount(
+          MOCK_VOICE_CATALOG.length,
+        );
+        await expect(panel.locator(".voice-studio-empty")).toHaveCount(0);
+      }
     }
 
     expect(
