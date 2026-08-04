@@ -644,6 +644,83 @@ describe("nothing outside the rail exports a width", () => {
   });
 });
 
+describe("nothing inside a row exports a width either", () => {
+  /**
+   * The same defect, one containment boundary further in — and it fails
+   * silently there, because the rail's `container-type` means a row that
+   * outgrows its line cannot scroll the document. It just paints outside the
+   * card, which is what the `Use` button was doing 20px past the card's edge
+   * between a 609px and a 649px rail in a 40 %-longer locale.
+   *
+   * The cause is `min-width: auto`: a flex item's automatic minimum is its own
+   * content, so `flex: 0 0 96px` means `max(96px, whatever is inside)` and a
+   * nowrap badge means its own string. Each guard below is one item that used
+   * to say "I will not go below my text" on a page whose text is about to be
+   * rewritten in ~30 languages. The rendered proof is in `voices-rail.e2e.ts`.
+   */
+  it.each([
+    [".voice-row-badges", "the badge cluster"],
+    [".voice-row-actions", "the actions column, whose 96px basis IS its width"],
+  ])("lets %s shrink below its content (%s)", (selector) => {
+    expect(ruleBody(selector)).toMatch(/min-width:\s*0/);
+  });
+
+  it("gives the row's decorations somewhere to yield to", () => {
+    // Ellipsis, not a hard clip: these are the two columns the row spends when
+    // it has nothing else left, and a tail that is visibly missing reads very
+    // differently from a word that was never there.
+    for (const selector of [
+      ".voice-tier-chip, .voice-row-inuse",
+      ".voice-pin-toggle",
+      ".voice-use",
+    ]) {
+      const body = ruleBody(selector);
+      expect(body, `${selector} should be able to yield`).toMatch(
+        /min-width:\s*0/,
+      );
+      expect(body).toMatch(/text-overflow:\s*ellipsis/);
+    }
+  });
+
+  /**
+   * With every text-derived floor removed, the one-line row's minimum is four
+   * constants — and it has to come out BELOW the width at which the row takes a
+   * second line, or there is a band where neither layout can draw it. Computed
+   * from the stylesheet rather than restated, so re-tuning any of the four
+   * re-runs the arithmetic.
+   */
+  it("keeps the one-line row's minimum under the two-line breakpoint", () => {
+    const px = (body: string, prop: string) =>
+      Number(new RegExp(`${prop}:\\s*(\\d+)px`).exec(body)?.[1]);
+    const row = ruleBody(".voice-row");
+    const [padTop, padRight, , padLeft] = /padding:\s*([^;]+);/
+      .exec(row)![1]
+      .trim()
+      .split(/\s+/)
+      .map((v) => Number(v.replace("px", "")));
+    expect(padTop).toBe(0);
+    const print = ruleBody(".voice-row-print");
+    const name = ruleBody(".voice-row-name");
+    const desc = ruleBody(".voice-row-desc");
+    const actions = ruleBody(".voice-row-actions");
+    const floor =
+      padLeft +
+      padRight +
+      flexOf(print).basis +
+      px(print, "margin-right") +
+      px(name, "min-width") +
+      px(name, "margin-right") +
+      px(desc, "min-width") +
+      px(ruleBody(".voice-row-badges"), "margin-left") +
+      flexOf(actions).basis +
+      px(actions, "margin-left");
+    expect(
+      floor,
+      `the one-line row cannot draw itself under ${floor}px, but the row only takes a second line below ${twoLineBreakpoint()}px — between the two there is no layout that fits`,
+    ).toBeLessThanOrEqual(twoLineBreakpoint());
+  });
+});
+
 describe("the control bar pins, and the rows scroll under it", () => {
   it("is sticky and OPAQUE", () => {
     const bar = ruleBody(".voice-rail-controls");

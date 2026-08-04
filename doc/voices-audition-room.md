@@ -217,6 +217,20 @@ also the size it is drawn at: the chart is at its most legible exactly where the
 The control bar needs no rule of its own — it is a handful of short controls whose number depends on
 what the page can currently do, so it simply wraps.
 
+"Never yields" was still an arithmetic claim, though, and it ran out one screen size below where it
+was drawn. Line two is the description beside a 108px reservation for the actions, so a 249px rail
+leaves the description 104px and `Speaks 33 languages` wants 121 — the twins were being ellipsised at
+320px, in English, in the face the page was designed in. So the twins' disambiguator is now the one
+line on the rail that **wraps** rather than ellipsising. That is a change of shape, not of margin: a
+nowrap line's safety is a claim about one string in one face that every locale re-litigates, and a
+line that wraps has no such claim to make. It costs nothing where the text already fits, which is
+nearly everywhere; where it does not, the twin's row takes a second line of 12px type.
+
+The ordinary taglines keep their ellipsis, and below about 360px they use it. That is the yield order
+working rather than a hole in it: a tagline is one voice's description, where a disambiguator is two
+rows' only difference, and wrapping all twenty-two of them would make every row taller at rest to
+save a word the reader is not looking at.
+
 The cost is height. A row grows by about half, and at rest most rows carry an empty second line. That
 is the right way round: this page is a list you scroll, so vertical is the axis it can afford to
 spend, and the alternative is a rail whose rows cannot be told apart.
@@ -254,6 +268,18 @@ width. Nothing about the resting page changed: a wrapping row of controls breaks
 controls long before it breaks inside one. The one thing in here that genuinely cannot wrap is the
 filter's `<select>`, whose minimum is its longest option — a bounded floor, measured rather than
 assumed, and well under the column a 320px phone gives.
+
+Inside the rail the same mistake is available and *quieter*, which is why it survived longer. The
+rail's containment means a row that outgrows its line can never scroll the document; it simply paints
+outside the card. The `Use` button was doing exactly that — 20px past the card's right edge, on the
+current voice's row, at every window between about 665 and 730px in a 40%-longer locale — while the
+page's scroll width read a contented zero. The cause was the same `min-width: auto` in a different
+costume: a flex item's automatic minimum is its own content, so `flex: 0 0 96px` means *at least* 96px
+and a nowrap badge means at least its own string. With the badges and the actions allowed to yield —
+in that order, because a clipped `In use` is a decoration losing its tail and a clipped `Use` is the
+page's one commit control — the row's minimum stops being text-derived at all: 594px of constants,
+against the 608px at which it takes a second line. There is no width the one-line layout is used at
+that it cannot draw, whatever the strings are.
 
 ### Listening is the primary interaction, and the keyboard is the primary instrument
 

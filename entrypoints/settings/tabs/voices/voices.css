@@ -636,16 +636,89 @@
   opacity: 1;
   color: rgba(36, 29, 20, 0.38);
   transition: color 0.12s ease-out;
+  /* AND IT WRAPS, where every other line on the row ellipsises.
+
+     This is the twins' second exception, and it exists for the same reason as
+     the first: an ellipsis on a line whose whole job is to be different from
+     the line above it is the same broken page as no line at all. `Speaks 33
+     languages` wants 121px in this face; the 152px floor above clears it on
+     one line, and at 320px — where the row is two lines and the description
+     shares its line with the actions' 108px reservation — it gets 104 and was
+     losing its last word. Measured on the author's own machine, in English.
+
+     Ellipsising was never a number that could be re-tuned into safety. It is
+     the SHAPE of the failure that is wrong: `white-space: nowrap` means the
+     line fits or it doesn't, so its safety margin is an arithmetic claim about
+     one string in one face, re-litigated by every locale and every runner. A
+     line that wraps has no such claim to make — there is no width at which it
+     loses a word, in any of the ~30 languages this string is about to be
+     written in, in any face. `anywhere` closes the last hole: it is the only
+     wrapping mode whose min-content is a single character, so even a compound
+     with no break opportunity in it cannot be cut.
+
+     It costs nothing where the description already fits, which is nearly
+     everywhere: one line stays one line. Where it doesn't fit, the twin's row
+     takes a second line of 12px text — inside the row's own 42px on the
+     one-line layout, and growing the row on the narrow one, which is the axis
+     that layout already spends. Ordinary taglines keep the ellipsis on
+     purpose: they are one voice's description rather than two rows' only
+     difference, and wrapping all 22 of them would make every row taller at
+     rest to save a word nobody is reading yet. */
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .voice-row:hover .voice-row-desc-dup,
 .voice-row.focused .voice-row-desc-dup {
   color: rgba(36, 29, 20, 0.66);
 }
+/* --- and the row's own version of the same rule ----------------------------
+   "Nothing outside the rail may export a width" (top of this file) is about
+   the PAGE. Inside the rail, containment means a row that outgrows its line
+   can never scroll the document — so the identical mistake fails silently
+   instead, by painting outside the card.
+
+   It was doing exactly that. Between a 609px and a 649px rail — an ordinary
+   ~700px window, which is where the mobile shell's full-width column lands —
+   the one-line layout has to draw a print (152), a name at its 64px floor, a
+   description at its 152px floor, a full set of badges and a 96px actions
+   column. In English that fits. With `HD` and `In use` in a language 40%
+   longer it is 36px short, and because every remaining item refused to
+   shrink, the 36px came off the END: the `Use` button, drawn 20px outside the
+   card. Measured, in a simulated locale, on this machine.
+
+   The refusal is `min-width: auto` — a flex item's automatic minimum is its
+   own content, so `flex: 0 0 96px` is a floor of `max(96px, whatever is
+   inside)` and a nowrap badge is a floor of its own string. Same defect as the
+   keyboard hint, one containment boundary further in.
+
+   So the two decorative columns yield, and in a stated order. The badges give
+   first — a clipped `In use` is a decoration losing its tail, and the row's
+   aria-label still says it in full. The actions give second and only if the
+   badges were not enough, because a commit control ellipsised to `Us…` is a
+   real loss — but it is a smaller one than a commit control painted over the
+   card's edge, and the button keeps its position, its hit area and its
+   `aria-label`. What does NOT give is anything above them in the yield order:
+   the print's width is a page-level decision, the name keeps its 64px, and the
+   description keeps the 152px floor the twins depend on.
+
+   The point of doing it this way is that the row's minimum stops being
+   text-derived. It is now [34 padding][192 print][20][64 name][12][152 desc]
+   [12][96 actions][12] = 594px — nine constants and not one string — against
+   the 608px at which the row takes a second line. Every width the one-line
+   layout is drawn at can draw the widest row it has, in any locale, in any
+   face, and `voices-studio-layout.spec.ts` recomputes that sum from this
+   stylesheet rather than restating it. */
 .voice-row-badges {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-left: 12px;
+  min-width: 0;
+}
+.voice-tier-chip, .voice-row-inuse {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* Most rows carry no badge at all, and a gutter before nothing is 12px the
    description could have had. */
@@ -671,6 +744,13 @@
   gap: 8px;
   margin-left: var(--voice-actions-gap);
   visibility: hidden;
+  /* The declared basis IS the width. Without this, `min-width: auto` quietly
+     turns `flex: 0 0 96px` into `max(96px, the buttons' own width)`, and a
+     longer word for `Use` widens the one column the narrow layout does its
+     arithmetic against (`calc(100% - var(--voice-actions-w) …)`) — the
+     description's line stops adding up and the row overflows. See the badges
+     above. */
+  min-width: 0;
 }
 .voice-row:hover .voice-row-actions,
 .voice-row.focused .voice-row-actions {
@@ -943,6 +1023,13 @@
   color: rgba(36, 29, 20, 0.62);
   cursor: pointer;
   white-space: nowrap;
+  /* Last in the yield order, and only reached when the badges have already
+     given everything they have — see `.voice-row-badges`. Nowrap stays: these
+     are two-word controls that should break their LABEL before they break
+     their line. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .voice-pin-toggle:hover:not(:disabled) {
   color: #241d14;
@@ -965,6 +1052,12 @@
   color: #2c5a42;
   cursor: pointer;
   white-space: nowrap;
+  /* As `.voice-pin-toggle`. The full sentence is on the button's aria-label
+     (`Use <voice> on <host>`), so an ellipsised label costs the reader a tail
+     and costs a screen reader nothing. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* One green means one green: hover underlines rather than inventing a second
    shade of it. */

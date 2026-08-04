@@ -422,6 +422,82 @@ test.describe("settings → voices: the audition room", () => {
   });
 
   /**
+   * 320px — the narrowest width anything ships at — where the twins were still
+   * being cut.
+   *
+   * The spec above proves the narrow layout at 390px, which is where the design
+   * was drawn and where the description comfortably clears its text. 320px is
+   * 70px narrower and the arithmetic runs out: line two is the description
+   * beside a 108px reservation for the actions, so a 249px rail leaves the
+   * description 104px, and `Speaks 33 languages` wants 121 of them. Measured on
+   * the author's own machine, in English, in SF Pro — 17px short. On a runner's
+   * wider face, or in any of the ~30 locales this string is about to be
+   * translated into, further short.
+   *
+   * A tagline losing its last word there is the yield order working as
+   * designed. The twins' disambiguator is the one line that may not, because it
+   * is the ENTIRE difference between two rows that otherwise both read `Paola`
+   * (#474) — an ellipsis there is the same broken page as no subtitle at all.
+   *
+   * So the twins wrap rather than ellipsise, and this asserts the property
+   * rather than the pixel count: wrapped text has no truncation to measure at
+   * any width, in any face, in any locale, which is what makes this the last
+   * time this regression can happen. It is checked in BOTH directions —
+   * scrollWidth for a horizontal cut, scrollHeight for a wrapped line clipped
+   * off the bottom — because a wrap that overflows a fixed row height is the
+   * same information lost by a different mechanism.
+   */
+  test("at 320px the twins wrap rather than lose a word", async ({
+    context,
+    extensionId,
+    serviceWorker,
+  }) => {
+    await seedConsentDecision(serviceWorker);
+    const page = await context.newPage();
+    await openVoicesRail(page, extensionId);
+    await page.setViewportSize({ width: 320, height: 844 });
+
+    const rows = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>("#tab-voices .voice-row")].map(
+        (row) => {
+          const desc = row.querySelector<HTMLElement>(".voice-row-desc")!;
+          return {
+            name: row.querySelector(".voice-row-name")?.textContent ?? "",
+            twin: desc.classList.contains("voice-row-desc-dup"),
+            text: desc.textContent ?? "",
+            shownAtRest:
+              getComputedStyle(desc).opacity === "1" &&
+              !row.classList.contains("focused"),
+            cutSideways: desc.scrollWidth - desc.clientWidth,
+            cutOffBottom: desc.scrollHeight - desc.clientHeight,
+          };
+        },
+      ),
+    );
+
+    const twins = rows.filter((row) => row.twin);
+    expect(twins).toHaveLength(2);
+    expect(twins.map((twin) => twin.name)).toEqual(["Paola", "Paola"]);
+    for (const twin of twins) {
+      expect(
+        twin.shownAtRest,
+        `${twin.text} is hidden at rest at 320px — two rows now both read Paola`,
+      ).toBe(true);
+      expect(
+        twin.cutSideways,
+        `"${twin.text}" is ellipsised by ${twin.cutSideways}px at 320px — the twins told apart by an ellipsis`,
+      ).toBeLessThanOrEqual(0);
+      expect(
+        twin.cutOffBottom,
+        `"${twin.text}" wraps to a line that is clipped off the bottom of the row at 320px`,
+      ).toBeLessThanOrEqual(0);
+    }
+    expect(twins[0].text).not.toBe(twins[1].text);
+
+    await page.close();
+  });
+
+  /**
    * The same page in a language it has not been translated into yet, drawn in
    * a face its author does not have.
    *
@@ -483,9 +559,16 @@ test.describe("settings → voices: the audition room", () => {
 
     // Both layouts (desktop ≥736px, mobile ≤735px), both container steps the
     // row takes (648, 608, 404), and the boundaries between them.
+    //
+    // 665–730 is in here for a reason that cost a re-run to find: it is the
+    // band where the mobile shell gives the rail 609–649px, which is the ONE
+    // line-layout width that has to draw a full set of badges without the extra
+    // print step (648) and without the second line (608). Sampling only round
+    // numbers walked straight over it — 700px was green while 680px and 720px
+    // were drawing the `Use` button 20px outside the card.
     const WIDTHS = [
-      1280, 1100, 1000, 900, 800, 760, 736, 735, 700, 660, 640, 608, 500, 440,
-      390, 360, 320,
+      1280, 1100, 1000, 900, 800, 760, 736, 735, 730, 720, 705, 700, 690, 680,
+      670, 665, 660, 640, 608, 500, 440, 390, 360, 320,
     ];
     for (const width of WIDTHS) {
       await page.setViewportSize({ width, height: 844 });
@@ -506,6 +589,28 @@ test.describe("settings → voices: the audition room", () => {
                 .map((el) => (el.className || "").toString().split(" ")[0]),
             ),
           ],
+          // The twins, at EVERY width rather than only at the last one. Their
+          // disambiguator wraps instead of ellipsising, and a wrap has its own
+          // way of losing a word: a second line that does not fit the row it is
+          // in. Both directions, on both layouts — the narrow row grows to fit
+          // its lines, the one-line row does not and has 42px to spend.
+          twinsCut: [
+            ...document.querySelectorAll<HTMLElement>("#tab-voices .voice-row"),
+          ]
+            .map((row) => row.querySelector<HTMLElement>(".voice-row-desc")!)
+            .filter((desc) => desc.classList.contains("voice-row-desc-dup"))
+            .map((desc) => ({
+              text: desc.textContent ?? "",
+              sideways: desc.scrollWidth - desc.clientWidth,
+              bottom: desc.scrollHeight - desc.clientHeight,
+              // Wrapping inside a row whose height is FIXED is how a twin
+              // could stay un-truncated by its own measurements and still be
+              // drawn over its neighbour.
+              escapesRow: +(
+                desc.getBoundingClientRect().bottom -
+                desc.closest(".voice-row")!.getBoundingClientRect().bottom
+              ).toFixed(1),
+            })),
         };
       });
       expect(
@@ -516,12 +621,22 @@ test.describe("settings → voices: the audition room", () => {
         geometry.spilling,
         `at ${width}px these are drawn past the rail's right edge`,
       ).toEqual([]);
+      expect(geometry.twinsCut).toHaveLength(2);
+      for (const twin of geometry.twinsCut) {
+        expect(
+          Math.max(twin.sideways, twin.bottom, twin.escapesRow),
+          `at ${width}px the twins' disambiguator "${twin.text}" is not drawn whole inside its row: ${JSON.stringify(twin)}`,
+        ).toBeLessThanOrEqual(0);
+      }
     }
 
-    // The twins are the one thing that must not be what yields (#474). Longer
-    // copy may ellipsise a disambiguator — at 320px in a 40 %-longer locale
-    // something has to — but it may never stop being drawn at rest, and the
-    // two rows must still say different things.
+    // The twins are the one thing that must not be what yields (#474), and
+    // "must not" here is unconditional: at the narrowest width, in the longest
+    // locale, in the widest face. A tagline losing its last word is the yield
+    // order working; a disambiguator losing its last word is two rows that both
+    // read `Paola`, which is not a narrower page but a broken one. They are the
+    // one line on the rail that wraps rather than ellipsises, so there is no
+    // width at which this can come down to a pixel count.
     const twins = await page.evaluate(() =>
       [...document.querySelectorAll<HTMLElement>("#tab-voices .voice-row")]
         .filter(
@@ -535,6 +650,8 @@ test.describe("settings → voices: the audition room", () => {
               getComputedStyle(desc).opacity === "1" &&
               !row.classList.contains("focused"),
             width: Math.round(desc.getBoundingClientRect().width),
+            cutSideways: desc.scrollWidth - desc.clientWidth,
+            cutOffBottom: desc.scrollHeight - desc.clientHeight,
           };
         }),
     );
@@ -545,6 +662,14 @@ test.describe("settings → voices: the audition room", () => {
         "a longer locale hid the twins' disambiguator — two rows now both read Paola",
       ).toBe(true);
       expect(twin.width).toBeGreaterThan(0);
+      expect(
+        twin.cutSideways,
+        `"${twin.text}" is ellipsised by ${twin.cutSideways}px at 320px in a 40 %-longer locale — the twins told apart by an ellipsis`,
+      ).toBeLessThanOrEqual(0);
+      expect(
+        twin.cutOffBottom,
+        `"${twin.text}" wraps to a line clipped off the bottom of its row at 320px in a 40 %-longer locale`,
+      ).toBeLessThanOrEqual(0);
     }
     expect(twins[0].text).not.toBe(twins[1].text);
 
