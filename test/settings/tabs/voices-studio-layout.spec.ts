@@ -599,6 +599,51 @@ describe("ink is one ramp in three steps", () => {
   });
 });
 
+describe("nothing outside the rail exports a width", () => {
+  /**
+   * The rail is immune by construction — `container-type: inline-size` gives it
+   * inline-size containment, so its rows contribute nothing to how wide the
+   * pane says it wants to be. Everything else on this page sits in ordinary
+   * flow, where one `white-space: nowrap` string is a hard floor under the
+   * pane's min-content width, and the settings shell hands that floor straight
+   * to the document: `.content` is `flex: 1` with `width: 504px`, so its
+   * automatic minimum size is `min(504px, its contents' min-content)`.
+   *
+   * That is how the keyboard hint — one nowrap line — became 27px of
+   * horizontal scroll on a Linux CI runner and 0px on the author's Mac, off the
+   * same build. The rendered proof lives in `voices-rail.e2e.ts`, which draws
+   * the whole pane in a 40 %-longer locale and a wider face; these two guards
+   * are the cheap ones that fail the moment the rule is re-added.
+   */
+  it("lets every string outside the rail break, in any locale and any face", () => {
+    // `anywhere`, not `break-word`: only `anywhere` lowers an element's
+    // min-content size, which is the entire point — a `break-word` page still
+    // asks for its longest word and still exports a width.
+    expect(ruleBody("#tab-voices")).toMatch(/overflow-wrap:\s*anywhere/);
+  });
+
+  it("keeps nowrap to the rail's own rows, where it costs the page nothing", () => {
+    const nowrap = [...declarations.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter(([, , body]) => /white-space:\s*nowrap/.test(body))
+      .map(([, selector]) => selector.trim());
+    expect(new Set(nowrap)).toEqual(
+      new Set([
+        // Out of flow entirely (position: absolute), so it is invisible to
+        // intrinsic sizing — and nowrap is part of the clip technique.
+        ".voice-visually-hidden",
+        // Inside the rail: contained, and each one is a thing that must not
+        // break — a name, its tagline, a badge, a two-word action.
+        ".voice-row-name",
+        ".voice-row-desc",
+        ".voice-row-inuse",
+        ".voice-tier-chip",
+        ".voice-pin-toggle",
+        ".voice-use",
+      ]),
+    );
+  });
+});
+
 describe("the control bar pins, and the rows scroll under it", () => {
   it("is sticky and OPAQUE", () => {
     const bar = ruleBody(".voice-rail-controls");

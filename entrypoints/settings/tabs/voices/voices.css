@@ -45,6 +45,46 @@
    the wide column; #voice-studio's max-width caps it. A Voices-only width
    rule is exactly what caused the tab-switch sidebar shunt (#582/#583). */
 
+/* --- NOTHING OUTSIDE THE RAIL MAY EXPORT A WIDTH ---------------------------
+   The rail is immune to this by construction and always was: `container-type:
+   inline-size` gives it inline-size containment, so its rows — nowrap names,
+   nowrap descriptions, nowrap badges — contribute *nothing* to how wide this
+   pane says it wants to be. Everything else here (the heading row, the control
+   bar, the tail) sits in ordinary flow, where a single `white-space: nowrap`
+   string is a hard floor under the pane's min-content width.
+
+   That floor is not a local problem, because the settings shell hands it
+   straight to the page. `.content` is `flex: 1` with `width: 504px`, so its
+   automatic minimum size is `min(504px, its contents' min-content)`: whatever
+   this pane's longest unbreakable line is, the column refuses to shrink below
+   it, and past ~736px of window the column plus the sidebar is wider than the
+   viewport. Horizontal scroll, on a settings page.
+
+   It cost 27px of that on a Linux CI runner and 0px on the author's Mac, off
+   the same build — the keyboard hint was one nowrap line of ~426px, and the
+   runner's system-ui draws it wider than SF Pro does. Re-tuning the numbers
+   would only move the cliff: the same strings are about to be translated into
+   ~30 locales, several of them 30-40% longer than English.
+
+   So, outside the rail, TEXT WRAPS — and `overflow-wrap: anywhere` is the part
+   that makes that structural instead of another calibration. It is the one
+   wrapping mode that lowers an element's *min-content* size to a single
+   character, so no word, in any locale, in any face, can set this pane's
+   width. Nothing about the resting page changes: a wrapping flex container
+   breaks between whole controls long before it breaks inside one, so a control
+   only ever splits mid-word when it alone is wider than the column — which is
+   exactly the last resort it should be.
+
+   One thing left in here genuinely cannot wrap: `<select>`, whose intrinsic
+   width is its longest option. That is a bounded floor (~140px under a
+   simulated 40%-longer locale, against the 264px rail a 320px phone gives) and
+   it is measured, not assumed — `voices-rail.e2e.ts` renders the whole pane in
+   an inflated locale and a wider face and asserts the page never scrolls
+   sideways. */
+#tab-voices {
+  overflow-wrap: anywhere;
+}
+
 /* --- heading row ----------------------------------------------------------
    The host switcher is demoted to 12px and moved to the top-right, but stays
    TOP-LEVEL: host is the scope for pins, for the current voice and for the
@@ -152,13 +192,21 @@
   color: rgba(36, 29, 20, 0.62);
   font-variant-numeric: tabular-nums;
 }
-/* Wrapping, at every width, with no breakpoint. The bar is a row of short nowrap
+/* Wrapping, at every width, with no breakpoint. The bar is a row of short
    controls whose count and width both depend on state — `Your voice ↗` only
    exists when there is a row to jump to, `Play all (22)` grows with the
    catalog, and every label is translated into ~30 locales, some 40% longer
    than English. There is no column width at which a fixed single line is safe,
    so the line is not fixed: the controls reflow, keeping their right-edge
-   alignment, and the bar grows by one 18px line when they must. */
+   alignment, and the bar grows by one 18px line when they must.
+
+   Two levels of giving way, in this order. The container wraps BETWEEN
+   controls first — a flex line is broken on items' hypothetical sizes, which
+   are their full labels — and only a control that is wider than the whole
+   column on its own ever breaks INSIDE itself. So dropping `white-space:
+   nowrap` from these labels changed nothing about how the bar reads at any
+   width the page is drawn at; it removed the floor they were putting under the
+   pane. See "nothing outside the rail may export a width" at the top. */
 .voice-rail-controls-row {
   display: flex;
   align-items: center;
@@ -166,11 +214,12 @@
   gap: 4px 14px;
   min-height: 18px;
 }
-.voice-rail-hint {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* `.voice-rail-hint` needs no rule of its own any more, and that is the fix:
+   it used to be one nowrap, ellipsised line, which made it both the longest
+   unbreakable string on the page (426px of a 428px rail — the whole of the
+   pane's min-content width) and the one place an alert the reader has to act
+   on could be cut off mid-sentence. It wraps now, like everything else outside
+   the rail, and the bar grows the line it was already built to grow. */
 .voice-compare {
   margin-left: auto;
 }
@@ -188,7 +237,6 @@
   font: inherit;
   color: inherit;
   cursor: pointer;
-  white-space: nowrap;
 }
 .voice-your-voice:hover,
 .voice-compare-swap:hover {
@@ -264,9 +312,6 @@
 .voice-play-glyph {
   font-size: 9px;
 }
-.voice-sweep-position {
-  white-space: nowrap;
-}
 
 /* The filter lives in a slot the control bar can refill, because its option
    set changes without the rail repainting (`Not yet heard` appears the moment
@@ -281,7 +326,6 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  white-space: nowrap;
 }
 /* NB the gap above applies between EVERY flex item, including the anonymous
    one CSS wraps a bare text node in — which is why `Show:` is built as a
@@ -292,7 +336,6 @@
    at it, and proportional digits would shuffle the words beside it. Absent —
    not "0 of 0" — on a page with nothing auditionable on it. */
 .voice-heard-count {
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 .voice-heard-count:empty {

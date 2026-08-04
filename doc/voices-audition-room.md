@@ -227,6 +227,34 @@ its clip's length, so that is not a smaller chart but a chart that lies about ha
 shared reference line still sits at one height in every row, because that is the premise everything
 else here rests on.
 
+### Nothing outside the rail may export a width
+
+The narrow layout above is about what the page *looks like* when the column is small. There is a
+second, quieter question underneath it: how small is the column allowed to get, and who decides?
+
+The answer should be "the window", and for the rail itself it is — `container-type: inline-size`
+gives the list inline-size containment, so twenty-two rows of nowrap names and descriptions
+contribute *nothing* to how wide this pane says it wants to be. Everything else here — the heading
+row, the control bar, the tail — sits in ordinary flow, and there a single `white-space: nowrap`
+string is a hard floor under the pane's minimum width. The shell then hands that floor to the whole
+document: the settings content column is a flex item with `width: 504px`, so its automatic minimum
+size is `min(504px, its contents' minimum)`, and a pane that insists on 500px makes a 736px window
+scroll sideways.
+
+That is not hypothetical. The keyboard hint was one nowrap line, and it cost 27px of horizontal
+scroll on a Linux CI runner while measuring 0px on the machine it was designed on — same build, same
+browser, different system font. A layout calibrated to one machine's glyph widths is a layout that
+fails on someone else's, and the thirty translations still to land are a much bigger perturbation
+than a font swap.
+
+So the rule is structural rather than arithmetic: **outside the rail, text wraps.** `overflow-wrap:
+anywhere` is the load-bearing half of it — it is the one wrapping mode that lowers an element's
+*minimum* width to a single character, so no word, in any locale, in any face, can set this pane's
+width. Nothing about the resting page changed: a wrapping row of controls breaks between whole
+controls long before it breaks inside one. The one thing in here that genuinely cannot wrap is the
+filter's `<select>`, whose minimum is its longest option — a bounded floor, measured rather than
+assumed, and well under the column a 320px phone gives.
+
 ### Listening is the primary interaction, and the keyboard is the primary instrument
 
 `Space` plays the row you are on. `↑↓` walk. `⇧Space` plays *the other* of the last two voices you
@@ -371,7 +399,9 @@ Concrete tests, in rough order of how often they catch things:
 - **Is it drawn but not spoken?** Ink, hue, position and badges are all invisible to a screen reader.
   Anything the reader needs in order to choose needs a spoken counterpart — in the name if it
   identifies the row, in a description if it is a consequence of picking it.
-- **Does it survive a 40%-longer translation, and read correctly at a count of 1?**
+- **Does it survive a 40%-longer translation, and read correctly at a count of 1?** If it is outside
+  the rail, can its longest string *break*? A new `white-space: nowrap` there is a floor under the
+  whole page's width, not a local decision — see §5.
 - **Does it still work at ~690px — and at ~334px?** There is no wide window to design against, and
   since #584 there is no narrow floor either: the same pane is drawn at a third of its ceiling. If a
   new element only fits on one line, say which of the two lines it belongs to.

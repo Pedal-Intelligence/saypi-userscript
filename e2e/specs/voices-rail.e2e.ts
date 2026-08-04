@@ -5,14 +5,17 @@ import {
 } from "../support/voice-catalog";
 import {
   AUDITIONABLE_COUNT,
+  INFLATION_MARK,
   RAIL_ROW_COUNT,
   cursorVoiceId,
   firstVoicesToSound,
+  inflateVoicesCopy,
   openVoicesRail,
   railHasDomFocus,
   railOrder,
   recordPlayback,
   seedConsentDecision,
+  widenGlyphs,
 } from "../support/voices";
 
 /**
@@ -414,6 +417,154 @@ test.describe("settings → voices: the audition room", () => {
       [...new Set(rail.map((row) => row.referenceY))],
       "the reference line sits at a different height on different rows — the traces no longer register into one chart",
     ).toHaveLength(1);
+
+    await page.close();
+  });
+
+  /**
+   * The same page in a language it has not been translated into yet, drawn in
+   * a face its author does not have.
+   *
+   * `settings-layout.e2e.ts` asks whether the page fits today, in English, in
+   * whatever font this machine happens to resolve `system-ui` to. That is a
+   * measurement of one build on one box, and it went red exactly that way: 27px
+   * of horizontal scroll on the Linux CI runner, 0px on the author's Mac, off
+   * the same commit — the keyboard hint was a single `white-space: nowrap`
+   * line, and the runner's system font draws it wider. Shaving 27px off the
+   * layout would have bought a fix good until the next runner image, and none
+   * at all for the ~30 locales this copy is about to be translated into, some
+   * of them 40% longer than English.
+   *
+   * So this asks the structural question instead: with every string in the pane
+   * 40% longer and every glyph wider, does the page still refuse to scroll
+   * sideways — at seventeen widths from a desktop window down to a small
+   * phone? It can only answer yes if nothing outside the rail exports an
+   * intrinsic width, which is a property of the stylesheet rather than of these
+   * particular strings, so it holds for strings nobody has written yet.
+   *
+   * Why the page and not the pane is measured: the settings shell hands the
+   * pane's demand straight to the document. `.content` is `flex: 1` with
+   * `width: 504px`, so its automatic minimum size is `min(504px, its contents'
+   * min-content)` — one unbreakable line in here becomes the column's floor,
+   * and the column plus the sidebar becomes wider than the window. The final
+   * assertion names that mechanism directly, so a future failure says *which*
+   * of the two is wrong.
+   */
+  test("no locale can push the rail off the page: 40 %-longer copy in a wider face", async ({
+    context,
+    extensionId,
+    serviceWorker,
+  }) => {
+    await seedConsentDecision(serviceWorker);
+    const page = await context.newPage();
+    await inflateVoicesCopy(page);
+    await openVoicesRail(page, extensionId);
+    await widenGlyphs(page);
+
+    // Commit a voice first, and an HD one, so the widest row the rail can draw
+    // is on screen: print, name, `HD` chip AND the `In use` badge, all of it in
+    // the longer locale. That badge is not a hypothetical — adding it is what
+    // stole the description's column once already.
+    const current = page.locator(ROW(MOCK_VOICE_IDS.addison));
+    await current.hover();
+    await current.locator(".voice-use").click();
+    await expect(page.locator(".voice-row-inuse")).toHaveCount(1);
+    // Off the rail again: "at rest" has to mean at rest for the twins below.
+    await page.mouse.move(0, 0);
+
+    // Guard the guard: if the i18n stub ever stops landing (a bundler change,
+    // a getMessage wrapper, a renamed key prefix), every assertion below passes
+    // for the wrong reason and this file quietly stops testing anything.
+    const hint = await page.locator(".voice-rail-hint").innerText();
+    expect(
+      hint,
+      "the inflated locale never reached the page — this test would pass on plain English",
+    ).toContain(INFLATION_MARK.slice(0, 6));
+
+    // Both layouts (desktop ≥736px, mobile ≤735px), both container steps the
+    // row takes (648, 608, 404), and the boundaries between them.
+    const WIDTHS = [
+      1280, 1100, 1000, 900, 800, 760, 736, 735, 700, 660, 640, 608, 500, 440,
+      390, 360, 320,
+    ];
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: 844 });
+      const geometry = await page.evaluate(() => {
+        const rail = document
+          .querySelector(".voice-rail")!
+          .getBoundingClientRect();
+        return {
+          overflow:
+            document.body.scrollWidth - document.documentElement.clientWidth,
+          // The rail is a query container, so a row that outgrows it may not
+          // show up in the page's scroll width at all — it would just paint
+          // over the card's edge. Ask the rows directly.
+          spilling: [
+            ...new Set(
+              [...document.querySelectorAll("#tab-voices .voice-row *")]
+                .filter((el) => el.getBoundingClientRect().right > rail.right + 0.5)
+                .map((el) => (el.className || "").toString().split(" ")[0]),
+            ),
+          ],
+        };
+      });
+      expect(
+        geometry.overflow,
+        `${geometry.overflow}px of horizontal scroll at ${width}px — a string in the Voices pane is wider than it can shrink`,
+      ).toBeLessThanOrEqual(0);
+      expect(
+        geometry.spilling,
+        `at ${width}px these are drawn past the rail's right edge`,
+      ).toEqual([]);
+    }
+
+    // The twins are the one thing that must not be what yields (#474). Longer
+    // copy may ellipsise a disambiguator — at 320px in a 40 %-longer locale
+    // something has to — but it may never stop being drawn at rest, and the
+    // two rows must still say different things.
+    const twins = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>("#tab-voices .voice-row")]
+        .filter(
+          (row) => row.querySelector(".voice-row-name")?.textContent === "Paola",
+        )
+        .map((row) => {
+          const desc = row.querySelector<HTMLElement>(".voice-row-desc")!;
+          return {
+            text: desc.textContent ?? "",
+            shownAtRest:
+              getComputedStyle(desc).opacity === "1" &&
+              !row.classList.contains("focused"),
+            width: Math.round(desc.getBoundingClientRect().width),
+          };
+        }),
+    );
+    expect(twins).toHaveLength(2);
+    for (const twin of twins) {
+      expect(
+        twin.shownAtRest,
+        "a longer locale hid the twins' disambiguator — two rows now both read Paola",
+      ).toBe(true);
+      expect(twin.width).toBeGreaterThan(0);
+    }
+    expect(twins[0].text).not.toBe(twins[1].text);
+
+    // …and the mechanism, stated as an invariant rather than as an outcome:
+    // whatever this pane's strings are, its min-content width fits the column
+    // it was given. Measured at the narrowest viewport, where the column is
+    // smallest and the demand is therefore hardest to meet.
+    const intrinsic = await page.evaluate(() => {
+      const pane = document.querySelector("#tab-voices") as HTMLElement;
+      const column = pane.getBoundingClientRect().width;
+      const declared = pane.style.width;
+      pane.style.width = "min-content";
+      const minContent = pane.getBoundingClientRect().width;
+      pane.style.width = declared;
+      return { column: Math.round(column), minContent: Math.round(minContent) };
+    });
+    expect(
+      intrinsic.minContent,
+      `the Voices pane demands ${intrinsic.minContent}px of the ${intrinsic.column}px column it has — it is exporting an intrinsic width, which the settings shell turns into page-wide horizontal scroll`,
+    ).toBeLessThanOrEqual(intrinsic.column);
 
     await page.close();
   });

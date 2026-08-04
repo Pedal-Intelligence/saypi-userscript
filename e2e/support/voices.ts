@@ -75,6 +75,66 @@ export async function openVoicesRail(
 }
 
 /**
+ * How much longer than English the simulated locale runs. German, Finnish and
+ * Russian routinely land in this band, and the design doc budgets for it by
+ * name (§3, "some 40% longer").
+ */
+export const COPY_INFLATION = 0.4;
+
+/**
+ * The tail appended to every inflated string — one long compound word, so the
+ * simulation stresses the thing English rarely does: a token that cannot be
+ * broken at a space. Also the marker the spec looks for to prove the stub
+ * actually landed.
+ */
+export const INFLATION_MARK = "Sprachgeschwindigkeitsregelung";
+
+/**
+ * Render the Voices tab as if its copy had been translated into a language
+ * ~40% longer than English.
+ *
+ * Every string this pane draws comes through `chrome.i18n.getMessage` — the
+ * control bar, the taglines, the twins' `Speaks N languages` disambiguator,
+ * the tail — so wrapping that one function inflates the whole page and nothing
+ * else. Scoped to the pane's own keys (`voices*`, `voiceTagline_*`, `hd*`) on
+ * purpose: the settings shell around it is a different owner's layout, and a
+ * failure here should mean the rail.
+ *
+ * Must be installed before `openVoicesRail` — the controller reads every one
+ * of these strings while it paints.
+ */
+export async function inflateVoicesCopy(page: Page): Promise<void> {
+  await page.addInitScript(
+    ([ratio, mark]: [number, string]) => {
+      const real = chrome.i18n.getMessage.bind(chrome.i18n);
+      chrome.i18n.getMessage = ((name: string, substitutions?: never) => {
+        const message = real(name, substitutions);
+        if (!message || !/^(voice|hd)/i.test(name)) return message;
+        const extra = Math.max(3, Math.ceil(message.length * ratio));
+        return `${message} ${mark.slice(0, extra)}`;
+      }) as typeof chrome.i18n.getMessage;
+    },
+    [COPY_INFLATION, INFLATION_MARK] as [number, string],
+  );
+}
+
+/**
+ * Draw the page in a face wider than the author's.
+ *
+ * `system-ui` resolves to SF Pro on macOS and to something Bitstream-descended
+ * (DejaVu/Liberation) on a Linux CI runner, and the same sentence is several
+ * percent wider there — which is the entire difference between a green local
+ * run and a red CI one when a layout is calibrated to one machine's glyphs.
+ * The stack picks a wide face on either platform: Verdana on macOS, DejaVu on
+ * Linux, both Vera-proportioned.
+ */
+export async function widenGlyphs(page: Page): Promise<void> {
+  await page.addStyleTag({
+    content: `* { font-family: Verdana, "DejaVu Sans", "Liberation Sans", sans-serif !important; }`,
+  });
+}
+
+/**
  * Seed the analytics-consent decision the settings shell asks for on first run.
  *
  * Not cosmetic here: undecided, the General tab renders a full-width consent
