@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Förmån listad i autentiseringsmodalen – ökade användningsgränser.",
+    "message": "Högre användningsgränser med gratis konto"
+  },
+  "authBenefitPremium": {
+    "description": "Förmån listad i autentiseringsmodalen – premiumfunktioner i olika chatbots.",
+    "message": "Premiumfunktioner och chatbot-stöd"
+  },
+  "authBenefitSupport": {
+    "description": "Förmån listad i autentiseringsmodalen – prioriterad support.",
+    "message": "Prioriterad support vid problem"
+  },
+  "authBenefitSync": {
+    "description": "Förmån listad i autentiseringsmodalen – synk av inställningar.",
+    "message": "Synka röstinställningar överallt"
+  },
+  "authBenefitTTS": {
+    "description": "Förmån listad i autentiseringsmodalen – TTS-funktion.",
+    "message": "Text-till-tal-röster (betalda planer)"
+  },
+  "authBenefitUsage": {
+    "description": "Förmån listad i autentiseringsmodalen – användningsspårning.",
+    "message": "Följ din röst-användning på olika enheter"
+  },
+  "authPromptModalFull": {
+    "description": "Beskrivning för den fullständiga modala autentiseringsprompten med värdeerbjudande.",
+    "message": "Du använder SayPi flitigt. Logga in för högre gränser, text-till-tal-röster och premiumfunktioner i alla chatbots som stöds."
+  },
+  "authPromptModalSoft": {
+    "description": "Beskrivning för den mjuka modala autentiseringsprompten.",
+    "message": "Skapa ett gratis SayPi-konto för högre användningsgränser och tillgång till premiumröstfunktioner."
+  },
+  "authPromptTitle": {
+    "description": "Titel för autentiseringspromptens modal.",
+    "message": "Lås upp fler röstfunktioner"
+  },
+  "authPromptToast": {
+    "description": "Toast-notis som uppmuntrar användaren att logga in.",
+    "message": "Logga in på SayPi för högre gränser och premiumfunktioner"
+  },
   "autoReadAloudChatGPT": {
     "description": "Etikett för kryssrutan som aktiverar eller inaktiverar automatisk uppläsning av ChatGPT:s svar under röstsamtal.",
     "message": "Automatisk uppläsning (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Inaktivera text-till-tal"
   },
+  "dismiss": {
+    "message": "Jag förstår",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Avfärda"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Fokus"
   },
+  "errorVadInitFailed": {
+    "description": "Fel-toast som visas när röstaktivitetsdetektering inte kan initieras.",
+    "message": "Kunde inte initiera röstigenkänning"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Fel-toast som visas när ett oväntat fel inträffar vid konfigurering av röstinspelning.",
+    "message": "Kunde inte konfigurera röstinspelning"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Fel-toast som visas när klienten för röstigenkänning inte kan starta inspelning.",
+    "message": "Kunde inte starta röstinspelning"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Fel-toast som visas när klienten för röstigenkänning (VAD) inte är tillgänglig, så inspelning inte kan starta.",
+    "message": "Röstinspelning är inte tillgänglig"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Avsluta fokusläge"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Enradig notis som visas i röstmenyer när både premiumröster (HD) och värderöster finns tillgängliga",
+    "message": "HD-röster använder din månadsgräns ungefär 20× snabbare."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Tucking detta bort ..."
   },
+  "maybeLater": {
+    "description": "Knapptext för att stänga autentiseringsprompten.",
+    "message": "Kanske senare"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Dina mikrofoninställningar uppfyller inte de obligatoriska specifikationerna. \nProva att använda en annan mikrofon eller justera dina ljudinställningar."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Det går inte att komma åt mikrofonen. \nKontrollera dina enhetsinställningar och försök igen."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Fel-toast som visas när mikrofontillstånd nekades efter flödet för tillståndsfrågan.",
+    "message": "Mikrofontillstånd beviljades inte. Kontrollera att du har tillåtit åtkomst i dialogrutan och i tilläggets inställningar."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "noggrannhet"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Snabbast svar, men mindre exakt. \nBenägna att avbryta."
   },
+  "moreVoices": {
+    "description": "Menyval som länkar från röstmenyn på sidan till den fullständiga röstkatalogen i tilläggets inställningar",
+    "message": "Fler röster…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Assistents smeknamn"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Inte inloggad"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Knappetikett som öppnar ChatGPT.",
+    "message": "Öppna ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Knappetikett som öppnar Claude.ai.",
+    "message": "Öppna Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Knappetikett som öppnar Pi.ai.",
+    "message": "Öppna Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Miljöalternativ: bland andra människor.",
+    "message": "Bland andra människor"
+  },
+  "onboarding_envMixed": {
+    "description": "Miljöalternativ: en blandning av privata och delade platser.",
+    "message": "En blandning av platser"
+  },
+  "onboarding_envPrivate": {
+    "description": "Miljöalternativ: en privat plats.",
+    "message": "Någonstans privat"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Bekräftelse som visas när svaret om miljön lämnar tyst läge avstängt.",
+    "message": "Okej, vi behåller standardinställningarna för lyssning och uppspelning."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Bekräftelse som visas när miljösvaret aktiverar tyst läge.",
+    "message": "Tyst läge är på — vi plockar upp tystare tal och svarar tyst, så att du kan prata diskret."
+  },
+  "onboarding_envTitle": {
+    "description": "Rubrik för introduktionsfrågan om användarens miljö.",
+    "message": "Var pratar du oftast?"
+  },
+  "onboarding_footer": {
+    "description": "Sidfotstext på introduktionssidan som visas första gången.",
+    "message": "Du kan gå tillbaka hit när som helst i inställningarna för Say, Pi. Din integritet är viktig — ljud fångas bara upp under ett aktivt samtal."
+  },
+  "onboarding_heading": {
+    "description": "Huvudrubrik på introduktionssidan vid första körningen.",
+    "message": "🗣️ Välkommen till Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Ingress på introduktionssidan vid första körningen.",
+    "message": "Du är två steg från din första talade konversation med en AI. Att prata är ungefär 3× snabbare än att skriva, så nu fixar vi inställningarna."
+  },
+  "onboarding_micTestButton": {
+    "description": "Knapp som startar det riskfria mikrofontestet i introduktionen.",
+    "message": "🎤 Testa din mikrofon"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status som visas efter att mikrofontestet i introduktionen har slutförts.",
+    "message": "Bra — din mikrofon fungerar. 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status som visas medan mikrofontestet i introduktionen mäter ljudnivån.",
+    "message": "Lyssnar — säg något. 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status som visas medan mikrofontestet i introduktionen väntar på behörighet.",
+    "message": "Begär åtkomst till mikrofonen…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Knappetikett för att stoppa mikrofontestet i introduktionen medan det körs.",
+    "message": "Stoppa testet"
+  },
+  "onboarding_step1Body": {
+    "description": "Brödtext för det första introduktionssteget som förklarar hur man fäster tillägget.",
+    "message": "Klicka på pusselbiten 🧩 uppe till höger i webbläsaren och sedan på nålen 📌 bredvid Say, Pi. Då är samtalsknappen bara ett klick bort."
+  },
+  "onboarding_step1Title": {
+    "description": "Rubrik för det första introduktionssteget (fäst tillägget).",
+    "message": "Fäst Say, Pi i verktygsfältet"
+  },
+  "onboarding_step2Body": {
+    "description": "Brödtext för det andra introduktionssteget som förklarar hur man startar en röstkonversation.",
+    "message": "Gå till någon av assistenterna som stöds nedan, tryck på Say, Pi-samtalsknappen och säg hej. Vi ber om åtkomst till mikrofonen första gången, det är som det ska, och vi lyssnar bara när du är aktivt med i ett samtal."
+  },
+  "onboarding_step2Title": {
+    "description": "Rubrik för det andra introduktionssteget (starta en konversation).",
+    "message": "Öppna en AI-chatt och börja prata"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Mikrofonbehörighet"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Återställningsvägledning när mikrofonbehörigheten är blockerad.",
+    "message": "Din webbläsare blockerar mikrofonen. Klicka på kamera- eller låsikonen i adressfältet, ställ in Mikrofon på \"Tillåt\" och försök sedan igen. På macOS kan du också kontrollera Systeminställningar → Integritet och säkerhet → Mikrofon."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Titel för återställningspanelen när mikrofonbehörighet nekades/blockerades.",
+    "message": "Mikrofonåtkomst är blockerad"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Återställningsvägledning när mikrofonen används någon annanstans.",
+    "message": "En annan app eller flik kan använda din mikrofon. Stäng allt annat som kan spela in (videosamtal, röstanteckningar) och försök sedan igen."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Titel för återställningspanelen när mikrofonen används av en annan app.",
+    "message": "Din mikrofon används"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Återställningsvägledning när ingen mikrofonenhet är tillgänglig.",
+    "message": "Vi kunde inte hitta någon mikrofon. Anslut en (eller anslut ditt headset), se till att den är vald som inmatningsenhet och försök sedan igen."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Titel för återställningspanelen när ingen mikrofonenhet är tillgänglig.",
+    "message": "Ingen mikrofon hittades"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Återställningsvägledning vid ett okänt mikrofonfel.",
+    "message": "Något gick fel när vi försökte nå din mikrofon. Kontrollera att den är ansluten och tillåten i webbläsarens inställningar och försök sedan igen."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Titel för återställningspanelen vid ett okänt mikrofonfel.",
+    "message": "Vi kunde inte komma åt din mikrofon"
+  },
+  "permissions_retryButton": {
+    "description": "Etikett för knappen som begär mikrofonbehörighet igen.",
+    "message": "Försök igen"
+  },
+  "permissions_revokedHeading": {
+    "description": "Rubrik som visas när mikrofonåtkomst tidigare beviljats men sedan har återkallats.",
+    "message": "Låt oss ansluta din mikrofon igen"
+  },
+  "permissions_revokedInfo": {
+    "description": "Informationstext som visas när mikrofonåtkomst återkallades efter att ha beviljats.",
+    "message": "Din mikrofonåtkomst har stängts av. Det händer ofta efter en uppdatering av webbläsaren eller systemet. Tillåt den igen nedan så lyssnar $productName$ när du är i ett samtal.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Etikett för reglaget som aktiverar tyst-/viskningsläge.",
+    "message": "Tyst läge"
+  },
+  "quietModeTooltip": {
+    "description": "Beskrivning som förklarar vad tyst-/viskningsläge gör.",
+    "message": "Tala mjukt – tar upp tystare tal och sänker assistentens svarsvolym, så att du kan använda röst bland andra."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Text för inloggningsknappen medan autentisering pågår.",
+    "message": "Loggar in…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ljudeffekter"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Ljudeffekter är inaktiverade i Firefox för att förhindra problem med ljudåterkoppling."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Rubrik för den engångsavisering om tidsvinsten som visas efter den första talade växlingen.",
+    "message": "Bra – att prata är ungefär 3× snabbare än att skriva."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Valfri andra rad i aviseringen om tidsvinsten som visar hela minuter som sparats.",
+    "message": "Du har redan pratat ungefär $minutes$ min snabbare än att skriva det.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Skicka bara när du trycker på knappen"
   },
+  "surveyQuestion": {
+    "description": "Den enda frågan i den engångs mikroenkäten efter en vinst.",
+    "message": "Hur fungerar rösten för dig hittills?"
+  },
+  "surveyRatingLabel": {
+    "description": "Tillgänglighetsetikett för en betygsknapp i en enkät.",
+    "message": "Betygsätt $rating$ av 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Bekräftelse som visas efter att användaren har svarat på enkäten efter vinsten.",
+    "message": "Tack — det hjälper oss att göra Say, Pi bättre."
+  },
   "tabAIChat": {
     "description": "Fliketikett för AI-chattinställningar.",
     "message": "AI Chatt"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Fliketikett för allmänna inställningar.",
     "message": "Allmänt"
+  },
+  "tabVoices": {
+    "description": "Fliketikett för inställningsavsnittet för röster (röstkatalog per webbplats).",
+    "message": "Röster"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "krediter"
   },
+  "ttsCreditsRemaining": {
+    "description": "Text som visar återstående TTS-kvot som en kreditpool per röst (saypi-api #181 Stage 2), inte råa tecken.",
+    "message": "$credits$ krediter kvar",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Flerspråkiga röster stöds för närvarande inte i Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Röstproduktion"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Observera! Taluppspelning är inte tillgänglig på $browserName$ med $chatbotName$ ännu. De goda nyheterna? Röstinmatning fungerar utmärkt! För TTS, prova Chrome eller Edge på skrivbordet.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS inte tillgänglig på $browserName$ + $chatbotName$. Röstinmatning fungerar! Prova Chrome skrivbord för TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -röst"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD-detalj när tal-liknande ljud upptäcktes men var för svagt / med för låg säkerhet för att transkribera (klientsidig admission-gate drop).",
+    "message": "Ljudet är för svagt för att transkribera"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD-detalj som förklarar att samtalet avslutades eftersom mikrofonen togs över av en nyare flik.",
+    "message": "Röstinmatningen flyttades till en annan flik"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Röst inte tillgänglig. \nProva Chrome eller Firefox på skrivbordet."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Observera! Taluppspelning är inte tillgänglig på $browserName$ med $chatbotName$ ännu. De goda nyheterna? Röstinmatning fungerar utmärkt! För TTS, prova Chrome eller Edge på skrivbordet.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS inte tillgänglig på $browserName$ + $chatbotName$. Röstinmatning fungerar! Prova Chrome skrivbord för TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Jag förstår",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "VAD-status som visas på en flik vars röstinmatning togs över av en annan flik.",
+    "message": "Pausad"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Visa detaljer"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Generisk talad introduktion som spelas när en vald Say, Pi-röst inte har ett röstspecifikt introduktionsmanus (och det inte finns något nyligt meddelande att läsa upp).",
+    "message": "Hej, jag är $voice$. Så här låter jag. Hoppas att du gillar den här rösten.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hej! \nПривет! \n你好! \nJag är Pi, din polyglot AI-assistent. \nMed 32 språk på mitt kommando kan vi utforska idéer och kulturer från hela världen. \nVad tycker du om den här rösten?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Röstinställningar"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Reservundertext för en röstrad i röstkatalogen i inställningarna när rösten saknar beskrivning; $count$ är antalet språk som rösten stöder.",
+    "message": "Talar $count$ språk",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Författad personlighetstagline för rösten \"Addison\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Solig och vältalig"
+  },
+  "voiceTagline_alloy": {
+    "description": "Författad tagline för personligheten hos rösten \"Alloy\" (inställningar: Röster-studio; klientbaserad karta för röstidentitet).",
+    "message": "Balanserad och mångsidig"
+  },
+  "voiceTagline_ash": {
+    "description": "Författad tagline för personligheten hos rösten \"Ash\" (inställningar: Röster-studio; klientbaserad karta för röstidentitet).",
+    "message": "Mörk, eftertänksam, lugn"
+  },
+  "voiceTagline_ballad": {
+    "description": "Författad tagline för personligheten hos rösten \"Ballad\" (inställningar: Röster-studio; klientbaserad karta för röstidentitet).",
+    "message": "Mjuk och melodisk"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Författad personlighetstagline för rösten \"Cassidy\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Vänlig och saklig"
+  },
+  "voiceTagline_cedar": {
+    "description": "Författad personlighetstext för rösten ”Cedar” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Stadig och trygg"
+  },
+  "voiceTagline_coral": {
+    "description": "Författad personlighetstext för rösten ”Coral” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Ljus, positiv energi"
+  },
+  "voiceTagline_echo": {
+    "description": "Författad personlighetstext för rösten ”Echo” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Ren och neutral"
+  },
+  "voiceTagline_fable": {
+    "description": "Författad personlighetstext för rösten ”Fable” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "En berättares tonfall"
+  },
+  "voiceTagline_finn": {
+    "description": "Författad personlighetstagline för rösten \"Finn\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Fräsch och energisk"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Författad personlighetstagline för rösten \"Jamahal\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Fyllig och magnetisk"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Författad personlighetstext för rösten ”Jarnathan” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Sammetslen senkvällsbariton"
+  },
+  "voiceTagline_jeff": {
+    "description": "Författad personlighetstagline för rösten \"Jeff\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Rakt på sak och stabil"
+  },
+  "voiceTagline_jessica": {
+    "description": "Författad personlighetstagline för rösten \"Jessica\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Varmt och välpolerat lugn"
+  },
+  "voiceTagline_joey": {
+    "description": "Författad personlighetstext för rösten ”Joey” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Avslappnad, samtalston från USA"
+  },
+  "voiceTagline_juniper": {
+    "description": "Författad personlighetstagline för rösten \"Juniper\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Klar, ljus, livlig"
+  },
+  "voiceTagline_lucy": {
+    "description": "Författad personlighetstagline för rösten \"Lucy\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Mjuk och strålande"
+  },
+  "voiceTagline_marin": {
+    "description": "Författad personlighetstext för rösten ”Marin” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Varmt, morgonradio-lugnt"
+  },
+  "voiceTagline_mark": {
+    "description": "Författad personlighetstagline för rösten \"Mark\" (inställningar: Röststudio; klientbaserad karta för röstidentitet).",
+    "message": "Tydlig, självsäker berättare"
+  },
+  "voiceTagline_nova": {
+    "description": "Författad personlighetstext för rösten ”Nova” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Snabb och nyfiken"
+  },
+  "voiceTagline_onyx": {
+    "description": "Författad personlighetstext för rösten ”Onyx” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Djup, resonant tyngd"
+  },
+  "voiceTagline_paola": {
+    "description": "Författad personlighetstext för rösten ”Paola” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Uttrycksfull italiensk värme"
+  },
+  "voiceTagline_sage": {
+    "description": "Författad personlighetstext för rösten ”Sage” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Mjuk och tydlig"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Författad personlighetstext för rösten ”Shimmer” (inställningar > Voice studio; klientbaserad röstidentitetskarta).",
+    "message": "Lätt och luftig"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Kort etikett på ett röstkorts fästreglage (av-läge) i inställningarnas röststudio; vid tryck läggs rösten till i värdens röstmeny i chatten.",
+    "message": "+ Meny"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Tillgänglighetsetikett för ett röstkorts fästreglage (av-läge); $name$ är rösten, $host$ assistenten.",
+    "message": "Lägg till $name$ i $host$s meny",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Etikett på reglaget i rösternas kontrollfält som anger om det spelas upp en röst när fokus når den när man går i listan med piltangenterna.",
+    "message": "Spela upp när du bläddrar"
+  },
+  "voicesArrowsLive": {
+    "description": "Bekräftelse för skärmläsare, som läggs till efter det första \"Spelar upp <röst>\"-utropet i inställningarnas lista för Röster, som säger att piltangenterna just har blivit hörbara. Återger samma formulering som reglaget \"Spela när du flyttar\".",
+    "message": "Pilarna spelar nu när du flyttar. Esc stoppar."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Notis under menyplatserna för värdar som har inbyggda röster (t.ex. Pis 8 inbyggda), som studion inte hanterar; $host$ är assistenten.",
+    "message": "$host$ egna inbyggda röster visas alltid också i dess meny.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Variant av voicesBuiltinsNote för en värd utan röstmeny i chatten (Pi tog bort sin meny 2026), där originalets löfte att de inbyggda rösterna \"visas i dess meny\" skulle vara fel; $host$ är assistenten.",
+    "message": "$host$ har också egna inbyggda röster, som inte listas här.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Förloppsvisning i inställningarnas kontrollrad för Röster: hur många av de listade rösterna användaren redan har lyssnat på. Bara siffror, så att det läses korrekt även vid 1 — Chrome i18n har inga pluralformer.",
+    "message": "$heard$ av $total$ hörda",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Del av en rads tillgängliga namn i inställningarnas lista för Röster som markerar en röst som den här profilen redan har lyssnat på. Visuellt ritas detta som bläcktäthet i röstens ljudavtryck, vilket en skärmläsare inte kan se.",
+    "message": "Hörd"
+  },
+  "voicesInHostMenu": {
+    "description": "Avsnittsrubrik ovanför raden med menyplatser i inställningarnas röststudio; $host$ är assistenten.",
+    "message": "I $host$s meny",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Kort etikett på ett röstkorts fästreglage (på-läge) i inställningarnas röststudio.",
+    "message": "✓ I menyn"
+  },
+  "voicesInUse": {
+    "description": "Bestående märkning på värdens aktuella valda röst i listan Röster i inställningarna, renderas i versaler. Avsiktligt INTE ”Talar nu”: på den här sidan spelar raderna upp sina exempelklipp, så en vald men tyst röst får inte påstå att den talar när en annan rad gör det.",
+    "message": "Används"
+  },
+  "voicesKeyboardHint": {
+    "description": "Kort tangentbordstips på en rad i inställningarnas kontrollrad för Röster. Symbolerna är tangenter: mellanslag, upp-/nedpilarna och Skift+mellanslag.",
+    "message": "Tryck på mellanslag för att lyssna, ↑↓ för att flytta mellan röster, ⇧mellanslag för att växla tillbaka."
+  },
+  "voicesLoadError": {
+    "description": "Felläge i en värds studio när värdens röstkatalog inte gick att läsa in; $host$ är assistenten.",
+    "message": "Kunde inte läsa in $host$-röster. Försök igen senare.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/hint på ett inaktiverat ”+ Meny”-reglage när värdens röstmeny i chatten redan har sitt maxantal röster.",
+    "message": "Menyn är full, ta bort en röst för att lägga till en annan"
+  },
+  "voicesMenuHint": {
+    "description": "Enradig hint bredvid rubriken ”I {host}s meny” som förklarar att raden med platser speglar röstmenyn i chatten.",
+    "message": "Det här ser du i chatten"
+  },
+  "voicesMenuOverflow": {
+    "description": "Notis under menyplatserna när användaren har fler fästa röster än vad menyn i chatten kan visa (äldre tillstånd); $count$ är hur många som inte får plats, $cap$ är menystorleken.",
+    "message": "$count$ fler fästa röster väntar utanför menyns $cap$ platser.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Singular av voicesMenuOverflow, används när exakt en fäst röst inte får plats i menyn i chatten; $cap$ är menystorleken.",
+    "message": "1 ytterligare fäst röst väntar utanför menyns $cap$ platser.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Sammanfattningsrad under inställningarnas lista för Röster som visar hur mycket av värdens röstmeny i chatten som är fylld; $host$ är assistenten, $used$ hur många platser som är upptagna, $cap$ hur många det finns. Formulerad för att läsas korrekt även vid 1 — Chrome i18n har inga pluralformer.",
+    "message": "$host$-meny: $used$ av $cap$ platser",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Rubrik för gruppen längst ned i inställningarnas lista för Röster som innehåller röster utan något provklipp att spela; $count$ är hur många. Formulerad för att läsas korrekt även vid 1 — Chrome i18n har inga pluralformer.",
+    "message": "Inget prov ännu ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Visas i röstkatalogen i inställningarna när röstlistan är tom för en inloggad användare (t.ex. vid ett nätverksproblem).",
+    "message": "Röster kunde inte läsas in just nu. Försök igen senare."
+  },
+  "voicesNowPlaying": {
+    "description": "Skärmläsarutrop när ett röstprov börjar spelas upp i inställningarnas lista för Röster; $name$ är rösten.",
+    "message": "Spelar upp $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Knapp i inställningarnas kontrollrad för Röster som spelar varje röst som listas just nu, en efter en; $count$ är hur många. Formulerad för att läsas korrekt även vid 1 — Chrome i18n har inga pluralformer.",
+    "message": "Spela alla ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Knapp i inställningarnas kontrollrad för Röster vid ett återbesök: spelar bara de listade rösterna som du inte har lyssnat på ännu; $count$ är hur många. Formulerad för att läsas korrekt även vid 1 — Chrome i18n har inga pluralformer.",
+    "message": "Spela nya ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Rad i inställningarnas kontrollfält för Röster när webbläsaren vägrade spela upp ett prov eftersom sidan ännu inte haft någon användarinteraktion.",
+    "message": "Klicka på en röst för att aktivera ljud."
+  },
+  "voicesPreview": {
+    "description": "Tillgänglighetsetikett för uppspelningsknappen (▶) som låter användaren provlyssna på en rösts kostnadsfria provklipp på en radrad; $name$ är röstens namn.",
+    "message": "Spela upp ett prov av $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Tillgängligt namn för listan Röster i inställningarna (en listbox med alla röster, en rad per röst).",
+    "message": "Röster, ordnade från mörkast till ljusast"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Tillgänglighetsetikett för ett röstkorts fästreglage (på-läge) och en menyplats borttagningsknapp; $name$ är rösten, $host$ assistenten.",
+    "message": "Ta bort $name$ från $host$s meny",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Rad i inställningarnas kontrollfält för Röster när en rösts provklipp inte kunde läsas in eller spelas upp; $name$ är den rösten. Icke-modalt — en serie prov fortsätter förbi den.",
+    "message": "Kunde inte spela upp provet för $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Underrubrik för röstkatalogavsnittet i inställningsfliken AI Chat",
+    "message": "Välj rösten som läser upp svaren på varje webbplats."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Underrubrik under rubriken Röster i inställningarna, för den tonhöjdsordnade raden av röster.",
+    "message": "Varje röst, från mörkast till ljusast. Lyssna och välj."
+  },
+  "voicesSectionTitle": {
+    "description": "Rubrik för röstkatalogavsnittet i inställningsfliken AI Chat",
+    "message": "Röster"
+  },
+  "voicesShelfEveryday": {
+    "description": "Grupprubrik för röster i värdeklassen i inställningarnas röstkatalog. Renderas med versaler via CSS.",
+    "message": "Vardagsröster"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Enradig notis bredvid grupprubriken Vardags i inställningarnas röststudio; det enda stället där studion anger hur mycket längre denna nivå räcker jämfört med HD.",
+    "message": "Naturligt och tydligt — du kan lyssna ungefär 20× längre än med HD."
+  },
+  "voicesShelfHd": {
+    "description": "Grupprubrik för premiumröster (HD) i inställningarnas röstkatalog. Renderas med versaler via CSS.",
+    "message": "HD-röster"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Enradig notis bredvid HD-grupprubriken i inställningarnas röststudio.",
+    "message": "Vårt fylligaste, mest uttrycksfulla ljud."
+  },
+  "voicesShowAll": {
+    "description": "Alternativ i inställningarnas \"Visa\"-filter för Röster: ingen filtrering, alla röster listas.",
+    "message": "Alla röster"
+  },
+  "voicesShowEveryday": {
+    "description": "Alternativ i inställningarnas \"Visa\"-filter för Röster: listar bara standardrösterna (icke-HD).",
+    "message": "Endast standard"
+  },
+  "voicesShowHd": {
+    "description": "Alternativ i inställningarnas \"Visa\"-filter för Röster: listar bara premiumrösterna (HD).",
+    "message": "Endast HD"
+  },
+  "voicesShowLabel": {
+    "description": "Etikett på filtret i inställningarnas kontrollfält för Röster som begränsar vilka röster som visas i listan.",
+    "message": "Visa"
+  },
+  "voicesShowUnheard": {
+    "description": "Alternativ i inställningarnas \"Visa\"-filter för Röster: listar bara rösterna som användaren inte har lyssnat på än.",
+    "message": "Inte lyssnat på än"
+  },
+  "voicesSpeakingNow": {
+    "description": "Statusetikett på värdens aktuella valda röst i inställningarnas röststudio (menyplats och röstkort).",
+    "message": "Talar nu"
+  },
+  "voicesSpeaksWith": {
+    "description": "Ögonbrynsrad ovanför den aktuella röstens namn i inställningarnas röststudio; $host$ är assistenten (t.ex. Pi). Renderas i versaler av CSS.",
+    "message": "$host$ talar med",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Scennotis när värden levererar eget ljud (t.ex. Pi), så att valet av en Say, Pi-röst ersätter värdens.",
+    "message": "$host$ använder sin egen röst tills du väljer en nedan.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Scennotis när värden inte har någon egen röst (t.ex. Claude), så ingenting läses upp förrän en Say, Pi-röst väljs.",
+    "message": "$host$ läser inte upp svar förrän du väljer en nedan.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Rubrik på scenen i inställningarnas röststudio när värden inte har någon SayPi-röst vald; $host$ är assistenten (t.ex. Pi, Claude). Renderas i namn-storlek.",
+    "message": "Välj hur $host$ låter",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Knapp på scenen i inställningarnas röststudio som spelar upp den aktuella röstens kostnadsfria provklipp.",
+    "message": "Lyssna på ett prov"
+  },
+  "voicesStopPlayback": {
+    "description": "Knapp i inställningarnas kontrollrad för Röster som stoppar serien av prov som startades av \"Spela alla\".",
+    "message": "Stoppa"
+  },
+  "voicesSweepPosition": {
+    "description": "Visar aktuell position i inställningarnas kontrollfält för Röster medan \"Spela alla\" går igenom listan; $index$ är rösten som spelas nu och $total$ hur många som är i kö.",
+    "message": "$index$ av $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Tillgänglighetsetikett för jämförelsekontrollen i inställningarnas kontrollrad för Röster, som spelar upp den andra rösten av de två senast hörda; $name$ är den rösten.",
+    "message": "Växla tillbaka till $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Rad i inställningarnas kontrollfält för Röster när \"Spela alla\" trycks på en lista som är för lång att lyssna igenom; $count$ är hur många röster och $minutes$ ungefär hur många minuter de skulle ta. Förkortat \"min\" så att det läses rätt vid 1 — Chrome i18n saknar pluralformer.",
+    "message": "Det är $count$ röster — cirka $minutes$ min. Begränsa listan först.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Tillgänglighetsetikett för knappen ”använd den här rösten” per värd i röstkatalogen i inställningarna; $name$ är rösten, $host$ är assistenten (t.ex. Pi, Claude).",
+    "message": "Använd $name$ på $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Kort etikett på knappen ”använd den här rösten” per värd i den enhetliga röstkatalogen i inställningarna (värden visas bredvid).",
+    "message": "Använd"
+  },
+  "voicesYourVoice": {
+    "description": "Knapp i kontrollraden i inställningarnas lista för Röster som flyttar fokus till raden för den röst som den här värden använder just nu; $name$ är den rösten.",
+    "message": "Din röst: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Fel som uppstår när webbläsaren inte kan allokera tillräckligt med WebAssembly-minne för röstigenkänningsmodellen.",
+    "message": "Röstigenkänning kan inte starta: inte tillräckligt med WebAssembly-minne för röstmodellen. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Fel som uppstår när webbläsaren inte exponerar det initiala WebAssembly-minnet som behövs för att köra röstigenkänningsmodellen.",
+    "message": "Röstigenkänning kan inte starta: WebAssembly-minne är inte tillgängligt i den här webbläsaren."
   }
 }

@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Lợi ích liệt kê trong hộp thoại đăng nhập - tăng hạn mức sử dụng.",
+    "message": "Hạn mức sử dụng cao hơn với tài khoản miễn phí"
+  },
+  "authBenefitPremium": {
+    "description": "Lợi ích liệt kê trong hộp thoại đăng nhập - tính năng cao cấp trên các chatbot.",
+    "message": "Tính năng cao cấp và hỗ trợ chatbot"
+  },
+  "authBenefitSupport": {
+    "description": "Lợi ích liệt kê trong hộp thoại đăng nhập - hỗ trợ ưu tiên.",
+    "message": "Ưu tiên hỗ trợ khi có sự cố"
+  },
+  "authBenefitSync": {
+    "description": "Lợi ích liệt kê trong hộp thoại đăng nhập - đồng bộ cài đặt.",
+    "message": "Đồng bộ cài đặt giọng nói ở mọi nơi"
+  },
+  "authBenefitTTS": {
+    "description": "Lợi ích liệt kê trong hộp thoại đăng nhập - tính năng TTS.",
+    "message": "Giọng chuyển văn bản thành giọng nói (gói trả phí)"
+  },
+  "authBenefitUsage": {
+    "description": "Lợi ích liệt kê trong hộp thoại đăng nhập - theo dõi mức sử dụng.",
+    "message": "Theo dõi mức sử dụng giọng nói trên các thiết bị"
+  },
+  "authPromptModalFull": {
+    "description": "Mô tả cho hộp thoại đăng nhập đầy đủ kèm đề xuất giá trị.",
+    "message": "Bạn đang dùng SayPi rất hiệu quả. Đăng nhập để có hạn mức cao hơn, giọng chuyển văn bản thành giọng nói và các tính năng cao cấp trên mọi chatbot được hỗ trợ."
+  },
+  "authPromptModalSoft": {
+    "description": "Mô tả cho hộp thoại đăng nhập dạng nhẹ.",
+    "message": "Tạo tài khoản SayPi miễn phí để có hạn mức cao hơn và dùng các tính năng giọng nói cao cấp."
+  },
+  "authPromptTitle": {
+    "description": "Tiêu đề cho hộp thoại đăng nhập.",
+    "message": "Mở khóa thêm tính năng giọng nói"
+  },
+  "authPromptToast": {
+    "description": "Thông báo dạng toast khuyến khích người dùng đăng nhập.",
+    "message": "Đăng nhập SayPi để có hạn mức cao hơn và tính năng cao cấp"
+  },
   "autoReadAloudChatGPT": {
     "description": "Nhãn cho hộp kiểm bật/tắt tính năng đọc tự động các phản hồi của ChatGPT trong cuộc gọi thoại.",
     "message": "Đọc tự động (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Vô hiệu hóa văn bản để nói"
   },
+  "dismiss": {
+    "message": "Hiểu rồi",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Đuổi đi"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Tập trung"
   },
+  "errorVadInitFailed": {
+    "description": "Thông báo lỗi hiển thị khi phát hiện hoạt động giọng nói không khởi tạo được.",
+    "message": "Không khởi tạo được phát hiện giọng nói"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Thông báo lỗi hiển thị khi có lỗi không mong muốn xảy ra trong lúc thiết lập ghi âm giọng nói.",
+    "message": "Không thiết lập được ghi âm giọng nói"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Thông báo lỗi hiển thị khi máy khách phát hiện giọng nói không thể bắt đầu ghi.",
+    "message": "Không bắt đầu được ghi âm giọng nói"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Thông báo lỗi hiển thị khi máy khách phát hiện giọng nói (VAD) không khả dụng nên không thể bắt đầu ghi.",
+    "message": "Không thể ghi âm giọng nói"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Thoát Chế độ Tập Trung"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Ghi chú một dòng hiển thị trong menu giọng nói khi có cả giọng cao cấp (HD) và giọng tiết kiệm.",
+    "message": "Giọng HD dùng hạn mức hằng tháng của bạn nhanh hơn khoảng 20×."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Tucking cái này đi ..."
   },
+  "maybeLater": {
+    "description": "Văn bản nút để đóng lời nhắc đăng nhập.",
+    "message": "Để sau"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Cài đặt micrô của bạn không đáp ứng các thông số kỹ thuật bắt buộc. \nHãy thử sử dụng micrô khác hoặc điều chỉnh cài đặt âm thanh của bạn."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Không thể truy cập micrô. \nVui lòng kiểm tra cài đặt thiết bị của bạn và thử lại."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Thông báo lỗi hiển thị khi quyền micrô bị từ chối sau luồng lời nhắc cấp quyền.",
+    "message": "Bạn chưa cấp quyền micrô. Hãy đảm bảo bạn đã cho phép trong lời nhắc và trong phần cài đặt của tiện ích."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "chính xác"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Phản hồi nhanh nhất nhưng kém chính xác hơn. \nDễ bị gián đoạn."
   },
+  "moreVoices": {
+    "description": "Dòng menu liên kết từ menu giọng nói trong trang đến danh mục giọng nói đầy đủ trong phần cài đặt tiện ích.",
+    "message": "Thêm giọng nói…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Tên gọi trợ lý"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Không đăng nhập"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Nhãn nút mở ChatGPT.",
+    "message": "Mở ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Nhãn nút mở Claude.ai.",
+    "message": "Mở Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Nhãn nút mở Pi.ai.",
+    "message": "Mở Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Tùy chọn môi trường: ở gần người khác.",
+    "message": "Gần người khác"
+  },
+  "onboarding_envMixed": {
+    "description": "Tùy chọn môi trường: kết hợp không gian riêng tư và dùng chung.",
+    "message": "Ở nhiều nơi khác nhau"
+  },
+  "onboarding_envPrivate": {
+    "description": "Tùy chọn môi trường: một không gian riêng tư.",
+    "message": "Ở nơi riêng tư"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Xác nhận hiển thị khi câu trả lời về môi trường để chế độ yên lặng tắt.",
+    "message": "Đã rõ — chúng tôi sẽ giữ các cài đặt nghe và phát tiêu chuẩn."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Xác nhận hiển thị khi câu trả lời về môi trường bật chế độ yên lặng.",
+    "message": "Đã bật chế độ yên lặng — chúng tôi sẽ bắt tiếng nói nhỏ hơn và trả lời nhỏ, để bạn có thể trò chuyện kín đáo."
+  },
+  "onboarding_envTitle": {
+    "description": "Tiêu đề cho câu hỏi trong phần giới thiệu về môi trường của người dùng.",
+    "message": "Bạn thường nói chuyện ở đâu?"
+  },
+  "onboarding_footer": {
+    "description": "Văn bản chân trang trên trang giới thiệu khi chạy lần đầu.",
+    "message": "Bạn có thể xem lại mục này bất cứ lúc nào trong phần cài đặt của Say, Pi. Quyền riêng tư của bạn rất quan trọng — âm thanh chỉ được ghi khi đang trong một cuộc gọi."
+  },
+  "onboarding_heading": {
+    "description": "Tiêu đề chính trên trang hướng dẫn lần chạy đầu tiên.",
+    "message": "🗣️ Chào mừng đến với Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Đoạn giới thiệu trên trang hướng dẫn lần chạy đầu tiên.",
+    "message": "Bạn chỉ còn hai bước nữa là có cuộc trò chuyện đầu tiên với AI bằng giọng nói. Nói nhanh hơn gõ khoảng 3× — cùng thiết lập nhé."
+  },
+  "onboarding_micTestButton": {
+    "description": "Nút bắt đầu bài kiểm tra mic trong phần giới thiệu, không có rủi ro.",
+    "message": "🎤 Thử mic của bạn"
+  },
+  "onboarding_micTestDone": {
+    "description": "Trạng thái hiển thị sau khi bài kiểm tra mic trong phần giới thiệu hoàn tất thành công.",
+    "message": "Ổn rồi — mic của bạn hoạt động! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Trạng thái hiển thị khi bài kiểm tra mic trong phần giới thiệu đang đo tín hiệu đầu vào.",
+    "message": "Đang nghe — hãy nói gì đó! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Trạng thái hiển thị khi bài kiểm tra mic trong phần giới thiệu đang chờ cấp quyền.",
+    "message": "Đang yêu cầu quyền micro…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Nhãn nút để dừng bài kiểm tra mic trong phần giới thiệu khi đang chạy.",
+    "message": "Dừng thử"
+  },
+  "onboarding_step1Body": {
+    "description": "Nội dung của bước hướng dẫn đầu tiên giải thích cách ghim tiện ích.",
+    "message": "Nhấn biểu tượng mảnh ghép 🧩 ở góc trên bên phải trình duyệt, rồi nhấn ghim 📌 cạnh Say, Pi. Như vậy nút gọi chỉ cách một lần nhấn."
+  },
+  "onboarding_step1Title": {
+    "description": "Tiêu đề của bước hướng dẫn đầu tiên (ghim tiện ích).",
+    "message": "Ghim Say, Pi vào thanh công cụ"
+  },
+  "onboarding_step2Body": {
+    "description": "Nội dung của bước hướng dẫn thứ hai giải thích cách bắt đầu cuộc trò chuyện bằng giọng nói.",
+    "message": "Vào một trong các trợ lý được hỗ trợ bên dưới, rồi nhấn nút gọi Say, Pi và chào một câu. Lần đầu chúng tôi sẽ xin quyền micrô — điều đó là bình thường, và chúng tôi chỉ nghe khi bạn đang trong cuộc gọi."
+  },
+  "onboarding_step2Title": {
+    "description": "Tiêu đề của bước hướng dẫn thứ hai (bắt đầu cuộc trò chuyện).",
+    "message": "Mở một chat AI và bắt đầu nói"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Cho phép micrô"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Hướng dẫn khôi phục khi quyền micro bị chặn.",
+    "message": "Trình duyệt của bạn đang chặn micro. Nhấp vào biểu tượng camera hoặc ổ khóa trên thanh địa chỉ, đặt Microphone thành \"Allow\", rồi thử lại. Trên macOS, cũng kiểm tra System Settings → Privacy & Security → Microphone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Tiêu đề của bảng khôi phục khi quyền micro bị từ chối/bị chặn.",
+    "message": "Quyền truy cập micro đang bị chặn"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Hướng dẫn khôi phục khi micro đang được dùng ở nơi khác.",
+    "message": "Một ứng dụng hoặc thẻ khác có thể đang dùng micro của bạn. Hãy đóng mọi thứ khác có thể đang ghi âm (cuộc gọi video, ghi âm giọng nói), rồi thử lại."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Tiêu đề của bảng khôi phục khi micro đang được một ứng dụng khác sử dụng.",
+    "message": "Micro của bạn đang bận"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Hướng dẫn khôi phục khi không có thiết bị micro khả dụng.",
+    "message": "Chúng tôi không tìm thấy micro. Hãy cắm một cái (hoặc kết nối tai nghe có mic), đảm bảo nó được chọn làm thiết bị đầu vào, rồi thử lại."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Tiêu đề của bảng khôi phục khi không có thiết bị micro khả dụng.",
+    "message": "Không tìm thấy micro"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Hướng dẫn khôi phục cho lỗi micro không xác định.",
+    "message": "Đã xảy ra sự cố khi truy cập micro của bạn. Hãy kiểm tra xem micro đã được kết nối và được cho phép trong cài đặt trình duyệt, rồi thử lại."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Tiêu đề của bảng khôi phục cho lỗi micro không xác định.",
+    "message": "Chúng tôi không thể truy cập micro của bạn"
+  },
+  "permissions_retryButton": {
+    "description": "Nhãn cho nút yêu cầu lại quyền micro.",
+    "message": "Thử lại"
+  },
+  "permissions_revokedHeading": {
+    "description": "Tiêu đề hiển thị khi quyền truy cập micro trước đó đã được cấp nhưng sau đó bị thu hồi.",
+    "message": "🎙️ Hãy kết nối lại micro của bạn"
+  },
+  "permissions_revokedInfo": {
+    "description": "Văn bản thông tin hiển thị khi quyền truy cập micro bị thu hồi sau khi đã được cấp.",
+    "message": "Quyền truy cập micro của bạn đã bị tắt — điều này thường xảy ra sau khi cập nhật trình duyệt hoặc hệ thống. Hãy cho phép lại bên dưới và $productName$ sẽ lại lắng nghe khi bạn đang trong cuộc gọi.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Hồ sơ"
+  },
+  "quietModeLabel": {
+    "description": "Nhãn cho công tắc bật chế độ yên lặng/thì thầm.",
+    "message": "Chế độ yên lặng"
+  },
+  "quietModeTooltip": {
+    "description": "Chú giải giải thích chế độ yên lặng/thì thầm hoạt động như thế nào.",
+    "message": "Nói khẽ — nhận giọng nói nhỏ hơn và giảm âm lượng phản hồi của trợ lý, để bạn có thể dùng giọng nói khi có người xung quanh."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Chữ trên nút đăng nhập khi quá trình xác thực đang diễn ra.",
+    "message": "Đang đăng nhập..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Hiệu ứng âm thanh"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Hiệu ứng âm thanh bị tắt trong Firefox để ngăn sự cố phản hồi âm thanh."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Dòng tiêu đề của thông báo một lần về lợi ích tốc độ, hiển thị sau lần trao đổi bằng giọng nói đầu tiên.",
+    "message": "Hay đấy — nói nhanh hơn gõ khoảng 3×."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Dòng thứ hai (không bắt buộc) của thông báo lợi ích tốc độ, hiển thị số phút nguyên đã tiết kiệm.",
+    "message": "Bạn đã nói nhanh hơn việc gõ khoảng $minutes$ phút.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Chỉ gửi khi bạn nhấn nút"
   },
+  "surveyQuestion": {
+    "description": "Câu hỏi duy nhất của khảo sát siêu ngắn một lần sau khi người dùng đạt được một mốc (post-win).",
+    "message": "Bạn thấy giọng nói dùng đến giờ thế nào?"
+  },
+  "surveyRatingLabel": {
+    "description": "Nhãn hỗ trợ tiếp cận cho nút chấm điểm khảo sát.",
+    "message": "Chấm $rating$ trên 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Lời cảm ơn hiển thị sau khi người dùng trả lời khảo sát post-win.",
+    "message": "Cảm ơn, điều đó giúp chúng tôi cải thiện Say, Pi."
+  },
   "tabAIChat": {
     "description": "Nhãn tab cho phần cài đặt trò chuyện AI.",
     "message": "Trò Chuyện AI"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Nhãn tab cho phần cài đặt chung.",
     "message": "Chung"
+  },
+  "tabVoices": {
+    "description": "Nhãn tab cho mục cài đặt giọng nói (danh mục giọng theo từng trang).",
+    "message": "Giọng nói"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "Tín dụng"
   },
+  "ttsCreditsRemaining": {
+    "description": "Văn bản hiển thị hạn mức TTS còn lại dưới dạng một nhóm credit theo từng giọng (saypi-api #181 Stage 2), không phải số ký tự thô.",
+    "message": "Còn $credits$ credit",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Tạo giọng nói"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Lưu ý! Phát lại giọng nói chưa khả dụng trên $browserName$ với $chatbotName$. Tin tốt? Đầu vào bằng giọng nói hoạt động tuyệt vời! Đối với TTS, hãy thử Chrome hoặc Edge trên máy tính để bàn.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS không khả dụng trên $browserName$ + $chatbotName$. Đầu vào bằng giọng nói hoạt động! Hãy thử Chrome trên máy tính để bàn cho TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Voice"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Chi tiết VAD khi phát hiện âm thanh giống lời nói nhưng quá nhỏ / độ tin cậy thấp để chuyển thành văn bản (bị chặn phía client ở cổng chấp nhận).",
+    "message": "Âm thanh quá nhỏ để chuyển thành văn bản"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Chi tiết VAD giải thích cuộc gọi kết thúc vì micrô đã được một tab mới hơn giành quyền.",
+    "message": "Đầu vào giọng nói đã chuyển sang tab khác"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Giọng nói không có sẵn. \nHãy thử Chrome hoặc Firefox trên máy tính để bàn."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Lưu ý! Phát lại giọng nói chưa khả dụng trên $browserName$ với $chatbotName$. Tin tốt? Đầu vào bằng giọng nói hoạt động tuyệt vời! Đối với TTS, hãy thử Chrome hoặc Edge trên máy tính để bàn.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS không khả dụng trên $browserName$ + $chatbotName$. Đầu vào bằng giọng nói hoạt động! Hãy thử Chrome trên máy tính để bàn cho TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Hiểu rồi",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Trạng thái VAD hiển thị trên một tab có đầu vào giọng nói đã bị một tab khác tiếp quản.",
+    "message": "Đã tạm dừng"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Xem chi tiết"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Lời giới thiệu chung được phát khi giọng SayPi đã chọn không có kịch bản giới thiệu riêng cho giọng đó (và không có tin nhắn gần đây để đọc lại).",
+    "message": "Chào bạn, tôi là $voice$. Đây là giọng của tôi. Mong bạn thích giọng này.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hoan hô! \nXin chào! \nbạn ơi! \nTôi là Pi, trợ lý AI đa ngôn ngữ của bạn. \nVới 32 ngôn ngữ trong tầm tay của tôi, chúng ta có thể khám phá các ý tưởng và nền văn hóa từ khắp nơi trên thế giới. \nBạn nghĩ gì về giọng nói này?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Cài đặt giọng nói"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Phụ đề dự phòng cho một hàng giọng trong danh mục giọng nói của phần cài đặt khi giọng không có mô tả; $count$ là số ngôn ngữ mà giọng hỗ trợ.",
+    "message": "Nói $count$ ngôn ngữ",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Addison' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Tươi tắn và diễn đạt mạch lạc"
+  },
+  "voiceTagline_alloy": {
+    "description": "Câu khẩu hiệu tính cách được viết sẵn cho giọng \"Alloy\" (studio Giọng nói trong cài đặt; bản đồ định danh giọng phía máy khách).",
+    "message": "Cân bằng, đa dụng"
+  },
+  "voiceTagline_ash": {
+    "description": "Câu khẩu hiệu tính cách được viết sẵn cho giọng \"Ash\" (studio Giọng nói trong cài đặt; bản đồ định danh giọng phía máy khách).",
+    "message": "Trầm, sâu sắc, điềm tĩnh"
+  },
+  "voiceTagline_ballad": {
+    "description": "Câu khẩu hiệu tính cách được viết sẵn cho giọng \"Ballad\" (studio Giọng nói trong cài đặt; bản đồ định danh giọng phía máy khách).",
+    "message": "Mượt mà, du dương"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Cassidy' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Thân thiện và thẳng thắn"
+  },
+  "voiceTagline_cedar": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Cedar' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Điềm tĩnh và đáng tin cậy"
+  },
+  "voiceTagline_coral": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Coral' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Tươi sáng, giàu năng lượng"
+  },
+  "voiceTagline_echo": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Echo' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Gọn gàng và trung tính"
+  },
+  "voiceTagline_fable": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Fable' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Nhịp điệu kể chuyện"
+  },
+  "voiceTagline_finn": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Finn' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Tươi mới và tràn đầy năng lượng"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Jamahal' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Trầm ấm và cuốn hút"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Jarnathan' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Baritone mượt mà kiểu đêm muộn"
+  },
+  "voiceTagline_jeff": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Jeff' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Thẳng thắn và vững vàng"
+  },
+  "voiceTagline_jessica": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Jessica' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Ấm áp, điềm tĩnh và chỉn chu"
+  },
+  "voiceTagline_joey": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Joey' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Tự nhiên, trò chuyện kiểu Mỹ"
+  },
+  "voiceTagline_juniper": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Juniper' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Gọn gàng, sáng, giàu biểu cảm"
+  },
+  "voiceTagline_lucy": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Lucy' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Dịu dàng và trong sáng"
+  },
+  "voiceTagline_marin": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Marin' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Ấm áp, bình thản như radio buổi sáng"
+  },
+  "voiceTagline_mark": {
+    "description": "Dòng mô tả tính cách được viết sẵn cho giọng 'Mark' (studio Giọng nói trong phần cài đặt; bản đồ nhận diện giọng phía máy khách).",
+    "message": "Rõ ràng, tự tin như người dẫn chuyện"
+  },
+  "voiceTagline_nova": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Nova' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Nhanh nhạy và ham khám phá"
+  },
+  "voiceTagline_onyx": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Onyx' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Trầm sâu, vang và uy nghi"
+  },
+  "voiceTagline_paola": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Paola' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Ấm áp kiểu Ý, giàu biểu cảm"
+  },
+  "voiceTagline_sage": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Sage' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Rõ ràng, nhẹ nhàng"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Dòng mô tả tính cách do tác giả viết cho giọng 'Shimmer' (trong phần cài đặt Voices studio; bản đồ nhận diện giọng ở phía máy khách).",
+    "message": "Nhẹ và thoáng"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Nhãn ngắn trên công tắc ghim của thẻ giọng (trạng thái tắt) trong studio Giọng nói của cài đặt; nhấn để thêm giọng vào menu trong chat của host.",
+    "message": "+ Menu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Nhãn trợ năng cho công tắc ghim của thẻ giọng (trạng thái tắt); $name$ là giọng, $host$ là trợ lý.",
+    "message": "Thêm $name$ vào menu của $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Nhãn trên nút gạt trong thanh điều khiển Giọng nói cho biết việc duyệt danh sách bằng phím mũi tên có phát từng giọng khi tiêu điểm đến đó hay không.",
+    "message": "Phát khi bạn di chuyển"
+  },
+  "voicesArrowsLive": {
+    "description": "Xác nhận của trình đọc màn hình, được thêm vào thông báo đầu tiên \"Đang phát <giọng>\" trong danh sách Giọng nói của phần cài đặt, cho biết các phím mũi tên vừa trở nên có âm thanh. Phản chiếu đúng cách diễn đạt của nút bật/tắt \"Phát khi di chuyển\".",
+    "message": "Mũi tên giờ sẽ phát khi bạn di chuyển. Esc sẽ dừng."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Ghi chú dưới các ô trong menu cho các host có giọng nói gốc đi kèm (ví dụ: 8 giọng tích hợp của Pi), mà studio không quản lý; $host$ là trợ lý.",
+    "message": "Các giọng nói tích hợp sẵn của $host$ cũng luôn xuất hiện trong menu của nó.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Biến thể của voicesBuiltinsNote cho một host không có menu giọng nói trong khung chat (Pi đã ngừng menu vào năm 2026), nơi lời hứa của bản gốc rằng các giọng tích hợp 'xuất hiện trong menu của nó' sẽ không đúng; $host$ là trợ lý.",
+    "message": "$host$ cũng có các giọng nói tích hợp sẵn, nhưng không được liệt kê ở đây.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Chỉ báo tiến độ trong thanh điều khiển Giọng nói của phần cài đặt: số giọng trong danh sách mà người dùng đã nghe. Chỉ là số nên đọc đúng khi là 1 vì Chrome i18n không có dạng số nhiều.",
+    "message": "Đã nghe $heard$ trên $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Một phần của tên hỗ trợ tiếp cận của một hàng giọng trong danh sách Giọng nói của phần cài đặt, đánh dấu một giọng mà hồ sơ này đã nghe rồi. Về mặt thị giác, điều này được thể hiện bằng mật độ mực trên \"dấu vân âm\" của giọng, thứ mà trình đọc màn hình không nhìn thấy.",
+    "message": "Đã nghe"
+  },
+  "voicesInHostMenu": {
+    "description": "Tiêu đề mục phía trên hàng các ô menu trong studio Giọng nói của cài đặt; $host$ là trợ lý.",
+    "message": "Trong menu của $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Nhãn ngắn trên công tắc ghim của thẻ giọng (trạng thái bật) trong studio Giọng nói của cài đặt.",
+    "message": "✓ Trong menu"
+  },
+  "voicesInUse": {
+    "description": "Huy hiệu cố định trên giọng hiện được chọn của host trong danh sách Giọng nói của cài đặt, được hiển thị dạng chữ hoa. Cố ý KHÔNG dùng \"Đang nói\": trên trang này, mỗi hàng phát clip mẫu, nên một giọng được chọn nhưng im lặng không được tự nhận là đang nói khi một hàng khác đang phát.",
+    "message": "Đang dùng"
+  },
+  "voicesKeyboardHint": {
+    "description": "Gợi ý phím tắt một dòng trong thanh điều khiển Giọng nói của phần cài đặt. Các ký hiệu là phím: Space, mũi tên lên/xuống và Shift+Space.",
+    "message": "Nhấn Space để nghe, ↑↓ để chuyển giữa các giọng, ⇧Space để chuyển lại."
+  },
+  "voicesLoadError": {
+    "description": "Trạng thái lỗi bên trong studio của một host khi danh mục giọng nói của host đó không tải được; $host$ là trợ lý.",
+    "message": "Không thể tải giọng nói của $host$. Vui lòng thử lại sau.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/gợi ý trên công tắc \"+ Menu\" bị vô hiệu hóa khi menu trong chat của host đã có số giọng tối đa.",
+    "message": "Menu đã đầy, hãy gỡ một giọng để thêm giọng khác"
+  },
+  "voicesMenuHint": {
+    "description": "Gợi ý một dòng cạnh tiêu đề \"Trong menu của {host}\", giải thích rằng hàng các ô phản chiếu menu giọng trong chat.",
+    "message": "Những gì bạn sẽ thấy trong chat"
+  },
+  "voicesMenuOverflow": {
+    "description": "Ghi chú dưới các ô trong menu khi người dùng ghim nhiều giọng nói hơn số menu trong khung chat có thể hiển thị (trạng thái cũ); $count$ là số lượng không vừa, $cap$ là kích thước menu.",
+    "message": "Còn $count$ giọng nói đã ghim đang chờ ngoài $cap$ vị trí của menu.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Dạng số ít của voicesMenuOverflow, dùng khi chỉ có đúng một giọng nói đã ghim không vừa trong menu trong khung chat; $cap$ là kích thước menu.",
+    "message": "Còn 1 giọng nói đã ghim đang chờ ngoài $cap$ vị trí của menu.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Dòng tóm tắt dưới danh sách Giọng nói trong phần cài đặt cho biết mức độ lấp đầy của menu giọng trong chat của máy chủ; $host$ là trợ lý, $used$ là số vị trí đã dùng, $cap$ là tổng số vị trí. Diễn đạt để đọc đúng khi là 1 vì Chrome i18n không có dạng số nhiều.",
+    "message": "Menu của $host$: $used$ trên $cap$ vị trí",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Tiêu đề cho nhóm ở cuối danh sách Giọng nói trong phần cài đặt, chứa các giọng chưa có đoạn mẫu để phát; $count$ là số lượng. Diễn đạt để đọc đúng khi là 1 vì Chrome i18n không có dạng số nhiều.",
+    "message": "Chưa có mẫu ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Hiển thị trong danh mục giọng nói của phần cài đặt khi danh sách giọng nói trống với người dùng đã đăng nhập (ví dụ: sự cố mạng).",
+    "message": "Hiện không tải được giọng nói. Vui lòng thử lại sau."
+  },
+  "voicesNowPlaying": {
+    "description": "Thông báo của trình đọc màn hình khi đoạn mẫu của một giọng bắt đầu phát trong danh sách Giọng nói của phần cài đặt; $name$ là giọng đó.",
+    "message": "Đang phát $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Nút trong thanh điều khiển Giọng nói của phần cài đặt phát lần lượt mọi giọng đang được liệt kê; $count$ là số lượng. Diễn đạt để đọc đúng khi là 1 vì Chrome i18n không có dạng số nhiều.",
+    "message": "Phát tất cả ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Nút trong thanh điều khiển Giọng nói của phần cài đặt khi quay lại: chỉ phát các giọng được liệt kê mà bạn chưa nghe; $count$ là số lượng. Diễn đạt để đọc đúng khi là 1 vì Chrome i18n không có dạng số nhiều.",
+    "message": "Phát mới ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Dòng trong thanh điều khiển Giọng nói ở phần cài đặt khi trình duyệt từ chối phát mẫu vì trang chưa có tương tác của người dùng.",
+    "message": "Nhấp vào bất kỳ giọng nào để bật âm thanh."
+  },
+  "voicesPreview": {
+    "description": "Nhãn hỗ trợ tiếp cận cho nút phát (▶) để nghe thử đoạn mẫu miễn phí của một giọng trong một hàng giọng; $name$ là tên của giọng.",
+    "message": "Phát đoạn mẫu của $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Tên hỗ trợ tiếp cận của danh sách Giọng nói trong cài đặt (một listbox gồm mọi giọng nói, mỗi hàng một giọng).",
+    "message": "Giọng nói, sắp từ trầm nhất đến sáng nhất"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Nhãn trợ năng cho công tắc ghim của thẻ giọng (trạng thái bật) và nút gỡ trên một ô menu; $name$ là giọng, $host$ là trợ lý.",
+    "message": "Gỡ $name$ khỏi menu của $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Dòng trong thanh điều khiển Giọng nói ở phần cài đặt khi đoạn mẫu của một giọng không tải được hoặc không phát được; $name$ là giọng đó. Không phải hộp thoại — chuỗi phát mẫu vẫn tiếp tục sau đó.",
+    "message": "Không phát được mẫu của $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Tiêu đề phụ cho phần danh mục giọng nói trong tab AI Chat của phần cài đặt.",
+    "message": "Chọn giọng đọc to câu trả lời trên từng trang web."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Tiêu đề phụ dưới tiêu đề cài đặt Giọng nói, cho dải giọng nói được sắp theo cao độ.",
+    "message": "Mọi giọng nói, từ trầm nhất đến sáng nhất. Nghe rồi chọn."
+  },
+  "voicesSectionTitle": {
+    "description": "Tiêu đề cho phần danh mục giọng nói trong tab AI Chat của phần cài đặt.",
+    "message": "Giọng nói"
+  },
+  "voicesShelfEveryday": {
+    "description": "Tiêu đề nhóm cho các giọng ở phân khúc tiết kiệm trong danh mục giọng nói ở phần cài đặt. Được CSS hiển thị bằng chữ in hoa.",
+    "message": "Giọng hằng ngày"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Ghi chú một dòng bên cạnh tiêu đề nhóm Everyday trong studio Giọng nói của phần cài đặt; là nơi duy nhất studio nói rõ mức chênh lệch độ dài nghe của phân khúc này so với HD.",
+    "message": "Tự nhiên và rõ ràng, bạn có thể nghe lâu hơn khoảng 20× so với HD."
+  },
+  "voicesShelfHd": {
+    "description": "Tiêu đề nhóm cho các giọng cao cấp (HD) trong danh mục giọng nói ở phần cài đặt. Được CSS hiển thị bằng chữ in hoa.",
+    "message": "Giọng HD"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Ghi chú một dòng bên cạnh tiêu đề nhóm HD trong studio Giọng nói của phần cài đặt.",
+    "message": "Âm thanh phong phú và biểu cảm nhất."
+  },
+  "voicesShowAll": {
+    "description": "Tùy chọn trong bộ lọc \"Hiện\" của Giọng nói: không lọc, liệt kê mọi giọng.",
+    "message": "Tất cả giọng nói"
+  },
+  "voicesShowEveryday": {
+    "description": "Tùy chọn trong bộ lọc \"Hiện\" của Giọng nói: chỉ liệt kê các giọng tiêu chuẩn (không HD).",
+    "message": "Chỉ thường"
+  },
+  "voicesShowHd": {
+    "description": "Tùy chọn trong bộ lọc \"Hiện\" của Giọng nói: chỉ liệt kê các giọng cao cấp (HD).",
+    "message": "Chỉ HD"
+  },
+  "voicesShowLabel": {
+    "description": "Nhãn trên bộ lọc trong thanh điều khiển Giọng nói ở phần cài đặt, dùng để thu hẹp các giọng được hiển thị trong danh sách.",
+    "message": "Hiện"
+  },
+  "voicesShowUnheard": {
+    "description": "Tùy chọn trong bộ lọc \"Hiện\" của Giọng nói: chỉ liệt kê các giọng mà người dùng chưa nghe thử.",
+    "message": "Chưa nghe"
+  },
+  "voicesSpeakingNow": {
+    "description": "Nhãn trạng thái trên giọng hiện được chọn của host trong studio Giọng nói của cài đặt (ô menu và thẻ giọng).",
+    "message": "Đang nói"
+  },
+  "voicesSpeaksWith": {
+    "description": "Dòng tiêu đề nhỏ phía trên tên giọng hiện tại trên sân khấu studio Giọng nói trong cài đặt; $host$ là trợ lý (ví dụ: Pi). Được CSS hiển thị dạng chữ hoa.",
+    "message": "$host$ nói bằng",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Ghi chú trên stage khi host tự cung cấp âm thanh (ví dụ: Pi), nên việc chọn một giọng Say, Pi sẽ thay thế giọng của host.",
+    "message": "$host$ dùng giọng của chính mình cho đến khi bạn chọn một giọng bên dưới.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Ghi chú trên stage khi host không có giọng nói riêng (ví dụ: Claude), nên sẽ không có gì được đọc to cho đến khi chọn một giọng Say, Pi.",
+    "message": "$host$ sẽ không đọc to câu trả lời cho đến khi bạn chọn một giọng bên dưới.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Tiêu đề trên khu vực stage của studio Giọng nói trong cài đặt khi host chưa có giọng nói SayPi nào được chọn; $host$ là trợ lý (ví dụ: Pi, Claude). Hiển thị ở cỡ chữ tên.",
+    "message": "Chọn cách $host$ nghe như thế nào",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Nút trên stage của studio Giọng nói trong cài đặt để phát đoạn clip mẫu miễn phí của giọng nói hiện tại.",
+    "message": "Nghe một đoạn mẫu"
+  },
+  "voicesStopPlayback": {
+    "description": "Nút trong thanh điều khiển Giọng nói của phần cài đặt dừng chuỗi đoạn mẫu được bắt đầu bởi \"Phát tất cả\".",
+    "message": "Dừng"
+  },
+  "voicesSweepPosition": {
+    "description": "Chỉ báo vị trí trực tiếp trong thanh điều khiển Giọng nói ở phần cài đặt khi \"Phát tất cả\" duyệt qua danh sách; $index$ là giọng đang phát và $total$ là số lượng đang được xếp hàng.",
+    "message": "$index$ / $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Nhãn hỗ trợ tiếp cận cho nút so sánh trong thanh điều khiển Giọng nói của phần cài đặt, phát lại giọng còn lại trong hai giọng nghe gần nhất; $name$ là giọng đó.",
+    "message": "Chuyển lại sang $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Dòng trong thanh điều khiển Giọng nói ở phần cài đặt khi nhấn \"Phát tất cả\" trên một danh sách quá dài để nghe hết; $count$ là số giọng và $minutes$ là số phút ước tính. Viết tắt \"min\" để đọc đúng khi là 1 — Chrome i18n không có dạng số nhiều.",
+    "message": "Có $count$ giọng, khoảng $minutes$ min. Hãy thu hẹp danh sách trước.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Nhãn trợ năng cho nút \"dùng giọng này\" theo từng host trong danh mục giọng của cài đặt; $name$ là giọng, $host$ là trợ lý (ví dụ: Pi, Claude).",
+    "message": "Dùng $name$ trên $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Nhãn ngắn trên nút \"dùng giọng này\" theo từng host trong danh mục giọng của cài đặt hợp nhất (host được hiển thị bên cạnh).",
+    "message": "Dùng"
+  },
+  "voicesYourVoice": {
+    "description": "Nút trên thanh điều khiển trong danh sách Giọng nói của phần cài đặt, đưa tiêu điểm đến hàng của giọng mà máy chủ hiện đang dùng; $name$ là giọng đó.",
+    "message": "Giọng của bạn: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Lỗi được đưa ra khi trình duyệt không thể cấp phát đủ bộ nhớ WebAssembly cho mô hình phát hiện giọng nói.",
+    "message": "Không thể bắt đầu phát hiện giọng nói: không đủ bộ nhớ WebAssembly cho mô hình giọng nói. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Lỗi được đưa ra khi trình duyệt không cung cấp bộ nhớ WebAssembly ban đầu cần để chạy mô hình phát hiện giọng nói.",
+    "message": "Không thể bắt đầu phát hiện giọng nói: trình duyệt này không hỗ trợ bộ nhớ WebAssembly."
   }
 }

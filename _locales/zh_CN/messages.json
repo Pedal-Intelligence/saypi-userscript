@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "登录模态框中的权益：提高使用限额。",
+    "message": "免费账户提供更高使用限额"
+  },
+  "authBenefitPremium": {
+    "description": "登录模态框中的权益：覆盖各聊天机器人的高级功能。",
+    "message": "高级功能和聊天机器人支持"
+  },
+  "authBenefitSupport": {
+    "description": "登录模态框中的权益：优先支持。",
+    "message": "问题优先支持"
+  },
+  "authBenefitSync": {
+    "description": "登录模态框中的权益：设置同步。",
+    "message": "在所有地方同步语音设置"
+  },
+  "authBenefitTTS": {
+    "description": "登录模态框中的权益：TTS 功能。",
+    "message": "文字转语音音色（付费套餐）"
+  },
+  "authBenefitUsage": {
+    "description": "登录模态框中的权益：用量追踪。",
+    "message": "跨设备查看语音使用情况"
+  },
+  "authPromptModalFull": {
+    "description": "完整登录提示模态框的说明文案，包含价值主张。",
+    "message": "你对 Say, Pi 的使用非常频繁。登录以获得更高限额、文字转语音音色，以及在所有受支持的聊天机器人上的高级功能。"
+  },
+  "authPromptModalSoft": {
+    "description": "轻提示登录模态框的说明文案。",
+    "message": "创建免费的 Say, Pi 账户，以获得更高使用限额并访问高级语音功能。"
+  },
+  "authPromptTitle": {
+    "description": "登录提示模态框的标题。",
+    "message": "解锁更多语音功能"
+  },
+  "authPromptToast": {
+    "description": "提示用户登录的吐司通知。",
+    "message": "登录 Say, Pi 以获得更高限额和高级功能"
+  },
   "autoReadAloudChatGPT": {
     "description": "用于启用或禁用通话中自动朗读ChatGPT回复的复选框标签。",
     "message": "自动朗读（ChatGPT）"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "禁用文本到语音"
   },
+  "dismiss": {
+    "message": "明白了",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "解雇"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "专注"
   },
+  "errorVadInitFailed": {
+    "description": "当语音活动检测初始化失败时显示的错误提示。",
+    "message": "无法初始化语音检测"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "在设置语音录制时发生意外错误时显示的错误提示。",
+    "message": "无法设置语音录制"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "当语音检测客户端无法开始录音时显示的错误提示。",
+    "message": "无法开始语音录制"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "当语音检测（VAD）客户端不可用、因此无法开始录音时显示的错误提示。",
+    "message": "语音录制不可用"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "退出专注模式"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "当高级（HD）和超值语音都可用时，在语音菜单中显示的一行提示",
+    "message": "HD 语音会让你更快用完每月额度，约快 20 倍。"
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "把这个塞了..."
   },
+  "maybeLater": {
+    "description": "用于关闭登录提示的按钮文本。",
+    "message": "稍后再说"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "您的麦克风设置不符合所需的规格。\n尝试使用不同的麦克风或调整音频设置。"
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "无法访问麦克风。\n请检查您的设备设置并重试。"
   },
+  "microphonePermissionDeniedError": {
+    "description": "在权限提示流程结束后麦克风权限被拒绝时显示的错误提示。",
+    "message": "未授予麦克风权限。请确保你在授权提示和扩展设置中都已允许访问。"
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "准确性"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "响应速度最快，但准确性较差。\n容易打断。"
   },
+  "moreVoices": {
+    "description": "页面内声音菜单中，跳转到扩展程序设置里完整声音目录的菜单行。",
+    "message": "更多声音…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "助手昵称"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "未签名"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "打开 ChatGPT 的按钮标签。",
+    "message": "打开 ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "打开 Claude.ai 的按钮标签。",
+    "message": "打开 Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "打开 Pi.ai 的按钮标签。",
+    "message": "打开 Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "环境选项：在其他人附近。",
+    "message": "在别人身边"
+  },
+  "onboarding_envMixed": {
+    "description": "环境选项：私密空间与共享空间的混合。",
+    "message": "在不同地方都有"
+  },
+  "onboarding_envPrivate": {
+    "description": "环境选项：私密空间。",
+    "message": "在比较私密的地方"
+  },
+  "onboarding_envQuietOff": {
+    "description": "当环境选择让安静模式保持关闭时显示的确认信息。",
+    "message": "好的，我们会保留标准的监听和播放设置。"
+  },
+  "onboarding_envQuietOn": {
+    "description": "环境答案启用静音模式时显示的确认信息。",
+    "message": "静音模式已开启——我们会更灵敏地捕捉轻声说话，并轻声回复，让你更隐蔽地交流。"
+  },
+  "onboarding_envTitle": {
+    "description": "新手引导中关于用户环境问题的标题。",
+    "message": "你通常会在哪里说话？"
+  },
+  "onboarding_footer": {
+    "description": "首次运行引导页面底部文本。",
+    "message": "你可以随时在 Say, Pi 的设置中再次查看。你的隐私很重要——只有在通话进行中才会采集音频。"
+  },
+  "onboarding_heading": {
+    "description": "首次运行引导页上的主标题。",
+    "message": "🗣️ 欢迎使用 Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "首次运行引导页上的介绍段落。",
+    "message": "只需两步，你就能和 AI 开始第一次语音对话。说话大约比打字快 3 倍，我们来帮你设置好。"
+  },
+  "onboarding_micTestButton": {
+    "description": "开始无压力的新手引导麦克风测试的按钮。",
+    "message": "🎤 测试你的麦克风"
+  },
+  "onboarding_micTestDone": {
+    "description": "新手引导麦克风测试成功完成后显示的状态。",
+    "message": "很好，你的麦克风能用 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "新手引导麦克风测试正在测量输入时显示的状态。",
+    "message": "正在聆听——说点什么吧 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "新手引导麦克风测试等待权限时显示的状态。",
+    "message": "正在请求麦克风权限…"
+  },
+  "onboarding_micTestStop": {
+    "description": "麦克风测试运行时用于停止的新手引导按钮标签。",
+    "message": "停止测试"
+  },
+  "onboarding_step1Body": {
+    "description": "第一步引导的正文，说明如何固定扩展程序。",
+    "message": "点击浏览器右上角的拼图 🧩 图标，然后点击 Say, Pi 旁边的图钉 📌。这样通话按钮就只需一次点击即可打开。"
+  },
+  "onboarding_step1Title": {
+    "description": "第一步引导的标题（固定扩展程序）。",
+    "message": "将 Say, Pi 固定到工具栏"
+  },
+  "onboarding_step2Body": {
+    "description": "第二步引导的正文，说明如何开始语音对话。",
+    "message": "前往下方支持的任一助手，然后点击 Say, Pi 的通话按钮并打个招呼。第一次会请求麦克风权限，这是正常的，我们只会在你正在通话时才会监听。"
+  },
+  "onboarding_step2Title": {
+    "description": "第二步引导的标题（开始对话）。",
+    "message": "打开 AI 聊天并开始说话"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "麦克风许可"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "当麦克风权限被阻止时的恢复指引。",
+    "message": "你的浏览器正在阻止麦克风。点击地址栏中的摄像头或锁形图标，将“麦克风”设为“允许”，然后再试一次。在 macOS 上，也请检查：系统设置 → 隐私与安全性 → 麦克风。"
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "当麦克风权限被拒绝/阻止时，恢复面板的标题。",
+    "message": "麦克风访问被阻止"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "当麦克风在其他地方被占用时的恢复指引。",
+    "message": "另一个应用或标签页可能正在使用你的麦克风。关闭任何可能在录音的内容（视频通话、语音备忘录），然后再试一次。"
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "当麦克风被其他应用占用时，恢复面板的标题。",
+    "message": "你的麦克风正忙"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "当没有可用的麦克风设备时的恢复指引。",
+    "message": "我们找不到麦克风。请插入一个（或连接你的耳机），确认它已被选为输入设备，然后再试一次。"
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "当没有可用的麦克风设备时，恢复面板的标题。",
+    "message": "未找到麦克风"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "用于未知麦克风错误的恢复指引。",
+    "message": "连接麦克风时出了点问题。请确认它已连接，并且在浏览器设置中已被允许，然后再试一次。"
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "用于未知麦克风错误的恢复面板标题。",
+    "message": "我们无法访问你的麦克风"
+  },
+  "permissions_retryButton": {
+    "description": "用于重新请求麦克风权限的按钮标签。",
+    "message": "再试一次"
+  },
+  "permissions_revokedHeading": {
+    "description": "当麦克风访问权限之前已授予但后来被撤销时显示的标题。",
+    "message": "让我们重新连接你的麦克风"
+  },
+  "permissions_revokedInfo": {
+    "description": "当麦克风访问权限在已授予后被撤销时显示的说明文本。",
+    "message": "你的麦克风访问权限已关闭，这通常发生在浏览器或系统更新之后。请在下方重新允许，$productName$ 就会在你通话时恢复监听。",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "轮廓"
+  },
+  "quietModeLabel": {
+    "description": "用于启用安静/耳语模式的开关标签。",
+    "message": "安静模式"
+  },
+  "quietModeTooltip": {
+    "description": "解释安静/耳语模式作用的提示文本。",
+    "message": "轻声说话，会更好地拾取较小的声音并降低助手回复音量，方便你在他人身边使用语音。"
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "身份验证进行中时，登录按钮显示的文本。",
+    "message": "正在登录…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "音效"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Firefox 中禁用声音效果以防止出现音频反馈问题。"
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "首次语音对话后显示的一次性速度收益提示的标题。",
+    "message": "不错，说话大约比打字快 3 倍。"
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "速度收益提示的可选第二行，显示节省的整分钟数。",
+    "message": "你已经比打字快了大约 $minutes$ 分钟。",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "仅在按下按钮时提交"
   },
+  "surveyQuestion": {
+    "description": "一次性“体验成功后”微型问卷的唯一问题。",
+    "message": "到目前为止，语音用起来感觉如何？"
+  },
+  "surveyRatingLabel": {
+    "description": "问卷评分按钮的无障碍标签。",
+    "message": "为 $rating$（满分 5）评分",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "用户回答体验成功后问卷后显示的致谢。",
+    "message": "谢谢，这能帮助我们把 Say, Pi 做得更好。"
+  },
   "tabAIChat": {
     "description": "AI 聊天设置部分的标签。",
     "message": "AI 聊天"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "常规设置部分的标签。",
     "message": "常规"
+  },
+  "tabVoices": {
+    "description": "“语音”设置部分（按站点的语音目录）的标签。",
+    "message": "语音"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "学分"
   },
+  "ttsCreditsRemaining": {
+    "description": "显示剩余 TTS 配额的文本，以“每种声音的点数池”为单位（saypi-api #181 Stage 2），而不是按字符数。",
+    "message": "剩余 $credits$ 个点数",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Safari 目前不支持多语言语音。"
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "语音生成"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "注意！在$browserName$上使用$chatbotName$时，语音播放尚不可用。好消息？语音输入运行良好！对于TTS，请在桌面上尝试Chrome或Edge。",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$上TTS不可用。语音输入有效！尝试Chrome桌面版以使用TTS。",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS声音"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "当检测到类似语音的音频但音量太弱/置信度太低，无法转写时显示的 VAD 详情（客户端准入门槛丢弃）。",
+    "message": "音频太弱，无法转写"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD 详情，用于说明通话结束的原因是麦克风被较新的标签页占用。",
+    "message": "语音输入已移至另一标签页"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "声音不可用。\n在桌面上尝试Chrome或Firefox。"
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "注意！在$browserName$上使用$chatbotName$时，语音播放尚不可用。好消息？语音输入运行良好！对于TTS，请在桌面上尝试Chrome或Edge。",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "$browserName$ + $chatbotName$上TTS不可用。语音输入有效！尝试Chrome桌面版以使用TTS。",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "明白了",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "当某个标签页的语音输入被另一个标签页接管时，在该标签页上显示的 VAD 状态。",
+    "message": "已暂停"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "查看详细信息"
   },
+  "voiceIntroductionGeneric": {
+    "description": "当所选 SayPi 语音没有语音专属介绍脚本（且没有可回读的最近消息）时播放的通用口头介绍。",
+    "message": "你好，我是$voice$。这就是我的声音。希望你喜欢这个声音。",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "你好！\n请注意！ \n嗨好！\n我是 Pi，您的多语言人工智能助手。\n通过我掌握的 32 种语言，我们可以探索世界各地的思想和文化。\n你觉得这个声音怎么样？"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "语音设置"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "当语音在设置语音目录中的条目没有描述时，作为回退副标题显示；$count$ 为该语音支持的语言数量。",
+    "message": "支持 $count$ 种语言",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "为“Addison”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "明朗清晰"
+  },
+  "voiceTagline_alloy": {
+    "description": "为“Alloy”声音撰写的人设标语（设置中的声音工作室；客户端声音身份映射）。",
+    "message": "均衡百搭"
+  },
+  "voiceTagline_ash": {
+    "description": "为“Ash”声音撰写的人设标语（设置中的声音工作室；客户端声音身份映射）。",
+    "message": "低沉、沉思、平静"
+  },
+  "voiceTagline_ballad": {
+    "description": "为“Ballad”声音撰写的人设标语（设置中的声音工作室；客户端声音身份映射）。",
+    "message": "顺滑又有旋律感"
+  },
+  "voiceTagline_cassidy": {
+    "description": "为“Cassidy”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "友好又直截了当"
+  },
+  "voiceTagline_cedar": {
+    "description": "为“Cedar”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "沉稳又让人安心"
+  },
+  "voiceTagline_coral": {
+    "description": "为“Coral”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "明亮又充满活力"
+  },
+  "voiceTagline_echo": {
+    "description": "为“Echo”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "干净而中性"
+  },
+  "voiceTagline_fable": {
+    "description": "为“Fable”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "讲故事般的韵律"
+  },
+  "voiceTagline_finn": {
+    "description": "为“Finn”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "清新有活力"
+  },
+  "voiceTagline_jamahal": {
+    "description": "为“Jamahal”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "醇厚有吸引力"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "为“Jarnathan”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "丝绒般的深夜男中音"
+  },
+  "voiceTagline_jeff": {
+    "description": "为“Jeff”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "直白稳重"
+  },
+  "voiceTagline_jessica": {
+    "description": "为“Jessica”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "温暖从容，质感精致"
+  },
+  "voiceTagline_joey": {
+    "description": "为“Joey”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "轻松自然的美式对话感"
+  },
+  "voiceTagline_juniper": {
+    "description": "为“Juniper”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "清脆明亮，生动灵动"
+  },
+  "voiceTagline_lucy": {
+    "description": "为“Lucy”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "温柔而明澈"
+  },
+  "voiceTagline_marin": {
+    "description": "为“Marin”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "温暖如晨间电台的平静"
+  },
+  "voiceTagline_mark": {
+    "description": "为“Mark”语音撰写的人格标语（设置页的语音工作室；客户端语音身份映射）。",
+    "message": "清晰自信的旁白"
+  },
+  "voiceTagline_nova": {
+    "description": "为“Nueva”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "敏捷又好奇"
+  },
+  "voiceTagline_onyx": {
+    "description": "为“Onyx”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "低沉浑厚，气场十足"
+  },
+  "voiceTagline_paola": {
+    "description": "为“Paola”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "富有表现力的意式温暖"
+  },
+  "voiceTagline_sage": {
+    "description": "为“Sage”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "轻声细语的清晰感"
+  },
+  "voiceTagline_shimmer": {
+    "description": "为“Shimmer”语音撰写的人设标语（设置中的 Voices 工作室；客户端语音身份映射）。",
+    "message": "轻盈而通透"
+  },
+  "voicesAddToMenuShort": {
+    "description": "设置的“语音”工作室中，语音卡片的置顶切换（关闭状态）上的短标签；按下会把该语音加入主机的聊天内菜单。",
+    "message": "+ 菜单"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "语音卡片置顶切换（关闭状态）的无障碍标签；$name$ 是语音，$host$ 是助手。",
+    "message": "将 $name$ 添加到 $host$ 的菜单",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "语音控制栏中开关的标签，用于说明用方向键浏览列表时，焦点移到某个语音就会播放该语音。",
+    "message": "移动时播放"
+  },
+  "voicesArrowsLive": {
+    "description": "屏幕阅读器确认信息，会附加在设置的“语音”列表中首次“Playing <voice>”播报后，表示方向键刚刚变为可听。呼应“移动时播放”开关自身的措辞。",
+    "message": "现在移动时方向键会播放。Esc 停止。"
+  },
+  "voicesBuiltinsNote": {
+    "description": "用于提供原生语音的 host（例如 Pi 的 8 个内置语音）时，显示在菜单槽位下方的提示；这些语音不由工作室管理；$host$ 是助手名称。",
+    "message": "$host$ 自带的内置语音也会始终出现在它的菜单中。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "voicesBuiltinsNote 的变体，适用于没有聊天内语音菜单的 host（Pi 在 2026 年移除了其菜单），此时原文“会出现在它的菜单中”的承诺不成立；$host$ 是助手名称。",
+    "message": "$host$ 也有它自带的内置语音，但这里不会列出。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "设置的“语音”控制栏中的进度读数：用户已试听过列表中多少个语音。为纯数字形式，因此在为 1 时也能读起来自然——Chrome i18n 没有复数形式。",
+    "message": "已听 $heard$ / $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "设置的“语音”列表中某个语音行的无障碍名称的一部分，用于标记此配置文件已试听过的语音。视觉上用语音声纹的墨色浓淡表示，但屏幕阅读器无法看到。",
+    "message": "已听过"
+  },
+  "voicesInHostMenu": {
+    "description": "设置的“语音”工作室中，菜单槽位行上方的分区标题；$host$ 是助手。",
+    "message": "在 $host$ 的菜单中",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "设置的“语音”工作室中，语音卡片的置顶切换（开启状态）上的短标签。",
+    "message": "✓ 在菜单中"
+  },
+  "voicesInUse": {
+    "description": "设置的“语音”列表中，主机当前选定语音的常驻徽标，渲染为大写。刻意不是“正在说话”：此页面的每一行都会播放示例片段，因此已选但静音的语音不能宣称在说话，而此时可能是另一行在播放。",
+    "message": "使用中"
+  },
+  "voicesKeyboardHint": {
+    "description": "设置的“语音”控制栏中的一行键盘提示。图标是按键：空格键、上下方向键，以及 Shift+空格键。",
+    "message": "按空格键试听，↑↓在语音间移动，⇧空格键切回。"
+  },
+  "voicesLoadError": {
+    "description": "在某个 host 的工作室中，当该 host 的语音目录加载失败时的错误状态；$host$ 是助手名称。",
+    "message": "无法加载 $host$ 的语音。请稍后再试。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "当主机的聊天内菜单已达到最大语音数量时，禁用的“+ 菜单”切换上的工具提示/提示文案。",
+    "message": "菜单已满，移除一个语音以添加另一个"
+  },
+  "voicesMenuHint": {
+    "description": "“In {host}'s menu”标题旁的一行提示，说明槽位行会镜像聊天中的语音菜单。",
+    "message": "你在聊天中会看到的内容"
+  },
+  "voicesMenuOverflow": {
+    "description": "当用户置顶的语音数量超过聊天内菜单可显示数量（遗留状态）时，显示在菜单槽位下方的提示；$count$ 是放不下的数量，$cap$ 是菜单大小。",
+    "message": "还有 $count$ 个置顶语音在菜单的 $cap$ 个槽位之外等待显示。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow 的单数形式，用于恰好有一个置顶语音放不进聊天内菜单时；$cap$ 是菜单大小。",
+    "message": "还有 1 个置顶语音在菜单的 $cap$ 个槽位之外等待显示。",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "设置的“语音”列表下方的摘要行，说明该 host 的聊天内语音菜单填充了多少；$host$ 是助手名，$used$ 为已占用席位数，$cap$ 为总席位数。措辞需在为 1 时也读起来自然——Chrome i18n 没有复数形式。",
+    "message": "$host$ 的菜单：$used$ / $cap$ 个席位",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "设置的“语音”列表末尾分组的标题，包含尚无可播放试听片段的语音；$count$ 为数量。措辞需在为 1 时也读起来自然——Chrome i18n 没有复数形式。",
+    "message": "暂无试听片段（$count$）",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "当已登录用户在设置的语音目录中看到空的语音列表时显示（例如网络问题）。",
+    "message": "目前无法加载语音。请稍后再试。"
+  },
+  "voicesNowPlaying": {
+    "description": "在设置的“语音”列表中，当某个语音的试听片段开始播放时的屏幕阅读器播报；$name$ 是该语音。",
+    "message": "正在播放 $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "设置的“语音”控制栏中的按钮，会按顺序依次播放当前列出的所有语音；$count$ 为数量。措辞需在为 1 时也读起来自然——Chrome i18n 没有复数形式。",
+    "message": "播放全部（$count$）",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "在再次访问时出现在设置的“语音”控制栏中的按钮：只播放列表中你尚未试听过的语音；$count$ 为数量。措辞需在为 1 时也读起来自然——Chrome i18n 没有复数形式。",
+    "message": "播放新的（$count$）",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "当页面尚未发生用户交互，浏览器拒绝播放示例时，显示在设置的“声音”控制栏中的一行提示。",
+    "message": "点击任意声音以启用音频。"
+  },
+  "voicesPreview": {
+    "description": "用于播放（▶）按钮的无障碍标签，该按钮可试听语音行中的免费示例片段；$name$ 为语音名称。",
+    "message": "播放 $name$ 的示例",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "设置中语音列表的无障碍名称（包含所有语音的列表框，每行一个）。",
+    "message": "语音，按从低沉到明亮排序"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "语音卡片置顶切换（开启状态）以及菜单槽位移除按钮的无障碍标签；$name$ 是语音，$host$ 是助手。",
+    "message": "从 $host$ 的菜单移除 $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "当某个声音的示例片段加载或播放失败时，显示在设置的“声音”控制栏中的一行提示；$name$ 是该声音名称。非模态——示例连续播放会继续跳过它。",
+    "message": "无法播放 $name$ 的示例。",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "设置中 AI Chat 选项卡里声音目录部分的副标题。",
+    "message": "为每个网站选择朗读回复的声音。"
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "语音设置标题下的副标题，用于按音高排序的语音轨道。",
+    "message": "每一种声音，从低沉到明亮。先听，再选。"
+  },
+  "voicesSectionTitle": {
+    "description": "设置中 AI Chat 选项卡里声音目录部分的标题。",
+    "message": "声音"
+  },
+  "voicesShelfEveryday": {
+    "description": "设置的声音目录中，超值档声音的分组标题。由 CSS 渲染为全大写。",
+    "message": "日常声音"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "设置的声音工作室中，日常分组标题旁的一行说明；这是工作室中唯一说明这一档比 HD 可用时长更长的地方。",
+    "message": "自然清晰，你可以比使用 HD 多听约 20 倍。"
+  },
+  "voicesShelfHd": {
+    "description": "设置的声音目录中，高级（HD）声音的分组标题。由 CSS 渲染为全大写。",
+    "message": "HD 声音"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "设置的声音工作室中，HD 分组标题旁的一行说明。",
+    "message": "最饱满、最富表现力的声音。"
+  },
+  "voicesShowAll": {
+    "description": "设置的“声音”中“显示”过滤器的选项：不筛选，列出所有声音。",
+    "message": "所有声音"
+  },
+  "voicesShowEveryday": {
+    "description": "设置的“声音”中“显示”过滤器的选项：只列出标准（非 HD）声音。",
+    "message": "仅日常"
+  },
+  "voicesShowHd": {
+    "description": "设置的“声音”中“显示”过滤器的选项：只列出高级（HD）声音。",
+    "message": "仅 HD"
+  },
+  "voicesShowLabel": {
+    "description": "设置的“声音”控制栏中过滤器的标签，用于缩小列表中显示哪些声音。",
+    "message": "显示"
+  },
+  "voicesShowUnheard": {
+    "description": "设置的“声音”中“显示”过滤器的选项：只列出用户还未试听过的声音。",
+    "message": "尚未听过"
+  },
+  "voicesSpeakingNow": {
+    "description": "设置的“语音”工作室中，主机当前选定语音的状态标签（菜单槽位和语音卡片上）。",
+    "message": "正在说话"
+  },
+  "voicesSpeaksWith": {
+    "description": "设置中“语音”工作室舞台上，当前语音名称上方的眉题行；$host$ 是助手（例如 Pi）。由 CSS 渲染为大写。",
+    "message": "$host$ 使用的声音",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "当 host 会提供自己的音频（例如 Pi）时的舞台提示，因此选择一个 Say, Pi 语音会替换 host 的声音。",
+    "message": "在你从下方选择之前，$host$ 会使用它自己的声音。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "当 host 本身没有语音（例如 Claude）时的舞台提示，因此在选择 Say, Pi 语音之前不会朗读任何内容。",
+    "message": "在你从下方选择之前，$host$ 不会朗读回复。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "在设置的语音工作室舞台上，当该 host 尚未选择任何 SayPi 语音时显示的标题；$host$ 是助手（例如 Pi、Claude）。以名称字号渲染。",
+    "message": "选择 $host$ 的声音",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "设置的语音工作室舞台上的按钮，用于播放当前语音的免费示例片段。",
+    "message": "试听示例"
+  },
+  "voicesStopPlayback": {
+    "description": "设置的“语音”控制栏中的按钮，用于停止由“播放全部”开始的连续试听。",
+    "message": "停止"
+  },
+  "voicesSweepPosition": {
+    "description": "在设置的“声音”控制栏中，“全部播放”遍历列表时显示的实时位置读数；$index$ 是当前正在播放的声音，$total$ 是队列中的总数。",
+    "message": "$index$ / $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "设置的“语音”控制栏中“对比”控件的无障碍标签，会重放最近听过的两个语音中的另一个；$name$ 是该语音。",
+    "message": "切回 $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "当在过长的列表上按下“全部播放”时，显示在设置的“声音”控制栏中的一行提示；$count$ 是声音数量，$minutes$ 是大致所需分钟数。用缩写“min”以便在为 1 时也能读通顺——Chrome i18n 没有复数形式。",
+    "message": "这有 $count$ 个声音，约 $minutes$ min。请先缩小列表。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "设置语音目录中，每个主机对应的“使用此语音”按钮的无障碍标签；$name$ 是语音，$host$ 是助手（例如 Pi、Claude）。",
+    "message": "在 $host$ 上使用 $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "在统一设置的语音目录中，每个主机对应的“使用此语音”按钮上的短标签（旁边会显示主机）。",
+    "message": "使用"
+  },
+  "voicesYourVoice": {
+    "description": "设置的“语音”列表中控制栏按钮，将焦点移到此 host 当前使用的语音所在行；$name$ 是该语音。",
+    "message": "你的语音：$name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "当浏览器无法为语音检测模型分配足够的 WebAssembly 内存时抛出的错误。",
+    "message": "无法开始语音检测：WebAssembly 内存不足以运行语音模型。$detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "当浏览器未提供运行语音检测模型所需的初始 WebAssembly 内存时抛出的错误。",
+    "message": "无法开始语音检测：此浏览器中 WebAssembly 内存不可用。"
   }
 }

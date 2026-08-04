@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Benefício listado no modal de autenticação: aumento dos limites de uso.",
+    "message": "Limites de uso maiores com conta gratuita"
+  },
+  "authBenefitPremium": {
+    "description": "Benefício listado no modal de autenticação: recursos premium em chatbots.",
+    "message": "Recursos premium e suporte a chatbots"
+  },
+  "authBenefitSupport": {
+    "description": "Benefício listado no modal de autenticação: suporte prioritário.",
+    "message": "Suporte prioritário para problemas"
+  },
+  "authBenefitSync": {
+    "description": "Benefício listado no modal de autenticação: sincronização de configurações.",
+    "message": "Sincronize as configurações de voz em todo lugar"
+  },
+  "authBenefitTTS": {
+    "description": "Benefício listado no modal de autenticação: recurso de TTS.",
+    "message": "Vozes de texto para fala (planos pagos)"
+  },
+  "authBenefitUsage": {
+    "description": "Benefício listado no modal de autenticação: acompanhamento de uso.",
+    "message": "Acompanhe seu uso de voz em todos os dispositivos"
+  },
+  "authPromptModalFull": {
+    "description": "Descrição do modal completo de solicitação de autenticação com proposta de valor.",
+    "message": "Você está usando bastante o Say, Pi. Faça login para ter limites maiores, vozes de texto para fala e recursos premium em todos os chatbots compatíveis."
+  },
+  "authPromptModalSoft": {
+    "description": "Descrição do modal leve de solicitação de autenticação.",
+    "message": "Crie uma conta gratuita do Say, Pi para ter limites de uso maiores e acesso a recursos premium de voz."
+  },
+  "authPromptTitle": {
+    "description": "Título do modal de solicitação de autenticação.",
+    "message": "Desbloqueie mais recursos de voz"
+  },
+  "authPromptToast": {
+    "description": "Notificação toast incentivando o usuário a fazer login.",
+    "message": "Faça login no Say, Pi para ter limites maiores e recursos premium"
+  },
   "autoReadAloudChatGPT": {
     "description": "Etiqueta para a caixa de seleção que ativa ou desativa a leitura automática das respostas do ChatGPT durante chamadas de voz.",
     "message": "Leitura Automática (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Desative o texto em fala"
   },
+  "dismiss": {
+    "message": "Entendi",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Demitir"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Focar"
   },
+  "errorVadInitFailed": {
+    "description": "Toast de erro mostrado quando a detecção de atividade de voz falha ao inicializar.",
+    "message": "Falha ao inicializar a detecção de voz"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Toast de erro mostrado quando ocorre um erro inesperado durante a configuração da gravação de voz.",
+    "message": "Falha ao configurar a gravação de voz"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Toast de erro mostrado quando o cliente de detecção de voz falha ao iniciar a gravação.",
+    "message": "Falha ao iniciar a gravação de voz"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Toast de erro mostrado quando o cliente de detecção de voz (VAD) não está disponível, então a gravação não pode começar.",
+    "message": "Gravação de voz indisponível"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Sair do Modo Foco"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Nota de uma linha mostrada nos menus de voz quando vozes premium (HD) e vozes econômicas estão disponíveis",
+    "message": "As vozes HD usam sua cota mensal cerca de 20× mais rápido."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Afastando isso ..."
   },
+  "maybeLater": {
+    "description": "Texto do botão para dispensar a solicitação de autenticação.",
+    "message": "Talvez mais tarde"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "As configurações do seu microfone não atendem às especificações exigidas. \nTente usar um microfone diferente ou ajustar as configurações de áudio."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Não é possível acessar o microfone. \nVerifique as configurações do seu dispositivo e tente novamente."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Toast de erro mostrado quando a permissão do microfone foi negada após o fluxo do aviso de permissão.",
+    "message": "A permissão do microfone não foi concedida. Verifique se você permitiu o acesso no aviso e nas configurações da extensão."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "precisão"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Resposta mais rápida, mas menos precisa. \nPropenso a interromper."
   },
+  "moreVoices": {
+    "description": "Linha do menu que leva do menu de vozes na página para o catálogo completo de vozes nas configurações da extensão.",
+    "message": "Mais vozes…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Apelido do assistente"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Não assinou"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Rótulo do botão que abre o ChatGPT.",
+    "message": "Abrir o ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Rótulo do botão que abre o Claude.ai.",
+    "message": "Abrir Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Rótulo do botão que abre o Pi.ai.",
+    "message": "Abrir Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Opção de ambiente: perto de outras pessoas.",
+    "message": "Perto de outras pessoas"
+  },
+  "onboarding_envMixed": {
+    "description": "Opção de ambiente: uma mistura de espaços privados e compartilhados.",
+    "message": "Em lugares variados"
+  },
+  "onboarding_envPrivate": {
+    "description": "Opção de ambiente: um espaço privado.",
+    "message": "Em um lugar privado"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Confirmação mostrada quando a resposta sobre o ambiente deixa o modo silencioso desativado.",
+    "message": "Certo — vamos manter as configurações padrão de escuta e reprodução."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Confirmação mostrada quando a resposta sobre o ambiente ativa o modo silencioso.",
+    "message": "Modo silencioso ativado — vamos captar falas mais baixas e responder em voz baixa, para você falar com discrição."
+  },
+  "onboarding_envTitle": {
+    "description": "Título da pergunta do onboarding sobre o ambiente do usuário.",
+    "message": "Onde você costuma falar?"
+  },
+  "onboarding_footer": {
+    "description": "Texto do rodapé na página de onboarding da primeira execução.",
+    "message": "Você pode ver isso de novo a qualquer momento nas configurações do Say, Pi. Sua privacidade importa — o áudio só é capturado durante uma chamada ativa."
+  },
+  "onboarding_heading": {
+    "description": "Título principal na página de onboarding da primeira execução.",
+    "message": "🗣️ Boas-vindas ao Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Parágrafo de introdução na página de onboarding da primeira execução.",
+    "message": "Faltam dois passos para sua primeira conversa falada com uma IA. Falar é cerca de 3× mais rápido do que digitar — vamos configurar tudo."
+  },
+  "onboarding_micTestButton": {
+    "description": "Botão que inicia o teste de microfone do onboarding, sem consequências.",
+    "message": "🎤 Testar seu microfone"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status mostrado após o teste de microfone do onboarding ser concluído com sucesso.",
+    "message": "Boa — seu microfone está funcionando 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status mostrado enquanto o teste de microfone do onboarding está medindo a entrada.",
+    "message": "Ouvindo — diga algo 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status mostrado enquanto o teste de microfone do onboarding aguarda permissão.",
+    "message": "Solicitando acesso ao microfone…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Rótulo do botão para interromper o teste de microfone do onboarding enquanto ele está em execução.",
+    "message": "Parar teste"
+  },
+  "onboarding_step1Body": {
+    "description": "Texto do primeiro passo do onboarding explicando como fixar a extensão.",
+    "message": "Clique no ícone de peça de quebra-cabeça 🧩 no canto superior direito do navegador e depois no alfinete 📌 ao lado de Say, Pi. Assim, o botão de chamada fica a um clique."
+  },
+  "onboarding_step1Title": {
+    "description": "Título do primeiro passo do onboarding (fixar a extensão).",
+    "message": "Fixe o Say, Pi na barra de ferramentas"
+  },
+  "onboarding_step2Body": {
+    "description": "Texto do segundo passo do onboarding explicando como iniciar uma conversa por voz.",
+    "message": "Acesse um dos assistentes compatíveis abaixo, toque no botão de chamada do Say, Pi e diga oi. Na primeira vez, vamos pedir acesso ao microfone — isso é esperado, e só ouvimos enquanto você estiver em uma chamada."
+  },
+  "onboarding_step2Title": {
+    "description": "Título do segundo passo do onboarding (iniciar uma conversa).",
+    "message": "Abra um chat de IA e comece a falar"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Permissão de microfone"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Orientação de recuperação quando a permissão do microfone está bloqueada.",
+    "message": "Seu navegador está bloqueando o microfone. Clique no ícone de câmera ou cadeado na barra de endereços, defina Microfone como \"Permitir\" e tente novamente. No macOS, verifique também Ajustes do Sistema → Privacidade e Segurança → Microfone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Título do painel de recuperação quando a permissão do microfone foi negada/bloqueada.",
+    "message": "O acesso ao microfone está bloqueado"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Orientação de recuperação quando o microfone está em uso em outro lugar.",
+    "message": "Outro app ou aba pode estar usando seu microfone. Feche qualquer coisa que possa estar gravando (chamadas de vídeo, gravador de voz) e tente novamente."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Título do painel de recuperação quando o microfone está sendo usado por outro app.",
+    "message": "Seu microfone está em uso"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Orientação de recuperação quando nenhum dispositivo de microfone está disponível.",
+    "message": "Não encontramos um microfone. Conecte um (ou conecte seu headset), verifique se ele está selecionado como dispositivo de entrada e tente novamente."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Título do painel de recuperação quando nenhum dispositivo de microfone está disponível.",
+    "message": "Nenhum microfone encontrado"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Orientação de recuperação para um erro desconhecido do microfone.",
+    "message": "Algo deu errado ao acessar seu microfone. Verifique se ele está conectado e permitido nas configurações do navegador e tente novamente."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Título do painel de recuperação para um erro desconhecido do microfone.",
+    "message": "Não foi possível acessar seu microfone"
+  },
+  "permissions_retryButton": {
+    "description": "Rótulo do botão que solicita novamente a permissão do microfone.",
+    "message": "Tentar novamente"
+  },
+  "permissions_revokedHeading": {
+    "description": "Título mostrado quando o acesso ao microfone já foi concedido anteriormente, mas depois foi revogado.",
+    "message": "🎙️ Vamos reconectar seu microfone"
+  },
+  "permissions_revokedInfo": {
+    "description": "Texto informativo mostrado quando o acesso ao microfone foi revogado após ter sido concedido.",
+    "message": "O acesso ao microfone foi desativado — isso costuma acontecer após uma atualização do navegador ou do sistema. Permita novamente abaixo e o $productName$ voltará a escutar quando você estiver em uma chamada.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Perfil"
+  },
+  "quietModeLabel": {
+    "description": "Rótulo para o botão de alternância que ativa o modo silencioso/sussurro.",
+    "message": "Modo silencioso"
+  },
+  "quietModeTooltip": {
+    "description": "Tooltip explicando o que o modo silencioso/sussurro faz.",
+    "message": "Fale mais baixo — capta fala mais baixa e reduz o volume da resposta do assistente, para você usar voz perto de outras pessoas."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Texto do botão de login enquanto a autenticação está em andamento.",
+    "message": "Fazendo login..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Efeitos sonoros"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Os efeitos sonoros estão desativados no Firefox para evitar problemas de feedback de áudio."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Título do aviso único de ganho de velocidade mostrado após a primeira troca falada.",
+    "message": "Legal — falar é cerca de 3× mais rápido do que digitar."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Segunda linha opcional do aviso de ganho de velocidade mostrando os minutos inteiros economizados.",
+    "message": "Você já falou aproximadamente $minutes$ min mais rápido do que se tivesse digitado.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Envie apenas quando você pressionar o botão"
   },
+  "surveyQuestion": {
+    "description": "A única pergunta da micro-pesquisa única após a vitória.",
+    "message": "Como a voz está funcionando para você até agora?"
+  },
+  "surveyRatingLabel": {
+    "description": "Rótulo acessível para um botão de avaliação da pesquisa.",
+    "message": "Avalie $rating$ de 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Agradecimento mostrado após o usuário responder à pesquisa pós-vitória.",
+    "message": "Obrigado — isso nos ajuda a melhorar o Say, Pi. 🙏"
+  },
   "tabAIChat": {
     "description": "Rótulo da aba para a seção de configurações de chat com IA.",
     "message": "Chat com IA"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Rótulo da aba para a seção de configurações gerais.",
     "message": "Geral"
+  },
+  "tabVoices": {
+    "description": "Rótulo da aba para a seção de configurações de vozes (catálogo de vozes por site).",
+    "message": "Vozes"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "Créditos"
   },
+  "ttsCreditsRemaining": {
+    "description": "Texto que mostra a cota de TTS restante como um conjunto de créditos por voz (saypi-api #181 Stage 2), não caracteres brutos.",
+    "message": "$credits$ créditos restantes",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Atualmente, vozes multilíngues não são suportadas no Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Geração de voz"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Atenção! A reprodução de fala ainda não está disponível no $browserName$ com $chatbotName$. A boa notícia? A entrada de voz funciona muito bem! Para TTS, experimente o Chrome ou Edge na área de trabalho.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS indisponível no $browserName$ + $chatbotName$. A entrada de voz funciona! Experimente o Chrome na área de trabalho para TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Voz tts"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Detalhe do VAD quando foi detectado áudio parecido com fala, mas estava muito baixo / com baixa confiança para transcrever (descartado no cliente pelo gate de admissão).",
+    "message": "Áudio muito baixo para transcrever"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Detalhe do VAD explicando que a chamada terminou porque o microfone foi assumido por uma aba mais recente.",
+    "message": "A entrada de voz foi movida para outra aba"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Voz não disponível. \nExperimente o Chrome ou o Firefox na área de trabalho."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Atenção! A reprodução de fala ainda não está disponível no $browserName$ com $chatbotName$. A boa notícia? A entrada de voz funciona muito bem! Para TTS, experimente o Chrome ou Edge na área de trabalho.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS indisponível no $browserName$ + $chatbotName$. A entrada de voz funciona! Experimente o Chrome na área de trabalho para TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Entendi",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Status do VAD mostrado em uma aba cuja entrada de voz foi assumida por outra aba.",
+    "message": "Em pausa"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Ver detalhes"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Introdução genérica falada, tocada quando uma voz do SayPi selecionada não tem um roteiro de introdução específico da voz (e não há uma mensagem recente para ler em voz alta).",
+    "message": "Oi, eu sou $voice$. É assim que eu soio. Espero que você goste desta voz.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Olá! \nPrivado! \nVocê! \nSou Pi, seu assistente poliglota de IA. \nCom 32 idiomas sob meu comando, podemos explorar ideias e culturas de todo o mundo. \nO que você acha dessa voz?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Configurações de voz"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Subtítulo alternativo para uma linha de voz no catálogo de vozes das configurações quando a voz não tem descrição; $count$ é o número de idiomas compatíveis com a voz.",
+    "message": "Fala $count$ idioma(s)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Slogan de personalidade criado para a voz \"Addison\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Radiante e articulado"
+  },
+  "voiceTagline_alloy": {
+    "description": "Slogan de personalidade escrito para a voz \"Alloy\" (estúdio de Vozes nas configurações; mapa de identidade de voz no cliente).",
+    "message": "Equilibrada e versátil"
+  },
+  "voiceTagline_ash": {
+    "description": "Slogan de personalidade escrito para a voz \"Ash\" (estúdio de Vozes nas configurações; mapa de identidade de voz no cliente).",
+    "message": "Grave, reflexiva, calma"
+  },
+  "voiceTagline_ballad": {
+    "description": "Slogan de personalidade escrito para a voz \"Ballad\" (estúdio de Vozes nas configurações; mapa de identidade de voz no cliente).",
+    "message": "Suave e melódica"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Slogan de personalidade criado para a voz \"Cassidy\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Amigável e objetivo"
+  },
+  "voiceTagline_cedar": {
+    "description": "Slogan de personalidade criado para a voz 'Cedar' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Estável e reconfortante"
+  },
+  "voiceTagline_coral": {
+    "description": "Slogan de personalidade criado para a voz 'Coral' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Energia leve e animada"
+  },
+  "voiceTagline_echo": {
+    "description": "Slogan de personalidade criado para a voz 'Echo' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Limpa e neutra"
+  },
+  "voiceTagline_fable": {
+    "description": "Slogan de personalidade criado para a voz 'Fable' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Cadência de contador de histórias"
+  },
+  "voiceTagline_finn": {
+    "description": "Slogan de personalidade criado para a voz \"Finn\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Leve e cheio de energia"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Slogan de personalidade criado para a voz \"Jamahal\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Marcante e magnético"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Slogan de personalidade criado para a voz 'Jarnathan' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Barítono aveludado da madrugada"
+  },
+  "voiceTagline_jeff": {
+    "description": "Slogan de personalidade criado para a voz \"Jeff\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Direto e constante"
+  },
+  "voiceTagline_jessica": {
+    "description": "Slogan de personalidade criado para a voz \"Jessica\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Calorosa e refinada"
+  },
+  "voiceTagline_joey": {
+    "description": "Slogan de personalidade criado para a voz 'Joey' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Americano fácil, de conversa"
+  },
+  "voiceTagline_juniper": {
+    "description": "Slogan de personalidade criado para a voz \"Juniper\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Nítido, vibrante, expressivo"
+  },
+  "voiceTagline_lucy": {
+    "description": "Slogan de personalidade criado para a voz \"Lucy\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Suave e luminosa"
+  },
+  "voiceTagline_marin": {
+    "description": "Slogan de personalidade criado para a voz 'Marin' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Calma acolhedora de rádio matinal"
+  },
+  "voiceTagline_mark": {
+    "description": "Slogan de personalidade criado para a voz \"Mark\" (configurações > estúdio de Vozes; mapa de identidade de voz no cliente).",
+    "message": "Narrador claro e confiante"
+  },
+  "voiceTagline_nova": {
+    "description": "Slogan de personalidade criado para a voz 'Nova' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Rápida e curiosa"
+  },
+  "voiceTagline_onyx": {
+    "description": "Slogan de personalidade criado para a voz 'Onyx' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Gravidade profunda e ressonante"
+  },
+  "voiceTagline_paola": {
+    "description": "Slogan de personalidade criado para a voz 'Paola' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Calor italiano expressivo"
+  },
+  "voiceTagline_sage": {
+    "description": "Slogan de personalidade criado para a voz 'Sage' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Clareza em voz baixa"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Slogan de personalidade criado para a voz 'Shimmer' (configurações do estúdio de Vozes; mapa de identidade de voz no lado do cliente).",
+    "message": "Leve e arejada"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Rótulo curto no alternador de fixar de um cartão de voz (estado desligado) no estúdio de Vozes nas configurações; ao pressionar, adiciona a voz ao menu no chat do host.",
+    "message": "+ Menu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Rótulo acessível para o alternador de fixar de um cartão de voz (estado desligado); $name$ é a voz, $host$ é o assistente.",
+    "message": "Adicionar $name$ ao menu do $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Rótulo no alternador na barra de controle de Vozes que indica se navegar pela lista com as setas toca cada voz quando o foco chega nela.",
+    "message": "Reproduzir ao mover"
+  },
+  "voicesArrowsLive": {
+    "description": "Confirmação do leitor de tela, acrescentada ao primeiro anúncio \"Reproduzindo <voz>\" na lista de Vozes nas configurações, dizendo que as teclas de seta acabaram de se tornar audíveis. Ecoa a redação do próprio alternador \"Tocar ao navegar\".",
+    "message": "As setas agora tocam enquanto você navega. Esc para parar."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Nota sob os espaços do menu para hosts que vêm com vozes nativas (ex.: as 8 vozes do Pi), que o estúdio não gerencia; $host$ é o assistente.",
+    "message": "As vozes nativas do $host$ sempre aparecem no menu dele também.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Variante de voicesBuiltinsNote para um host sem menu de voz no chat (Pi removeu o menu em 2026), em que a promessa original de que as vozes nativas 'aparecem no menu' seria falsa; $host$ é o assistente.",
+    "message": "$host$ também tem vozes nativas, que não são listadas aqui.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Indicador de progresso na barra de controle de Vozes nas configurações: quantas das vozes listadas o usuário já ouviu. Apenas números, para soar correto com 1 — o Chrome i18n não tem formas de plural.",
+    "message": "$heard$ de $total$ ouvidas",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Parte do nome acessível de uma linha de voz na lista de Vozes nas configurações, marcando uma voz que este perfil já ouviu. Visualmente isso é desenhado como densidade de tinta na impressão sonora da voz, o que um leitor de tela não consegue ver.",
+    "message": "Ouvida"
+  },
+  "voicesInHostMenu": {
+    "description": "Título de seção acima da linha de slots do menu no estúdio de Vozes nas configurações; $host$ é o assistente.",
+    "message": "No menu do $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Rótulo curto no alternador de fixar de um cartão de voz (estado ligado) no estúdio de Vozes nas configurações.",
+    "message": "✓ No menu"
+  },
+  "voicesInUse": {
+    "description": "Selo persistente na voz selecionada atualmente para o host na lista de Vozes nas configurações, renderizado em maiúsculas. Deliberadamente NÃO \"Falando agora\": nesta página as linhas reproduzem seus clipes de amostra, então uma voz selecionada porém silenciosa não deve afirmar que está falando enquanto uma linha diferente está.",
+    "message": "Em uso"
+  },
+  "voicesKeyboardHint": {
+    "description": "Dica de teclado em uma linha na barra de controle de Vozes nas configurações. Os símbolos são teclas: Espaço, as setas para cima/baixo e Shift+Espaço.",
+    "message": "Pressione Espaço para ouvir, ↑↓ para alternar entre vozes, ⇧Espaço para voltar."
+  },
+  "voicesLoadError": {
+    "description": "Estado de erro dentro do estúdio de um host quando o catálogo de vozes desse host falhou ao carregar; $host$ é o assistente.",
+    "message": "Não foi possível carregar as vozes de $host$. Tente novamente mais tarde.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/dica em um alternador \"+ Menu\" desativado quando o menu no chat do host já tem o número máximo de vozes.",
+    "message": "Menu cheio — remova uma voz para adicionar outra"
+  },
+  "voicesMenuHint": {
+    "description": "Dica de uma linha ao lado do título \"No menu do {host}\", explicando que a linha de slots espelha o menu de voz no chat.",
+    "message": "O que você verá no chat"
+  },
+  "voicesMenuOverflow": {
+    "description": "Nota sob os espaços do menu quando o usuário tem mais vozes fixadas do que o menu no chat consegue mostrar (estado legado); $count$ é quantas não cabem, $cap$ é o tamanho do menu.",
+    "message": "Mais $count$ vozes fixadas estão além dos $cap$ espaços do menu.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Singular de voicesMenuOverflow, usado quando exatamente uma voz fixada não cabe no menu no chat; $cap$ é o tamanho do menu.",
+    "message": "Mais 1 voz fixada está além dos $cap$ espaços do menu.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Linha de resumo sob a lista de Vozes nas configurações dizendo quanto do menu de vozes no chat do host está preenchido; $host$ é o assistente, $used$ quantas vagas estão ocupadas, $cap$ quantas existem. Formulado para soar correto com 1 — o Chrome i18n não tem formas de plural.",
+    "message": "Menu de $host$: $used$ de $cap$ vagas",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Cabeçalho do grupo no fim da lista de Vozes nas configurações com vozes sem clipe de amostra para reproduzir; $count$ é quantas. Formulado para soar correto com 1 — o Chrome i18n não tem formas de plural.",
+    "message": "Ainda sem amostra ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Mostrado no catálogo de vozes das configurações quando a lista de vozes está vazia para um usuário conectado (por exemplo, um problema de rede).",
+    "message": "Não foi possível carregar as vozes agora. Tente novamente mais tarde."
+  },
+  "voicesNowPlaying": {
+    "description": "Anúncio do leitor de tela quando o clipe de amostra de uma voz começa a tocar na lista de Vozes nas configurações; $name$ é a voz.",
+    "message": "Reproduzindo $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Botão na barra de controle de Vozes nas configurações que toca todas as vozes listadas no momento, uma após a outra; $count$ é quantas. Formulado para soar correto com 1 — o Chrome i18n não tem formas de plural.",
+    "message": "Tocar tudo ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Botão na barra de controle de Vozes nas configurações em uma visita de retorno: toca apenas as vozes listadas que você ainda não ouviu; $count$ é quantas. Formulado para soar correto com 1 — o Chrome i18n não tem formas de plural.",
+    "message": "Tocar novas ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Linha na barra de controle de Vozes nas configurações quando o navegador se recusou a tocar uma amostra porque a página ainda não teve interação do usuário.",
+    "message": "Clique em uma voz para ativar o som."
+  },
+  "voicesPreview": {
+    "description": "Rótulo acessível para o botão de reproduzir (▶) que testa o clipe de amostra grátis de uma voz em uma linha de voz; $name$ é o nome da voz.",
+    "message": "Reproduzir uma amostra de $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Nome acessível da lista de Vozes nas configurações (uma listbox de todas as vozes, uma linha por voz).",
+    "message": "Vozes, ordenadas das mais graves às mais agudas"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Rótulo acessível para o alternador de fixar de um cartão de voz (estado ligado) e para o botão de remover de um slot do menu; $name$ é a voz, $host$ é o assistente.",
+    "message": "Remover $name$ do menu do $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Linha na barra de controle de Vozes nas configurações quando a amostra de uma voz falhou ao carregar ou tocar; $name$ é essa voz. Não modal — uma sequência de amostras continua apesar disso.",
+    "message": "Não foi possível reproduzir a amostra de $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Subtítulo da seção do catálogo de vozes na aba de configurações de chat com IA.",
+    "message": "Escolha a voz que lê as respostas em voz alta em cada site."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Subtítulo sob o título de configurações de Vozes, para a trilha de vozes ordenada por altura.",
+    "message": "Todas as vozes, das mais graves às mais agudas. Ouça, depois escolha."
+  },
+  "voicesSectionTitle": {
+    "description": "Título da seção do catálogo de vozes na aba de configurações de chat com IA.",
+    "message": "Vozes"
+  },
+  "voicesShelfEveryday": {
+    "description": "Título do grupo de vozes da faixa econômica no catálogo de vozes nas configurações. Renderizado em maiúsculas pelo CSS.",
+    "message": "Vozes do dia a dia"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Nota de uma linha ao lado do título do grupo do dia a dia no estúdio de Vozes nas configurações; o único lugar em que o estúdio informa quanto mais esse nível vai em relação ao HD.",
+    "message": "Natural e clara — dá para ouvir cerca de 20× mais do que com HD."
+  },
+  "voicesShelfHd": {
+    "description": "Título do grupo de vozes premium (HD) no catálogo de vozes nas configurações. Renderizado em maiúsculas pelo CSS.",
+    "message": "Vozes HD"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Nota de uma linha ao lado do título do grupo HD no estúdio de Vozes nas configurações.",
+    "message": "Nosso som mais rico e expressivo."
+  },
+  "voicesShowAll": {
+    "description": "Opção no filtro \"Mostrar\" de Vozes nas configurações: sem filtragem, todas as vozes são listadas.",
+    "message": "Todas as vozes"
+  },
+  "voicesShowEveryday": {
+    "description": "Opção no filtro \"Mostrar\" de Vozes nas configurações: lista apenas as vozes padrão (não HD).",
+    "message": "Somente comuns"
+  },
+  "voicesShowHd": {
+    "description": "Opção no filtro \"Mostrar\" de Vozes nas configurações: lista apenas as vozes premium (HD).",
+    "message": "Somente HD"
+  },
+  "voicesShowLabel": {
+    "description": "Rótulo no filtro na barra de controle de Vozes nas configurações que limita quais vozes a lista mostra.",
+    "message": "Mostrar"
+  },
+  "voicesShowUnheard": {
+    "description": "Opção no filtro \"Mostrar\" de Vozes nas configurações: lista apenas as vozes que o usuário ainda não ouviu.",
+    "message": "Ainda não ouvidas"
+  },
+  "voicesSpeakingNow": {
+    "description": "Rótulo de estado na voz selecionada atualmente para o host no estúdio de Vozes nas configurações (slot do menu e cartão de voz).",
+    "message": "Falando agora"
+  },
+  "voicesSpeaksWith": {
+    "description": "Linha de destaque acima do nome da voz atual no palco do estúdio de Vozes nas configurações; $host$ é o assistente (ex.: Pi). Renderizado em maiúsculas via CSS.",
+    "message": "$host$ fala com",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Nota da área quando o host fornece o próprio áudio (ex.: Pi), então escolher uma voz do Say, Pi substitui a do host.",
+    "message": "$host$ usa a própria voz até você escolher uma abaixo.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Nota da área quando o host não tem voz própria (ex.: Claude), então nada é lido em voz alta até que uma voz do Say, Pi seja escolhida.",
+    "message": "$host$ não vai ler as respostas em voz alta até você escolher uma abaixo.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Título na área do estúdio de Vozes nas configurações quando o host não tem nenhuma voz do Say, Pi selecionada; $host$ é o assistente (ex.: Pi, Claude). Renderizado no tamanho de nome.",
+    "message": "Escolha como $host$ soa",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Botão na área do estúdio de Vozes nas configurações que reproduz o clipe de amostra grátis da voz atual.",
+    "message": "Ouvir uma amostra"
+  },
+  "voicesStopPlayback": {
+    "description": "Botão na barra de controle de Vozes nas configurações que interrompe a sequência de amostras iniciada por \"Tocar tudo\".",
+    "message": "Parar"
+  },
+  "voicesSweepPosition": {
+    "description": "Leitura de posição ao vivo na barra de controle de Vozes nas configurações enquanto \"Reproduzir tudo\" percorre a lista; $index$ é a voz que está tocando agora e $total$ quantas estão na fila.",
+    "message": "$index$ de $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Rótulo acessível para o controle de comparação na barra de controle de Vozes nas configurações, que reproduz a outra voz das duas últimas ouvidas; $name$ é essa voz.",
+    "message": "Voltar para $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Linha na barra de controle de Vozes nas configurações quando \"Reproduzir tudo\" é pressionado em uma lista longa demais para ouvir até o fim; $count$ é quantas vozes e $minutes$ aproximadamente quantos minutos elas levariam. \"min\" abreviado para ler corretamente com 1 — o Chrome i18n não tem formas de plural.",
+    "message": "São $count$ vozes — cerca de $minutes$ min. Filtre a lista primeiro.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Rótulo acessível para o botão por host \"usar esta voz\" no catálogo de vozes nas configurações; $name$ é a voz, $host$ é o assistente (ex.: Pi, Claude).",
+    "message": "Usar $name$ no $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Rótulo curto no botão por host \"usar esta voz\" no catálogo unificado de vozes nas configurações (o host é mostrado ao lado).",
+    "message": "Usar"
+  },
+  "voicesYourVoice": {
+    "description": "Botão da barra de controle na lista de Vozes nas configurações que leva o foco para a linha da voz que este host usa atualmente; $name$ é essa voz.",
+    "message": "Sua voz: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Erro lançado quando o navegador não consegue alocar memória do WebAssembly suficiente para o modelo de detecção de voz.",
+    "message": "A detecção de voz não pode iniciar: não há memória do WebAssembly suficiente para o modelo de voz. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Erro lançado quando o navegador não expõe a memória inicial do WebAssembly necessária para executar o modelo de detecção de voz.",
+    "message": "A detecção de voz não pode iniciar: a memória do WebAssembly não está disponível neste navegador."
   }
 }

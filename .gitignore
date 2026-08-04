@@ -110,3 +110,7 @@ ngrok.yml
 
 # Credential-freshness state (timestamps only — release:freshness, #534)
 .credential-freshness.json
+
+# Python bytecode from tools/
+__pycache__/
+*.pyc

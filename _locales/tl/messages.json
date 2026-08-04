@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Benepisyo na nakalista sa auth modal - increased usage limits.",
+    "message": "Mas mataas na limit sa paggamit gamit ang libreng account"
+  },
+  "authBenefitPremium": {
+    "description": "Benepisyo na nakalista sa auth modal - premium features across chatbots.",
+    "message": "Mga premium na feature at suporta sa chatbot"
+  },
+  "authBenefitSupport": {
+    "description": "Benepisyo na nakalista sa auth modal - priority support.",
+    "message": "Priority na suporta para sa mga isyu"
+  },
+  "authBenefitSync": {
+    "description": "Benepisyo na nakalista sa auth modal - settings sync.",
+    "message": "I-sync ang settings ng boses saanman"
+  },
+  "authBenefitTTS": {
+    "description": "Benepisyo na nakalista sa auth modal - TTS feature.",
+    "message": "Mga boses na text-to-speech (mga bayad na plan)"
+  },
+  "authBenefitUsage": {
+    "description": "Benepisyo na nakalista sa auth modal - usage tracking.",
+    "message": "Subaybayan ang paggamit mo ng boses sa iba’t ibang device"
+  },
+  "authPromptModalFull": {
+    "description": "Paglalarawan para sa full modal auth prompt na may value proposition.",
+    "message": "Sulit na sulit ang paggamit mo sa Say, Pi. Mag-sign in para sa mas mataas na limit, mga boses na text-to-speech, at mga premium na feature sa lahat ng suportadong chatbot."
+  },
+  "authPromptModalSoft": {
+    "description": "Paglalarawan para sa soft modal auth prompt.",
+    "message": "Gumawa ng libreng account sa Say, Pi para sa mas mataas na limit sa paggamit at access sa mga premium na feature ng boses."
+  },
+  "authPromptTitle": {
+    "description": "Pamagat para sa auth prompt modal.",
+    "message": "I-unlock ang mas maraming feature ng boses"
+  },
+  "authPromptToast": {
+    "description": "Toast notification na humihikayat sa user na mag-sign in.",
+    "message": "Mag-sign in sa Say, Pi para sa mas mataas na limit at mga premium na feature"
+  },
   "autoReadAloudChatGPT": {
     "description": "Tanda para sa checkbox upang paganahin/huwag paganahin ang awtomatikong pagbabasa ng mga sagot ng ChatGPT habang may tawag na boses.",
     "message": "Awtomatikong Pagbasa (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Huwag paganahin ang text-to-speech"
   },
+  "dismiss": {
+    "message": "Naintindihan ko",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Iwaksi"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Tumok"
   },
+  "errorVadInitFailed": {
+    "description": "Error toast na ipinapakita kapag nabigo ang voice-activity detection na mag-initialize.",
+    "message": "Nabigong i-initialize ang voice detection"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Error toast na ipinapakita kapag may hindi inaasahang error habang sine-set up ang pag-record ng boses.",
+    "message": "Nabigong i-set up ang pag-record ng boses"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Error toast na ipinapakita kapag nabigo ang voice-detection client na simulan ang recording.",
+    "message": "Nabigong simulan ang pag-record ng boses"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Error toast na ipinapakita kapag hindi available ang voice-detection (VAD) client, kaya hindi makapagsimula ang recording.",
+    "message": "Hindi available ang pag-record ng boses"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Lumabas sa Mode ng Pokus"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Isang linyang paalala na ipinapakita sa voice menus kapag parehong available ang premium (HD) at value voices",
+    "message": "Mas mabilis maubos ang buwanang allowance mo nang mga 20× kapag HD voices ang gamit."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Tucking ito ..."
   },
+  "maybeLater": {
+    "description": "Text ng button para isara ang auth prompt.",
+    "message": "Mamaya na lang"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Ang iyong mga setting ng mikropono ay hindi nakakatugon sa mga kinakailangang detalye. \nSubukang gumamit ng ibang mikropono o ayusin ang iyong mga setting ng audio."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Hindi ma-access ang mikropono. \nPakisuri ang mga setting ng iyong device at subukang muli."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Error toast na ipinapakita kapag tinanggihan ang pahintulot sa mikropono pagkatapos ng permission prompt flow.",
+    "message": "Hindi naibigay ang pahintulot sa mikropono. Tiyaking pinayagan mo ang access sa prompt at sa settings ng extension."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "katumpakan"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Pinakamabilis na tugon, ngunit hindi gaanong tumpak. \nMahilig makagambala."
   },
+  "moreVoices": {
+    "description": "Row sa menu na nagli-link mula sa voice menu sa page papunta sa buong voice catalog sa settings ng extension",
+    "message": "Mas maraming boses…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Palayaw ng Katulong"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Hindi naka -sign in"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Label ng button na nagbubukas ng ChatGPT.",
+    "message": "Buksan ang ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Label ng button na nagbubukas ng Claude.ai.",
+    "message": "Buksan ang Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Label ng button na nagbubukas ng Pi.ai.",
+    "message": "Buksan ang Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Opsyon sa kapaligiran: malapit sa ibang tao.",
+    "message": "Malapit sa ibang tao"
+  },
+  "onboarding_envMixed": {
+    "description": "Opsyon sa kapaligiran: halo ng pribado at shared na espasyo.",
+    "message": "Halo-halong lugar"
+  },
+  "onboarding_envPrivate": {
+    "description": "Opsyon sa kapaligiran: pribadong espasyo.",
+    "message": "Sa pribadong lugar"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Kumpirmasyong ipinapakita kapag ang sagot tungkol sa kapaligiran ay hindi nagbubukas ng quiet mode.",
+    "message": "Sige — gagamitin namin ang karaniwang mga setting sa pakikinig at pag-playback."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Kumpirmasyong ipinapakita kapag ang sagot sa kapaligiran ay nag-e-enable ng quiet mode.",
+    "message": "Naka-on ang quiet mode — makikinig kami kahit mas mahina ang boses at mahina ring sasagot, para makapagsalita ka nang hindi halata."
+  },
+  "onboarding_envTitle": {
+    "description": "Heading para sa onboarding na tanong tungkol sa kapaligiran ng user.",
+    "message": "Saan ka karaniwang magsasalita?"
+  },
+  "onboarding_footer": {
+    "description": "Teksto sa footer sa unang beses na onboarding page.",
+    "message": "Maaari mong balikan ito anumang oras mula sa settings ng Say, Pi. Mahalaga ang privacy mo — kinukuha lang ang audio habang may aktibong tawag."
+  },
+  "onboarding_heading": {
+    "description": "Pangunahing heading sa first-run onboarding page.",
+    "message": "🗣️ Maligayang pagdating sa Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Panimulang talata sa first-run onboarding page.",
+    "message": "Dalawang hakbang ka na lang bago ang una mong pasalitang usapan sa isang AI. Mga 3× mas mabilis ang pagsasalita kaysa pag-type — i-setup na natin."
+  },
+  "onboarding_micTestButton": {
+    "description": "Button na nagsisimula ng onboarding microphone test na walang risk.",
+    "message": "🎤 Subukan ang mikropono mo"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status na ipinapakita pagkatapos matagumpay na matapos ang onboarding mic test.",
+    "message": "Ayos — gumagana ang mikropono mo! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status na ipinapakita habang sinusukat ng onboarding mic test ang input.",
+    "message": "Nakikinig — magsalita ka! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status na ipinapakita habang naghihintay ng pahintulot ang onboarding mic test.",
+    "message": "Humihingi ng pahintulot sa mikropono…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Label ng button para ihinto ang onboarding mic test habang tumatakbo.",
+    "message": "Itigil ang test"
+  },
+  "onboarding_step1Body": {
+    "description": "Nilalaman ng unang onboarding step na nagpapaliwanag kung paano i-pin ang extension.",
+    "message": "I-click ang puzzle-piece 🧩 icon sa kanang-itaas ng browser mo, tapos ang pin 📌 sa tabi ng Say, Pi. Para isang click na lang ang call button."
+  },
+  "onboarding_step1Title": {
+    "description": "Pamagat ng unang onboarding step (i-pin ang extension).",
+    "message": "I-pin ang Say, Pi sa toolbar mo"
+  },
+  "onboarding_step2Body": {
+    "description": "Nilalaman ng pangalawang onboarding step na nagpapaliwanag kung paano magsimula ng voice conversation.",
+    "message": "Pumunta sa isa sa mga supported na assistant sa ibaba, tapos i-tap ang Say, Pi call button at bumati. Hihingi kami ng access sa mikropono sa unang beses — normal iyon, at nakikinig lang kami habang aktibo kang nasa tawag."
+  },
+  "onboarding_step2Title": {
+    "description": "Pamagat ng pangalawang onboarding step (magsimula ng usapan).",
+    "message": "Magbukas ng AI chat at magsimulang magsalita"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Pahintulot ng mikropono"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Gabay sa pag-recover kapag naka-block ang pahintulot sa mikropono.",
+    "message": "Binablock ng browser mo ang mikropono. I-click ang camera o lock na icon sa address bar, itakda ang Microphone sa \"Allow\", pagkatapos ay subukan ulit. Sa macOS, tingnan din ang System Settings → Privacy & Security → Microphone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Pamagat ng recovery panel kapag tinanggihan/naka-block ang pahintulot sa mikropono.",
+    "message": "Naka-block ang access sa mikropono"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Gabay sa pag-recover kapag ginagamit sa ibang lugar ang mikropono.",
+    "message": "Maaaring ginagamit ng ibang app o tab ang mikropono mo. Isara ang anumang posibleng nagre-record (mga video call, voice memo), pagkatapos ay subukan ulit."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Pamagat ng recovery panel kapag ginagamit ang mikropono ng ibang app.",
+    "message": "Ginagamit ang mikropono mo"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Gabay sa pag-recover kapag walang available na mikropono na device.",
+    "message": "Wala kaming nakitang mikropono. Isaksak ang isa (o ikonekta ang headset mo), tiyaking ito ang napili bilang input device, pagkatapos ay subukan ulit."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Pamagat ng recovery panel kapag walang available na mikropono na device.",
+    "message": "Walang nakitang mikropono"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Gabay sa pag-recover para sa hindi kilalang error sa mikropono.",
+    "message": "May nangyaring problema sa pag-access sa mikropono mo. Tingnan kung nakakonekta ito at pinapayagan sa mga setting ng browser mo, pagkatapos ay subukan ulit."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Pamagat ng recovery panel para sa hindi kilalang error sa mikropono.",
+    "message": "Hindi namin ma-access ang mikropono mo"
+  },
+  "permissions_retryButton": {
+    "description": "Label para sa button na muling humihiling ng pahintulot sa mikropono.",
+    "message": "Subukan ulit"
+  },
+  "permissions_revokedHeading": {
+    "description": "Heading na ipinapakita kapag dating pinayagan ang access sa mikropono pero na-revoke na.",
+    "message": "🎙️ Ikonekta ulit ang mikropono mo"
+  },
+  "permissions_revokedInfo": {
+    "description": "Impormasyong text na ipinapakita kapag na-revoke ang access sa mikropono matapos itong mapayagan.",
+    "message": "Naka-off ang access sa mikropono mo — madalas itong mangyari pagkatapos ng update sa browser o system. Payagan ulit ito sa ibaba at makikinig na ulit ang $productName$ kapag nasa tawag ka.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profile"
+  },
+  "quietModeLabel": {
+    "description": "Label para sa toggle na nag-e-enable ng tahimik/whisper mode.",
+    "message": "Tahimik na mode"
+  },
+  "quietModeTooltip": {
+    "description": "Tooltip na nagpapaliwanag kung ano ang ginagawa ng tahimik/whisper mode.",
+    "message": "Magsalita nang mahina — mas naririnig ang mas mahinang boses at binabaan ang lakas ng tugon ng assistant, para magamit mo ang boses kapag may ibang tao."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Teksto para sa button ng pag-sign in habang nagpapatuloy ang authentication.",
+    "message": "Nagla-log in..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Mga tunog na epekto"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Ang mga sound effect ay hindi pinagana sa Firefox upang maiwasan ang mga isyu sa audio feedback."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Headline ng one-time post-win speed-payoff notice na ipinapakita pagkatapos ng unang spoken exchange.",
+    "message": "Ayos — mga 3× na mas mabilis ang pagsasalita kaysa pag-type."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Opsyonal na ikalawang linya ng speed-payoff notice na nagpapakita ng buong minutong natipid.",
+    "message": "Nakakapagsalita ka na ng humigit-kumulang $minutes$ min na mas mabilis kaysa kung tinype mo ito.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Isumite lamang kapag pinindot mo ang pindutan"
   },
+  "surveyQuestion": {
+    "description": "Ang nag-iisang tanong ng one-time post-win micro-survey.",
+    "message": "Kamusta ang boses para sa iyo sa ngayon?"
+  },
+  "surveyRatingLabel": {
+    "description": "Accessible na label para sa button ng rating sa survey.",
+    "message": "I-rate ang $rating$ sa 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Pagkilala na ipinapakita matapos sagutin ng user ang post-win survey.",
+    "message": "Salamat — nakakatulong ito para mas mapabuti ang Say, Pi. 🙏"
+  },
   "tabAIChat": {
     "description": "Label ng tab para sa mga setting ng AI chat.",
     "message": "AI Chat"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Label ng tab para sa mga pangkalahatang setting.",
     "message": "Pangkalahatan"
+  },
+  "tabVoices": {
+    "description": "Label ng tab para sa seksyon ng settings ng mga boses (katalogo ng boses kada site).",
+    "message": "Mga boses"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "mga kredito"
   },
+  "ttsCreditsRemaining": {
+    "description": "Tekstong nagpapakita ng natitirang TTS quota bilang per-voice na credit pool (saypi-api #181 Stage 2), hindi bilang raw characters.",
+    "message": "Natitirang $credits$ credit",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Kasalukuyang hindi sinusuportahan sa Safari ang mga multilingguwal na boses."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Henerasyon ng boses"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Paalala! Ang speech playback ay hindi pa available sa $browserName$ gamit ang $chatbotName$. Ang magandang balita? Gumagana nang napakahusay ang voice input! Para sa TTS, subukan ang Chrome o Edge sa desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "Hindi available ang TTS sa $browserName$ + $chatbotName$. Gumagana ang voice input! Subukan ang Chrome desktop para sa TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Voice"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Detalye ng VAD kapag may natukoy na audio na parang pagsasalita pero masyadong mahina / mababa ang kumpiyansa para ma-transcribe (client-side admission-gate drop).",
+    "message": "Masyadong mahina ang audio para ma-transcribe"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Detalye ng VAD na nagpapaliwanag na natapos ang tawag dahil inangkin ang mikropono ng mas bagong tab.",
+    "message": "Inilipat ang voice input sa ibang tab"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Hindi magagamit ang boses. \nSubukan ang Chrome o Firefox sa desktop."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Paalala! Ang speech playback ay hindi pa available sa $browserName$ gamit ang $chatbotName$. Ang magandang balita? Gumagana nang napakahusay ang voice input! Para sa TTS, subukan ang Chrome o Edge sa desktop.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "Hindi available ang TTS sa $browserName$ + $chatbotName$. Gumagana ang voice input! Subukan ang Chrome desktop para sa TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Naintindihan ko",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Status ng VAD na ipinapakita sa tab na ang voice input ay inagaw ng ibang tab.",
+    "message": "Naka-pause"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Tingnan ang mga detalye"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Pangkalahatang binibigkas na pagpapakilala na pinapatugtog kapag ang napiling boses ng SayPi ay walang voice-specific na introduction script (at walang kamakailang mensahe na babasahin pabalik).",
+    "message": "Hi, ako si $voice$. Ganito ang tunog ko. Sana magustuhan mo ang boses na ito.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hola! \nПривет! \n你好! \nAko si Pi, ang iyong polyglot AI assistant. \nSa 32 wika sa aking utos, maaari nating tuklasin ang mga ideya at kultura mula sa buong mundo. \nAno sa tingin mo ang boses na ito?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Mga setting ng boses"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Fallback na subtitle para sa voice row sa settings voice catalog kapag walang paglalarawan ang boses; $count$ ang bilang ng mga wikang sinusuportahan ng boses.",
+    "message": "Nakakapagsalita ng $count$ wika",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Addison' (settings Voices studio; client-side voice identity map).",
+    "message": "Masigla at malinaw magsalita"
+  },
+  "voiceTagline_alloy": {
+    "description": "Inakdang tagline ng personalidad para sa boses na 'Alloy' (settings Voices studio; client-side voice identity map).",
+    "message": "Balanseng pangkalahatan"
+  },
+  "voiceTagline_ash": {
+    "description": "Inakdang tagline ng personalidad para sa boses na 'Ash' (settings Voices studio; client-side voice identity map).",
+    "message": "Mababa, mapag-isip, kalmado"
+  },
+  "voiceTagline_ballad": {
+    "description": "Inakdang tagline ng personalidad para sa boses na 'Ballad' (settings Voices studio; client-side voice identity map).",
+    "message": "Malambot at melodiko"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Cassidy' (settings Voices studio; client-side voice identity map).",
+    "message": "Palakaibigan at diretsahan"
+  },
+  "voiceTagline_cedar": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Cedar' (settings Voices studio; client-side voice identity map).",
+    "message": "Matatag at nakapagpapakalma"
+  },
+  "voiceTagline_coral": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Coral' (settings Voices studio; client-side voice identity map).",
+    "message": "Maliwanag, masiglang enerhiya"
+  },
+  "voiceTagline_echo": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Echo' (settings Voices studio; client-side voice identity map).",
+    "message": "Malinis at neutral"
+  },
+  "voiceTagline_fable": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Fable' (settings Voices studio; client-side voice identity map).",
+    "message": "Tono ng pagkukuwento"
+  },
+  "voiceTagline_finn": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Finn' (settings Voices studio; client-side voice identity map).",
+    "message": "Presko at masigla"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Jamahal' (settings Voices studio; client-side voice identity map).",
+    "message": "May lalim at nakakaakit"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Jarnathan' (settings Voices studio; client-side voice identity map).",
+    "message": "Makinis na baritone sa gabing-gabi"
+  },
+  "voiceTagline_jeff": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Jeff' (settings Voices studio; client-side voice identity map).",
+    "message": "Diretsahan at kalmado"
+  },
+  "voiceTagline_jessica": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Jessica' (settings Voices studio; client-side voice identity map).",
+    "message": "Mainit, pulido, may tikas"
+  },
+  "voiceTagline_joey": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Joey' (settings Voices studio; client-side voice identity map).",
+    "message": "Magaan, pang-usapang Amerikano"
+  },
+  "voiceTagline_juniper": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Juniper' (settings Voices studio; client-side voice identity map).",
+    "message": "Malutong, maliwanag, buhay"
+  },
+  "voiceTagline_lucy": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Lucy' (settings Voices studio; client-side voice identity map).",
+    "message": "Banayad at nagniningning"
+  },
+  "voiceTagline_marin": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Marin' (settings Voices studio; client-side voice identity map).",
+    "message": "Mainit, kalmadong parang morning radio"
+  },
+  "voiceTagline_mark": {
+    "description": "Nakatalagang tagline ng personalidad para sa boses na 'Mark' (settings Voices studio; client-side voice identity map).",
+    "message": "Malinaw, kumpiyansang tagapagsalaysay"
+  },
+  "voiceTagline_nova": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Nova' (settings Voices studio; client-side voice identity map).",
+    "message": "Mabilis at mausisa"
+  },
+  "voiceTagline_onyx": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Onyx' (settings Voices studio; client-side voice identity map).",
+    "message": "Malalim, matunog na bigat"
+  },
+  "voiceTagline_paola": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Paola' (settings Voices studio; client-side voice identity map).",
+    "message": "Masining na init na Italyano"
+  },
+  "voiceTagline_sage": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Sage' (settings Voices studio; client-side voice identity map).",
+    "message": "Malinaw na banayad magsalita"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Isinulat na tagline ng personalidad para sa boses na 'Shimmer' (settings Voices studio; client-side voice identity map).",
+    "message": "Magaan at mahangin"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Maikling label sa pin toggle ng voice card (off state) sa settings Voices studio; kapag pinindot, idinadagdag ang boses sa in-chat menu ng host.",
+    "message": "+ Menu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Accessible label para sa pin toggle ng voice card (off state); $name$ ang boses, $host$ ang assistant.",
+    "message": "Idagdag ang $name$ sa menu ni $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Label sa toggle sa control bar ng Voices na nagsasabi kung ang paglakad sa listahan gamit ang mga arrow key ay nagpapatugtog ng bawat boses habang naaabot ito ng focus.",
+    "message": "I-play habang gumagalaw"
+  },
+  "voicesArrowsLive": {
+    "description": "Kumpirmasyon ng screen reader, idinadagdag sa unang anunsyong 'Playing <voice>' sa listahan ng Voices sa settings, na nagsasabing naririnig na ang mga arrow key. Inuulit ang mismong pananalita ng toggle na 'Play as you move'.",
+    "message": "Tumutugtog na ang mga arrow habang lumilipat ka. Humihinto ang Esc."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Tala sa ilalim ng mga slot ng menu para sa mga host na may native na boses (hal. 8 built-in ni Pi), na hindi pinapamahalaan ng studio; $host$ ang assistant.",
+    "message": "Lagi ring lumalabas sa menu nito ang mga built-in na boses ni $host$.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Bersyon ng voicesBuiltinsNote para sa host na walang in-chat voice menu (tinanggal ni Pi ang menu nito noong 2026), kung saan magiging mali ang pangako ng orihinal na 'lumalabas sa menu nito' ang mga built-in; $host$ ang assistant.",
+    "message": "May sarili ring built-in na mga boses si $host$, na hindi nakalista rito.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Progress readout sa control bar ng Voices sa settings: kung ilang boses sa listahan ang napakinggan na ng user. Hubad na numero, kaya bumabasa nang tama sa 1 — walang plural forms ang Chrome i18n.",
+    "message": "$heard$ sa $total$ narinig",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Bahagi ng accessible name ng row ng boses sa listahan ng Voices sa settings, na nagmamarka ng boses na napakinggan na ng profile na ito. Sa biswal, iginuguhit ito bilang ink density sa soundprint ng boses, na hindi nakikita ng screen reader.",
+    "message": "Narinig"
+  },
+  "voicesInHostMenu": {
+    "description": "Heading ng seksyon sa itaas ng hanay ng mga menu slot sa settings Voices studio; $host$ ang assistant.",
+    "message": "Sa menu ni $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Maikling label sa pin toggle ng voice card (on state) sa settings Voices studio.",
+    "message": "✓ Nasa menu"
+  },
+  "voicesInUse": {
+    "description": "Palagiang badge sa kasalukuyang napiling boses ng host sa listahan ng settings Voices, ginagawang uppercase. Sadyang HINDI 'Kasalukuyang nagsasalita': sa pahinang ito, nagpapatugtog ang mga row ng sample clip, kaya hindi dapat magpahiwatig na nagsasalita ang napili-ngunit-tahimik na boses habang ibang row ang tumutugtog.",
+    "message": "Ginagamit"
+  },
+  "voicesKeyboardHint": {
+    "description": "Isang-linyang keyboard hint sa control bar ng Voices sa settings. Ang mga glyph ay mga key: Space, ang pataas/pababang arrow, at Shift+Space.",
+    "message": "Pindutin ang Space para makinig, ↑↓ para lumipat sa mga boses, ⇧Space para bumalik."
+  },
+  "voicesLoadError": {
+    "description": "Error state sa loob ng studio ng isang host kapag hindi na-load ang voice catalog ng host na iyon; $host$ ang assistant.",
+    "message": "Hindi ma-load ang mga boses ni $host$. Pakisubukang muli mamaya.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/hint sa naka-disable na '+ Menu' toggle kapag nasa maximum na bilang ng mga boses ang in-chat menu ng host.",
+    "message": "Puno na ang menu — mag-alis ng boses para makapagdagdag ng iba"
+  },
+  "voicesMenuHint": {
+    "description": "Isang linyang hint sa tabi ng heading na 'In {host}'s menu', na nagpapaliwanag na ang hanay ng mga slot ay kapareho ng voice menu sa chat.",
+    "message": "Ito ang makikita mo sa chat"
+  },
+  "voicesMenuOverflow": {
+    "description": "Tala sa ilalim ng mga slot ng menu kapag mas marami ang naka-pin na boses ng user kaysa sa kayang ipakita ng in-chat menu (legacy state); $count$ ang bilang ng hindi kasya, $cap$ ang laki ng menu.",
+    "message": "May $count$ pang naka-pin na boses na naghihintay lampas sa $cap$ slot ng menu.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Isahan ng voicesMenuOverflow, ginagamit kapag eksaktong isang naka-pin na boses ang hindi kasya sa in-chat menu; $cap$ ang laki ng menu.",
+    "message": "May 1 pang naka-pin na boses na naghihintay lampas sa $cap$ slot ng menu.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Buod na linya sa ilalim ng listahan ng Voices sa settings na nagsasabi kung gaano napupuno ang in-chat voice menu ng host; $host$ ang assistant, $used$ kung ilang upuan ang okupado, $cap$ kung ilan lahat. Naka-ayos para bumasa nang tama sa 1 — walang plural forms ang Chrome i18n.",
+    "message": "Menu ni $host$: $used$ sa $cap$ upuan",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Heading para sa grupo sa dulo ng listahan ng Voices sa settings na naglalaman ng mga boses na walang sample clip na mapapatugtog; $count$ kung ilan. Naka-ayos para bumasa nang tama sa 1 — walang plural forms ang Chrome i18n.",
+    "message": "Wala pang sample ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Ipinapakita sa settings voice catalog kapag walang laman ang listahan ng boses para sa naka-sign in na user (hal. problema sa network)",
+    "message": "Hindi ma-load ang mga boses sa ngayon. Pakisubukang muli mamaya."
+  },
+  "voicesNowPlaying": {
+    "description": "Anunsyo ng screen reader kapag nagsimulang tumugtog ang sample clip ng isang boses sa listahan ng Voices sa settings; $name$ ang boses.",
+    "message": "Pinapatugtog ang $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Button sa control bar ng Voices sa settings na pinapatugtog ang bawat kasalukuyang nakalistang boses, sunod-sunod; $count$ kung ilan. Naka-ayos para bumasa nang tama sa 1 — walang plural forms ang Chrome i18n.",
+    "message": "I-play lahat ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Button sa control bar ng Voices sa settings sa pagbabalik-bisita: pinapatugtog lang ang mga nakalistang boses na hindi mo pa napapakinggan; $count$ kung ilan. Naka-ayos para bumasa nang tama sa 1 — walang plural forms ang Chrome i18n.",
+    "message": "I-play ang bago ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Linya sa settings Voices control bar kapag tumanggi ang browser na patugtugin ang sample dahil wala pang pakikipag-ugnayan ang user sa pahina.",
+    "message": "I-click ang alinmang boses para paganahin ang tunog."
+  },
+  "voicesPreview": {
+    "description": "Accessible na label para sa play (▶) button na nagpapatugtog ng libreng sample clip ng isang boses sa voice row; $name$ ang pangalan ng boses.",
+    "message": "I-play ang sample ni $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Accessible name ng listahan ng Voices sa settings (isang listbox ng bawat boses, tig-isang row).",
+    "message": "Mga boses, nakaayos mula pinakamalalim hanggang pinakamatingkad"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Accessible label para sa pin toggle ng voice card (on state) at remove button ng menu slot; $name$ ang boses, $host$ ang assistant.",
+    "message": "Alisin ang $name$ sa menu ni $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Linya sa settings Voices control bar kapag nabigong mag-load o tumugtog ang sample clip ng isang boses; ang $name$ ang boses na iyon. Hindi modal — nagpapatuloy ang sunod-sunod na sample lampas dito.",
+    "message": "Hindi maipatugtog ang sample ni $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Subheading para sa seksyon ng voice catalog sa settings AI Chat tab",
+    "message": "Piliin ang boses na magbabasa nang malakas ng mga sagot sa bawat site."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Subheading sa ilalim ng heading ng Voices settings, para sa rail ng mga boses na nakaayos ayon sa pitch.",
+    "message": "Bawat boses, mula pinakamalalim hanggang pinakamatingkad. Makinig, saka pumili."
+  },
+  "voicesSectionTitle": {
+    "description": "Heading para sa seksyon ng voice catalog sa settings AI Chat tab",
+    "message": "Mga boses"
+  },
+  "voicesShelfEveryday": {
+    "description": "Heading ng grupo para sa value-tier na mga boses sa settings voice catalog. Nirender na uppercase ng CSS.",
+    "message": "Mga pang-araw-araw na boses"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Isang linyang tala katabi ng heading ng grupong Everyday sa settings Voices studio; ang nag-iisang lugar kung saan sinasabi ng studio kung gaano kalayo ang itinatagal ng tier na ito kumpara sa HD.",
+    "message": "Natural at malinaw — makikinig ka nang mga 20× na mas matagal kaysa sa HD."
+  },
+  "voicesShelfHd": {
+    "description": "Heading ng grupo para sa premium (HD) na mga boses sa settings voice catalog. Nirender na uppercase ng CSS.",
+    "message": "Mga HD na boses"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Isang linyang tala katabi ng heading ng grupong HD sa settings Voices studio.",
+    "message": "Pinakamayaman at pinakama-expressive naming tunog."
+  },
+  "voicesShowAll": {
+    "description": "Opsyon sa settings Voices 'Show' filter: walang pag-filter, nakalista ang bawat boses.",
+    "message": "Lahat ng boses"
+  },
+  "voicesShowEveryday": {
+    "description": "Opsyon sa settings Voices 'Show' filter: ilista lang ang mga standard (hindi HD) na boses.",
+    "message": "Pang-araw-araw lang"
+  },
+  "voicesShowHd": {
+    "description": "Opsyon sa settings Voices 'Show' filter: ilista lang ang mga premium (HD) na boses.",
+    "message": "HD lang"
+  },
+  "voicesShowLabel": {
+    "description": "Label sa filter sa settings Voices control bar na nagpapaliit kung aling mga boses ang ipinapakita ng listahan.",
+    "message": "Ipakita"
+  },
+  "voicesShowUnheard": {
+    "description": "Opsyon sa settings Voices 'Show' filter: ilista lang ang mga boses na hindi pa napapakinggan ng user.",
+    "message": "Hindi pa napapakinggan"
+  },
+  "voicesSpeakingNow": {
+    "description": "Label ng estado sa kasalukuyang napiling boses ng host sa settings Voices studio (menu slot at voice card).",
+    "message": "Kasalukuyang nagsasalita"
+  },
+  "voicesSpeaksWith": {
+    "description": "Linyang eyebrow sa itaas ng pangalan ng kasalukuyang boses sa stage ng settings Voices studio; $host$ ang assistant (hal. Pi). Ginagawang uppercase ng CSS.",
+    "message": "nagsasalita si $host$ gamit ang",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Tala sa stage kapag ang host ay may sarili nitong audio (hal. Pi), kaya pinapalitan ng pagpili ng Say, Pi voice ang boses ng host.",
+    "message": "Gagamit si $host$ ng sarili niyang boses hanggang pumili ka ng isa sa ibaba.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Tala sa stage kapag walang sariling boses ang host (hal. Claude), kaya walang babasahing malakas hanggang pumili ng Say, Pi voice.",
+    "message": "Hindi babasahin ni $host$ nang malakas ang mga sagot hanggang pumili ka ng isa sa ibaba.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Headline sa stage ng Voices studio sa settings kapag walang napiling SayPi voice ang host; $host$ ang assistant (hal. Pi, Claude). Nire-render sa laki ng pangalan.",
+    "message": "Piliin kung paano tunog si $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Button sa stage ng Voices studio sa settings na nagpapatugtog ng libreng sample clip ng kasalukuyang boses.",
+    "message": "Makinig sa sample"
+  },
+  "voicesStopPlayback": {
+    "description": "Button sa control bar ng Voices sa settings na humihinto sa sunod-sunod na pag-play ng mga sample na sinimulan ng 'Play all'.",
+    "message": "Ihinto"
+  },
+  "voicesSweepPosition": {
+    "description": "Live na pagbasa ng posisyon sa settings Voices control bar habang nilalakad ng 'Play all' ang listahan; ang $index$ ang boses na kasalukuyang tumutugtog at ang $total$ kung ilan ang naka-queue.",
+    "message": "$index$ sa $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Accessible label para sa compare control sa control bar ng Voices sa settings, na inuulit ang isa pang boses sa huling dalawang narinig; $name$ ang boses na iyon.",
+    "message": "Bumalik sa $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Linya sa settings Voices control bar kapag pinindot ang 'Play all' sa listahang masyadong mahaba para pakinggan; ang $count$ ay kung ilang boses at ang $minutes$ ay tinatayang kung ilang minuto ang aabutin. Pinaikli sa 'min' para mabasang tama sa 1 — walang plural forms ang Chrome i18n.",
+    "message": "$count$ boses iyan — mga $minutes$ min. Pakitipirin muna ang listahan.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Accessible label para sa button na 'gamitin ang boses na ito' kada host sa voice catalog ng settings; $name$ ang boses, $host$ ang assistant (hal. Pi, Claude).",
+    "message": "Gamitin ang $name$ sa $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Maikling label sa button na 'gamitin ang boses na ito' kada host sa pinag-isang voice catalog ng settings (ipinapakita rin ang host sa tabi nito).",
+    "message": "Gamitin"
+  },
+  "voicesYourVoice": {
+    "description": "Button sa control bar sa listahan ng Voices sa settings na inililipat ang focus sa row ng boses na kasalukuyang ginagamit ng host na ito; $name$ ang boses na iyon.",
+    "message": "Boses mo: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Error na ibinabato kapag hindi makapag-allocate ang browser ng sapat na WebAssembly memory para sa voice-detection model.",
+    "message": "Hindi makapagsimula ang voice detection: kulang ang WebAssembly memory para sa voice model. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Error na ibinabato kapag hindi inilalantad ng browser ang initial WebAssembly memory na kailangan para patakbuhin ang voice-detection model.",
+    "message": "Hindi makapagsimula ang voice detection: hindi available ang WebAssembly memory sa browser na ito."
   }
 }

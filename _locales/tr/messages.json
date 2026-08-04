@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Kimlik doğrulama modalında listelenen fayda - artırılmış kullanım limitleri.",
+    "message": "Ücretsiz hesapla daha yüksek kullanım limitleri"
+  },
+  "authBenefitPremium": {
+    "description": "Kimlik doğrulama modalında listelenen fayda - sohbet botlarında premium özellikler.",
+    "message": "Premium özellikler ve sohbet botu desteği"
+  },
+  "authBenefitSupport": {
+    "description": "Kimlik doğrulama modalında listelenen fayda - öncelikli destek.",
+    "message": "Sorunlar için öncelikli destek"
+  },
+  "authBenefitSync": {
+    "description": "Kimlik doğrulama modalında listelenen fayda - ayar senkronizasyonu.",
+    "message": "Ses ayarlarını her yerde senkronize edin"
+  },
+  "authBenefitTTS": {
+    "description": "Kimlik doğrulama modalında listelenen fayda - TTS özelliği.",
+    "message": "Metinden konuşmaya sesleri (ücretli planlar)"
+  },
+  "authBenefitUsage": {
+    "description": "Kimlik doğrulama modalında listelenen fayda - kullanım takibi.",
+    "message": "Ses kullanımınızı cihazlar arasında takip edin"
+  },
+  "authPromptModalFull": {
+    "description": "Değer önerisi içeren tam modal kimlik doğrulama istemi açıklaması.",
+    "message": "SayPi'yi harika kullanıyorsunuz. Daha yüksek limitler, metinden konuşmaya sesleri ve desteklenen tüm sohbet botlarında premium özellikler için giriş yapın."
+  },
+  "authPromptModalSoft": {
+    "description": "Yumuşak modal kimlik doğrulama istemi açıklaması.",
+    "message": "Daha yüksek kullanım limitleri ve premium ses özelliklerine erişim için ücretsiz bir SayPi hesabı oluşturun."
+  },
+  "authPromptTitle": {
+    "description": "Kimlik doğrulama istemi modalı başlığı.",
+    "message": "Daha fazla ses özelliğinin kilidini açın"
+  },
+  "authPromptToast": {
+    "description": "Kullanıcıyı giriş yapmaya teşvik eden toast bildirimi.",
+    "message": "Daha yüksek limitler ve premium özellikler için SayPi'ye giriş yapın"
+  },
   "autoReadAloudChatGPT": {
     "description": "Sesli aramalar sırasında ChatGPT yanıtlarının otomatik olarak okunmasını etkinleştirmek/devre dışı bırakmak için onay kutusu etiketi.",
     "message": "Otomatik Okuma (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Metin-konuşma devre dışı bırakın"
   },
+  "dismiss": {
+    "message": "Anladım",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Reddet"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Odaklan"
   },
+  "errorVadInitFailed": {
+    "description": "Ses etkinliği algılama başlatılamadığında gösterilen hata bildirimi.",
+    "message": "Ses algılama başlatılamadı"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Ses kaydı ayarlanırken beklenmeyen bir hata oluştuğunda gösterilen hata bildirimi.",
+    "message": "Ses kaydı ayarlanamadı"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Ses algılama istemcisi kaydı başlatamadığında gösterilen hata bildirimi.",
+    "message": "Ses kaydı başlatılamadı"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Ses algılama (VAD) istemcisi kullanılamadığında, kayıt başlatılamadığı için gösterilen hata bildirimi.",
+    "message": "Ses kaydı kullanılamıyor"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Odak Modundan Çık"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Hem premium (HD) hem de value sesler mevcutken ses menülerinde gösterilen tek satırlık not",
+    "message": "HD sesler aylık kotanı yaklaşık 20× daha hızlı kullanır."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Bunu sıkmak ..."
   },
+  "maybeLater": {
+    "description": "Kimlik doğrulama istemini kapatma düğmesi metni.",
+    "message": "Belki sonra"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Mikrofon ayarlarınız gerekli özellikleri karşılamıyor. \nFarklı bir mikrofon kullanmayı veya ses ayarlarınızı değiştirmeyi deneyin."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Mikrofona erişilemiyor. \nLütfen cihaz ayarlarınızı kontrol edip tekrar deneyin."
   },
+  "microphonePermissionDeniedError": {
+    "description": "İzin istemi akışından sonra mikrofon izni reddedildiğinde gösterilen hata bildirimi.",
+    "message": "Mikrofon izni verilmedi. Lütfen istemde ve uzantı ayarlarında erişime izin verdiğinizden emin olun."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "doğruluk"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "En hızlı yanıt, ancak daha az doğru. \nBölmeye eğilimli."
   },
+  "moreVoices": {
+    "description": "Sayfa içi ses menüsünden uzantı ayarlarındaki tam ses kataloğuna giden menü satırı.",
+    "message": "Daha fazla ses…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Asistan takma adı"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Oturum açmadı"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "ChatGPT'yi açan düğme etiketi.",
+    "message": "ChatGPT'yi aç"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Claude.ai'yi açan düğme etiketi.",
+    "message": "Claude'u aç"
+  },
+  "onboarding_ctaPi": {
+    "description": "Pi.ai'yi açan düğme etiketi.",
+    "message": "Pi'yi aç"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Ortam seçeneği: başka insanların yanında.",
+    "message": "Başkalarının yanında"
+  },
+  "onboarding_envMixed": {
+    "description": "Ortam seçeneği: özel ve paylaşılan alanların karışımı.",
+    "message": "Karışık yerlerde"
+  },
+  "onboarding_envPrivate": {
+    "description": "Ortam seçeneği: özel bir alan.",
+    "message": "Özel bir yerde"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Ortam yanıtı sessiz modu kapalı bıraktığında gösterilen onay.",
+    "message": "Anlaşıldı — standart dinleme ve oynatma ayarlarını koruyacağız."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Ortam yanıtı sessiz modu etkinleştirdiğinde gösterilen onay.",
+    "message": "Sessiz mod açık — daha hafif konuşmayı algılarız ve sessiz yanıt veririz, böylece daha gizli konuşabilirsiniz."
+  },
+  "onboarding_envTitle": {
+    "description": "Kullanıcının ortamıyla ilgili tanıtım sorusunun başlığı.",
+    "message": "Genelde nerede konuşacaksınız?"
+  },
+  "onboarding_footer": {
+    "description": "İlk çalıştırma tanıtım sayfasındaki alt bilgi metni.",
+    "message": "Buna istediğiniz zaman Say, Pi ayarlarından geri dönebilirsiniz. Gizliliğiniz önemli — ses yalnızca etkin bir arama sırasında alınır."
+  },
+  "onboarding_heading": {
+    "description": "İlk çalıştırma tanıtım sayfasındaki ana başlık.",
+    "message": "🗣️ Say, Pi'ye hoş geldiniz"
+  },
+  "onboarding_intro": {
+    "description": "İlk çalıştırma tanıtım sayfasındaki giriş paragrafı.",
+    "message": "Bir yapay zekâyla ilk sesli konuşmanıza iki adım kaldı. Konuşmak yazmaktan yaklaşık 3× daha hızlı, hadi sizi kurulumdan geçirelim."
+  },
+  "onboarding_micTestButton": {
+    "description": "Risksiz tanıtım mikrofon testini başlatan düğme.",
+    "message": "🎤 Mikrofonunuzu test edin"
+  },
+  "onboarding_micTestDone": {
+    "description": "Tanıtım mikrofon testi başarıyla tamamlandıktan sonra gösterilen durum.",
+    "message": "Güzel — mikrofonunuz çalışıyor 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Tanıtım mikrofon testi girişi ölçerken gösterilen durum.",
+    "message": "Dinliyor — bir şey söyleyin 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Tanıtım mikrofon testi izin beklerken gösterilen durum.",
+    "message": "Mikrofon isteniyor…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Tanıtım mikrofon testi çalışırken durdurmak için düğme etiketi.",
+    "message": "Testi durdur"
+  },
+  "onboarding_step1Body": {
+    "description": "Uzantının nasıl sabitleneceğini açıklayan ilk tanıtım adımının metni.",
+    "message": "Tarayıcınızın sağ üstündeki yapboz parçası 🧩 simgesine, sonra Say, Pi'nin yanındaki sabitleme 📌 simgesine tıklayın. Böylece arama düğmesi tek tık uzağınızda kalır."
+  },
+  "onboarding_step1Title": {
+    "description": "İlk tanıtım adımının başlığı (uzantıyı sabitleme).",
+    "message": "Say, Pi'yi araç çubuğunuza sabitleyin"
+  },
+  "onboarding_step2Body": {
+    "description": "Sesli konuşmanın nasıl başlatılacağını açıklayan ikinci tanıtım adımının metni.",
+    "message": "Aşağıdaki desteklenen asistanlardan birine gidin, ardından Say, Pi arama düğmesine dokunup merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz; bu normal, ve yalnızca aktif bir aramadayken dinleriz."
+  },
+  "onboarding_step2Title": {
+    "description": "İkinci tanıtım adımının başlığı (sohbete başlama).",
+    "message": "Bir AI sohbeti açın ve konuşmaya başlayın"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Mikrofon izni"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Mikrofon izni engellendiğinde kurtarma yönlendirmesi.",
+    "message": "Tarayıcınız mikrofonu engelliyor. Adres çubuğundaki kamera veya kilit simgesine tıklayın, Mikrofon'u \"İzin ver\" olarak ayarlayın, sonra tekrar deneyin. macOS'te ayrıca Sistem Ayarları → Gizlilik ve Güvenlik → Mikrofon'u kontrol edin."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Mikrofon izni reddedildi/engellendiyse kurtarma panelinin başlığı.",
+    "message": "Mikrofon erişimi engellendi"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Mikrofon başka yerde kullanılıyorsa kurtarma yönlendirmesi.",
+    "message": "Başka bir uygulama veya sekme mikrofonunuzu kullanıyor olabilir. Kayıt yapabilecek diğer her şeyi kapatın (görüntülü aramalar, sesli notlar), sonra tekrar deneyin."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Mikrofon başka bir uygulama tarafından kullanılıyorsa kurtarma panelinin başlığı.",
+    "message": "Mikrofonunuz meşgul"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Mikrofon aygıtı yoksa kurtarma yönlendirmesi.",
+    "message": "Bir mikrofon bulamadık. Bir tane takın (veya kulaklığınızı bağlayın), giriş aygıtı olarak seçildiğinden emin olun, sonra tekrar deneyin."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Mikrofon aygıtı yoksa kurtarma panelinin başlığı.",
+    "message": "Mikrofon bulunamadı"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Bilinmeyen bir mikrofon hatası için kurtarma yönlendirmesi.",
+    "message": "Mikrofonunuza erişirken bir şeyler ters gitti. Bağlı olduğunu ve tarayıcı ayarlarında izinli olduğunu kontrol edin, sonra tekrar deneyin."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Bilinmeyen bir mikrofon hatası için kurtarma panelinin başlığı.",
+    "message": "Mikrofonunuza erişemedik"
+  },
+  "permissions_retryButton": {
+    "description": "Mikrofon iznini yeniden isteyen düğmenin etiketi.",
+    "message": "Tekrar dene"
+  },
+  "permissions_revokedHeading": {
+    "description": "Mikrofon erişimi daha önce verilmiş ama sonradan iptal edilmişse gösterilen başlık.",
+    "message": "🎙️ Mikrofonunuzu yeniden bağlayalım"
+  },
+  "permissions_revokedInfo": {
+    "description": "Mikrofon erişimi verildikten sonra iptal edildiyse gösterilen bilgilendirme metni.",
+    "message": "Mikrofon erişiminiz kapatıldı — bu, genellikle tarayıcı veya sistem güncellemesinden sonra olur. Aşağıdan yeniden izin verin; bir görüşmedeyken $productName$ tekrar dinlemeye başlayacak.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Sessiz/fısıltı modunu etkinleştiren düğmenin etiketi.",
+    "message": "Sessiz mod"
+  },
+  "quietModeTooltip": {
+    "description": "Sessiz/fısıltı modunun ne yaptığını açıklayan ipucu.",
+    "message": "Yumuşak konuşun — daha sessiz konuşmayı algılar ve asistanın yanıt sesini azaltır, böylece başkalarının yanında sesle kullanabilirsiniz."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Kimlik doğrulama sürerken giriş yap düğmesi için metin.",
+    "message": "Giriş yapılıyor..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ses efektleri"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Sesli geri bildirim sorunlarını önlemek için Firefox'ta ses efektleri devre dışı bırakıldı."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "İlk sesli konuşmadan sonra bir kez gösterilen hız kazanımı bildirisinin başlığı.",
+    "message": "Güzel, konuşmak yazmaktan yaklaşık 3× daha hızlı."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Kazanılan toplam dakikayı gösteren hız kazanımı bildirisinin isteğe bağlı ikinci satırı.",
+    "message": "Bunu yazmak yerine yaklaşık $minutes$ dk daha hızlı konuştunuz.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Yalnızca düğmeye bastığınızda gönderin"
   },
+  "surveyQuestion": {
+    "description": "Tek seferlik, başarı sonrası mikro anketin tek sorusu.",
+    "message": "Şu ana kadar ses nasıl gidiyor?"
+  },
+  "surveyRatingLabel": {
+    "description": "Bir anket puanlama düğmesi için erişilebilir etiket.",
+    "message": "5 üzerinden $rating$ puan ver",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Kullanıcı başarı sonrası anketi yanıtladıktan sonra gösterilen teşekkür.",
+    "message": "Teşekkürler — bu, Say, Pi'yi daha iyi yapmamıza yardımcı oluyor. 🙏"
+  },
   "tabAIChat": {
     "description": "Yapay zeka sohbet ayarları bölümü için sekme etiketi.",
     "message": "Yapay Zeka Sohbeti"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Genel ayarlar bölümü için sekme etiketi.",
     "message": "Genel"
+  },
+  "tabVoices": {
+    "description": "Ses ayarları bölümü için sekme etiketi (siteye özel ses kataloğu).",
+    "message": "Sesler"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "krediler"
   },
+  "ttsCreditsRemaining": {
+    "description": "Kalan TTS kotasını, ham karakter sayısı değil, ses başına kredi havuzu olarak gösteren metin (saypi-api #181 Stage 2).",
+    "message": "$credits$ kredi kaldı",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Çok dilli sesler şu anda Safari'de desteklenmemektedir."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Ses üretimi"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Dikkat! $browserName$ tarayıcısında $chatbotName$ ile konuşma oynatma henüz kullanılamıyor. İyi haber? Sesli giriş harika çalışıyor! TTS için masaüstünde Chrome veya Edge'i deneyin.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$ üzerinde TTS kullanılamıyor. Sesli giriş çalışıyor! TTS için Chrome masaüstünü deneyin.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Sesi"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Konuşmaya benzer ses algılandığında ancak yazıya dökmek için çok zayıf / düşük güvenli olduğunda görünen VAD detayı (istemci tarafı kabul kapısı düşürmesi).",
+    "message": "Yazıya dökmek için ses çok zayıf"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Mikrofon daha yeni bir sekme tarafından alındığı için aramanın bittiğini açıklayan VAD detayı.",
+    "message": "Ses girişi başka bir sekmeye taşındı"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Ses mevcut değil. \nMasaüstünde Chrome veya Firefox'u deneyin."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Dikkat! $browserName$ tarayıcısında $chatbotName$ ile konuşma oynatma henüz kullanılamıyor. İyi haber? Sesli giriş harika çalışıyor! TTS için masaüstünde Chrome veya Edge'i deneyin.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "$browserName$ + $chatbotName$ üzerinde TTS kullanılamıyor. Sesli giriş çalışıyor! TTS için Chrome masaüstünü deneyin.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Anladım",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Ses girişi başka bir sekme tarafından devralınan bir sekmede gösterilen VAD durumu.",
+    "message": "Duraklatıldı"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Ayrıntıları Görüntüle"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Seçili bir Say, Pi sesinin sesine özel bir tanıtım metni olmadığında (ve okunacak yakın tarihli bir mesaj da yokken) çalınan genel sesli tanıtım.",
+    "message": "Merhaba, ben $voice$. Sesim böyle. Umarım bu sesi beğenirsiniz.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Selam! \nПривет! \nişte! \nBen Pi, çok dilli yapay zeka asistanınım. \nEmrimdeki 32 dil sayesinde dünyanın dört bir yanından fikirleri ve kültürleri keşfedebiliyoruz. \nBu ses hakkında ne düşünüyorsunuz?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ses Ayarları"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Bir sesin açıklaması olmadığında ayarlardaki ses kataloğunda ses satırı için yedek alt başlık; $count$ sesin desteklediği dil sayısıdır.",
+    "message": "$count$ dil konuşur",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "“Addison” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Aydınlık ve akıcı"
+  },
+  "voiceTagline_alloy": {
+    "description": "'Alloy' sesi için yazılmış kişilik sloganı (ayarlar Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Dengeli ve çok amaçlı"
+  },
+  "voiceTagline_ash": {
+    "description": "'Ash' sesi için yazılmış kişilik sloganı (ayarlar Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Alçak, düşünceli, sakin"
+  },
+  "voiceTagline_ballad": {
+    "description": "'Ballad' sesi için yazılmış kişilik sloganı (ayarlar Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Yumuşak ve melodik"
+  },
+  "voiceTagline_cassidy": {
+    "description": "“Cassidy” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Sıcakkanlı ve doğrudan"
+  },
+  "voiceTagline_cedar": {
+    "description": "'Cedar' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Dengeli ve güven veren"
+  },
+  "voiceTagline_coral": {
+    "description": "'Coral' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Parlak, pozitif enerji"
+  },
+  "voiceTagline_echo": {
+    "description": "'Echo' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Temiz ve nötr"
+  },
+  "voiceTagline_fable": {
+    "description": "'Fable' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Masalcı bir tını"
+  },
+  "voiceTagline_finn": {
+    "description": "“Finn” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Taze ve enerjik"
+  },
+  "voiceTagline_jamahal": {
+    "description": "“Jamahal” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Zengin ve etkileyici"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "'Jarnathan' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Kadifemsi gece baritonu"
+  },
+  "voiceTagline_jeff": {
+    "description": "“Jeff” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Net ve sakin"
+  },
+  "voiceTagline_jessica": {
+    "description": "“Jessica” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Sıcak, zarif duruş"
+  },
+  "voiceTagline_joey": {
+    "description": "'Joey' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Rahat, sohbet gibi bir Amerikan"
+  },
+  "voiceTagline_juniper": {
+    "description": "“Juniper” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Net, canlı, hareketli"
+  },
+  "voiceTagline_lucy": {
+    "description": "“Lucy” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Yumuşak ve ışıldayan"
+  },
+  "voiceTagline_marin": {
+    "description": "'Marin' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Sıcak, sabah radyosu sakinliği"
+  },
+  "voiceTagline_mark": {
+    "description": "“Mark” sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Net, kendinden emin anlatıcı"
+  },
+  "voiceTagline_nova": {
+    "description": "'Nova' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Hızlı ve meraklı"
+  },
+  "voiceTagline_onyx": {
+    "description": "'Onyx' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Derin, yankılı bir ağırlık"
+  },
+  "voiceTagline_paola": {
+    "description": "'Paola' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Etkileyici İtalyan sıcaklığı"
+  },
+  "voiceTagline_sage": {
+    "description": "'Sage' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Sakin bir netlik"
+  },
+  "voiceTagline_shimmer": {
+    "description": "'Shimmer' sesi için yazılmış kişilik sloganı (Ayarlar > Sesler stüdyosu; istemci tarafı ses kimliği eşlemesi).",
+    "message": "Hafif ve ferah"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Ayarlar Sesler stüdyosunda bir ses kartının sabitleme anahtarındaki kısa etiket (kapalı durum); basınca sesi ana bilgisayarın sohbet içi menüsüne ekler.",
+    "message": "+ Menü"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Bir ses kartının sabitleme anahtarının (kapalı durum) erişilebilir etiketi; $name$ ses, $host$ asistan.",
+    "message": "$name$ sesini $host$ menüsüne ekle",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Sesler kontrol çubuğundaki anahtarın etiketi; ok tuşlarıyla listede gezerken odak her sese geldiğinde o sesi çalıp çalmadığını belirtir.",
+    "message": "Gezindikçe çal"
+  },
+  "voicesArrowsLive": {
+    "description": "Ayarlar Sesler listesinde ilk 'Playing <voice>' duyurusuna eklenen ekran okuyucu onayı; ok tuşlarının az önce duyulur hale geldiğini söyler. 'Hareket ederken çal' anahtarının kendi ifadesini yansıtır.",
+    "message": "Artık hareket ederken ok tuşları çalıyor. Esc durdurur."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Yerel seslerle gelen host'lar için (örn. Pi'nin 8 yerleşiği) menü yuvalarının altında görünen not; stüdyo bunları yönetmez; $host$ asistanın adıdır.",
+    "message": "$host$'un kendi yerleşik sesleri de menüsünde her zaman görünür.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Sohbet içinde ses menüsü olmayan bir host için voicesBuiltinsNote varyantı (Pi 2026'da menüsünü kaldırdı); özgündeki yerleşiklerin 'menüsünde göründüğü' vaadi bu durumda doğru olmaz; $host$ asistanın adıdır.",
+    "message": "$host$'un burada listelenmeyen kendi yerleşik sesleri de var.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Ayarlar Sesler kontrol çubuğundaki ilerleme göstergesi: kullanıcı listelenen seslerin kaçını zaten dinledi. Sadece sayılar, bu yüzden 1 için de doğru okunur — Chrome i18n'de çoğul formlar yoktur.",
+    "message": "$total$ sesten $heard$ dinlendi",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Ayarlar Sesler listesindeki bir ses satırının erişilebilir adının parçası; bu profilin daha önce dinlediği bir sesi işaretler. Görsel olarak bu, sesin ses izinde mürekkep yoğunluğu olarak çizilir; ekran okuyucu bunu göremez.",
+    "message": "Dinlendi"
+  },
+  "voicesInHostMenu": {
+    "description": "Ayarlar Sesler stüdyosunda menü yuvaları satırının üstündeki bölüm başlığı; $host$ asistan.",
+    "message": "$host$ menüsünde",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Ayarlar Sesler stüdyosunda bir ses kartının sabitleme anahtarındaki kısa etiket (açık durum).",
+    "message": "✓ Menüde"
+  },
+  "voicesInUse": {
+    "description": "Ayarlar Sesler listesinde ana bilgisayarın şu anda seçili sesi üzerindeki kalıcı rozet; büyük harfle gösterilir. Bilerek “Şu an konuşuyor” DEĞİL: bu sayfada satırlar örnek kliplerini çalar, bu yüzden seçili ama sessiz bir ses, başka bir satır çalarken konuştuğunu iddia etmemelidir.",
+    "message": "Kullanımda"
+  },
+  "voicesKeyboardHint": {
+    "description": "Ayarlar Sesler kontrol çubuğunda tek satırlık klavye ipucu. Simgeler tuşlardır: Space, yukarı/aşağı okları ve Shift+Space.",
+    "message": "Dinlemek için Space, sesler arasında geçmek için ↑↓, geri dönmek için ⇧Space."
+  },
+  "voicesLoadError": {
+    "description": "Bir host'un stüdyosunda, o host'un ses kataloğu yüklenemediğinde görünen hata durumu; $host$ asistanın adıdır.",
+    "message": "$host$ sesleri yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Ana bilgisayarın sohbet içi menüsü zaten azami sayıda ses içerdiğinde, devre dışı “+ Menü” anahtarının üzerindeki araç ipucu/ipucu.",
+    "message": "Menü dolu, eklemek için bir sesi kaldırın"
+  },
+  "voicesMenuHint": {
+    "description": "“$host$ menüsünde” başlığının yanındaki tek satırlık ipucu; yuvalar satırının, sohbet içi ses menüsünü yansıttığını açıklar.",
+    "message": "Sohbette göreceğiniz"
+  },
+  "voicesMenuOverflow": {
+    "description": "Kullanıcının sabitlenmiş ses sayısı, sohbet içi menünün gösterebildiğinden fazla olduğunda (eski durum) menü yuvalarının altında görünen not; $count$ kaç tanesinin sığmadığıdır, $cap$ menü boyutudur.",
+    "message": "Menünün $cap$ yuvasının ötesinde $count$ sabitlenmiş ses daha bekliyor.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow'un tekil hâli; sohbet içi menüye tam olarak bir sabitlenmiş ses sığmadığında kullanılır; $cap$ menü boyutudur.",
+    "message": "Menünün $cap$ yuvasının ötesinde 1 sabitlenmiş ses daha bekliyor.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Ayarlar Sesler listesinin altındaki özet satırı; ana makinenin sohbet içi ses menüsünün ne kadarının dolu olduğunu söyler; $host$ asistan, $used$ kaç koltuğun dolu olduğu, $cap$ toplam koltuk sayısıdır. 1 için de doğru okunacak şekilde yazılmıştır — Chrome i18n'de çoğul formlar yoktur.",
+    "message": "$host$ menüsü: $cap$ koltuğun $used$ kadarı dolu",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Ayarlar Sesler listesinin sonunda, çalınacak örnek klibi olmayan sesleri tutan grubun başlığı; $count$ kaç tane olduğunu belirtir. 1 için de doğru okunacak şekilde yazılmıştır — Chrome i18n'de çoğul formlar yoktur.",
+    "message": "Henüz örnek yok ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Oturum açmış bir kullanıcı için ses listesi boş olduğunda (ör. ağ sorunu) ayarlardaki ses kataloğunda gösterilir.",
+    "message": "Sesler şu anda yüklenemedi. Lütfen daha sonra tekrar deneyin."
+  },
+  "voicesNowPlaying": {
+    "description": "Ayarlar Sesler listesinde bir sesin örnek klibi çalmaya başladığında ekran okuyucu duyurusu; $name$ sestir.",
+    "message": "$name$ çalıyor",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Ayarlar Sesler kontrol çubuğundaki düğme; şu anda listelenen her sesi art arda çalar; $count$ kaç tane olduğunu belirtir. 1 için de doğru okunacak şekilde yazılmıştır — Chrome i18n'de çoğul formlar yoktur.",
+    "message": "Hepsini çal ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Dönüş ziyaretinde ayarlar Sesler kontrol çubuğundaki düğme: yalnızca henüz dinlemediğiniz listelenen sesleri çalar; $count$ kaç tane olduğunu belirtir. 1 için de doğru okunacak şekilde yazılmıştır — Chrome i18n'de çoğul formlar yoktur.",
+    "message": "Yenileri çal ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Sayfada henüz kullanıcı etkileşimi olmadığı için tarayıcı bir örneği çalmayı reddettiğinde ayarlar Sesler kontrol çubuğunda görünen satır.",
+    "message": "Sesi etkinleştirmek için herhangi bir sese tıklayın."
+  },
+  "voicesPreview": {
+    "description": "Bir ses satırındaki ücretsiz örnek klibi dinleten oynat (▶) düğmesi için erişilebilir etiket; $name$ sesin adıdır.",
+    "message": "$name$ için bir örnek çal",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Ayarlar Sesler listesinin erişilebilir adı (her seste bir satır olacak şekilde tüm seslerin listbox'ı).",
+    "message": "Sesler, en koyudan en parlak olana sıralı"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Bir ses kartının sabitleme anahtarının (açık durum) ve bir menü yuvasının kaldırma düğmesinin erişilebilir etiketi; $name$ ses, $host$ asistan.",
+    "message": "$name$ sesini $host$ menüsünden kaldır",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Bir sesin örnek klibi yüklenemediğinde veya çalınamadığında ayarlar Sesler kontrol çubuğunda görünen satır; $name$ o sestir. Modal değildir — örnekler akışı bunun üzerinden devam eder.",
+    "message": "$name$ örneği çalınamadı.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Ayarlar > AI Chat sekmesinde ses kataloğu bölümünün alt başlığı.",
+    "message": "Her sitede yanıtları sesli okuyan sesi seçin."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Sesler ayarları başlığının altındaki alt başlık; perdeye göre sıralanmış ses rayı için.",
+    "message": "En koyudan en parlak olana tüm sesler. Dinleyip seçin."
+  },
+  "voicesSectionTitle": {
+    "description": "Ayarlar > AI Chat sekmesinde ses kataloğu bölümünün başlığı.",
+    "message": "Sesler"
+  },
+  "voicesShelfEveryday": {
+    "description": "Ayarlar ses kataloğunda uygun fiyatlı katmandaki sesler için grup başlığı. CSS tarafından büyük harfle gösterilir.",
+    "message": "Günlük sesler"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Ayarlar > Sesler stüdyosunda Günlük grup başlığının yanındaki tek satırlık not; bu katmanın HD'ye göre ne kadar daha uzun gittiğini stüdyoda belirten tek yer.",
+    "message": "Doğal ve net — HD'ye göre yaklaşık 20× daha uzun süre dinleyebilirsiniz."
+  },
+  "voicesShelfHd": {
+    "description": "Ayarlar ses kataloğunda premium (HD) sesler için grup başlığı. CSS tarafından büyük harfle gösterilir.",
+    "message": "HD sesler"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Ayarlar > Sesler stüdyosunda HD grup başlığının yanındaki tek satırlık not.",
+    "message": "En zengin, en etkileyici sesimiz."
+  },
+  "voicesShowAll": {
+    "description": "Ayarlar Sesler 'Göster' filtresindeki seçenek: filtre yok, tüm sesler listelenir.",
+    "message": "Tüm sesler"
+  },
+  "voicesShowEveryday": {
+    "description": "Ayarlar Sesler 'Göster' filtresindeki seçenek: yalnızca standart (HD olmayan) sesleri listele.",
+    "message": "Yalnızca günlük"
+  },
+  "voicesShowHd": {
+    "description": "Ayarlar Sesler 'Göster' filtresindeki seçenek: yalnızca premium (HD) sesleri listele.",
+    "message": "Yalnızca HD"
+  },
+  "voicesShowLabel": {
+    "description": "Ayarlar Sesler kontrol çubuğundaki, listede hangi seslerin görüneceğini daraltan filtrenin etiketi.",
+    "message": "Göster"
+  },
+  "voicesShowUnheard": {
+    "description": "Ayarlar Sesler 'Göster' filtresindeki seçenek: yalnızca kullanıcının henüz dinlemediği sesleri listele.",
+    "message": "Henüz dinlenmedi"
+  },
+  "voicesSpeakingNow": {
+    "description": "Ayarlar Sesler stüdyosunda (menü yuvası ve ses kartı) ana bilgisayarın şu anda seçili sesi üzerindeki durum etiketi.",
+    "message": "Şu an konuşuyor"
+  },
+  "voicesSpeaksWith": {
+    "description": "Ayarlar Sesler stüdyo sahnesinde, mevcut sesin adının üstündeki üst başlık satırı; $host$ asistan (örn. Pi). CSS tarafından büyük harfe dönüştürülür.",
+    "message": "$host$ şununla konuşur:",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Host'un kendi sesini sunduğu (örn. Pi) durumda sahne notu; bu yüzden bir Say, Pi sesi seçmek host'un sesinin yerini alır.",
+    "message": "Aşağıdan birini seçene kadar $host$ kendi sesini kullanır.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Host'un kendi sesi olmadığı (örn. Claude) durumda sahne notu; bu yüzden bir Say, Pi sesi seçilene kadar hiçbir şey sesli okunmaz.",
+    "message": "Aşağıdan birini seçene kadar $host$ yanıtları sesli okumaz.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Host için Say, Pi sesi seçilmemişken ayarlardaki Sesler stüdyosu sahnesinin başlığı; $host$ asistanın adıdır (örn. Pi, Claude). İsim boyutunda gösterilir.",
+    "message": "$host$ nasıl seslensin",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Ayarlar Sesler stüdyosu sahnesinde, geçerli sesin ücretsiz örnek klibini çalan düğme.",
+    "message": "Örnek dinle"
+  },
+  "voicesStopPlayback": {
+    "description": "Ayarlar Sesler kontrol çubuğundaki düğme; 'Hepsini çal' ile başlatılan örnekler dizisini durdurur.",
+    "message": "Durdur"
+  },
+  "voicesSweepPosition": {
+    "description": "Ayarlar Sesler kontrol çubuğunda, 'Tümünü çal' listeyi gezerken canlı konum göstergesi; $index$ şu anda çalan sesi, $total$ ise sıradaki toplam sayıyı belirtir.",
+    "message": "$total$ içinde $index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Ayarlar Sesler kontrol çubuğundaki karşılaştırma denetimi için erişilebilir etiket; son duyulan iki sesten diğerini tekrar çalar; $name$ o sestir.",
+    "message": "$name$ sesine geri dön",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Liste, baştan sona dinlenemeyecek kadar uzunken 'Tümünü çal' basıldığında ayarlar Sesler kontrol çubuğunda görünen satır; $count$ ses sayısıdır, $minutes$ ise kabaca kaç dakika süreceğidir. Chrome i18n’de çoğul formlar olmadığı için kısaltılmış 'min' kullanılmıştır; 1’de de doğru okunur.",
+    "message": "Bu $count$ ses ediyor, yaklaşık $minutes$ dk. Önce listeyi daraltın.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Ayarlar ses kataloğunda, her ana bilgisayar için yer alan “bu sesi kullan” düğmesinin erişilebilir etiketi; $name$ ses, $host$ asistan (örn. Pi, Claude).",
+    "message": "$host$ üzerinde $name$ kullan",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Birleşik ayarlar ses kataloğunda, her ana bilgisayar için yer alan “bu sesi kullan” düğmesindeki kısa etiket (ana bilgisayar yanında gösterilir).",
+    "message": "Kullan"
+  },
+  "voicesYourVoice": {
+    "description": "Ayarlar Sesler listesindeki kontrol çubuğu düğmesi; odağı bu ana makinenin şu anda kullandığı sesin satırına taşır; $name$ o sestir.",
+    "message": "Senin sesin: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Tarayıcı, ses algılama modeli için yeterli WebAssembly belleği ayıramadığında oluşturulan hata.",
+    "message": "Ses algılama başlatılamıyor: ses modeli için yeterli WebAssembly belleği yok. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Tarayıcı, ses algılama modelini çalıştırmak için gereken başlangıç WebAssembly belleğini sağlamadığında oluşturulan hata.",
+    "message": "Ses algılama başlatılamıyor: bu tarayıcıda WebAssembly belleği kullanılamıyor."
   }
 }

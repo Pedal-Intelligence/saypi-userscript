@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Výhoda uvedená v auth modale – zvýšené limity používania.",
+    "message": "Vyššie limity používania s bezplatným účtom"
+  },
+  "authBenefitPremium": {
+    "description": "Výhoda uvedená v auth modale – prémiové funkcie naprieč chatbotmi.",
+    "message": "Prémiové funkcie a podpora chatbotov"
+  },
+  "authBenefitSupport": {
+    "description": "Výhoda uvedená v auth modale – prioritná podpora.",
+    "message": "Prioritná podpora pri problémoch"
+  },
+  "authBenefitSync": {
+    "description": "Výhoda uvedená v auth modale – synchronizácia nastavení.",
+    "message": "Synchronizujte nastavenia hlasu všade"
+  },
+  "authBenefitTTS": {
+    "description": "Výhoda uvedená v auth modale – funkcia TTS.",
+    "message": "Hlasy prevodu textu na reč (platené plány)"
+  },
+  "authBenefitUsage": {
+    "description": "Výhoda uvedená v auth modale – sledovanie používania.",
+    "message": "Sledujte používanie hlasu na všetkých zariadeniach"
+  },
+  "authPromptModalFull": {
+    "description": "Popis pre plnú modálnu výzvu na prihlásenie s hodnotovou ponukou.",
+    "message": "Say, Pi už používate naplno. Prihláste sa pre vyššie limity, hlasy prevodu textu na reč a prémiové funkcie vo všetkých podporovaných chatbotov."
+  },
+  "authPromptModalSoft": {
+    "description": "Popis pre jemnú modálnu výzvu na prihlásenie.",
+    "message": "Vytvorte si bezplatný účet Say, Pi pre vyššie limity používania a prístup k prémiovým hlasovým funkciám."
+  },
+  "authPromptTitle": {
+    "description": "Nadpis modálneho okna s výzvou na prihlásenie.",
+    "message": "Odomknite viac hlasových funkcií"
+  },
+  "authPromptToast": {
+    "description": "Toast notifikácia, ktorá povzbudzuje používateľa, aby sa prihlásil.",
+    "message": "Prihláste sa do Say, Pi pre vyššie limity a prémiové funkcie"
+  },
   "autoReadAloudChatGPT": {
     "description": "Popis za zaškrtávacie políčko na povolenie alebo zakázanie automatického čítania odpovedí ChatGPT počas hlasových hovorov.",
     "message": "Automatické čítanie nahlas (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Zakázať text-reč"
   },
+  "dismiss": {
+    "message": "Rozumiem",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Zamietnuť"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Zamerať sa"
   },
+  "errorVadInitFailed": {
+    "description": "Chybový toast zobrazený, keď sa nepodarí inicializovať detekciu hlasovej aktivity.",
+    "message": "Nepodarilo sa inicializovať detekciu hlasu"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Chybový toast zobrazený, keď dôjde k neočakávanej chybe počas nastavovania hlasového nahrávania.",
+    "message": "Nepodarilo sa nastaviť hlasové nahrávanie"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Chybový toast zobrazený, keď sa klientovi detekcie hlasu nepodarí spustiť nahrávanie.",
+    "message": "Nepodarilo sa spustiť hlasové nahrávanie"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Chybový toast zobrazený, keď nie je dostupný klient detekcie hlasu (VAD), takže nahrávanie sa nemôže spustiť.",
+    "message": "Hlasové nahrávanie nie je dostupné"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Opustiť režim sústredenia"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Jednoriadková poznámka zobrazená v ponukách hlasu, keď sú dostupné prémiové (HD) aj výhodné hlasy",
+    "message": "Hlasy v HD míňajú váš mesačný limit asi 20× rýchlejšie."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "To zastrčenie ..."
   },
+  "maybeLater": {
+    "description": "Text tlačidla na zrušenie výzvy na prihlásenie.",
+    "message": "Možno neskôr"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Nastavenia mikrofónu nespĺňajú požadované špecifikácie. \nSkúste použiť iný mikrofón alebo upravte nastavenia zvuku."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Nedá sa získať prístup k mikrofónu. \nSkontrolujte nastavenia zariadenia a skúste to znova."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Chybový toast zobrazený, keď bolo povolenie mikrofónu zamietnuté po procese výzvy na povolenie.",
+    "message": "Povolenie mikrofónu nebolo udelené. Uistite sa, že ste povolili prístup vo výzve aj v nastaveniach rozšírenia."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "presnosť"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Najrýchlejšia odozva, ale menej presná. \nSklon k prerušovaniu."
   },
+  "moreVoices": {
+    "description": "Riadok menu, ktorý odkazuje z hlasového menu na stránke na celý katalóg hlasov v nastaveniach rozšírenia",
+    "message": "Ďalšie hlasy…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Prezývka asistenta"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nie podpísané"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Názov tlačidla, ktoré otvorí ChatGPT.",
+    "message": "Otvoriť ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Popis tlačidla, ktoré otvorí Claude.ai.",
+    "message": "Otvoriť Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Popis tlačidla, ktoré otvorí Pi.ai.",
+    "message": "Otvoriť Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Možnosť prostredia: okolo iných ľudí.",
+    "message": "V prítomnosti iných ľudí"
+  },
+  "onboarding_envMixed": {
+    "description": "Možnosť prostredia: mix súkromných a zdieľaných priestorov.",
+    "message": "Striedanie miest"
+  },
+  "onboarding_envPrivate": {
+    "description": "Možnosť prostredia: súkromný priestor.",
+    "message": "Niekde v súkromí"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Potvrdenie zobrazené, keď odpoveď o prostredí nechá tichý režim vypnutý.",
+    "message": "Dobre, ponecháme štandardné nastavenia počúvania a prehrávania."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Potvrdenie zobrazené vtedy, keď odpoveď o prostredí zapne tichý režim.",
+    "message": "Tichý režim je zapnutý — zachytíme aj tichšiu reč a odpovieme potichu, aby si sa mohol rozprávať diskrétne."
+  },
+  "onboarding_envTitle": {
+    "description": "Nadpis otázky v úvodnom sprievodcovi o prostredí používateľa.",
+    "message": "Kde sa budeš zvyčajne rozprávať?"
+  },
+  "onboarding_footer": {
+    "description": "Text v pätičke na stránke úvodného sprievodcu pri prvom spustení.",
+    "message": "K tomuto sa môžeš kedykoľvek vrátiť v nastaveniach Say, Pi. Na tvojom súkromí záleží — zvuk sa zachytáva iba počas aktívneho hovoru."
+  },
+  "onboarding_heading": {
+    "description": "Hlavný nadpis na úvodnej stránke pri prvom spustení.",
+    "message": "🗣️ Vitajte v Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Úvodný odsek na úvodnej stránke pri prvom spustení.",
+    "message": "Od prvého hovoreného rozhovoru s AI vás delia dva kroky. Hovorenie je asi 3× rýchlejšie než písanie — poďme to nastaviť."
+  },
+  "onboarding_micTestButton": {
+    "description": "Tlačidlo, ktoré spustí nezáväzný test mikrofónu v úvodnom sprievodcovi.",
+    "message": "🎤 Otestovať mikrofón"
+  },
+  "onboarding_micTestDone": {
+    "description": "Stav zobrazený po úspešnom dokončení testu mikrofónu v úvodnom sprievodcovi.",
+    "message": "Super — mikrofón funguje! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Stav zobrazený počas toho, ako test mikrofónu v úvodnom sprievodcovi meria vstup.",
+    "message": "Počúvam — povedz niečo! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Stav zobrazený počas toho, ako test mikrofónu v úvodnom sprievodcovi čaká na povolenie.",
+    "message": "Žiada sa o prístup k mikrofónu…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Názov tlačidla na zastavenie testu mikrofónu v úvodnom sprievodcovi, kým beží.",
+    "message": "Zastaviť test"
+  },
+  "onboarding_step1Body": {
+    "description": "Text prvého kroku úvodného nastavenia, ktorý vysvetľuje, ako pripnúť rozšírenie.",
+    "message": "Kliknite na ikonu dielika skladačky 🧩 vpravo hore v prehliadači a potom na pripináčik 📌 vedľa Say, Pi. Vďaka tomu bude tlačidlo hovoru na jeden klik."
+  },
+  "onboarding_step1Title": {
+    "description": "Názov prvého kroku úvodného nastavenia (pripnutie rozšírenia).",
+    "message": "Pripnite si Say, Pi na panel nástrojov"
+  },
+  "onboarding_step2Body": {
+    "description": "Text druhého kroku úvodného nastavenia, ktorý vysvetľuje, ako začať hlasový rozhovor.",
+    "message": "Prejdite na jedného z podporovaných asistentov nižšie, potom ťuknite na tlačidlo hovoru Say, Pi a pozdravte. Prvýkrát si vyžiadame prístup k mikrofónu — je to v poriadku a počúvame len vtedy, keď ste aktívne v hovore."
+  },
+  "onboarding_step2Title": {
+    "description": "Názov druhého kroku úvodného nastavenia (začatie konverzácie).",
+    "message": "Otvorte chat s AI a začnite rozprávať"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Mikrofón"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Pokyny na obnovu, keď je povolenie mikrofónu zablokované.",
+    "message": "Váš prehliadač blokuje mikrofón. Kliknite na ikonu kamery alebo zámku v paneli s adresou, nastavte Mikrofón na „Povoliť“ a potom to skúste znova. V macOS skontrolujte aj Systémové nastavenia → Súkromie a zabezpečenie → Mikrofón."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Názov panela obnovy, keď bolo povolenie mikrofónu zamietnuté/zablokované.",
+    "message": "Prístup k mikrofónu je zablokovaný"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Pokyny na obnovu, keď sa mikrofón používa inde.",
+    "message": "Váš mikrofón môže používať iná aplikácia alebo karta. Zatvorte všetko, čo by mohlo nahrávať (videohovory, hlasové poznámky), a potom to skúste znova."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Názov panela obnovy, keď mikrofón používa iná aplikácia.",
+    "message": "Váš mikrofón sa používa"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Pokyny na obnovu, keď nie je k dispozícii žiadne zariadenie mikrofónu.",
+    "message": "Nenašli sme mikrofón. Pripojte ho (alebo pripojte slúchadlá s mikrofónom), uistite sa, že je vybraný ako vstupné zariadenie, a potom to skúste znova."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Názov panela obnovy, keď nie je k dispozícii žiadne zariadenie mikrofónu.",
+    "message": "Nenašiel sa žiadny mikrofón"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Pokyny na obnovu pri neznámej chybe mikrofónu.",
+    "message": "Pri prístupe k mikrofónu sa niečo pokazilo. Skontrolujte, či je pripojený a povolený v nastaveniach prehliadača, a potom to skúste znova."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Názov panela obnovy pri neznámej chybe mikrofónu.",
+    "message": "Nepodarilo sa nám získať prístup k vášmu mikrofónu"
+  },
+  "permissions_retryButton": {
+    "description": "Popis tlačidla, ktoré znovu požiada o povolenie mikrofónu.",
+    "message": "Skúsiť znova"
+  },
+  "permissions_revokedHeading": {
+    "description": "Nadpis zobrazený, keď bol prístup k mikrofónu predtým udelený, ale neskôr bol odobratý.",
+    "message": "🎙️ Znova pripojme váš mikrofón"
+  },
+  "permissions_revokedInfo": {
+    "description": "Informačný text zobrazený, keď bol prístup k mikrofónu odobratý po tom, čo bol udelený.",
+    "message": "Prístup k mikrofónu bol vypnutý — často sa to stáva po aktualizácii prehliadača alebo systému. Znova ho povoľte nižšie a $productName$ bude pri hovore opäť počúvať.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Označenie prepínača, ktorý zapína tichý/šepkací režim.",
+    "message": "Tichý režim"
+  },
+  "quietModeTooltip": {
+    "description": "Pomocný popis vysvetľujúci, čo robí tichý/šepkací režim.",
+    "message": "Hovorí jemnejšie — zachytí tichšiu reč a zníži hlasitosť odpovede asistenta, aby ste mohli používať hlas medzi ľuďmi."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Text na tlačidle prihlásenia počas prebiehajúceho overovania.",
+    "message": "Prihlasujem..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Zvukové efekty"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Zvukové efekty sú vo Firefoxe zakázané, aby sa predišlo problémom so spätnou väzbou."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Nadpis jednorazového oznámenia o časovej úspore zobrazeného po prvej hovorenej výmene.",
+    "message": "Fajn — rozprávanie je asi 3× rýchlejšie než písanie."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Voliteľný druhý riadok oznámenia o časovej úspore zobrazujúci počet ušetrených celých minút.",
+    "message": "Už ste ušetrili približne $minutes$ min oproti písaniu.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Odošlite iba vtedy, keď stlačíte tlačidlo"
   },
+  "surveyQuestion": {
+    "description": "Jediná otázka jednorazového mikroprieskumu po úspešnom použití.",
+    "message": "Ako vám zatiaľ funguje hlas?"
+  },
+  "surveyRatingLabel": {
+    "description": "Prístupný štítok pre tlačidlo hodnotenia v prieskume.",
+    "message": "Ohodnoťte $rating$ z 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Poďakovanie zobrazené po tom, ako používateľ odpovie na prieskum po úspešnom použití.",
+    "message": "Ďakujeme — pomáha nám to zlepšovať Say, Pi."
+  },
   "tabAIChat": {
     "description": "Označenie záložky pre sekciu nastavení AI chatu.",
     "message": "AI Chat"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Označenie záložky pre sekciu všeobecných nastavení.",
     "message": "Všeobecné"
+  },
+  "tabVoices": {
+    "description": "Popisok karty pre sekciu nastavení hlasov (katalóg hlasov podľa webu).",
+    "message": "Hlasy"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "kredity"
   },
+  "ttsCreditsRemaining": {
+    "description": "Text zobrazujúci zostávajúcu kvótu TTS ako fond kreditov na hlas (saypi-api #181 Stage 2), nie ako počet znakov.",
+    "message": "Zostáva $credits$ kreditov",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "V Safari momentálne nie sú podporované viacjazyčné hlasy."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Generácia hlasu"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Pozor! Prehrávanie reči ešte nie je k dispozícii na $browserName$ s $chatbotName$. Dobrá správa? Hlasový vstup funguje skvelé! Pre TTS vyskúšajte Chrome alebo Edge na pracovnej ploche.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS nie je k dispozícii na $browserName$ + $chatbotName$. Hlasový vstup funguje! Vyskúšajte Chrome na pracovnej ploche pre TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS hlas"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Detail VAD, keď bol zistený zvuk podobný reči, ale bol príliš tichý / s nízkou mierou istoty na prepis (zahodené na strane klienta pri vstupnej kontrole).",
+    "message": "Zvuk je príliš tichý na prepis"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Detail VAD vysvetľujúci, že hovor sa skončil, pretože mikrofón si prevzala novšia karta.",
+    "message": "Hlasový vstup bol presunutý do inej karty"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Hlas nie je k dispozícii. \nVyskúšajte Chrome alebo Firefox na pracovnej ploche."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Pozor! Prehrávanie reči ešte nie je k dispozícii na $browserName$ s $chatbotName$. Dobrá správa? Hlasový vstup funguje skvelé! Pre TTS vyskúšajte Chrome alebo Edge na pracovnej ploche.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS nie je k dispozícii na $browserName$ + $chatbotName$. Hlasový vstup funguje! Vyskúšajte Chrome na pracovnej ploche pre TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Rozumiem",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Stav VAD zobrazený na karte, ktorej hlasový vstup prevzala iná karta.",
+    "message": "Pozastavené"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Zobraziť podrobnosti"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Všeobecné hovorené predstavenie prehrané vtedy, keď vybraný hlas SayPi nemá vlastný úvodný skript (a nie je ani žiadna nedávna správa na prečítanie).",
+    "message": "Ahoj, som $voice$. Takto zniem. Dúfam, že sa ti tento hlas bude páčiť.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Ahoj! \nПривет! \n你好! \nSom Pi, váš polyglot AI asistent. \nS 32 jazykmi, ktoré ovládam, môžeme skúmať myšlienky a kultúry z celého sveta. \nČo si myslíte o tomto hlase?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Nastavenia hlasu"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Núdzový podtitulok pre riadok hlasu v katalógu hlasov v nastaveniach, keď hlas nemá popis; $count$ je počet jazykov, ktoré hlas podporuje.",
+    "message": "Hovorí $count$ jazykmi",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Autorský slogan osobnosti pre hlas „Addison“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Slnečná a výrečná"
+  },
+  "voiceTagline_alloy": {
+    "description": "Autorské sloganové vyjadrenie osobnosti pre hlas „Alloy“ (štúdio Hlasov v nastaveniach; mapovanie identity hlasu na strane klienta).",
+    "message": "Vyvážený a univerzálny"
+  },
+  "voiceTagline_ash": {
+    "description": "Autorské sloganové vyjadrenie osobnosti pre hlas „Ash“ (štúdio Hlasov v nastaveniach; mapovanie identity hlasu na strane klienta).",
+    "message": "Nízky, premýšľavý, pokojný"
+  },
+  "voiceTagline_ballad": {
+    "description": "Autorské sloganové vyjadrenie osobnosti pre hlas „Ballad“ (štúdio Hlasov v nastaveniach; mapovanie identity hlasu na strane klienta).",
+    "message": "Jemný a melodický"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Autorský slogan osobnosti pre hlas „Cassidy“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Priateľská a vecná"
+  },
+  "voiceTagline_cedar": {
+    "description": "Autorský slogan osobnosti pre hlas „Cedar“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Pokojný a upokojujúci"
+  },
+  "voiceTagline_coral": {
+    "description": "Autorský slogan osobnosti pre hlas „Coral“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Jasná, povzbudivá energia"
+  },
+  "voiceTagline_echo": {
+    "description": "Autorský slogan osobnosti pre hlas „Echo“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Čistý a neutrálny"
+  },
+  "voiceTagline_fable": {
+    "description": "Autorský slogan osobnosti pre hlas „Fable“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Rozprávačský šarm"
+  },
+  "voiceTagline_finn": {
+    "description": "Autorský slogan osobnosti pre hlas „Finn“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Svieži a energický"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Autorský slogan osobnosti pre hlas „Jamahal“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Bohatý a príťažlivý"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Autorský slogan osobnosti pre hlas „Jarnathan“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Zamatový nočný barytón"
+  },
+  "voiceTagline_jeff": {
+    "description": "Autorský slogan osobnosti pre hlas „Jeff“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Priamočiary a vyrovnaný"
+  },
+  "voiceTagline_jessica": {
+    "description": "Autorský slogan osobnosti pre hlas „Jessica“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Vrelá, uhladená elegancia"
+  },
+  "voiceTagline_joey": {
+    "description": "Autorský slogan osobnosti pre hlas „Joey“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Nenútená americká konverzácia"
+  },
+  "voiceTagline_juniper": {
+    "description": "Autorský slogan osobnosti pre hlas „Juniper“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Čistý, jasný, živý"
+  },
+  "voiceTagline_lucy": {
+    "description": "Autorský slogan osobnosti pre hlas „Lucy“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Jemná a žiarivá"
+  },
+  "voiceTagline_marin": {
+    "description": "Autorský slogan osobnosti pre hlas „Marin“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Teplý pokoj ranného rádia"
+  },
+  "voiceTagline_mark": {
+    "description": "Autorský slogan osobnosti pre hlas „Mark“ (nastavenia: štúdio Hlasy; mapovanie identity hlasu na strane klienta).",
+    "message": "Jasný, sebavedomý rozprávač"
+  },
+  "voiceTagline_nova": {
+    "description": "Autorský slogan osobnosti pre hlas „Nova“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Rýchly a zvedavý"
+  },
+  "voiceTagline_onyx": {
+    "description": "Autorský slogan osobnosti pre hlas „Onyx“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Hlboká, rezonujúca vážnosť"
+  },
+  "voiceTagline_paola": {
+    "description": "Autorský slogan osobnosti pre hlas „Paola“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Výrazná talianska srdečnosť"
+  },
+  "voiceTagline_sage": {
+    "description": "Autorský slogan osobnosti pre hlas „Sage“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Jemná, zrozumiteľná jasnosť"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Autorský slogan osobnosti pre hlas „Shimmer“ (nastavenia Voices studio; klientská mapa identity hlasu).",
+    "message": "Ľahký a vzdušný"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Krátky štítok na prepínači pripnutia na karte hlasu (vypnutý stav) v štúdiu Hlasov v nastaveniach; stlačením sa hlas pridá do ponuky v chate pre daného asistenta.",
+    "message": "+ Ponuka"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Prístupný štítok pre prepínač pripnutia na karte hlasu (vypnutý stav); $name$ je hlas, $host$ je asistent.",
+    "message": "Pridať $name$ do ponuky asistenta $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Popis pri prepínači v ovládacej lište Hlasov, ktorý hovorí, či prechádzanie zoznamom šípkami prehrá každý hlas, keď sa naň presunie fokus.",
+    "message": "Prehrávať pri prechádzaní"
+  },
+  "voicesArrowsLive": {
+    "description": "Potvrdenie pre čítačku obrazovky, pripojené k prvému oznámeniu „Prehráva sa <hlas>“ v zozname Hlasov v nastaveniach, že šípkové klávesy sa práve stali počuteľnými. Nadväzuje na znenie prepínača „Prehrávať počas presunu“.",
+    "message": "Šípky teraz prehrávajú počas presunu. Esc zastaví."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Poznámka pod miestami v ponuke pre hostiteľov, ktorí majú natívne hlasy (napr. 8 vstavaných hlasov Pi), ktoré štúdio nespravuje; $host$ je asistent.",
+    "message": "V ponuke sa vždy zobrazujú aj vstavané hlasy od $host$.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Variant voicesBuiltinsNote pre hostiteľa bez hlasovej ponuky v chate (Pi v roku 2026 zrušil ponuku), kde by pôvodný sľub, že vstavané hlasy „sa zobrazujú v jeho ponuke“, neplatil; $host$ je asistent.",
+    "message": "$host$ má aj vlastné vstavané hlasy, ktoré tu nie sú uvedené.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Zobrazenie postupu v ovládacom paneli Hlasov v nastaveniach: koľko z uvedených hlasov si používateľ už vypočul. Holé čísla, aby to znelo správne aj pri 1 — Chrome i18n nemá tvary množného čísla.",
+    "message": "Vypočuté: $heard$ z $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Súčasť prístupného názvu riadku hlasu v zozname Hlasov v nastaveniach, označuje hlas, ktorý si tento profil už vypočul. Vizuálne je to zobrazené ako hustota atramentu na zvukovej stope hlasu, čo čítačka obrazovky nevie vidieť.",
+    "message": "Vypočuté"
+  },
+  "voicesInHostMenu": {
+    "description": "Nadpis sekcie nad riadkom slotov ponuky v štúdiu Hlasov v nastaveniach; $host$ je asistent.",
+    "message": "V ponuke asistenta $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Krátky štítok na prepínači pripnutia na karte hlasu (zapnutý stav) v štúdiu Hlasov v nastaveniach.",
+    "message": "✓ V ponuke"
+  },
+  "voicesInUse": {
+    "description": "Trvalý odznak na aktuálne vybranom hlase hostiteľa v zozname Hlasov v nastaveniach, zobrazený veľkými písmenami. Zámerne NIE „Práve hovorí“: na tejto stránke riadky prehrávajú ukážky, takže vybraný, ale tichý hlas nesmie tvrdiť, že hovorí, kým iný riadok hrá.",
+    "message": "Používa sa"
+  },
+  "voicesKeyboardHint": {
+    "description": "Jednoriadková klávesová nápoveda v ovládacom paneli Hlasov v nastaveniach. Symboly sú klávesy: medzerník, šípky hore/dole a Shift+medzerník.",
+    "message": "Stlačte medzerník na počúvanie, ↑↓ na prechod medzi hlasmi, ⇧Medzerník na prepnutie späť."
+  },
+  "voicesLoadError": {
+    "description": "Chybový stav v štúdiu jedného hostiteľa, keď sa nepodarilo načítať katalóg hlasov tohto hostiteľa; $host$ je asistent.",
+    "message": "Nepodarilo sa načítať hlasy pre $host$. Skúste to neskôr.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Pomocný text/nápoveda pri deaktivovanom prepínači „+ Ponuka“, keď má ponuka hlasov v chate pre daného asistenta už maximálny počet hlasov.",
+    "message": "Ponuka je plná, odstráňte hlas a pridajte iný"
+  },
+  "voicesMenuHint": {
+    "description": "Jednoriadková nápoveda vedľa nadpisu „V ponuke asistenta {host}“, ktorá vysvetľuje, že riadok slotov zodpovedá hlasovej ponuke v chate.",
+    "message": "Čo uvidíte v chate"
+  },
+  "voicesMenuOverflow": {
+    "description": "Poznámka pod miestami v ponuke, keď má používateľ viac pripnutých hlasov, než dokáže zobraziť ponuka v chate (legacy stav); $count$ je počet tých, ktoré sa nezmestia, $cap$ je veľkosť ponuky.",
+    "message": "Ďalších pripnutých hlasov $count$ čaká mimo $cap$ miest v ponuke.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Jednotné číslo pre voicesMenuOverflow, používa sa, keď sa do ponuky v chate nezmestí presne jeden pripnutý hlas; $cap$ je veľkosť ponuky.",
+    "message": "1 ďalší pripnutý hlas čaká mimo $cap$ miest v ponuke.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Súhrnný riadok pod zoznamom Hlasov v nastaveniach, ktorý hovorí, koľko miesta je obsadeného v hlasovom menu hostiteľa v chate; $host$ je asistent, $used$ je počet obsadených miest, $cap$ je celkový počet. Formulované tak, aby to znelo správne aj pri 1 — Chrome i18n nemá tvary množného čísla.",
+    "message": "Menu pre $host$: $used$ z $cap$ miest",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Nadpis skupiny na konci zoznamu Hlasov v nastaveniach, ktorá obsahuje hlasy bez ukážkového klipu na prehranie; $count$ je počet. Formulované tak, aby to znelo správne aj pri 1 — Chrome i18n nemá tvary množného čísla.",
+    "message": "Zatiaľ bez ukážky ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Zobrazuje sa v katalógu hlasov v nastaveniach, keď je zoznam hlasov prázdny pre prihláseného používateľa (napr. problém so sieťou).",
+    "message": "Hlasy sa teraz nepodarilo načítať. Skúste to znova neskôr."
+  },
+  "voicesNowPlaying": {
+    "description": "Oznámenie čítačky obrazovky, keď sa v zozname Hlasov v nastaveniach začne prehrávať ukážkový klip hlasu; $name$ je hlas.",
+    "message": "Prehráva sa $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Tlačidlo v ovládacom paneli Hlasov v nastaveniach, ktoré prehrá všetky práve uvedené hlasy, jeden po druhom; $count$ je počet. Formulované tak, aby to znelo správne aj pri 1 — Chrome i18n nemá tvary množného čísla.",
+    "message": "Prehrať všetko ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Tlačidlo v ovládacom paneli Hlasov v nastaveniach pri návrate: prehrá iba uvedené hlasy, ktoré ste si ešte nevypočuli; $count$ je počet. Formulované tak, aby to znelo správne aj pri 1 — Chrome i18n nemá tvary množného čísla.",
+    "message": "Prehrať nové ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Riadok v ovládacom paneli Hlasov v nastaveniach, keď prehliadač odmietol prehrať ukážku, pretože stránka ešte nemala žiadnu interakciu od používateľa.",
+    "message": "Kliknite na ľubovoľný hlas, aby sa zapol zvuk."
+  },
+  "voicesPreview": {
+    "description": "Prístupný popis pre tlačidlo prehratia (▶), ktoré prehrá bezplatnú ukážku hlasu v riadku hlasu; $name$ je názov hlasu.",
+    "message": "Prehrať ukážku hlasu $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Prístupný názov zoznamu Hlasov v nastaveniach (listbox všetkých hlasov, jeden riadok na hlas).",
+    "message": "Hlasy zoradené od najhlbších po najjasnejšie"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Prístupný štítok pre prepínač pripnutia na karte hlasu (zapnutý stav) a pre tlačidlo odstránenia slotu v ponuke; $name$ je hlas, $host$ je asistent.",
+    "message": "Odstrániť $name$ z ponuky asistenta $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Riadok v ovládacom paneli Hlasov v nastaveniach, keď sa nepodarilo načítať alebo prehrať ukážku jedného hlasu; $name$ je daný hlas. Nemodálne — prehrávanie série ukážok pokračuje ďalej.",
+    "message": "Nepodarilo sa prehrať ukážku hlasu $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Podnadpis sekcie katalógu hlasov v nastaveniach na karte AI Chat",
+    "message": "Vyberte hlas, ktorý na každej stránke číta odpovede nahlas."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Podnadpis pod nadpisom nastavení Hlasov, pre lištu hlasov zoradenú podľa výšky.",
+    "message": "Všetky hlasy, od najhlbších po najjasnejšie. Vypočujte si a vyberte."
+  },
+  "voicesSectionTitle": {
+    "description": "Nadpis sekcie katalógu hlasov v nastaveniach na karte AI Chat",
+    "message": "Hlasy"
+  },
+  "voicesShelfEveryday": {
+    "description": "Nadpis skupiny hlasov výhodnejšej úrovne v katalógu hlasov v nastaveniach. CSS ho vykresľuje veľkými písmenami.",
+    "message": "Každodenné hlasy"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Jednoriadková poznámka vedľa nadpisu skupiny Každodenné hlasy v štúdiu Hlasy v nastaveniach; jediné miesto, kde štúdio uvádza, o koľko ďalej siaha táto úroveň oproti HD.",
+    "message": "Prirodzené a jasné — môžete počúvať asi 20× dlhšie než s HD."
+  },
+  "voicesShelfHd": {
+    "description": "Nadpis skupiny prémiových (HD) hlasov v katalógu hlasov v nastaveniach. CSS ho vykresľuje veľkými písmenami.",
+    "message": "HD hlasy"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Jednoriadková poznámka vedľa nadpisu skupiny HD v štúdiu Hlasy v nastaveniach.",
+    "message": "Náš najbohatší a najvýraznejší zvuk."
+  },
+  "voicesShowAll": {
+    "description": "Možnosť vo filtri „Zobraziť“ v nastaveniach Hlasov: bez filtrovania, zobrazia sa všetky hlasy.",
+    "message": "Všetky hlasy"
+  },
+  "voicesShowEveryday": {
+    "description": "Možnosť vo filtri „Zobraziť“ v nastaveniach Hlasov: zobrazí len štandardné (nie HD) hlasy.",
+    "message": "Len bežné"
+  },
+  "voicesShowHd": {
+    "description": "Možnosť vo filtri „Zobraziť“ v nastaveniach Hlasov: zobrazí len prémiové (HD) hlasy.",
+    "message": "Len HD"
+  },
+  "voicesShowLabel": {
+    "description": "Štítok pri filtri v ovládacom paneli Hlasov v nastaveniach, ktorý zužuje, ktoré hlasy sa zobrazia v zozname.",
+    "message": "Zobraziť"
+  },
+  "voicesShowUnheard": {
+    "description": "Možnosť vo filtri „Zobraziť“ v nastaveniach Hlasov: zobrazí len hlasy, ktoré si používateľ ešte nevypočul.",
+    "message": "Ešte nevypočuté"
+  },
+  "voicesSpeakingNow": {
+    "description": "Štítok stavu na aktuálne vybranom hlase hostiteľa v štúdiu Hlasov v nastaveniach (v položke menu aj na karte hlasu).",
+    "message": "Práve hovorí"
+  },
+  "voicesSpeaksWith": {
+    "description": "Riadok nad názvom aktuálneho hlasu na scéne štúdia Hlasov v nastaveniach; $host$ je asistent (napr. Pi). CSS to zobrazuje veľkými písmenami.",
+    "message": "$host$ hovorí hlasom",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Poznámka na scéne, keď hostiteľ poskytuje vlastný zvuk (napr. Pi), takže výber hlasu Say, Pi nahradí hlas hostiteľa.",
+    "message": "$host$ používa vlastný hlas, kým si nevyberiete jeden nižšie.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Poznámka na scéne, keď hostiteľ nemá vlastný hlas (napr. Claude), takže sa nič nečíta nahlas, kým sa nezvolí hlas Say, Pi.",
+    "message": "$host$ nebude čítať odpovede nahlas, kým si nevyberiete jeden nižšie.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Nadpis na scéne štúdia hlasov v nastaveniach, keď hostiteľ nemá vybraný hlas Say, Pi; $host$ je asistent (napr. Pi, Claude). Zobrazuje sa veľkosťou písma ako meno.",
+    "message": "Vyberte, ako znie $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Tlačidlo na scéne štúdia hlasov v nastaveniach, ktoré prehrá bezplatnú ukážku aktuálneho hlasu.",
+    "message": "Vypočuť ukážku"
+  },
+  "voicesStopPlayback": {
+    "description": "Tlačidlo v ovládacom paneli Hlasov v nastaveniach, ktoré zastaví sériu ukážok spustenú cez „Prehrať všetko“.",
+    "message": "Zastaviť"
+  },
+  "voicesSweepPosition": {
+    "description": "Živé zobrazenie pozície v ovládacom paneli Hlasov v nastaveniach počas prehrávania „Prehrať všetko“; $index$ je hlas, ktorý práve hrá, a $total$ je počet hlasov vo fronte.",
+    "message": "$index$ z $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Prístupný popis pre ovládací prvok porovnania v ovládacom paneli Hlasov v nastaveniach, ktorý znovu prehrá druhý hlas z posledných dvoch vypočutých; $name$ je tento hlas.",
+    "message": "Prepnúť späť na $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Riadok v ovládacom paneli Hlasov v nastaveniach, keď sa stlačí „Prehrať všetko“ pri príliš dlhom zozname; $count$ je počet hlasov a $minutes$ približne počet minút, ktoré by to trvalo. Skratka „min“, aby to znelo správne pri 1 — Chrome i18n nemá tvary množného čísla.",
+    "message": "To je $count$ hlasov — asi $minutes$ min. Najprv zúžte zoznam.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Prístupný štítok pre tlačidlo „použiť tento hlas“ pre konkrétneho hostiteľa v katalógu hlasov v nastaveniach; $name$ je hlas, $host$ je asistent (napr. Pi, Claude).",
+    "message": "Použiť $name$ v $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Krátky štítok na tlačidle „použiť tento hlas“ pre konkrétneho hostiteľa v zjednotenom katalógu hlasov v nastaveniach (hostiteľ je zobrazený vedľa).",
+    "message": "Použiť"
+  },
+  "voicesYourVoice": {
+    "description": "Tlačidlo v ovládacom paneli v zozname Hlasov v nastaveniach, ktoré presunie fokus na riadok hlasu, ktorý tento hostiteľ momentálne používa; $name$ je tento hlas.",
+    "message": "Váš hlas: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Chyba vyhodená, keď prehliadač nedokáže prideliť dostatok pamäte WebAssembly pre model detekcie hlasu.",
+    "message": "Detekciu hlasu sa nepodarilo spustiť: pre hlasový model nie je dosť pamäte WebAssembly. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Chyba vyhodená, keď prehliadač neposkytuje počiatočnú pamäť WebAssembly potrebnú na spustenie modelu detekcie hlasu.",
+    "message": "Detekciu hlasu sa nepodarilo spustiť: pamäť WebAssembly nie je v tomto prehliadači dostupná."
   }
 }

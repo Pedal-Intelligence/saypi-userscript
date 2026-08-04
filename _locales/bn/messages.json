@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "অথ মোডালে তালিকাভুক্ত সুবিধা - ব্যবহার সীমা বৃদ্ধি।",
+    "message": "ফ্রি অ্যাকাউন্টে উচ্চতর ব্যবহার সীমা"
+  },
+  "authBenefitPremium": {
+    "description": "অথ মোডালে তালিকাভুক্ত সুবিধা - চ্যাটবট জুড়ে প্রিমিয়াম ফিচার।",
+    "message": "প্রিমিয়াম ফিচার ও চ্যাটবট সাপোর্ট"
+  },
+  "authBenefitSupport": {
+    "description": "অথ মোডালে তালিকাভুক্ত সুবিধা - অগ্রাধিকার সাপোর্ট।",
+    "message": "সমস্যার জন্য অগ্রাধিকার সাপোর্ট"
+  },
+  "authBenefitSync": {
+    "description": "অথ মোডালে তালিকাভুক্ত সুবিধা - সেটিংস সিঙ্ক।",
+    "message": "সবখানে ভয়েস সেটিংস সিঙ্ক করুন"
+  },
+  "authBenefitTTS": {
+    "description": "অথ মোডালে তালিকাভুক্ত সুবিধা - TTS ফিচার।",
+    "message": "টেক্সট-টু-স্পিচ ভয়েস (পেইড প্ল্যান)"
+  },
+  "authBenefitUsage": {
+    "description": "অথ মোডালে তালিকাভুক্ত সুবিধা - ব্যবহার ট্র্যাকিং।",
+    "message": "ডিভাইস জুড়ে আপনার ভয়েস ব্যবহার ট্র্যাক করুন"
+  },
+  "authPromptModalFull": {
+    "description": "ভ্যালু প্রপোজিশনসহ ফুল মোডাল অথ প্রম্পটের বর্ণনা।",
+    "message": "আপনি Say, Pi অনেক ব্যবহার করছেন। উচ্চ সীমা, টেক্সট-টু-স্পিচ ভয়েস এবং সব সমর্থিত চ্যাটবটে প্রিমিয়াম ফিচারের জন্য সাইন ইন করুন।"
+  },
+  "authPromptModalSoft": {
+    "description": "সফট মোডাল অথ প্রম্পটের বর্ণনা।",
+    "message": "উচ্চ ব্যবহার সীমা ও প্রিমিয়াম ভয়েস ফিচারে অ্যাক্সেস পেতে একটি ফ্রি Say, Pi অ্যাকাউন্ট তৈরি করুন।"
+  },
+  "authPromptTitle": {
+    "description": "অথ প্রম্পট মোডালের শিরোনাম।",
+    "message": "আরও ভয়েস ফিচার আনলক করুন"
+  },
+  "authPromptToast": {
+    "description": "ব্যবহারকারীকে সাইন ইন করতে উৎসাহিত করার টোস্ট নোটিফিকেশন।",
+    "message": "উচ্চ সীমা ও প্রিমিয়াম ফিচারের জন্য Say, Pi-তে সাইন ইন করুন"
+  },
   "autoReadAloudChatGPT": {
     "description": "ভয়েস কলের সময় ChatGPT এর প্রতিক্রিয়াগুলি স্বয়ংক্রিয়ভাবে পড়ার বিকল্প সক্ষম বা নিষ্ক্রিয় করার জন্য চেকবক্সের লেবেল।",
     "message": "স্বয়ংক্রিয়ভাবে পড়ুন (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "পাঠ্য থেকে স্পিচ অক্ষম করুন"
   },
+  "dismiss": {
+    "message": "বুঝেছি",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "খারিজ করা"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "মনোযোগ দিন"
   },
+  "errorVadInitFailed": {
+    "description": "ভয়েস-অ্যাক্টিভিটি ডিটেকশন শুরু করতে ব্যর্থ হলে দেখানো এরর টোস্ট।",
+    "message": "ভয়েস ডিটেকশন চালু করা যায়নি"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "ভয়েস রেকর্ডিং সেট আপ করার সময় অপ্রত্যাশিত ত্রুটি হলে দেখানো এরর টোস্ট।",
+    "message": "ভয়েস রেকর্ডিং সেট আপ করা যায়নি"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "ভয়েস-ডিটেকশন ক্লায়েন্ট রেকর্ডিং শুরু করতে ব্যর্থ হলে দেখানো এরর টোস্ট।",
+    "message": "ভয়েস রেকর্ডিং শুরু করা যায়নি"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "ভয়েস-ডিটেকশন (VAD) ক্লায়েন্ট অনুপলব্ধ থাকায় রেকর্ডিং শুরু করা না গেলে দেখানো এরর টোস্ট।",
+    "message": "ভয়েস রেকর্ডিং উপলব্ধ নয়"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "ফোকাস মোড থেকে বেরিয়ে আসুন"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "প্রিমিয়াম (HD) এবং ভ্যালু ভয়েস—দুটিই উপলব্ধ থাকলে ভয়েস মেনুতে দেখানো একলাইন নোট",
+    "message": "HD ভয়েসে আপনার মাসিক বরাদ্দ প্রায় ২০× দ্রুত খরচ হয়।"
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "এই দূরে টেক করা ..."
   },
+  "maybeLater": {
+    "description": "অথ প্রম্পট বাতিল করার বাটন টেক্সট।",
+    "message": "পরে হয়তো"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "আপনার মাইক্রোফোন সেটিংস প্রয়োজনীয় স্পেসিফিকেশন পূরণ করে না। \nএকটি ভিন্ন মাইক্রোফোন ব্যবহার করে দেখুন বা আপনার অডিও সেটিংস সামঞ্জস্য করুন৷"
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "মাইক্রোফোন অ্যাক্সেস করতে অক্ষম৷ \nঅনুগ্রহ করে আপনার ডিভাইস সেটিংস চেক করুন এবং আবার চেষ্টা করুন।"
   },
+  "microphonePermissionDeniedError": {
+    "description": "অনুমতি প্রম্পটের ধাপ শেষ হওয়ার পরও মাইক্রোফোনের অনুমতি অস্বীকার করা হলে দেখানো এরর টোস্ট।",
+    "message": "মাইক্রোফোনের অনুমতি দেওয়া হয়নি। অনুগ্রহ করে প্রম্পটে এবং এক্সটেনশন সেটিংসে অ্যাক্সেস অনুমোদিত আছে কি না নিশ্চিত করুন।"
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "নির্ভুলতা"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "দ্রুততম প্রতিক্রিয়া, কিন্তু কম সঠিক। \nবাধা প্রবণ."
   },
+  "moreVoices": {
+    "description": "ইন-পেজ ভয়েস মেনু থেকে এক্সটেনশন সেটিংসের সম্পূর্ণ ভয়েস ক্যাটালগে যাওয়ার মেনু সারি।",
+    "message": "আরও ভয়েস…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "সহায়কের ডাকনাম"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "সাইন ইন না"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "ChatGPT খোলে এমন বোতামের লেবেল।",
+    "message": "ChatGPT খুলুন"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Claude.ai খোলে—এমন বোতামের লেবেল।",
+    "message": "Claude খুলুন"
+  },
+  "onboarding_ctaPi": {
+    "description": "Pi.ai খোলে—এমন বোতামের লেবেল।",
+    "message": "Pi খুলুন"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "পরিবেশের বিকল্প: অন্য মানুষের আশেপাশে।",
+    "message": "অন্যদের আশেপাশে"
+  },
+  "onboarding_envMixed": {
+    "description": "পরিবেশের বিকল্প: ব্যক্তিগত ও শেয়ার করা স্থানের মিশ্রণ।",
+    "message": "বিভিন্ন জায়গায়"
+  },
+  "onboarding_envPrivate": {
+    "description": "পরিবেশের বিকল্প: একটি ব্যক্তিগত স্থান।",
+    "message": "কোনো ব্যক্তিগত জায়গায়"
+  },
+  "onboarding_envQuietOff": {
+    "description": "পরিবেশ সংক্রান্ত উত্তরে quiet mode বন্ধ থাকলে যে নিশ্চিতকরণ দেখানো হয়।",
+    "message": "ঠিক আছে — আমরা মানক শোনা ও প্লেব্যাক সেটিংসই রাখব।"
+  },
+  "onboarding_envQuietOn": {
+    "description": "পরিবেশের উত্তরে কোয়াইট মোড চালু হলে দেখানো নিশ্চিতকরণ।",
+    "message": "কোয়াইট মোড চালু — আমরা নরমভাবে বলা কথাও ধরব এবং নিচু স্বরে উত্তর দেব, যাতে আপনি আড়ালে কথা বলতে পারেন।"
+  },
+  "onboarding_envTitle": {
+    "description": "ব্যবহারকারীর পরিবেশ সম্পর্কে অনবোর্ডিং প্রশ্নের শিরোনাম।",
+    "message": "আপনি সাধারণত কোথায় কথা বলবেন?"
+  },
+  "onboarding_footer": {
+    "description": "প্রথমবার চালুর অনবোর্ডিং পৃষ্ঠার ফুটার টেক্সট।",
+    "message": "আপনি Say, Pi-এর সেটিংস থেকে যেকোনো সময় এটি আবার দেখতে পারবেন। আপনার গোপনীয়তা গুরুত্বপূর্ণ — শুধু সক্রিয় কল চলাকালীনই অডিও নেওয়া হয়।"
+  },
+  "onboarding_heading": {
+    "description": "প্রথমবার চালুর অনবোর্ডিং পাতার প্রধান শিরোনাম।",
+    "message": "🗣️ Say, Pi-এ স্বাগতম"
+  },
+  "onboarding_intro": {
+    "description": "প্রথমবার চালুর অনবোর্ডিং পাতার পরিচিতি অনুচ্ছেদ।",
+    "message": "AI-এর সাথে আপনার প্রথম কথোপকথন করতে আপনি আর মাত্র দুই ধাপ দূরে। বলা টাইপ করার চেয়ে প্রায় ৩× দ্রুত, তাই সেটআপ করে দিই।"
+  },
+  "onboarding_micTestButton": {
+    "description": "ঝুঁকিমুক্ত অনবোর্ডিং মাইক্রোফোন টেস্ট শুরু করে এমন বোতাম।",
+    "message": "🎤 আপনার মাইক্রোফোন পরীক্ষা করুন"
+  },
+  "onboarding_micTestDone": {
+    "description": "অনবোর্ডিং মাইক টেস্ট সফলভাবে শেষ হলে দেখানো স্ট্যাটাস।",
+    "message": "ভালো — আপনার মাইক্রোফোন কাজ করছে 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "অনবোর্ডিং মাইক টেস্ট ইনপুট মাপার সময় দেখানো স্ট্যাটাস।",
+    "message": "শোনা হচ্ছে — কিছু বলুন 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "অনবোর্ডিং মাইক টেস্ট অনুমতির জন্য অপেক্ষা করার সময় দেখানো স্ট্যাটাস।",
+    "message": "মাইক্রোফোনের অনুমতি চাওয়া হচ্ছে…"
+  },
+  "onboarding_micTestStop": {
+    "description": "অনবোর্ডিং মাইক টেস্ট চলার সময় তা থামানোর বোতামের লেবেল।",
+    "message": "টেস্ট বন্ধ করুন"
+  },
+  "onboarding_step1Body": {
+    "description": "এক্সটেনশন কীভাবে পিন করতে হয় তা ব্যাখ্যা করা অনবোর্ডিং-এর প্রথম ধাপের মূল লেখা।",
+    "message": "ব্রাউজারের উপরের ডানদিকে থাকা পাজল-পিস 🧩 আইকনে ক্লিক করুন, তারপর Say, Pi-এর পাশে পিন 📌-এ। এতে কল বোতাম এক ক্লিক দূরেই থাকে।"
+  },
+  "onboarding_step1Title": {
+    "description": "অনবোর্ডিং-এর প্রথম ধাপের শিরোনাম (এক্সটেনশন পিন করা)।",
+    "message": "টুলবারে Say, Pi পিন করুন"
+  },
+  "onboarding_step2Body": {
+    "description": "ভয়েস কথোপকথন কীভাবে শুরু করতে হয় তা ব্যাখ্যা করা অনবোর্ডিং-এর দ্বিতীয় ধাপের মূল লেখা।",
+    "message": "নিচে থাকা সমর্থিত সহকারীদের যেকোনো একটিতে যান, তারপর Say, Pi কল বোতাম ট্যাপ করে হ্যালো বলুন। প্রথমবার আমরা মাইক্রোফোনের অনুমতি চাইব—এটা স্বাভাবিক, আর আপনি সক্রিয়ভাবে কলে থাকলেই আমরা শুনি।"
+  },
+  "onboarding_step2Title": {
+    "description": "অনবোর্ডিং-এর দ্বিতীয় ধাপের শিরোনাম (কথোপকথন শুরু করা)।",
+    "message": "একটি AI চ্যাট খুলুন এবং কথা বলা শুরু করুন"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "মাইক্রোফোন অনুমতি"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "মাইক অনুমতি ব্লক থাকলে পুনরুদ্ধারের নির্দেশনা।",
+    "message": "আপনার ব্রাউজার মাইক্রোফোন ব্লক করছে। অ্যাড্রেস বারে ক্যামেরা বা লক আইকনে ক্লিক করুন, Microphone-কে \"Allow\" করুন, তারপর আবার চেষ্টা করুন। macOS-এ System Settings → Privacy & Security → Microphone-ও দেখুন।"
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "মাইক অনুমতি denied/blocked হলে রিকভারি প্যানেলের শিরোনাম।",
+    "message": "মাইক্রোফোন অ্যাক্সেস ব্লক করা আছে"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "মাইক্রোফোন অন্যত্র ব্যবহৃত হলে পুনরুদ্ধারের নির্দেশনা।",
+    "message": "অন্য কোনো অ্যাপ বা ট্যাব আপনার মাইক্রোফোন ব্যবহার করছে হতে পারে। যে কিছু রেকর্ড করছে এমন সবকিছু বন্ধ করুন (ভিডিও কল, ভয়েস মেমো), তারপর আবার চেষ্টা করুন।"
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "মাইক অন্য কোনো অ্যাপ ব্যবহার করলে রিকভারি প্যানেলের শিরোনাম।",
+    "message": "আপনার মাইক্রোফোন ব্যস্ত"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "কোনো মাইক্রোফোন ডিভাইস উপলব্ধ না থাকলে পুনরুদ্ধারের নির্দেশনা।",
+    "message": "আমরা কোনো মাইক্রোফোন খুঁজে পাইনি। একটি লাগান (বা আপনার হেডসেট সংযোগ করুন), নিশ্চিত করুন এটি আপনার ইনপুট ডিভাইস হিসেবে নির্বাচিত আছে, তারপর আবার চেষ্টা করুন।"
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "কোনো মাইক্রোফোন ডিভাইস উপলব্ধ না থাকলে রিকভারি প্যানেলের শিরোনাম।",
+    "message": "কোনো মাইক্রোফোন পাওয়া যায়নি"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "অজানা মাইক্রোফোন ত্রুটির জন্য পুনরুদ্ধারের নির্দেশনা।",
+    "message": "আপনার মাইক্রোফোনে পৌঁছাতে গিয়ে কিছু সমস্যা হয়েছে। এটি সংযুক্ত আছে কিনা এবং আপনার ব্রাউজার সেটিংসে অনুমোদিত আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন।"
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "অজানা মাইক ত্রুটির জন্য রিকভারি প্যানেলের শিরোনাম।",
+    "message": "আমরা আপনার মাইক্রোফোনে অ্যাক্সেস করতে পারিনি"
+  },
+  "permissions_retryButton": {
+    "description": "মাইক্রোফোন অনুমতি আবার অনুরোধ করে এমন বোতামের লেবেল।",
+    "message": "আবার চেষ্টা করুন"
+  },
+  "permissions_revokedHeading": {
+    "description": "মাইক্রোফোনে অ্যাক্সেস আগে অনুমোদিত ছিল কিন্তু পরে প্রত্যাহার করা হলে যে শিরোনাম দেখানো হয়।",
+    "message": "🎙️ আপনার মাইক্রোফোন আবার সংযোগ দিই"
+  },
+  "permissions_revokedInfo": {
+    "description": "অনুমোদনের পর মাইক্রোফোন অ্যাক্সেস প্রত্যাহার করা হলে যে তথ্যপূর্ণ লেখা দেখানো হয়।",
+    "message": "আপনার মাইক্রোফোন অ্যাক্সেস বন্ধ করা হয়েছিল — ব্রাউজার বা সিস্টেম আপডেটের পর এটা প্রায়ই হয়। নিচে আবার অনুমতি দিন, আর আপনি কলের মধ্যে থাকলে $productName$ আবার শুনতে থাকবে।",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "প্রোফাইল"
+  },
+  "quietModeLabel": {
+    "description": "নীরব/ফিসফিস মোড চালু করার টগলের লেবেল।",
+    "message": "নীরব মোড"
+  },
+  "quietModeTooltip": {
+    "description": "নীরব/ফিসফিস মোড কী করে তা ব্যাখ্যা করা টুলটিপ।",
+    "message": "আলতো করে কথা বলুন — নিচু স্বরও ধরতে পারে এবং সহকারীর উত্তর দেওয়ার ভলিউম কমায়, যাতে অন্যদের পাশে ভয়েস ব্যবহার করতে পারেন।"
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "অথেনটিকেশন চলাকালীন সাইন ইন বোতামের টেক্সট।",
+    "message": "সাইন ইন করা হচ্ছে…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "শব্দ প্রভাব"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "অডিও প্রতিক্রিয়া সমস্যা প্রতিরোধ করতে ফায়ারফক্সে সাউন্ড এফেক্ট নিষ্ক্রিয় করা হয়েছে।"
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "প্রথম স্পোকেন এক্সচেঞ্জের পর একবার দেখানো speed-payoff নোটিসের শিরোনাম।",
+    "message": "ভালো — কথা বলা টাইপ করার চেয়ে প্রায় 3× দ্রুত।"
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "সাশ্রয় হওয়া পুরো মিনিট দেখানো speed-payoff নোটিসের ঐচ্ছিক দ্বিতীয় লাইন।",
+    "message": "আপনি ইতিমধ্যেই টাইপ করার চেয়ে আনুমানিক $minutes$ মিনিট দ্রুত বলেছেন।",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "আপনি বোতাম টিপে শুধুমাত্র জমা দিন"
   },
+  "surveyQuestion": {
+    "description": "একবারের পোস্ট-উইন মাইক্রো-সার্ভের একটিমাত্র প্রশ্ন।",
+    "message": "এখন পর্যন্ত ভয়েস আপনার কেমন লাগছে?"
+  },
+  "surveyRatingLabel": {
+    "description": "সার্ভে রেটিং বোতামের জন্য অ্যাক্সেসযোগ্য লেবেল।",
+    "message": "৫ এর মধ্যে $rating$ দিন",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "ব্যবহারকারী পোস্ট-উইন সার্ভের উত্তর দেওয়ার পর দেখানো স্বীকৃতি বার্তা।",
+    "message": "ধন্যবাদ — এতে Say, Pi আরও ভালো করতে আমাদের সাহায্য হয়। 🙏"
+  },
   "tabAIChat": {
     "description": "এআই চ্যাট সেটিংস বিভাগের জন্য ট্যাব লেবেল।",
     "message": "এআই চ্যাট"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "সাধারণ সেটিংস বিভাগের জন্য ট্যাব লেবেল।",
     "message": "সাধারণ"
+  },
+  "tabVoices": {
+    "description": "ভয়েস সেটিংস সেকশনের ট্যাব লেবেল (প্রতি-সাইট ভয়েস ক্যাটালগ)।",
+    "message": "ভয়েস"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "ক্রেডিট"
   },
+  "ttsCreditsRemaining": {
+    "description": "প্রতি-ভয়েস ক্রেডিট পুল হিসেবে অবশিষ্ট TTS কোটার টেক্সট (saypi-api #181 Stage 2), কাঁচা অক্ষর সংখ্যা নয়।",
+    "message": "$credits$ ক্রেডিট বাকি",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "বহুভাষিক ভয়েস বর্তমানে সাফারিতে সমর্থিত নয়।"
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "ভয়েস জেনারেশন"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "মনোযোগ দিন! $browserName$ এ $chatbotName$ এর সাথে স্পিচ প্লেব্যাক এখনও উপলব্ধ নয়। ভাল খবর? ভয়েস ইনপুট দুর্দান্ত কাজ করে! TTS এর জন্য, ডেস্কটপে Chrome বা Edge চেষ্টা করুন।",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$ এ TTS অনুপলব্ধ। ভয়েস ইনপুট কাজ করে! TTS এর জন্য Chrome ডেস্কটপ চেষ্টা করুন।",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "টিটিএস ভয়েস"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "সক্রিয় মাইক্রোফোন ..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "কথার মতো অডিও শনাক্ত হয়েছিল, কিন্তু তা খুব ক্ষীণ/কম-নিশ্চিত হওয়ায় লিখে নেওয়া যায়নি—এমন ক্ষেত্রে VAD বিস্তারিত (ক্লায়েন্ট-সাইড অ্যাডমিশন-গেট ড্রপ)।",
+    "message": "লিখে নেওয়ার জন্য অডিও খুবই ক্ষীণ"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "ভিএডি পরিষেবা বন্ধ।"
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "নতুন ট্যাব মাইক্রোফোন দখল করায় কল শেষ হয়েছে—এটা বোঝাতে VAD বিস্তারিত।",
+    "message": "ভয়েস ইনপুট অন্য ট্যাবে চলে গেছে"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "বক্তৃতার জন্য অপেক্ষা করছি"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "ভয়েস পাওয়া যায় না। \nডেস্কটপে ক্রোম বা ফায়ারফক্স চেষ্টা করুন।"
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "মনোযোগ দিন! $browserName$ এ $chatbotName$ এর সাথে স্পিচ প্লেব্যাক এখনও উপলব্ধ নয়। ভাল খবর? ভয়েস ইনপুট দুর্দান্ত কাজ করে! TTS এর জন্য, ডেস্কটপে Chrome বা Edge চেষ্টা করুন।",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "$browserName$ + $chatbotName$ এ TTS অনুপলব্ধ। ভয়েস ইনপুট কাজ করে! TTS এর জন্য Chrome ডেস্কটপ চেষ্টা করুন।",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "বুঝেছি",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "ভুল আগুন"
   },
+  "vadStatusPreempted": {
+    "description": "যে ট্যাবের ভয়েস ইনপুট অন্য ট্যাব দখল করেছে, সেই ট্যাবে দেখানো VAD স্ট্যাটাস।",
+    "message": "সাময়িক বিরতি"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "প্রক্রিয়াজাতকরণ"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "বিশদ দেখুন"
   },
+  "voiceIntroductionGeneric": {
+    "description": "যখন নির্বাচিত SayPi ভয়েসের জন্য নির্দিষ্ট পরিচিতিমূলক স্ক্রিপ্ট নেই (এবং পড়ার মতো সাম্প্রতিক বার্তাও নেই), তখন চালানো সাধারণ স্পোকেন পরিচিতি।",
+    "message": "হাই, আমি $voice$। আমার কণ্ঠ এমন শোনায়। আশা করি এই কণ্ঠটি আপনার পছন্দ হবে।",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "হোলা! \nপ্রিভেট! \n你好! \nআমি পাই, আপনার পলিগ্লট এআই সহকারী। \nআমার নির্দেশে 32টি ভাষার সাথে, আমরা সারা বিশ্ব থেকে ধারণা এবং সংস্কৃতি অন্বেষণ করতে পারি। \nআপনি এই ভয়েস কি মনে করেন?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "ভয়েস সেটিংস"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "সেটিংসের ভয়েস ক্যাটালগে কোনো ভয়েসের বর্ণনা না থাকলে ভয়েস সারির জন্য ফallback সাবটাইটেল; $count$ হলো ভয়েসটি যতটি ভাষা সমর্থন করে তার সংখ্যা।",
+    "message": "$count$টি ভাষায় কথা বলে",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "'Addison' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "প্রফুল্ল ও স্পষ্টভাষী"
+  },
+  "voiceTagline_alloy": {
+    "description": "‘Alloy’ ভয়েসের জন্য লেখা ব্যক্তিত্বের ট্যাগলাইন (সেটিংস Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "ভারসাম্যপূর্ণ, সব কাজে মানানসই"
+  },
+  "voiceTagline_ash": {
+    "description": "‘Ash’ ভয়েসের জন্য লেখা ব্যক্তিত্বের ট্যাগলাইন (সেটিংস Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "নিচু, ভাবুক, শান্ত"
+  },
+  "voiceTagline_ballad": {
+    "description": "‘Ballad’ ভয়েসের জন্য লেখা ব্যক্তিত্বের ট্যাগলাইন (সেটিংস Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "মসৃণ, সুরেলা"
+  },
+  "voiceTagline_cassidy": {
+    "description": "'Cassidy' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "বন্ধুসুলভ ও সোজাসাপ্টা"
+  },
+  "voiceTagline_cedar": {
+    "description": "'Cedar' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "স্থিতিশীল ও আশ্বস্তকারী"
+  },
+  "voiceTagline_coral": {
+    "description": "'Coral' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "উজ্জ্বল, চাঙা উদ্যম"
+  },
+  "voiceTagline_echo": {
+    "description": "'Echo' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "পরিচ্ছন্ন ও নিরপেক্ষ"
+  },
+  "voiceTagline_fable": {
+    "description": "'Fable' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "গল্পকারের সুরেলা টান"
+  },
+  "voiceTagline_finn": {
+    "description": "'Finn' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "টাটকা ও প্রাণবন্ত"
+  },
+  "voiceTagline_jamahal": {
+    "description": "'Jamahal' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "গভীর ও আকর্ষণীয়"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "'Jarnathan' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "মখমলি রাতজাগা ব্যারিটোন"
+  },
+  "voiceTagline_jeff": {
+    "description": "'Jeff' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "সোজাসাপ্টা ও স্থির"
+  },
+  "voiceTagline_jessica": {
+    "description": "'Jessica' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "উষ্ণ, পরিমার্জিত সৌম্যতা"
+  },
+  "voiceTagline_joey": {
+    "description": "'Joey' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "সহজ, কথোপকথনমুখর আমেরিকান"
+  },
+  "voiceTagline_juniper": {
+    "description": "'Juniper' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "ঝকঝকে, উজ্জ্বল, প্রাণচঞ্চল"
+  },
+  "voiceTagline_lucy": {
+    "description": "'Lucy' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "কোমল ও দীপ্তিময়"
+  },
+  "voiceTagline_marin": {
+    "description": "'Marin' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "উষ্ণ, মর্নিং-রেডিওর শান্ত ভাব"
+  },
+  "voiceTagline_mark": {
+    "description": "'Mark' ভয়েসের জন্য লেখা ব্যক্তিত্ব ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেনটিটি ম্যাপ)।",
+    "message": "স্পষ্ট, আত্মবিশ্বাসী বর্ণনাকারী"
+  },
+  "voiceTagline_nova": {
+    "description": "'Nova' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "দ্রুত ও কৌতূহলী"
+  },
+  "voiceTagline_onyx": {
+    "description": "'Onyx' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "গভীর, অনুরণিত গাম্ভীর্য"
+  },
+  "voiceTagline_paola": {
+    "description": "'Paola' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "প্রকাশভঙ্গিমায় ইতালীয় উষ্ণতা"
+  },
+  "voiceTagline_sage": {
+    "description": "'Sage' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "নিম্নস্বরে স্পষ্টতা"
+  },
+  "voiceTagline_shimmer": {
+    "description": "'Shimmer' ভয়েসের জন্য রচিত ব্যক্তিত্বের ট্যাগলাইন (সেটিংসের Voices স্টুডিও; ক্লায়েন্ট-সাইড ভয়েস আইডেন্টিটি ম্যাপ)।",
+    "message": "হালকা ও বাতাসি"
+  },
+  "voicesAddToMenuShort": {
+    "description": "সেটিংসের Voices স্টুডিওতে ভয়েস কার্ডের পিন টগলে (বন্ধ অবস্থায়) সংক্ষিপ্ত লেবেল; চাপলে ভয়েসটি হোস্টের ইন-চ্যাট মেনুতে যোগ হয়।",
+    "message": "+ মেনু"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "ভয়েস কার্ডের পিন টগলের (বন্ধ অবস্থায়) অ্যাক্সেসিবল লেবেল; $name$ হলো ভয়েস, $host$ হলো অ্যাসিস্ট্যান্ট।",
+    "message": "$host$-এর মেনুতে $name$ যোগ করুন",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Voices কন্ট্রোল বারে টগলের লেবেল, যা বলে তীরচিহ্ন কী দিয়ে তালিকা ঘোরার সময় ফোকাস যেই ভয়েসে যায় সেটি চালানো হবে কি না।",
+    "message": "সরার সঙ্গে সঙ্গে চালান"
+  },
+  "voicesArrowsLive": {
+    "description": "সেটিংসের Voices তালিকায় প্রথম 'Playing <voice>' ঘোষণার সাথে যুক্ত স্ক্রিন-রিডার নিশ্চিতকরণ, যা বলে অ্যারো কী এখন শোনা যাবে। 'Play as you move' টগলের নিজের ভাষার প্রতিধ্বনি।",
+    "message": "এখন সরালে অ্যারো কীগুলো বাজবে। Esc থামায়।"
+  },
+  "voicesBuiltinsNote": {
+    "description": "যেসব হোস্টে নেটিভ ভয়েস থাকে (যেমন Pi-এর 8টি বিল্ট-ইন), তাদের জন্য মেনু স্লটের নিচে নোট; এগুলো স্টুডিও পরিচালনা করে না; $host$ হলো সহকারী।",
+    "message": "$host$-এর নিজস্ব বিল্ট-ইন ভয়েসগুলোও তার মেনুতেই সবসময় দেখা যাবে।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "যে হোস্টে ইন-চ্যাট ভয়েস মেনু নেই তার জন্য voicesBuiltinsNote-এর ভ্যারিয়েন্ট (Pi 2026 সালে তার মেনু অবসর দিয়েছে), যেখানে মূলটির 'তার মেনুতে দেখা যাবে' প্রতিশ্রুতি মিথ্যা হবে; $host$ হলো সহকারী।",
+    "message": "$host$-এর নিজস্ব বিল্ট-ইন ভয়েসও আছে, যেগুলো এখানে তালিকাভুক্ত নেই।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারে অগ্রগতির রিডআউট: তালিকাভুক্ত ভয়েসগুলোর মধ্যে ব্যবহারকারী কতগুলো ইতিমধ্যে শুনেছেন। খালি সংখ্যা, তাই ১ হলেও ঠিকভাবে পড়ে — Chrome i18n-এ plural ফর্ম নেই।",
+    "message": "$total$-এর মধ্যে $heard$টি শোনা হয়েছে",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "সেটিংসের Voices তালিকায় কোনো ভয়েস সারির অ্যাক্সেসিবল নামের অংশ, যা চিহ্নিত করে যে এই প্রোফাইল ওই ভয়েসটি আগেই শুনেছে। দৃশ্যত এটি ভয়েসের সাউন্ডপ্রিন্টে কালি-ঘনত্ব হিসেবে আঁকা থাকে, যা স্ক্রিন রিডার দেখতে পারে না।",
+    "message": "শোনা হয়েছে"
+  },
+  "voicesInHostMenu": {
+    "description": "সেটিংসের Voices স্টুডিওতে মেনু স্লটগুলোর সারির উপরে থাকা সেকশন শিরোনাম; $host$ হলো অ্যাসিস্ট্যান্ট।",
+    "message": "$host$-এর মেনুতে",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "সেটিংসের Voices স্টুডিওতে ভয়েস কার্ডের পিন টগলে (চালু অবস্থায়) সংক্ষিপ্ত লেবেল।",
+    "message": "✓ মেনুতে"
+  },
+  "voicesInUse": {
+    "description": "সেটিংসের Voices তালিকায় হোস্টের বর্তমানে নির্বাচিত ভয়েসের স্থায়ী ব্যাজ, যা বড় হাতের অক্ষরে রেন্ডার করা হয়। ইচ্ছাকৃতভাবে “এখন কথা বলছে” নয়: এই পেজে সারিগুলো তাদের স্যাম্পল ক্লিপ চালায়, তাই নির্বাচিত কিন্তু নীরব ভয়েস অন্য সারি বাজলেও কথা বলছে বলে দাবি করবে না।",
+    "message": "ব্যবহৃত হচ্ছে"
+  },
+  "voicesKeyboardHint": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারে এক লাইনের কীবোর্ড হিন্ট। চিহ্নগুলো কীগুলোর নাম: Space, আপ/ডাউন অ্যারো, এবং Shift+Space।",
+    "message": "শুনতে Space চাপুন, ভয়েস বদলাতে ↑↓, আগেরটিতে ফিরতে ⇧Space।"
+  },
+  "voicesLoadError": {
+    "description": "একটি হোস্টের স্টুডিওর ভেতরে ত্রুটি অবস্থা, যখন ওই হোস্টের ভয়েস ক্যাটালগ লোড হতে ব্যর্থ হয়; $host$ হলো সহকারী।",
+    "message": "$host$-এর ভয়েস লোড করা যায়নি। পরে আবার চেষ্টা করুন।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "হোস্টের ইন-চ্যাট মেনুতে সর্বোচ্চ সংখ্যক ভয়েস আগে থেকেই থাকলে নিষ্ক্রিয় “+ মেনু” টগলের টুলটিপ/ইঙ্গিত।",
+    "message": "মেনু পূর্ণ — আরেকটি যোগ করতে একটি ভয়েস সরান"
+  },
+  "voicesMenuHint": {
+    "description": "“In {host}'s menu” শিরোনামের পাশে থাকা এক লাইনের ইঙ্গিত, যা ব্যাখ্যা করে স্লটগুলোর সারি চ্যাটের ভয়েস মেনুকে প্রতিফলিত করে।",
+    "message": "চ্যাটে আপনি যা দেখবেন"
+  },
+  "voicesMenuOverflow": {
+    "description": "ইন-চ্যাট মেনুতে দেখানো যায় তার চেয়ে বেশি পিন করা ভয়েস থাকলে (লেগেসি অবস্থা) মেনু স্লটের নিচে দেখানো নোট; $count$ কতগুলো ফিট করছে না, $cap$ হলো মেনুর আকার।",
+    "message": "মেনুর $cap$টি স্লটের বাইরে $count$টি আরও পিন করা ভয়েস অপেক্ষা করছে।",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow-এর একবচন রূপ, যখন ঠিক একটি পিন করা ভয়েস ইন-চ্যাট মেনুতে ফিট করে না; $cap$ হলো মেনুর আকার।",
+    "message": "মেনুর $cap$টি স্লটের বাইরে আরও 1টি পিন করা ভয়েস অপেক্ষা করছে।",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "সেটিংসের Voices তালিকার নিচের সারসংক্ষেপ লাইন, যা বলে হোস্টের ইন-চ্যাট ভয়েস মেনু কতটা ভরা; $host$ হলো অ্যাসিস্ট্যান্ট, $used$ কতটি আসন নেওয়া হয়েছে, $cap$ মোট কতটি। ১ হলেও যেন ঠিকভাবে পড়ে এমনভাবে লেখা — Chrome i18n-এ plural ফর্ম নেই।",
+    "message": "$host$-এর মেনু: $cap$-এর মধ্যে $used$টি আসন",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "সেটিংসের Voices তালিকার শেষে থাকা গ্রুপের শিরোনাম, যেখানে চালানোর মতো কোনো স্যাম্পল ক্লিপ নেই এমন ভয়েসগুলো থাকে; $count$ হলো কতগুলো। ১ হলেও যেন ঠিকভাবে পড়ে এমনভাবে লেখা — Chrome i18n-এ plural ফর্ম নেই।",
+    "message": "এখনও নমুনা নেই ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "সাইন-ইন করা ব্যবহারকারীর ক্ষেত্রে সেটিংসের ভয়েস ক্যাটালগে ভয়েস তালিকা খালি থাকলে দেখানো হয় (যেমন, নেটওয়ার্ক সমস্যায়)।",
+    "message": "এখন ভয়েস লোড করা যাচ্ছে না। পরে আবার চেষ্টা করুন।"
+  },
+  "voicesNowPlaying": {
+    "description": "সেটিংসের Voices তালিকায় কোনো ভয়েসের স্যাম্পল ক্লিপ চালু হলে স্ক্রিন রিডারের ঘোষণা; $name$ হলো ভয়েসের নাম।",
+    "message": "$name$ চালানো হচ্ছে",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারের বোতাম, যা তালিকাভুক্ত সব ভয়েস একের পর এক চালায়; $count$ হলো কতগুলো। ১ হলেও যেন ঠিকভাবে পড়ে এমনভাবে লেখা — Chrome i18n-এ plural ফর্ম নেই।",
+    "message": "সব চালান ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "পুনরায় এলে সেটিংসের Voices কন্ট্রোল বারের বোতাম: আপনি এখনও শোনেননি এমন তালিকাভুক্ত ভয়েসগুলোই শুধু চালায়; $count$ হলো কতগুলো। ১ হলেও যেন ঠিকভাবে পড়ে এমনভাবে লেখা — Chrome i18n-এ plural ফর্ম নেই।",
+    "message": "নতুন চালান ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারের লাইন, যখন পেজে এখনো কোনো ব্যবহারকারী ইন্টারঅ্যাকশন না থাকায় ব্রাউজার স্যাম্পল চালাতে অস্বীকার করেছে।",
+    "message": "শব্দ চালু করতে যেকোনো ভয়েসে ক্লিক করুন।"
+  },
+  "voicesPreview": {
+    "description": "ভয়েস সারিতে থাকা প্লে (▶) বোতামের জন্য অ্যাক্সেসিবল লেবেল, যা একটি ভয়েসের বিনামূল্যের নমুনা ক্লিপ চালিয়ে শোনায়; $name$ হলো ভয়েসের নাম।",
+    "message": "$name$-এর একটি নমুনা চালান",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "সেটিংসের Voices তালিকার অ্যাক্সেসিবল নাম (প্রতিটি সারিতে একটি করে ভয়েসসহ সব ভয়েসের একটি লিস্টবক্স)।",
+    "message": "ভয়েস, গভীরতম থেকে উজ্জ্বলতম পর্যন্ত সাজানো"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "ভয়েস কার্ডের পিন টগলের (চালু অবস্থায়) এবং মেনু স্লটের রিমুভ বোতামের অ্যাক্সেসিবল লেবেল; $name$ হলো ভয়েস, $host$ হলো অ্যাসিস্ট্যান্ট।",
+    "message": "$host$-এর মেনু থেকে $name$ সরান",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারের লাইন, যখন একটি ভয়েসের স্যাম্পল ক্লিপ লোড বা প্লে হতে ব্যর্থ হয়; $name$ হলো সেই ভয়েস। এটি নন-মোডাল — স্যাম্পলগুলোর ধারাবাহিক প্লে এটিকে পেরিয়ে চলতে থাকে।",
+    "message": "$name$-এর স্যাম্পল চালানো গেল না।",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "সেটিংসের AI Chat ট্যাবে ভয়েস ক্যাটালগ সেকশনের উপশিরোনাম।",
+    "message": "প্রতিটি সাইটে উত্তরগুলো যে ভয়েসে জোরে পড়ে শোনায়, সেটি বেছে নিন।"
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Voices সেটিংস শিরোনামের নিচে উপশিরোনাম, পিচ-অনুযায়ী সাজানো ভয়েস রেলের জন্য।",
+    "message": "গভীরতম থেকে উজ্জ্বলতম পর্যন্ত সব ভয়েস। শুনুন, তারপর বাছুন।"
+  },
+  "voicesSectionTitle": {
+    "description": "সেটিংসের AI Chat ট্যাবে ভয়েস ক্যাটালগ সেকশনের শিরোনাম।",
+    "message": "ভয়েস"
+  },
+  "voicesShelfEveryday": {
+    "description": "সেটিংস ভয়েস ক্যাটালগে ভ্যালু-টিয়ার ভয়েসগুলোর গ্রুপ শিরোনাম। CSS দিয়ে বড় হাতের অক্ষরে দেখানো হয়।",
+    "message": "দৈনন্দিন ভয়েস"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "সেটিংসের Voices স্টুডিওতে Everyday গ্রুপ শিরোনামের পাশে এক লাইনের নোট; স্টুডিওতে একমাত্র জায়গা যেখানে এই টিয়ার HD-এর চেয়ে কতটা বেশি দীর্ঘস্থায়ী তা বলা হয়।",
+    "message": "স্বাভাবিক এবং পরিষ্কার — HD-এর তুলনায় প্রায় ২০× বেশি সময় শুনতে পারবেন।"
+  },
+  "voicesShelfHd": {
+    "description": "সেটিংস ভয়েস ক্যাটালগে প্রিমিয়াম (HD) ভয়েসগুলোর গ্রুপ শিরোনাম। CSS দিয়ে বড় হাতের অক্ষরে দেখানো হয়।",
+    "message": "HD ভয়েস"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "সেটিংসের Voices স্টুডিওতে HD গ্রুপ শিরোনামের পাশে এক লাইনের নোট।",
+    "message": "আমাদের সবচেয়ে সমৃদ্ধ, সবচেয়ে অভিব্যক্তিপূর্ণ সাউন্ড।"
+  },
+  "voicesShowAll": {
+    "description": "সেটিংসের Voices ‘Show’ ফিল্টারের অপশন: কোনো ফিল্টার নয়, সব ভয়েস তালিকাভুক্ত হয়।",
+    "message": "সব ভয়েস"
+  },
+  "voicesShowEveryday": {
+    "description": "সেটিংসের Voices ‘Show’ ফিল্টারের অপশন: শুধু স্ট্যান্ডার্ড (non-HD) ভয়েসগুলো তালিকাভুক্ত হয়।",
+    "message": "শুধু Everyday"
+  },
+  "voicesShowHd": {
+    "description": "সেটিংসের Voices ‘Show’ ফিল্টারের অপশন: শুধু প্রিমিয়াম (HD) ভয়েসগুলো তালিকাভুক্ত হয়।",
+    "message": "শুধু HD"
+  },
+  "voicesShowLabel": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারে থাকা ফিল্টারের লেবেল, যা তালিকায় কোন কোন ভয়েস দেখাবে তা সীমিত করে।",
+    "message": "দেখান"
+  },
+  "voicesShowUnheard": {
+    "description": "সেটিংসের Voices ‘Show’ ফিল্টারের অপশন: ব্যবহারকারী এখনো শোনেননি এমন ভয়েসগুলোই শুধু তালিকাভুক্ত হয়।",
+    "message": "এখনও শোনা হয়নি"
+  },
+  "voicesSpeakingNow": {
+    "description": "সেটিংসের Voices স্টুডিওতে (মেনু স্লট ও ভয়েস কার্ডে) হোস্টের বর্তমানে নির্বাচিত ভয়েসের স্টেট লেবেল।",
+    "message": "এখন কথা বলছে"
+  },
+  "voicesSpeaksWith": {
+    "description": "সেটিংসের Voices স্টুডিও স্টেজে বর্তমান ভয়েসের নামের উপরে থাকা আইব্রো লাইন; $host$ হলো অ্যাসিস্ট্যান্ট (যেমন Pi)। CSS দিয়ে বড় হাতের অক্ষরে রেন্ডার করা হয়।",
+    "message": "$host$ কথা বলে",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "স্টেজ নোট যখন হোস্ট নিজস্ব অডিও দেয় (যেমন Pi), তাই Say, Pi ভয়েস বাছলে হোস্টেরটি প্রতিস্থাপিত হয়।",
+    "message": "নিচ থেকে একটি বাছা পর্যন্ত $host$ তার নিজের ভয়েস ব্যবহার করবে।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "স্টেজ নোট যখন হোস্টের নিজের কোনো ভয়েস নেই (যেমন Claude), তাই Say, Pi ভয়েস না বাছা পর্যন্ত কিছুই জোরে পড়া হয় না।",
+    "message": "নিচ থেকে একটি বাছা পর্যন্ত $host$ উত্তরগুলো জোরে পড়বে না।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "হোস্টের জন্য কোনো SayPi ভয়েস নির্বাচন না থাকলে সেটিংসের Voices স্টুডিও স্টেজে শিরোনাম; $host$ হলো সহকারী (যেমন Pi, Claude)। নামের আকারে রেন্ডার হয়।",
+    "message": "$host$-এর কণ্ঠস্বর কেমন হবে বাছুন",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "সেটিংসের Voices স্টুডিও স্টেজে বোতাম, যা বর্তমান ভয়েসের ফ্রি স্যাম্পল ক্লিপ চালায়।",
+    "message": "একটি নমুনা শুনুন"
+  },
+  "voicesStopPlayback": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারের বোতাম, যা 'Play all' থেকে শুরু হওয়া স্যাম্পলগুলোর চলা থামায়।",
+    "message": "থামান"
+  },
+  "voicesSweepPosition": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারে ‘Play all’ তালিকা জুড়ে চলার সময় লাইভ অবস্থান দেখায়; $index$ হলো এখন যে ভয়েস চলছে এবং $total$ হলো কিউতে মোট কতটি আছে।",
+    "message": "$total$ এর মধ্যে $index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারে compare কন্ট্রোলের অ্যাক্সেসিবল লেবেল, যা শেষবার শোনা শেষ দুইটির মধ্যে অন্য ভয়েসটি আবার চালায়; $name$ হলো সেই ভয়েস।",
+    "message": "$name$-এ ফিরে যান",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "সেটিংসের Voices কন্ট্রোল বারের লাইন, যখন খুব বড় তালিকায় ‘Play all’ চাপা হয়; $count$ হলো কতটি ভয়েস এবং $minutes$ হলো আনুমানিক কত মিনিট লাগবে। ‘min’ সংক্ষিপ্ত রাখা হয়েছে যাতে 1 হলেও ঠিকভাবে পড়ে — Chrome i18n-এ বহুবচনের আলাদা ফর্ম নেই।",
+    "message": "এটা $count$টি ভয়েস — প্রায় $minutes$ min। আগে তালিকাটা ছোট করুন।",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "সেটিংসের ভয়েস ক্যাটালগে প্রতি-হোস্ট “এই ভয়েস ব্যবহার করুন” বোতামের অ্যাক্সেসিবল লেবেল; $name$ হলো ভয়েস, $host$ হলো অ্যাসিস্ট্যান্ট (যেমন Pi, Claude)।",
+    "message": "$host$-এ $name$ ব্যবহার করুন",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "ইউনিফাইড সেটিংসের ভয়েস ক্যাটালগে প্রতি-হোস্ট “এই ভয়েস ব্যবহার করুন” বোতামের সংক্ষিপ্ত লেবেল (এর পাশে হোস্টও দেখানো থাকে)।",
+    "message": "ব্যবহার করুন"
+  },
+  "voicesYourVoice": {
+    "description": "সেটিংসের Voices তালিকায় কন্ট্রোল-বারের বোতাম, যা এই হোস্ট বর্তমানে যে ভয়েস ব্যবহার করছে তার সারিতে ফোকাস নিয়ে যায়; $name$ হলো সেই ভয়েস।",
+    "message": "আপনার ভয়েস: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "ভয়েস-ডিটেকশন মডেলের জন্য পর্যাপ্ত WebAssembly মেমরি বরাদ্দ করতে না পারলে যে ত্রুটি দেখায়।",
+    "message": "ভয়েস ডিটেকশন শুরু করা যাচ্ছে না: ভয়েস মডেলের জন্য পর্যাপ্ত WebAssembly মেমরি নেই। $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "ভয়েস-ডিটেকশন মডেল চালাতে প্রয়োজনীয় প্রাথমিক WebAssembly মেমরি ব্রাউজার সরবরাহ না করলে যে ত্রুটি দেখায়।",
+    "message": "ভয়েস ডিটেকশন শুরু করা যাচ্ছে না: এই ব্রাউজারে WebAssembly মেমরি উপলব্ধ নয়।"
   }
 }
