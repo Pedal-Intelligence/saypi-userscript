@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Manfaat yang tercantum di modal autentikasi - peningkatan batas penggunaan.",
+    "message": "Batas penggunaan lebih tinggi dengan akun gratis"
+  },
+  "authBenefitPremium": {
+    "description": "Manfaat yang tercantum di modal autentikasi - fitur premium di berbagai chatbot.",
+    "message": "Fitur premium dan dukungan chatbot"
+  },
+  "authBenefitSupport": {
+    "description": "Manfaat yang tercantum di modal autentikasi - dukungan prioritas.",
+    "message": "Dukungan prioritas untuk masalah"
+  },
+  "authBenefitSync": {
+    "description": "Manfaat yang tercantum di modal autentikasi - sinkronisasi pengaturan.",
+    "message": "Sinkronkan pengaturan suara di mana saja"
+  },
+  "authBenefitTTS": {
+    "description": "Manfaat yang tercantum di modal autentikasi - fitur TTS.",
+    "message": "Suara text-to-speech (paket berbayar)"
+  },
+  "authBenefitUsage": {
+    "description": "Manfaat yang tercantum di modal autentikasi - pelacakan penggunaan.",
+    "message": "Lacak penggunaan suara Anda di semua perangkat"
+  },
+  "authPromptModalFull": {
+    "description": "Deskripsi untuk prompt autentikasi modal penuh dengan proposisi nilai.",
+    "message": "Anda sering memakai Say, Pi. Masuk untuk batas lebih tinggi, suara text-to-speech, dan fitur premium di semua chatbot yang didukung."
+  },
+  "authPromptModalSoft": {
+    "description": "Deskripsi untuk prompt autentikasi modal ringan.",
+    "message": "Buat akun Say, Pi gratis untuk batas penggunaan lebih tinggi dan akses ke fitur suara premium."
+  },
+  "authPromptTitle": {
+    "description": "Judul untuk modal prompt autentikasi.",
+    "message": "Buka lebih banyak fitur suara"
+  },
+  "authPromptToast": {
+    "description": "Notifikasi toast yang mendorong pengguna untuk masuk.",
+    "message": "Masuk ke Say, Pi untuk batas lebih tinggi dan fitur premium"
+  },
   "autoReadAloudChatGPT": {
     "description": "Label untuk kotak centang yang mengaktifkan atau menonaktifkan pembacaan otomatis tanggapan ChatGPT selama panggilan suara.",
     "message": "Pembacaan Otomatis (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Nonaktifkan teks-ke-pidato"
   },
+  "dismiss": {
+    "message": "Paham",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Membubarkan"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Fokus"
   },
+  "errorVadInitFailed": {
+    "description": "Toast error yang ditampilkan saat pendeteksian aktivitas suara gagal diinisialisasi.",
+    "message": "Gagal menginisialisasi pendeteksi suara"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Toast error yang ditampilkan saat terjadi kesalahan tak terduga ketika menyiapkan perekaman suara.",
+    "message": "Gagal menyiapkan perekaman suara"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Toast error yang ditampilkan saat klien pendeteksi suara gagal memulai perekaman.",
+    "message": "Gagal memulai perekaman suara"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Toast error yang ditampilkan saat klien pendeteksi suara (VAD) tidak tersedia, sehingga perekaman tidak dapat dimulai.",
+    "message": "Perekaman suara tidak tersedia"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Keluar dari Mode Fokus"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Catatan satu baris yang ditampilkan di menu suara saat suara premium (HD) dan suara value sama-sama tersedia",
+    "message": "Suara HD memakai jatah bulanan Anda sekitar 20× lebih cepat."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Menyelipkan ini ..."
   },
+  "maybeLater": {
+    "description": "Teks tombol untuk menutup prompt autentikasi.",
+    "message": "Mungkin nanti"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Setelan mikrofon Anda tidak memenuhi spesifikasi yang diperlukan. \nCoba gunakan mikrofon lain atau sesuaikan pengaturan audio Anda."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Tidak dapat mengakses mikrofon. \nSilakan periksa pengaturan perangkat Anda dan coba lagi."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Toast error yang ditampilkan ketika izin mikrofon ditolak setelah alur prompt perizinan.",
+    "message": "Izin mikrofon tidak diberikan. Pastikan kamu sudah mengizinkan akses di prompt dan di pengaturan ekstensi."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "ketepatan"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Respon tercepat, namun kurang akurat. \nCenderung mengganggu."
   },
+  "moreVoices": {
+    "description": "Baris menu yang menautkan dari menu suara di halaman ke katalog suara lengkap di setelan ekstensi",
+    "message": "Suara lainnya…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Nama panggilan asisten"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Tidak masuk"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Label tombol yang membuka ChatGPT.",
+    "message": "Buka ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Label tombol yang membuka Claude.ai.",
+    "message": "Buka Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Label tombol yang membuka Pi.ai.",
+    "message": "Buka Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Opsi lingkungan: di sekitar orang lain.",
+    "message": "Di sekitar orang lain"
+  },
+  "onboarding_envMixed": {
+    "description": "Opsi lingkungan: campuran ruang privat dan bersama.",
+    "message": "Campuran beberapa tempat"
+  },
+  "onboarding_envPrivate": {
+    "description": "Opsi lingkungan: ruang privat.",
+    "message": "Di tempat yang privat"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Konfirmasi yang ditampilkan saat jawaban lingkungan membiarkan mode senyap tetap mati.",
+    "message": "Baik, kami akan tetap memakai pengaturan standar untuk mendengarkan dan pemutaran."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Konfirmasi yang ditampilkan saat jawaban lingkungan mengaktifkan mode senyap.",
+    "message": "Mode senyap aktif — kami akan menangkap suara yang lebih pelan dan membalas dengan pelan, agar Anda bisa berbicara dengan lebih discreet."
+  },
+  "onboarding_envTitle": {
+    "description": "Judul untuk pertanyaan onboarding tentang lingkungan pengguna.",
+    "message": "Biasanya Anda akan berbicara di mana?"
+  },
+  "onboarding_footer": {
+    "description": "Teks footer pada halaman onboarding saat pertama kali dijalankan.",
+    "message": "Anda bisa melihat ini lagi kapan saja dari pengaturan Say, Pi. Privasi Anda penting — audio hanya direkam selama panggilan aktif."
+  },
+  "onboarding_heading": {
+    "description": "Judul utama pada halaman onboarding saat pertama kali dijalankan.",
+    "message": "🗣️ Selamat datang di Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Paragraf pengantar pada halaman onboarding saat pertama kali dijalankan.",
+    "message": "Anda tinggal dua langkah lagi dari percakapan lisan pertama Anda dengan AI. Berbicara sekitar 3× lebih cepat daripada mengetik — mari kita siapkan."
+  },
+  "onboarding_micTestButton": {
+    "description": "Tombol yang memulai uji mikrofon onboarding tanpa risiko.",
+    "message": "🎤 Uji mikrofon Anda"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status yang ditampilkan setelah uji mikrofon onboarding selesai dengan sukses.",
+    "message": "Bagus — mikrofon Anda berfungsi. 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status yang ditampilkan saat uji mikrofon onboarding mengukur input.",
+    "message": "Mendengarkan — coba bicara sesuatu. 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status yang ditampilkan saat uji mikrofon onboarding menunggu izin.",
+    "message": "Meminta akses mikrofon…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Label tombol untuk menghentikan uji mikrofon onboarding saat sedang berjalan.",
+    "message": "Hentikan uji"
+  },
+  "onboarding_step1Body": {
+    "description": "Isi langkah onboarding pertama yang menjelaskan cara menyematkan ekstensi.",
+    "message": "Klik ikon kepingan puzzle 🧩 di kanan atas browser Anda, lalu ikon semat 📌 di sebelah Say, Pi. Itu membuat tombol panggilan selalu satu klik saja."
+  },
+  "onboarding_step1Title": {
+    "description": "Judul langkah onboarding pertama (menyematkan ekstensi).",
+    "message": "Sematkan Say, Pi ke toolbar Anda"
+  },
+  "onboarding_step2Body": {
+    "description": "Isi langkah onboarding kedua yang menjelaskan cara memulai percakapan suara.",
+    "message": "Buka salah satu asisten yang didukung di bawah ini, lalu ketuk tombol panggilan Say, Pi dan sapa. Kami akan meminta akses mikrofon pada kali pertama — itu wajar, dan kami hanya mendengarkan saat Anda sedang dalam panggilan."
+  },
+  "onboarding_step2Title": {
+    "description": "Judul langkah onboarding kedua (memulai percakapan).",
+    "message": "Buka chat AI dan mulai bicara"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Izin mikrofon"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Panduan pemulihan saat izin mikrofon diblokir.",
+    "message": "Browser Anda memblokir mikrofon. Klik ikon kamera atau gembok di bilah alamat, setel Mikrofon ke \"Izinkan\", lalu coba lagi. Di macOS, periksa juga Pengaturan Sistem → Privasi & Keamanan → Mikrofon."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Judul panel pemulihan saat izin mikrofon ditolak/diblokir.",
+    "message": "Akses mikrofon diblokir"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Panduan pemulihan saat mikrofon sedang digunakan di tempat lain.",
+    "message": "Aplikasi atau tab lain mungkin sedang menggunakan mikrofon Anda. Tutup apa pun yang mungkin sedang merekam (panggilan video, memo suara), lalu coba lagi."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Judul panel pemulihan saat mikrofon sedang dipakai oleh aplikasi lain.",
+    "message": "Mikrofon Anda sedang digunakan"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Panduan pemulihan saat tidak ada perangkat mikrofon yang tersedia.",
+    "message": "Kami tidak dapat menemukan mikrofon. Colokkan (atau sambungkan headset Anda), pastikan mikrofon dipilih sebagai perangkat input, lalu coba lagi."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Judul panel pemulihan saat tidak ada perangkat mikrofon yang tersedia.",
+    "message": "Tidak ada mikrofon yang ditemukan"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Panduan pemulihan untuk kesalahan mikrofon yang tidak diketahui.",
+    "message": "Ada masalah saat mengakses mikrofon Anda. Pastikan mikrofon tersambung dan diizinkan di pengaturan browser Anda, lalu coba lagi."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Judul panel pemulihan untuk kesalahan mikrofon yang tidak diketahui.",
+    "message": "Kami tidak dapat mengakses mikrofon Anda"
+  },
+  "permissions_retryButton": {
+    "description": "Label untuk tombol yang meminta ulang izin mikrofon.",
+    "message": "Coba lagi"
+  },
+  "permissions_revokedHeading": {
+    "description": "Judul yang ditampilkan saat akses mikrofon sebelumnya sudah diberikan tetapi kemudian dicabut.",
+    "message": "🎙️ Mari hubungkan kembali mikrofon Anda"
+  },
+  "permissions_revokedInfo": {
+    "description": "Teks informasi yang ditampilkan saat akses mikrofon dicabut setelah sebelumnya diberikan.",
+    "message": "Akses mikrofon Anda dimatikan — ini sering terjadi setelah pembaruan browser atau sistem. Izinkan lagi di bawah ini dan $productName$ akan kembali mendengarkan saat Anda sedang dalam panggilan.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Label untuk tombol yang mengaktifkan mode senyap/bisik.",
+    "message": "Mode senyap"
+  },
+  "quietModeTooltip": {
+    "description": "Tooltip yang menjelaskan fungsi mode senyap/bisik.",
+    "message": "Bicara lebih pelan — menangkap suara yang lebih pelan dan menurunkan volume balasan asisten, jadi kamu bisa pakai suara di sekitar orang lain."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Teks untuk tombol masuk saat autentikasi sedang berlangsung.",
+    "message": "Sedang masuk..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Efek suara"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Efek suara dinonaktifkan di Firefox untuk mencegah masalah umpan balik audio."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Judul pemberitahuan satu kali tentang keuntungan kecepatan yang ditampilkan setelah pertukaran suara pertama.",
+    "message": "Bagus — berbicara sekitar 3× lebih cepat daripada mengetik."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Baris kedua opsional dari pemberitahuan keuntungan kecepatan yang menampilkan total menit yang dihemat.",
+    "message": "Kamu sudah berbicara kira-kira $minutes$ menit lebih cepat daripada mengetiknya.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Hanya kirimkan ketika Anda menekan tombol"
   },
+  "surveyQuestion": {
+    "description": "Pertanyaan tunggal untuk mikro-survei sekali saja setelah kemenangan.",
+    "message": "Sejauh ini, bagaimana menurutmu fitur suara?"
+  },
+  "surveyRatingLabel": {
+    "description": "Label aksesibel untuk tombol penilaian survei.",
+    "message": "Beri nilai $rating$ dari 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Ucapan terima kasih yang ditampilkan setelah pengguna menjawab survei pasca-kemenangan.",
+    "message": "Terima kasih — ini membantu kami membuat Say, Pi lebih baik. 🙏"
+  },
   "tabAIChat": {
     "description": "Label tab untuk bagian pengaturan obrolan AI.",
     "message": "Obrolan AI"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Label tab untuk bagian pengaturan umum.",
     "message": "Umum"
+  },
+  "tabVoices": {
+    "description": "Label tab untuk bagian pengaturan suara (katalog suara per situs).",
+    "message": "Suara"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "kredit"
   },
+  "ttsCreditsRemaining": {
+    "description": "Teks yang menampilkan sisa kuota TTS sebagai kumpulan kredit per suara (saypi-api #181 Stage 2), bukan karakter mentah.",
+    "message": "Sisa $credits$ kredit",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Suara multibahasa saat ini tidak didukung di Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Generasi suara"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Perhatian! Pemutaran ucapan belum tersedia di $browserName$ dengan $chatbotName$. Kabar baiknya? Input suara berfungsi dengan baik! Untuk TTS, coba Chrome atau Edge di desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS tidak tersedia di $browserName$ + $chatbotName$. Input suara berfungsi! Coba Chrome desktop untuk TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Suara tts"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Detail VAD saat audio mirip ucapan terdeteksi tetapi terlalu pelan / tingkat keyakinan terlalu rendah untuk ditranskripsikan (penolakan admission-gate di sisi klien).",
+    "message": "Audio terlalu pelan untuk ditranskripsikan"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Detail VAD yang menjelaskan panggilan berakhir karena mikrofon diklaim oleh tab yang lebih baru.",
+    "message": "Input suara dipindahkan ke tab lain"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Suara tidak tersedia. \nCoba chrome atau firefox di desktop."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Perhatian! Pemutaran ucapan belum tersedia di $browserName$ dengan $chatbotName$. Kabar baiknya? Input suara berfungsi dengan baik! Untuk TTS, coba Chrome atau Edge di desktop.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS tidak tersedia di $browserName$ + $chatbotName$. Input suara berfungsi! Coba Chrome desktop untuk TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Paham",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Status VAD yang ditampilkan pada tab yang input suaranya diambil alih oleh tab lain.",
+    "message": "Dijeda"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Lihat detail"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Perkenalan umum yang diputar ketika suara SayPi yang dipilih tidak memiliki skrip perkenalan khusus (dan tidak ada pesan terbaru untuk dibacakan ulang).",
+    "message": "Hai, saya $voice$. Ini suara saya. Semoga kamu suka suara ini.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Halo! \nTerima kasih! \ntidak! \nSaya Pi, asisten AI poliglot Anda. \nDengan 32 bahasa yang saya kuasai, kita dapat mengeksplorasi ide dan budaya dari seluruh dunia. \nApa pendapat Anda tentang suara ini?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Pengaturan Suara"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Subjudul cadangan untuk baris suara di katalog suara pengaturan saat suara tidak memiliki deskripsi; $count$ adalah jumlah bahasa yang didukung suara.",
+    "message": "Berbicara dalam $count$ bahasa",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Addison' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Ceria dan artikulatif"
+  },
+  "voiceTagline_alloy": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Alloy' (studio Suara di setelan; peta identitas suara sisi klien).",
+    "message": "Seimbang dan serbaguna"
+  },
+  "voiceTagline_ash": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Ash' (studio Suara di setelan; peta identitas suara sisi klien).",
+    "message": "Rendah, bijak, tenang"
+  },
+  "voiceTagline_ballad": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Ballad' (studio Suara di setelan; peta identitas suara sisi klien).",
+    "message": "Lembut dan melodis"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Cassidy' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Ramah dan lugas"
+  },
+  "voiceTagline_cedar": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Cedar' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Stabil dan meyakinkan"
+  },
+  "voiceTagline_coral": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Coral' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Cerah, berenergi positif"
+  },
+  "voiceTagline_echo": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Echo' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Bersih dan netral"
+  },
+  "voiceTagline_fable": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Fable' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Irama khas pendongeng"
+  },
+  "voiceTagline_finn": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Finn' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Segar dan berenergi"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Jamahal' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Kaya dan memikat"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Jarnathan' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Bariton lembut ala larut malam"
+  },
+  "voiceTagline_jeff": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Jeff' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Terus terang dan stabil"
+  },
+  "voiceTagline_jessica": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Jessica' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Hangat dan berwibawa"
+  },
+  "voiceTagline_joey": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Joey' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Gaya Amerika yang santai dan komunikatif"
+  },
+  "voiceTagline_juniper": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Juniper' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Jernih, cerah, ekspresif"
+  },
+  "voiceTagline_lucy": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Lucy' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Lembut dan bercahaya"
+  },
+  "voiceTagline_marin": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Marin' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Hangat, tenang ala radio pagi"
+  },
+  "voiceTagline_mark": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Mark' (pengaturan Voices studio; peta identitas suara sisi klien).",
+    "message": "Narator yang jelas dan percaya diri"
+  },
+  "voiceTagline_nova": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Nova' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Cepat dan ingin tahu"
+  },
+  "voiceTagline_onyx": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Onyx' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Dalam, bergema, dan berwibawa"
+  },
+  "voiceTagline_paola": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Paola' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Kehangatan Italia yang ekspresif"
+  },
+  "voiceTagline_sage": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Sage' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Jelas dengan tutur lembut"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Tagline kepribadian yang ditulis untuk suara 'Shimmer' (pengaturan Voices studio; peta identitas suara di sisi klien).",
+    "message": "Ringan dan lapang"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Label singkat pada tombol semat kartu suara (status mati) di studio Suara pengaturan; menekan akan menambahkan suara ke menu di chat untuk host.",
+    "message": "+ Menu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Label aksesibel untuk tombol semat kartu suara (status mati); $name$ adalah suara, $host$ adalah asisten.",
+    "message": "Tambahkan $name$ ke menu $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Label pada toggle di bilah kontrol Suara yang menunjukkan apakah menelusuri daftar dengan tombol panah akan memutar tiap suara saat fokus mencapainya.",
+    "message": "Putar saat Anda berpindah"
+  },
+  "voicesArrowsLive": {
+    "description": "Konfirmasi pembaca layar, ditambahkan ke pengumuman pertama 'Memutar <suara>' di daftar Suara pada setelan, yang menyatakan tombol panah baru saja menjadi terdengar. Menggemakan kata-kata dari sakelar 'Putar saat Anda bergerak'.",
+    "message": "Panah kini memutar saat Anda bergerak. Esc menghentikan."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Catatan di bawah slot menu untuk host yang menyertakan suara asli (mis. 8 suara bawaan Pi), yang tidak dikelola studio; $host$ adalah asisten.",
+    "message": "Suara bawaan $host$ juga selalu muncul di menunya.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Varian dari voicesBuiltinsNote untuk host tanpa menu suara dalam chat (Pi menghentikan menunya pada 2026), ketika janji versi asli bahwa suara bawaan 'muncul di menunya' akan tidak benar; $host$ adalah asisten.",
+    "message": "$host$ juga punya suara bawaan sendiri, yang tidak tercantum di sini.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Tampilan progres di bilah kontrol Suara pada setelan: berapa banyak dari suara yang terdaftar sudah didengarkan pengguna. Angka tanpa kata, sehingga terbaca benar saat 1 — Chrome i18n tidak memiliki bentuk jamak.",
+    "message": "$heard$ dari $total$ sudah didengar",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Bagian dari nama aksesibel pada baris suara di daftar Suara pada setelan, menandai suara yang sudah didengarkan profil ini. Secara visual ini digambar sebagai kepadatan tinta pada jejak suara, yang tidak dapat dilihat pembaca layar.",
+    "message": "Sudah didengar"
+  },
+  "voicesInHostMenu": {
+    "description": "Judul bagian di atas deretan slot menu di studio Suara pengaturan; $host$ adalah asisten.",
+    "message": "Di menu $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Label singkat pada tombol semat kartu suara (status nyala) di studio Suara pengaturan.",
+    "message": "✓ Di menu"
+  },
+  "voicesInUse": {
+    "description": "Lencana tetap pada suara yang saat ini dipilih untuk host di daftar Suara pengaturan, dirender huruf besar. Sengaja BUKAN 'Sedang berbicara': di halaman ini baris memutar klip contoh, jadi suara yang dipilih tetapi diam tidak boleh mengklaim sedang berbicara ketika baris lain yang sedang berbunyi.",
+    "message": "Digunakan"
+  },
+  "voicesKeyboardHint": {
+    "description": "Petunjuk keyboard satu baris di bilah kontrol Suara pada setelan. Glif adalah tombol: Space, panah atas/bawah, dan Shift+Space.",
+    "message": "Tekan Space untuk mendengarkan, ↑↓ untuk berpindah antar suara, ⇧Space untuk beralih kembali."
+  },
+  "voicesLoadError": {
+    "description": "Status error di dalam studio milik satu host saat katalog suara host tersebut gagal dimuat; $host$ adalah asisten.",
+    "message": "Tidak dapat memuat suara $host$. Silakan coba lagi nanti.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/petunjuk pada tombol '+ Menu' yang dinonaktifkan ketika menu di chat untuk host sudah mencapai jumlah maksimum suara.",
+    "message": "Menu penuh — hapus satu suara untuk menambahkan yang lain"
+  },
+  "voicesMenuHint": {
+    "description": "Petunjuk satu baris di samping judul 'Di menu {host}', menjelaskan bahwa deretan slot mencerminkan menu suara di dalam chat.",
+    "message": "Yang akan Anda lihat di chat"
+  },
+  "voicesMenuOverflow": {
+    "description": "Catatan di bawah slot menu saat pengguna memiliki lebih banyak suara tersemat daripada yang bisa ditampilkan menu dalam chat (status lama); $count$ adalah jumlah yang tidak muat, $cap$ adalah ukuran menu.",
+    "message": "Ada $count$ suara tersemat lagi yang menunggu di luar $cap$ slot menu.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Bentuk tunggal dari voicesMenuOverflow, digunakan saat tepat satu suara tersemat tidak muat di menu dalam chat; $cap$ adalah ukuran menu.",
+    "message": "Ada 1 suara tersemat lagi yang menunggu di luar $cap$ slot menu.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Baris ringkasan di bawah daftar Suara pada setelan yang menyatakan seberapa penuh menu suara dalam chat milik host; $host$ adalah asisten, $used$ berapa slot terisi, $cap$ berapa totalnya. Dirumuskan agar terbaca benar saat 1 — Chrome i18n tidak memiliki bentuk jamak.",
+    "message": "Menu $host$: $used$ dari $cap$ slot",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Judul untuk grup di akhir daftar Suara pada setelan yang berisi suara tanpa klip sampel untuk diputar; $count$ adalah jumlahnya. Dirumuskan agar terbaca benar saat 1 — Chrome i18n tidak memiliki bentuk jamak.",
+    "message": "Belum ada sampel ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Ditampilkan di katalog suara pengaturan saat daftar suara kosong untuk pengguna yang sudah masuk (mis. masalah jaringan).",
+    "message": "Suara tidak dapat dimuat saat ini. Silakan coba lagi nanti."
+  },
+  "voicesNowPlaying": {
+    "description": "Pengumuman pembaca layar saat klip sampel suara mulai diputar di daftar Suara pada setelan; $name$ adalah suara tersebut.",
+    "message": "Memutar $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Tombol di bilah kontrol Suara pada setelan yang memutar setiap suara yang sedang terdaftar, satu demi satu; $count$ adalah jumlahnya. Dirumuskan agar terbaca benar saat 1 — Chrome i18n tidak memiliki bentuk jamak.",
+    "message": "Putar semua ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Tombol di bilah kontrol Suara pada setelan saat kunjungan ulang: hanya memutar suara terdaftar yang belum Anda dengarkan; $count$ adalah jumlahnya. Dirumuskan agar terbaca benar saat 1 — Chrome i18n tidak memiliki bentuk jamak.",
+    "message": "Putar yang baru ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Baris di bilah kontrol Suara pada setelan saat browser menolak memutar sampel karena halaman belum ada interaksi pengguna.",
+    "message": "Klik suara mana pun untuk mengaktifkan audio."
+  },
+  "voicesPreview": {
+    "description": "Label aksesibel untuk tombol putar (▶) yang memutar klip contoh gratis sebuah suara pada baris suara; $name$ adalah nama suara.",
+    "message": "Putar contoh $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Nama aksesibel untuk daftar Suara di pengaturan (listbox berisi semua suara, satu baris tiap suara).",
+    "message": "Suara, diurutkan dari terdalam sampai terjernih"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Label aksesibel untuk tombol semat kartu suara (status nyala) dan tombol hapus pada slot menu; $name$ adalah suara, $host$ adalah asisten.",
+    "message": "Hapus $name$ dari menu $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Baris di bilah kontrol Suara pada setelan saat klip sampel satu suara gagal dimuat atau diputar; $name$ adalah suara tersebut. Non-modal — rangkaian sampel tetap berlanjut melewatinya.",
+    "message": "Tidak bisa memutar sampel $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Subjudul untuk bagian katalog suara di tab setelan AI Chat",
+    "message": "Pilih suara yang membacakan balasan dengan lantang di setiap situs."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Subjudul di bawah judul pengaturan Suara, untuk deretan suara yang diurutkan berdasarkan tinggi nada.",
+    "message": "Semua suara, dari terdalam sampai terjernih. Dengarkan, lalu pilih."
+  },
+  "voicesSectionTitle": {
+    "description": "Judul untuk bagian katalog suara di tab setelan AI Chat",
+    "message": "Suara"
+  },
+  "voicesShelfEveryday": {
+    "description": "Judul grup untuk suara tingkat hemat di katalog suara setelan. Dirender huruf besar oleh CSS.",
+    "message": "Suara sehari-hari"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Catatan satu baris di samping judul grup Sehari-hari di studio Suara setelan; satu-satunya tempat studio menyatakan seberapa jauh tier ini dibandingkan HD.",
+    "message": "Alami dan jernih — bisa didengarkan sekitar 20× lebih lama dibandingkan HD."
+  },
+  "voicesShelfHd": {
+    "description": "Judul grup untuk suara premium (HD) di katalog suara setelan. Dirender huruf besar oleh CSS.",
+    "message": "Suara HD"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Catatan satu baris di samping judul grup HD di studio Suara setelan.",
+    "message": "Suara kami yang paling kaya dan paling ekspresif."
+  },
+  "voicesShowAll": {
+    "description": "Opsi pada filter 'Tampilkan' Suara di setelan: tanpa pemfilteran, setiap suara ditampilkan.",
+    "message": "Semua suara"
+  },
+  "voicesShowEveryday": {
+    "description": "Opsi pada filter 'Tampilkan' Suara di setelan: hanya tampilkan suara standar (non-HD).",
+    "message": "Hanya standar"
+  },
+  "voicesShowHd": {
+    "description": "Opsi pada filter 'Tampilkan' Suara di setelan: hanya tampilkan suara premium (HD).",
+    "message": "Hanya HD"
+  },
+  "voicesShowLabel": {
+    "description": "Label pada filter di bilah kontrol Suara pada setelan yang mempersempit suara mana yang ditampilkan daftar.",
+    "message": "Tampilkan"
+  },
+  "voicesShowUnheard": {
+    "description": "Opsi pada filter 'Tampilkan' Suara di setelan: hanya tampilkan suara yang belum didengarkan pengguna.",
+    "message": "Belum didengar"
+  },
+  "voicesSpeakingNow": {
+    "description": "Label status pada suara yang saat ini dipilih untuk host di studio Suara pengaturan (slot menu dan kartu suara).",
+    "message": "Sedang berbicara"
+  },
+  "voicesSpeaksWith": {
+    "description": "Baris kecil di atas nama suara saat ini pada panggung studio Suara di pengaturan; $host$ adalah asisten (misalnya Pi). Dirender huruf besar oleh CSS.",
+    "message": "$host$ berbicara dengan",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Catatan panggung saat host menyediakan audionya sendiri (mis. Pi), sehingga memilih suara Say, Pi menggantikan suara host.",
+    "message": "$host$ memakai suaranya sendiri sampai Anda memilih satu di bawah.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Catatan panggung saat host tidak punya suara sendiri (mis. Claude), sehingga tidak ada yang dibacakan sampai suara Say, Pi dipilih.",
+    "message": "$host$ tidak akan membacakan balasan dengan suara sampai Anda memilih satu di bawah.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Judul pada panggung studio Suara di pengaturan saat host belum memiliki suara Say, Pi yang dipilih; $host$ adalah asisten (mis. Pi, Claude). Dirender pada ukuran nama.",
+    "message": "Pilih bagaimana suara $host$ terdengar",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Tombol pada panggung studio Suara di pengaturan yang memutar klip contoh gratis dari suara saat ini.",
+    "message": "Dengarkan contoh"
+  },
+  "voicesStopPlayback": {
+    "description": "Tombol di bilah kontrol Suara pada setelan yang menghentikan rangkaian sampel yang dimulai oleh 'Putar semua'.",
+    "message": "Hentikan"
+  },
+  "voicesSweepPosition": {
+    "description": "Pembacaan posisi langsung di bilah kontrol Suara pada setelan saat 'Putar semua' menelusuri daftar; $index$ adalah suara yang sedang diputar dan $total$ berapa banyak yang masuk antrean.",
+    "message": "$index$ dari $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Label aksesibel untuk kontrol perbandingan di bilah kontrol Suara pada setelan, yang memutar ulang suara lain dari dua suara terakhir yang didengar; $name$ adalah suara tersebut.",
+    "message": "Beralih kembali ke $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Baris di bilah kontrol Suara pada setelan saat 'Putar semua' ditekan pada daftar yang terlalu panjang untuk didengarkan; $count$ adalah jumlah suara dan $minutes$ kira-kira berapa menit durasinya. Disingkat 'min' agar tetap terbaca benar pada 1 — Chrome i18n tidak punya bentuk jamak.",
+    "message": "Itu $count$ suara — sekitar $minutes$ min. Persempit daftar dulu.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Label aksesibel untuk tombol per-host 'gunakan suara ini' di katalog suara pengaturan; $name$ adalah suara, $host$ adalah asisten (misalnya Pi, Claude).",
+    "message": "Gunakan $name$ di $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Label singkat pada tombol per-host 'gunakan suara ini' di katalog suara pengaturan terpadu (host ditampilkan di sebelahnya).",
+    "message": "Gunakan"
+  },
+  "voicesYourVoice": {
+    "description": "Tombol bilah kontrol di daftar Suara pada setelan yang memindahkan fokus ke baris suara yang saat ini digunakan host ini; $name$ adalah suara tersebut.",
+    "message": "Suara Anda: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Error yang muncul ketika browser tidak dapat mengalokasikan memori WebAssembly yang cukup untuk model pendeteksi suara.",
+    "message": "Pendeteksian suara tidak dapat dimulai: memori WebAssembly tidak cukup untuk model suara. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Error yang muncul ketika browser tidak menyediakan memori WebAssembly awal yang diperlukan untuk menjalankan model pendeteksi suara.",
+    "message": "Pendeteksian suara tidak dapat dimulai: memori WebAssembly tidak tersedia di browser ini."
   }
 }

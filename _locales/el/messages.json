@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Όφελος που εμφανίζεται στο modal σύνδεσης - αυξημένα όρια χρήσης.",
+    "message": "Υψηλότερα όρια χρήσης με δωρεάν λογαριασμό"
+  },
+  "authBenefitPremium": {
+    "description": "Όφελος που εμφανίζεται στο modal σύνδεσης - premium λειτουργίες σε chatbot.",
+    "message": "Premium λειτουργίες και υποστήριξη chatbot"
+  },
+  "authBenefitSupport": {
+    "description": "Όφελος που εμφανίζεται στο modal σύνδεσης - υποστήριξη προτεραιότητας.",
+    "message": "Υποστήριξη προτεραιότητας για προβλήματα"
+  },
+  "authBenefitSync": {
+    "description": "Όφελος που εμφανίζεται στο modal σύνδεσης - συγχρονισμός ρυθμίσεων.",
+    "message": "Συγχρονίστε τις ρυθμίσεις φωνής παντού"
+  },
+  "authBenefitTTS": {
+    "description": "Όφελος που εμφανίζεται στο modal σύνδεσης - λειτουργία TTS.",
+    "message": "Φωνές κειμένου σε ομιλία (επί πληρωμή προγράμματα)"
+  },
+  "authBenefitUsage": {
+    "description": "Όφελος που εμφανίζεται στο modal σύνδεσης - παρακολούθηση χρήσης.",
+    "message": "Παρακολουθήστε τη χρήση φωνής σε όλες τις συσκευές"
+  },
+  "authPromptModalFull": {
+    "description": "Περιγραφή για το πλήρες modal προτροπής σύνδεσης με πρόταση αξίας.",
+    "message": "Χρησιμοποιείτε πολύ το SayPi. Συνδεθείτε για υψηλότερα όρια, φωνές κειμένου σε ομιλία και premium λειτουργίες σε όλα τα υποστηριζόμενα chatbot."
+  },
+  "authPromptModalSoft": {
+    "description": "Περιγραφή για το ήπιο modal προτροπής σύνδεσης.",
+    "message": "Δημιουργήστε έναν δωρεάν λογαριασμό SayPi για υψηλότερα όρια χρήσης και πρόσβαση σε premium λειτουργίες φωνής."
+  },
+  "authPromptTitle": {
+    "description": "Τίτλος για το modal προτροπής σύνδεσης.",
+    "message": "Ξεκλειδώστε περισσότερες λειτουργίες φωνής"
+  },
+  "authPromptToast": {
+    "description": "Ειδοποίηση toast που ενθαρρύνει τον χρήστη να συνδεθεί.",
+    "message": "Συνδεθείτε στο SayPi για υψηλότερα όρια και premium λειτουργίες"
+  },
   "autoReadAloudChatGPT": {
     "description": "Ετικέτα για το πλαίσιο επιλογής που ενεργοποιεί ή απενεργοποιεί την αυτόματη ανάγνωση των απαντήσεων του ChatGPT κατά τη διάρκεια φωνητικών κλήσεων.",
     "message": "Αυτόματη Ανάγνωση (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Απενεργοποιήστε το κείμενο σε ομιλία"
   },
+  "dismiss": {
+    "message": "Το κατάλαβα",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Απορρίπτω"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Εστίαση"
   },
+  "errorVadInitFailed": {
+    "description": "Αναδυόμενο μήνυμα σφάλματος όταν αποτυγχάνει να αρχικοποιηθεί η ανίχνευση φωνητικής δραστηριότητας.",
+    "message": "Αποτυχία αρχικοποίησης ανίχνευσης φωνής"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Αναδυόμενο μήνυμα σφάλματος όταν προκύπτει απρόσμενο σφάλμα κατά τη ρύθμιση της ηχογράφησης φωνής.",
+    "message": "Αποτυχία ρύθμισης ηχογράφησης φωνής"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Αναδυόμενο μήνυμα σφάλματος όταν ο πελάτης ανίχνευσης φωνής αποτυγχάνει να ξεκινήσει την ηχογράφηση.",
+    "message": "Αποτυχία εκκίνησης ηχογράφησης φωνής"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Αναδυόμενο μήνυμα σφάλματος όταν ο πελάτης ανίχνευσης φωνής (VAD) δεν είναι διαθέσιμος, οπότε δεν μπορεί να ξεκινήσει η ηχογράφηση.",
+    "message": "Η ηχογράφηση φωνής δεν είναι διαθέσιμη"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Απενεργοποίηση Λειτουργίας Εστίασης"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Μονόγραμμη σημείωση που εμφανίζεται στα μενού φωνής όταν υπάρχουν διαθέσιμες τόσο premium (HD) όσο και value φωνές",
+    "message": "Οι φωνές HD καταναλώνουν το μηνιαίο όριό σας περίπου 20× πιο γρήγορα."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Τοποθετώντας αυτό μακριά ..."
   },
+  "maybeLater": {
+    "description": "Κείμενο κουμπιού για απόρριψη της προτροπής σύνδεσης.",
+    "message": "Ίσως αργότερα"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Οι ρυθμίσεις του μικροφώνου σας δεν πληρούν τις απαιτούμενες προδιαγραφές. \nΔοκιμάστε να χρησιμοποιήσετε διαφορετικό μικρόφωνο ή να προσαρμόσετε τις ρυθμίσεις ήχου."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Δεν είναι δυνατή η πρόσβαση στο μικρόφωνο. \nΕλέγξτε τις ρυθμίσεις της συσκευής σας και δοκιμάστε ξανά."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Αναδυόμενο μήνυμα σφάλματος όταν η άδεια μικροφώνου απορρίφθηκε μετά τη ροή του παραθύρου προτροπής άδειας.",
+    "message": "Δεν δόθηκε άδεια για το μικρόφωνο. Βεβαιώσου ότι έχεις επιτρέψει την πρόσβαση στο παράθυρο προτροπής και στις ρυθμίσεις της επέκτασης."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "ακρίβεια"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Η ταχύτερη απόκριση, αλλά λιγότερο ακριβής. \nΕπιρρεπής σε διακοπή."
   },
+  "moreVoices": {
+    "description": "Γραμμή μενού που συνδέει από το μενού φωνών στη σελίδα προς τον πλήρη κατάλογο φωνών στις ρυθμίσεις της επέκτασης",
+    "message": "Περισσότερες φωνές…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Ψευδώνυμο βοηθού"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Δεν έχει συνδεθεί"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Ετικέτα κουμπιού που ανοίγει το ChatGPT.",
+    "message": "Άνοιγμα του ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Ετικέτα κουμπιού που ανοίγει το Claude.ai.",
+    "message": "Άνοιγμα Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Ετικέτα κουμπιού που ανοίγει το Pi.ai.",
+    "message": "Άνοιγμα Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Επιλογή περιβάλλοντος: κοντά σε άλλα άτομα.",
+    "message": "Δίπλα σε άλλα άτομα"
+  },
+  "onboarding_envMixed": {
+    "description": "Επιλογή περιβάλλοντος: μίγμα ιδιωτικών και κοινόχρηστων χώρων.",
+    "message": "Σε διάφορα μέρη"
+  },
+  "onboarding_envPrivate": {
+    "description": "Επιλογή περιβάλλοντος: ιδιωτικός χώρος.",
+    "message": "Κάπου ιδιωτικά"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Επιβεβαίωση που εμφανίζεται όταν η απάντηση για το περιβάλλον αφήνει τη λειτουργία ησυχίας απενεργοποιημένη.",
+    "message": "Εντάξει — θα κρατήσουμε τις τυπικές ρυθμίσεις ακρόασης και αναπαραγωγής."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Επιβεβαίωση που εμφανίζεται όταν η απάντηση για το περιβάλλον ενεργοποιεί την ήσυχη λειτουργία.",
+    "message": "Ησυχη λειτουργία ενεργή — θα πιάνουμε πιο χαμηλή ομιλία και θα απαντάμε ήσυχα, για να μιλάς διακριτικά."
+  },
+  "onboarding_envTitle": {
+    "description": "Επικεφαλίδα για την ερώτηση onboarding σχετικά με το περιβάλλον του χρήστη.",
+    "message": "Πού θα μιλάς συνήθως;"
+  },
+  "onboarding_footer": {
+    "description": "Κείμενο υποσέλιδου στη σελίδα onboarding της πρώτης εκτέλεσης.",
+    "message": "Μπορείς να το ξαναδείς όποτε θέλεις από τις ρυθμίσεις του Say, Pi. Το απόρρητό σου έχει σημασία — ο ήχος καταγράφεται μόνο κατά τη διάρκεια μιας ενεργής κλήσης."
+  },
+  "onboarding_heading": {
+    "description": "Κύρια επικεφαλίδα στη σελίδα πρώτης εκτέλεσης του onboarding.",
+    "message": "🗣️ Καλώς ήρθατε στο Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Εισαγωγική παράγραφος στη σελίδα πρώτης εκτέλεσης του onboarding.",
+    "message": "Απέχετε δύο βήματα από την πρώτη σας προφορική συνομιλία με ένα AI. Το να μιλάτε είναι περίπου 3× πιο γρήγορο από το να πληκτρολογείτε — ας το ρυθμίσουμε."
+  },
+  "onboarding_micTestButton": {
+    "description": "Κουμπί που ξεκινά τη δοκιμή μικροφώνου στο onboarding, χωρίς επιπτώσεις.",
+    "message": "🎤 Δοκίμασε το μικρόφωνό σου"
+  },
+  "onboarding_micTestDone": {
+    "description": "Κατάσταση που εμφανίζεται αφού η δοκιμή μικροφώνου στο onboarding ολοκληρωθεί με επιτυχία.",
+    "message": "Ωραία — το μικρόφωνό σου λειτουργεί! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Κατάσταση που εμφανίζεται όσο η δοκιμή μικροφώνου στο onboarding μετρά την είσοδο.",
+    "message": "Ακούω — πες κάτι! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Κατάσταση που εμφανίζεται όσο η δοκιμή μικροφώνου στο onboarding περιμένει άδεια.",
+    "message": "Ζητείται πρόσβαση στο μικρόφωνο…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Ετικέτα κουμπιού για διακοπή της δοκιμής μικροφώνου στο onboarding ενώ εκτελείται.",
+    "message": "Διακοπή δοκιμής"
+  },
+  "onboarding_step1Body": {
+    "description": "Κείμενο του πρώτου βήματος onboarding που εξηγεί πώς να καρφιτσώσετε την επέκταση.",
+    "message": "Πατήστε το εικονίδιο παζλ 🧩 πάνω δεξιά στο πρόγραμμα περιήγησής σας και μετά την καρφίτσα 📌 δίπλα στο Say, Pi. Έτσι, το κουμπί κλήσης είναι πάντα ένα κλικ μακριά."
+  },
+  "onboarding_step1Title": {
+    "description": "Τίτλος του πρώτου βήματος onboarding (καρφίτσωμα της επέκτασης).",
+    "message": "Καρφιτσώστε το Say, Pi στη γραμμή εργαλείων σας"
+  },
+  "onboarding_step2Body": {
+    "description": "Κείμενο του δεύτερου βήματος onboarding που εξηγεί πώς να ξεκινήσετε μια φωνητική συνομιλία.",
+    "message": "Μεταβείτε σε έναν από τους υποστηριζόμενους βοηθούς παρακάτω, έπειτα πατήστε το κουμπί κλήσης του Say, Pi και πείτε γεια. Την πρώτη φορά θα ζητήσουμε πρόσβαση στο μικρόφωνο — είναι αναμενόμενο, και ακούμε μόνο όσο βρίσκεστε ενεργά σε μια κλήση."
+  },
+  "onboarding_step2Title": {
+    "description": "Τίτλος του δεύτερου βήματος onboarding (έναρξη μιας συνομιλίας).",
+    "message": "Ανοίξτε ένα AI chat και ξεκινήστε να μιλάτε"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Άδεια μικροφώνου"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Οδηγίες ανάκτησης όταν η άδεια μικροφώνου είναι αποκλεισμένη.",
+    "message": "Το πρόγραμμα περιήγησής σας αποκλείει το μικρόφωνο. Κάντε κλικ στο εικονίδιο κάμερας ή λουκέτου στη γραμμή διευθύνσεων, ορίστε το Microphone σε \"Allow\" και μετά δοκιμάστε ξανά. Σε macOS, ελέγξτε επίσης: System Settings → Privacy & Security → Microphone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Τίτλος του πίνακα ανάκτησης όταν η άδεια μικροφώνου απορρίφθηκε/αποκλείστηκε.",
+    "message": "Η πρόσβαση στο μικρόφωνο είναι αποκλεισμένη"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Οδηγίες ανάκτησης όταν το μικρόφωνο χρησιμοποιείται αλλού.",
+    "message": "Κάποια άλλη εφαρμογή ή καρτέλα μπορεί να χρησιμοποιεί το μικρόφωνό σας. Κλείστε οτιδήποτε άλλο μπορεί να κάνει εγγραφή (βιντεοκλήσεις, φωνητικές σημειώσεις) και μετά δοκιμάστε ξανά."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Τίτλος του πίνακα ανάκτησης όταν το μικρόφωνο χρησιμοποιείται από άλλη εφαρμογή.",
+    "message": "Το μικρόφωνό σας χρησιμοποιείται"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Οδηγίες ανάκτησης όταν δεν είναι διαθέσιμη συσκευή μικροφώνου.",
+    "message": "Δεν μπορέσαμε να βρούμε μικρόφωνο. Συνδέστε ένα (ή συνδέστε το headset σας), βεβαιωθείτε ότι είναι επιλεγμένο ως συσκευή εισόδου και μετά δοκιμάστε ξανά."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Τίτλος του πίνακα ανάκτησης όταν δεν είναι διαθέσιμη συσκευή μικροφώνου.",
+    "message": "Δεν βρέθηκε μικρόφωνο"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Οδηγίες ανάκτησης για άγνωστο σφάλμα μικροφώνου.",
+    "message": "Κάτι πήγε στραβά με την πρόσβαση στο μικρόφωνό σας. Ελέγξτε ότι είναι συνδεδεμένο και ότι επιτρέπεται στις ρυθμίσεις του προγράμματος περιήγησής σας, και μετά δοκιμάστε ξανά."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Τίτλος του πίνακα ανάκτησης για άγνωστο σφάλμα μικροφώνου.",
+    "message": "Δεν μπορέσαμε να αποκτήσουμε πρόσβαση στο μικρόφωνό σας"
+  },
+  "permissions_retryButton": {
+    "description": "Ετικέτα για το κουμπί που ζητά ξανά άδεια πρόσβασης στο μικρόφωνο.",
+    "message": "Δοκιμάστε ξανά"
+  },
+  "permissions_revokedHeading": {
+    "description": "Επικεφαλίδα που εμφανίζεται όταν η πρόσβαση στο μικρόφωνο είχε δοθεί προηγουμένως αλλά έκτοτε έχει ανακληθεί.",
+    "message": "🎙️ Ας συνδέσουμε ξανά το μικρόφωνό σας"
+  },
+  "permissions_revokedInfo": {
+    "description": "Ενημερωτικό κείμενο που εμφανίζεται όταν η πρόσβαση στο μικρόφωνο ανακλήθηκε αφού είχε δοθεί.",
+    "message": "Η πρόσβαση στο μικρόφωνό σας απενεργοποιήθηκε — αυτό συχνά συμβαίνει μετά από ενημέρωση του προγράμματος περιήγησης ή του συστήματος. Επιτρέψτε την ξανά παρακάτω και το $productName$ θα ξανακούει όταν είστε σε κλήση.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Προφίλ"
+  },
+  "quietModeLabel": {
+    "description": "Ετικέτα για τον διακόπτη που ενεργοποιεί την αθόρυβη/ψιθυριστή λειτουργία.",
+    "message": "Αθόρυβη λειτουργία"
+  },
+  "quietModeTooltip": {
+    "description": "Υπόδειξη εργαλείου που εξηγεί τι κάνει η αθόρυβη/ψιθυριστή λειτουργία.",
+    "message": "Μίλα χαμηλόφωνα — ανιχνεύει πιο ήσυχη ομιλία και μειώνει την ένταση της απάντησης του βοηθού, ώστε να χρησιμοποιείς φωνή κοντά σε άλλους."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Κείμενο για το κουμπί σύνδεσης όσο η ταυτοποίηση βρίσκεται σε εξέλιξη.",
+    "message": "Γίνεται σύνδεση..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ηχητικά εφέ"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Τα ηχητικά εφέ είναι απενεργοποιημένα στον Firefox για την αποφυγή προβλημάτων με τα ηχητικά σχόλια."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Τίτλος της εφάπαξ ειδοποίησης για το όφελος ταχύτητας που εμφανίζεται μετά την πρώτη προφορική ανταλλαγή.",
+    "message": "Ωραία — η ομιλία είναι περίπου 3× πιο γρήγορη από την πληκτρολόγηση."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Προαιρετική δεύτερη γραμμή της ειδοποίησης για το όφελος ταχύτητας που δείχνει ολόκληρα λεπτά που εξοικονομήθηκαν.",
+    "message": "Έχεις ήδη μιλήσει περίπου $minutes$ λεπτά πιο γρήγορα από ό,τι θα το πληκτρολογούσες.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Υποβολή μόνο όταν πατήσετε το κουμπί"
   },
+  "surveyQuestion": {
+    "description": "Η μοναδική ερώτηση του εφάπαξ micro-survey μετά το win.",
+    "message": "Πώς σου φαίνεται η φωνή μέχρι τώρα;"
+  },
+  "surveyRatingLabel": {
+    "description": "Προσβάσιμη ετικέτα για ένα κουμπί βαθμολόγησης της έρευνας.",
+    "message": "Βαθμολόγησε $rating$ στα 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Ευχαριστήριο μήνυμα που εμφανίζεται αφού ο χρήστης απαντήσει στην έρευνα μετά το win.",
+    "message": "Ευχαριστούμε — αυτό μας βοηθά να κάνουμε το Say, Pi καλύτερο. 🙏"
+  },
   "tabAIChat": {
     "description": "Ετικέτα καρτέλας για τις ρυθμίσεις συνομιλίας AI.",
     "message": "Συνομιλία AI"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Ετικέτα καρτέλας για τις γενικές ρυθμίσεις.",
     "message": "Γενικά"
+  },
+  "tabVoices": {
+    "description": "Ετικέτα καρτέλας για την ενότητα ρυθμίσεων φωνών (κατάλογος φωνών ανά ιστότοπο).",
+    "message": "Φωνές"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "πιστώσεις"
   },
+  "ttsCreditsRemaining": {
+    "description": "Κείμενο που δείχνει το υπόλοιπο του ορίου TTS ως σύνολο πιστώσεων ανά φωνή (saypi-api #181 Stage 2), όχι ως ακατέργαστους χαρακτήρες.",
+    "message": "Απομένουν $credits$ πιστώσεις",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Οι πολύγλωσσες φωνές δεν υποστηρίζονται αυτήν τη στιγμή στο Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Παραγωγή φωνής"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Προσοχή! Η αναπαραγωγή ομιλίας δεν είναι ακόμη διαθέσιμη στο $browserName$ με το $chatbotName$. Τα καλά νέα; Η φωνητική είσοδος λειτουργεί τέλεια! Για TTS, δοκιμάστε το Chrome ή το Edge στην επιφάνεια εργασίας.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS μη διαθέσιμο στο $browserName$ + $chatbotName$. Η φωνητική είσοδος λειτουργεί! Δοκιμάστε το Chrome desktop για TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Φωνή TTS"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Λεπτομέρεια VAD όταν ανιχνεύτηκε ήχος που μοιάζει με ομιλία αλλά ήταν πολύ αδύναμος / χαμηλής βεβαιότητας για απομαγνητοφώνηση (απόρριψη στην πύλη εισαγωγής από την πλευρά του πελάτη).",
+    "message": "Ο ήχος είναι πολύ αδύναμος για απομαγνητοφώνηση"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Λεπτομέρεια VAD που εξηγεί ότι η κλήση τερματίστηκε επειδή το μικρόφωνο δεσμεύτηκε από νεότερη καρτέλα.",
+    "message": "Η φωνητική είσοδος μεταφέρθηκε σε άλλη καρτέλα"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Η φωνή δεν είναι διαθέσιμη. \nΔοκιμάστε το Chrome ή τον Firefox στην επιφάνεια εργασίας."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Προσοχή! Η αναπαραγωγή ομιλίας δεν είναι ακόμη διαθέσιμη στο $browserName$ με το $chatbotName$. Τα καλά νέα; Η φωνητική είσοδος λειτουργεί τέλεια! Για TTS, δοκιμάστε το Chrome ή το Edge στην επιφάνεια εργασίας.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS μη διαθέσιμο στο $browserName$ + $chatbotName$. Η φωνητική είσοδος λειτουργεί! Δοκιμάστε το Chrome desktop για TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Το κατάλαβα",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Κατάσταση VAD που εμφανίζεται σε καρτέλα της οποίας η φωνητική είσοδος παραλήφθηκε από άλλη καρτέλα.",
+    "message": "Σε παύση"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Προβολή λεπτομερειών"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Γενική προφορική εισαγωγή που αναπαράγεται όταν μια επιλεγμένη φωνή του SayPi δεν έχει εισαγωγικό σενάριο ειδικό για τη φωνή (και δεν υπάρχει πρόσφατο μήνυμα για ανάγνωση).",
+    "message": "Γεια, είμαι ο/η $voice$. Έτσι ακούγομαι. Ελπίζω να σου αρέσει αυτή η φωνή.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hola! \nΣυμβουλή! \nεσυ! \nΕίμαι ο Πι, ο πολυγλωσσικός σας βοηθός τεχνητής νοημοσύνης. \nΜε 32 γλώσσες υπό τις διαταγές μου, μπορούμε να εξερευνήσουμε ιδέες και πολιτισμούς από όλο τον κόσμο. \nΠώς σας φαίνεται αυτή η φωνή;"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ρυθμίσεις φωνής"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Εφεδρικός υπότιτλος για μια σειρά φωνής στον κατάλογο φωνών των ρυθμίσεων όταν η φωνή δεν έχει περιγραφή· το $count$ είναι ο αριθμός των γλωσσών που υποστηρίζει η φωνή.",
+    "message": "Μιλά $count$ γλώσσες",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Addison» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Φωτεινός και εύγλωττος"
+  },
+  "voiceTagline_alloy": {
+    "description": "Σύντομο tagline προσωπικότητας για τη φωνή «Alloy» (στούντιο Φωνές στις ρυθμίσεις· χάρτης ταυτότητας φωνών στην πλευρά του πελάτη).",
+    "message": "Ισορροπημένη και για κάθε χρήση"
+  },
+  "voiceTagline_ash": {
+    "description": "Σύντομο tagline προσωπικότητας για τη φωνή «Ash» (στούντιο Φωνές στις ρυθμίσεις· χάρτης ταυτότητας φωνών στην πλευρά του πελάτη).",
+    "message": "Χαμηλή, στοχαστική, ήρεμη"
+  },
+  "voiceTagline_ballad": {
+    "description": "Σύντομο tagline προσωπικότητας για τη φωνή «Ballad» (στούντιο Φωνές στις ρυθμίσεις· χάρτης ταυτότητας φωνών στην πλευρά του πελάτη).",
+    "message": "Απαλή και μελωδική"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Cassidy» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Φιλικός και απλός"
+  },
+  "voiceTagline_cedar": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Cedar» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Σταθερή και καθησυχαστική"
+  },
+  "voiceTagline_coral": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Coral» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Φωτεινή, ανεβασμένη ενέργεια"
+  },
+  "voiceTagline_echo": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Echo» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Καθαρή και ουδέτερη"
+  },
+  "voiceTagline_fable": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Fable» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Με αφηγηματική χροιά"
+  },
+  "voiceTagline_finn": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Finn» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Φρέσκος και γεμάτος ενέργεια"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Jamahal» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Πλούσιος και μαγνητικός"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Jarnathan» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Βελούδινο, νυχτερινό μπάσο"
+  },
+  "voiceTagline_jeff": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Jeff» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Απλός και σταθερός"
+  },
+  "voiceTagline_jessica": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Jessica» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Ζεστή, με κομψή ισορροπία"
+  },
+  "voiceTagline_joey": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Joey» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Άνετη, αμερικανική κουβεντιαστή χροιά"
+  },
+  "voiceTagline_juniper": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Juniper» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Κοφτερός, φωτεινός, ζωντανός"
+  },
+  "voiceTagline_lucy": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Lucy» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Απαλός και φωτεινός"
+  },
+  "voiceTagline_marin": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Marin» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Ζεστή, πρωινή ραδιοφωνική ηρεμία"
+  },
+  "voiceTagline_mark": {
+    "description": "Σύντομο κείμενο προσωπικότητας που έχει γραφτεί για τη φωνή «Mark» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Καθαρός, με αυτοπεποίθηση αφηγητής"
+  },
+  "voiceTagline_nova": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Nova» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Γρήγορη και περίεργη"
+  },
+  "voiceTagline_onyx": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Onyx» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Βαθιά, ηχηρή επιβλητικότητα"
+  },
+  "voiceTagline_paola": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Paola» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Εκφραστική ιταλική ζεστασιά"
+  },
+  "voiceTagline_sage": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Sage» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Ήπια, καθαρή άρθρωση"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Επιμελημένο σλόγκαν προσωπικότητας για τη φωνή «Shimmer» (ρυθμίσεις Voices studio· αντιστοίχιση ταυτότητας φωνής στην πλευρά του πελάτη).",
+    "message": "Ελαφριά και αέρινη"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Σύντομη ετικέτα στον διακόπτη καρφίτσας μιας κάρτας φωνής (κατάσταση off) στο Voices studio των ρυθμίσεων· πατώντας προσθέτει τη φωνή στο μενού του host μέσα στη συνομιλία.",
+    "message": "+ Μενού"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Ετικέτα προσβασιμότητας για τον διακόπτη καρφίτσας μιας κάρτας φωνής (κατάσταση off)· το $name$ είναι η φωνή, το $host$ ο βοηθός.",
+    "message": "Προσθήκη του/της $name$ στο μενού του $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Ετικέτα στον διακόπτη στη γραμμή ελέγχου Φωνές που δηλώνει αν, όταν κινείστε στη λίστα με τα πλήκτρα βέλους, παίζει κάθε φωνή μόλις αποκτήσει εστίαση.",
+    "message": "Αναπαραγωγή καθώς μετακινείστε"
+  },
+  "voicesArrowsLive": {
+    "description": "Επιβεβαίωση για αναγνώστη οθόνης, που προστίθεται στην πρώτη ανακοίνωση «Αναπαραγωγή <φωνή>» στη λίστα Φωνών στις ρυθμίσεις, λέγοντας ότι τα πλήκτρα βελών μόλις έγιναν ακουστά. Αντιγράφει τη διατύπωση του διακόπτη «Αναπαραγωγή καθώς μετακινείστε».",
+    "message": "Τα βέλη παίζουν καθώς μετακινείστε. Το Esc σταματά."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Σημείωση κάτω από τις θέσεις του μενού για hosts που διαθέτουν εγγενείς φωνές (π.χ. οι 8 ενσωματωμένες του Pi), τις οποίες δεν διαχειρίζεται το στούντιο· το $host$ είναι ο βοηθός.",
+    "message": "Οι ενσωματωμένες φωνές του $host$ εμφανίζονται πάντα και στο μενού του.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Παραλλαγή του voicesBuiltinsNote για host χωρίς μενού φωνής μέσα στη συνομιλία (το Pi απέσυρε το μενού του το 2026), όπου η υπόσχεση του αρχικού ότι οι ενσωματωμένες «εμφανίζονται στο μενού του» θα ήταν αναληθής· το $host$ είναι ο βοηθός.",
+    "message": "Ο $host$ έχει επίσης τις δικές του ενσωματωμένες φωνές, που δεν εμφανίζονται εδώ.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Ένδειξη προόδου στη γραμμή ελέγχου Φωνών στις ρυθμίσεις: πόσες από τις φωνές που εμφανίζονται έχει ήδη ακούσει ο χρήστης. Γυμνοί αριθμοί, ώστε να διαβάζεται σωστά και στο 1 — το Chrome i18n δεν έχει πληθυντικούς τύπους.",
+    "message": "Ακούστηκαν $heard$ από $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Μέρος του προσβάσιμου ονόματος μιας γραμμής φωνής στη λίστα Φωνών στις ρυθμίσεις, που επισημαίνει μια φωνή που αυτό το προφίλ έχει ήδη ακούσει. Οπτικά αυτό σχεδιάζεται ως πυκνότητα μελανιού στο ηχητικό αποτύπωμα της φωνής, κάτι που ένας αναγνώστης οθόνης δεν μπορεί να δει.",
+    "message": "Ακούστηκε"
+  },
+  "voicesInHostMenu": {
+    "description": "Επικεφαλίδα ενότητας πάνω από τη σειρά θέσεων μενού στο Voices studio των ρυθμίσεων· το $host$ είναι ο βοηθός.",
+    "message": "Στο μενού του $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Σύντομη ετικέτα στον διακόπτη καρφίτσας μιας κάρτας φωνής (κατάσταση on) στο Voices studio των ρυθμίσεων.",
+    "message": "✓ Στο μενού"
+  },
+  "voicesInUse": {
+    "description": "Μόνιμο σήμα στην τρέχουσα επιλεγμένη φωνή του host στη λίστα Voices στις ρυθμίσεις, αποδίδεται με κεφαλαία. Σκόπιμα ΔΕΝ είναι «Μιλάει τώρα»: σε αυτή τη σελίδα οι γραμμές αναπαράγουν τα δείγματά τους, οπότε μια επιλεγμένη αλλά σιωπηλή φωνή δεν πρέπει να ισχυρίζεται ότι μιλάει ενώ μια άλλη γραμμή αναπαράγεται.",
+    "message": "Σε χρήση"
+  },
+  "voicesKeyboardHint": {
+    "description": "Υπόδειξη πληκτρολογίου μίας γραμμής στη γραμμή ελέγχου Φωνών στις ρυθμίσεις. Τα σύμβολα είναι πλήκτρα: Space, τα βέλη πάνω/κάτω και Shift+Space.",
+    "message": "Πατήστε Space για ακρόαση, ↑↓ για μετακίνηση μεταξύ φωνών, ⇧Space για επιστροφή."
+  },
+  "voicesLoadError": {
+    "description": "Κατάσταση σφάλματος μέσα στο στούντιο ενός host όταν απέτυχε να φορτώσει ο κατάλογος φωνών αυτού του host· το $host$ είναι ο βοηθός.",
+    "message": "Δεν ήταν δυνατή η φόρτωση των φωνών του $host$. Δοκιμάστε ξανά αργότερα.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/υπόδειξη σε απενεργοποιημένο διακόπτη «+ Μενού» όταν το μενού μέσα στη συνομιλία του host έχει ήδη τον μέγιστο αριθμό φωνών.",
+    "message": "Το μενού είναι πλήρες — αφαίρεσε μια φωνή για να προσθέσεις άλλη"
+  },
+  "voicesMenuHint": {
+    "description": "Μονογραμμική υπόδειξη δίπλα στην επικεφαλίδα «Στο μενού του {host}», που εξηγεί ότι η σειρά θέσεων αντιστοιχεί στο μενού φωνών μέσα στη συνομιλία.",
+    "message": "Τι θα βλέπεις στη συνομιλία"
+  },
+  "voicesMenuOverflow": {
+    "description": "Σημείωση κάτω από τις θέσεις του μενού όταν ο χρήστης έχει περισσότερες καρφιτσωμένες φωνές από όσες μπορεί να δείξει το μενού μέσα στη συνομιλία (παλαιά κατάσταση)· το $count$ είναι πόσες δεν χωρούν, το $cap$ είναι το μέγεθος του μενού.",
+    "message": "Άλλες $count$ καρφιτσωμένες φωνές περιμένουν πέρα από τις $cap$ θέσεις του μενού.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Ενικός του voicesMenuOverflow, χρησιμοποιείται όταν ακριβώς μία καρφιτσωμένη φωνή δεν χωρά στο μενού μέσα στη συνομιλία· το $cap$ είναι το μέγεθος του μενού.",
+    "message": "Άλλη 1 καρφιτσωμένη φωνή περιμένει πέρα από τις $cap$ θέσεις του μενού.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Γραμμή σύνοψης κάτω από τη λίστα Φωνών στις ρυθμίσεις που λέει πόσο γεμάτο είναι το μενού φωνών εντός συνομιλίας του host· το $host$ είναι ο βοηθός, το $used$ πόσες θέσεις είναι κατειλημμένες, το $cap$ πόσες υπάρχουν. Διατυπωμένο ώστε να διαβάζεται σωστά και στο 1 — το Chrome i18n δεν έχει πληθυντικούς τύπους.",
+    "message": "Μενού του/της $host$: $used$ από $cap$ θέσεις",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Κεφαλίδα για την ομάδα στο τέλος της λίστας Φωνών στις ρυθμίσεις που περιέχει φωνές χωρίς κλιπ δείγματος για αναπαραγωγή· το $count$ είναι πόσες. Διατυπωμένο ώστε να διαβάζεται σωστά και στο 1 — το Chrome i18n δεν έχει πληθυντικούς τύπους.",
+    "message": "Χωρίς δείγμα ακόμη ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Εμφανίζεται στον κατάλογο φωνών των ρυθμίσεων όταν η λίστα φωνών είναι κενή για έναν συνδεδεμένο χρήστη (π.χ. πρόβλημα δικτύου)",
+    "message": "Οι φωνές δεν μπόρεσαν να φορτωθούν αυτή τη στιγμή. Δοκιμάστε ξανά αργότερα."
+  },
+  "voicesNowPlaying": {
+    "description": "Ανακοίνωση για αναγνώστη οθόνης όταν ξεκινά να παίζει το κλιπ δείγματος μιας φωνής στη λίστα Φωνών στις ρυθμίσεις· το $name$ είναι η φωνή.",
+    "message": "Αναπαραγωγή $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Κουμπί στη γραμμή ελέγχου Φωνών στις ρυθμίσεις που αναπαράγει κάθε φωνή που εμφανίζεται αυτή τη στιγμή, τη μία μετά την άλλη· το $count$ είναι πόσες. Διατυπωμένο ώστε να διαβάζεται σωστά και στο 1 — το Chrome i18n δεν έχει πληθυντικούς τύπους.",
+    "message": "Αναπαραγωγή όλων ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Κουμπί στη γραμμή ελέγχου Φωνών στις ρυθμίσεις σε επόμενη επίσκεψη: αναπαράγει μόνο τις φωνές που εμφανίζονται και δεν έχετε ακούσει ακόμη· το $count$ είναι πόσες. Διατυπωμένο ώστε να διαβάζεται σωστά και στο 1 — το Chrome i18n δεν έχει πληθυντικούς τύπους.",
+    "message": "Αναπαραγωγή νέων ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Γραμμή στη μπάρα ελέγχου Φωνές στις ρυθμίσεις όταν το πρόγραμμα περιήγησης αρνήθηκε να παίξει δείγμα επειδή η σελίδα δεν είχε ακόμη αλληλεπίδραση χρήστη.",
+    "message": "Κάντε κλικ σε οποιαδήποτε φωνή για να ενεργοποιήσετε τον ήχο."
+  },
+  "voicesPreview": {
+    "description": "Ετικέτα προσβασιμότητας για το κουμπί αναπαραγωγής (▶) που δοκιμάζει το δωρεάν δείγμα κλιπ μιας φωνής σε μια σειρά φωνής· το $name$ είναι το όνομα της φωνής.",
+    "message": "Αναπαραγωγή δείγματος του/της $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Προσβάσιμο όνομα της λίστας Φωνές στις ρυθμίσεις (ένα listbox με κάθε φωνή, μία ανά γραμμή).",
+    "message": "Φωνές, με σειρά από τη βαθύτερη ως την πιο φωτεινή"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Ετικέτα προσβασιμότητας για τον διακόπτη καρφίτσας μιας κάρτας φωνής (κατάσταση on) και για το κουμπί αφαίρεσης μιας θέσης μενού· το $name$ είναι η φωνή, το $host$ ο βοηθός.",
+    "message": "Αφαίρεση του/της $name$ από το μενού του $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Γραμμή στη μπάρα ελέγχου Φωνές στις ρυθμίσεις όταν απέτυχε η φόρτωση ή η αναπαραγωγή του δείγματος μιας φωνής· το $name$ είναι αυτή η φωνή. Μη modal — η ακολουθία δειγμάτων συνεχίζει μετά από αυτό.",
+    "message": "Δεν ήταν δυνατή η αναπαραγωγή του δείγματος της φωνής $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Υποεπικεφαλίδα για την ενότητα καταλόγου φωνών στις ρυθμίσεις, καρτέλα AI Chat",
+    "message": "Διάλεξε τη φωνή που διαβάζει τις απαντήσεις δυνατά σε κάθε ιστότοπο."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Υποεπικεφαλίδα κάτω από την επικεφαλίδα ρυθμίσεων Φωνές, για τη ράγα φωνών ταξινομημένων κατά ύψος.",
+    "message": "Κάθε φωνή, από τη βαθύτερη ως την πιο φωτεινή. Ακούστε και διαλέξτε."
+  },
+  "voicesSectionTitle": {
+    "description": "Επικεφαλίδα για την ενότητα καταλόγου φωνών στις ρυθμίσεις, καρτέλα AI Chat",
+    "message": "Φωνές"
+  },
+  "voicesShelfEveryday": {
+    "description": "Επικεφαλίδα ομάδας για φωνές κατηγορίας value στον κατάλογο φωνών των ρυθμίσεων. Εμφανίζεται με κεφαλαία μέσω CSS.",
+    "message": "Καθημερινές φωνές"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Σύντομη σημείωση μίας γραμμής δίπλα στην επικεφαλίδα της ομάδας Everyday στο στούντιο Φωνές των ρυθμίσεων· το μοναδικό σημείο όπου το στούντιο αναφέρει πόσο περισσότερο διαρκεί αυτή η κατηγορία σε σχέση με τις HD.",
+    "message": "Φυσικές και καθαρές — μπορείς να ακούς περίπου 20× περισσότερο απ’ ό,τι με τις HD."
+  },
+  "voicesShelfHd": {
+    "description": "Επικεφαλίδα ομάδας για premium (HD) φωνές στον κατάλογο φωνών των ρυθμίσεων. Εμφανίζεται με κεφαλαία μέσω CSS.",
+    "message": "Φωνές HD"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Σύντομη σημείωση μίας γραμμής δίπλα στην επικεφαλίδα της ομάδας HD στο στούντιο Φωνές των ρυθμίσεων.",
+    "message": "Ο πιο πλούσιος, πιο εκφραστικός μας ήχος."
+  },
+  "voicesShowAll": {
+    "description": "Επιλογή στο φίλτρο «Εμφάνιση» των Φωνών στις ρυθμίσεις: χωρίς φιλτράρισμα, εμφανίζονται όλες οι φωνές.",
+    "message": "Όλες οι φωνές"
+  },
+  "voicesShowEveryday": {
+    "description": "Επιλογή στο φίλτρο «Εμφάνιση» των Φωνών στις ρυθμίσεις: εμφάνιση μόνο των τυπικών (μη HD) φωνών.",
+    "message": "Μόνο καθημερινές"
+  },
+  "voicesShowHd": {
+    "description": "Επιλογή στο φίλτρο «Εμφάνιση» των Φωνών στις ρυθμίσεις: εμφάνιση μόνο των premium (HD) φωνών.",
+    "message": "Μόνο HD"
+  },
+  "voicesShowLabel": {
+    "description": "Ετικέτα στο φίλτρο στη μπάρα ελέγχου Φωνές στις ρυθμίσεις που περιορίζει ποιες φωνές εμφανίζει η λίστα.",
+    "message": "Εμφάνιση"
+  },
+  "voicesShowUnheard": {
+    "description": "Επιλογή στο φίλτρο «Εμφάνιση» των Φωνών στις ρυθμίσεις: εμφάνιση μόνο των φωνών που ο χρήστης δεν έχει ακούσει ακόμα.",
+    "message": "Δεν έχουν ακουστεί ακόμα"
+  },
+  "voicesSpeakingNow": {
+    "description": "Ετικέτα κατάστασης στην τρέχουσα επιλεγμένη φωνή του host στο Voices studio των ρυθμίσεων (θέση μενού και κάρτα φωνής).",
+    "message": "Μιλάει τώρα"
+  },
+  "voicesSpeaksWith": {
+    "description": "Γραμμή-επικεφαλίδα πάνω από το όνομα της τρέχουσας φωνής στη σκηνή του Voices studio στις ρυθμίσεις· το $host$ είναι ο βοηθός (π.χ. Pi). Αποδίδεται με κεφαλαία από CSS.",
+    "message": "Το $host$ μιλάει με",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Σημείωση σκηνής όταν ο host παρέχει δικό του ήχο (π.χ. Pi), οπότε η επιλογή μιας φωνής Say, Pi αντικαθιστά τη φωνή του host.",
+    "message": "Ο $host$ χρησιμοποιεί τη δική του φωνή μέχρι να διαλέξετε μία παρακάτω.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Σημείωση σκηνής όταν ο host δεν έχει δική του φωνή (π.χ. Claude), οπότε δεν διαβάζεται τίποτα δυνατά μέχρι να επιλεγεί μια φωνή Say, Pi.",
+    "message": "Ο $host$ δεν θα διαβάζει τις απαντήσεις δυνατά μέχρι να διαλέξετε μία παρακάτω.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Επικεφαλίδα στη σκηνή του στούντιο Φωνές στις ρυθμίσεις όταν ο host δεν έχει επιλεγμένη φωνή SayPi· το $host$ είναι ο βοηθός (π.χ. Pi, Claude). Αποδίδεται σε μέγεθος ονόματος.",
+    "message": "Διαλέξτε πώς ακούγεται ο $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Κουμπί στη σκηνή του στούντιο Φωνές στις ρυθμίσεις που αναπαράγει το δωρεάν δείγμα κλιπ της τρέχουσας φωνής.",
+    "message": "Ακούστε ένα δείγμα"
+  },
+  "voicesStopPlayback": {
+    "description": "Κουμπί στη γραμμή ελέγχου Φωνών στις ρυθμίσεις που σταματά τη σειρά δειγμάτων που ξεκίνησε από το «Αναπαραγωγή όλων».",
+    "message": "Διακοπή"
+  },
+  "voicesSweepPosition": {
+    "description": "Ζωντανή ένδειξη θέσης στη μπάρα ελέγχου Φωνές στις ρυθμίσεις, όσο το «Αναπαραγωγή όλων» διατρέχει τη λίστα· το $index$ είναι η φωνή που παίζει τώρα και το $total$ πόσες είναι σε ουρά.",
+    "message": "$index$ από $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Ετικέτα προσβασιμότητας για το στοιχείο σύγκρισης στη γραμμή ελέγχου Φωνών στις ρυθμίσεις, που αναπαράγει ξανά την άλλη φωνή από τις δύο τελευταίες που ακούστηκαν· το $name$ είναι αυτή η φωνή.",
+    "message": "Επιστροφή στο $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Γραμμή στη μπάρα ελέγχου Φωνές στις ρυθμίσεις όταν πατιέται το «Αναπαραγωγή όλων» σε λίστα πολύ μεγάλη για να την ακούσει κανείς· το $count$ είναι πόσες φωνές και το $minutes$ περίπου πόσα λεπτά θα έπαιρναν. Συντομογραφία «min» ώστε να διαβάζεται σωστά στο 1 — το Chrome i18n δεν έχει πληθυντικούς.",
+    "message": "Είναι $count$ φωνές — περίπου $minutes$ min. Περιορίστε πρώτα τη λίστα.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Ετικέτα προσβασιμότητας για το κουμπί «χρήση αυτής της φωνής» ανά host στον κατάλογο φωνών στις ρυθμίσεις· το $name$ είναι η φωνή, το $host$ είναι ο βοηθός (π.χ. Pi, Claude).",
+    "message": "Χρήση του/της $name$ στο $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Σύντομη ετικέτα στο κουμπί «χρήση αυτής της φωνής» ανά host στον ενοποιημένο κατάλογο φωνών στις ρυθμίσεις (ο host εμφανίζεται δίπλα).",
+    "message": "Χρήση"
+  },
+  "voicesYourVoice": {
+    "description": "Κουμπί στη γραμμή ελέγχου στη λίστα Φωνών των ρυθμίσεων που μεταφέρει την εστίαση στη γραμμή της φωνής που χρησιμοποιεί αυτή τη στιγμή αυτός ο host· το $name$ είναι αυτή η φωνή.",
+    "message": "Η φωνή σας: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Σφάλμα που προκύπτει όταν το πρόγραμμα περιήγησης δεν μπορεί να δεσμεύσει αρκετή μνήμη WebAssembly για το μοντέλο ανίχνευσης φωνής.",
+    "message": "Η ανίχνευση φωνής δεν μπορεί να ξεκινήσει: δεν υπάρχει αρκετή μνήμη WebAssembly για το μοντέλο φωνής. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Σφάλμα που προκύπτει όταν το πρόγραμμα περιήγησης δεν εκθέτει την αρχική μνήμη WebAssembly που απαιτείται για την εκτέλεση του μοντέλου ανίχνευσης φωνής.",
+    "message": "Η ανίχνευση φωνής δεν μπορεί να ξεκινήσει: η μνήμη WebAssembly δεν είναι διαθέσιμη σε αυτό το πρόγραμμα περιήγησης."
   }
 }

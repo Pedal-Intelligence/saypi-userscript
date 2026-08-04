@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Voordeel in de aanmeldingsprompt: hogere gebruikslimieten.",
+    "message": "Hogere gebruikslimieten met een gratis account"
+  },
+  "authBenefitPremium": {
+    "description": "Voordeel in de aanmeldingsprompt: premium functies voor chatbots.",
+    "message": "Premium functies en ondersteuning voor chatbots"
+  },
+  "authBenefitSupport": {
+    "description": "Voordeel in de aanmeldingsprompt: prioriteitsondersteuning.",
+    "message": "Prioriteitsondersteuning bij problemen"
+  },
+  "authBenefitSync": {
+    "description": "Voordeel in de aanmeldingsprompt: instellingen synchroniseren.",
+    "message": "Synchroniseer steminstellingen overal"
+  },
+  "authBenefitTTS": {
+    "description": "Voordeel in de aanmeldingsprompt: TTS-functie.",
+    "message": "Tekst-naar-spraak-stemmen (betaalde abonnementen)"
+  },
+  "authBenefitUsage": {
+    "description": "Voordeel in de aanmeldingsprompt: gebruik bijhouden.",
+    "message": "Volg je stemgebruik op al je apparaten"
+  },
+  "authPromptModalFull": {
+    "description": "Beschrijving voor de volledige aanmeldingsprompt met waardepropositie.",
+    "message": "Je haalt veel uit Say, Pi. Meld je aan voor hogere limieten, tekst-naar-spraak-stemmen en premium functies voor alle ondersteunde chatbots."
+  },
+  "authPromptModalSoft": {
+    "description": "Beschrijving voor de zachte aanmeldingsprompt.",
+    "message": "Maak een gratis Say, Pi-account aan voor hogere gebruikslimieten en toegang tot premium stemfuncties."
+  },
+  "authPromptTitle": {
+    "description": "Titel voor het aanmeldingsvenster.",
+    "message": "Ontgrendel meer stemfuncties"
+  },
+  "authPromptToast": {
+    "description": "Toastmelding die de gebruiker aanmoedigt om zich aan te melden.",
+    "message": "Meld je aan bij Say, Pi voor hogere limieten en premium functies"
+  },
   "autoReadAloudChatGPT": {
     "description": "Label voor het selectievakje om het automatisch voorlezen van ChatGPT-antwoorden tijdens spraakoproepen in of uit te schakelen.",
     "message": "Automatisch voorlezen (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Schakel tekst-naar-spraak uit"
   },
+  "dismiss": {
+    "message": "Begrepen",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Afwijzen"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Focus"
   },
+  "errorVadInitFailed": {
+    "description": "Foutmelding die wordt getoond wanneer voice-activity detection niet kan worden geïnitialiseerd.",
+    "message": "Initialiseren van spraakdetectie mislukt"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Foutmelding die wordt getoond wanneer er een onverwachte fout optreedt tijdens het instellen van spraakopname.",
+    "message": "Instellen van spraakopname mislukt"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Foutmelding die wordt getoond wanneer de voice-detection client er niet in slaagt de opname te starten.",
+    "message": "Starten van spraakopname mislukt"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Foutmelding die wordt getoond wanneer de voice-detection (VAD)-client niet beschikbaar is, waardoor opnemen niet kan starten.",
+    "message": "Spraakopname niet beschikbaar"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Focusmodus uitschakelen"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Regel met uitleg die in stemmenu’s wordt getoond wanneer zowel premium- (HD) als value-stemmen beschikbaar zijn",
+    "message": "HD-stemmen verbruiken je maandelijkse limiet ongeveer 20× sneller."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Dit wegstappen ..."
   },
+  "maybeLater": {
+    "description": "Knoptekst om de aanmeldingsprompt te sluiten.",
+    "message": "Misschien later"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Je microfooninstellingen voldoen niet aan de vereiste specificaties. \nProbeer een andere microfoon te gebruiken of pas uw audio-instellingen aan."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Kan geen toegang krijgen tot de microfoon. \nControleer uw apparaatinstellingen en probeer het opnieuw."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Foutmelding die wordt getoond wanneer microfoontoestemming is geweigerd na de toestemmingsprompt.",
+    "message": "Microfoontoestemming is niet verleend. Zorg dat je toegang hebt toegestaan in de melding en in de extensie-instellingen."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "nauwkeurigheid"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Snelste reactie, maar minder nauwkeurig. \nGevoelig voor onderbrekingen."
   },
+  "moreVoices": {
+    "description": "Menuregel die vanuit het stemmenu op de pagina linkt naar de volledige stemcatalogus in de extensie-instellingen.",
+    "message": "Meer stemmen…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Assistent bijnaam"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Niet aangemeld"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Knoplabel dat ChatGPT opent.",
+    "message": "ChatGPT openen"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Knoplabel dat Claude.ai opent.",
+    "message": "Open Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Knoplabel dat Pi.ai opent.",
+    "message": "Open Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Omgevingsoptie: in de buurt van andere mensen.",
+    "message": "Tussen andere mensen"
+  },
+  "onboarding_envMixed": {
+    "description": "Omgevingsoptie: een mix van privé- en gedeelde ruimtes.",
+    "message": "Een mix van plekken"
+  },
+  "onboarding_envPrivate": {
+    "description": "Omgevingsoptie: een privéplek.",
+    "message": "Ergens privé"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Bevestiging die wordt getoond wanneer het omgevingsantwoord de stille modus uit laat.",
+    "message": "Begrepen, we houden de standaard luister- en afspeelinstellingen aan."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Bevestiging die wordt getoond wanneer het omgevingsantwoord de stille modus inschakelt.",
+    "message": "Stille modus aan — we pikken zachtere spraak op en antwoorden rustig, zodat je discreet kunt praten."
+  },
+  "onboarding_envTitle": {
+    "description": "Kop voor de onboarding-vraag over de omgeving van de gebruiker.",
+    "message": "Waar praat je meestal?"
+  },
+  "onboarding_footer": {
+    "description": "Voettekst op de onboardingpagina die bij het eerste gebruik wordt getoond.",
+    "message": "Je kunt dit altijd opnieuw bekijken via de instellingen van Say, Pi. Je privacy is belangrijk — audio wordt alleen vastgelegd tijdens een actieve oproep."
+  },
+  "onboarding_heading": {
+    "description": "Hoofdkop op de onboardingpagina die bij de eerste keer openen wordt getoond.",
+    "message": "🗣️ Welkom bij Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Intro-alinea op de onboardingpagina die bij de eerste keer openen wordt getoond.",
+    "message": "Je bent nog twee stappen verwijderd van je eerste gesproken gesprek met een AI. Praten is ongeveer 3× sneller dan typen — laten we je instellen."
+  },
+  "onboarding_micTestButton": {
+    "description": "Knop die de onboarding-microfoontest zonder gevolgen start.",
+    "message": "🎤 Je microfoon testen"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status die wordt getoond nadat de onboarding-microfoontest succesvol is afgerond.",
+    "message": "Mooi — je microfoon werkt! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status die wordt getoond terwijl de onboarding-microfoontest het invoerniveau meet.",
+    "message": "Luisteren — zeg iets! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status die wordt getoond terwijl de onboarding-microfoontest wacht op toestemming.",
+    "message": "Microfoontoegang aanvragen…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Knoplabel om de onboarding-microfoontest te stoppen terwijl die actief is.",
+    "message": "Test stoppen"
+  },
+  "onboarding_step1Body": {
+    "description": "Tekst van de eerste onboardingstap die uitlegt hoe je de extensie vastzet.",
+    "message": "Klik op het puzzelstukje 🧩-pictogram rechtsboven in je browser, en daarna op de punaise 📌 naast Say, Pi. Zo staat de belknop altijd op één klik afstand."
+  },
+  "onboarding_step1Title": {
+    "description": "Titel van de eerste onboardingstap (de extensie vastzetten).",
+    "message": "Zet Say, Pi vast op je werkbalk"
+  },
+  "onboarding_step2Body": {
+    "description": "Tekst van de tweede onboardingstap die uitlegt hoe je een spraakgesprek start.",
+    "message": "Ga naar een van de ondersteunde assistants hieronder, tik op de Say, Pi-belknop en zeg hallo. De eerste keer vragen we om microfoontoegang — dat is normaal, en we luisteren alleen terwijl je actief in een gesprek zit."
+  },
+  "onboarding_step2Title": {
+    "description": "Titel van de tweede onboardingstap (een gesprek starten).",
+    "message": "Open een AI-chat en begin te praten"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Microfoonvergunning"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Herstelinstructies wanneer microfoonrechten zijn geblokkeerd.",
+    "message": "Je browser blokkeert de microfoon. Klik op het camera- of slotpictogram in de adresbalk, zet Microfoon op \"Toestaan\" en probeer het opnieuw. Controleer op macOS ook Systeeminstellingen → Privacy en beveiliging → Microfoon."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Titel van het herstelpaneel wanneer microfoonrechten zijn geweigerd/geblokkeerd.",
+    "message": "Microfoontoegang is geblokkeerd"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Herstelinstructies wanneer de microfoon elders in gebruik is.",
+    "message": "Een andere app of tabblad gebruikt mogelijk je microfoon. Sluit alles wat mogelijk opneemt (videogesprekken, spraakmemo's) en probeer het opnieuw."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Titel van het herstelpaneel wanneer de microfoon door een andere app wordt gebruikt.",
+    "message": "Je microfoon is in gebruik"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Herstelinstructies wanneer er geen microfoonapparaat beschikbaar is.",
+    "message": "We konden geen microfoon vinden. Sluit er een aan (of verbind je headset), zorg dat die is geselecteerd als je invoerapparaat en probeer het opnieuw."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Titel van het herstelpaneel wanneer er geen microfoonapparaat beschikbaar is.",
+    "message": "Geen microfoon gevonden"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Herstelinstructies voor een onbekende microfoonfout.",
+    "message": "Er ging iets mis bij het benaderen van je microfoon. Controleer of die is aangesloten en is toegestaan in de instellingen van je browser en probeer het opnieuw."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Titel van het herstelpaneel voor een onbekende microfoonfout.",
+    "message": "We konden je microfoon niet bereiken"
+  },
+  "permissions_retryButton": {
+    "description": "Label voor de knop die microfoontoestemming opnieuw aanvraagt.",
+    "message": "Opnieuw proberen"
+  },
+  "permissions_revokedHeading": {
+    "description": "Kop die wordt getoond wanneer microfoontoegang eerder was toegestaan maar inmiddels is ingetrokken.",
+    "message": "Laten we je microfoon opnieuw verbinden"
+  },
+  "permissions_revokedInfo": {
+    "description": "Informatieve tekst die wordt getoond wanneer microfoontoegang is ingetrokken nadat deze was toegestaan.",
+    "message": "Je microfoontoegang is uitgezet, dit gebeurt vaak na een browser- of systeemupdate. Sta het hieronder opnieuw toe en $productName$ luistert weer wanneer je in een gesprek zit.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profiel"
+  },
+  "quietModeLabel": {
+    "description": "Label voor de schakelaar die de stille/fluistermodus inschakelt.",
+    "message": "Stille modus"
+  },
+  "quietModeTooltip": {
+    "description": "Tooltip die uitlegt wat de stille/fluistermodus doet.",
+    "message": "Spreek zachtjes — pikt stillere spraak op en verlaagt het volume van het antwoord van de assistent, zodat je spraak kunt gebruiken in de buurt van anderen."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Tekst voor de aanmeldknop terwijl de authenticatie bezig is.",
+    "message": "Aanmelden..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Geluidseffecten"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Geluidseffecten zijn uitgeschakeld in Firefox om problemen met audiofeedback te voorkomen."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Kop van de eenmalige speed-payoff-melding die na de eerste gesproken uitwisseling wordt getoond.",
+    "message": "Mooi — praten is ongeveer 3× sneller dan typen."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Optionele tweede regel van de speed-payoff-melding met het aantal bespaarde hele minuten.",
+    "message": "Je hebt al ongeveer $minutes$ min sneller gesproken dan wanneer je het had getypt.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Alleen verzenden als u op de knop drukt"
   },
+  "surveyQuestion": {
+    "description": "De enige vraag van de eenmalige micro-enquête na de win.",
+    "message": "Hoe bevalt de stem tot nu toe?"
+  },
+  "surveyRatingLabel": {
+    "description": "Toegankelijk label voor een beoordelingsknop in de enquête.",
+    "message": "Beoordeel $rating$ van 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Bevestiging die wordt getoond nadat de gebruiker de enquête na de win heeft ingevuld.",
+    "message": "Bedankt, dit helpt ons Say, Pi beter te maken. 🙏"
+  },
   "tabAIChat": {
     "description": "Tablabel voor de AI-chatinstellingen.",
     "message": "AI Chat"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Tablabel voor de algemene instellingen.",
     "message": "Algemeen"
+  },
+  "tabVoices": {
+    "description": "Tablabel voor het gedeelte met steminstellingen (stemmencatalogus per site).",
+    "message": "Stemmen"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "credits"
   },
+  "ttsCreditsRemaining": {
+    "description": "Tekst die het resterende TTS-quotum toont als een tegoedpool per stem (saypi-api #181 Stage 2), niet als ruwe tekens.",
+    "message": "Nog $credits$ tegoed",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Meertalige stemmen worden momenteel niet ondersteund in Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Spraakgeneratie"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Let op! Spraakweergave is nog niet beschikbaar op $browserName$ met $chatbotName$. Het goede nieuws? Spraakinvoer werkt geweldig! Probeer Chrome of Edge op desktop voor TTS.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS niet beschikbaar op $browserName$ + $chatbotName$. Spraakinvoer werkt! Probeer Chrome desktop voor TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -stem"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD-detail wanneer spraakachtig geluid is gedetecteerd maar te zacht / met te lage zekerheid was om te transcriberen (client-side admission-gate drop).",
+    "message": "Audio te zacht om te transcriberen"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD-detail dat uitlegt dat de oproep is beëindigd omdat de microfoon door een nieuwer tabblad is geclaimd.",
+    "message": "Spraakinvoer verplaatst naar een ander tabblad"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Stem niet beschikbaar. \nProbeer Chrome of Firefox op desktop."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Let op! Spraakweergave is nog niet beschikbaar op $browserName$ met $chatbotName$. Het goede nieuws? Spraakinvoer werkt geweldig! Probeer Chrome of Edge op desktop voor TTS.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS niet beschikbaar op $browserName$ + $chatbotName$. Spraakinvoer werkt! Probeer Chrome desktop voor TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Begrepen",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "VAD-status die wordt getoond op een tabblad waarvan de spraakinvoer is overgenomen door een ander tabblad.",
+    "message": "Gepauzeerd"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Bekijk details"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Algemene gesproken introductie die wordt afgespeeld wanneer een geselecteerde SayPi-stem geen stem-specifiek introductiescript heeft (en er geen recent bericht is om voor te lezen).",
+    "message": "Hoi, ik ben $voice$. Zo klink ik. Ik hoop dat je deze stem fijn vindt.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hallo! \nGoed! \nJa! \nIk ben Pi, je meertalige AI-assistent. \nMet 32 ​​talen tot mijn beschikking kunnen we ideeën en culturen van over de hele wereld verkennen. \nWat vind jij van deze stem?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Spraakinstellingen"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Reserve-ondertitel voor een stemrij in de stemmencatalogus in de instellingen wanneer de stem geen beschrijving heeft; $count$ is het aantal talen dat de stem ondersteunt.",
+    "message": "Spreekt $count$ talen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Addison' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Zonnig en welbespraakt"
+  },
+  "voiceTagline_alloy": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Alloy' (instellingen Stemmen-studio; client-side stem-identiteitsmap).",
+    "message": "Evenwichtig en veelzijdig"
+  },
+  "voiceTagline_ash": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Ash' (instellingen Stemmen-studio; client-side stem-identiteitsmap).",
+    "message": "Laag, bedachtzaam, kalm"
+  },
+  "voiceTagline_ballad": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Ballad' (instellingen Stemmen-studio; client-side stem-identiteitsmap).",
+    "message": "Soepel en melodieus"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Cassidy' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Vriendelijk en nuchter"
+  },
+  "voiceTagline_cedar": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Cedar' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Rustig en geruststellend"
+  },
+  "voiceTagline_coral": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Coral' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Helder, opgewekte energie"
+  },
+  "voiceTagline_echo": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Echo' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Helder en neutraal"
+  },
+  "voiceTagline_fable": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Fable' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Met een verhalende cadans"
+  },
+  "voiceTagline_finn": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Finn' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Fris en energiek"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Jamahal' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Rijk en magnetisch"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Jarnathan' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Fluwelen bariton voor laat op de avond"
+  },
+  "voiceTagline_jeff": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Jeff' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Nuchter en standvastig"
+  },
+  "voiceTagline_jessica": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Jessica' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Warm en stijlvol"
+  },
+  "voiceTagline_joey": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Joey' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Ontspannen, converserend Amerikaans"
+  },
+  "voiceTagline_juniper": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Juniper' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Helder, sprankelend, levendig"
+  },
+  "voiceTagline_lucy": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Lucy' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Zacht en stralend"
+  },
+  "voiceTagline_marin": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Marin' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Warm, kalm als ochtendradio"
+  },
+  "voiceTagline_mark": {
+    "description": "Geschreven persoonlijkheidstagline voor de stem 'Mark' (instellingen Voices studio; client-side voice identity map).",
+    "message": "Heldere, zelfverzekerde verteller"
+  },
+  "voiceTagline_nova": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Nova' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Snel en nieuwsgierig"
+  },
+  "voiceTagline_onyx": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Onyx' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Diep, resonerend gezag"
+  },
+  "voiceTagline_paola": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Paola' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Expressieve Italiaanse warmte"
+  },
+  "voiceTagline_sage": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Sage' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Zachte, heldere stem"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Geschreven persoonlijkheidsslogan voor de stem 'Shimmer' (instellingen Stemmen-studio; client-side stemidentiteitskaart).",
+    "message": "Licht en luchtig"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Korte label op de vastzetknop van een stemkaart (uit-stand) in de stemmenstudio van de instellingen; indrukken voegt de stem toe aan het in-chatmenu van de host.",
+    "message": "+ Menu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Toegankelijkheidslabel voor de vastzetknop van een stemkaart (uit-stand); $name$ is de stem, $host$ de assistent.",
+    "message": "Voeg $name$ toe aan het menu van $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Label bij de schakelaar in de bedieningsbalk van Stemmen die aangeeft of het doorlopen van de lijst met de pijltoetsen elke stem afspeelt zodra de focus erop komt.",
+    "message": "Afspelen tijdens bladeren"
+  },
+  "voicesArrowsLive": {
+    "description": "Bevestiging voor de schermlezer, toegevoegd aan de eerste aankondiging 'Speelt <stem> af' in de lijst Stemmen in de instellingen, die zegt dat de pijltjestoetsen zojuist hoorbaar zijn geworden. Sluit aan bij de bewoording van de schakelaar 'Afspelen tijdens bewegen'.",
+    "message": "Pijltjestoetsen spelen nu af terwijl je beweegt. Esc stopt."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Opmerking onder de menuplekken voor hosts die standaard eigen stemmen hebben (bijv. Pi's 8 ingebouwde stemmen), die de studio niet beheert; $host$ is de assistent.",
+    "message": "De ingebouwde stemmen van $host$ staan ook altijd in het menu.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Variant van voicesBuiltinsNote voor een host zonder in-chat stemmenmenu (Pi heeft zijn menu in 2026 uitgefaseerd), waarbij de belofte uit het origineel dat de ingebouwde stemmen 'in het menu verschijnen' onjuist zou zijn; $host$ is de assistent.",
+    "message": "$host$ heeft ook eigen ingebouwde stemmen, maar die staan hier niet.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Voortgangsweergave in de bedieningsbalk Stemmen in de instellingen: hoeveel van de vermelde stemmen de gebruiker al heeft beluisterd. Kale getallen, zodat het ook bij 1 klopt — Chrome i18n heeft geen meervoudsvormen.",
+    "message": "$heard$ van $total$ gehoord",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Onderdeel van de toegankelijke naam van een stemrij in de lijst Stemmen in de instellingen, markeert een stem waar dit profiel al naar heeft geluisterd. Visueel wordt dit getoond als inktdichtheid op de geluidsafdruk van de stem, wat een schermlezer niet kan zien.",
+    "message": "Gehoord"
+  },
+  "voicesInHostMenu": {
+    "description": "Sectiekop boven de rij met menuslots in de stemmenstudio van de instellingen; $host$ is de assistent.",
+    "message": "In het menu van $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Korte label op de vastzetknop van een stemkaart (aan-stand) in de stemmenstudio van de instellingen.",
+    "message": "✓ In menu"
+  },
+  "voicesInUse": {
+    "description": "Persistente badge op de momenteel geselecteerde stem van de host in de stemmenlijst van de instellingen, weergegeven in hoofdletters. Bewust NIET 'Spreekt nu': op deze pagina spelen rijen hun voorbeeldclips af, dus een geselecteerde maar stille stem mag niet beweren te spreken terwijl een andere rij dat is.",
+    "message": "In gebruik"
+  },
+  "voicesKeyboardHint": {
+    "description": "Hint van één regel voor het toetsenbord in de bedieningsbalk Stemmen in de instellingen. De symbolen zijn toetsen: Spatie, de pijlen omhoog/omlaag en Shift+Spatie.",
+    "message": "Druk op Spatie om te luisteren, ↑↓ om tussen stemmen te gaan, ⇧Spatie om terug te schakelen."
+  },
+  "voicesLoadError": {
+    "description": "Foutstatus binnen de studio van één host wanneer de stemmencatalogus van die host niet kon worden geladen; $host$ is de assistent.",
+    "message": "Kon de stemmen van $host$ niet laden. Probeer het later opnieuw.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/hint op een uitgeschakelde '+ Menu'-schakelaar wanneer het in-chatmenu van de host al het maximale aantal stemmen heeft.",
+    "message": "Menu vol, verwijder een stem om er nog een toe te voegen"
+  },
+  "voicesMenuHint": {
+    "description": "Hint van één regel naast de kop 'In het menu van {host}', die uitlegt dat de rij met slots het stemmenmenu in de chat weerspiegelt.",
+    "message": "Wat je in de chat ziet"
+  },
+  "voicesMenuOverflow": {
+    "description": "Opmerking onder de menuplekken wanneer de gebruiker meer vastgezette stemmen heeft dan het in-chatmenu kan tonen (legacy-status); $count$ is hoeveel er niet passen, $cap$ is de menugrootte.",
+    "message": "Er wachten nog $count$ vastgezette stemmen buiten de $cap$ menuplekken.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Enkelvoud van voicesMenuOverflow, gebruikt wanneer precies één vastgezette stem niet in het in-chatmenu past; $cap$ is de menugrootte.",
+    "message": "Er wacht nog 1 vastgezette stem buiten de $cap$ menuplekken.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Samenvattingsregel onder de lijst Stemmen in de instellingen die aangeeft hoeveel van het in-chat stemmenmenu van de host is gevuld; $host$ is de assistent, $used$ hoeveel plaatsen bezet zijn, $cap$ hoeveel er zijn. Geformuleerd zodat het ook bij 1 klopt — Chrome i18n heeft geen meervoudsvormen.",
+    "message": "$host$'s menu: $used$ van $cap$ plaatsen",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Kop voor de groep aan het eind van de lijst Stemmen in de instellingen met stemmen zonder voorbeeldfragment om af te spelen; $count$ is hoeveel. Geformuleerd zodat het ook bij 1 klopt — Chrome i18n heeft geen meervoudsvormen.",
+    "message": "Nog geen voorbeeld ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Wordt getoond in de stemmencatalogus in de instellingen wanneer de stemmenlijst leeg is voor een ingelogde gebruiker (bijv. een netwerkprobleem).",
+    "message": "Stemmen konden nu niet worden geladen. Probeer het later opnieuw."
+  },
+  "voicesNowPlaying": {
+    "description": "Schermlezer-aankondiging wanneer het voorbeeldfragment van een stem begint met afspelen in de lijst Stemmen in de instellingen; $name$ is de stem.",
+    "message": "Speelt $name$ af",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Knop in de bedieningsbalk Stemmen in de instellingen die elke momenteel vermelde stem één voor één afspeelt; $count$ is hoeveel. Geformuleerd zodat het ook bij 1 klopt — Chrome i18n heeft geen meervoudsvormen.",
+    "message": "Alles afspelen ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Knop in de bedieningsbalk Stemmen in de instellingen bij een terugkeerbezoek: speelt alleen de vermelde stemmen af waar je nog niet naar hebt geluisterd; $count$ is hoeveel. Geformuleerd zodat het ook bij 1 klopt — Chrome i18n heeft geen meervoudsvormen.",
+    "message": "Nieuwe afspelen ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Regel in de instellingenbalk voor Stemmen wanneer de browser weigerde een voorbeeld af te spelen omdat de pagina nog geen gebruikersinteractie heeft gehad.",
+    "message": "Klik op een stem om geluid in te schakelen."
+  },
+  "voicesPreview": {
+    "description": "Toegankelijk label voor de afspeelknop (▶) waarmee je het gratis voorbeeldfragment van een stem op een stemrij beluistert; $name$ is de naam van de stem.",
+    "message": "Speel een voorbeeld van $name$ af",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Toegankelijke naam van de instellingenlijst Stemmen (een listbox met elke stem, één rij per stem).",
+    "message": "Stemmen, geordend van diep tot helder"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Toegankelijkheidslabel voor de vastzetknop van een stemkaart (aan-stand) en de verwijderknop van een menuslot; $name$ is de stem, $host$ de assistent.",
+    "message": "Verwijder $name$ uit het menu van $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Regel in de instellingenbalk voor Stemmen wanneer het voorbeeldfragment van één stem niet kon laden of afspelen; $name$ is die stem. Niet-modale melding — een reeks voorbeelden gaat erna gewoon door.",
+    "message": "Kon het voorbeeld van $name$ niet afspelen.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Subkop voor de sectie stemcatalogus in het tabblad AI Chat van de instellingen.",
+    "message": "Kies de stem die antwoorden op elke site voorleest."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Subkop onder de instellingstitel Stemmen, voor de op toonhoogte geordende rail met stemmen.",
+    "message": "Elke stem, van diep tot helder. Luister, en kies dan."
+  },
+  "voicesSectionTitle": {
+    "description": "Kop voor de sectie stemcatalogus in het tabblad AI Chat van de instellingen.",
+    "message": "Stemmen"
+  },
+  "voicesShelfEveryday": {
+    "description": "Groepskop voor stemmen uit de voordeligere categorie in de stemcatalogus van de instellingen. Wordt door CSS in hoofdletters weergegeven.",
+    "message": "Dagelijkse stemmen"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Opmerking van één regel naast de groepskop Dagelijks in de stemmenstudio van de instellingen; de enige plek waar de studio aangeeft hoeveel langer deze categorie meegaat dan HD.",
+    "message": "Natuurlijk en helder — je kunt ongeveer 20× langer luisteren dan met HD."
+  },
+  "voicesShelfHd": {
+    "description": "Groepskop voor premium (HD)-stemmen in de stemcatalogus van de instellingen. Wordt door CSS in hoofdletters weergegeven.",
+    "message": "HD-stemmen"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Opmerking van één regel naast de HD-groepskop in de stemmenstudio van de instellingen.",
+    "message": "Ons rijkste, meest expressieve geluid."
+  },
+  "voicesShowAll": {
+    "description": "Optie in het filter 'Tonen' bij instellingen > Stemmen: geen filtering, alle stemmen worden getoond.",
+    "message": "Alle stemmen"
+  },
+  "voicesShowEveryday": {
+    "description": "Optie in het filter 'Tonen' bij instellingen > Stemmen: toon alleen de standaard (niet-HD)-stemmen.",
+    "message": "Alleen standaard"
+  },
+  "voicesShowHd": {
+    "description": "Optie in het filter 'Tonen' bij instellingen > Stemmen: toon alleen de premium (HD)-stemmen.",
+    "message": "Alleen HD"
+  },
+  "voicesShowLabel": {
+    "description": "Label op het filter in de instellingenbalk voor Stemmen waarmee wordt beperkt welke stemmen de lijst toont.",
+    "message": "Tonen"
+  },
+  "voicesShowUnheard": {
+    "description": "Optie in het filter 'Tonen' bij instellingen > Stemmen: toon alleen de stemmen waar de gebruiker nog niet naar geluisterd heeft.",
+    "message": "Nog niet beluisterd"
+  },
+  "voicesSpeakingNow": {
+    "description": "Statuslabel op de momenteel geselecteerde stem van de host in de stemmenstudio van de instellingen (menuslot en stemkaart).",
+    "message": "Spreekt nu"
+  },
+  "voicesSpeaksWith": {
+    "description": "Wenkbrauwregel boven de naam van de huidige stem op het instellingenpodium van de stemmenstudio; $host$ is de assistent (bijv. Pi). Wordt door CSS in hoofdletters weergegeven.",
+    "message": "$host$ spreekt met",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Podiumopmerking wanneer de host zijn eigen audio levert (bijv. Pi), dus het kiezen van een Say, Pi-stem die van de host vervangt.",
+    "message": "$host$ gebruikt zijn eigen stem tot je hieronder een stem kiest.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Podiumopmerking wanneer de host geen eigen stem heeft (bijv. Claude), dus er wordt niets hardop voorgelezen totdat een Say, Pi-stem is gekozen.",
+    "message": "$host$ leest antwoorden niet hardop voor tot je hieronder een stem kiest.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Kop op het podium van de instellingen van de Stemmen-studio wanneer er geen SayPi-stem is geselecteerd voor de host; $host$ is de assistent (bijv. Pi, Claude). Wordt weergegeven op naamgrootte.",
+    "message": "Kies hoe $host$ klinkt",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Knop op het podium van de Stemmen-studio in de instellingen die het gratis voorbeeldfragment van de huidige stem afspeelt.",
+    "message": "Voorbeeld beluisteren"
+  },
+  "voicesStopPlayback": {
+    "description": "Knop in de bedieningsbalk Stemmen in de instellingen die de reeks voorbeelden stopt die is gestart door 'Alles afspelen'.",
+    "message": "Stoppen"
+  },
+  "voicesSweepPosition": {
+    "description": "Live positie-indicator in de instellingenbalk voor Stemmen terwijl 'Alles afspelen' door de lijst loopt; $index$ is de stem die nu speelt en $total$ hoeveel er in de wachtrij staan.",
+    "message": "$index$ van $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Toegankelijk label voor de vergelijken-bediening in de bedieningsbalk Stemmen in de instellingen, die de andere stem van de laatste twee gehoorde opnieuw afspeelt; $name$ is die stem.",
+    "message": "Schakel terug naar $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Regel in de instellingenbalk voor Stemmen wanneer op 'Alles afspelen' wordt gedrukt bij een lijst die te lang is om te beluisteren; $count$ is hoeveel stemmen en $minutes$ ongeveer hoeveel minuten ze zouden duren. Afgekort 'min' zodat het bij 1 ook klopt — Chrome i18n heeft geen meervoudsvormen.",
+    "message": "Dat zijn $count$ stemmen — ongeveer $minutes$ min. Maak de lijst eerst kleiner.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Toegankelijkheidslabel voor de per-hostknop 'gebruik deze stem' in de instellingen-stemcatalogus; $name$ is de stem, $host$ is de assistent (bijv. Pi, Claude).",
+    "message": "Gebruik $name$ op $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Korte label op de per-hostknop 'gebruik deze stem' in de gecombineerde instellingen-stemcatalogus (de host wordt ernaast getoond).",
+    "message": "Gebruik"
+  },
+  "voicesYourVoice": {
+    "description": "Knop in de bedieningsbalk in de lijst Stemmen in de instellingen die de focus naar de rij verplaatst van de stem die deze host momenteel gebruikt; $name$ is die stem.",
+    "message": "Jouw stem: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Fout die wordt opgegooid wanneer de browser niet genoeg WebAssembly-geheugen kan toewijzen voor het spraakdetectiemodel.",
+    "message": "Spraakdetectie kan niet starten: niet genoeg WebAssembly-geheugen voor het spraakmodel. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Fout die wordt opgegooid wanneer de browser het initiële WebAssembly-geheugen dat nodig is om het spraakdetectiemodel te draaien niet aanbiedt.",
+    "message": "Spraakdetectie kan niet starten: WebAssembly-geheugen is niet beschikbaar in deze browser."
   }
 }

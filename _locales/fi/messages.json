@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Etu kirjautumismodaalissa – suuremmat käyttörajat.",
+    "message": "Korkeammat käyttörajat ilmaisella tilillä"
+  },
+  "authBenefitPremium": {
+    "description": "Etu kirjautumismodaalissa – premium-ominaisuudet eri chatboteissa.",
+    "message": "Premium-ominaisuudet ja chatbot-tuki"
+  },
+  "authBenefitSupport": {
+    "description": "Etu kirjautumismodaalissa – ensisijainen tuki.",
+    "message": "Ensisijainen tuki ongelmatilanteissa"
+  },
+  "authBenefitSync": {
+    "description": "Etu kirjautumismodaalissa – asetusten synkronointi.",
+    "message": "Synkronoi ääniasetukset kaikkialle"
+  },
+  "authBenefitTTS": {
+    "description": "Etu kirjautumismodaalissa – TTS-ominaisuus.",
+    "message": "Tekstistä puheeksi -äänet (maksulliset paketit)"
+  },
+  "authBenefitUsage": {
+    "description": "Etu kirjautumismodaalissa – käytön seuranta.",
+    "message": "Seuraa äänen käyttöäsi laitteiden välillä"
+  },
+  "authPromptModalFull": {
+    "description": "Kuvaus täydelle modaalille kirjautumiskehotteelle, jossa kerrotaan arvolupaus.",
+    "message": "Saat Say, Pi:stä paljon irti. Kirjaudu sisään saadaksesi korkeammat rajat, tekstistä puheeksi -äänet ja premium-ominaisuudet kaikissa tuetuissa chatboteissa."
+  },
+  "authPromptModalSoft": {
+    "description": "Kuvaus pehmeälle modaalille kirjautumiskehotteelle.",
+    "message": "Luo ilmainen Say, Pi -tili saadaksesi korkeammat käyttörajat ja premium-ääniominaisuudet."
+  },
+  "authPromptTitle": {
+    "description": "Otsikko kirjautumiskehotteen modaalissa.",
+    "message": "Avaa lisää ääniominaisuuksia"
+  },
+  "authPromptToast": {
+    "description": "Toast-ilmoitus, joka kannustaa käyttäjää kirjautumaan sisään.",
+    "message": "Kirjaudu Say, Pi -palveluun, niin saat korkeammat rajat ja premium-ominaisuudet"
+  },
   "autoReadAloudChatGPT": {
     "description": "Valintaruutu ChatGPT-vastausten automaattisen ääneenlukemisen ottamiseksi käyttöön tai pois käytöstä puheluiden aikana.",
     "message": "Automaattinen ääneenlukeminen (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Poista tekstistä puheeksi"
   },
+  "dismiss": {
+    "message": "Selvä",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Hylkää"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Keskity"
   },
+  "errorVadInitFailed": {
+    "description": "Virheilmoitus, joka näytetään, kun puheaktiivisuuden tunnistus ei onnistu alustamaan.",
+    "message": "Puheentunnistuksen alustus epäonnistui"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Virheilmoitus, joka näytetään, kun äänitallennusta määritettäessä tapahtuu odottamaton virhe.",
+    "message": "Äänitallennuksen määritys epäonnistui"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Virheilmoitus, joka näytetään, kun puheentunnistuksen asiakas ei onnistu käynnistämään tallennusta.",
+    "message": "Äänitallennuksen käynnistys epäonnistui"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Virheilmoitus, joka näytetään, kun puheentunnistuksen (VAD) asiakas ei ole käytettävissä, joten tallennusta ei voida aloittaa.",
+    "message": "Äänitallennus ei ole käytettävissä"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Poistu keskittymismoodista"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Yhden rivin huomautus, joka näytetään ääni-valikoissa, kun sekä premium- (HD) että value-äänet ovat saatavilla",
+    "message": "HD-äänet kuluttavat kuukausikiintiötäsi noin 20× nopeammin."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Tämän työntäminen ..."
   },
+  "maybeLater": {
+    "description": "Painiketeksti kirjautumiskehotteen sulkemiseen.",
+    "message": "Ehkä myöhemmin"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Mikrofoniasetukset eivät täytä vaadittuja määrityksiä. \nKokeile käyttää toista mikrofonia tai säätää ääniasetuksiasi."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Mikrofonia ei voi käyttää. \nTarkista laitteesi asetukset ja yritä uudelleen."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Virheilmoitus, joka näytetään, kun mikrofonin käyttöoikeus evättiin käyttöoikeuspyyntöprosessin jälkeen.",
+    "message": "Mikrofonin käyttöoikeutta ei myönnetty. Varmista, että olet sallinut pääsyn ponnahdusikkunassa ja laajennuksen asetuksissa."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "tarkkuus"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Nopein vastaus, mutta vähemmän tarkka. \nTaipuvainen keskeyttämään."
   },
+  "moreVoices": {
+    "description": "Valikkorivi, joka linkittää sivun sisäisestä äänivalikosta laajaan äänikatalogiin laajennuksen asetuksissa",
+    "message": "Lisää ääniä…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Assistentin lempinimi"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Ei allekirjoitettu"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Painikkeen teksti, joka avaa ChatGPT:n.",
+    "message": "Avaa ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Painiketeksti, joka avaa Claude.ai:n.",
+    "message": "Avaa Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Painiketeksti, joka avaa Pi.ai:n.",
+    "message": "Avaa Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Ympäristövaihtoehto: muiden ihmisten lähellä.",
+    "message": "Muiden ihmisten lähellä"
+  },
+  "onboarding_envMixed": {
+    "description": "Ympäristövaihtoehto: sekoitus yksityisiä ja jaettuja tiloja.",
+    "message": "Eri paikoissa"
+  },
+  "onboarding_envPrivate": {
+    "description": "Ympäristövaihtoehto: yksityinen tila.",
+    "message": "Jossain yksityisessä paikassa"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Vahvistus, joka näytetään, kun ympäristökysymykseen annettu vastaus jättää hiljaisen tilan pois päältä.",
+    "message": "Selvä — pidämme vakio kuuntelu- ja toistoasetukset."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Vahvistus, joka näytetään, kun ympäristövalinta ottaa hiljaisen tilan käyttöön.",
+    "message": "Hiljainen tila päällä — kuulemme myös hiljaisemman puheen ja vastaamme hiljaa, jotta voit puhua huomaamattomasti."
+  },
+  "onboarding_envTitle": {
+    "description": "Otsikko käyttöönoton kysymykselle käyttäjän ympäristöstä.",
+    "message": "Missä yleensä puhut?"
+  },
+  "onboarding_footer": {
+    "description": "Alateksti ensimmäisen käynnistyksen opastussivun alareunassa.",
+    "message": "Voit palata tähän milloin tahansa Say, Pi -asetuksista. Yksityisyytesi on tärkeää — ääntä tallennetaan vain aktiivisen puhelun aikana."
+  },
+  "onboarding_heading": {
+    "description": "Pääotsikko ensimmäisen käynnistyksen opastussivulla.",
+    "message": "🗣️ Tervetuloa käyttämään Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Johdantokappale ensimmäisen käynnistyksen opastussivulla.",
+    "message": "Olet kahden vaiheen päässä ensimmäisestä puhutusta AI-keskustelustasi. Puhuminen on noin 3× nopeampaa kuin kirjoittaminen — laitetaan kaikki valmiiksi."
+  },
+  "onboarding_micTestButton": {
+    "description": "Painike, joka käynnistää riskittömän mikrofonitestin käyttöönoton yhteydessä.",
+    "message": "🎤 Testaa mikrofonisi"
+  },
+  "onboarding_micTestDone": {
+    "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti valmistuu onnistuneesti.",
+    "message": "Hyvä — mikrofonisi toimii. 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti mittaa sisääntuloa.",
+    "message": "Kuunnellaan — sano jotain. 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti odottaa lupaa.",
+    "message": "Pyydetään mikrofonin käyttöoikeutta…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Painikkeen teksti, jolla käyttöönoton mikrofonitesti pysäytetään sen ollessa käynnissä.",
+    "message": "Lopeta testi"
+  },
+  "onboarding_step1Body": {
+    "description": "Ensimmäisen opastusvaiheen leipäteksti, joka selittää, miten laajennus kiinnitetään.",
+    "message": "Napsauta selaimen oikeassa yläkulmassa olevaa palapeli 🧩 -kuvaketta ja sitten Say, Pi:n vieressä olevaa nastaa 📌. Näin puhelupainike on yhden klikkauksen päässä."
+  },
+  "onboarding_step1Title": {
+    "description": "Ensimmäisen opastusvaiheen otsikko (laajennuksen kiinnittäminen).",
+    "message": "Kiinnitä Say, Pi työkalupalkkiin"
+  },
+  "onboarding_step2Body": {
+    "description": "Toisen opastusvaiheen leipäteksti, joka selittää, miten äänikeskustelu aloitetaan.",
+    "message": "Siirry johonkin alla olevista tuetuista avustajista, napauta sitten Say, Pi:n puhelupainiketta ja tervehdi. Pyydämme ensimmäisellä kerralla mikrofonin käyttöoikeutta — se kuuluu asiaan, ja kuuntelemme vain silloin, kun olet aktiivisesti puhelussa."
+  },
+  "onboarding_step2Title": {
+    "description": "Toisen opastusvaiheen otsikko (keskustelun aloittaminen).",
+    "message": "Avaa AI-chat ja ala puhua"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Mikrofonin lupa"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Palautusohjeet, kun mikrofonin käyttöoikeus on estetty.",
+    "message": "Selaimesi estää mikrofonin. Napsauta osoiterivillä kamera- tai lukkokuvaketta, aseta Microphone arvoon \"Allow\" ja yritä sitten uudelleen. macOS:ssä tarkista myös Järjestelmäasetukset → Tietosuoja ja suojaus → Mikrofoni."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Palautuspaneelin otsikko, kun mikrofonin lupa on hylätty/estetty.",
+    "message": "Mikrofonin käyttöoikeus on estetty"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Palautusohjeet, kun mikrofoni on muualla käytössä.",
+    "message": "Toinen sovellus tai välilehti saattaa käyttää mikrofoniasi. Sulje kaikki muu, joka voi nauhoittaa (videopuhelut, äänimuistiot), ja yritä sitten uudelleen."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Palautuspaneelin otsikko, kun mikrofoni on toisen sovelluksen käytössä.",
+    "message": "Mikrofoni on varattuna"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Palautusohjeet, kun mikrofonilaitetta ei ole saatavilla.",
+    "message": "Emme löytäneet mikrofonia. Liitä sellainen (tai kytke kuulokemikrofoni), varmista että se on valittu syöttölaitteeksi ja yritä sitten uudelleen."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Palautuspaneelin otsikko, kun mikrofonilaitetta ei ole saatavilla.",
+    "message": "Mikrofonia ei löytynyt"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Palautusohjeet tuntemattomaan mikrofonivirheeseen.",
+    "message": "Mikrofoniin yhdistämisessä meni jokin pieleen. Tarkista, että se on kytketty ja sallittu selaimen asetuksissa, ja yritä sitten uudelleen."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Palautuspaneelin otsikko tuntemattomalle mikrofonivirheelle.",
+    "message": "Emme saaneet mikrofonia käyttöön"
+  },
+  "permissions_retryButton": {
+    "description": "Painikkeen teksti, joka pyytää mikrofonin käyttöoikeutta uudelleen.",
+    "message": "Yritä uudelleen"
+  },
+  "permissions_revokedHeading": {
+    "description": "Otsikko, joka näytetään, kun mikrofonin käyttöoikeus oli aiemmin myönnetty mutta on sittemmin poistettu.",
+    "message": "Yhdistetään mikrofoni uudelleen"
+  },
+  "permissions_revokedInfo": {
+    "description": "Infoteksti, joka näytetään, kun mikrofonin käyttöoikeus on peruttu sen jälkeen kun se oli myönnetty.",
+    "message": "Mikrofonin käyttöoikeus on poistettu käytöstä — näin käy usein selaimen tai järjestelmän päivityksen jälkeen. Salli se uudelleen alta, niin $productName$ kuuntelee taas, kun olet puhelussa.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profiili"
+  },
+  "quietModeLabel": {
+    "description": "Selite valintakytkimelle, joka ottaa käyttöön hiljaisen/kuiskaustilan.",
+    "message": "Hiljainen tila"
+  },
+  "quietModeTooltip": {
+    "description": "Työkaluvihje, joka selittää mitä hiljainen/kuiskaustila tekee.",
+    "message": "Puhu hiljaa — tunnistaa hiljaisemman puheen ja laskee avustajan vastausäänenvoimakkuutta, jotta voit käyttää ääntä muiden lähellä."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Teksti kirjautumispainikkeessa, kun tunnistautuminen on käynnissä.",
+    "message": "Kirjaudutaan sisään…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ääniefektit"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Äänitehosteet on poistettu käytöstä Firefoxissa äänipalauteongelmien estämiseksi."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Otsikko kertaluonteisessa nopeushyödyn ilmoituksessa, joka näytetään ensimmäisen puhutun keskustelun jälkeen.",
+    "message": "Hyvä — puhuminen on noin 3× nopeampaa kuin kirjoittaminen."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Nopeushyödyn ilmoituksen valinnainen toinen rivi, joka näyttää säästetyt kokonaiset minuutit.",
+    "message": "Olet jo puhunut noin $minutes$ min nopeammin kuin olisit kirjoittanut sen.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Lähetä vain, kun painat painiketta"
   },
+  "surveyQuestion": {
+    "description": "Kertaluonteisen, onnistumisen jälkeen näytettävän mikrokyselyn ainoa kysymys.",
+    "message": "Miten ääni on toiminut tähän asti?"
+  },
+  "surveyRatingLabel": {
+    "description": "Saavutettava nimike kyselyn arviointipainikkeelle.",
+    "message": "Arvioi $rating$ / 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Kuittaus, joka näytetään käyttäjän vastattua onnistumisen jälkeiseen kyselyyn.",
+    "message": "Kiitos — tämä auttaa meitä parantamaan Say, Pi:tä. 🙏"
+  },
   "tabAIChat": {
     "description": "Välilehden kansi AI-keskusteluasetuksille.",
     "message": "AI Keskustelu"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Välilehden kansi yleisille asetuksille.",
     "message": "Yleiset"
+  },
+  "tabVoices": {
+    "description": "Välilehden nimi ääniasetusten osiolle (sivustokohtainen ääniluettelo).",
+    "message": "Äänet"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "hyvitykset"
   },
+  "ttsCreditsRemaining": {
+    "description": "Teksti, joka näyttää jäljellä olevan TTS-kiintiön ääni-kohtaisena krediittipoolina (saypi-api #181 Stage 2), ei raakoina merkkeinä.",
+    "message": "$credits$ krediittiä jäljellä",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Äänen sukupolvi"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Huomio! Puheen toisto ei ole vielä saatavilla $browserName$:lla $chatbotName$:n kanssa. Hyvät uutiset? Äänisyöte toimii loistavasti! TTS:ää varten kokeile Chromea tai Edgeä työpöydällä.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS ei saatavilla $browserName$ + $chatbotName$. Äänisyöte toimii! Kokeile Chrome työpöytää TTS:ää varten.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -ääni"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD-yksityiskohta, kun puheelta kuulostavaa ääntä havaittiin, mutta se oli liian hiljainen / luottamus liian matala litterointiin (asiakaspään admission-gate drop).",
+    "message": "Ääni on liian hiljainen litteroitavaksi"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD-yksityiskohta, joka selittää, että puhelu päättyi, koska mikrofoni varattiin uudemmalle välilehdelle.",
+    "message": "Äänisyöttö siirrettiin toiseen välilehteen"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Ääni ei ole saatavilla. \nKokeile Chromea tai Firefoxia työpöydällä."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Huomio! Puheen toisto ei ole vielä saatavilla $browserName$:lla $chatbotName$:n kanssa. Hyvät uutiset? Äänisyöte toimii loistavasti! TTS:ää varten kokeile Chromea tai Edgeä työpöydällä.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS ei saatavilla $browserName$ + $chatbotName$. Äänisyöte toimii! Kokeile Chrome työpöytää TTS:ää varten.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Selvä",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "VAD-tila, joka näytetään välilehdellä, jonka äänisyötön toinen välilehti otti haltuunsa.",
+    "message": "Tauolla"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Katso yksityiskohdat"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Yleinen puhuttu esittely, joka soitetaan, kun valitulla Say, Pi -äänellä ei ole ääneen sidottua esittelytekstiä (eikä ole tuoretta viestiä luettavaksi).",
+    "message": "Hei, olen $voice$. Tältä kuulostan. Toivottavasti pidät tästä äänestä.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hei! \nПривет! \n你好! \nOlen Pi, polyglotti tekoälyavustajasi. \nHallitsemani 32 kielellä voimme tutustua ideoihin ja kulttuureihin ympäri maailmaa. \nMitä mieltä olet tästä äänestä?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ääni -asetukset"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Varateksti äänen riville asetusten äänikatalogissa, kun äänellä ei ole kuvausta; $count$ on niiden kielten määrä, joita ääni tukee.",
+    "message": "Puhuu $count$ kieltä",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Addison'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Aurinkoinen ja selkeä"
+  },
+  "voiceTagline_alloy": {
+    "description": "Kirjoitettu persoonallisuustunnuslause \"Alloy\"-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Tasapainoinen ja monikäyttöinen"
+  },
+  "voiceTagline_ash": {
+    "description": "Kirjoitettu persoonallisuustunnuslause \"Ash\"-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Matala, harkitseva, rauhallinen"
+  },
+  "voiceTagline_ballad": {
+    "description": "Kirjoitettu persoonallisuustunnuslause \"Ballad\"-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Pehmeä ja melodinen"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Cassidy'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Ystävällinen ja asiallinen"
+  },
+  "voiceTagline_cedar": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Cedar'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Tyyni ja rauhoittava"
+  },
+  "voiceTagline_coral": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Coral'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Kirkas ja pirteä energia"
+  },
+  "voiceTagline_echo": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Echo'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Selkeä ja neutraali"
+  },
+  "voiceTagline_fable": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Fable'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Tarinankertojan sointi"
+  },
+  "voiceTagline_finn": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Finn'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Raikas ja energinen"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Jamahal'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Täyteläinen ja vetovoimainen"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Jarnathan'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Samettinen myöhäisillan baritoni"
+  },
+  "voiceTagline_jeff": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Jeff'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Selkeä ja rauhallinen"
+  },
+  "voiceTagline_jessica": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Jessica'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Lämmin, huoliteltu olemus"
+  },
+  "voiceTagline_joey": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Joey'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Vaivaton, keskusteleva amerikkalainen"
+  },
+  "voiceTagline_juniper": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Juniper'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Napakka, kirkas, eloisa"
+  },
+  "voiceTagline_lucy": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Lucy'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Lempeä ja hehkuva"
+  },
+  "voiceTagline_marin": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Marin'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Lämmin, aamujuontajan rauha"
+  },
+  "voiceTagline_mark": {
+    "description": "Kirjoitettu persoonallisuustunnuslause 'Mark'-äänelle (asetukset > Voices studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Selkeä, itsevarma kertoja"
+  },
+  "voiceTagline_nova": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Nova'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Nopea ja utelias"
+  },
+  "voiceTagline_onyx": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Onyx'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Syvä ja arvokas sointi"
+  },
+  "voiceTagline_paola": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Paola'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Ilmeikäs italialainen lämpö"
+  },
+  "voiceTagline_sage": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Sage'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Hiljainen selkeys"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Kirjoittajan laatima persoonallisuustagi 'Shimmer'-äänelle (asetusten Äänet-studio; asiakaspuolen ääni-identiteettikartta).",
+    "message": "Kevyt ja ilmava"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Lyhyt teksti äänikortin kiinnityskytkimessä (pois päältä) asetusten Voices-studiossa; painaminen lisää äänen isännän chatin valikkoon.",
+    "message": "+ Valikko"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Saavutettava nimi äänikortin kiinnityskytkimelle (pois päältä); $name$ on ääni, $host$ avustaja.",
+    "message": "Lisää $name$ $host$:n valikkoon",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Selite Voices-ohjauspalkin kytkimessä, joka kertoo, toistetaanko jokainen ääni, kun listaa selataan nuolinäppäimillä ja kohdistus siirtyy siihen.",
+    "message": "Toista liikuessa"
+  },
+  "voicesArrowsLive": {
+    "description": "Ruudunlukijan vahvistus, joka lisätään ensimmäiseen \"Toistetaan <ääni>\" -ilmoitukseen asetusten Äänet-luettelossa ja kertoo, että nuolinäppäimistä on juuri tullut kuultavia. Toistaa \"Toista siirtyessä\" -valitsimen omaa sanamuotoa.",
+    "message": "Nuolinäppäimet toistavat nyt siirtyessäsi. Esc lopettaa."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Huomautus valikkopaikkojen alla isännille, joilla on omat natiivit äänet (esim. Pin 8 sisäänrakennettua), joita studio ei hallitse; $host$ on avustaja.",
+    "message": "Myös $host$in omat sisäänrakennetut äänet näkyvät aina sen valikossa.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "voicesBuiltinsNote-tekstin muunnelma isännälle, jolla ei ole chatin sisäistä äänivalikkoa (Pi poisti valikkonsa vuonna 2026), jolloin alkuperäisen lupaus siitä, että sisäänrakennetut äänet 'näkyvät sen valikossa', olisi virheellinen; $host$ on avustaja.",
+    "message": "$host$illa on myös omat sisäänrakennetut äänet, joita ei luetella tässä.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Edistymisnäyttö asetusten Äänet-ohjauspalkissa: kuinka monta luetelluista äänistä käyttäjä on jo kuunnellut. Pelkät numerot, jotta se toimii oikein myös arvolla 1 — Chrome i18n:ssa ei ole monikkoja.",
+    "message": "Kuunneltu $heard$/$total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Osa äänen rivin saavutettavaa nimeä asetusten Äänet-luettelossa; merkitsee äänen, jota tämä profiili on jo kuunnellut. Visuaalisesti tämä piirretään mustetiheytenä äänen äänijäljessä, jota ruudunlukija ei näe.",
+    "message": "Kuunneltu"
+  },
+  "voicesInHostMenu": {
+    "description": "Osion otsikko valikkopaikkarivin yläpuolella asetusten Voices-studiossa; $host$ on avustaja.",
+    "message": "$host$:n valikossa",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Lyhyt teksti äänikortin kiinnityskytkimessä (päällä) asetusten Voices-studiossa.",
+    "message": "✓ Valikossa"
+  },
+  "voicesInUse": {
+    "description": "Pysyvä merkki asetusten Voices-listassa isännän tällä hetkellä valitulle äänelle, näytetään isoilla kirjaimilla. Tarkoituksella EI ”Puhuu nyt”: tällä sivulla rivit soittavat esimerkkipätkiä, joten valittu mutta hiljainen ääni ei saa väittää puhuvansa, kun eri rivi soi.",
+    "message": "Käytössä"
+  },
+  "voicesKeyboardHint": {
+    "description": "Yhden rivin pikanäppäinvihje asetusten Äänet-ohjauspalkissa. Merkit ovat näppäimiä: välilyönti, ylös/alas-nuolet ja Shift+välilyönti.",
+    "message": "Paina välilyöntiä kuunnellaksesi, ↑↓ siirtyäksesi äänien välillä, ⇧Välilyönti palataksesi takaisin."
+  },
+  "voicesLoadError": {
+    "description": "Virhetila yhden isännän studiossa, kun kyseisen isännän ääniluetteloa ei saatu ladattua; $host$ on avustaja.",
+    "message": "Ei voitu ladata avustajan $host$ ääniä. Yritä myöhemmin uudelleen.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Vihjeteksti/ohjeteksti pois käytöstä olevalle ”+ Valikko” -kytkimelle, kun isännän chatin valikossa on jo enimmäismäärä ääniä.",
+    "message": "Valikko täynnä — poista yksi ääni lisätäksesi toisen"
+  },
+  "voicesMenuHint": {
+    "description": "Yhden rivin vihje ”In {host}'s menu” -otsikon vieressä, selittää että paikkarivi vastaa chatin äänivalikkoa.",
+    "message": "Näin se näkyy chatissa"
+  },
+  "voicesMenuOverflow": {
+    "description": "Huomautus valikkopaikkojen alla, kun käyttäjällä on enemmän kiinnitettyjä ääniä kuin chatin valikko voi näyttää (perintötila); $count$ on niiden määrä, jotka eivät mahdu, $cap$ on valikon koko.",
+    "message": "Vielä $count$ kiinnitettyä ääntä odottaa valikon $cap$ paikan ulkopuolella.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow-tekstin yksikkömuoto, käytetään kun täsmälleen yksi kiinnitetty ääni ei mahdu chatin valikkoon; $cap$ on valikon koko.",
+    "message": "Vielä 1 kiinnitetty ääni odottaa valikon $cap$ paikan ulkopuolella.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Yhteenvetorivi asetusten Äänet-luettelon alla: kuinka täynnä isännän chatin sisäinen äänivalikko on; $host$ on avustaja, $used$ on varattujen paikkojen määrä, $cap$ paikkojen kokonaismäärä. Muotoiltu toimimaan oikein myös arvolla 1 — Chrome i18n:ssa ei ole monikkoja.",
+    "message": "$host$-valikko: $used$/$cap$ paikkaa käytössä",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Otsikko ryhmälle asetusten Äänet-luettelon lopussa, jossa ovat äänet, joilla ei ole toistettavaa näyteleikettä; $count$ on määrä. Muotoiltu toimimaan oikein myös arvolla 1 — Chrome i18n:ssa ei ole monikkoja.",
+    "message": "Ei vielä näytettä ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Näytetään asetusten äänikatalogissa, kun ääniluettelo on tyhjä sisäänkirjautuneella käyttäjällä (esim. verkkohäiriö).",
+    "message": "Ääniä ei voitu ladata juuri nyt. Yritä myöhemmin uudelleen."
+  },
+  "voicesNowPlaying": {
+    "description": "Ruudunlukijan ilmoitus, kun äänen näyteleike alkaa toistua asetusten Äänet-luettelossa; $name$ on ääni.",
+    "message": "Toistetaan: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Painike asetusten Äänet-ohjauspalkissa, joka toistaa kaikki tällä hetkellä luetellut äänet peräkkäin; $count$ on määrä. Muotoiltu toimimaan oikein myös arvolla 1 — Chrome i18n:ssa ei ole monikkoja.",
+    "message": "Toista kaikki ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Painike asetusten Äänet-ohjauspalkissa paluukäynnillä: toistaa vain luetellut äänet, joita et ole vielä kuunnellut; $count$ on määrä. Muotoiltu toimimaan oikein myös arvolla 1 — Chrome i18n:ssa ei ole monikkoja.",
+    "message": "Toista uudet ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Rivi asetusten Äänet-ohjauspalkissa, kun selain kieltäytyi toistamasta näytettä, koska sivulla ei ole vielä ollut käyttäjän vuorovaikutusta.",
+    "message": "Ota ääni käyttöön klikkaamalla mitä tahansa ääntä."
+  },
+  "voicesPreview": {
+    "description": "Saavutettava nimike toisto (▶) -painikkeelle, joka kuuntelee äänen ilmaisen esimerkkileikkeen äänen rivillä; $name$ on äänen nimi.",
+    "message": "Toista äänen $name$ esimerkki",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Asetusten Voices-listan saavutettava nimi (listbox, jossa jokainen ääni on omalla rivillään).",
+    "message": "Äänet, järjestetty matalimmasta kirkkaimpaan"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Saavutettava nimi äänikortin kiinnityskytkimelle (päällä) ja valikkopaikan poistopainikkeelle; $name$ on ääni, $host$ avustaja.",
+    "message": "Poista $name$ $host$:n valikosta",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Rivi asetusten Äänet-ohjauspalkissa, kun yhden äänen näyteklippiä ei saatu ladattua tai toistettua; $name$ on kyseinen ääni. Ei-modaalinen — näytteiden sarja jatkuu siitä huolimatta.",
+    "message": "Äänen $name$ näytettä ei voitu toistaa.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Alaotsikko äänikatalogiosioon asetusten AI Chat -välilehdessä",
+    "message": "Valitse ääni, joka lukee vastaukset ääneen kullekin sivustolle."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Alaotsikko Voices-asetusten otsikon alla, sävelkorkeuden mukaan järjestetylle ääniriville.",
+    "message": "Jokainen ääni, matalimmasta kirkkaimpaan. Kuuntele ja valitse."
+  },
+  "voicesSectionTitle": {
+    "description": "Otsikko äänikatalogiosioon asetusten AI Chat -välilehdessä",
+    "message": "Äänet"
+  },
+  "voicesShelfEveryday": {
+    "description": "Ryhmäotsikko edullisemman tason äänille asetusten äänikatalogissa. CSS muuntaa isoiksi kirjaimiksi.",
+    "message": "Jokapäiväiset äänet"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Yhden rivin huomautus Everyday-ryhmäotsikon vieressä asetusten Äänet-studiossa; ainoa kohta, jossa studio kertoo, kuinka paljon pidemmälle tämä taso riittää verrattuna HD:hen.",
+    "message": "Luonnollinen ja selkeä — voit kuunnella noin 20× pidempään kuin HD:llä."
+  },
+  "voicesShelfHd": {
+    "description": "Ryhmäotsikko premium- (HD-)äänille asetusten äänikatalogissa. CSS muuntaa isoiksi kirjaimiksi.",
+    "message": "HD-äänet"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Yhden rivin huomautus HD-ryhmäotsikon vieressä asetusten Äänet-studiossa.",
+    "message": "Rikkain ja ilmeikkäin äänemme."
+  },
+  "voicesShowAll": {
+    "description": "Valinta asetusten Äänet-näkymän \"Näytä\"-suodattimessa: ei suodatusta, kaikki äänet listataan.",
+    "message": "Kaikki äänet"
+  },
+  "voicesShowEveryday": {
+    "description": "Valinta asetusten Äänet-näkymän \"Näytä\"-suodattimessa: listaa vain tavalliset (ei-HD) äänet.",
+    "message": "Vain perusäänet"
+  },
+  "voicesShowHd": {
+    "description": "Valinta asetusten Äänet-näkymän \"Näytä\"-suodattimessa: listaa vain premium- (HD-) äänet.",
+    "message": "Vain HD"
+  },
+  "voicesShowLabel": {
+    "description": "Selite asetusten Äänet-ohjauspalkin suodattimessa, joka rajaa, mitkä äänet luettelo näyttää.",
+    "message": "Näytä"
+  },
+  "voicesShowUnheard": {
+    "description": "Valinta asetusten Äänet-näkymän \"Näytä\"-suodattimessa: listaa vain äänet, joita käyttäjä ei ole vielä kuunnellut.",
+    "message": "Ei vielä kuunneltu"
+  },
+  "voicesSpeakingNow": {
+    "description": "Tilan ilmaiseva teksti asetusten Voices-studiossa isännän tällä hetkellä valitulle äänelle (valikkopaikka ja äänikortti).",
+    "message": "Puhuu nyt"
+  },
+  "voicesSpeaksWith": {
+    "description": "Pieni otsakerivi nykyisen äänen nimen yläpuolella asetusten Voices-studiossa; $host$ on avustaja (esim. Pi). CSS muuntaa tekstin isoiksi kirjaimiksi.",
+    "message": "$host$ puhuu äänellä",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Vaihemuistiinpano, kun isäntä tuottaa oman äänensä (esim. Pi), joten Say, Pi -äänen valinta korvaa isännän äänen.",
+    "message": "$host$ käyttää omaa ääntään, kunnes valitset alta.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Vaihemuistiinpano, kun isännällä ei ole omaa ääntä (esim. Claude), joten mitään ei lueta ääneen ennen kuin Say, Pi -ääni on valittu.",
+    "message": "$host$ ei lue vastauksia ääneen, ennen kuin valitset alta.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Otsikko Asetukset > Voices -studion vaiheessa, kun isännälle ei ole valittu SayPi-ääntä; $host$ on avustaja (esim. Pi, Claude). Renderöidään nimikoolla.",
+    "message": "Valitse, miltä $host$ kuulostaa",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Painike Asetukset > Voices -studion vaiheessa, joka toistaa nykyisen äänen ilmaisen näytepätkän.",
+    "message": "Kuuntele näyte"
+  },
+  "voicesStopPlayback": {
+    "description": "Painike asetusten Äänet-ohjauspalkissa, joka pysäyttää \"Toista kaikki\" -toiminnolla aloitetun näytteiden sarjan.",
+    "message": "Pysäytä"
+  },
+  "voicesSweepPosition": {
+    "description": "Reaaliaikainen sijaintinäyttö asetusten Äänet-ohjauspalkissa, kun \"Toista kaikki\" käy luetteloa läpi; $index$ on nyt soiva ääni ja $total$ kertoo, montako ääntä on jonossa.",
+    "message": "$index$ / $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Saavutettava nimi vertailuohjaimelle asetusten Äänet-ohjauspalkissa. Toistaa uudelleen toisen kahdesta viimeksi kuullusta äänestä; $name$ on kyseinen ääni.",
+    "message": "Vaihda takaisin: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Rivi asetusten Äänet-ohjauspalkissa, kun \"Toista kaikki\" painetaan liian pitkälle listalle; $count$ on äänien määrä ja $minutes$ on karkea arvio minuuteissa. Lyhennetty \"min\", jotta se toimii oikein myös arvolla 1 — Chrome i18n:ssä ei ole monikkomuotoja.",
+    "message": "Se on $count$ ääntä — noin $minutes$ min. Rajaa lista ensin.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Saavutettava nimi asetusten ääniluettelon isäntäkohtaiselle ”käytä tätä ääntä” -painikkeelle; $name$ on ääni, $host$ on avustaja (esim. Pi, Claude).",
+    "message": "Käytä ääntä $name$ kohteessa $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Lyhyt teksti yhtenäisen asetusten ääniluettelon isäntäkohtaisessa ”käytä tätä ääntä” -painikkeessa (isäntä näkyy sen vieressä).",
+    "message": "Käytä"
+  },
+  "voicesYourVoice": {
+    "description": "Ohjauspalkin painike asetusten Äänet-luettelossa, joka siirtää kohdistuksen sen äänen riville, jota tämä isäntä käyttää tällä hetkellä; $name$ on kyseinen ääni.",
+    "message": "Äänesi: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Virhe, joka heitetään, kun selain ei pysty varaamaan riittävästi WebAssembly-muistia puheentunnistusmallille.",
+    "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muistia ei ole riittävästi äänimallille. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Virhe, joka heitetään, kun selain ei tarjoa alkuperäistä WebAssembly-muistia, jota tarvitaan puheentunnistusmallin ajamiseen.",
+    "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muisti ei ole käytettävissä tässä selaimessa."
   }
 }

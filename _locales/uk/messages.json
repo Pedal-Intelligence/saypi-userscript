@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Перевага в модальному вікні автентифікації — збільшені ліміти використання.",
+    "message": "Вищі ліміти використання з безкоштовним акаунтом"
+  },
+  "authBenefitPremium": {
+    "description": "Перевага в модальному вікні автентифікації — преміумможливості в чатботах.",
+    "message": "Преміумможливості та підтримка чатботів"
+  },
+  "authBenefitSupport": {
+    "description": "Перевага в модальному вікні автентифікації — пріоритетна підтримка.",
+    "message": "Пріоритетна підтримка щодо проблем"
+  },
+  "authBenefitSync": {
+    "description": "Перевага в модальному вікні автентифікації — синхронізація налаштувань.",
+    "message": "Синхронізуйте налаштування голосу всюди"
+  },
+  "authBenefitTTS": {
+    "description": "Перевага в модальному вікні автентифікації — функція TTS.",
+    "message": "Голоси перетворення тексту на мовлення (платні плани)"
+  },
+  "authBenefitUsage": {
+    "description": "Перевага в модальному вікні автентифікації — відстеження використання.",
+    "message": "Відстежуйте використання голосу на всіх пристроях"
+  },
+  "authPromptModalFull": {
+    "description": "Опис для повного модального вікна запиту на автентифікацію з пропозицією цінності.",
+    "message": "Ви активно користуєтеся Say, Pi. Увійдіть, щоб отримати вищі ліміти, голоси перетворення тексту на мовлення та преміумможливості в усіх підтримуваних чатботах."
+  },
+  "authPromptModalSoft": {
+    "description": "Опис для м’якого модального вікна запиту на автентифікацію.",
+    "message": "Створіть безкоштовний обліковий запис Say, Pi для вищих лімітів використання та доступу до преміумголосових можливостей."
+  },
+  "authPromptTitle": {
+    "description": "Заголовок модального вікна запиту на автентифікацію.",
+    "message": "Відкрийте більше голосових можливостей"
+  },
+  "authPromptToast": {
+    "description": "Спливаюче повідомлення, що заохочує користувача увійти.",
+    "message": "Увійдіть у Say, Pi для вищих лімітів і преміумфункцій"
+  },
   "autoReadAloudChatGPT": {
     "description": "Позначка для ввімкнення або вимкнення автоматичного озвучування відповідей ChatGPT під час голосових дзвінків.",
     "message": "Автоматичне озвучування (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Вимкнути текст до мови"
   },
+  "dismiss": {
+    "message": "Зрозуміло",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Звільнити"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Зосередитися"
   },
+  "errorVadInitFailed": {
+    "description": "Спливаюче повідомлення про помилку, яке показується, коли не вдається ініціалізувати виявлення голосової активності.",
+    "message": "Не вдалося ініціалізувати виявлення голосу"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Спливаюче повідомлення про помилку, яке показується, коли під час налаштування запису голосу стається неочікувана помилка.",
+    "message": "Не вдалося налаштувати запис голосу"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Спливаюче повідомлення про помилку, яке показується, коли клієнту визначення голосу не вдається почати запис.",
+    "message": "Не вдалося почати запис голосу"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Спливаюче повідомлення про помилку, яке показується, коли клієнт визначення голосу (VAD) недоступний, тому запис не може початися.",
+    "message": "Запис голосу недоступний"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Вийти з режиму фокусу"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Однорядкова примітка, що показується в меню голосів, коли доступні і преміум (HD), і value-голоси",
+    "message": "HD-голоси витрачають ваш місячний ліміт приблизно у 20× швидше."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Відбиваючи це ..."
   },
+  "maybeLater": {
+    "description": "Текст кнопки для закриття запиту на автентифікацію.",
+    "message": "Можливо, пізніше"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Ваші налаштування мікрофона не відповідають необхідним характеристикам. \nСпробуйте використати інший мікрофон або налаштувати параметри звуку."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Неможливо отримати доступ до мікрофона. \nПеревірте налаштування свого пристрою та повторіть спробу."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Спливаюче повідомлення про помилку, яке показується, коли після процесу запиту дозволу було відхилено дозвіл на мікрофон.",
+    "message": "Дозвіл на мікрофон не надано. Переконайтеся, що ви дозволили доступ у запиті та в налаштуваннях розширення."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "точність"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Найшвидша відповідь, але менш точна. \nСхильний до переривання."
   },
+  "moreVoices": {
+    "description": "Рядок меню, що веде з меню голосів на сторінці до повного каталогу голосів у налаштуваннях розширення.",
+    "message": "Більше голосів…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Псевдонім асистента"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Не ввійшов"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Напис на кнопці, яка відкриває ChatGPT.",
+    "message": "Відкрити ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Напис на кнопці, що відкриває Claude.ai.",
+    "message": "Відкрити Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Напис на кнопці, що відкриває Pi.ai.",
+    "message": "Відкрити Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Варіант оточення: поруч з іншими людьми.",
+    "message": "Поруч з іншими людьми"
+  },
+  "onboarding_envMixed": {
+    "description": "Варіант оточення: поєднання приватних і спільних просторів.",
+    "message": "У різних місцях"
+  },
+  "onboarding_envPrivate": {
+    "description": "Варіант оточення: приватний простір.",
+    "message": "У приватному місці"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Підтвердження, яке показується, коли відповідь про середовище залишає тихий режим вимкненим.",
+    "message": "Гаразд — залишимо стандартні налаштування слухання та відтворення."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Підтвердження, що показується, коли відповідь про оточення вмикає тихий режим.",
+    "message": "Тихий режим увімкнено — ми вловлюватимемо тихішу мову й відповідатимемо тихо, щоб ви могли говорити непомітно."
+  },
+  "onboarding_envTitle": {
+    "description": "Заголовок для питання onboarding про оточення користувача.",
+    "message": "Де ви зазвичай розмовляєте?"
+  },
+  "onboarding_footer": {
+    "description": "Текст у нижній частині сторінки першого запуску onboarding.",
+    "message": "Ви можете повернутися до цього будь-коли в налаштуваннях Say, Pi. Ваша приватність важлива — аудіо записується лише під час активного дзвінка."
+  },
+  "onboarding_heading": {
+    "description": "Основний заголовок на сторінці першого запуску (onboarding).",
+    "message": "🗣️ Ласкаво просимо до Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Вступний абзац на сторінці першого запуску (onboarding).",
+    "message": "Вас відділяють два кроки від першої розмови з ШІ вголос. Говорити приблизно у 3× швидше, ніж друкувати — давайте все налаштуємо."
+  },
+  "onboarding_micTestButton": {
+    "description": "Кнопка, що запускає безстресовий тест мікрофона під час onboarding.",
+    "message": "🎤 Перевірити мікрофон"
+  },
+  "onboarding_micTestDone": {
+    "description": "Статус, що показується після успішного завершення тесту мікрофона під час onboarding.",
+    "message": "Чудово — мікрофон працює 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Статус, що показується, поки тест мікрофона під час onboarding вимірює вхідний сигнал.",
+    "message": "Слухаємо — скажіть щось 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Статус, що показується, поки тест мікрофона під час onboarding очікує на дозвіл.",
+    "message": "Запитуємо доступ до мікрофона…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Напис на кнопці для зупинки тесту мікрофона під час onboarding, поки він виконується.",
+    "message": "Зупинити тест"
+  },
+  "onboarding_step1Body": {
+    "description": "Текст першого кроку onboarding з поясненням, як закріпити розширення.",
+    "message": "Натисніть значок пазла 🧩 у правому верхньому куті браузера, потім — шпильку 📌 поруч із Say, Pi. Так кнопка виклику буде за один клік."
+  },
+  "onboarding_step1Title": {
+    "description": "Заголовок першого кроку onboarding (закріпити розширення).",
+    "message": "Закріпіть Say, Pi на панелі інструментів"
+  },
+  "onboarding_step2Body": {
+    "description": "Текст другого кроку onboarding з поясненням, як почати голосову розмову.",
+    "message": "Перейдіть до одного з підтримуваних асистентів нижче, потім натисніть кнопку виклику Say, Pi і привітайтеся. Першого разу ми попросимо доступ до мікрофона — так і має бути, і ми слухаємо лише тоді, коли ви активно в розмові."
+  },
+  "onboarding_step2Title": {
+    "description": "Заголовок другого кроку onboarding (почати розмову).",
+    "message": "Відкрийте чат із ШІ та почніть говорити"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Дозвіл мікрофона"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Підказки для відновлення, коли дозвіл на мікрофон заблоковано.",
+    "message": "Браузер блокує мікрофон. Натисни значок камери або замка в адресному рядку, встанови для «Мікрофон» значення «Дозволити», а потім спробуй ще раз. На macOS також перевір System Settings → Privacy & Security → Microphone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Заголовок панелі відновлення, коли дозвіл на мікрофон було відхилено/заблоковано.",
+    "message": "Доступ до мікрофона заблоковано"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Підказки для відновлення, коли мікрофон використовується десь іще.",
+    "message": "Можливо, твій мікрофон використовує інша програма або вкладка. Закрий усе, що може записувати (відеодзвінки, голосові нотатки), а потім спробуй ще раз."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Заголовок панелі відновлення, коли мікрофон використовується іншою програмою.",
+    "message": "Мікрофон зайнятий"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Підказки для відновлення, коли немає доступного пристрою мікрофона.",
+    "message": "Нам не вдалося знайти мікрофон. Підключи його (або гарнітуру), переконайся, що його вибрано як пристрій введення, а потім спробуй ще раз."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Заголовок панелі відновлення, коли немає доступного пристрою мікрофона.",
+    "message": "Мікрофон не знайдено"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Підказки для відновлення у разі невідомої помилки мікрофона.",
+    "message": "Щось пішло не так під час доступу до мікрофона. Перевір, що він підключений і дозволений у налаштуваннях браузера, а потім спробуй ще раз."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Заголовок панелі відновлення для невідомої помилки мікрофона.",
+    "message": "Не вдалося отримати доступ до мікрофона"
+  },
+  "permissions_retryButton": {
+    "description": "Текст кнопки, яка повторно запитує дозвіл на мікрофон.",
+    "message": "Спробувати ще раз"
+  },
+  "permissions_revokedHeading": {
+    "description": "Заголовок, що показується, коли доступ до мікрофона раніше було надано, але згодом його відкликано.",
+    "message": "🎙️ Давай знову підключимо твій мікрофон"
+  },
+  "permissions_revokedInfo": {
+    "description": "Інформаційний текст, що показується, коли доступ до мікрофона було відкликано після надання.",
+    "message": "Доступ до мікрофона вимкнено — таке часто трапляється після оновлення браузера або системи. Дозволь його знову нижче, і $productName$ знову слухатиме, коли ти в дзвінку.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Профіл"
+  },
+  "quietModeLabel": {
+    "description": "Підпис для перемикача, який вмикає тихий/шепітний режим.",
+    "message": "Тихий режим"
+  },
+  "quietModeTooltip": {
+    "description": "Підказка, що пояснює, що робить тихий/шепітний режим.",
+    "message": "Говоріть тихіше — він розпізнає тихішу мову та зменшує гучність відповіді асистента, щоб ви могли користуватися голосом поруч з іншими."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Текст для кнопки входу, поки триває автентифікація.",
+    "message": "Вхід..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Звукові ефекти"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Звукові ефекти вимкнено у Firefox, щоб запобігти проблемам зі звуковими відгуками."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Заголовок одноразового повідомлення про виграш у швидкості, яке показується після першого голосового обміну.",
+    "message": "Добре — говорити приблизно у 3 рази швидше, ніж набирати."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Необовʼязковий другий рядок повідомлення про виграш у швидкості, який показує заощаджені цілі хвилини.",
+    "message": "Ви вже виграли приблизно $minutes$ хв порівняно з набором.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Надсилайте лише після натискання кнопки"
   },
+  "surveyQuestion": {
+    "description": "Єдине запитання одноразового мікроопитування після перемоги.",
+    "message": "Як вам поки що працюється з голосом?"
+  },
+  "surveyRatingLabel": {
+    "description": "Доступна мітка для кнопки оцінювання в опитуванні.",
+    "message": "Оцініть $rating$ із 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Подяка, яку показують після того, як користувач відповість на опитування після перемоги.",
+    "message": "Дякуємо — це допомагає нам зробити Say, Pi кращим."
+  },
   "tabAIChat": {
     "description": "Позначення вкладки для розділу налаштувань AI-чат.",
     "message": "AI Чат"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Позначення вкладки для розділу загальних налаштувань.",
     "message": "Загальні"
+  },
+  "tabVoices": {
+    "description": "Підпис вкладки для розділу налаштувань голосів (каталог голосів для кожного сайту).",
+    "message": "Голоси"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "кредити"
   },
+  "ttsCreditsRemaining": {
+    "description": "Текст, що показує залишок квоти TTS як пул кредитів на кожен голос (saypi-api #181 Stage 2), а не сирі символи.",
+    "message": "Залишилось кредитів: $credits$",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Багатомовні голоси наразі не підтримуються в Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Генерування голосу"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Увага! Відтворення мовлення ще не доступне в $browserName$ з $chatbotName$. Хороша новина? Голосовий ввід працює чудово! Для TTS спробуйте Chrome або Edge на робочому столі.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS недоступний у $browserName$ + $chatbotName$. Голосовий ввід працює! Спробуйте Chrome на робочому столі для TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -голос"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Деталь VAD, коли було виявлено схожий на мовлення звук, але він був надто тихий / з надто низькою впевненістю для транскрибування (відсікання на клієнті на етапі admission-gate).",
+    "message": "Звук надто тихий для транскрибування"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Деталь VAD, що пояснює, що виклик завершився, бо мікрофон було зайнято новішою вкладкою.",
+    "message": "Голосовий ввід перенесено в іншу вкладку"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Голос недоступний. \nСпробуйте Chrome або Firefox на робочому столі."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Увага! Відтворення мовлення ще не доступне в $browserName$ з $chatbotName$. Хороша новина? Голосовий ввід працює чудово! Для TTS спробуйте Chrome або Edge на робочому столі.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS недоступний у $browserName$ + $chatbotName$. Голосовий ввід працює! Спробуйте Chrome на робочому столі для TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Зрозуміло",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Статус VAD, що показується на вкладці, чий голосовий ввід було перехоплено іншою вкладкою.",
+    "message": "Призупинено"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Переглянути деталі"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Загальне озвучене представлення, яке відтворюється, коли вибраний голос SayPi не має власного сценарію представлення (і немає нещодавнього повідомлення, яке можна було б зачитати).",
+    "message": "Привіт, я $voice$. Ось як я звучатиму. Сподіваюся, вам сподобається цей голос.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Холо! \nПривет! \n你好! \nЯ Пі, ваш помічник ШІ-поліглот. \nЗавдяки 32 мовам у моєму розпорядженні ми можемо досліджувати ідеї та культури з усього світу. \nЩо ви думаєте про цей голос?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Налаштування голосу"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Запасний підзаголовок для рядка голосу в каталозі голосів у налаштуваннях, коли голос не має опису; $count$ — кількість мов, які підтримує голос.",
+    "message": "Говорить $count$ мовами",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Авторський слоган характеру для голосу «Addison» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Сонячний і виразний"
+  },
+  "voiceTagline_alloy": {
+    "description": "Авторський слоган характеру для голосу «Alloy» (студія голосів у налаштуваннях; мапа ідентичності голосів на стороні клієнта).",
+    "message": "Збалансований і універсальний"
+  },
+  "voiceTagline_ash": {
+    "description": "Авторський слоган характеру для голосу «Ash» (студія голосів у налаштуваннях; мапа ідентичності голосів на стороні клієнта).",
+    "message": "Низький, задумливий, спокійний"
+  },
+  "voiceTagline_ballad": {
+    "description": "Авторський слоган характеру для голосу «Ballad» (студія голосів у налаштуваннях; мапа ідентичності голосів на стороні клієнта).",
+    "message": "М’який і мелодійний"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Авторський слоган характеру для голосу «Cassidy» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Доброзичливий і прямий"
+  },
+  "voiceTagline_cedar": {
+    "description": "Авторський слоган характеру для голосу «Cedar» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Врівноважений і заспокійливий"
+  },
+  "voiceTagline_coral": {
+    "description": "Авторський слоган характеру для голосу «Coral» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Яскрава, піднесена енергія"
+  },
+  "voiceTagline_echo": {
+    "description": "Авторський слоган характеру для голосу «Echo» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Чистий і нейтральний"
+  },
+  "voiceTagline_fable": {
+    "description": "Авторський слоган характеру для голосу «Fable» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Оповідна інтонація"
+  },
+  "voiceTagline_finn": {
+    "description": "Авторський слоган характеру для голосу «Finn» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Свіжий і енергійний"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Авторський слоган характеру для голосу «Jamahal» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Насичений і магнетичний"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Авторський слоган характеру для голосу «Jarnathan» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Оксамитовий нічний баритон"
+  },
+  "voiceTagline_jeff": {
+    "description": "Авторський слоган характеру для голосу «Jeff» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Простий і врівноважений"
+  },
+  "voiceTagline_jessica": {
+    "description": "Авторський слоган характеру для голосу «Jessica» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Теплий, вишуканий"
+  },
+  "voiceTagline_joey": {
+    "description": "Авторський слоган характеру для голосу «Joey» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Невимушена американська розмовна манера"
+  },
+  "voiceTagline_juniper": {
+    "description": "Авторський слоган характеру для голосу «Juniper» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Чіткий, яскравий, жвавий"
+  },
+  "voiceTagline_lucy": {
+    "description": "Авторський слоган характеру для голосу «Lucy» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Ніжний і світлий"
+  },
+  "voiceTagline_marin": {
+    "description": "Авторський слоган характеру для голосу «Marin» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Теплий, спокій ранкового радіо"
+  },
+  "voiceTagline_mark": {
+    "description": "Авторський слоган характеру для голосу «Mark» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Чіткий, упевнений оповідач"
+  },
+  "voiceTagline_nova": {
+    "description": "Авторський слоган характеру для голосу «Nova» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Швидкий і допитливий"
+  },
+  "voiceTagline_onyx": {
+    "description": "Авторський слоган характеру для голосу «Onyx» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Глибока, резонансна вагомість"
+  },
+  "voiceTagline_paola": {
+    "description": "Авторський слоган характеру для голосу «Paola» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Виразне італійське тепло"
+  },
+  "voiceTagline_sage": {
+    "description": "Авторський слоган характеру для голосу «Sage» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Спокійна, виразна ясність"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Авторський слоган характеру для голосу «Shimmer» (налаштування Voices studio; клієнтська мапа ідентичності голосів).",
+    "message": "Легкий і повітряний"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Короткий напис на перемикачі закріплення на картці голосу (вимкнений стан) у студії Голоси в налаштуваннях; натискання додає голос до меню $host$ у чаті.",
+    "message": "+ Меню"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Доступна назва для перемикача закріплення на картці голосу (вимкнений стан); $name$ — голос, $host$ — асистент.",
+    "message": "Додати $name$ до меню $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Підпис до перемикача на панелі керування Голосами, який вказує, чи відтворюється кожен голос під час переміщення списком клавішами зі стрілками, коли фокус доходить до нього.",
+    "message": "Відтворювати під час переміщення"
+  },
+  "voicesArrowsLive": {
+    "description": "Підтвердження для читача екрана, яке додається до першого оголошення «Відтворюється <голос>» у списку «Голоси» в налаштуваннях, повідомляючи, що клавіші зі стрілками щойно стали озвучуватися. Повторює формулювання перемикача «Відтворювати під час переміщення».",
+    "message": "Стрілки тепер відтворюють під час переміщення. Esc зупиняє."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Примітка під слотами меню для хостів, які мають вбудовані нативні голоси (наприклад, 8 вбудованих у Pi), якими студія не керує; $host$ — асистент.",
+    "message": "Власні вбудовані голоси $host$ теж завжди є в його меню.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Варіант voicesBuiltinsNote для хоста без меню голосів у чаті (Pi прибрав меню у 2026), де обіцянка оригіналу, що вбудовані голоси «з’являються в його меню», була б неправдивою; $host$ — асистент.",
+    "message": "$host$ також має власні вбудовані голоси, але їх тут не показано.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Індикатор прогресу в панелі керування «Голоси» в налаштуваннях: скільки голосів зі списку користувач уже прослухав. Лише числа, тож читається правильно при 1 — у Chrome i18n немає форм множини.",
+    "message": "Прослухано: $heard$ з $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Частина доступної назви рядка голосу в списку «Голоси» в налаштуваннях, що позначає голос, який цей профіль уже прослуховував. Візуально це показано щільністю чорнила на звуковому відбитку голосу, яку читач екрана не бачить.",
+    "message": "Прослухано"
+  },
+  "voicesInHostMenu": {
+    "description": "Заголовок розділу над рядком слотів меню в студії Голоси в налаштуваннях; $host$ — асистент.",
+    "message": "У меню $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Короткий напис на перемикачі закріплення на картці голосу (увімкнений стан) у студії Голоси в налаштуваннях.",
+    "message": "✓ У меню"
+  },
+  "voicesInUse": {
+    "description": "Постійний бейдж на поточному вибраному голосі хоста у списку Голоси в налаштуваннях, відображається великими літерами. Навмисно НЕ «Зараз говорить»: на цій сторінці рядки відтворюють свої демо-кліпи, тож вибраний, але мовчазний голос не повинен заявляти, що говорить, поки інший рядок відтворюється.",
+    "message": "Використовується"
+  },
+  "voicesKeyboardHint": {
+    "description": "Однорядкова підказка щодо клавіатури в панелі керування «Голоси» в налаштуваннях. Символи — це клавіші: Space, стрілки вгору/вниз і Shift+Space.",
+    "message": "Натисніть Space, щоб слухати, ↑↓ щоб переходити між голосами, ⇧Space щоб перемкнутися назад."
+  },
+  "voicesLoadError": {
+    "description": "Стан помилки всередині студії одного хоста, коли не вдалося завантажити каталог голосів цього хоста; $host$ — асистент.",
+    "message": "Не вдалося завантажити голоси $host$. Спробуйте ще раз пізніше.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Підказка/хінт на вимкненому перемикачі «+ Меню», коли меню $host$ у чаті вже має максимально можливу кількість голосів.",
+    "message": "Меню заповнене — вилучіть голос, щоб додати інший"
+  },
+  "voicesMenuHint": {
+    "description": "Однорядкова підказка поруч із заголовком «У меню {host}», яка пояснює, що рядок слотів віддзеркалює меню голосів у чаті.",
+    "message": "Що ви побачите в чаті"
+  },
+  "voicesMenuOverflow": {
+    "description": "Примітка під слотами меню, коли в користувача більше закріплених голосів, ніж може показати меню в чаті (застарілий стан); $count$ — скільки не вмістилося, $cap$ — розмір меню.",
+    "message": "Ще $count$ закріплених голосів чекають за межами $cap$ слотів меню.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Однина для voicesMenuOverflow, використовується, коли рівно один закріплений голос не вміщується в меню в чаті; $cap$ — розмір меню.",
+    "message": "Ще 1 закріплений голос чекає за межами $cap$ слотів меню.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Підсумковий рядок під списком «Голоси» в налаштуваннях, що показує, наскільки заповнене голосове меню хоста в чаті; $host$ — асистент, $used$ — скільки місць зайнято, $cap$ — скільки їх усього. Сформульовано так, щоб читалося правильно при 1 — у Chrome i18n немає форм множини.",
+    "message": "Меню $host$: $used$ з $cap$ місць",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Заголовок групи наприкінці списку «Голоси» в налаштуваннях, що містить голоси без зразка для відтворення; $count$ — скільки їх. Сформульовано так, щоб читалося правильно при 1 — у Chrome i18n немає форм множини.",
+    "message": "Ще немає зразка ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Показується в каталозі голосів у налаштуваннях, коли список голосів порожній для користувача, що увійшов (наприклад, через проблему з мережею).",
+    "message": "Зараз не вдалося завантажити голоси. Спробуйте пізніше."
+  },
+  "voicesNowPlaying": {
+    "description": "Оголошення для читача екрана, коли у списку «Голоси» в налаштуваннях починає відтворюватися зразок голосу; $name$ — це голос.",
+    "message": "Відтворюється $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Кнопка в панелі керування «Голоси» в налаштуваннях, яка відтворює кожен голос із поточного списку один за одним; $count$ — скільки їх. Сформульовано так, щоб читалося правильно при 1 — у Chrome i18n немає форм множини.",
+    "message": "Відтворити всі ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Кнопка в панелі керування «Голоси» в налаштуваннях під час повторного візиту: відтворює лише ті голоси зі списку, які ви ще не слухали; $count$ — скільки їх. Сформульовано так, щоб читалося правильно при 1 — у Chrome i18n немає форм множини.",
+    "message": "Відтворити нові ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Рядок у панелі керування «Голоси» в налаштуваннях, коли браузер відмовився відтворити приклад, бо на сторінці ще не було взаємодії з користувачем.",
+    "message": "Натисніть будь-який голос, щоб увімкнути звук."
+  },
+  "voicesPreview": {
+    "description": "Доступна мітка для кнопки відтворення (▶), яка програє безплатний демо-кліп голосу в рядку голосу; $name$ — назва голосу.",
+    "message": "Відтворити зразок $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Доступна назва списку Голоси в налаштуваннях (listbox усіх голосів, по одному рядку на голос).",
+    "message": "Голоси, упорядковані від найнижчого до найяскравішого"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Доступна назва для перемикача закріплення на картці голосу (увімкнений стан) і кнопки вилучення у слоті меню; $name$ — голос, $host$ — асистент.",
+    "message": "Вилучити $name$ з меню $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Рядок у панелі керування «Голоси» в налаштуваннях, коли не вдалося завантажити або відтворити зразок одного голосу; $name$ — назва цього голосу. Немодально — програвання зразків продовжується далі.",
+    "message": "Не вдалося відтворити зразок голосу $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Підзаголовок розділу каталогу голосів у вкладці налаштувань AI Chat.",
+    "message": "Виберіть голос, який озвучує відповіді на кожному сайті."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Підзаголовок під заголовком налаштувань Голоси, для рейки голосів, упорядкованої за висотою тону.",
+    "message": "Кожен голос, від найнижчого до найяскравішого. Послухайте й виберіть."
+  },
+  "voicesSectionTitle": {
+    "description": "Заголовок розділу каталогу голосів у вкладці налаштувань AI Chat.",
+    "message": "Голоси"
+  },
+  "voicesShelfEveryday": {
+    "description": "Заголовок групи для голосів цінового рівня value у каталозі голосів у налаштуваннях. CSS відображає у верхньому регістрі.",
+    "message": "Повсякденні голоси"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Однорядкова примітка поруч із заголовком групи Everyday у студії Голоси в налаштуваннях; єдине місце, де в студії зазначено, наскільки довше цей рівень працює порівняно з HD.",
+    "message": "Природні й чіткі — можна слухати приблизно у 20× довше, ніж з HD."
+  },
+  "voicesShelfHd": {
+    "description": "Заголовок групи для преміальних (HD) голосів у каталозі голосів у налаштуваннях. CSS відображає у верхньому регістрі.",
+    "message": "HD-голоси"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Однорядкова примітка поруч із заголовком групи HD у студії Голоси в налаштуваннях.",
+    "message": "Найбагатше, найвиразніше звучання."
+  },
+  "voicesShowAll": {
+    "description": "Пункт у фільтрі «Показати» в налаштуваннях «Голоси»: без фільтрації, у списку всі голоси.",
+    "message": "Усі голоси"
+  },
+  "voicesShowEveryday": {
+    "description": "Пункт у фільтрі «Показати» в налаштуваннях «Голоси»: показувати лише стандартні (не HD) голоси.",
+    "message": "Лише стандартні"
+  },
+  "voicesShowHd": {
+    "description": "Пункт у фільтрі «Показати» в налаштуваннях «Голоси»: показувати лише преміум-голоси (HD).",
+    "message": "Лише HD"
+  },
+  "voicesShowLabel": {
+    "description": "Напис на фільтрі в панелі керування «Голоси» в налаштуваннях, який звужує, які голоси показує список.",
+    "message": "Показати"
+  },
+  "voicesShowUnheard": {
+    "description": "Пункт у фільтрі «Показати» в налаштуваннях «Голоси»: показувати лише голоси, які користувач ще не прослуховував.",
+    "message": "Ще не прослухані"
+  },
+  "voicesSpeakingNow": {
+    "description": "Позначка стану на поточному вибраному голосі хоста в студії Голоси в налаштуваннях (слот меню та картка голосу).",
+    "message": "Зараз говорить"
+  },
+  "voicesSpeaksWith": {
+    "description": "Рядок-надпис над назвою поточного голосу на сцені студії Голоси в налаштуваннях; $host$ — асистент (наприклад, Pi). CSS відображає великими літерами.",
+    "message": "$host$ говорить голосом",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Примітка на сцені, коли хост відтворює власне аудіо (наприклад, Pi), тож вибір голосу Say, Pi замінює голос хоста.",
+    "message": "$host$ використовує свій голос, доки ви не виберете один нижче.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Примітка на сцені, коли хост не має власного голосу (наприклад, Claude), тож нічого не читається вголос, доки не вибрано голос Say, Pi.",
+    "message": "$host$ не читатиме відповіді вголос, доки ви не виберете один нижче.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Заголовок на сцені студії голосів у налаштуваннях, коли для хоста не вибрано голос SayPi; $host$ — асистент (наприклад, Pi, Claude). Відображається розміром імені.",
+    "message": "Виберіть, як звучить $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Кнопка на сцені студії голосів у налаштуваннях, яка відтворює безплатний зразок поточного голосу.",
+    "message": "Послухати зразок"
+  },
+  "voicesStopPlayback": {
+    "description": "Кнопка в панелі керування «Голоси» в налаштуваннях, яка зупиняє послідовність зразків, запущену командою «Відтворити всі».",
+    "message": "Зупинити"
+  },
+  "voicesSweepPosition": {
+    "description": "Поточний індикатор позиції в панелі керування «Голоси» в налаштуваннях, поки «Відтворити все» проходить список; $index$ — голос, що зараз відтворюється, а $total$ — скільки в черзі.",
+    "message": "$index$ із $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Доступна мітка для елемента порівняння в панелі керування «Голоси» в налаштуваннях, який відтворює інший голос із двох останніх прослуханих; $name$ — це той голос.",
+    "message": "Перемкнутися назад на $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Рядок у панелі керування «Голоси» в налаштуваннях, коли «Відтворити все» натиснуто для надто довгого списку; $count$ — скільки голосів, а $minutes$ — приблизно скільки хвилин це займе. Скорочено «хв.», щоб читалося коректно при 1 — у Chrome i18n немає множинних форм.",
+    "message": "Це $count$ голосів — приблизно $minutes$ хв. Спершу звузьте список.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Доступна назва для кнопки «використати цей голос» для кожного хоста в каталозі голосів у налаштуваннях; $name$ — голос, $host$ — асистент (наприклад, Pi, Claude).",
+    "message": "Використати $name$ для $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Короткий напис на кнопці «використати цей голос» для кожного хоста в об’єднаному каталозі голосів у налаштуваннях (поруч показано хост).",
+    "message": "Використати"
+  },
+  "voicesYourVoice": {
+    "description": "Кнопка на панелі керування в списку «Голоси» в налаштуваннях, яка переводить фокус на рядок голосу, який зараз використовує цей хост; $name$ — це той голос.",
+    "message": "Ваш голос: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Помилка, яка виникає, коли браузер не може виділити достатньо памʼяті WebAssembly для моделі виявлення голосу.",
+    "message": "Виявлення голосу не може запуститися: недостатньо памʼяті WebAssembly для голосової моделі. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Помилка, яка виникає, коли браузер не надає початкову памʼять WebAssembly, потрібну для запуску моделі виявлення голосу.",
+    "message": "Виявлення голосу не може запуститися: у цьому браузері недоступна памʼять WebAssembly."
   }
 }

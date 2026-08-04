@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Előny a bejelentkezési ablakban – magasabb használati korlátok.",
+    "message": "Magasabb használati korlátok ingyenes fiókkal"
+  },
+  "authBenefitPremium": {
+    "description": "Előny a bejelentkezési ablakban – prémium funkciók több chatbotban.",
+    "message": "Prémium funkciók és chatbot-támogatás"
+  },
+  "authBenefitSupport": {
+    "description": "Előny a bejelentkezési ablakban – elsőbbségi támogatás.",
+    "message": "Elsőbbségi támogatás problémák esetén"
+  },
+  "authBenefitSync": {
+    "description": "Előny a bejelentkezési ablakban – beállítások szinkronizálása.",
+    "message": "Hangbeállítások szinkronizálása mindenhol"
+  },
+  "authBenefitTTS": {
+    "description": "Előny a bejelentkezési ablakban – TTS funkció.",
+    "message": "Szövegfelolvasó hangok (fizetős csomagokban)"
+  },
+  "authBenefitUsage": {
+    "description": "Előny a bejelentkezési ablakban – használatkövetés.",
+    "message": "Kövesd a hanghasználatodat több eszközön"
+  },
+  "authPromptModalFull": {
+    "description": "Leírás a teljes bejelentkezési felugró ablakhoz, értékajánlattal.",
+    "message": "Úgy tűnik, sokat használod a Say, Pi-t. Jelentkezz be a magasabb korlátokért, a szövegfelolvasó hangokért és a prémium funkciókért az összes támogatott chatbotban."
+  },
+  "authPromptModalSoft": {
+    "description": "Leírás a bejelentkezést kérő, enyhébb felugró ablakhoz.",
+    "message": "Hozz létre egy ingyenes Say, Pi-fiókot a magasabb használati korlátokért és a prémium hangfunkciók eléréséhez."
+  },
+  "authPromptTitle": {
+    "description": "Cím a bejelentkezési felugró ablakhoz.",
+    "message": "További hangfunkciók feloldása"
+  },
+  "authPromptToast": {
+    "description": "Toast értesítés, amely bejelentkezésre ösztönzi a felhasználót.",
+    "message": "Jelentkezz be a Say, Pi-ba a magasabb korlátokért és a prémium funkciókért"
+  },
   "autoReadAloudChatGPT": {
     "description": "Jelölőnégyzet felirat az automatikus válaszolvasás engedélyezéséhez vagy letiltásához hanghívások alatt ChatGPT válaszainak esetén.",
     "message": "Automatikus felolvasás (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Tiltsa le a szöveges beszédet"
   },
+  "dismiss": {
+    "message": "Értem",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Elutasít"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Fókusz"
   },
+  "errorVadInitFailed": {
+    "description": "Hiba toast, amely akkor jelenik meg, ha a hangaktivitás-érzékelést nem sikerül inicializálni.",
+    "message": "Nem sikerült inicializálni a hangérzékelést"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Hiba toast, amely akkor jelenik meg, ha váratlan hiba történik a hangrögzítés beállítása közben.",
+    "message": "Nem sikerült beállítani a hangrögzítést"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Hiba toast, amely akkor jelenik meg, ha a hangérzékelő kliens nem tudja elindítani a rögzítést.",
+    "message": "Nem sikerült elindítani a hangrögzítést"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Hiba toast, amely akkor jelenik meg, ha a hangérzékelő (VAD) kliens nem érhető el, ezért nem lehet elindítani a rögzítést.",
+    "message": "A hangrögzítés nem érhető el"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Fókusz mód kikapcsolása"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Egysoros megjegyzés, amely a hangmenükben jelenik meg, amikor prémium (HD) és value hangok is elérhetők",
+    "message": "A HD hangok kb. 20× gyorsabban fogyasztják a havi keretedet."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Ezt eldobva ..."
   },
+  "maybeLater": {
+    "description": "Gombszöveg a bejelentkezési kérés elutasításához.",
+    "message": "Talán később"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "A mikrofon beállításai nem felelnek meg a szükséges előírásoknak. \nPróbáljon meg másik mikrofont használni, vagy módosítsa a hangbeállításokat."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Nem lehet hozzáférni a mikrofonhoz. \nKérjük, ellenőrizze az eszköz beállításait, és próbálja újra."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Hiba toast, amely akkor jelenik meg, ha a mikrofonengedélyt elutasították az engedélykérési folyamat után.",
+    "message": "A mikrofonengedélyt nem adtad meg. Ellenőrizd, hogy engedélyezted-e a hozzáférést a felugró kérésnél és a bővítmény beállításaiban."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "pontosság"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "A leggyorsabb válasz, de kevésbé pontos. \nHajlamos a megszakításra."
   },
+  "moreVoices": {
+    "description": "Menüsor, amely az oldalon belüli hangmenüből a bővítmény beállításaiban található teljes hangkatalógusra mutat.",
+    "message": "További hangok…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Segédfelhasználónév"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nem jelentkezett be"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Gombfelirat, amely megnyitja a ChatGPT-t.",
+    "message": "ChatGPT megnyitása"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Gombfelirat, amely megnyitja a Claude.ai-t.",
+    "message": "Claude megnyitása"
+  },
+  "onboarding_ctaPi": {
+    "description": "Gombfelirat, amely megnyitja a Pi.ai-t.",
+    "message": "Pi megnyitása"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Környezeti opció: mások között.",
+    "message": "Mások között"
+  },
+  "onboarding_envMixed": {
+    "description": "Környezeti opció: privát és közös terek keveréke.",
+    "message": "Különféle helyeken"
+  },
+  "onboarding_envPrivate": {
+    "description": "Környezeti opció: privát tér.",
+    "message": "Valahol privát helyen"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Megerősítés, amikor a környezeti válasz alapján a csendes mód ki van kapcsolva.",
+    "message": "Rendben, maradnak az alapértelmezett figyelési és lejátszási beállítások."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Megerősítés, amely akkor jelenik meg, amikor a környezeti válasz bekapcsolja a csendes módot.",
+    "message": "Csendes mód bekapcsolva — a halkabb beszédet is felvesszük, és halkan válaszolunk, hogy diszkréten beszélhess."
+  },
+  "onboarding_envTitle": {
+    "description": "Címsor az onboarding kérdéshez a felhasználó környezetéről.",
+    "message": "Hol szoktál általában beszélni?"
+  },
+  "onboarding_footer": {
+    "description": "Láblécszöveg az első indításkor megjelenő onboarding oldalon.",
+    "message": "Bármikor újra megnyithatod ezt a Say, Pi beállításaiból. Fontos a magánszférád — hangot csak aktív hívás közben rögzítünk."
+  },
+  "onboarding_heading": {
+    "description": "Főcím az első indításkor megjelenő bevezető oldalon.",
+    "message": "🗣️ Üdv a Say, Pi-ban"
+  },
+  "onboarding_intro": {
+    "description": "Bevezető bekezdés az első indításkor megjelenő bevezető oldalon.",
+    "message": "Már csak két lépésre vagy az első, AI-jal folytatott beszélgetésedtől. Beszélni kb. 3× gyorsabb, mint gépelni, állítsuk be."
+  },
+  "onboarding_micTestButton": {
+    "description": "Gomb, amely elindítja a tét nélküli onboarding mikrofontesztet.",
+    "message": "🎤 Mikrofon tesztelése"
+  },
+  "onboarding_micTestDone": {
+    "description": "Állapot, amely az onboarding mikrofonteszt sikeres befejezése után jelenik meg.",
+    "message": "Szuper — működik a mikrofonod. 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Állapot, amely akkor jelenik meg, amikor az onboarding mikrofonteszt méri a bemenetet.",
+    "message": "Figyelek — mondj valamit! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Állapot, amely akkor jelenik meg, amikor az onboarding mikrofonteszt engedélyre vár.",
+    "message": "Mikrofon engedély kérése…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Gombfelirat az onboarding mikrofonteszt leállításához, miközben fut.",
+    "message": "Teszt leállítása"
+  },
+  "onboarding_step1Body": {
+    "description": "Az első bevezető lépés szövege, amely elmagyarázza, hogyan kell kitűzni a bővítményt.",
+    "message": "Kattints a böngésző jobb felső sarkában a kirakós 🧩 ikonra, majd a Say, Pi melletti kitűzés 📌 ikonra. Így a hívásgomb egy kattintásra lesz."
+  },
+  "onboarding_step1Title": {
+    "description": "Az első bevezető lépés címe (a bővítmény kitűzése).",
+    "message": "Rögzítsd a Say, Pi-t az eszköztáradra"
+  },
+  "onboarding_step2Body": {
+    "description": "A második bevezető lépés szövege, amely elmagyarázza, hogyan kell hangos beszélgetést indítani.",
+    "message": "Menj az alábbi támogatott asszisztensek egyikéhez, majd nyomd meg a Say, Pi hívásgombját, és köszönj. Az első alkalommal mikrofonhozzáférést kérünk, ez rendben van, és csak akkor figyelünk, amikor aktív hívásban vagy."
+  },
+  "onboarding_step2Title": {
+    "description": "A második bevezető lépés címe (beszélgetés indítása).",
+    "message": "Nyiss meg egy AI chatet, és kezdj el beszélni"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Mikrofon engedély"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Helyreállítási útmutató, amikor a mikrofonengedély le van tiltva.",
+    "message": "A böngésződ blokkolja a mikrofont. Kattints a kamera vagy a lakat ikonra a címsorban, állítsd a Mikrofon beállítást „Engedélyezés”-re, majd próbáld újra. macOS-en ellenőrizd a Rendszerbeállítások → Adatvédelem és biztonság → Mikrofon részt is."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "A helyreállítási panel címe, amikor a mikrofonengedélyt elutasították/letiltották.",
+    "message": "A mikrofonhozzáférés le van tiltva"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Helyreállítási útmutató, amikor a mikrofont máshol használják.",
+    "message": "Lehet, hogy egy másik alkalmazás vagy lap használja a mikrofonodat. Zárj be mindent, ami rögzíthet (videóhívás, hangjegyzet), majd próbáld újra."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "A helyreállítási panel címe, amikor a mikrofont egy másik alkalmazás használja.",
+    "message": "A mikrofonod foglalt"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Helyreállítási útmutató, amikor nem érhető el mikrofon eszköz.",
+    "message": "Nem találtunk mikrofont. Csatlakoztass egyet (vagy a headsetedet), ellenőrizd, hogy bemeneti eszközként van kiválasztva, majd próbáld újra."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "A helyreállítási panel címe, amikor nem érhető el mikrofon eszköz.",
+    "message": "Nem található mikrofon"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Helyreállítási útmutató ismeretlen mikrofonhiba esetén.",
+    "message": "Hiba történt a mikrofon elérésekor. Ellenőrizd, hogy csatlakoztatva van-e, és hogy engedélyezve van a böngésző beállításaiban, majd próbáld újra."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "A helyreállítási panel címe ismeretlen mikrofonhiba esetén.",
+    "message": "Nem tudtunk hozzáférni a mikrofonodhoz"
+  },
+  "permissions_retryButton": {
+    "description": "A gomb felirata, amely újra kéri a mikrofonengedélyt.",
+    "message": "Próbáld újra"
+  },
+  "permissions_revokedHeading": {
+    "description": "Címsor, amikor a mikrofonhozzáférés korábban engedélyezve volt, de azóta visszavonták.",
+    "message": "Csatlakoztassuk újra a mikrofonodat"
+  },
+  "permissions_revokedInfo": {
+    "description": "Tájékoztató szöveg, amikor a mikrofonhozzáférést az engedélyezés után visszavonták.",
+    "message": "A mikrofonhozzáférés ki lett kapcsolva, ez gyakran böngésző- vagy rendszerfrissítés után történik. Engedélyezd újra lent, és $productName$ ismét figyelni fog, amikor hívásban vagy.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Címke a kapcsolóhoz, amely bekapcsolja a csendes/suttogó módot.",
+    "message": "Csendes mód"
+  },
+  "quietModeTooltip": {
+    "description": "Súgó, amely elmagyarázza, mit csinál a csendes/suttogó mód.",
+    "message": "Halkan beszél — a halkabb beszédet is érzékeli, és csökkenti az asszisztens válaszának hangerejét, így mások mellett is használhatod a hangot."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Szöveg a bejelentkezés gombon, amíg a hitelesítés folyamatban van.",
+    "message": "Bejelentkezés…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Hanghatások"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "A hangeffektusok le vannak tiltva a Firefoxban a hangvisszajelzéssel kapcsolatos problémák elkerülése érdekében."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Címsor az egyszer megjelenő, „sebesség-nyereség” értesítéshez, amely az első elhangzott váltás után jelenik meg.",
+    "message": "Klassz, beszélni nagyjából 3× gyorsabb, mint gépelni."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "A „sebesség-nyereség” értesítés opcionális második sora, amely a megtakarított egész perceket mutatja.",
+    "message": "Eddig nagyjából $minutes$ percet spóroltál a gépeléshez képest.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Csak akkor küldje el, ha megnyomja a gombot"
   },
+  "surveyQuestion": {
+    "description": "Az egyszeri, nyerés utáni mikro-felmérés egyetlen kérdése.",
+    "message": "Hogy működik eddig a hang?"
+  },
+  "surveyRatingLabel": {
+    "description": "Akadálymentes címke a felmérés értékelő gombjához.",
+    "message": "Értékelés: $rating$ / 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "A felhasználó válasza után megjelenő köszönetnyilvánítás a nyerés utáni felmérésben.",
+    "message": "Köszönjük, ez segít, hogy jobbá tegyük a Say, Pi-t. 🙏"
+  },
   "tabAIChat": {
     "description": "Fül címke az AI chat beállítások szekcióhoz.",
     "message": "AI Chat"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Fül címke az általános beállítások szekcióhoz.",
     "message": "Általános"
+  },
+  "tabVoices": {
+    "description": "Fül felirata a hangbeállítások szakaszához (webhelyenkénti hangkatalógus).",
+    "message": "Hangok"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "jóváírás"
   },
+  "ttsCreditsRemaining": {
+    "description": "A fennmaradó TTS-kvótát megjelenítő szöveg, hangonkénti kreditkeretként (saypi-api #181 2. szakasz), nem nyers karakterként.",
+    "message": "Hátralévő kreditek: $credits$",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "A Safari jelenleg nem támogatja a többnyelvű hangokat."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Hangtermelés"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Figyelem! A beszéd lejátszás még nem elérhető a $browserName$ böngészőben a $chatbotName$ használatával. A jó hír? A hangbemenet remekül működik! A TTS-hez próbálja ki a Chrome-ot vagy az Edge-et asztali gépen.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "A TTS nem érhető el a $browserName$ + $chatbotName$ esetén. A hangbemenet működik! Próbálja ki a Chrome asztali verziót a TTS-hez.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS hang"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD-részlet, amikor beszédszerű hangot észleltünk, de túl halk / túl alacsony megbízhatóságú volt a leiratozáshoz (kliensoldali admission-gate eldobás).",
+    "message": "A hang túl halk a leirathoz"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD-részlet, amely elmagyarázza, hogy a hívás azért ért véget, mert a mikrofont egy újabb lap foglalta le.",
+    "message": "A hangbemenet átkerült egy másik lapra"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "A hang nem érhető el. \nPróbálja ki a Chrome -t vagy a Firefoxot az asztalon."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Figyelem! A beszéd lejátszás még nem elérhető a $browserName$ böngészőben a $chatbotName$ használatával. A jó hír? A hangbemenet remekül működik! A TTS-hez próbálja ki a Chrome-ot vagy az Edge-et asztali gépen.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "A TTS nem érhető el a $browserName$ + $chatbotName$ esetén. A hangbemenet működik! Próbálja ki a Chrome asztali verziót a TTS-hez.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Értem",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "VAD-állapot egy olyan lapon, amelynek hangbemenetét egy másik lap vette át.",
+    "message": "Szüneteltetve"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "A részletek megtekintése"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Általános, felolvasott bemutatkozás, amely akkor szólal meg, ha a kiválasztott SayPi hanghoz nincs hangspecifikus bemutatkozó szöveg (és nincs friss üzenet, amit fel lehetne olvasni).",
+    "message": "Szia, én vagyok $voice$. Így szólok. Remélem, tetszik ez a hang.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hola! \nПривет! \n你好! \nPi vagyok, a poliglott mesterséges intelligencia asszisztense. \nA rendelkezésemre álló 32 nyelv segítségével felfedezhetünk ötleteket és kultúrákat a világ minden tájáról. \nmit gondolsz erről a hangról?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Hangbeállítások"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Tartalék felirat egy hang sorához a beállítások hangkatalógusában, amikor a hanghoz nincs leírás; a $count$ a hang által támogatott nyelvek száma.",
+    "message": "$count$ nyelven beszél",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Szerző által írt személyiségszlogen az „Addison” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Derűs és választékos"
+  },
+  "voiceTagline_alloy": {
+    "description": "Megírt személyiség-jelmondat az „Alloy” hanghoz (Beállítások Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Kiegyensúlyozott, mindenre jó"
+  },
+  "voiceTagline_ash": {
+    "description": "Megírt személyiség-jelmondat az „Ash” hanghoz (Beállítások Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Mély, elgondolkodó, nyugodt"
+  },
+  "voiceTagline_ballad": {
+    "description": "Megírt személyiség-jelmondat a „Ballad” hanghoz (Beállítások Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Sima és dallamos"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Szerző által írt személyiségszlogen a „Cassidy” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Barátságos és tárgyilagos"
+  },
+  "voiceTagline_cedar": {
+    "description": "A 'Cedar' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Nyugodt és megnyugtató"
+  },
+  "voiceTagline_coral": {
+    "description": "A 'Coral' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Fényes, lendületes energia"
+  },
+  "voiceTagline_echo": {
+    "description": "Az 'Echo' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Tiszta és semleges"
+  },
+  "voiceTagline_fable": {
+    "description": "A 'Fable' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Mesélős dallamosság"
+  },
+  "voiceTagline_finn": {
+    "description": "Szerző által írt személyiségszlogen a „Finn” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Friss és energikus"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Szerző által írt személyiségszlogen a „Jamahal” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Gazdag és magával ragadó"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "A 'Jarnathan' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Bársonyos, késő esti bariton"
+  },
+  "voiceTagline_jeff": {
+    "description": "Szerző által írt személyiségszlogen a „Jeff” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Egyszerű, egyenes és kiegyensúlyozott"
+  },
+  "voiceTagline_jessica": {
+    "description": "Szerző által írt személyiségszlogen a „Jessica” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Meleg, kifinomult elegancia"
+  },
+  "voiceTagline_joey": {
+    "description": "A 'Joey' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Laza, társalgós amerikai"
+  },
+  "voiceTagline_juniper": {
+    "description": "Szerző által írt személyiségszlogen a „Juniper” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Éles, derűs, élénk"
+  },
+  "voiceTagline_lucy": {
+    "description": "Szerző által írt személyiségszlogen a „Lucy” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Lágy és ragyogó"
+  },
+  "voiceTagline_marin": {
+    "description": "A 'Marin' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Meleg, reggeli rádiós nyugalom"
+  },
+  "voiceTagline_mark": {
+    "description": "Szerző által írt személyiségszlogen a „Mark” hanghoz (Beállítások > Hangok stúdió; kliensoldali hangazonosság-térkép).",
+    "message": "Tiszta, magabiztos narrátor"
+  },
+  "voiceTagline_nova": {
+    "description": "A 'Nova' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Gyors és kíváncsi"
+  },
+  "voiceTagline_onyx": {
+    "description": "Az 'Onyx' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Mély, zengő komolyság"
+  },
+  "voiceTagline_paola": {
+    "description": "A 'Paola' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Kifejező olasz melegség"
+  },
+  "voiceTagline_sage": {
+    "description": "A 'Sage' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Halk szavú tisztaság"
+  },
+  "voiceTagline_shimmer": {
+    "description": "A 'Shimmer' hanghoz írt személyiségjelmondat (Beállítások > Hangok stúdió; kliensoldali hangidentitás-térkép).",
+    "message": "Könnyed és légies"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Rövid címke egy hangkártya rögzítéskapcsolóján (kikapcsolt állapot) a beállítások Hangok stúdiójában; megnyomásra hozzáadja a hangot a gazdagép csevegésbeli menüjéhez.",
+    "message": "+ Menü"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Akadálymentes címke egy hangkártya rögzítéskapcsolójához (kikapcsolt állapot); $name$ a hang, $host$ az asszisztens.",
+    "message": "$name$ hozzáadása $host$ menüjéhez",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "A Hangok vezérlősáv kapcsolójának felirata, amely jelzi, hogy a lista nyílbillentyűkkel történő bejárásakor lejátszódik-e minden hang, amikor a fókusz ráér.",
+    "message": "Lejátszás léptetés közben"
+  },
+  "voicesArrowsLive": {
+    "description": "Képernyőolvasós megerősítés, amely az első „Lejátszás <hang>” bejelentéshez van hozzáfűzve a Beállítások Hangok listában, jelezve, hogy a nyílbillentyűk mostantól hallhatóak. A „Lejátszás mozgás közben” kapcsoló saját megfogalmazását tükrözi.",
+    "message": "A nyilak most már lépés közben lejátszanak. Esc leállítja."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Megjegyzés a menühelyek alatt azoknál a hosztoknál, amelyek natív hangokkal érkeznek (pl. Pi 8 beépített hangja), amelyeket a stúdió nem kezel; $host$ az asszisztens.",
+    "message": "$host$ saját beépített hangjai is mindig megjelennek a menüjében.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "A voicesBuiltinsNote változata olyan hoszthoz, amelynek nincs chaten belüli hangmenüje (Pi 2026-ban kivezette a menüjét), ahol az eredeti ígérete, hogy a beépített hangok „megjelennek a menüjében”, nem lenne igaz; $host$ az asszisztens.",
+    "message": "$host$-nak saját beépített hangjai is vannak, amelyek itt nem szerepelnek.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Állapotjelző a Beállítások Hangok vezérlősávjában: hány hangot hallgatott már meg a felhasználó a listából. Csak számok, így 1-nél is helyesen olvasható — a Chrome i18n nem támogat többes számot.",
+    "message": "$heard$ / $total$ meghallgatva",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "A Beállítások Hangok listában egy hang sorának akadálymentes nevének része, amely jelöli, hogy ezt a profilt használva a felhasználó már meghallgatta. Vizuálisan ez a hang hanglenyomatán megjelenő tinta-sűrűség, amit a képernyőolvasó nem lát.",
+    "message": "Meghallgatva"
+  },
+  "voicesInHostMenu": {
+    "description": "Szakaszcím a menühelyek sora felett a beállítások Hangok stúdiójában; $host$ az asszisztens.",
+    "message": "$host$ menüjében",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Rövid címke egy hangkártya rögzítéskapcsolóján (bekapcsolt állapot) a beállítások Hangok stúdiójában.",
+    "message": "✓ Menüben"
+  },
+  "voicesInUse": {
+    "description": "Tartós jelvény a beállítások Hangok listájában a gazdagép által jelenleg kiválasztott hangon, nagybetűsítve. Szándékosan NEM „Most beszél”: ezen az oldalon a sorok mintaklipjei lejátszhatók, ezért a kiválasztott, de néma hang nem állíthatja, hogy beszél, miközben egy másik sor épp szól.",
+    "message": "Használatban"
+  },
+  "voicesKeyboardHint": {
+    "description": "Egysoros billentyűzetes súgó a Beállítások Hangok vezérlősávjában. A jelek billentyűk: Szóköz, fel/le nyilak és Shift+Szóköz.",
+    "message": "Nyomj szóközt a meghallgatáshoz, ↑↓ a hangok közti lépkedéshez, ⇧Szóköz a visszaváltáshoz."
+  },
+  "voicesLoadError": {
+    "description": "Hibaállapot egy hoszt stúdióján belül, amikor a hoszt hangkatalógusát nem sikerült betölteni; $host$ az asszisztens.",
+    "message": "Nem sikerült betölteni $host$ hangjait. Próbáld újra később.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Eszköztipp/tájékoztató egy letiltott „+ Menü” kapcsolón, amikor a gazdagép csevegésbeli menüje már elérte a maximális hangszámot.",
+    "message": "A menü tele van, távolíts el egy hangot a másik hozzáadásához"
+  },
+  "voicesMenuHint": {
+    "description": "Egysoros tipp az „A(z) {host} menüjében” cím mellett, amely elmagyarázza, hogy a helyek sora tükrözi a csevegésbeli hangmenüt.",
+    "message": "Ezt fogod látni a csevegésben"
+  },
+  "voicesMenuOverflow": {
+    "description": "Megjegyzés a menühelyek alatt, amikor a felhasználónak több rögzített hangja van, mint amennyit a chaten belüli menü meg tud jeleníteni (örökölt állapot); $count$ az, hogy mennyi nem fér be, $cap$ a menü mérete.",
+    "message": "Még $count$ rögzített hang vár a menü $cap$ helyén túl.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "A voicesMenuOverflow egyes számú alakja, amikor pontosan egy rögzített hang nem fér be a chaten belüli menübe; $cap$ a menü mérete.",
+    "message": "Még 1 rögzített hang vár a menü $cap$ helyén túl.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Összegző sor a Beállítások Hangok lista alatt, amely jelzi, mennyire van feltöltve a host csevegésen belüli hangmenüje; $host$ az asszisztens, $used$ a foglalt helyek száma, $cap$ a teljes férőhely. Úgy megfogalmazva, hogy 1-nél is helyesen olvasható legyen — a Chrome i18n nem támogat többes számot.",
+    "message": "$host$ menüje: $used$ / $cap$ hely foglalt",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Címsor a Beállítások Hangok lista végén lévő csoporthoz, amely a lejátszható mintaklip nélküli hangokat tartalmazza; $count$ a darabszám. Úgy megfogalmazva, hogy 1-nél is helyesen olvasható legyen — a Chrome i18n nem támogat többes számot.",
+    "message": "Még nincs minta ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "A beállítások hangkatalógusában jelenik meg, amikor a hanglista üres bejelentkezett felhasználónál (pl. hálózati probléma esetén).",
+    "message": "A hangokat most nem sikerült betölteni. Próbáld meg később."
+  },
+  "voicesNowPlaying": {
+    "description": "Képernyőolvasó-bejelentés, amikor elindul egy hang mintaklipje a Beállítások Hangok listában; $name$ a hang.",
+    "message": "$name$ lejátszása",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Gomb a Beállítások Hangok vezérlősávjában, amely egymás után lejátssza az összes jelenleg listázott hangot; $count$ a darabszám. Úgy megfogalmazva, hogy 1-nél is helyesen olvasható legyen — a Chrome i18n nem támogat többes számot.",
+    "message": "Összes lejátszása ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Gomb a Beállítások Hangok vezérlősávjában visszatérő látogatáskor: csak azokat a listázott hangokat játssza le, amelyeket még nem hallgattál meg; $count$ a darabszám. Úgy megfogalmazva, hogy 1-nél is helyesen olvasható legyen — a Chrome i18n nem támogat többes számot.",
+    "message": "Újak lejátszása ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Sor a Beállítások Hangok vezérlősávjában, amikor a böngésző megtagadta egy minta lejátszását, mert az oldalon még nem történt felhasználói interakció.",
+    "message": "Kattints bármelyik hangra a hang engedélyezéséhez."
+  },
+  "voicesPreview": {
+    "description": "Akadálymentes címke a lejátszás (▶) gombhoz, amely egy hang ingyenes mintaklipjét játssza le a hang sorában; a $name$ a hang neve.",
+    "message": "$name$ mintájának lejátszása",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "A Beállítások Hangok listájának akadálymentes neve (egy listadoboz az összes hanggal, soronként egy).",
+    "message": "Hangok, a legmélyebbtől a legvilágosabbig rendezve"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Akadálymentes címke egy hangkártya rögzítéskapcsolójához (bekapcsolt állapot) és egy menühely eltávolítás gombjához; $name$ a hang, $host$ az asszisztens.",
+    "message": "$name$ eltávolítása $host$ menüjéből",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Sor a Beállítások Hangok vezérlősávjában, amikor egy hang mintaklipje nem töltődött be vagy nem játszható le; $name$ az adott hang neve. Nem modális — a minták sorozata továbbhalad.",
+    "message": "Nem sikerült lejátszani $name$ mintáját.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Alcím a hangkatalógus szakaszához a beállítások AI Chat lapján.",
+    "message": "Válaszd ki, melyik hang olvassa fel az adott oldalon a válaszokat."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Alcím a Hangok beállítások címsora alatt, a hangok magasság szerint rendezett sávjához.",
+    "message": "Minden hang, a legmélyebbtől a legvilágosabbig. Hallgasd meg, majd válassz."
+  },
+  "voicesSectionTitle": {
+    "description": "Címsor a hangkatalógus szakaszához a beállítások AI Chat lapján.",
+    "message": "Hangok"
+  },
+  "voicesShelfEveryday": {
+    "description": "Csoportcím a kedvezőbb árú hangokhoz a beállítások hangkatalógusában. CSS nagybetűssé alakítja.",
+    "message": "Mindennapi hangok"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Egysoros megjegyzés a Mindennapi csoportcím mellett a Hangok stúdiójában; az egyetlen hely, ahol a stúdió megadja, mennyivel tart tovább ez a szint a HD-nál.",
+    "message": "Természetes és tiszta, kb. 20× tovább hallgatható, mint a HD."
+  },
+  "voicesShelfHd": {
+    "description": "Csoportcím a prémium (HD) hangokhoz a beállítások hangkatalógusában. CSS nagybetűssé alakítja.",
+    "message": "HD hangok"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Egysoros megjegyzés a HD csoportcím mellett a Hangok stúdiójában.",
+    "message": "A leggazdagabb, legkifejezőbb hangzásunk."
+  },
+  "voicesShowAll": {
+    "description": "Opció a Beállítások Hangok „Megjelenítés” szűrőjében: nincs szűrés, minden hang listázva van.",
+    "message": "Összes hang"
+  },
+  "voicesShowEveryday": {
+    "description": "Opció a Beállítások Hangok „Megjelenítés” szűrőjében: csak a standard (nem HD) hangokat listázza.",
+    "message": "Csak alap"
+  },
+  "voicesShowHd": {
+    "description": "Opció a Beállítások Hangok „Megjelenítés” szűrőjében: csak a prémium (HD) hangokat listázza.",
+    "message": "Csak HD"
+  },
+  "voicesShowLabel": {
+    "description": "Felirat a Beállítások Hangok vezérlősávjában lévő szűrőn, amely leszűkíti, hogy a lista mely hangokat mutassa.",
+    "message": "Megjelenítés"
+  },
+  "voicesShowUnheard": {
+    "description": "Opció a Beállítások Hangok „Megjelenítés” szűrőjében: csak azokat a hangokat listázza, amelyeket a felhasználó még nem hallgatott meg.",
+    "message": "Még nem meghallgatott"
+  },
+  "voicesSpeakingNow": {
+    "description": "Állapotcímke a gazdagép beállítások Hangok stúdiójában jelenleg kiválasztott hangján (menühely és hangkártya).",
+    "message": "Most beszél"
+  },
+  "voicesSpeaksWith": {
+    "description": "Szemöldöksor a jelenlegi hang neve felett a beállítások Hangok stúdió nézetében; $host$ az asszisztens (pl. Pi). CSS nagybetűsítve jeleníti meg.",
+    "message": "$host$ ezzel beszél",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Színpadi megjegyzés, amikor a hoszt a saját hangját szolgáltatja (pl. Pi), így egy Say, Pi hang kiválasztása lecseréli a hoszt hangját.",
+    "message": "$host$ a saját hangját használja, amíg nem választasz lent egyet.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Színpadi megjegyzés, amikor a hosztnak nincs saját hangja (pl. Claude), így addig semmi nem hangzik el, amíg nem választanak egy Say, Pi hangot.",
+    "message": "$host$ nem olvassa fel a válaszokat, amíg nem választasz lent egyet.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Címsor a Beállítások Hangok stúdiójának színpadán, amikor a hoszthoz nincs kiválasztva Say, Pi hang; $host$ az asszisztens (pl. Pi, Claude). Név méretben jelenik meg.",
+    "message": "Válaszd ki, hogyan szóljon $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Gomb a Beállítások Hangok stúdiójának színpadán, amely lejátsza az aktuális hang ingyenes mintaklipjét.",
+    "message": "Minta meghallgatása"
+  },
+  "voicesStopPlayback": {
+    "description": "Gomb a Beállítások Hangok vezérlősávjában, amely leállítja az „Összes lejátszása” által elindított mintasorozatot.",
+    "message": "Leállítás"
+  },
+  "voicesSweepPosition": {
+    "description": "Élő pozíciókijelzés a Beállítások Hangok vezérlősávjában, miközben a „Lejátszás mind” végiglépked a listán; $index$ az épp lejátszott hang, $total$ pedig a sorban lévők száma.",
+    "message": "$index$ / $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Akadálymentes címke a Beállítások Hangok vezérlősávjában lévő összehasonlítás vezérlőhöz, amely a legutóbb meghallgatott két hang közül a másikat játssza le; $name$ az a hang.",
+    "message": "Visszaváltás erre: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Sor a Beállítások Hangok vezérlősávjában, amikor a „Lejátszás mind” túl hosszú listán lett megnyomva; $count$ a hangok száma, $minutes$ pedig nagyjából az, hány percig tartana. A „min” rövidítés azért van, hogy 1-nél is helyesen olvasható legyen — a Chrome i18n nem kezeli a többes számot.",
+    "message": "Ez $count$ hang, kb. $minutes$ min. Előbb szűkítsd a listát.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Akadálymentes címke a beállítások hangkatalógusában található, gazdagépenkénti „használd ezt a hangot” gombhoz; $name$ a hang, $host$ az asszisztens (pl. Pi, Claude).",
+    "message": "$name$ használata itt: $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Rövid címke az egységes beállítások hangkatalógusában található, gazdagépenkénti „használd ezt a hangot” gombon (a gazdagép mellette látható).",
+    "message": "Használat"
+  },
+  "voicesYourVoice": {
+    "description": "Vezérlősáv gomb a Beállítások Hangok listában, amely a fókuszt arra a sorra viszi, amelyik hangot ez a host jelenleg használja; $name$ az a hang.",
+    "message": "A te hangod: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Hiba, amely akkor keletkezik, ha a böngésző nem tud elegendő WebAssembly-memóriát lefoglalni a hangérzékelő modellhez.",
+    "message": "A hangérzékelés nem indítható el: nincs elég WebAssembly-memória a hangmodellhez. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Hiba, amely akkor keletkezik, ha a böngésző nem teszi elérhetővé a hangérzékelő modell futtatásához szükséges kezdeti WebAssembly-memóriát.",
+    "message": "A hangérzékelés nem indítható el: ebben a böngészőben nem érhető el a WebAssembly-memória."
   }
 }

@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "ऑथ मोडल में सूचीबद्ध लाभ - बढ़ी हुई उपयोग सीमाएँ।",
+    "message": "मुफ्त अकाउंट के साथ ज़्यादा उपयोग लिमिट"
+  },
+  "authBenefitPremium": {
+    "description": "ऑथ मोडल में सूचीबद्ध लाभ - चैटबॉट्स में प्रीमियम सुविधाएँ।",
+    "message": "प्रीमियम सुविधाएँ और चैटबॉट सपोर्ट"
+  },
+  "authBenefitSupport": {
+    "description": "ऑथ मोडल में सूचीबद्ध लाभ - प्राथमिकता सहायता।",
+    "message": "समस्याओं के लिए प्राथमिकता सहायता"
+  },
+  "authBenefitSync": {
+    "description": "ऑथ मोडल में सूचीबद्ध लाभ - सेटिंग्स सिंक।",
+    "message": "हर जगह वॉइस सेटिंग्स सिंक करें"
+  },
+  "authBenefitTTS": {
+    "description": "ऑथ मोडल में सूचीबद्ध लाभ - TTS सुविधा।",
+    "message": "टेक्स्ट-टू-स्पीच आवाज़ें (पेड प्लान)"
+  },
+  "authBenefitUsage": {
+    "description": "ऑथ मोडल में सूचीबद्ध लाभ - उपयोग ट्रैकिंग।",
+    "message": "डिवाइसों पर अपने वॉइस उपयोग को ट्रैक करें"
+  },
+  "authPromptModalFull": {
+    "description": "वैल्यू प्रपोज़िशन के साथ फुल मोडल ऑथ प्रॉम्प्ट का विवरण।",
+    "message": "आप SayPi का बढ़िया उपयोग कर रहे हैं। ज़्यादा लिमिट, टेक्स्ट-टू-स्पीच आवाज़ें, और सभी समर्थित चैटबॉट्स में प्रीमियम सुविधाओं के लिए साइन इन करें।"
+  },
+  "authPromptModalSoft": {
+    "description": "सॉफ्ट मोडल ऑथ प्रॉम्प्ट का विवरण।",
+    "message": "ज़्यादा उपयोग लिमिट और प्रीमियम वॉइस सुविधाओं तक पहुँच के लिए एक मुफ्त SayPi अकाउंट बनाएँ।"
+  },
+  "authPromptTitle": {
+    "description": "ऑथ प्रॉम्प्ट मोडल का शीर्षक।",
+    "message": "और वॉइस सुविधाएँ अनलॉक करें"
+  },
+  "authPromptToast": {
+    "description": "उपयोगकर्ता को साइन इन करने के लिए प्रोत्साहित करने वाली टोस्ट सूचना।",
+    "message": "ज़्यादा लिमिट और प्रीमियम सुविधाओं के लिए SayPi में साइन इन करें"
+  },
   "autoReadAloudChatGPT": {
     "description": "वॉयस कॉल के दौरान ChatGPT के उत्तरों को स्वत: पढ़ने के विकल्प को चालू या बंद करने के लिए चेकबॉक्स का लेबल।",
     "message": "स्वत: पढ़ें (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "पाठ-से-भाषण अक्षम करें"
   },
+  "dismiss": {
+    "message": "समझ गए",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "खारिज करें"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "ध्यान केन्द्रित करें"
   },
+  "errorVadInitFailed": {
+    "description": "एरर टोस्ट, जब वॉइस-एक्टिविटी डिटेक्शन इनिशियलाइज़ नहीं हो पाता।",
+    "message": "वॉइस डिटेक्शन शुरू नहीं हो सका"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "एरर टोस्ट, जब वॉइस रिकॉर्डिंग सेट अप करते समय कोई अप्रत्याशित त्रुटि होती है।",
+    "message": "वॉइस रिकॉर्डिंग सेट अप नहीं हो सका"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "एरर टोस्ट, जब वॉइस-डिटेक्शन क्लाइंट रिकॉर्डिंग शुरू नहीं कर पाता।",
+    "message": "वॉइस रिकॉर्डिंग शुरू नहीं हो सकी"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "एरर टोस्ट, जब वॉइस-डिटेक्शन (VAD) क्लाइंट उपलब्ध नहीं होता, इसलिए रिकॉर्डिंग शुरू नहीं हो सकती।",
+    "message": "वॉइस रिकॉर्डिंग उपलब्ध नहीं है"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "फोकस मोड से बाहर निकलें"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "प्रीमियम (HD) और वैल्यू वॉइस दोनों उपलब्ध होने पर वॉइस मेनू में दिखाया जाने वाला एक-पंक्ति नोट",
+    "message": "HD वॉइस आपकी मासिक सीमा को लगभग 20× तेज़ी से उपयोग करती हैं।"
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "इस दूर टक ..."
   },
+  "maybeLater": {
+    "description": "ऑथ प्रॉम्प्ट को बंद करने के लिए बटन टेक्स्ट।",
+    "message": "शायद बाद में"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "आपकी माइक्रोफ़ोन सेटिंग्स आवश्यक विशिष्टताओं को पूरा नहीं करती हैं। \nकिसी भिन्न माइक्रोफ़ोन का उपयोग करने या अपनी ऑडियो सेटिंग समायोजित करने का प्रयास करें।"
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "माइक्रोफ़ोन तक पहुँचने में असमर्थ. \nकृपया अपनी डिवाइस सेटिंग जांचें और पुनः प्रयास करें।"
   },
+  "microphonePermissionDeniedError": {
+    "description": "एरर टोस्ट, जब अनुमति प्रॉम्प्ट फ्लो के बाद माइक्रोफ़ोन अनुमति अस्वीकार कर दी जाती है।",
+    "message": "माइक्रोफ़ोन की अनुमति नहीं मिली। कृपया सुनिश्चित करें कि आपने प्रॉम्प्ट में और एक्सटेंशन सेटिंग्स में एक्सेस की अनुमति दी है।"
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "सटीकता"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "सबसे तेज़ प्रतिक्रिया, लेकिन कम सटीक। \nव्यवधान उत्पन्न करने वाला।"
   },
+  "moreVoices": {
+    "description": "इन-पेज आवाज़ मेन्यू से एक्सटेंशन सेटिंग्स में पूरी आवाज़ कैटलॉग तक ले जाने वाली मेन्यू पंक्ति",
+    "message": "और आवाज़ें…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "सहायक उपनाम"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "प्रवेश नहीं किया"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "बटन लेबल जो ChatGPT खोलता है।",
+    "message": "ChatGPT खोलें"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Claude.ai खोलने वाला बटन लेबल।",
+    "message": "Claude खोलें"
+  },
+  "onboarding_ctaPi": {
+    "description": "Pi.ai खोलने वाला बटन लेबल।",
+    "message": "Pi खोलें"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "माहौल विकल्प: दूसरे लोगों के आसपास।",
+    "message": "दूसरे लोगों के आसपास"
+  },
+  "onboarding_envMixed": {
+    "description": "माहौल विकल्प: निजी और साझा जगहों का मिश्रण।",
+    "message": "अलग-अलग जगहों पर"
+  },
+  "onboarding_envPrivate": {
+    "description": "माहौल विकल्प: एक निजी स्थान।",
+    "message": "किसी निजी जगह पर"
+  },
+  "onboarding_envQuietOff": {
+    "description": "पुष्टिकरण संदेश, जब पर्यावरण वाला उत्तर शांत मोड को बंद ही रखता है।",
+    "message": "ठीक है — हम मानक सुनने और प्लेबैक सेटिंग्स ही रखेंगे।"
+  },
+  "onboarding_envQuietOn": {
+    "description": "माहौल का जवाब क्वाइट मोड चालू करे तो दिखने वाली पुष्टि।",
+    "message": "क्वाइट मोड चालू — हम धीमी आवाज़ भी पकड़ लेंगे और धीरे जवाब देंगे, ताकि आप चुपचाप बात कर सकें।"
+  },
+  "onboarding_envTitle": {
+    "description": "उपयोगकर्ता के माहौल के बारे में ऑनबोर्डिंग सवाल के लिए शीर्षक।",
+    "message": "आप आम तौर पर कहाँ बात करेंगे?"
+  },
+  "onboarding_footer": {
+    "description": "पहली बार चलने वाले ऑनबोर्डिंग पेज पर फ़ूटर टेक्स्ट।",
+    "message": "आप इसे कभी भी Say, Pi की सेटिंग्स से फिर से देख सकते हैं। आपकी निजता मायने रखती है — ऑडियो सिर्फ़ सक्रिय कॉल के दौरान ही कैप्चर होता है।"
+  },
+  "onboarding_heading": {
+    "description": "पहली बार चलाने पर ऑनबोर्डिंग पेज का मुख्य शीर्षक।",
+    "message": "🗣️ Say, Pi में आपका स्वागत है"
+  },
+  "onboarding_intro": {
+    "description": "पहली बार चलाने पर ऑनबोर्डिंग पेज का परिचय पैराग्राफ।",
+    "message": "AI के साथ अपनी पहली बोली हुई बातचीत से आप बस दो कदम दूर हैं। बोलना टाइप करने से लगभग 3× तेज़ है — चलिए सेट अप करते हैं।"
+  },
+  "onboarding_micTestButton": {
+    "description": "बटन जो बिना किसी दबाव वाले ऑनबोर्डिंग माइक्रोफ़ोन टेस्ट को शुरू करता है।",
+    "message": "🎤 अपना माइक्रोफ़ोन टेस्ट करें"
+  },
+  "onboarding_micTestDone": {
+    "description": "ऑनबोर्डिंग माइक टेस्ट सफलतापूर्वक पूरा होने के बाद दिखने वाली स्थिति।",
+    "message": "अच्छा — आपका माइक्रोफ़ोन काम कर रहा है 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "ऑनबोर्डिंग माइक टेस्ट के इनपुट मापते समय दिखने वाली स्थिति।",
+    "message": "सुन रहे हैं — कुछ बोलिए 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "ऑनबोर्डिंग माइक टेस्ट में अनुमति का इंतज़ार करते समय दिखने वाली स्थिति।",
+    "message": "माइक्रोफ़ोन की अनुमति मांग रहे हैं…"
+  },
+  "onboarding_micTestStop": {
+    "description": "ऑनबोर्डिंग माइक टेस्ट चल रहा हो तब उसे रोकने के लिए बटन लेबल।",
+    "message": "टेस्ट रोकें"
+  },
+  "onboarding_step1Body": {
+    "description": "एक्सटेंशन को पिन करने का तरीका समझाने वाला पहले ऑनबोर्डिंग चरण का मुख्य पाठ।",
+    "message": "अपने ब्राउज़र के ऊपर-दाईं ओर पज़ल-पीस 🧩 आइकन पर क्लिक करें, फिर Say, Pi के पास पिन 📌 पर क्लिक करें। इससे कॉल बटन एक क्लिक की दूरी पर रहता है।"
+  },
+  "onboarding_step1Title": {
+    "description": "पहले ऑनबोर्डिंग चरण का शीर्षक (एक्सटेंशन को पिन करना)।",
+    "message": "Say, Pi को अपनी टूलबार में पिन करें"
+  },
+  "onboarding_step2Body": {
+    "description": "वॉइस बातचीत शुरू करने का तरीका समझाने वाला दूसरे ऑनबोर्डिंग चरण का मुख्य पाठ।",
+    "message": "नीचे दिए गए समर्थित असिस्टेंट में से किसी एक पर जाएँ, फिर Say, Pi कॉल बटन दबाएँ और नमस्ते कहें। पहली बार हम माइक्रोफोन की अनुमति माँगेंगे — यह सामान्य है, और हम केवल तभी सुनते हैं जब आप सक्रिय रूप से कॉल में हों।"
+  },
+  "onboarding_step2Title": {
+    "description": "दूसरे ऑनबोर्डिंग चरण का शीर्षक (बातचीत शुरू करना)।",
+    "message": "AI चैट खोलें और बोलना शुरू करें"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "माइक्रोफोन अनुमति"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "रिकवरी मार्गदर्शन, जब माइक्रोफ़ोन अनुमति ब्लॉक हो।",
+    "message": "आपका ब्राउज़र माइक्रोफ़ोन को ब्लॉक कर रहा है। एड्रेस बार में कैमरा या लॉक आइकन पर क्लिक करें, Microphone को \"Allow\" पर सेट करें, फिर दोबारा कोशिश करें। macOS पर, System Settings → Privacy & Security → Microphone भी जाँचें।"
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "रिकवरी पैनल का शीर्षक, जब माइक्रोफ़ोन अनुमति अस्वीकार/ब्लॉक कर दी गई हो।",
+    "message": "माइक्रोफ़ोन एक्सेस ब्लॉक है"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "रिकवरी मार्गदर्शन, जब माइक्रोफ़ोन कहीं और उपयोग में हो।",
+    "message": "कोई दूसरा ऐप या टैब आपका माइक्रोफ़ोन इस्तेमाल कर रहा हो सकता है। जो भी रिकॉर्ड कर रहा हो सकता है उसे बंद करें (वीडियो कॉल, वॉइस मेमो), फिर दोबारा कोशिश करें।"
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "रिकवरी पैनल का शीर्षक, जब माइक्रोफ़ोन किसी अन्य ऐप द्वारा उपयोग में हो।",
+    "message": "आपका माइक्रोफ़ोन व्यस्त है"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "रिकवरी मार्गदर्शन, जब कोई माइक्रोफ़ोन डिवाइस उपलब्ध न हो।",
+    "message": "हमें कोई माइक्रोफ़ोन नहीं मिला। एक प्लग इन करें (या अपना हेडसेट कनेक्ट करें), सुनिश्चित करें कि वह आपके इनपुट डिवाइस के रूप में चुना गया है, फिर दोबारा कोशिश करें।"
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "रिकवरी पैनल का शीर्षक, जब कोई माइक्रोफ़ोन डिवाइस उपलब्ध न हो।",
+    "message": "कोई माइक्रोफ़ोन नहीं मिला"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "किसी अज्ञात माइक्रोफ़ोन त्रुटि के लिए रिकवरी मार्गदर्शन।",
+    "message": "आपके माइक्रोफ़ोन तक पहुँचने में कुछ गड़बड़ हो गई। जाँचें कि वह कनेक्ट है और आपकी ब्राउज़र सेटिंग्स में अनुमति दी गई है, फिर दोबारा कोशिश करें।"
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "किसी अज्ञात माइक्रोफ़ोन त्रुटि के लिए रिकवरी पैनल का शीर्षक।",
+    "message": "हम आपके माइक्रोफ़ोन तक नहीं पहुँच पाए"
+  },
+  "permissions_retryButton": {
+    "description": "उस बटन का लेबल जो माइक्रोफ़ोन अनुमति के लिए दोबारा अनुरोध करता है।",
+    "message": "फिर से कोशिश करें"
+  },
+  "permissions_revokedHeading": {
+    "description": "शीर्षक, जब माइक्रोफ़ोन एक्सेस पहले दिया गया था लेकिन बाद में वापस ले लिया गया।",
+    "message": "🎙️ आइए आपका माइक्रोफ़ोन फिर से कनेक्ट करें"
+  },
+  "permissions_revokedInfo": {
+    "description": "जानकारी वाला पाठ, जब माइक्रोफ़ोन एक्सेस अनुमति मिलने के बाद रद्द/वापस ले लिया गया हो।",
+    "message": "आपका माइक्रोफ़ोन एक्सेस बंद कर दिया गया था — यह अक्सर ब्राउज़र या सिस्टम अपडेट के बाद होता है। नीचे फिर से अनुमति दें और जब आप कॉल में होंगे, $productName$ फिर से सुनने लगेगा।",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "प्रोफ़ाइल"
+  },
+  "quietModeLabel": {
+    "description": "उस टॉगल के लिए लेबल जो शांत/फुसफुसाहट मोड सक्षम करता है।",
+    "message": "शांत मोड"
+  },
+  "quietModeTooltip": {
+    "description": "समझाने के लिए टूलटिप कि शांत/फुसफुसाहट मोड क्या करता है।",
+    "message": "धीरे बोलें — यह धीमी आवाज़ भी पकड़ता है और असिस्टेंट के जवाब की आवाज़ कम करता है, ताकि आप दूसरों के आसपास भी वॉइस इस्तेमाल कर सकें।"
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "प्रमाणीकरण जारी होने के दौरान साइन इन बटन के लिए टेक्स्ट।",
+    "message": "साइन इन हो रहा है..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "ध्वनि प्रभाव"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "ऑडियो फीडबैक समस्याओं को रोकने के लिए फ़ायरफ़ॉक्स में ध्वनि प्रभाव अक्षम हैं।"
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "पहले बोले गए एक्सचेंज के बाद दिखने वाली एक-बार वाली speed-payoff सूचना की हेडलाइन।",
+    "message": "अच्छा — बोलना टाइप करने से लगभग 3× तेज़ है।"
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "speed-payoff सूचना की वैकल्पिक दूसरी पंक्ति, जो बचाए गए पूरे मिनट दिखाती है।",
+    "message": "आपने इसे टाइप करने के बजाय लगभग $minutes$ मिनट तेज़ बोल लिया।",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "जब आप बटन दबाएँ तभी सबमिट करें"
   },
+  "surveyQuestion": {
+    "description": "एक बार दिखने वाले पोस्ट-विन माइक्रो-सर्वे का एकमात्र सवाल।",
+    "message": "अब तक आवाज़ आपके लिए कैसी काम कर रही है?"
+  },
+  "surveyRatingLabel": {
+    "description": "सर्वे रेटिंग बटन के लिए सुलभ लेबल।",
+    "message": "5 में से $rating$ रेट करें",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "यूज़र के पोस्ट-विन सर्वे का जवाब देने के बाद दिखाया जाने वाला आभार संदेश।",
+    "message": "धन्यवाद — इससे हमें Say, Pi को बेहतर बनाने में मदद मिलती है। 🙏"
+  },
   "tabAIChat": {
     "description": "एआई चैट सेटिंग्स अनुभाग के लिए टैब लेबल।",
     "message": "एआई चैट"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "सामान्य सेटिंग्स अनुभाग के लिए टैब लेबल।",
     "message": "सामान्य"
+  },
+  "tabVoices": {
+    "description": "आवाज़ों की सेटिंग्स सेक्शन (प्रति साइट वॉइस कैटलॉग) के लिए टैब लेबल।",
+    "message": "आवाज़ें"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "क्रेडिट"
   },
+  "ttsCreditsRemaining": {
+    "description": "बची हुई TTS कोटा दिखाने वाला टेक्स्ट, प्रति-आवाज़ क्रेडिट पूल के रूप में (saypi-api #181 Stage 2), कच्चे अक्षरों के रूप में नहीं।",
+    "message": "$credits$ क्रेडिट शेष",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "सफ़ारी में वर्तमान में बहुभाषी आवाज़ें समर्थित नहीं हैं।"
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "आवाज"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "ध्यान दें! $browserName$ पर $chatbotName$ के साथ स्पीच प्लेबैक अभी उपलब्ध नहीं है। अच्छी खबर? वॉयस इनपुट बहुत अच्छा काम करता है! TTS के लिए, डेस्कटॉप पर Chrome या Edge आज़माएं।",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$ पर TTS उपलब्ध नहीं है। वॉयस इनपुट काम करता है! TTS के लिए Chrome डेस्कटॉप आज़माएं।",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "टीटीएस आवाज"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "जब बोलने जैसा ऑडियो मिला लेकिन वह ट्रांसक्राइब करने के लिए बहुत धीमा / कम भरोसे वाला था (क्लाइंट-साइड एडमिशन-गेट ड्रॉप), तब दिखने वाला VAD विवरण।",
+    "message": "ऑडियो ट्रांसक्राइब करने के लिए बहुत धीमा है"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD विवरण जो बताता है कि माइक्रोफोन को नए टैब ने क्लेम कर लिया, इसलिए कॉल खत्म हो गई।",
+    "message": "वॉइस इनपुट दूसरे टैब में चला गया"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "आवाज उपलब्ध नहीं है। \nडेस्कटॉप पर क्रोम या फ़ायरफ़ॉक्स का प्रयास करें।"
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "ध्यान दें! $browserName$ पर $chatbotName$ के साथ स्पीच प्लेबैक अभी उपलब्ध नहीं है। अच्छी खबर? वॉयस इनपुट बहुत अच्छा काम करता है! TTS के लिए, डेस्कटॉप पर Chrome या Edge आज़माएं।",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "$browserName$ + $chatbotName$ पर TTS उपलब्ध नहीं है। वॉयस इनपुट काम करता है! TTS के लिए Chrome डेस्कटॉप आज़माएं।",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "समझ गए",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "उस टैब पर दिखाया जाने वाला VAD स्टेटस, जिसकी वॉइस इनपुट को किसी दूसरे टैब ने अपने नियंत्रण में ले लिया हो।",
+    "message": "रोका गया"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "विवरण देखें"
   },
+  "voiceIntroductionGeneric": {
+    "description": "सामान्य बोला गया परिचय, जब चुनी गई SayPi वॉइस के पास वॉइस-विशेष परिचय स्क्रिप्ट नहीं होती (और पढ़कर सुनाने के लिए कोई हालिया संदेश भी नहीं होता)।",
+    "message": "नमस्ते, मैं $voice$ हूँ। मेरी आवाज़ ऐसी है। उम्मीद है आपको यह आवाज़ पसंद आएगी।",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "होला! \nПривет! \nठीक है! \nमैं पाई हूं, आपका बहुभाषी एआई सहायक। \nमेरे नियंत्रण में 32 भाषाओं के साथ, हम दुनिया भर के विचारों और संस्कृतियों का पता लगा सकते हैं। \nआप इस आवाज़ के बारे में क्या सोचते हैं?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "आवाज सेटिंग्स"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "सेटिंग्स वॉइस कैटलॉग में किसी वॉइस पंक्ति के लिए फ़ॉलबैक सबटाइटल, जब वॉइस का कोई विवरण नहीं होता; $count$ उन भाषाओं की संख्या है जिन्हें वॉइस सपोर्ट करती है।",
+    "message": "$count$ भाषाएँ बोलता है",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "'Addison' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "खुशनुमा और स्पष्ट वक्ता"
+  },
+  "voiceTagline_alloy": {
+    "description": "'Alloy' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "संतुलित और हर काम के लिए"
+  },
+  "voiceTagline_ash": {
+    "description": "'Ash' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "गहरी, विचारशील, शांत"
+  },
+  "voiceTagline_ballad": {
+    "description": "'Ballad' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "मुलायम और मधुर"
+  },
+  "voiceTagline_cassidy": {
+    "description": "'Cassidy' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "मिलनसार और साफ़-साफ़"
+  },
+  "voiceTagline_cedar": {
+    "description": "'Cedar' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "स्थिर और भरोसा जगाने वाली"
+  },
+  "voiceTagline_coral": {
+    "description": "'Coral' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "उज्ज्वल, उत्साहपूर्ण ऊर्जा"
+  },
+  "voiceTagline_echo": {
+    "description": "'Echo' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "साफ़ और तटस्थ"
+  },
+  "voiceTagline_fable": {
+    "description": "'Fable' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "कहानीकार जैसी लय"
+  },
+  "voiceTagline_finn": {
+    "description": "'Finn' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "ताज़ा और ऊर्जावान"
+  },
+  "voiceTagline_jamahal": {
+    "description": "'Jamahal' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "समृद्ध और आकर्षक"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "'Jarnathan' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "मखमली देर-रात वाला बैरिटोन"
+  },
+  "voiceTagline_jeff": {
+    "description": "'Jeff' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "सीधी और स्थिर"
+  },
+  "voiceTagline_jessica": {
+    "description": "'Jessica' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "गर्मजोशी भरा, तराशा हुआ ठहराव"
+  },
+  "voiceTagline_joey": {
+    "description": "'Joey' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "आसान, संवादात्मक अमेरिकी अंदाज़"
+  },
+  "voiceTagline_juniper": {
+    "description": "'Juniper' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "सटीक, उजला, जीवंत"
+  },
+  "voiceTagline_lucy": {
+    "description": "'Lucy' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "मृदु और उज्ज्वल"
+  },
+  "voiceTagline_marin": {
+    "description": "'Marin' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "गरमजोशी भरा, सुबह-रेडियो जैसा सुकून"
+  },
+  "voiceTagline_mark": {
+    "description": "'Mark' वॉइस के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस पहचान मैप)।",
+    "message": "स्पष्ट, आत्मविश्वासी कथावाचक"
+  },
+  "voiceTagline_nova": {
+    "description": "'Nova' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "तेज़ और जिज्ञासु"
+  },
+  "voiceTagline_onyx": {
+    "description": "'Onyx' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "गहरी, गूंजती गरिमा"
+  },
+  "voiceTagline_paola": {
+    "description": "'Paola' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "अभिव्यक्तिपूर्ण इतालवी गरमजोशी"
+  },
+  "voiceTagline_sage": {
+    "description": "'Sage' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "धीमे स्वर की स्पष्टता"
+  },
+  "voiceTagline_shimmer": {
+    "description": "'Shimmer' आवाज़ के लिए लिखी गई व्यक्तित्व टैगलाइन (सेटिंग्स Voices स्टूडियो; क्लाइंट-साइड वॉइस आइडेंटिटी मैप)।",
+    "message": "हल्की और हवादार"
+  },
+  "voicesAddToMenuShort": {
+    "description": "सेटिंग्स Voices स्टूडियो में वॉइस कार्ड के पिन टॉगल (ऑफ़ स्थिति) पर छोटा लेबल; दबाने पर आवाज़ होस्ट के चैट-इन मेनू में जुड़ जाती है।",
+    "message": "+ मेनू"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "वॉइस कार्ड के पिन टॉगल (ऑफ़ स्थिति) के लिए सुलभ लेबल; $name$ आवाज़ है, $host$ असिस्टेंट।",
+    "message": "$host$ के मेनू में $name$ जोड़ें",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Voices कंट्रोल बार में टॉगल का लेबल, जो बताता है कि एरो कीज़ से सूची में आगे बढ़ने पर फोकस पहुँचते ही हर आवाज़ चलती है या नहीं।",
+    "message": "जैसे-जैसे आप जाएँ, वैसे ही चलाएँ"
+  },
+  "voicesArrowsLive": {
+    "description": "सेटिंग्स के Voices सूची में पहली 'Playing <voice>' घोषणा के साथ जोड़ा गया स्क्रीन-रीडर पुष्टिकरण, जो बताता है कि तीर कुंजियाँ अभी सुनाई देने लगी हैं। 'Play as you move' टॉगल के शब्दों को दोहराता है।",
+    "message": "अब चलते समय तीर कुंजियाँ चलाएँगी। Esc रोकता है।"
+  },
+  "voicesBuiltinsNote": {
+    "description": "उन होस्ट्स के लिए मेनू स्लॉट्स के नीचे नोट जिनमें नेटिव आवाज़ें आती हैं (जैसे Pi की 8 बिल्ट-इन), जिन्हें स्टूडियो मैनेज नहीं करता; $host$ असिस्टेंट है।",
+    "message": "$host$ की अपनी बिल्ट-इन आवाज़ें उसके मेनू में भी हमेशा दिखती हैं।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "voicesBuiltinsNote का रूपांतर उस होस्ट के लिए जिसमें इन-चैट वॉइस मेनू नहीं है (Pi ने 2026 में अपना मेनू हटाया), जहाँ मूल वाक्य का यह कहना कि बिल्ट-इन आवाज़ें 'उसके मेनू में दिखती हैं' गलत हो जाएगा; $host$ असिस्टेंट है।",
+    "message": "$host$ की अपनी बिल्ट-इन आवाज़ें भी हैं, जो यहाँ सूचीबद्ध नहीं हैं।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में प्रगति रीडआउट: सूचीबद्ध आवाज़ों में से कितनी को उपयोगकर्ता पहले ही सुन चुका है। सिर्फ़ संख्याएँ, ताकि 1 पर भी सही पढ़े — Chrome i18n में बहुवचन रूप नहीं हैं।",
+    "message": "$total$ में से $heard$ सुना गया",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "सेटिंग्स के Voices सूची में आवाज़ की पंक्ति के सुलभ नाम का हिस्सा, जो बताता है कि इस प्रोफ़ाइल ने यह आवाज़ पहले ही सुन ली है। दृश्य रूप से यह आवाज़ के साउंडप्रिंट पर स्याही की घनता के रूप में दिखता है, जिसे स्क्रीन रीडर नहीं देख सकता।",
+    "message": "सुना गया"
+  },
+  "voicesInHostMenu": {
+    "description": "सेटिंग्स Voices स्टूडियो में मेनू स्लॉट्स वाली पंक्ति के ऊपर सेक्शन हेडिंग; $host$ असिस्टेंट है।",
+    "message": "$host$ के मेनू में",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "सेटिंग्स Voices स्टूडियो में वॉइस कार्ड के पिन टॉगल (ऑन स्थिति) पर छोटा लेबल।",
+    "message": "✓ मेनू में"
+  },
+  "voicesInUse": {
+    "description": "सेटिंग्स Voices सूची में होस्ट की वर्तमान में चुनी गई आवाज़ पर स्थायी बैज, uppercase में रेंडर होता है। जानबूझकर 'अभी बोल रहा है' नहीं: इस पेज पर पंक्तियाँ अपने सैंपल क्लिप चलाती हैं, इसलिए चुनी हुई लेकिन शांत आवाज़ को बोलने का दावा नहीं करना चाहिए जब कोई दूसरी पंक्ति चल रही हो।",
+    "message": "उपयोग में"
+  },
+  "voicesKeyboardHint": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में एक लाइन का कीबोर्ड संकेत। ये चिन्ह कुंजियाँ हैं: Space, ऊपर/नीचे वाले तीर, और Shift+Space।",
+    "message": "सुनने के लिए Space दबाएँ, आवाज़ों में जाने के लिए ↑↓, वापस स्विच करने के लिए ⇧Space"
+  },
+  "voicesLoadError": {
+    "description": "किसी एक होस्ट के स्टूडियो के अंदर त्रुटि स्थिति, जब उस होस्ट का वॉइस कैटलॉग लोड नहीं हो पाया; $host$ असिस्टेंट है।",
+    "message": "$host$ की आवाज़ें लोड नहीं हो सकीं। कृपया बाद में फिर कोशिश करें।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "जब होस्ट के चैट-इन मेनू में आवाज़ों की अधिकतम संख्या पहले से हो, तब निष्क्रिय '+ मेनू' टॉगल पर टूलटिप/संकेत।",
+    "message": "मेनू भर गया है — दूसरा जोड़ने के लिए कोई आवाज़ हटाएँ"
+  },
+  "voicesMenuHint": {
+    "description": "'In {host}'s menu' हेडिंग के पास एक लाइन का संकेत, जो बताता है कि स्लॉट्स वाली पंक्ति चैट के अंदर वाले वॉइस मेनू को प्रतिबिंबित करती है।",
+    "message": "चैट में आपको यही दिखेगा"
+  },
+  "voicesMenuOverflow": {
+    "description": "जब उपयोगकर्ता के पास जितनी पिन की गई आवाज़ें हैं वे इन-चैट मेनू में दिखने वाली संख्या से ज़्यादा हों (पुरानी स्थिति), तब मेनू स्लॉट्स के नीचे दिखने वाला नोट; $count$ बताता है कितनी आवाज़ें फिट नहीं हुईं, $cap$ मेनू का आकार है।",
+    "message": "$count$ और पिन की गई आवाज़ें मेनू के $cap$ स्लॉट्स से आगे इंतज़ार कर रही हैं।",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow का एकवचन रूप, जब ठीक एक पिन की गई आवाज़ इन-चैट मेनू में फिट नहीं होती; $cap$ मेनू का आकार है।",
+    "message": "1 और पिन की गई आवाज़ मेनू के $cap$ स्लॉट्स से आगे इंतज़ार कर रही है।",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "सेटिंग्स के Voices सूची के नीचे सार पंक्ति जो बताती है कि होस्ट के इन-चैट वॉइस मेनू में कितना भरा है; $host$ सहायक है, $used$ कितनी सीटें भरी हैं, $cap$ कुल कितनी हैं। इसे 1 पर भी सही पढ़ने लायक लिखा गया है — Chrome i18n में बहुवचन रूप नहीं हैं।",
+    "message": "$host$ का मेनू: $cap$ में से $used$ सीटें",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "सेटिंग्स के Voices सूची के अंत में उस समूह के लिए शीर्षक जिसमें चलाने के लिए कोई सैंपल क्लिप नहीं है; $count$ कितनी हैं। इसे 1 पर भी सही पढ़ने लायक लिखा गया है — Chrome i18n में बहुवचन रूप नहीं हैं।",
+    "message": "अभी तक कोई सैंपल नहीं ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "सेटिंग्स वॉइस कैटलॉग में तब दिखाया जाता है जब साइन-इन उपयोगकर्ता के लिए वॉइस सूची खाली हो (जैसे नेटवर्क समस्या)।",
+    "message": "अभी वॉइस लोड नहीं हो सकीं. कृपया बाद में फिर से कोशिश करें."
+  },
+  "voicesNowPlaying": {
+    "description": "सेटिंग्स के Voices सूची में किसी आवाज़ का सैंपल क्लिप चलना शुरू होने पर स्क्रीन रीडर की घोषणा; $name$ वह आवाज़ है।",
+    "message": "$name$ चल रहा है",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में बटन जो अभी सूचीबद्ध हर आवाज़ को एक-एक करके चलाता है; $count$ कितनी हैं। इसे 1 पर भी सही पढ़ने लायक लिखा गया है — Chrome i18n में बहुवचन रूप नहीं हैं।",
+    "message": "सब चलाएँ ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "वापसी पर सेटिंग्स के Voices कंट्रोल बार में बटन: सिर्फ़ वे सूचीबद्ध आवाज़ें चलाता है जिन्हें आपने अभी तक नहीं सुना; $count$ कितनी हैं। इसे 1 पर भी सही पढ़ने लायक लिखा गया है — Chrome i18n में बहुवचन रूप नहीं हैं।",
+    "message": "नई चलाएँ ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार की पंक्ति, जब पेज पर अभी तक उपयोगकर्ता इंटरैक्शन न होने के कारण ब्राउज़र ने सैंपल चलाने से मना कर दिया।",
+    "message": "ध्वनि चालू करने के लिए किसी भी वॉइस पर क्लिक करें।"
+  },
+  "voicesPreview": {
+    "description": "प्ले (▶) बटन के लिए सुलभ लेबल, जो वॉइस पंक्ति पर किसी वॉइस की निःशुल्क नमूना क्लिप चलाता है; $name$ वॉइस का नाम है।",
+    "message": "$name$ का नमूना चलाएँ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "सेटिंग्स की Voices सूची का सुलभ नाम (हर आवाज़ के लिए एक पंक्ति, सभी आवाज़ों की सूचीबॉक्स)।",
+    "message": "आवाज़ें, सबसे गहरी से सबसे चमकीली तक क्रम में"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "वॉइस कार्ड के पिन टॉगल (ऑन स्थिति) और मेनू स्लॉट के हटाने वाले बटन के लिए सुलभ लेबल; $name$ आवाज़ है, $host$ असिस्टेंट।",
+    "message": "$host$ के मेनू से $name$ हटाएँ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार की पंक्ति, जब किसी एक वॉइस का सैंपल क्लिप लोड या प्ले नहीं हो पाया; $name$ वही वॉइस है। यह मोडल नहीं है — सैंपलों की श्रृंखला इसके बाद भी चलती रहती है।",
+    "message": "$name$ का सैंपल नहीं चल पाया।",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "सेटिंग्स के AI Chat टैब में आवाज़ कैटलॉग सेक्शन के लिए उपशीर्षक",
+    "message": "हर साइट पर जवाबों को ज़ोर से पढ़ने वाली आवाज़ चुनें।"
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Voices सेटिंग्स शीर्षक के नीचे उपशीर्षक, पिच-क्रम वाली आवाज़ों की रेल के लिए।",
+    "message": "हर आवाज़, सबसे गहरी से सबसे चमकीली तक। सुनें, फिर चुनें।"
+  },
+  "voicesSectionTitle": {
+    "description": "सेटिंग्स के AI Chat टैब में आवाज़ कैटलॉग सेक्शन के लिए शीर्षक",
+    "message": "आवाज़ें"
+  },
+  "voicesShelfEveryday": {
+    "description": "सेटिंग्स आवाज़ कैटलॉग में वैल्यू-टियर आवाज़ों के लिए समूह शीर्षक। CSS द्वारा अपरकेस में रेंडर होता है।",
+    "message": "रोज़मर्रा की आवाज़ें"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "सेटिंग्स के Voices स्टूडियो में Everyday समूह शीर्षक के पास एक-पंक्ति नोट; स्टूडियो में यही एक जगह है जहाँ बताया जाता है कि यह टियर HD से कितना आगे तक जाता है।",
+    "message": "प्राकृतिक और स्पष्ट — HD की तुलना में आप लगभग 20× ज़्यादा देर सुन सकते हैं।"
+  },
+  "voicesShelfHd": {
+    "description": "सेटिंग्स आवाज़ कैटलॉग में प्रीमियम (HD) आवाज़ों के लिए समूह शीर्षक। CSS द्वारा अपरकेस में रेंडर होता है।",
+    "message": "HD आवाज़ें"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "सेटिंग्स के Voices स्टूडियो में HD समूह शीर्षक के पास एक-पंक्ति नोट।",
+    "message": "हमारी सबसे समृद्ध, सबसे अभिव्यंजक ध्वनि।"
+  },
+  "voicesShowAll": {
+    "description": "सेटिंग्स के Voices 'Show' फ़िल्टर में विकल्प: कोई फ़िल्टर नहीं, हर वॉइस सूचीबद्ध होती है।",
+    "message": "सभी वॉइस"
+  },
+  "voicesShowEveryday": {
+    "description": "सेटिंग्स के Voices 'Show' फ़िल्टर में विकल्प: केवल मानक (non-HD) वॉइस सूचीबद्ध करें।",
+    "message": "केवल रोज़मर्रा"
+  },
+  "voicesShowHd": {
+    "description": "सेटिंग्स के Voices 'Show' फ़िल्टर में विकल्प: केवल प्रीमियम (HD) वॉइस सूचीबद्ध करें।",
+    "message": "केवल HD"
+  },
+  "voicesShowLabel": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में फ़िल्टर का लेबल, जो सूची में दिखने वाली वॉइसों को सीमित करता है।",
+    "message": "दिखाएँ"
+  },
+  "voicesShowUnheard": {
+    "description": "सेटिंग्स के Voices 'Show' फ़िल्टर में विकल्प: केवल वे वॉइस सूचीबद्ध करें जिन्हें उपयोगकर्ता ने अभी तक नहीं सुना है।",
+    "message": "अभी तक नहीं सुनी"
+  },
+  "voicesSpeakingNow": {
+    "description": "सेटिंग्स Voices स्टूडियो में होस्ट की वर्तमान में चुनी गई आवाज़ पर स्टेट लेबल (मेनू स्लॉट और वॉइस कार्ड)।",
+    "message": "अभी बोल रहा है"
+  },
+  "voicesSpeaksWith": {
+    "description": "सेटिंग्स Voices स्टूडियो स्टेज में वर्तमान आवाज़ के नाम के ऊपर आइब्रो लाइन; $host$ असिस्टेंट है (जैसे Pi)। CSS द्वारा uppercase में रेंडर होता है।",
+    "message": "$host$ बोलता है",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "स्टेज नोट जब होस्ट अपना ही ऑडियो देता है (जैसे Pi), इसलिए Say, Pi की कोई आवाज़ चुनने पर होस्ट की आवाज़ बदल जाती है।",
+    "message": "जब तक आप नीचे से कोई आवाज़ नहीं चुनते, $host$ अपनी ही आवाज़ इस्तेमाल करेगा।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "स्टेज नोट जब होस्ट के पास अपनी कोई आवाज़ नहीं होती (जैसे Claude), इसलिए Say, Pi की आवाज़ चुने बिना कुछ भी ज़ोर से नहीं पढ़ा जाता।",
+    "message": "जब तक आप नीचे से कोई आवाज़ नहीं चुनते, $host$ जवाबों को ज़ोर से नहीं पढ़ेगा।",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Voices स्टूडियो स्टेज पर सेटिंग्स में शीर्षक, जब होस्ट के लिए कोई SayPi आवाज़ चुनी नहीं गई हो; $host$ असिस्टेंट है (जैसे Pi, Claude)। नाम के आकार में रेंडर होता है।",
+    "message": "चुनें कि $host$ की आवाज़ कैसी लगे",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Voices स्टूडियो स्टेज पर बटन, जो वर्तमान आवाज़ का मुफ्त सैंपल क्लिप चलाता है।",
+    "message": "सैंपल सुनें"
+  },
+  "voicesStopPlayback": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में बटन जो 'Play all' से शुरू हुए सैंपल्स के क्रम को रोकता है।",
+    "message": "रोकें"
+  },
+  "voicesSweepPosition": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में लाइव स्थिति दिखाने वाला पाठ, जब 'Play all' सूची में आगे बढ़ता है; $index$ अभी चल रही वॉइस है और $total$ कतार में कुल कितनी हैं।",
+    "message": "$total$ में से $index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार में compare कंट्रोल के लिए सुलभ लेबल, जो पिछली दो सुनी गई आवाज़ों में से दूसरी वाली को फिर चलाता है; $name$ वही आवाज़ है।",
+    "message": "$name$ पर वापस स्विच करें",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "सेटिंग्स के Voices कंट्रोल बार की पंक्ति, जब बहुत लंबी सूची पर 'Play all' दबाया जाता है; $count$ वॉइसों की संख्या है और $minutes$ लगभग कितने मिनट लगेंगे। 'min' संक्षिप्त रखा है ताकि 1 पर भी सही लगे — Chrome i18n में बहुवचन रूप नहीं हैं।",
+    "message": "ये $count$ वॉइस हैं — लगभग $minutes$ min. पहले सूची को सीमित करें।",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "सेटिंग्स वॉइस कैटलॉग में प्रति-होस्ट 'इस आवाज़ का उपयोग करें' बटन के लिए सुलभ लेबल; $name$ आवाज़ है, $host$ असिस्टेंट है (जैसे Pi, Claude)।",
+    "message": "$host$ पर $name$ उपयोग करें",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "यूनिफ़ाइड सेटिंग्स वॉइस कैटलॉग में प्रति-होस्ट 'इस आवाज़ का उपयोग करें' बटन पर छोटा लेबल (होस्ट इसके साथ दिखाया जाता है)।",
+    "message": "उपयोग करें"
+  },
+  "voicesYourVoice": {
+    "description": "सेटिंग्स के Voices सूची में कंट्रोल-बार बटन जो फ़ोकस को उस आवाज़ की पंक्ति पर ले जाता है जिसे यह होस्ट अभी उपयोग कर रहा है; $name$ वही आवाज़ है।",
+    "message": "आपकी आवाज़: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "एरर, जब ब्राउज़र वॉइस-डिटेक्शन मॉडल के लिए पर्याप्त WebAssembly मेमोरी आवंटित नहीं कर पाता।",
+    "message": "वॉइस डिटेक्शन शुरू नहीं हो सकता: वॉइस मॉडल के लिए पर्याप्त WebAssembly मेमोरी नहीं है। $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "एरर, जब ब्राउज़र वॉइस-डिटेक्शन मॉडल चलाने के लिए ज़रूरी शुरुआती WebAssembly मेमोरी उपलब्ध नहीं कराता।",
+    "message": "वॉइस डिटेक्शन शुरू नहीं हो सकता: इस ब्राउज़र में WebAssembly मेमोरी उपलब्ध नहीं है।"
   }
 }

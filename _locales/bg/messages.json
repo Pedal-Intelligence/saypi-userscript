@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Предимство, изписано в модалния прозорец за вход/регистрация – увеличени лимити за използване.",
+    "message": "По-високи лимити за използване с безплатен акаунт"
+  },
+  "authBenefitPremium": {
+    "description": "Предимство, изписано в модалния прозорец за вход/регистрация – премиум функции за различни чатботове.",
+    "message": "Премиум функции и поддръжка за чатботове"
+  },
+  "authBenefitSupport": {
+    "description": "Предимство, изписано в модалния прозорец за вход/регистрация – приоритетна поддръжка.",
+    "message": "Приоритетна поддръжка при проблеми"
+  },
+  "authBenefitSync": {
+    "description": "Предимство, изписано в модалния прозорец за вход/регистрация – синхронизиране на настройки.",
+    "message": "Синхронизирайте настройките за глас навсякъде"
+  },
+  "authBenefitTTS": {
+    "description": "Предимство, изписано в модалния прозорец за вход/регистрация – функция за преобразуване на текст в реч.",
+    "message": "Гласове за преобразуване на текст в реч (платени планове)"
+  },
+  "authBenefitUsage": {
+    "description": "Предимство, изписано в модалния прозорец за вход/регистрация – проследяване на използването.",
+    "message": "Следете използването на гласови функции на различни устройства"
+  },
+  "authPromptModalFull": {
+    "description": "Описание за „пълната“ версия на модалния прозорец за вход/регистрация с представяне на стойността.",
+    "message": "Използвате SayPi много активно. Влезте за по-високи лимити, гласове за преобразуване на текст в реч и премиум функции във всички поддържани чатботове."
+  },
+  "authPromptModalSoft": {
+    "description": "Описание за „меката“ версия на модалния прозорец за вход/регистрация.",
+    "message": "Създайте безплатен акаунт в SayPi за по-високи лимити и достъп до премиум гласови функции."
+  },
+  "authPromptTitle": {
+    "description": "Заглавие на модалния прозорец за вход/регистрация.",
+    "message": "Отключете още гласови функции"
+  },
+  "authPromptToast": {
+    "description": "Изскачащо известие, което насърчава потребителя да влезе.",
+    "message": "Влезте в SayPi за по-високи лимити и премиум функции"
+  },
   "autoReadAloudChatGPT": {
     "description": "Отметка за разрешаване или забрана на автоматичното озвучаване на отговорите на ChatGPT по време на гласови обаждания.",
     "message": "Автоматично озвучаване (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Деактивирайте текста към реч"
   },
+  "dismiss": {
+    "message": "Разбрах",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Отменям"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Фокус"
   },
+  "errorVadInitFailed": {
+    "description": "Съобщение за грешка (toast), показвано когато засичането на гласова активност не успее да се инициализира.",
+    "message": "Неуспешно инициализиране на засичането на глас"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Съобщение за грешка (toast), показвано когато възникне неочаквана грешка при настройването на гласовото записване.",
+    "message": "Неуспешна настройка на гласовото записване"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Съобщение за грешка (toast), показвано когато клиентът за засичане на глас не успее да започне запис.",
+    "message": "Неуспешно стартиране на гласовото записване"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Съобщение за грешка (toast), показвано когато клиентът за засичане на гласова активност (VAD) не е наличен, така че записът не може да започне.",
+    "message": "Гласовото записване не е налично"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Излез от режими на фокус"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Едноредова бележка, показвана в менютата за глас, когато са налични както премиум (HD), така и value гласове",
+    "message": "HD гласовете изразходват месечната ви квота около 20× по-бързо."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Разменям това ..."
   },
+  "maybeLater": {
+    "description": "Текст на бутона за отказ/затваряне на подканата за вход.",
+    "message": "Може би по-късно"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Настройките на вашия микрофон не отговарят на изискваните спецификации. \nОпитайте да използвате различен микрофон или коригирайте аудио настройките си."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Няма достъп до микрофона. \nМоля, проверете настройките на вашето устройство и опитайте отново."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Съобщение за грешка (toast), показвано когато разрешението за микрофона е отказано след потока с подканата за разрешение.",
+    "message": "Разрешението за микрофона не беше предоставено. Уверете се, че сте разрешили достъпа в подканата и в настройките на разширението."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "точност"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Най-бързият отговор, но по-малко точен. \nСклонен към прекъсване."
   },
+  "moreVoices": {
+    "description": "Ред в менюто, който води от менюто за гласове на страницата към пълния каталог с гласове в настройките на разширението",
+    "message": "Още гласове…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Псевдоним на асистента"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Не е влязъл в"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Етикет на бутон, който отваря ChatGPT.",
+    "message": "Отвори ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Етикет на бутон, който отваря Claude.ai.",
+    "message": "Отворете Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Етикет на бутон, който отваря Pi.ai.",
+    "message": "Отворете Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Опция за среда: сред други хора.",
+    "message": "Сред други хора"
+  },
+  "onboarding_envMixed": {
+    "description": "Опция за среда: смесица от лични и споделени пространства.",
+    "message": "На различни места"
+  },
+  "onboarding_envPrivate": {
+    "description": "Опция за среда: лично пространство.",
+    "message": "Някъде насаме"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Потвърждение, показвано когато отговорът за средата оставя тихия режим изключен.",
+    "message": "Разбрахме се — ще запазим стандартните настройки за слушане и възпроизвеждане."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Потвърждение, показвано когато отговорът за средата включи тих режим.",
+    "message": "Тих режим е включен — ще улавяме по-тиха реч и ще отговаряме тихо, за да можеш да говориш дискретно."
+  },
+  "onboarding_envTitle": {
+    "description": "Заглавие за въпроса в първоначалното въвеждане за средата на потребителя.",
+    "message": "Къде обикновено ще говориш?"
+  },
+  "onboarding_footer": {
+    "description": "Текст във футъра на страницата за първоначално въвеждане при първо стартиране.",
+    "message": "Можеш да се върнеш към това по всяко време от настройките на Say, Pi. Поверителността ти е важна — аудио се записва само по време на активен разговор."
+  },
+  "onboarding_heading": {
+    "description": "Основно заглавие на страницата за първоначално въвеждане при първо стартиране.",
+    "message": "🗣️ Добре дошли в Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Въвеждащ абзац на страницата за първоначално въвеждане при първо стартиране.",
+    "message": "Остават ви две стъпки до първия ви разговор с AI с говор. Говоренето е около 3× по-бързо от писането — нека ви настроим."
+  },
+  "onboarding_micTestButton": {
+    "description": "Бутон, който стартира безрисковия тест на микрофона в първоначалното въвеждане.",
+    "message": "🎤 Тествай микрофона си"
+  },
+  "onboarding_micTestDone": {
+    "description": "Състояние, показвано след като тестът на микрофона в първоначалното въвеждане приключи успешно.",
+    "message": "Супер — микрофонът ти работи 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Състояние, показвано докато тестът на микрофона в първоначалното въвеждане измерва входа.",
+    "message": "Слушам — кажи нещо 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Състояние, показвано докато тестът на микрофона в първоначалното въвеждане чака разрешение.",
+    "message": "Искаме достъп до микрофона…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Етикет на бутон за спиране на теста на микрофона в първоначалното въвеждане, докато тече.",
+    "message": "Спри теста"
+  },
+  "onboarding_step1Body": {
+    "description": "Текст на първата стъпка от въвеждането, обясняващ как да закачите разширението.",
+    "message": "Кликнете иконата с пъзел 🧩 горе вдясно в браузъра, после карфицата 📌 до Say, Pi. Така бутонът за обаждане е на един клик разстояние."
+  },
+  "onboarding_step1Title": {
+    "description": "Заглавие на първата стъпка от въвеждането (закачане на разширението).",
+    "message": "Закачете Say, Pi към лентата с инструменти"
+  },
+  "onboarding_step2Body": {
+    "description": "Текст на втората стъпка от въвеждането, обясняващ как да започнете гласов разговор.",
+    "message": "Отидете при някой от поддържаните асистенти по-долу, после натиснете бутона за обаждане на Say, Pi и кажете здравей. Първия път ще поискаме достъп до микрофона — това е нормално, и слушаме само докато сте активно в разговор."
+  },
+  "onboarding_step2Title": {
+    "description": "Заглавие на втората стъпка от въвеждането (стартиране на разговор).",
+    "message": "Отворете AI чат и започнете да говорите"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Разрешение за микрофон"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Насоки за възстановяване, когато разрешението за микрофона е блокирано.",
+    "message": "Браузърът ви блокира микрофона. Щракнете иконата на камера или катинар в адресната лента, задайте Microphone на „Allow“, после опитайте отново. На macOS проверете и System Settings → Privacy & Security → Microphone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Заглавие на панела за възстановяване, когато разрешението за микрофона е отказано/блокирано.",
+    "message": "Достъпът до микрофона е блокиран"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Насоки за възстановяване, когато микрофонът се използва другаде.",
+    "message": "Друго приложение или раздел може да използва микрофона ви. Затворете всичко, което може да записва (видеоразговори, гласови бележки), после опитайте отново."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Заглавие на панела за възстановяване, когато микрофонът се използва от друго приложение.",
+    "message": "Микрофонът ви е зает"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Насоки за възстановяване, когато няма налично устройство микрофон.",
+    "message": "Не успяхме да намерим микрофон. Включете такъв (или свържете слушалките си с микрофон), уверете се, че е избран като входно устройство, после опитайте отново."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Заглавие на панела за възстановяване, когато няма налично устройство микрофон.",
+    "message": "Не е открит микрофон"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Насоки за възстановяване при неизвестна грешка с микрофона.",
+    "message": "Нещо се обърка при достъпа до микрофона ви. Проверете дали е свързан и разрешен в настройките на браузъра, после опитайте отново."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Заглавие на панела за възстановяване при неизвестна грешка с микрофона.",
+    "message": "Не успяхме да получим достъп до микрофона ви"
+  },
+  "permissions_retryButton": {
+    "description": "Етикет за бутона, който отново изисква разрешение за микрофона.",
+    "message": "Опитайте отново"
+  },
+  "permissions_revokedHeading": {
+    "description": "Заглавие, показвано когато достъпът до микрофона е бил предоставен преди, но впоследствие е отнет.",
+    "message": "🎙️ Нека свържем микрофона ви отново"
+  },
+  "permissions_revokedInfo": {
+    "description": "Информационен текст, показван когато достъпът до микрофона е бил отнет след като е бил предоставен.",
+    "message": "Достъпът до микрофона ви беше изключен — това често се случва след актуализация на браузъра или системата. Разрешете го отново по-долу и $productName$ пак ще слуша, когато сте в разговор.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Профил"
+  },
+  "quietModeLabel": {
+    "description": "Етикет за превключвателя, който включва тих/шепотен режим.",
+    "message": "Тих режим"
+  },
+  "quietModeTooltip": {
+    "description": "Подсказка, която обяснява какво прави тих/шепотен режим.",
+    "message": "Говорете тихо — улавя по-тиха реч и намалява силата на отговора на асистента, за да можете да използвате глас около други хора."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Текст за бутона за вход, докато удостоверяването е в ход.",
+    "message": "Влизане…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Звукови ефекти"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Звуковите ефекти са деактивирани във Firefox, за да се предотвратят проблеми със звуковата обратна връзка."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Заглавие на еднократното известие за ползата от скоростта, показвано след първия разговор с глас.",
+    "message": "Добре — говоренето е около 3× по-бързо от писането."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Незадължителен втори ред на известието за ползата от скоростта, който показва спестените цели минути.",
+    "message": "Вече сте говорили с около $minutes$ мин по-бързо, отколкото ако го бяхте написали.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Изпратете само когато натиснете бутона"
   },
+  "surveyQuestion": {
+    "description": "Единственият въпрос в еднократното микро-проучване след успех.",
+    "message": "Как ви се струва гласът досега?"
+  },
+  "surveyRatingLabel": {
+    "description": "Достъпен етикет за бутон за оценка в проучването.",
+    "message": "Оценете: $rating$ от 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Потвърждение, показвано след като потребителят отговори на проучването след успех.",
+    "message": "Благодаря — това ни помага да направим Say, Pi по-добър. 🙏"
+  },
   "tabAIChat": {
     "description": "Етикет на таба за секцията с настройки на AI чата.",
     "message": "AI Чат"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Етикет на таба за секцията с общи настройки.",
     "message": "Общи"
+  },
+  "tabVoices": {
+    "description": "Етикет на раздела за секцията с настройки на гласовете (каталог с гласове по сайтове).",
+    "message": "Гласове"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "кредити"
   },
+  "ttsCreditsRemaining": {
+    "description": "Текст, показващ оставащата квота за TTS като пул от кредити за глас (saypi-api #181 Stage 2), а не като брой знаци.",
+    "message": "Остават $credits$ кредита",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Понастоящем в Safari не се поддържат многоезични гласове."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Гласово генериране"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Внимание! Възпроизвеждането на реч все още не е налично на $browserName$ с $chatbotName$. Добрата новина? Гласовият вход работи отлично! За TTS опитайте Chrome или Edge на работния плот.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS не е наличен на $browserName$ + $chatbotName$. Гласовият вход работи! Опитайте Chrome на работния плот за TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts глас"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Активиране на микрофон ..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Подробност от VAD, когато е засечено аудио, подобно на реч, но е било твърде тихо / с ниска увереност за транскрибиране (клиентско отхвърляне от admission gate).",
+    "message": "Аудиото е твърде тихо за транскрибиране"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "Сервизната услуга на VAD."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Подробност от VAD, обясняваща, че обаждането е приключило, защото микрофонът е бил заявен от по-нов таб.",
+    "message": "Гласовият вход е преместен в друг таб"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "В очакване на реч"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Гласът не е наличен. \nОпитайте Chrome или Firefox на работния плот."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Внимание! Възпроизвеждането на реч все още не е налично на $browserName$ с $chatbotName$. Добрата новина? Гласовият вход работи отлично! За TTS опитайте Chrome или Edge на работния плот.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS не е наличен на $browserName$ + $chatbotName$. Гласовият вход работи! Опитайте Chrome на работния плот за TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Разбрах",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Покритие"
   },
+  "vadStatusPreempted": {
+    "description": "Статус на VAD, показван в таб, чийто гласов вход е бил поет от друг таб.",
+    "message": "На пауза"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Обработка"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Вижте подробности"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Общо гласово представяне, което се пуска, когато избраният глас на Say, Pi няма специфичен скрипт за представяне (и няма скорошно съобщение за прочит).",
+    "message": "Здравейте, аз съм $voice$. Така звуча. Надявам се този глас да ви хареса.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Здравей! \nПривет! \n你好! \nАз съм Пи, вашият полиглот AI помощник. \nС 32 езика под мое управление можем да изследваме идеи и култури от цял ​​свят. \nКакво мислите за този глас?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Гласови настройки"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Резервен подзаглавен текст за ред с глас в каталога с гласове в настройките, когато гласът няма описание; $count$ е броят езици, които гласът поддържа.",
+    "message": "Говори $count$ езика",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Създаден слоган за личността на гласа „Addison“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Слънчев и изразителен"
+  },
+  "voiceTagline_alloy": {
+    "description": "Авторски слоган за личността на гласа „Alloy“ (студио „Гласове“ в настройките; клиентска карта на идентичността на гласа).",
+    "message": "Балансиран и универсален"
+  },
+  "voiceTagline_ash": {
+    "description": "Авторски слоган за личността на гласа „Ash“ (студио „Гласове“ в настройките; клиентска карта на идентичността на гласа).",
+    "message": "Нисък, замислен, спокоен"
+  },
+  "voiceTagline_ballad": {
+    "description": "Авторски слоган за личността на гласа „Ballad“ (студио „Гласове“ в настройките; клиентска карта на идентичността на гласа).",
+    "message": "Плавен и мелодичен"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Създаден слоган за личността на гласа „Cassidy“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Приветлив и делови"
+  },
+  "voiceTagline_cedar": {
+    "description": "Авторски слоган за личността на гласа „Cedar“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Спокоен и успокояващ"
+  },
+  "voiceTagline_coral": {
+    "description": "Авторски слоган за личността на гласа „Coral“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Светла, приповдигната енергия"
+  },
+  "voiceTagline_echo": {
+    "description": "Авторски слоган за личността на гласа „Echo“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Чист и неутрален"
+  },
+  "voiceTagline_fable": {
+    "description": "Авторски слоган за личността на гласа „Fable“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Разказвачески нюанс"
+  },
+  "voiceTagline_finn": {
+    "description": "Създаден слоган за личността на гласа „Finn“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Свеж и енергичен"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Създаден слоган за личността на гласа „Jamahal“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Плътен и магнетичен"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Авторски слоган за личността на гласа „Jarnathan“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Кадифен къснонощен баритон"
+  },
+  "voiceTagline_jeff": {
+    "description": "Създаден слоган за личността на гласа „Jeff“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Прям и уравновесен"
+  },
+  "voiceTagline_jessica": {
+    "description": "Създаден слоган за личността на гласа „Jessica“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Топла, изтънчена осанка"
+  },
+  "voiceTagline_joey": {
+    "description": "Авторски слоган за личността на гласа „Joey“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Лесен, разговорен американски"
+  },
+  "voiceTagline_juniper": {
+    "description": "Създаден слоган за личността на гласа „Juniper“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Ясен, светъл, жив"
+  },
+  "voiceTagline_lucy": {
+    "description": "Създаден слоган за личността на гласа „Lucy“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Нежен и сияен"
+  },
+  "voiceTagline_marin": {
+    "description": "Авторски слоган за личността на гласа „Marin“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Топъл, спокоен като сутрешно радио"
+  },
+  "voiceTagline_mark": {
+    "description": "Създаден слоган за личността на гласа „Mark“ (настройки: студио Voices; клиентска карта за идентичност на гласа).",
+    "message": "Ясен, уверен разказвач"
+  },
+  "voiceTagline_nova": {
+    "description": "Авторски слоган за личността на гласа „Nova“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Бърз и любопитен"
+  },
+  "voiceTagline_onyx": {
+    "description": "Авторски слоган за личността на гласа „Onyx“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Дълбока, плътна тежест"
+  },
+  "voiceTagline_paola": {
+    "description": "Авторски слоган за личността на гласа „Paola“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Изразителна италианска топлота"
+  },
+  "voiceTagline_sage": {
+    "description": "Авторски слоган за личността на гласа „Sage“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Тиха яснота"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Авторски слоган за личността на гласа „Shimmer“ (настройки: студио Гласове; клиентска карта на идентичността на гласа).",
+    "message": "Лек и ефирен"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Кратък етикет върху превключвателя за закачане на карта на глас (изключено състояние) в Voices studio в настройките; натискането добавя гласа към менюто на хоста в чата.",
+    "message": "+ Меню"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Достъпен етикет за превключвателя за закачане на карта на глас (изключено състояние); $name$ е гласът, $host$ е асистентът.",
+    "message": "Добави $name$ към менюто на $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Етикет на превключвателя в лентата за управление на „Гласове“, който указва дали придвижването в списъка с клавишите със стрелки пуска всеки глас, когато фокусът стигне до него.",
+    "message": "Пускай при придвижване"
+  },
+  "voicesArrowsLive": {
+    "description": "Потвърждение за екранен четец, добавено към първото съобщение „Възпроизвежда се <глас>“ в списъка „Гласове“ в настройките, което казва, че стрелките току-що са станали звукови. Повтаря формулировката на превключвателя „Възпроизвеждай при придвижване“.",
+    "message": "Стрелките вече възпроизвеждат при придвижване. Esc спира."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Бележка под местата в менюто за хостове, които идват с вградени гласове (напр. 8-те вградени гласа на Pi), които студиото не управлява; $host$ е асистентът.",
+    "message": "В менюто на $host$ винаги се показват и собствените вградени гласове.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Вариант на voicesBuiltinsNote за хост без меню за глас в чата (Pi премахна менюто си през 2026), при който обещанието от оригинала, че вградените гласове „се показват в менюто му“, би било невярно; $host$ е асистентът.",
+    "message": "$host$ има и собствени вградени гласове, които не са изброени тук.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Отчет за напредъка в лентата за управление на настройките „Гласове“: колко от изброените гласове потребителят вече е слушал. Само числа, така че да се чете правилно и при 1 — Chrome i18n няма множествени форми.",
+    "message": "Чути $heard$ от $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Част от достъпното име на ред за глас в списъка „Гласове“ в настройките, която отбелязва глас, който този профил вече е слушал. Визуално това е изобразено като плътност на мастилото в звуковия отпечатък на гласа, което екранният четец не може да види.",
+    "message": "Чут"
+  },
+  "voicesInHostMenu": {
+    "description": "Заглавие на раздел над реда със слотове в менюто в Voices studio в настройките; $host$ е асистентът.",
+    "message": "В менюто на $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Кратък етикет върху превключвателя за закачане на карта на глас (включено състояние) в Voices studio в настройките.",
+    "message": "✓ В менюто"
+  },
+  "voicesInUse": {
+    "description": "Постоянна значка върху текущо избрания глас на хоста в списъка с гласове в настройките, визуализирана с главни букви. Умишлено НЕ е „Говори в момента“: на тази страница редовете възпроизвеждат примерни клипове, така че избран, но мълчалив глас не бива да твърди, че говори, докато друг ред го прави.",
+    "message": "Използва се"
+  },
+  "voicesKeyboardHint": {
+    "description": "Едноредов подсказващ текст за клавиатурата в лентата за управление на настройките „Гласове“. Символите са клавиши: Space, стрелките нагоре/надолу и Shift+Space.",
+    "message": "Натиснете Space, за да слушате, ↑↓ за придвижване между гласове, ⇧Space за връщане назад."
+  },
+  "voicesLoadError": {
+    "description": "Състояние за грешка в студиото на конкретен хост, когато каталогът с гласове на този хост не успее да се зареди; $host$ е асистентът.",
+    "message": "Не успяхме да заредим гласовете на $host$. Моля, опитайте отново по-късно.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Подсказка/хинт върху деактивиран превключвател „+ Меню“, когато менюто на хоста в чата вече е достигнало максималния брой гласове.",
+    "message": "Менюто е пълно — премахни глас, за да добавиш друг"
+  },
+  "voicesMenuHint": {
+    "description": "Едноредова подсказка до заглавието „В менюто на {host}“, която обяснява, че редът със слотове отразява менюто с гласове в чата.",
+    "message": "Какво ще виждаш в чата"
+  },
+  "voicesMenuOverflow": {
+    "description": "Бележка под местата в менюто, когато потребителят има повече закачени гласове, отколкото менюто в чата може да покаже (наследено състояние); $count$ е колко не се побират, $cap$ е размерът на менюто.",
+    "message": "Още $count$ закачени гласа чакат след $cap$-те места в менюто.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Единствено число на voicesMenuOverflow, използва се когато точно един закачен глас не се побира в менюто в чата; $cap$ е размерът на менюто.",
+    "message": "Още 1 закачен глас чака след $cap$-те места в менюто.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Обобщаващ ред под списъка „Гласове“ в настройките, който показва колко е запълнено гласовото меню на хоста в чата; $host$ е асистентът, $used$ е колко места са заети, $cap$ е колко са общо. Формулирано да звучи правилно и при 1 — Chrome i18n няма множествени форми.",
+    "message": "Менюто на $host$: $used$ от $cap$ места",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Заглавие за групата в края на списъка „Гласове“ в настройките, която съдържа гласове без примерен клип за пускане; $count$ е колко са. Формулирано да звучи правилно и при 1 — Chrome i18n няма множествени форми.",
+    "message": "Още няма пример ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Показва се в каталога с гласове в настройките, когато списъкът с гласове е празен за влязъл потребител (напр. проблем с мрежата).",
+    "message": "Гласовете не могат да се заредят в момента. Опитайте отново по-късно."
+  },
+  "voicesNowPlaying": {
+    "description": "Съобщение за екранен четец, когато започне да се възпроизвежда примерният клип на глас в списъка „Гласове“ в настройките; $name$ е гласът.",
+    "message": "Възпроизвежда се $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Бутон в лентата за управление на настройките „Гласове“, който пуска всички текущо изброени гласове един след друг; $count$ е колко са. Формулирано да звучи правилно и при 1 — Chrome i18n няма множествени форми.",
+    "message": "Пуснете всички ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Бутон в лентата за управление на настройките „Гласове“ при повторно посещение: пуска само изброените гласове, които още не сте слушали; $count$ е колко са. Формулирано да звучи правилно и при 1 — Chrome i18n няма множествени форми.",
+    "message": "Пуснете новите ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Ред в лентата за управление „Гласове“ в настройките, когато браузърът отказва да пусне пример, защото страницата все още няма потребителско взаимодействие.",
+    "message": "Щракнете върху глас, за да разрешите звука."
+  },
+  "voicesPreview": {
+    "description": "Достъпен етикет за бутона за пускане (▶), който прослушва безплатния примерен клип на гласа в реда за глас; $name$ е името на гласа.",
+    "message": "Пусни пример с $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Достъпно име на списъка „Гласове“ в настройките (listbox с всеки глас, по един ред за всеки).",
+    "message": "Гласове, подредени от най-дълбокия до най-светлия"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Достъпен етикет за превключвателя за закачане на карта на глас (включено състояние) и бутона за премахване на слот в менюто; $name$ е гласът, $host$ е асистентът.",
+    "message": "Премахни $name$ от менюто на $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Ред в лентата за управление „Гласове“ в настройките, когато примерният клип на даден глас не успее да се зареди или да се възпроизведе; $name$ е този глас. Немодално — поредицата от примери продължава и след него.",
+    "message": "Не успяхме да пуснем примера на $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Подзаглавие на раздела с каталога на гласове в таба AI Chat на настройките",
+    "message": "Изберете гласа, който чете на глас отговорите на всеки сайт."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Подзаглавие под заглавието на настройките „Гласове“, за релсата с гласове, подредени по височина.",
+    "message": "Всеки глас, от най-дълбокия до най-светлия. Слушайте, после изберете."
+  },
+  "voicesSectionTitle": {
+    "description": "Заглавие на раздела с каталога на гласове в таба AI Chat на настройките",
+    "message": "Гласове"
+  },
+  "voicesShelfEveryday": {
+    "description": "Заглавие на група за гласове от по-достъпния клас в каталога с гласове в настройките. Рендерира се с главни букви чрез CSS.",
+    "message": "Ежедневни гласове"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Едноредова бележка до заглавието на групата Everyday в студиото Гласове в настройките; единственото място, където студиото казва колко по-далеч стига този клас спрямо HD.",
+    "message": "Естествени и ясни — можете да слушате около 20× по-дълго, отколкото с HD."
+  },
+  "voicesShelfHd": {
+    "description": "Заглавие на група за премиум (HD) гласове в каталога с гласове в настройките. Рендерира се с главни букви чрез CSS.",
+    "message": "HD гласове"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Едноредова бележка до заглавието на групата HD в студиото Гласове в настройките.",
+    "message": "Най-богатият и най-изразителният ни звук."
+  },
+  "voicesShowAll": {
+    "description": "Опция във филтъра „Покажи“ за „Гласове“ в настройките: без филтриране, показват се всички гласове.",
+    "message": "Всички гласове"
+  },
+  "voicesShowEveryday": {
+    "description": "Опция във филтъра „Покажи“ за „Гласове“ в настройките: показва само стандартните (не-HD) гласове.",
+    "message": "Само стандартни"
+  },
+  "voicesShowHd": {
+    "description": "Опция във филтъра „Покажи“ за „Гласове“ в настройките: показва само премиум (HD) гласовете.",
+    "message": "Само HD"
+  },
+  "voicesShowLabel": {
+    "description": "Етикет на филтъра в лентата за управление „Гласове“ в настройките, който стеснява кои гласове се показват в списъка.",
+    "message": "Покажи"
+  },
+  "voicesShowUnheard": {
+    "description": "Опция във филтъра „Покажи“ за „Гласове“ в настройките: показва само гласовете, които потребителят още не е слушал.",
+    "message": "Още нечутите"
+  },
+  "voicesSpeakingNow": {
+    "description": "Етикет за състояние върху текущо избрания глас на хоста в Voices studio в настройките (слот в менюто и карта на гласа).",
+    "message": "Говори в момента"
+  },
+  "voicesSpeaksWith": {
+    "description": "Ред над името на текущия глас на сцената Voices studio в настройките; $host$ е асистентът (напр. Pi). CSS го визуализира с главни букви.",
+    "message": "$host$ говори с",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Бележка на сцената, когато хостът има собствено аудио (напр. Pi), така че изборът на глас от Say, Pi заменя гласа на хоста.",
+    "message": "$host$ използва собствения си глас, докато не изберете един отдолу.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Бележка на сцената, когато хостът няма собствен глас (напр. Claude), така че нищо не се чете на глас, докато не бъде избран глас от Say, Pi.",
+    "message": "$host$ няма да чете отговорите на глас, докато не изберете един отдолу.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Заглавие на сцената в студиото „Гласове“ в настройките, когато за хоста не е избран глас от SayPi; $host$ е асистентът (напр. Pi, Claude). Рендерира се с размер на име.",
+    "message": "Изберете как звучи $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Бутон на сцената в студиото „Гласове“ в настройките, който пуска безплатния примерен клип на текущия глас.",
+    "message": "Чуйте откъс"
+  },
+  "voicesStopPlayback": {
+    "description": "Бутон в лентата за управление на настройките „Гласове“, който спира поредицата от примери, стартирана от „Пуснете всички“.",
+    "message": "Спиране"
+  },
+  "voicesSweepPosition": {
+    "description": "Показване на текущата позиция в лентата за управление „Гласове“ в настройките, докато „Пусни всички“ обхожда списъка; $index$ е гласът, който се възпроизвежда в момента, а $total$ е колко са на опашка.",
+    "message": "$index$ от $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Достъпен етикет за контролата за сравнение в лентата за управление на настройките „Гласове“, която пуска отново другия глас от последните два чути; $name$ е този глас.",
+    "message": "Върнете към $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Ред в лентата за управление „Гласове“ в настройките, когато „Пусни всички“ е натиснато за твърде дълъг списък; $count$ е колко са гласовете, а $minutes$ приблизително колко минути биха отнели. Съкратено „мин.“ така че да се чете правилно при 1 — Chrome i18n няма форми за множествено число.",
+    "message": "Това са $count$ гласа — около $minutes$ мин. Първо стеснете списъка.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Достъпен етикет за бутона „използвай този глас“ за конкретен хост в каталога с гласове в настройките; $name$ е гласът, $host$ е асистентът (напр. Pi, Claude).",
+    "message": "Използвай $name$ в $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Кратък етикет върху бутона „използвай този глас“ за конкретен хост в единния каталог с гласове в настройките (хостът се показва до него).",
+    "message": "Използвай"
+  },
+  "voicesYourVoice": {
+    "description": "Бутон в лентата за управление в списъка „Гласове“ в настройките, който премества фокуса към реда на гласа, който този хост използва в момента; $name$ е този глас.",
+    "message": "Вашият глас: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Грешка, хвърляна когато браузърът не може да задели достатъчно WebAssembly памет за модела за засичане на глас.",
+    "message": "Засичането на глас не може да стартира: няма достатъчно WebAssembly памет за гласовия модел. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Грешка, хвърляна когато браузърът не предоставя началната WebAssembly памет, нужна за изпълнение на модела за засичане на глас.",
+    "message": "Засичането на глас не може да стартира: в този браузър не е налична памет за WebAssembly."
   }
 }

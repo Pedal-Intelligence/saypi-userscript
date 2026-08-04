@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "அங்கீகார மோடலில் பட்டியலிடப்படும் நன்மை - அதிகரிக்கப்பட்ட பயன்பாட்டு வரம்புகள்.",
+    "message": "இலவச கணக்குடன் அதிக பயன்பாட்டு வரம்புகள்"
+  },
+  "authBenefitPremium": {
+    "description": "அங்கீகார மோடலில் பட்டியலிடப்படும் நன்மை - chatbot-களில் பிரீமியம் அம்சங்கள்.",
+    "message": "பிரீமியம் அம்சங்கள் மற்றும் chatbot ஆதரவு"
+  },
+  "authBenefitSupport": {
+    "description": "அங்கீகார மோடலில் பட்டியலிடப்படும் நன்மை - முன்னுரிமை ஆதரவு.",
+    "message": "சிக்கல்களுக்கு முன்னுரிமை ஆதரவு"
+  },
+  "authBenefitSync": {
+    "description": "அங்கீகார மோடலில் பட்டியலிடப்படும் நன்மை - அமைப்புகள் ஒத்திசைவு.",
+    "message": "எல்லா இடங்களிலும் குரல் அமைப்புகளை ஒத்திசைக்கவும்"
+  },
+  "authBenefitTTS": {
+    "description": "அங்கீகார மோடலில் பட்டியலிடப்படும் நன்மை - TTS அம்சம்.",
+    "message": "உரையிலிருந்து-குரல் குரல்கள் (கட்டணத் திட்டங்கள்)"
+  },
+  "authBenefitUsage": {
+    "description": "அங்கீகார மோடலில் பட்டியலிடப்படும் நன்மை - பயன்பாட்டு கண்காணிப்பு.",
+    "message": "சாதனங்களுக்கிடையே உங்கள் குரல் பயன்பாட்டை கண்காணிக்கவும்"
+  },
+  "authPromptModalFull": {
+    "description": "மதிப்பு முன்மொழிவுடன் கூடிய முழு மோடல் அங்கீகார கேள்விக்கான விளக்கம்.",
+    "message": "Say, Pi-ஐ நீங்கள் நல்ல அளவில் பயன்படுத்துகிறீர்கள். அதிக வரம்புகள், உரையிலிருந்து-குரல் குரல்கள், மேலும் ஆதரிக்கப்படும் அனைத்து chatbot-களிலும் பிரீமியம் அம்சங்களுக்கு உள்நுழையவும்."
+  },
+  "authPromptModalSoft": {
+    "description": "மென்மையான மோடல் அங்கீகார கேள்விக்கான விளக்கம்.",
+    "message": "அதிக பயன்பாட்டு வரம்புகள் மற்றும் பிரீமியம் குரல் அம்சங்களைப் பெற இலவச Say, Pi கணக்கை உருவாக்குங்கள்."
+  },
+  "authPromptTitle": {
+    "description": "அங்கீகார கேள்வி மோடலுக்கான தலைப்பு.",
+    "message": "மேலும் குரல் அம்சங்களை திறக்கவும்"
+  },
+  "authPromptToast": {
+    "description": "பயனரை உள்நுழைய ஊக்குவிக்கும் டோஸ்ட் அறிவிப்பு.",
+    "message": "அதிக வரம்புகள் மற்றும் பிரீமியம் அம்சங்களுக்கு Say, Pi-க்கு உள்நுழையவும்"
+  },
   "autoReadAloudChatGPT": {
     "description": "குரல் அழைப்பின் போது ChatGPT பதில்களை தானாகக் கன்னடிக்கச் செய்யும்/செயலிழக்கும் என்பதற்கான தேர்வுத்தொகையுக்கான குறி.",
     "message": "தானாக கன்னடித்தல் (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "உரை-க்கு-பேச்சை முடக்கு"
   },
+  "dismiss": {
+    "message": "புரிந்தது",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "நிராகரி"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "கவனம் செலுத்து"
   },
+  "errorVadInitFailed": {
+    "description": "குரல்-செயற்பாட்டு கண்டறிதல் தொடக்கப்பட முடியாதபோது காட்டப்படும் பிழை டோஸ்ட்.",
+    "message": "குரல் கண்டறிதலைத் தொடக்க முடியவில்லை"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "குரல் பதிவேற்றத்தை அமைக்கும் போது எதிர்பாராத பிழை ஏற்பட்டால் காட்டப்படும் பிழை டோஸ்ட்.",
+    "message": "குரல் பதிவேற்றத்தை அமைக்க முடியவில்லை"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "குரல்-கண்டறிதல் கிளையண்ட் பதிவேற்றத்தை தொடங்க முடியாதபோது காட்டப்படும் பிழை டோஸ்ட்.",
+    "message": "குரல் பதிவேற்றத்தை தொடங்க முடியவில்லை"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "குரல்-கண்டறிதல் (VAD) கிளையண்ட் கிடைக்காததால் பதிவேற்றத்தைத் தொடங்க முடியாதபோது காட்டப்படும் பிழை டோஸ்ட்.",
+    "message": "குரல் பதிவேற்றம் கிடைக்கவில்லை"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "கவன நிலையை விட்டு வெளியேறவும்"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "பிரீமியம் (HD) மற்றும் மதிப்பு குரல்கள் இரண்டும் கிடைக்கும் போது குரல் மெனுக்களில் காட்டப்படும் ஒரு வரி குறிப்பு",
+    "message": "HD குரல்கள் உங்கள் மாதாந்திர அளவுத்தொகையை சுமார் 20× வேகமாக பயன்படுத்தும்."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "இதைத் தவிர்த்து ..."
   },
+  "maybeLater": {
+    "description": "அங்கீகார கேள்வியை நீக்குவதற்கான பொத்தான் உரை.",
+    "message": "பிறகு பார்க்கலாம்"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "உங்கள் மைக்ரோஃபோன் அமைப்புகள் தேவையான விவரக்குறிப்புகளைப் பூர்த்தி செய்யவில்லை. \nவேறு மைக்ரோஃபோனைப் பயன்படுத்தவும் அல்லது உங்கள் ஆடியோ அமைப்புகளைச் சரிசெய்யவும்."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "மைக்ரோஃபோனை அணுக முடியவில்லை. \nஉங்கள் சாதன அமைப்புகளைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்."
   },
+  "microphonePermissionDeniedError": {
+    "description": "அனுமதி கோரிக்கை முறையின் பிறகு மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டால் காட்டப்படும் பிழை டோஸ்ட்.",
+    "message": "மைக்ரோஃபோன் அனுமதி வழங்கப்படவில்லை. கோரிக்கையிலும் நீட்டிப்பு அமைப்புகளிலும் அணுகலை அனுமதித்துள்ளீர்களா என்பதை உறுதிசெய்யவும்."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "செம்மை"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "வேகமான பதில், ஆனால் குறைவான துல்லியம். \nகுறுக்கிட வாய்ப்புள்ளது."
   },
+  "moreVoices": {
+    "description": "பக்கத்திலுள்ள குரல் மெனுவிலிருந்து நீட்டிப்பு அமைப்புகளில் உள்ள முழு குரல் பட்டியலுக்குச் செல்லும் மெனு வரி.",
+    "message": "மேலும் குரல்கள்…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "உதவியாளர் பெயர்"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "உள்நுழையவில்லை"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "ChatGPT-ஐ திறக்கும் பொத்தானின் குறிப்பு.",
+    "message": "ChatGPT-ஐ திற"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Claude.ai-யை திறக்கும் பொத்தான் லேபல்.",
+    "message": "Claude-ஐ திறக்கவும்"
+  },
+  "onboarding_ctaPi": {
+    "description": "Pi.ai-யை திறக்கும் பொத்தான் லேபல்.",
+    "message": "Pi-யை திறக்கவும்"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "சூழல் விருப்பம்: மற்றவர்களுடன் இருக்கும் இடம்.",
+    "message": "மற்றவர்களுடன் இருக்கும் இடம்"
+  },
+  "onboarding_envMixed": {
+    "description": "சூழல் விருப்பம்: தனிப்பட்ட மற்றும் பகிரப்பட்ட இடங்களின் கலவை.",
+    "message": "பல இடங்களின் கலவை"
+  },
+  "onboarding_envPrivate": {
+    "description": "சூழல் விருப்பம்: தனிப்பட்ட இடம்.",
+    "message": "தனிப்பட்ட இடம்"
+  },
+  "onboarding_envQuietOff": {
+    "description": "சூழல் கேள்விக்கான பதிலால் quiet mode முடக்கப்பட்டிருக்கும்போது காட்டப்படும் உறுதிப்படுத்தல்.",
+    "message": "சரி — வழக்கமான கேட்கும் மற்றும் ஒலிபரப்பு அமைப்புகளையே வைத்திருப்போம்."
+  },
+  "onboarding_envQuietOn": {
+    "description": "சூழல் பதில் அமைதி முறையை இயக்கும் போது காட்டப்படும் உறுதிப்படுத்தல்.",
+    "message": "அமைதி முறை இயக்கப்பட்டுள்ளது — மெதுவான பேச்சையும் நாங்கள் பிடித்து, மெதுவாக பதிலளிப்போம்; நீங்கள் மறைவாக பேசலாம்."
+  },
+  "onboarding_envTitle": {
+    "description": "பயனர் சூழல் குறித்த வழிகாட்டி கேள்விக்கான தலைப்பு.",
+    "message": "பொதுவாக நீங்கள் எங்கே பேசுவீர்கள்?"
+  },
+  "onboarding_footer": {
+    "description": "முதல் முறை தொடங்கும் வழிகாட்டி பக்கத்தின் அடிக்குறிப்பு உரை.",
+    "message": "Say, Pi அமைப்புகளில் இருந்து இதை எப்போது வேண்டுமானாலும் மீண்டும் பார்க்கலாம். உங்கள் தனியுரிமை முக்கியம் — செயலில் உள்ள அழைப்பின் போது மட்டுமே ஆடியோ பதிவு செய்யப்படும்."
+  },
+  "onboarding_heading": {
+    "description": "முதல் இயக்கத்தின் onboarding பக்கத்தில் உள்ள முதன்மை தலைப்பு.",
+    "message": "🗣️ Say, Pi-க்கு வரவேற்கிறோம்"
+  },
+  "onboarding_intro": {
+    "description": "முதல் இயக்கத்தின் onboarding பக்கத்தில் உள்ள அறிமுகப் பத்தி.",
+    "message": "AI-யுடன் உங்கள் முதல் பேச்சு உரையாடலுக்கு இன்னும் இரண்டு படிகள். பேசுவது தட்டச்சை விட சுமார் 3× வேகமாக இருக்கும் — அமைப்பை செய்து விடலாம்."
+  },
+  "onboarding_micTestButton": {
+    "description": "அபாயமில்லா வழிகாட்டி மைக்ரோஃபோன் சோதனையைத் தொடங்கும் பொத்தான்.",
+    "message": "🎤 உங்கள் மைக்ரோஃபோனைச் சோதிக்கவும்"
+  },
+  "onboarding_micTestDone": {
+    "description": "வழிகாட்டி மைக் சோதனை வெற்றிகரமாக முடிந்த பிறகு காட்டப்படும் நிலை.",
+    "message": "சரி — உங்கள் மைக்ரோஃபோன் வேலை செய்கிறது! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "வழிகாட்டி மைக் சோதனை உள்ளீட்டை அளவிடும் போது காட்டப்படும் நிலை.",
+    "message": "கேட்கிறது — ஏதாவது சொல்லுங்கள்! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "வழிகாட்டி மைக் சோதனை அனுமதிக்காக காத்திருக்கும்போது காட்டப்படும் நிலை.",
+    "message": "மைக்ரோஃபோன் அனுமதி கேட்கப்படுகிறது…"
+  },
+  "onboarding_micTestStop": {
+    "description": "வழிகாட்டி மைக் சோதனை இயங்கும்போது அதை நிறுத்தும் பொத்தான்.",
+    "message": "சோதனையை நிறுத்து"
+  },
+  "onboarding_step1Body": {
+    "description": "நீட்சியை எப்படி பின் செய்வது என்பதை விளக்கும் முதல் onboarding படியின் உரை.",
+    "message": "உங்கள் உலாவியின் மேல்-வலப்பக்கத்தில் உள்ள பஸில்-பீஸ் 🧩 ஐகானை கிளிக் செய்து, பிறகு Say, Pi அருகிலுள்ள பின் 📌-ஐ அழுத்தவும். இதனால் அழைப்பு பொத்தான் ஒரு கிளிக்கில் கிடைக்கும்."
+  },
+  "onboarding_step1Title": {
+    "description": "முதல் onboarding படியின் தலைப்பு (நீட்சியை பின் செய்வது).",
+    "message": "Say, Pi-யை உங்கள் கருவிப்பட்டையில் பின் செய்யவும்"
+  },
+  "onboarding_step2Body": {
+    "description": "குரல் உரையாடலை எப்படி தொடங்குவது என்பதை விளக்கும் இரண்டாவது onboarding படியின் உரை.",
+    "message": "கீழே உள்ள ஆதரிக்கப்படும் உதவியாளர்களில் ஒன்றுக்குச் செல்லுங்கள்; பின்னர் Say, Pi அழைப்பு பொத்தானைத் தட்டி வணக்கம் சொல்லுங்கள். முதல் முறையில் மைக்ரோஃபோன் அணுகலை கேட்போம் — அது இயல்பானது, மேலும் நீங்கள் அழைப்பில் இருக்கும் நேரத்தில் மட்டுமே நாம் கேட்கிறோம்."
+  },
+  "onboarding_step2Title": {
+    "description": "இரண்டாவது onboarding படியின் தலைப்பு (உரையாடலைத் தொடங்குவது).",
+    "message": "AI அரட்டையைத் திறந்து பேசத் தொடங்கவும்"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "மைக்ரோஃபோன் அனுமதி"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "மைக்கின் அனுமதி தடுக்கப்பட்டிருக்கும் போது காட்டப்படும் மீட்பு வழிகாட்டல்.",
+    "message": "உங்கள் உலாவி மைக்ரோஃபோனை தடுக்கிறது. முகவரி பட்டையில் உள்ள கேமரா அல்லது பூட்டு சின்னத்தைச் சொடுக்கி, Microphone-ஐ \"Allow\" என அமைத்து, பின்னர் மீண்டும் முயற்சிக்கவும். macOS-ல், System Settings → Privacy & Security → Microphone-யும் சரிபார்க்கவும்."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "மைக்கின் அனுமதி மறுக்கப்பட்ட/தடுக்கப்பட்ட நிலையில் மீட்பு பலகையின் தலைப்பு.",
+    "message": "மைக்ரோஃபோன் அணுகல் தடுக்கப்பட்டுள்ளது"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "மைக்கை வேறு இடத்தில் பயன்படுத்திக் கொண்டிருக்கும்போது காட்டப்படும் மீட்பு வழிகாட்டல்.",
+    "message": "வேறொரு செயலி அல்லது தாவல் உங்கள் மைக்ரோஃபோனைப் பயன்படுத்திக் கொண்டிருக்கலாம். பதிவு செய்யக்கூடியவற்றை (வீடியோ அழைப்புகள், குரல் குறிப்புகள்) மூடி, பின்னர் மீண்டும் முயற்சிக்கவும்."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "மைக்கை வேறொரு செயலி பயன்படுத்தும்போது மீட்பு பலகையின் தலைப்பு.",
+    "message": "உங்கள் மைக்ரோஃபோன் பயன்படுத்தப்படுகிறது"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "மைக்ரோஃபோன் சாதனம் எதுவும் இல்லாதபோது காட்டப்படும் மீட்பு வழிகாட்டல்.",
+    "message": "மைக்ரோஃபோனை கண்டுபிடிக்க முடியவில்லை. ஒன்றை இணைக்கவும் (அல்லது உங்கள் ஹெட்செட்டை இணைக்கவும்), அது உங்கள் input சாதனமாகத் தேர்ந்தெடுக்கப்பட்டுள்ளதா என்பதை உறுதிசெய்து, பின்னர் மீண்டும் முயற்சிக்கவும்."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "மைக்ரோஃபோன் சாதனம் எதுவும் இல்லாதபோது மீட்பு பலகையின் தலைப்பு.",
+    "message": "மைக்ரோஃபோன் கிடைக்கவில்லை"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "அறியப்படாத மைக்ரோஃபோன் பிழைக்கான மீட்பு வழிகாட்டல்.",
+    "message": "உங்கள் மைக்ரோஃபோனை அணுகுவதில் ஏதோ தவறு ஏற்பட்டது. அது இணைக்கப்பட்டுள்ளதா, உங்கள் உலாவி அமைப்புகளில் அனுமதி அளிக்கப்பட்டுள்ளதா என்பதைச் சரிபார்த்து, பின்னர் மீண்டும் முயற்சிக்கவும்."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "அறியப்படாத மைக் பிழைக்கான மீட்பு பலகையின் தலைப்பு.",
+    "message": "உங்கள் மைக்ரோஃபோனை அணுக முடியவில்லை"
+  },
+  "permissions_retryButton": {
+    "description": "மைக்ரோஃபோன் அனுமதியை மீண்டும் கோரும் பொத்தானின் லேபிள்.",
+    "message": "மீண்டும் முயற்சிக்கவும்"
+  },
+  "permissions_revokedHeading": {
+    "description": "மைக்ரோஃபோன் அணுகல் முன்பு அனுமதிக்கப்பட்டு பின்னர் திரும்பப் பெறப்பட்டிருந்தால் காட்டப்படும் தலைப்பு.",
+    "message": "உங்கள் மைக்கை மீண்டும் இணைப்போம்"
+  },
+  "permissions_revokedInfo": {
+    "description": "அனுமதி வழங்கப்பட்ட பிறகு மைக்ரோஃபோன் அணுகல் திரும்பப் பெறப்பட்டால் காட்டப்படும் தகவல் உரை.",
+    "message": "உங்கள் மைக்ரோஃபோன் அணுகல் முடக்கப்பட்டுள்ளது — இது பெரும்பாலும் உலாவி அல்லது கணினி புதுப்பிப்புக்குப் பிறகு நடக்கும். கீழே அதை மீண்டும் அனுமதியுங்கள்; நீங்கள் அழைப்பில் இருக்கும்போது $productName$ மீண்டும் கேட்கத் தொடங்கும்.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "சுயவிவரம்"
+  },
+  "quietModeLabel": {
+    "description": "அமைதி/மெளனப் பயன்முறையை இயக்கும் தாவலுக்கான லேபிள்.",
+    "message": "அமைதி பயன்முறை"
+  },
+  "quietModeTooltip": {
+    "description": "அமைதி/மெளனப் பயன்முறை என்ன செய்கிறது என்பதை விளக்கும் கருவிக்குறிப்பு.",
+    "message": "மெதுவாகப் பேசுங்கள் — மெதுவான பேச்சையும் பிடித்து, உதவியாளரின் பதிலின் ஒலி அளவையும் குறைக்கும், அதனால் மற்றவர்கள் அருகில் இருக்கும்போது குரலைப் பயன்படுத்தலாம்."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "அங்கீகாரம் நடந்து கொண்டிருக்கும்போது sign in பொத்தானில் காட்டப்படும் உரை.",
+    "message": "உள்நுழைகிறது..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "ஒலி விளைவுகள்"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "ஆடியோ பின்னூட்டச் சிக்கல்களைத் தடுக்க பயர்பாக்ஸில் ஒலி விளைவுகள் முடக்கப்பட்டுள்ளன."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "முதல் குரல் உரையாடலுக்குப் பிறகு ஒருமுறை காட்டப்படும் வேக-பலன் அறிவிப்பின் தலைப்பு.",
+    "message": "நன்று — பேசுவது தட்டச்சுவதை விட சுமார் 3× வேகமானது."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "சேமிக்கப்பட்ட முழு நிமிடங்களை காட்டும் வேக-பலன் அறிவிப்பின் விருப்பமான இரண்டாவது வரி.",
+    "message": "தட்டச்சு செய்திருந்ததை விட நீங்கள் ஏற்கனவே சுமார் $minutes$ நிமிடங்கள் வேகமாகப் பேசியுள்ளீர்கள்.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "பொத்தானை அழுத்தினால் மட்டுமே சமர்ப்பிக்கவும்"
   },
+  "surveyQuestion": {
+    "description": "ஒருமுறை மட்டும் காட்டப்படும் post-win மைக்ரோ-சர்வேயின் ஒரே கேள்வி.",
+    "message": "இதுவரை குரல் உங்களுக்கு எப்படி வேலை செய்கிறது?"
+  },
+  "surveyRatingLabel": {
+    "description": "சர்வே மதிப்பீட்டு பொத்தானுக்கான அணுகக்கூடிய லேபல்.",
+    "message": "5-இல் $rating$ மதிப்பிடுங்கள்",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "பயனர் post-win சர்வேக்கு பதிலளித்த பிறகு காட்டப்படும் நன்றியுரை.",
+    "message": "நன்றி — இது Say, Pi-யை இன்னும் மேம்படுத்த எங்களுக்கு உதவுகிறது. 🙏"
+  },
   "tabAIChat": {
     "description": "AI உரையாடல் அமைப்புக்கான தாப் லேபல்.",
     "message": "AI உரையாடல்"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "பொதுவான அமைப்புக்கான தாப் லேபல்.",
     "message": "பொது"
+  },
+  "tabVoices": {
+    "description": "குரல் அமைப்புகள் பகுதியுக்கான தாவல் லேபல் (தளத்திற்கேற்ப குரல் பட்டியல்).",
+    "message": "குரல்கள்"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "வரவு"
   },
+  "ttsCreditsRemaining": {
+    "description": "மீதமுள்ள TTS வரம்பை, எழுத்து எண்ணிக்கையாக அல்லாமல், குரல்-ஒன்றிற்கு தனியான கிரெடிட் பூலாக காட்டும் உரை (saypi-api #181 Stage 2).",
+    "message": "$credits$ கிரெடிட்கள் மீதமுள்ளது",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "சஃபாரியில் தற்போது பன்மொழி குரல்கள் ஆதரிக்கப்படவில்லை."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "குரல் தலைமுறை"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "கவனிக்கவும்! $browserName$ இல் $chatbotName$ உடன் பேச்சு பிளேபேக் இன்னும் கிடைக்கவில்லை. நல்ல செய்தி? குரல் உள்ளீடு நன்றாக வேலை செய்கிறது! TTS க்கு, டெஸ்க்டாப்பில் Chrome அல்லது Edge ஐ முயற்சிக்கவும்.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$ இல் TTS கிடைக்கவில்லை. குரல் உள்ளீடு வேலை செய்கிறது! TTS க்கு Chrome டெஸ்க்டாப்பை முயற்சிக்கவும்.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts குரல்"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD விவரம்: பேச்சு போன்ற ஆடியோ கண்டறியப்பட்டது, ஆனால் எழுத்தாக்குவதற்கு மிக மெல்லியதாக / குறைந்த நம்பகத்தன்மையுடன் இருந்தது (கிளையண்ட்-சைடு admission-gate drop).",
+    "message": "எழுத்தாக்குவதற்கு ஆடியோ மிகவும் மெல்லியதாக உள்ளது"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "புதிய டேப் மைக்ரோஃபோனை கைப்பற்றியதால் அழைப்பு முடிந்தது என்பதை விளக்கும் VAD விவரம்.",
+    "message": "குரல் உள்ளீடு வேறு ஒரு டேபிற்கு மாற்றப்பட்டது"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1227,41 +1531,9 @@
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "குரல் கிடைக்கவில்லை. \nடெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸை முயற்சிக்கவும்."
   },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "கவனிக்கவும்! $browserName$ இல் $chatbotName$ உடன் பேச்சு பிளேபேக் இன்னும் கிடைக்கவில்லை. நல்ல செய்தி? குரல் உள்ளீடு நன்றாக வேலை செய்கிறது! TTS க்கு, டெஸ்க்டாப்பில் Chrome அல்லது Edge ஐ முயற்சிக்கவும்.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "$browserName$ + $chatbotName$ இல் TTS கிடைக்கவில்லை. குரல் உள்ளீடு வேலை செய்கிறது! TTS க்கு Chrome டெஸ்க்டாப்பை முயற்சிக்கவும்.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "புரிந்தது",
-    "description": "Button text to dismiss a notification or dialog."
-  },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
-    "message": "மொபைல் உலாவிகளில் $ சாட்போட்நேம் with உடன் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படாமல் போகலாம். \nசிறந்த அனுபவத்திற்கு டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்.",
+    "message": "$chatbotName$ உடன் மொபைல் உலாவிகளில் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படாமல் இருக்கலாம். சிறந்த அனுபவத்திற்காக டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்.",
     "placeholders": {
       "chatbotName": {
         "content": "$1",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "வேறு ஒரு டேப் குரல் உள்ளீட்டைக் கைப்பற்றியதால் அந்த டேபில் காட்டப்படும் VAD நிலை.",
+    "message": "இடைநிறுத்தப்பட்டது"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "விவரங்களைக் காண்க"
   },
+  "voiceIntroductionGeneric": {
+    "description": "தேர்ந்தெடுத்த SayPi குரலுக்கு குரல்-சிறப்பு அறிமுக ஸ்கிரிப்ட் இல்லாதபோது (மேலும் சமீபத்திய செய்தியை வாசிக்க எதுவும் இல்லாதபோது) இயக்கப்படும் பொதுவான குரல் அறிமுகம்.",
+    "message": "வணக்கம், நான் $voice$. என் குரல் இப்படிதான் இருக்கும். இந்தக் குரல் உங்களுக்கு பிடிக்கும் என்று நினைக்கிறேன்.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "ஹலோ! \nநடைமுறை! \nநீங்கள்! \nநான் பை, உங்கள் பாலிகிளாட் AI உதவியாளர். \nஎனது கட்டளையில் 32 மொழிகளைக் கொண்டு, உலகெங்கிலும் உள்ள கருத்துக்களையும் கலாச்சாரங்களையும் நாம் ஆராயலாம். \nஇந்தக் குரலைப் பற்றி நீங்கள் என்ன நினைக்கிறீர்கள்?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "குரல் அமைப்புகள்"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "ஒரு குரலுக்குப் விளக்கம் இல்லாத போது அமைப்புகளின் குரல் காடலாக்கில் குரல் வரிக்கான மாற்று துணைத்தலைப்பு; $count$ என்பது அந்தக் குரல் ஆதரிக்கும் மொழிகளின் எண்ணிக்கை.",
+    "message": "$count$ மொழிகளைப் பேசும்",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "'Addison' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "மகிழ்வானதும் தெளிவாகப் பேசும்"
+  },
+  "voiceTagline_alloy": {
+    "description": "'Alloy' குரலுக்கான எழுத்தாக்கப்பட்ட குணநலன் டேக்லைன் (அமைப்புகள் குரல்கள் ஸ்டூடியோ; கிளையண்ட்-சைடு குரல் அடையாள வரைபடம்).",
+    "message": "சமநிலை, அனைத்துக்கும் ஏற்றது"
+  },
+  "voiceTagline_ash": {
+    "description": "'Ash' குரலுக்கான எழுத்தாக்கப்பட்ட குணநலன் டேக்லைன் (அமைப்புகள் குரல்கள் ஸ்டூடியோ; கிளையண்ட்-சைடு குரல் அடையாள வரைபடம்).",
+    "message": "தாழ்ந்த, சிந்தனையுடன், அமைதியான"
+  },
+  "voiceTagline_ballad": {
+    "description": "'Ballad' குரலுக்கான எழுத்தாக்கப்பட்ட குணநலன் டேக்லைன் (அமைப்புகள் குரல்கள் ஸ்டூடியோ; கிளையண்ட்-சைடு குரல் அடையாள வரைபடம்).",
+    "message": "மென்மையான, இசைபோன்ற"
+  },
+  "voiceTagline_cassidy": {
+    "description": "'Cassidy' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "நட்பானதும் நேரடியானதும்"
+  },
+  "voiceTagline_cedar": {
+    "description": "'Cedar' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "நிலையான, நம்பிக்கை அளிப்பது"
+  },
+  "voiceTagline_coral": {
+    "description": "'Coral' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "பிரகாசமான, உற்சாகமான ஆற்றல்"
+  },
+  "voiceTagline_echo": {
+    "description": "'Echo' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "தெளிவான, நடுநிலை"
+  },
+  "voiceTagline_fable": {
+    "description": "'Fable' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "கதைசொல்லும் நயம்"
+  },
+  "voiceTagline_finn": {
+    "description": "'Finn' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "புதியதும் சுறுசுறுப்பானதும்"
+  },
+  "voiceTagline_jamahal": {
+    "description": "'Jamahal' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "அழுத்தமானதும் கவர்ச்சியானதும்"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "'Jarnathan' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "வெல்வெட் போன்ற இரவுநேர பாரிட்டோன்"
+  },
+  "voiceTagline_jeff": {
+    "description": "'Jeff' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "எளிமையாகவும் உறுதியாகவும்"
+  },
+  "voiceTagline_jessica": {
+    "description": "'Jessica' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "சூடான, மெழுகுப்போன்ற நயமை"
+  },
+  "voiceTagline_joey": {
+    "description": "'Joey' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "எளிதான, உரையாடல் போல் அமெரிக்க பாணி"
+  },
+  "voiceTagline_juniper": {
+    "description": "'Juniper' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "தெளிவான, பிரகாசமான, உயிரோட்டமான"
+  },
+  "voiceTagline_lucy": {
+    "description": "'Lucy' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "மென்மையானதும் ஒளிமிக்கதும்"
+  },
+  "voiceTagline_marin": {
+    "description": "'Marin' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "வெதுவெதுப்பான, காலை ரேடியோ போன்ற அமைதி"
+  },
+  "voiceTagline_mark": {
+    "description": "'Mark' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை டேக்லைன் (அமைப்புகள் Voices studio; கிளையண்ட்-சைடு voice identity map).",
+    "message": "தெளிவான, நம்பிக்கையான அறிவிப்பாளர்"
+  },
+  "voiceTagline_nova": {
+    "description": "'Nova' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "வேகமான, ஆர்வமுள்ள"
+  },
+  "voiceTagline_onyx": {
+    "description": "'Onyx' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "ஆழமான, ஒலித்திறன் நிறைந்த கம்பீரம்"
+  },
+  "voiceTagline_paola": {
+    "description": "'Paola' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "வெளிப்பாடான இத்தாலிய வெம்மை"
+  },
+  "voiceTagline_sage": {
+    "description": "'Sage' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "மென்மையான குரல் தெளிவு"
+  },
+  "voiceTagline_shimmer": {
+    "description": "'Shimmer' குரலுக்கான ஆசிரியர் உருவாக்கிய தன்மை வாசகம் (அமைப்புகள் Voices studio; கிளையன்ட்-பக்கம் குரல் அடையாள மேப்).",
+    "message": "இலகுவான, காற்றோட்டமான"
+  },
+  "voicesAddToMenuShort": {
+    "description": "அமைப்புகள் Voices ஸ்டுடியோவில் குரல் கார்டின் பின் டாகிளில் (ஆஃப் நிலையில்) காணும் குறுகிய லேபல்; அழுத்தினால் குரல் ஹோஸ்டின் அரட்டைக்குள் மெனுவில் சேர்க்கப்படும்.",
+    "message": "+ மெனு"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "குரல் கார்டின் பின் டாகிளுக்கான அணுகல்தன்மை லேபல் (ஆஃப் நிலையில்); $name$ என்பது குரல், $host$ என்பது உதவியாளர்.",
+    "message": "$host$-இன் மெனுவில் $name$-ஐ சேர்",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "அம்பு விசைகளால் பட்டியலில் நகரும் போது கவனம் (focus) சென்றவுடன் ஒவ்வொரு குரலும் இயக்கப்பட வேண்டுமா என்பதை காட்டும் Voices கட்டுப்பாட்டு பட்டையிலுள்ள தாவலின் (toggle) லேபல்.",
+    "message": "நகரும் போதே இயக்கவும்"
+  },
+  "voicesArrowsLive": {
+    "description": "அமைப்புகள் குரல்கள் பட்டியலில் முதல் 'Playing <voice>' அறிவிப்புடன் இணைக்கப்படும் திரை வாசிப்பான் உறுதிப்படுத்தல்; அம்பு விசைகள் இப்போது கேட்கக்கூடியதாக மாறியுள்ளன என்பதைச் சொல்கிறது. 'Play as you move' மாற்றியின் சொற்றொடரையே பிரதிபலிக்கிறது.",
+    "message": "நீங்கள் நகரும் போது அம்புகள் இப்போது இயக்கப்படும். Esc நிறுத்தும்."
+  },
+  "voicesBuiltinsNote": {
+    "description": "நேட்டிவ் குரல்களுடன் வரும் ஹோஸ்டுகளுக்கான மெனு இடங்களின் கீழே காட்டப்படும் குறிப்பு (எ.கா. Pi-யின் 8 உட்பொதிந்த குரல்கள்), இவற்றை ஸ்டூடியோ மேலாண்மை செய்யாது; $host$ என்பது உதவியாளர்.",
+    "message": "$host$-இன் சொந்த உட்பொதிந்த குரல்களும் அதன் மெனுவில் எப்போதும் காணப்படும்.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "அரட்டைக்குள் குரல் மெனு இல்லாத ஹோஸ்டிற்கான voicesBuiltinsNote மாறுபாடு (Pi 2026-இல் தனது மெனுவை நீக்கியது); அசலின் 'மெனுவில் காணப்படும்' என்ற வாக்குறுதி இங்கே தவறாக இருக்கும்; $host$ என்பது உதவியாளர்.",
+    "message": "$host$-க்கு சொந்த உட்பொதிந்த குரல்களும் உள்ளன, அவை இங்கே பட்டியலிடப்படவில்லை.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள முன்னேற்றக் காட்சி; பட்டியலிலுள்ள குரல்களில் பயனர் ஏற்கெனவே எத்தனை கேட்டுள்ளார் என்பதை காட்டும். வெறும் எண்கள், ஆகவே 1 இலும் சரியாக படிக்கும் — Chrome i18n இல் பன்மை வடிவங்கள் இல்லை.",
+    "message": "$total$ இல் $heard$ கேட்டது",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "அமைப்புகள் குரல்கள் பட்டியலில் ஒரு குரல் வரியின் அணுகத்தக்க பெயரின் ஒரு பகுதி; இந்த சுயவிவரம் ஏற்கெனவே கேட்ட குரலை குறிக்கும். காட்சியாக இது குரலின் சவுண்ட்பிரிண்டில் மை அடர்த்தியாக வரையப்படுகிறது; திரை வாசிப்பானால் அதை பார்க்க முடியாது.",
+    "message": "கேட்டது"
+  },
+  "voicesInHostMenu": {
+    "description": "அமைப்புகள் Voices ஸ்டுடியோவில் மெனு ஸ்லாட்கள் வரிசைக்கு மேலே வரும் பகுதி தலைப்பு; $host$ என்பது உதவியாளர்.",
+    "message": "$host$-இன் மெனுவில்",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "அமைப்புகள் Voices ஸ்டுடியோவில் குரல் கார்டின் பின் டாகிளில் (ஆன் நிலையில்) காணும் குறுகிய லேபல்.",
+    "message": "✓ மெனுவில்"
+  },
+  "voicesInUse": {
+    "description": "அமைப்புகள் Voices பட்டியலில், ஹோஸ்டின் தற்போது தேர்ந்தெடுக்கப்பட்ட குரலில் நிரந்தரமாக காட்டும் பேட்ஜ்; பெரிய எழுத்தாக காட்டப்படும். வேண்டுமென்றே 'இப்போது பேசுகிறது' அல்ல: இந்தப் பக்கத்தில் வரிசைகள் மாதிரி கிளிப்புகளை இயக்கும், ஆகவே தேர்ந்தெடுக்கப்பட்டும் அமைதியாக இருக்கும் குரல், வேறு வரிசை இயக்கப்படும்போது பேசுகிறது என்று கூறக்கூடாது.",
+    "message": "பயன்பாட்டில்"
+  },
+  "voicesKeyboardHint": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள ஒரு வரி விசைப்பலகை குறிப்பு. குறியீடுகள் விசைகள்: Space, மேல்/கீழ் அம்புகள், மற்றும் Shift+Space.",
+    "message": "கேட்க Space ஐ அழுத்தவும், குரல்களுக்கு இடையில் நகர ↑↓, மீண்டும் மாற்ற ⇧Space."
+  },
+  "voicesLoadError": {
+    "description": "ஒரு ஹோஸ்டின் ஸ்டூடியோவுக்குள் அந்த ஹோஸ்டின் குரல் பட்டியல் ஏற்றப்படாதபோது காட்டப்படும் பிழை நிலை; $host$ என்பது உதவியாளர்.",
+    "message": "$host$-இன் குரல்களை ஏற்ற முடியவில்லை. தயவுசெய்து பின்னர் மீண்டும் முயற்சிக்கவும்.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "ஹோஸ்டின் அரட்டைக்குள் மெனுவில் ஏற்கெனவே அதிகபட்ச எண்ணிக்கையிலான குரல்கள் இருக்கும் போது முடக்கப்பட்ட '+ மெனு' டாகிளில் காட்டப்படும் டூல்டிப்/குறிப்பு.",
+    "message": "மெனு நிரம்பியுள்ளது — மற்றொன்றை சேர்க்க ஒரு குரலை நீக்கவும்"
+  },
+  "voicesMenuHint": {
+    "description": "'In {host}'s menu' தலைப்புக்கு அருகில் வரும் ஒரே வரி குறிப்பு; ஸ்லாட்கள் வரிசை அரட்டைக்குள் உள்ள குரல் மெனுவை பிரதிபலிக்கிறது என்பதை விளக்குகிறது.",
+    "message": "அரட்டையில் நீங்கள் பார்ப்பது"
+  },
+  "voicesMenuOverflow": {
+    "description": "பயனரிடம் அரட்டை மெனு காட்டக்கூடியதைவிட அதிக பின் செய்த குரல்கள் இருக்கும்போது (பழைய நிலை) மெனு இடங்களின் கீழே காட்டப்படும் குறிப்பு; $count$ என்பது பொருந்தாத எண்ணிக்கை, $cap$ என்பது மெனு அளவு.",
+    "message": "மெனுவின் $cap$ இடங்களுக்கு அப்பால் இன்னும் $count$ பின் செய்த குரல்கள் காத்திருக்கின்றன.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow-இன் ஒருமை வடிவம்; அரட்டை மெனுவில் துல்லியமாக ஒரு பின் செய்த குரல் பொருந்தாதபோது பயன்படுத்தப்படும்; $cap$ என்பது மெனு அளவு.",
+    "message": "மெனுவின் $cap$ இடங்களுக்கு அப்பால் இன்னும் 1 பின் செய்த குரல் காத்திருக்கிறது.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "அமைப்புகள் குரல்கள் பட்டியலுக்குக் கீழே காட்டப்படும் சுருக்க வரி; அரட்டையிலுள்ள ஹோஸ்ட் குரல் மெனுவில் எவ்வளவு நிரம்பியுள்ளது என்பதைச் சொல்லும். $host$ உதவியாளர், $used$ எத்தனை இடங்கள் நிரம்பியுள்ளன, $cap$ மொத்த இடங்கள். 1 இலும் சரியாக படிக்குமாறு சொற்றொடராக்கப்பட்டுள்ளது — Chrome i18n இல் பன்மை வடிவங்கள் இல்லை.",
+    "message": "$host$ இன் மெனு: $cap$ இடங்களில் $used$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "அமைப்புகள் குரல்கள் பட்டியலின் இறுதியில் உள்ள குழுவுக்கான தலைப்பு; இயக்க மாதிரி கிளிப் இல்லாத குரல்கள் இதில் இருக்கும். $count$ எத்தனை என்பதை காட்டும். 1 இலும் சரியாக படிக்குமாறு சொற்றொடராக்கப்பட்டுள்ளது — Chrome i18n இல் பன்மை வடிவங்கள் இல்லை.",
+    "message": "இன்னும் மாதிரி இல்லை ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "உள்நுழைந்த பயனருக்காக குரல் பட்டியல் காலியாக இருக்கும் போது அமைப்புகளின் குரல் காடலாக்கில் காட்டப்படும் (எ.கா. நெட்வொர்க் பிரச்சனை).",
+    "message": "இப்போது குரல்களை ஏற்ற முடியவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்."
+  },
+  "voicesNowPlaying": {
+    "description": "அமைப்புகள் குரல்கள் பட்டியலில் ஒரு குரலின் மாதிரி கிளிப் இயக்கத் தொடங்கும்போது திரை வாசிப்பான் அறிவிக்கும்; $name$ அந்த குரல்.",
+    "message": "$name$ இயக்கப்படுகிறது",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள பொத்தான்; தற்போது பட்டியலிடப்பட்ட எல்லா குரல்களையும் ஒன்றன்பின் ஒன்றாக இயக்கும். $count$ எத்தனை. 1 இலும் சரியாக படிக்குமாறு சொற்றொடராக்கப்பட்டுள்ளது — Chrome i18n இல் பன்மை வடிவங்கள் இல்லை.",
+    "message": "அனைத்தையும் இயக்கு ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "மீண்டும் வரும்போது அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள பொத்தான்: நீங்கள் இன்னும் கேட்காத பட்டியலிலுள்ள குரல்களையே மட்டும் இயக்கும். $count$ எத்தனை. 1 இலும் சரியாக படிக்குமாறு சொற்றொடராக்கப்பட்டுள்ளது — Chrome i18n இல் பன்மை வடிவங்கள் இல்லை.",
+    "message": "புதியவற்றை இயக்கு ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "பக்கம் இன்னும் பயனர் தொடர்பு பெறாததால் உலாவி மாதிரி ஒலியை இயங்க விட மறுத்தபோது, அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டையில் காட்டப்படும் வரி.",
+    "message": "ஒலியை இயக்க எந்தக் குரலையும் கிளிக் செய்யவும்."
+  },
+  "voicesPreview": {
+    "description": "ஒரு குரல் வரியில் உள்ள இலவச மாதிரி கிளிப்பை இயக்கும் play (▶) பொத்தானுக்கான அணுகக்கூடிய லேபல்; $name$ என்பது குரலின் பெயர்.",
+    "message": "$name$ குரலின் மாதிரியை இயக்கு",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "அமைப்புகளின் Voices பட்டியலின் அணுகக்கூடிய பெயர் (ஒவ்வொரு வரியிலும் ஒரு குரல் இருக்கும் பட்டியல் பெட்டி).",
+    "message": "குரல்கள், கனமானதிலிருந்து தெளிவானது வரை வரிசைப்படுத்தப்பட்டவை"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "குரல் கார்டின் பின் டாகிளுக்கான (ஆன் நிலையில்) மற்றும் மெனு ஸ்லாட்டின் நீக்கு பொத்தானுக்கான அணுகல்தன்மை லேபல்; $name$ என்பது குரல், $host$ என்பது உதவியாளர்.",
+    "message": "$host$-இன் மெனுவிலிருந்து $name$-ஐ நீக்கு",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "ஒரு குரலின் மாதிரி கிளிப் ஏற்றப்படவோ இயக்கப்படவோ தவறியபோது, அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டையில் காட்டப்படும் வரி; $name$ என்பது அந்தக் குரல். மாடல் அல்ல — மாதிரிகள் தொடரில் இது கடந்தும் தொடர்ந்து இயங்கும்.",
+    "message": "$name$ குரலின் மாதிரியை இயக்க முடியவில்லை.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "அமைப்புகள் AI Chat தாவலில் உள்ள குரல் பட்டியல் பகுதியின் துணைத்தலைப்பு.",
+    "message": "ஒவ்வொரு தளத்திலும் பதில்களை ஒலிப்பாக வாசிக்கும் குரலைத் தேர்வு செய்யுங்கள்."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "சுருதி வரிசைப்படுத்தப்பட்ட குரல் பட்டை (rail)க்காக Voices அமைப்புத் தலைப்பின் கீழ் காட்டப்படும் துணைத்தலைப்பு.",
+    "message": "ஒவ்வொரு குரலும், கனமானதிலிருந்து தெளிவானது வரை. கேட்டு தேர்ந்தெடுக்கவும்."
+  },
+  "voicesSectionTitle": {
+    "description": "அமைப்புகள் AI Chat தாவலில் உள்ள குரல் பட்டியல் பகுதியின் தலைப்பு.",
+    "message": "குரல்கள்"
+  },
+  "voicesShelfEveryday": {
+    "description": "அமைப்புகள் குரல் பட்டியலில் value-tier குரல்களுக்கான குழுத் தலைப்பு. CSS மூலம் uppercase-ஆக ரெண்டர் செய்யப்படுகிறது.",
+    "message": "அன்றாடக் குரல்கள்"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "அமைப்புகள் Voices studio-வில் Everyday குழுத் தலைப்பிற்கு அருகிலுள்ள ஒரே வரி குறிப்பு; HD-யை விட இந்த tier எவ்வளவு அதிகமாக நீள்கிறது என்பதை studio கூறும் ஒரே இடம்.",
+    "message": "இயல்பானதும் தெளிவானதும் — HD-யை விட சுமார் 20× அதிக நேரம் கேட்கலாம்."
+  },
+  "voicesShelfHd": {
+    "description": "அமைப்புகள் குரல் பட்டியலில் பிரீமியம் (HD) குரல்களுக்கான குழுத் தலைப்பு. CSS மூலம் uppercase-ஆக ரெண்டர் செய்யப்படுகிறது.",
+    "message": "HD குரல்கள்"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "அமைப்புகள் Voices studio-வில் HD குழுத் தலைப்பிற்கு அருகிலுள்ள ஒரே வரி குறிப்பு.",
+    "message": "எங்களின் மிக வளமான, மிகவும் வெளிப்பாடான ஒலி."
+  },
+  "voicesShowAll": {
+    "description": "அமைப்புகள் குரல்கள் 'Show' வடிப்பானில் உள்ள விருப்பம்: வடிகட்டல் இல்லை, எல்லா குரல்களும் பட்டியலிடப்படும்.",
+    "message": "அனைத்து குரல்கள்"
+  },
+  "voicesShowEveryday": {
+    "description": "அமைப்புகள் குரல்கள் 'Show' வடிப்பானில் உள்ள விருப்பம்: நிலையான (HD அல்லாத) குரல்களை மட்டும் பட்டியலிடும்.",
+    "message": "சாதாரணம் மட்டும்"
+  },
+  "voicesShowHd": {
+    "description": "அமைப்புகள் குரல்கள் 'Show' வடிப்பானில் உள்ள விருப்பம்: பிரீமியம் (HD) குரல்களை மட்டும் பட்டியலிடும்.",
+    "message": "HD மட்டும்"
+  },
+  "voicesShowLabel": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டையில் உள்ள வடிப்பானின் லேபல்; பட்டியலில் எந்த குரல்கள் காட்டப்பட வேண்டும் என்பதைச் சுருக்குகிறது.",
+    "message": "காட்டு"
+  },
+  "voicesShowUnheard": {
+    "description": "அமைப்புகள் குரல்கள் 'Show' வடிப்பானில் உள்ள விருப்பம்: பயனர் இன்னும் கேட்காத குரல்களை மட்டும் பட்டியலிடும்.",
+    "message": "இன்னும் கேட்காதவை"
+  },
+  "voicesSpeakingNow": {
+    "description": "அமைப்புகள் Voices ஸ்டுடியோவில் (மெனு ஸ்லாட் மற்றும் குரல் கார்டில்) ஹோஸ்டின் தற்போது தேர்ந்தெடுக்கப்பட்ட குரலுக்கான நிலை லேபல்.",
+    "message": "இப்போது பேசுகிறது"
+  },
+  "voicesSpeaksWith": {
+    "description": "அமைப்புகள் Voices ஸ்டுடியோ மேடையில், தற்போதைய குரல் பெயருக்கு மேலே வரும் சுருக்க வரி; $host$ என்பது உதவியாளர் (எ.கா. Pi). CSS மூலம் பெரிய எழுத்தாக காட்டப்படும்.",
+    "message": "$host$ பேசும் குரல்",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "ஹோஸ்ட் தனது சொந்த ஆடியோவை வழங்கும் போது (எ.கா. Pi) காட்டப்படும் மேடை குறிப்பு; ஆகவே Say, Pi குரலைத் தேர்ந்தெடுத்தால் ஹோஸ்டின் குரல் மாற்றப்படும்.",
+    "message": "நீங்கள் கீழே ஒன்றைத் தேர்ந்தெடுக்கும் வரை $host$ தனது சொந்த குரலைப் பயன்படுத்தும்.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "ஹோஸ்டிற்கு தனிப்பட்ட குரல் இல்லாதபோது (எ.கா. Claude) காட்டப்படும் மேடை குறிப்பு; அதனால் Say, Pi குரல் தேர்ந்தெடுக்கப்படும் வரை எதுவும் சத்தமாக வாசிக்கப்படாது.",
+    "message": "நீங்கள் கீழே ஒன்றைத் தேர்ந்தெடுக்கும் வரை $host$ பதில்களை சத்தமாக வாசிக்காது.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "ஹோஸ்டிற்கு SayPi குரல் தேர்ந்தெடுக்கப்படாதபோது அமைப்புகளின் Voices ஸ்டூடியோ மேடையில் காட்டப்படும் தலைப்பு; $host$ என்பது உதவியாளர் (எ.கா. Pi, Claude). பெயர் அளவில் காட்டப்படும்.",
+    "message": "$host$ எப்படி ஒலிக்க வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "தற்போதைய குரலின் இலவச மாதிரி கிளிப்பை இயக்கும் அமைப்புகளின் Voices ஸ்டூடியோ மேடையில் உள்ள பொத்தான்.",
+    "message": "ஒரு மாதிரியை கேளுங்கள்"
+  },
+  "voicesStopPlayback": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள பொத்தான்; 'Play all' மூலம் தொடங்கப்பட்ட மாதிரி இயக்கத்தொடரை நிறுத்தும்.",
+    "message": "நிறுத்து"
+  },
+  "voicesSweepPosition": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டையில் 'Play all' பட்டியலில் நகரும் போது காட்டப்படும் நேரடி நிலை. $index$ என்பது தற்போது ஒலிக்கும் குரல், $total$ என்பது வரிசையில் உள்ள மொத்த எண்ணிக்கை.",
+    "message": "$total$ இல் $index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள ஒப்பீட்டு கட்டுப்பாட்டுக்கான அணுகத்தக்க லேபிள்; கடைசியாக கேட்ட இரண்டு குரல்களில் உள்ள மற்ற குரலை மீண்டும் இயக்கும். $name$ அந்த குரல்.",
+    "message": "$name$ க்கு மீண்டும் மாற்றவும்",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "'Play all' மிக நீளமான பட்டியலில் அழுத்தப்படும்போது அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டையில் காட்டப்படும் வரி; $count$ என்பது குரல்கள் எத்தனை, $minutes$ என்பது அவற்றிற்கு ஆகும் நேரத்தின் தோராயமான நிமிடங்கள். Chrome i18n-க்கு பன்மை வடிவங்கள் இல்லாததால் 1-இலும் சரியாக வாசிக்க 'min' என்ற சுருக்கம் பயன்படுத்தப்பட்டுள்ளது.",
+    "message": "அது $count$ குரல்கள் — சுமார் $minutes$ min. முதலில் பட்டியலைச் சுருக்கவும்.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "அமைப்புகள் குரல் பட்டியலில், ஒவ்வொரு ஹோஸ்ட்-க்கும் இருக்கும் 'இந்தக் குரலைப் பயன்படுத்து' பொத்தானுக்கான அணுகல்தன்மை லேபல்; $name$ என்பது குரல், $host$ என்பது உதவியாளர் (எ.கா. Pi, Claude).",
+    "message": "$host$-இல் $name$-ஐ பயன்படுத்து",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "ஒருங்கிணைந்த அமைப்புகள் குரல் பட்டியலில், ஒவ்வொரு ஹோஸ்ட்-க்கும் இருக்கும் 'இந்தக் குரலைப் பயன்படுத்து' பொத்தானில் காணும் குறுகிய லேபல் (அதன் அருகில் ஹோஸ்ட் காட்டப்படும்).",
+    "message": "பயன்படுத்து"
+  },
+  "voicesYourVoice": {
+    "description": "அமைப்புகள் குரல்கள் பட்டியலின் கட்டுப்பாட்டு பட்டியில் உள்ள பொத்தான்; இந்த ஹோஸ்ட் தற்போது பயன்படுத்தும் குரலின் வரிசைக்கு கவனத்தை நகர்த்தும். $name$ அந்த குரல்.",
+    "message": "உங்கள் குரல்: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "குரல்-கண்டறிதல் மாதிரிக்குப் போதுமான WebAssembly நினைவகத்தை உலாவி ஒதுக்க முடியாதபோது ஏற்படும் பிழை.",
+    "message": "குரல் கண்டறிதல் தொடங்க முடியாது: குரல் மாதிரிக்குப் போதுமான WebAssembly நினைவகம் இல்லை. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "குரல்-கண்டறிதல் மாதிரியை இயக்க தேவையான ஆரம்ப WebAssembly நினைவகத்தை உலாவி வழங்காதபோது ஏற்படும் பிழை.",
+    "message": "குரல் கண்டறிதல் தொடங்க முடியாது: இந்த உலாவியில் WebAssembly நினைவகம் கிடைக்கவில்லை."
   }
 }

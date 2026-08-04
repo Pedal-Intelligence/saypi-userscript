@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "認証モーダルに表示する特典：利用上限の増加。",
+    "message": "無料アカウントで利用上限アップ"
+  },
+  "authBenefitPremium": {
+    "description": "認証モーダルに表示する特典：チャットボット全体でのプレミアム機能。",
+    "message": "プレミアム機能とチャットボット対応"
+  },
+  "authBenefitSupport": {
+    "description": "認証モーダルに表示する特典：優先サポート。",
+    "message": "問題への優先サポート"
+  },
+  "authBenefitSync": {
+    "description": "認証モーダルに表示する特典：設定の同期。",
+    "message": "音声設定をどこでも同期"
+  },
+  "authBenefitTTS": {
+    "description": "認証モーダルに表示する特典：TTS 機能。",
+    "message": "テキスト読み上げ音声（有料プラン）"
+  },
+  "authBenefitUsage": {
+    "description": "認証モーダルに表示する特典：利用状況の追跡。",
+    "message": "デバイス間の音声利用量を確認"
+  },
+  "authPromptModalFull": {
+    "description": "価値提案を含む、フルモーダル認証プロンプトの説明文。",
+    "message": "Say, Pi をたくさんご利用いただいています。サインインすると、上限の引き上げ、テキスト読み上げ音声、対応するすべてのチャットボットでのプレミアム機能が利用できます。"
+  },
+  "authPromptModalSoft": {
+    "description": "控えめなモーダル認証プロンプトの説明文。",
+    "message": "無料の Say, Pi アカウントを作成すると、利用上限が増えてプレミアム音声機能にアクセスできます。"
+  },
+  "authPromptTitle": {
+    "description": "認証プロンプトのモーダルのタイトル。",
+    "message": "音声機能をもっと使う"
+  },
+  "authPromptToast": {
+    "description": "ユーザーにサインインを促すトースト通知。",
+    "message": "Say, Pi にサインインして上限引き上げとプレミアム機能を利用"
+  },
   "autoReadAloudChatGPT": {
     "description": "音声通話中にChatGPTの回答を自動で読み上げる機能のオン・オフを切り替えるチェックボックスのラベルです。",
     "message": "自動読み上げ（ChatGPT）"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "テキストからスピーチを無効にします"
   },
+  "dismiss": {
+    "message": "了解",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "解散"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "集中"
   },
+  "errorVadInitFailed": {
+    "description": "音声アクティビティ検出の初期化に失敗したときに表示されるエラートースト。",
+    "message": "音声検出を初期化できませんでした"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "音声録音の設定中に予期しないエラーが発生したときに表示されるエラートースト。",
+    "message": "音声録音の設定に失敗しました"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "音声検出クライアントが録音開始に失敗したときに表示されるエラートースト。",
+    "message": "音声録音を開始できませんでした"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "音声検出（VAD）クライアントが利用できず、録音を開始できないときに表示されるエラートースト。",
+    "message": "音声録音は利用できません"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "集中モードを終了"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "プレミアム（HD）音声とバリュー音声の両方が利用できるときに、音声メニューに表示される 1 行の注意書き",
+    "message": "HD 音声は月間利用枠を約 20 倍速く消費します。"
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "これを取り除く..."
   },
+  "maybeLater": {
+    "description": "認証プロンプトを閉じるボタンのテキスト。",
+    "message": "あとで"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "マイクの設定が必要な仕様を満たしていません。\n別のマイクを使用するか、オーディオ設定を調整してみてください。"
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "マイクにアクセスできません。\nデバイスの設定を確認して、もう一度試してください。"
   },
+  "microphonePermissionDeniedError": {
+    "description": "権限プロンプトのフロー後にマイクの権限が拒否されたときに表示されるエラートースト。",
+    "message": "マイクの権限が許可されませんでした。プロンプトと拡張機能の設定でアクセスを許可しているか確認してください。"
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "正確さ"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "応答は最速ですが、精度は低くなります。\n中断しがち。"
   },
+  "moreVoices": {
+    "description": "ページ内の音声メニューから拡張機能の設定にある完全な音声カタログへ移動するメニュー行。",
+    "message": "他の音声…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "アシスタントのニックネーム"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "サインインしていません"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "ChatGPT を開くボタンのラベル。",
+    "message": "ChatGPT を開く"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Claude.ai を開くボタンのラベル。",
+    "message": "Claude を開く"
+  },
+  "onboarding_ctaPi": {
+    "description": "Pi.ai を開くボタンのラベル。",
+    "message": "Pi を開く"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "環境の選択肢: 周りに他の人がいる。",
+    "message": "周りに人がいる場所"
+  },
+  "onboarding_envMixed": {
+    "description": "環境の選択肢: プライベートと共有空間の混在。",
+    "message": "いろいろな場所"
+  },
+  "onboarding_envPrivate": {
+    "description": "環境の選択肢: プライベートな空間。",
+    "message": "プライベートな場所"
+  },
+  "onboarding_envQuietOff": {
+    "description": "環境に関する回答で静音モードをオフのままにする場合に表示される確認。",
+    "message": "了解しました。標準のリスニングと再生の設定のままにします。"
+  },
+  "onboarding_envQuietOn": {
+    "description": "環境の回答によってクワイエットモードが有効になったときに表示される確認文。",
+    "message": "クワイエットモードオン。小さな声も拾い、控えめな音量で返答します。目立たずに話せます。"
+  },
+  "onboarding_envTitle": {
+    "description": "ユーザーの利用環境について尋ねるオンボーディング質問の見出し。",
+    "message": "普段どこで話しますか"
+  },
+  "onboarding_footer": {
+    "description": "初回オンボーディングページのフッターテキスト。",
+    "message": "これはいつでも Say, Pi の設定から見直せます。プライバシーは大切です。音声は通話中のみ取得されます。"
+  },
+  "onboarding_heading": {
+    "description": "初回オンボーディング ページのメイン見出し。",
+    "message": "🗣️ Say, Pi へようこそ"
+  },
+  "onboarding_intro": {
+    "description": "初回オンボーディング ページの導入段落。",
+    "message": "AI と最初の音声会話まであと 2 ステップです。話すのは入力の約 3 倍速いので、設定を始めましょう。"
+  },
+  "onboarding_micTestButton": {
+    "description": "リスクなしのオンボーディング用マイクテストを開始するボタン。",
+    "message": "🎤 マイクをテスト"
+  },
+  "onboarding_micTestDone": {
+    "description": "オンボーディングのマイクテストが正常に完了した後に表示されるステータス。",
+    "message": "いい感じです。マイクは動作しています 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "オンボーディングのマイクテストが入力レベルを測定している間に表示されるステータス。",
+    "message": "聞いています。何か話してみてください 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "オンボーディングのマイクテストで許可待ちの間に表示されるステータス。",
+    "message": "マイクをリクエスト中…"
+  },
+  "onboarding_micTestStop": {
+    "description": "実行中のオンボーディング用マイクテストを停止するボタンのラベル。",
+    "message": "テストを停止"
+  },
+  "onboarding_step1Body": {
+    "description": "拡張機能を固定する方法を説明する、オンボーディング最初のステップの本文。",
+    "message": "ブラウザ右上のパズルピース 🧩 アイコンをクリックし、Say, Pi の横にあるピン 📌 を押します。これで通話ボタンがワンクリックで使えます。"
+  },
+  "onboarding_step1Title": {
+    "description": "オンボーディングの最初のステップのタイトル（拡張機能を固定）。",
+    "message": "Say, Pi をツールバーに固定"
+  },
+  "onboarding_step2Body": {
+    "description": "音声会話を始める方法を説明する、オンボーディング 2 つ目のステップの本文。",
+    "message": "下の対応アシスタントのいずれかを開き、Say, Pi の通話ボタンを押して「こんにちは」と話してみてください。初回はマイクへのアクセスを求めますが、想定どおりです。通話中のときだけ音声を聞き取ります。"
+  },
+  "onboarding_step2Title": {
+    "description": "オンボーディングの 2 つ目のステップのタイトル（会話を開始）。",
+    "message": "AI チャットを開いて話し始める"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "マイクの許可"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "マイクの権限がブロックされている場合の復旧案内。",
+    "message": "ブラウザがマイクをブロックしています。アドレスバーのカメラまたは鍵アイコンをクリックし、マイクを「許可」に設定してから、もう一度お試しください。macOS では「システム設定 → プライバシーとセキュリティ → マイク」も確認してください。"
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "マイクの権限が拒否/ブロックされたときに表示される復旧パネルのタイトル。",
+    "message": "マイクへのアクセスがブロックされています"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "マイクが他で使用中の場合の復旧案内。",
+    "message": "別のアプリやタブがマイクを使っている可能性があります。録音していそうなもの（ビデオ通話、ボイスメモなど）を閉じてから、もう一度お試しください。"
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "別のアプリがマイクを使用している場合に表示される復旧パネルのタイトル。",
+    "message": "マイクが使用中です"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "利用できるマイクデバイスがない場合の復旧案内。",
+    "message": "マイクが見つかりませんでした。接続する（またはヘッドセットを接続する）うえで、入力デバイスとして選ばれていることを確認し、もう一度お試しください。"
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "利用できるマイクデバイスがない場合に表示される復旧パネルのタイトル。",
+    "message": "マイクが見つかりません"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "不明なマイクエラーの場合の復旧案内。",
+    "message": "マイクへのアクセスで問題が起きました。接続されていることと、ブラウザ設定で許可されていることを確認してから、もう一度お試しください。"
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "不明なマイクエラーの復旧パネルのタイトル。",
+    "message": "マイクにアクセスできませんでした"
+  },
+  "permissions_retryButton": {
+    "description": "マイク権限を再リクエストするボタンのラベル。",
+    "message": "もう一度試す"
+  },
+  "permissions_revokedHeading": {
+    "description": "マイクへのアクセスが以前は許可されていたが、その後取り消された場合に表示される見出し。",
+    "message": "マイクを再接続しましょう"
+  },
+  "permissions_revokedInfo": {
+    "description": "許可されていたマイクへのアクセスが後から取り消された場合に表示される案内文。",
+    "message": "マイクへのアクセスがオフになっています。これはブラウザやシステムのアップデート後によく起こります。下で再度許可すると、通話中は $productName$ がまた聞き取りを開始します。",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "プロフィール"
+  },
+  "quietModeLabel": {
+    "description": "静音／ささやきモードを有効にする切り替えのラベル。",
+    "message": "静音モード"
+  },
+  "quietModeTooltip": {
+    "description": "静音／ささやきモードの内容を説明するツールチップ。",
+    "message": "小さめの声でも認識し、アシスタントの返信音量を下げます。周りに人がいる場所でも音声を使えます。"
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "認証の進行中にサインイン ボタンに表示するテキスト。",
+    "message": "サインイン中…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "効果音"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "音声フィードバックの問題を防ぐために、Firefox ではサウンド効果が無効になっています。"
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "最初の音声でのやり取り後に一度だけ表示される、速度メリット通知の見出し。",
+    "message": "いいですね。話すほうが入力より約 3 倍速いです。"
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "節約できた時間（分）を整数で示す、速度メリット通知の任意の 2 行目。",
+    "message": "入力していた場合より約 $minutes$ 分ぶん速く話せています。",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "ボタンを押したときのみ送信します"
   },
+  "surveyQuestion": {
+    "description": "勝利後に一度だけ表示するマイクロアンケートの単一質問。",
+    "message": "これまで音声の使い心地はいかがですか？"
+  },
+  "surveyRatingLabel": {
+    "description": "アンケートの評価ボタン用のアクセシブルなラベル。",
+    "message": "5 段階中 $rating$ を評価",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "ユーザーが勝利後アンケートに回答した後に表示する謝辞。",
+    "message": "ありがとう。Say, Pi をより良くするのに役立ちます。"
+  },
   "tabAIChat": {
     "description": "AIチャット設定セクションのタブラベル。",
     "message": "AIチャット"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "一般設定セクションのタブラベル。",
     "message": "一般"
+  },
+  "tabVoices": {
+    "description": "音声設定セクション（サイト別の音声カタログ）のタブラベル。",
+    "message": "音声"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "クレジット"
   },
+  "ttsCreditsRemaining": {
+    "description": "音声ごとのクレジットプールとして残りの TTS 上限を表示するテキスト（saypi-api #181 Stage 2）。文字数の残量ではない。",
+    "message": "残り $credits$ クレジット",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "現在、Safari では多言語音声はサポートされていません。"
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "音声生成"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "お知らせ！$browserName$で$chatbotName$を使用した音声再生はまだ利用できません。良いニュース？音声入力は素晴らしく機能します！TTSの場合は、デスクトップでChromeまたはEdgeをお試しください。",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "$browserName$ + $chatbotName$でTTSは利用できません。音声入力は機能します！TTSの場合はChromeデスクトップをお試しください。",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS音声"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "音声らしい音が検出されたが、音量が小さすぎる／信頼度が低すぎて文字起こしできなかった場合の VAD 詳細（クライアント側の admission-gate によるドロップ）。",
+    "message": "音声が小さすぎて文字起こしできません"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "新しいタブがマイクを使用したため通話が終了したことを説明する VAD 詳細。",
+    "message": "音声入力が別のタブに移動しました"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "音声は利用できません。\nデスクトップでChromeまたはFirefoxをお試しください。"
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "お知らせ！$browserName$で$chatbotName$を使用した音声再生はまだ利用できません。良いニュース？音声入力は素晴らしく機能します！TTSの場合は、デスクトップでChromeまたはEdgeをお試しください。",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "$browserName$ + $chatbotName$でTTSは利用できません。音声入力は機能します！TTSの場合はChromeデスクトップをお試しください。",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "了解",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "別のタブに音声入力が引き継がれたタブに表示される VAD ステータス。",
+    "message": "一時停止中"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "詳細を表示します"
   },
+  "voiceIntroductionGeneric": {
+    "description": "選択された SayPi の声に専用の導入スクリプトがない場合（かつ読み上げる最近のメッセージがない場合）に再生される汎用の音声導入。",
+    "message": "こんにちは、$voice$です。こんな声です。気に入ってもらえるとうれしいです。",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "やあ！ \nПривет! \n你好！\n私は Pi です。多言語 AI アシスタントです。 \n32 の言語を自由に操ることができ、世界中のアイデアや文化を探求できます。\nこの声についてどう思いますか？"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "音声設定"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "設定のボイス カタログで、ボイスに説明がない場合に表示されるボイス行の代替サブタイトル。$count$ はボイスが対応する言語数。",
+    "message": "$count$ 言語に対応",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "「Addison」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "朗らかで話し方が明瞭"
+  },
+  "voiceTagline_alloy": {
+    "description": "「Alloy」音声のために作成された性格のタグライン（設定の音声スタジオ、クライアント側の音声アイデンティティマップ）。",
+    "message": "バランスがよく万能"
+  },
+  "voiceTagline_ash": {
+    "description": "「Ash」音声のために作成された性格のタグライン（設定の音声スタジオ、クライアント側の音声アイデンティティマップ）。",
+    "message": "低めで思慮深く落ち着いている"
+  },
+  "voiceTagline_ballad": {
+    "description": "「Ballad」音声のために作成された性格のタグライン（設定の音声スタジオ、クライアント側の音声アイデンティティマップ）。",
+    "message": "なめらかでメロディック"
+  },
+  "voiceTagline_cassidy": {
+    "description": "「Cassidy」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "親しみやすく率直"
+  },
+  "voiceTagline_cedar": {
+    "description": "「Cedar」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "落ち着いて安心感がある"
+  },
+  "voiceTagline_coral": {
+    "description": "「Coral」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "明るく前向きなエネルギー"
+  },
+  "voiceTagline_echo": {
+    "description": "「Echo」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "すっきりして中立的"
+  },
+  "voiceTagline_fable": {
+    "description": "「Fable」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "物語を語るような抑揚"
+  },
+  "voiceTagline_finn": {
+    "description": "「Finn」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "新鮮でエネルギッシュ"
+  },
+  "voiceTagline_jamahal": {
+    "description": "「Jamahal」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "深みがあり惹きつける"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "「Jarnathan」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "深夜向きのベルベット調バリトン"
+  },
+  "voiceTagline_jeff": {
+    "description": "「Jeff」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "飾らず落ち着いている"
+  },
+  "voiceTagline_jessica": {
+    "description": "「Jessica」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "温かく洗練されている"
+  },
+  "voiceTagline_joey": {
+    "description": "「Joey」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "気楽で会話調のアメリカ英語"
+  },
+  "voiceTagline_juniper": {
+    "description": "「Juniper」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "キレがあり明るく生き生き"
+  },
+  "voiceTagline_lucy": {
+    "description": "「Lucy」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "穏やかで透明感がある"
+  },
+  "voiceTagline_marin": {
+    "description": "「Marin」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "温かい朝ラジオの落ち着き"
+  },
+  "voiceTagline_mark": {
+    "description": "「Mark」ボイス用に作成された性格タグライン（設定の Voices スタジオ、クライアント側のボイス識別マップ）。",
+    "message": "明瞭で自信ある語り口"
+  },
+  "voiceTagline_nova": {
+    "description": "「Nova」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "素早くて好奇心旺盛"
+  },
+  "voiceTagline_onyx": {
+    "description": "「Onyx」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "深く響く重厚感"
+  },
+  "voiceTagline_paola": {
+    "description": "「Paola」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "表情豊かなイタリアの温かさ"
+  },
+  "voiceTagline_sage": {
+    "description": "「Sage」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "穏やかな声の明瞭さ"
+  },
+  "voiceTagline_shimmer": {
+    "description": "「Shimmer」音声のための作成済みの人格タグライン（設定のVoices studio、クライアント側の音声アイデンティティマップ）。",
+    "message": "軽やかで空気のよう"
+  },
+  "voicesAddToMenuShort": {
+    "description": "設定の音声スタジオで、音声カードのピン切り替え（オフ状態）に表示する短いラベル。押すとホストのチャット内メニューに音声を追加する。",
+    "message": "+ メニュー"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "音声カードのピン切り替え（オフ状態）のアクセシブルなラベル。$name$ は音声名、$host$ はアシスタント。",
+    "message": "$name$を$host$のメニューに追加",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "音声コントロールバーのトグルのラベル。矢印キーでリストを移動したとき、フォーカスが到達するたびに各音声を再生するかどうかを示す。",
+    "message": "移動しながら再生"
+  },
+  "voicesArrowsLive": {
+    "description": "設定の「音声」一覧で最初の「Playing <voice>」アナウンスに続けて付くスクリーンリーダー確認文。矢印キー操作が音として聞こえるようになったことを伝える。「Play as you move」切り替えの文言に合わせている。",
+    "message": "移動すると矢印キーで再生します。Esc で停止します。"
+  },
+  "voicesBuiltinsNote": {
+    "description": "ネイティブ音声を同梱するホスト（例: Pi の内蔵8音声）向けの、メニュー枠の下の注記。これらはスタジオでは管理しない。$host$ はアシスタント名。",
+    "message": "$host$の内蔵音声も、メニューに常に表示されます。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "チャット内音声メニューがないホスト向けの voicesBuiltinsNote の別文言（Pi は 2026 年にメニューを廃止）。元の「メニューに表示される」という約束が不正確になるため。$host$ はアシスタント名。",
+    "message": "$host$には内蔵音声もありますが、ここには表示されません。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "設定の「音声」コントロールバーの進捗表示。一覧の音声のうち、ユーザーがすでに聴いた数を示す。数値のみなので、Chrome i18n に複数形がなくても1で正しく読める。",
+    "message": "$total$ 件中 $heard$ 件聴取済み",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "設定の「音声」一覧の音声行のアクセシブル名の一部。このプロファイルで既に聴いた音声であることを示す。見た目では音紋のインク濃度で表され、スクリーンリーダーでは見えない。",
+    "message": "聴取済み"
+  },
+  "voicesInHostMenu": {
+    "description": "設定の音声スタジオで、メニュースロット行の上に表示されるセクション見出し。$host$ はアシスタント。",
+    "message": "$host$のメニュー",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "設定の音声スタジオで、音声カードのピン切り替え（オン状態）に表示する短いラベル。",
+    "message": "✓ メニュー内"
+  },
+  "voicesInUse": {
+    "description": "設定の音声一覧で、ホストが現在選択している音声に常時表示されるバッジ。大文字表示される。意図的に「再生中」ではない。このページでは各行がサンプルを再生するため、選択されていても無音の音声が、別の行が再生中なのに「再生中」と表示してはいけない。",
+    "message": "使用中"
+  },
+  "voicesKeyboardHint": {
+    "description": "設定の「音声」コントロールバーにある1行のキーボードヒント。記号はキー（Space、上下矢印、Shift+Space）を表す。",
+    "message": "Space で再生、↑↓ で音声を移動、⇧Space で戻す"
+  },
+  "voicesLoadError": {
+    "description": "特定ホストのスタジオ内で、そのホストの音声カタログの読み込みに失敗したときのエラー状態。$host$ はアシスタント名。",
+    "message": "$host$の音声を読み込めませんでした。後でもう一度お試しください。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "ホストのチャット内メニューが最大数の音声で埋まっているとき、無効化された「+ メニュー」切り替えに表示されるツールチップ／ヒント。",
+    "message": "メニューがいっぱいです。別の音声を削除してください"
+  },
+  "voicesMenuHint": {
+    "description": "「$host$のメニュー」見出しの横に表示する1行ヒント。スロット行がチャット内の音声メニューを反映していることを説明する。",
+    "message": "チャットで表示される内容"
+  },
+  "voicesMenuOverflow": {
+    "description": "ユーザーがピン留めした音声がチャット内メニューで表示できる数を超えている場合（旧状態）に、メニュー枠の下に出す注記。$count$ は収まらない数、$cap$ はメニューのサイズ。",
+    "message": "ピン留めした音声があと$count$個、メニューの$cap$枠の外で待機しています。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "voicesMenuOverflow の単数形。チャット内メニューに収まらないピン留め音声がちょうど1つのときに使用。$cap$ はメニューのサイズ。",
+    "message": "ピン留めした音声があと1つ、メニューの$cap$枠の外で待機しています。",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "設定の「音声」一覧の下に出る要約行。チャット内のホストの音声メニューがどれだけ埋まっているかを示す。$host$ はアシスタント、$used$ は使用中の席数、$cap$ は席数の上限。Chrome i18n に複数形がないため、1でも複数でも自然に読める表現にする。",
+    "message": "$host$ のメニュー: $cap$ 席中 $used$ 席",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "設定の「音声」一覧の末尾にある、再生できるサンプルクリップがない音声のグループ見出し。$count$ は数。Chrome i18n に複数形がないため、1でも複数でも自然に読める表現にする。",
+    "message": "まだサンプルなし ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "ログイン済みユーザーで、設定のボイス カタログのリストが空のときに表示（例: ネットワーク問題）。",
+    "message": "現在ボイスを読み込めません。後でもう一度お試しください。"
+  },
+  "voicesNowPlaying": {
+    "description": "設定の「音声」一覧で音声のサンプルクリップが再生開始したときのスクリーンリーダー向けアナウンス。$name$ は音声名。",
+    "message": "$name$ を再生中",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "設定の「音声」コントロールバーのボタン。現在一覧にある音声をすべて順番に再生する。$count$ は数。Chrome i18n に複数形がないため、1でも複数でも自然に読める表現にする。",
+    "message": "すべて再生 ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "再訪時に表示される設定の「音声」コントロールバーのボタン。まだ聴いていない一覧の音声だけを再生する。$count$ は数。Chrome i18n に複数形がないため、1でも複数でも自然に読める表現にする。",
+    "message": "新しいものを再生 ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "ページでまだユーザー操作がないため、ブラウザがサンプル再生を拒否したときに設定の音声コントロールバーに表示される行。",
+    "message": "音声を有効にするには、いずれかの音声をクリックしてください。"
+  },
+  "voicesPreview": {
+    "description": "ボイス行でボイスの無料サンプルクリップを試聴する再生（▶）ボタンのアクセシブル ラベル。$name$ はボイス名。",
+    "message": "$name$ のサンプルを再生",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "設定の音声リストのアクセシブル名（全音声を1行ずつ表示するリストボックス）。",
+    "message": "音声（低音から高音の順）"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "音声カードのピン切り替え（オン状態）およびメニュースロットの削除ボタンのアクセシブルなラベル。$name$ は音声名、$host$ はアシスタント。",
+    "message": "$name$を$host$のメニューから削除",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "特定の音声のサンプルクリップの読み込みまたは再生に失敗したときに、設定の音声コントロールバーに表示される行。$name$ はその音声名。モーダルではなく、サンプルの連続再生はそのまま続行される。",
+    "message": "$name$ のサンプルを再生できませんでした。",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "設定の AI Chat タブにある音声カタログ セクションのサブ見出し。",
+    "message": "各サイトで返信を読み上げる音声を選びます。"
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "音声設定の見出しの下にある小見出し。ピッチ順の音声レール向け。",
+    "message": "低音から高音まで。聴いてから選べます。"
+  },
+  "voicesSectionTitle": {
+    "description": "設定の AI Chat タブにある音声カタログ セクションの見出し。",
+    "message": "音声"
+  },
+  "voicesShelfEveryday": {
+    "description": "設定の音声カタログでのバリュー層音声のグループ見出し。CSS により大文字表示される。",
+    "message": "日常音声"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "設定の Voices スタジオで、Everyday グループ見出しの横に表示する 1 行メモ。この層が HD よりどれだけ長く使えるかをスタジオ内で示す唯一の箇所。",
+    "message": "自然でクリア。HD より約 20 倍長く聴けます。"
+  },
+  "voicesShelfHd": {
+    "description": "設定の音声カタログでのプレミアム（HD）音声のグループ見出し。CSS により大文字表示される。",
+    "message": "HD 音声"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "設定の Voices スタジオで、HD グループ見出しの横に表示する 1 行メモ。",
+    "message": "最も豊かで表現力のある音。"
+  },
+  "voicesShowAll": {
+    "description": "設定の音声「表示」フィルターの選択肢。絞り込みなしで、すべての音声を一覧表示する。",
+    "message": "すべての音声"
+  },
+  "voicesShowEveryday": {
+    "description": "設定の音声「表示」フィルターの選択肢。標準（非 HD）音声のみを一覧表示する。",
+    "message": "標準のみ"
+  },
+  "voicesShowHd": {
+    "description": "設定の音声「表示」フィルターの選択肢。プレミアム（HD）音声のみを一覧表示する。",
+    "message": "HD のみ"
+  },
+  "voicesShowLabel": {
+    "description": "設定の音声コントロールバーにあるフィルターのラベル。リストに表示する音声を絞り込む。",
+    "message": "表示"
+  },
+  "voicesShowUnheard": {
+    "description": "設定の音声「表示」フィルターの選択肢。ユーザーがまだ聴いていない音声のみを一覧表示する。",
+    "message": "未試聴"
+  },
+  "voicesSpeakingNow": {
+    "description": "設定の音声スタジオで、ホストが現在選択している音声に付く状態ラベル（メニュースロットと音声カード）。",
+    "message": "再生中"
+  },
+  "voicesSpeaksWith": {
+    "description": "設定の音声スタジオ画面で、現在の音声名の上に表示される見出し行。$host$ はアシスタント（例: Pi）。CSS で大文字表示される。",
+    "message": "$host$の話し声",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "ホストが独自の音声を提供する場合（例: Pi）のステージ注記。Say, Pi の音声を選ぶとホストの音声を置き換える。",
+    "message": "下から選ぶまで、$host$は自分の声を使います。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "ホスト自体に音声がない場合（例: Claude）のステージ注記。Say, Pi の音声を選ぶまで読み上げが行われない。",
+    "message": "下から選ぶまで、$host$は返信を読み上げません。",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "設定の音声スタジオのステージ見出し。ホストに Say, Pi の音声が未選択のときに表示。$host$ はアシスタント（例: Pi, Claude）。名前サイズで描画される。",
+    "message": "$host$の声を選ぶ",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "設定の音声スタジオのステージ上のボタン。現在の音声の無料サンプルクリップを再生する。",
+    "message": "サンプルを聴く"
+  },
+  "voicesStopPlayback": {
+    "description": "設定の「音声」コントロールバーのボタン。「すべて再生」で開始した連続再生を停止する。",
+    "message": "停止"
+  },
+  "voicesSweepPosition": {
+    "description": "設定の音声コントロールバーで「すべて再生」がリストを順に再生している間に表示される現在位置。$index$ は再生中の音声、$total$ はキューに入っている数。",
+    "message": "$total$ 件中 $index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "設定の「音声」コントロールバーにある比較コントロールのアクセシブル ラベル。直近で聴いた2つのうち、もう一方の音声を再生する。$name$ はその音声名。",
+    "message": "$name$ に戻す",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "長すぎるリストで「すべて再生」が押されたときに、設定の音声コントロールバーに表示される行。$count$ は音声数、$minutes$ はおおよその分数。「min」は 1 のときも正しく読めるように省略表記（Chrome i18n には複数形がない）。",
+    "message": "$count$ 件の音声です。約 $minutes$ min。先にリストを絞り込んでください。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "設定の音声カタログで、ホストごとの「この音声を使う」ボタンのアクセシブルなラベル。$name$ は音声名、$host$ はアシスタント（例: Pi、Claude）。",
+    "message": "$host$で$name$を使う",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "統合設定の音声カタログで、ホストごとの「この音声を使う」ボタンに表示する短いラベル（ホスト名が隣に表示される）。",
+    "message": "使う"
+  },
+  "voicesYourVoice": {
+    "description": "設定の「音声」一覧のコントロールバーのボタン。現在このホストが使っている音声の行へフォーカスを移動する。$name$ はその音声名。",
+    "message": "あなたの音声: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "音声検出モデルに必要な WebAssembly メモリを十分に割り当てられない場合に投げられるエラー。",
+    "message": "音声検出を開始できません: 音声モデルに必要な WebAssembly メモリが不足しています。$detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "音声検出モデルの実行に必要な初期 WebAssembly メモリがブラウザで公開されていない場合に投げられるエラー。",
+    "message": "音声検出を開始できません: このブラウザでは WebAssembly メモリを利用できません。"
   }
 }

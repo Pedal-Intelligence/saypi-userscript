@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Fordel listet i auth-modal – øgede brugsgrænser.",
+    "message": "Højere brugsgrænser med gratis konto"
+  },
+  "authBenefitPremium": {
+    "description": "Fordel listet i auth-modal – premiumfunktioner på tværs af chatbots.",
+    "message": "Premiumfunktioner og chatbot-understøttelse"
+  },
+  "authBenefitSupport": {
+    "description": "Fordel listet i auth-modal – prioriteret support.",
+    "message": "Prioriteret support ved problemer"
+  },
+  "authBenefitSync": {
+    "description": "Fordel listet i auth-modal – synkronisering af indstillinger.",
+    "message": "Synkronisér stemmeindstillinger overalt"
+  },
+  "authBenefitTTS": {
+    "description": "Fordel listet i auth-modal – TTS-funktion.",
+    "message": "Tekst-til-tale-stemmer (betalingsplaner)"
+  },
+  "authBenefitUsage": {
+    "description": "Fordel listet i auth-modal – sporing af forbrug.",
+    "message": "Følg dit stemmeforbrug på tværs af enheder"
+  },
+  "authPromptModalFull": {
+    "description": "Beskrivelse til den fulde modal-godkendelsesprompt med værdiforslag.",
+    "message": "Du får rigtig meget ud af Say, Pi. Log ind for højere grænser, tekst-til-tale-stemmer og premiumfunktioner på tværs af alle understøttede chatbots."
+  },
+  "authPromptModalSoft": {
+    "description": "Beskrivelse til den bløde modal-godkendelsesprompt.",
+    "message": "Opret en gratis Say, Pi-konto for højere brugsgrænser og adgang til premium-stemmefunktioner."
+  },
+  "authPromptTitle": {
+    "description": "Titel til godkendelsespromptens modal.",
+    "message": "Få adgang til flere stemmefunktioner"
+  },
+  "authPromptToast": {
+    "description": "Toast-notifikation, der opfordrer brugeren til at logge ind.",
+    "message": "Log ind på Say, Pi for højere grænser og premiumfunktioner"
+  },
   "autoReadAloudChatGPT": {
     "description": "Etiket for afkrydsningsfeltet til at aktivere/deaktivere automatisk oplæsning af ChatGPT-svar under opkald med stemme.",
     "message": "Automatisk oplæsning (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Deaktiver tekst-til-tale"
   },
+  "dismiss": {
+    "message": "Forstået",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Afskedige"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Fokus"
   },
+  "errorVadInitFailed": {
+    "description": "Fejl-toast vist, når voice-activity detection ikke kan initialiseres.",
+    "message": "Kunne ikke initialisere stemmedetektion"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Fejl-toast vist, når der opstår en uventet fejl under opsætning af stemmeoptagelse.",
+    "message": "Kunne ikke konfigurere stemmeoptagelse"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Fejl-toast vist, når voice-detection-klienten ikke kan starte optagelsen.",
+    "message": "Kunne ikke starte stemmeoptagelse"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Fejl-toast vist, når voice-detection (VAD)-klienten ikke er tilgængelig, så optagelsen ikke kan starte.",
+    "message": "Stemmeoptagelse er ikke tilgængelig"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Afslut fokustilstand"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "En linje note, der vises i stemmemenuer, når både premium (HD) og value-stemmer er tilgængelige",
+    "message": "HD-stemmer bruger din månedlige kvote ca. 20× hurtigere."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Gemt dette væk ..."
   },
+  "maybeLater": {
+    "description": "Knaptekst til at afvise auth-prompt.",
+    "message": "Måske senere"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Dine mikrofonindstillinger opfylder ikke de påkrævede specifikationer. \nPrøv at bruge en anden mikrofon eller juster dine lydindstillinger."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Kan ikke få adgang til mikrofonen. \nTjek venligst dine enhedsindstillinger og prøv igen."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Fejl-toast vist, når mikrofontilladelse blev afvist efter tilladelsespromptforløbet.",
+    "message": "Mikrofontilladelse blev ikke givet. Sørg for, at du har givet adgang i prompten og i udvidelsesindstillingerne."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "nøjagtighed"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Hurtigste respons, men mindre præcis. \nTilbøjelig til at afbryde."
   },
+  "moreVoices": {
+    "description": "Menurække, der linker fra stemmemenuen på siden til det fulde stemmekatalog i udvidelsens indstillinger",
+    "message": "Flere stemmer…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Assistents kaldenavn"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Ikke logget ind"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Knaptekst, der åbner ChatGPT.",
+    "message": "Åbn ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Knaptekst, der åbner Claude.ai.",
+    "message": "Åbn Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Knaptekst, der åbner Pi.ai.",
+    "message": "Åbn Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Miljøvalg: omkring andre mennesker.",
+    "message": "Omkring andre mennesker"
+  },
+  "onboarding_envMixed": {
+    "description": "Miljøvalg: en blanding af private og fælles rum.",
+    "message": "En blanding af steder"
+  },
+  "onboarding_envPrivate": {
+    "description": "Miljøvalg: et privat sted.",
+    "message": "Et privat sted"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Bekræftelse, der vises, når svaret om miljøet efterlader stille tilstand slået fra.",
+    "message": "Okay — vi beholder standardindstillingerne for lytning og afspilning."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Bekræftelse, der vises, når svaret om omgivelser aktiverer stille tilstand.",
+    "message": "Stille tilstand til — vi opfanger blødere tale og svarer lavt, så du kan tale diskret."
+  },
+  "onboarding_envTitle": {
+    "description": "Overskrift til onboarding-spørgsmålet om brugerens omgivelser.",
+    "message": "Hvor taler du typisk?"
+  },
+  "onboarding_footer": {
+    "description": "Fodtekst på onboarding-siden ved første kørsel.",
+    "message": "Du kan altid finde dette igen i indstillingerne i Say, Pi. Dit privatliv er vigtigt — lyd optages kun under et aktivt opkald."
+  },
+  "onboarding_heading": {
+    "description": "Hovedoverskrift på onboarding-siden ved første kørsel.",
+    "message": "🗣️ Velkommen til Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Introafsnit på onboarding-siden ved første kørsel.",
+    "message": "Du er to trin fra din første samtale med en AI. At tale er ca. 3× hurtigere end at skrive, så lad os få dig sat op."
+  },
+  "onboarding_micTestButton": {
+    "description": "Knap, der starter den uforpligtende mikrofontest i onboarding.",
+    "message": "🎤 Test din mikrofon"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status, der vises, efter onboarding-mikrofontesten er gennemført.",
+    "message": "Fint — din mikrofon virker! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status, der vises, mens onboarding-mikrofontesten måler input.",
+    "message": "Lytter — sig noget! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status, der vises, mens onboarding-mikrofontesten afventer tilladelse.",
+    "message": "Anmoder om mikrofon…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Knaptekst til at stoppe onboarding-mikrofontesten, mens den kører.",
+    "message": "Stop test"
+  },
+  "onboarding_step1Body": {
+    "description": "Brødtekst til første onboarding-trin, der forklarer hvordan du fastgør udvidelsen.",
+    "message": "Klik på puslespilsikonet 🧩 øverst til højre i din browser, og klik derefter på nålen 📌 ved siden af Say, Pi. Så er opkaldsknappen kun ét klik væk."
+  },
+  "onboarding_step1Title": {
+    "description": "Titel på første onboarding-trin (fastgør udvidelsen).",
+    "message": "Fastgør Say, Pi til værktøjslinjen"
+  },
+  "onboarding_step2Body": {
+    "description": "Brødtekst til andet onboarding-trin, der forklarer hvordan man starter en stemmesamtale.",
+    "message": "Gå til en af de understøttede assistenter nedenfor, tryk på Say, Pi-opkaldsknappen, og sig hej. Første gang beder vi om adgang til mikrofonen, og det er forventet, og vi lytter kun, mens du aktivt er i et opkald."
+  },
+  "onboarding_step2Title": {
+    "description": "Titel på andet onboarding-trin (start en samtale).",
+    "message": "Åbn en AI-chat og begynd at tale"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Mikrofon tilladelse"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Gendannelsesvejledning, når mikrofontilladelsen er blokeret.",
+    "message": "Din browser blokerer mikrofonen. Klik på kamera- eller låseikonet i adresselinjen, sæt Mikrofon til \"Tillad\", og prøv igen. På macOS: tjek også Systemindstillinger → Anonymitet og sikkerhed → Mikrofon."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Titel på gendannelsespanelet, når mikrofontilladelse blev afvist/blokeret.",
+    "message": "Mikrofonadgang er blokeret"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Gendannelsesvejledning, når mikrofonen bruges et andet sted.",
+    "message": "En anden app eller fane bruger måske din mikrofon. Luk alt andet, der kan optage (videoopkald, stemmenoter), og prøv igen."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Titel på gendannelsespanelet, når mikrofonen bruges af en anden app.",
+    "message": "Din mikrofon er optaget"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Gendannelsesvejledning, når der ikke er nogen mikrofonenhed tilgængelig.",
+    "message": "Vi kunne ikke finde en mikrofon. Tilslut en (eller forbind dit headset), sørg for at den er valgt som inputenhed, og prøv igen."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Titel på gendannelsespanelet, når der ikke er nogen mikrofonenhed tilgængelig.",
+    "message": "Ingen mikrofon fundet"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Gendannelsesvejledning ved en ukendt mikrofonfejl.",
+    "message": "Noget gik galt med adgangen til din mikrofon. Tjek, at den er tilsluttet og tilladt i din browsers indstillinger, og prøv igen."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Titel på gendannelsespanelet ved en ukendt mikrofonfejl.",
+    "message": "Vi kunne ikke få adgang til din mikrofon"
+  },
+  "permissions_retryButton": {
+    "description": "Tekst på knappen, der anmoder om mikrofontilladelse igen.",
+    "message": "Prøv igen"
+  },
+  "permissions_revokedHeading": {
+    "description": "Overskrift, der vises, når mikrofonadgang tidligere blev givet, men siden er blevet tilbagekaldt.",
+    "message": "🎙️ Lad os tilslutte din mikrofon igen"
+  },
+  "permissions_revokedInfo": {
+    "description": "Informationstekst, der vises, når mikrofonadgang blev tilbagekaldt efter at være blevet givet.",
+    "message": "Din mikrofonadgang blev slået fra — det sker ofte efter en browser- eller systemopdatering. Tillad den igen nedenfor, så lytter $productName$ igen, når du er i et opkald.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Etiket til kontakten, der aktiverer stille-/hvisketilstand.",
+    "message": "Stille tilstand"
+  },
+  "quietModeTooltip": {
+    "description": "Værktøjstip, der forklarer, hvad stille-/hvisketilstand gør.",
+    "message": "Tal lavt — opfanger svagere tale og sænker assistentens svarlydstyrke, så du kan bruge stemmen omkring andre."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Tekst til knappen Log ind, mens godkendelsen er i gang.",
+    "message": "Logger ind…"
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Lyd effekter"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Lydeffekter er deaktiveret i Firefox for at forhindre problemer med lydfeedback."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Overskrift på den engangsvist speed-payoff-besked efter den første talte udveksling.",
+    "message": "Dejligt — det er cirka 3× hurtigere at tale end at skrive."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Valgfri anden linje i speed-payoff-beskeden, der viser hele minutter sparet.",
+    "message": "Du har allerede talt omtrent $minutes$ min hurtigere, end hvis du havde skrevet det.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Send først, når du trykker på knappen"
   },
+  "surveyQuestion": {
+    "description": "Det ene spørgsmål i den engangs micro-undersøgelse efter en win.",
+    "message": "Hvordan fungerer stemmen for dig indtil videre?"
+  },
+  "surveyRatingLabel": {
+    "description": "Tilgængelig etiket til en knap til bedømmelse i en undersøgelse.",
+    "message": "Bedøm $rating$ ud af 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Anerkendelse, der vises, efter at brugeren har besvaret undersøgelsen efter en win.",
+    "message": "Tak — det hjælper os med at gøre Say, Pi bedre."
+  },
   "tabAIChat": {
     "description": "Faneblad label for AI chatindstillingssektionen.",
     "message": "AI Chat"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Faneblad label for de generelle indstillinger.",
     "message": "Generelt"
+  },
+  "tabVoices": {
+    "description": "Fanebladets etiket for stemmeindstillinger (stemmeoversigt pr. site).",
+    "message": "Stemmer"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "Kreditter"
   },
+  "ttsCreditsRemaining": {
+    "description": "Tekst, der viser resterende TTS-kvote som en kreditpulje pr. stemme (saypi-api #181 Stage 2), ikke rå tegn.",
+    "message": "$credits$ kreditter tilbage",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Flersprogede stemmer understøttes i øjeblikket ikke i Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Stemmegenerering"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Heads up! Taleafspilning er ikke tilgængelig på $browserName$ med $chatbotName$ endnu. Den gode nyhed? Stemmeinput fungerer fantastisk! Til TTS skal du prøve Chrome eller Edge på desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS ikke tilgængelig på $browserName$ + $chatbotName$. Stemmeinput fungerer! Prøv Chrome desktop til TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts stemme"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD-detalje når taleagtig lyd blev registreret, men var for svag / med for lav sikkerhed til at blive transskriberet (klientside admission-gate drop).",
+    "message": "Lyden er for svag til at blive transskriberet"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD-detalje der forklarer, at opkaldet sluttede, fordi mikrofonen blev taget i brug af en nyere fane.",
+    "message": "Stemmeinput flyttet til en anden fane"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Stemme ikke tilgængelig. \nPrøv Chrome eller Firefox på desktop."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Heads up! Taleafspilning er ikke tilgængelig på $browserName$ med $chatbotName$ endnu. Den gode nyhed? Stemmeinput fungerer fantastisk! Til TTS skal du prøve Chrome eller Edge på desktop.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS ikke tilgængelig på $browserName$ + $chatbotName$. Stemmeinput fungerer! Prøv Chrome desktop til TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Forstået",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "VAD-status vist på en fane, hvis stemmeinput blev overtaget af en anden fane.",
+    "message": "Sat på pause"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Se detaljer"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Generisk, talt introduktion, der afspilles, når en valgt SayPi-stemme ikke har et stemmespecifikt introduktionsmanuskript (og der ikke er en nylig besked at læse op).",
+    "message": "Hej, jeg er $voice$. Sådan lyder jeg. Jeg håber, du kan lide denne stemme.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hej! \nПривет! \n你好! \nJeg er Pi, din polyglot AI-assistent. \nMed 32 sprog på min kommando, kan vi udforske ideer og kulturer fra hele verden. \nHvad synes du om denne stemme?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Stemmeindstillinger"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Reserve-undertekst til en stemmerække i indstillingernes stemmekatalog, når stemmen ikke har en beskrivelse; $count$ er antallet af sprog, stemmen understøtter.",
+    "message": "Taler $count$ sprog",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Skrevet personlighedstagline til stemmen 'Addison' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Solrig og velformuleret"
+  },
+  "voiceTagline_alloy": {
+    "description": "Forfattet personlighedstagline til stemmen 'Alloy' (indstillinger for stemmestudie; klient-side stemmeidentitetskort).",
+    "message": "Balanceret og alsidig"
+  },
+  "voiceTagline_ash": {
+    "description": "Forfattet personlighedstagline til stemmen 'Ash' (indstillinger for stemmestudie; klient-side stemmeidentitetskort).",
+    "message": "Dyb, eftertænksom, rolig"
+  },
+  "voiceTagline_ballad": {
+    "description": "Forfattet personlighedstagline til stemmen 'Ballad' (indstillinger for stemmestudie; klient-side stemmeidentitetskort).",
+    "message": "Blød og melodisk"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Skrevet personlighedstagline til stemmen 'Cassidy' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Venlig og ligetil"
+  },
+  "voiceTagline_cedar": {
+    "description": "Forfattet personlighedstagline til stemmen 'Cedar' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Stabil og betryggende"
+  },
+  "voiceTagline_coral": {
+    "description": "Forfattet personlighedstagline til stemmen 'Coral' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Lys og optimistisk energi"
+  },
+  "voiceTagline_echo": {
+    "description": "Forfattet personlighedstagline til stemmen 'Echo' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Ren og neutral"
+  },
+  "voiceTagline_fable": {
+    "description": "Forfattet personlighedstagline til stemmen 'Fable' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "En fortællers melodiske tone"
+  },
+  "voiceTagline_finn": {
+    "description": "Skrevet personlighedstagline til stemmen 'Finn' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Frisk og energisk"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Skrevet personlighedstagline til stemmen 'Jamahal' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Fyldig og dragende"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Forfattet personlighedstagline til stemmen 'Jarnathan' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Fløjlsblød nattelig baryton"
+  },
+  "voiceTagline_jeff": {
+    "description": "Skrevet personlighedstagline til stemmen 'Jeff' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Ligefrem og stabil"
+  },
+  "voiceTagline_jessica": {
+    "description": "Skrevet personlighedstagline til stemmen 'Jessica' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Varm, poleret ro"
+  },
+  "voiceTagline_joey": {
+    "description": "Forfattet personlighedstagline til stemmen 'Joey' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Ubesværet, samtalende amerikansk"
+  },
+  "voiceTagline_juniper": {
+    "description": "Skrevet personlighedstagline til stemmen 'Juniper' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Skarp, lys, livlig"
+  },
+  "voiceTagline_lucy": {
+    "description": "Skrevet personlighedstagline til stemmen 'Lucy' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Blid og strålende"
+  },
+  "voiceTagline_marin": {
+    "description": "Forfattet personlighedstagline til stemmen 'Marin' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Varm ro som i morgenradio"
+  },
+  "voiceTagline_mark": {
+    "description": "Skrevet personlighedstagline til stemmen 'Mark' (indstillinger > stemmestudie; klientbaseret stemme-identitetskort).",
+    "message": "Klar og selvsikker fortæller"
+  },
+  "voiceTagline_nova": {
+    "description": "Forfattet personlighedstagline til stemmen 'Nova' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Hurtig og nysgerrig"
+  },
+  "voiceTagline_onyx": {
+    "description": "Forfattet personlighedstagline til stemmen 'Onyx' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Dyb og rungende autoritet"
+  },
+  "voiceTagline_paola": {
+    "description": "Forfattet personlighedstagline til stemmen 'Paola' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Udtryksfuld italiensk varme"
+  },
+  "voiceTagline_sage": {
+    "description": "Forfattet personlighedstagline til stemmen 'Sage' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Stille klarhed"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Forfattet personlighedstagline til stemmen 'Shimmer' (indstillinger Voices studio; identitetskort over stemmer på klientsiden).",
+    "message": "Let og luftig"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Kort etiket på et stemmekorts fastgør/skift-knap (slået fra) i indstillingerne (Voices studio); ved tryk tilføjes stemmen til værtens menu i chatten.",
+    "message": "+ Menu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Tilgængelig etiket for et stemmekorts fastgør/skift-knap (slået fra); $name$ er stemmen, $host$ assistenten.",
+    "message": "Føj $name$ til $host$s menu",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Etiket på kontakten i kontrolbjælken for Stemmer, der angiver om gennemgang af listen med piletasterne afspiller hver stemme, når fokus når den.",
+    "message": "Afspil mens du flytter dig"
+  },
+  "voicesArrowsLive": {
+    "description": "Skærmlæserbekræftelse, føjet til den første \"Afspiller <stemme>\"-meddelelse i indstillingslisten over Stemmer, der fortæller at piletasterne lige er blevet hørbare. Matcher formuleringen i til/fra-knappen \"Afspil mens du bevæger dig\".",
+    "message": "Piletaster afspiller nu, mens du bevæger dig. Esc stopper."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Note under menupladserne for værter, der leveres med indbyggede stemmer (f.eks. Pi's 8 indbyggede), som studiet ikke administrerer; $host$ er assistenten.",
+    "message": "$host$s egne indbyggede stemmer vises altid også i menuen.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Variant af voicesBuiltinsNote for en vært uden en stemmemenu i chatten (Pi udfasede sin menu i 2026), hvor løftet i originalen om at de indbyggede stemmer 'vises i menuen' ville være forkert; $host$ er assistenten.",
+    "message": "$host$ har også egne indbyggede stemmer, som ikke er listet her.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Status i indstillingskontrollen for Stemmer: hvor mange af de viste stemmer brugeren allerede har lyttet til. Kun tal, så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",
+    "message": "$heard$ af $total$ hørt",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Del af en stemmerækkes tilgængelige navn i indstillingslisten over Stemmer, som markerer en stemme denne profil allerede har lyttet til. Visuelt tegnes det som blæktæthed i stemmens lydaftryk, hvilket en skærmlæser ikke kan se.",
+    "message": "Hørt"
+  },
+  "voicesInHostMenu": {
+    "description": "Sektionsoverskrift over rækken med menuslots i indstillingerne (Voices studio); $host$ er assistenten.",
+    "message": "I $host$s menu",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Kort etiket på et stemmekorts fastgør/skift-knap (slået til) i indstillingerne (Voices studio).",
+    "message": "✓ I menu"
+  },
+  "voicesInUse": {
+    "description": "Vedvarende badge på værtens aktuelt valgte stemme i listen Stemmer i indstillingerne, gengivet med store bogstaver. Bevidst IKKE 'Taler nu': på denne side afspiller rækker deres sampleklip, så en valgt-men-tavs stemme må ikke påstå, at den taler, mens en anden række gør det.",
+    "message": "I brug"
+  },
+  "voicesKeyboardHint": {
+    "description": "Hint på én linje til tastaturbrug i indstillingskontrollen for Stemmer. Symbolerne er taster: mellemrum, pil op/ned og Skift+mellemrum.",
+    "message": "Tryk på mellemrum for at lytte, ↑↓ for at skifte mellem stemmer, ⇧Mellemrum for at skifte tilbage."
+  },
+  "voicesLoadError": {
+    "description": "Fejltilstand inde i én værts studie, når den værts stemmekatalog ikke kunne indlæses; $host$ er assistenten.",
+    "message": "Kunne ikke indlæse $host$s stemmer. Prøv igen senere.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/hint på en deaktiveret '+ Menu'-knap, når værtens menu i chatten allerede har det maksimale antal stemmer.",
+    "message": "Menuen er fuld — fjern en stemme for at tilføje en anden"
+  },
+  "voicesMenuHint": {
+    "description": "Enlinjet hint ved siden af overskriften 'I {host}'s menu', der forklarer at slots-rækken afspejler stemmemenuen i chatten.",
+    "message": "Det her ser du i chatten"
+  },
+  "voicesMenuOverflow": {
+    "description": "Note under menupladserne, når brugeren har flere fastgjorte stemmer, end menuen i chatten kan vise (legacy-tilstand); $count$ er hvor mange der ikke kan være der, $cap$ er menustørrelsen.",
+    "message": "$count$ flere fastgjorte stemmer venter uden for menuens $cap$ pladser.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Entalsform af voicesMenuOverflow, brugt når præcis én fastgjort stemme ikke kan være i menuen i chatten; $cap$ er menustørrelsen.",
+    "message": "1 flere fastgjort stemme venter uden for menuens $cap$ pladser.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Opsummeringslinje under indstillingslisten over Stemmer, der viser hvor meget af værtens stemmemenu i chatten der er fyldt; $host$ er assistenten, $used$ hvor mange pladser der er optaget, $cap$ hvor mange der er. Formuleret så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",
+    "message": "$host$'s menu: $used$ af $cap$ pladser",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Overskrift for gruppen til sidst i indstillingslisten over Stemmer med stemmer uden en prøveklip at afspille; $count$ er hvor mange. Formuleret så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",
+    "message": "Ingen prøve endnu ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Vises i indstillingernes stemmekatalog, når stemmelisten er tom for en bruger, der er logget ind (f.eks. et netværksproblem).",
+    "message": "Stemmer kunne ikke indlæses lige nu. Prøv igen senere."
+  },
+  "voicesNowPlaying": {
+    "description": "Skærmlæsermeddelelse når en stemmes prøveklip begynder at afspille i indstillingslisten over Stemmer; $name$ er stemmen.",
+    "message": "Afspiller $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Knap i indstillingskontrollen for Stemmer, som afspiller hver stemme, der vises i øjeblikket, én efter én; $count$ er hvor mange. Formuleret så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",
+    "message": "Afspil alle ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Knap i indstillingskontrollen for Stemmer ved et senere besøg: afspiller kun de viste stemmer, du ikke har lyttet til endnu; $count$ er hvor mange. Formuleret så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",
+    "message": "Afspil nye ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Linje i indstillingerne i stemmekontrollinjen, når browseren nægtede at afspille en prøve, fordi siden endnu ikke har haft brugerinteraktion.",
+    "message": "Klik på en vilkårlig stemme for at slå lyden til."
+  },
+  "voicesPreview": {
+    "description": "Tilgængelig etiket til afspilningsknappen (▶), der afspiller en stemmes gratis prøveklip på en stemmerække; $name$ er stemmens navn.",
+    "message": "Afspil en prøve med $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Tilgængeligt navn for listen over Stemmer i indstillingerne (en listeboks med alle stemmer, én række pr. stemme).",
+    "message": "Stemmer, sorteret fra dybest til lysest"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Tilgængelig etiket for et stemmekorts fastgør/skift-knap (slået til) og en menuslots fjern-knap; $name$ er stemmen, $host$ assistenten.",
+    "message": "Fjern $name$ fra $host$s menu",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Linje i indstillingerne i stemmekontrollinjen, når en stemmes prøvelyd ikke kunne indlæses eller afspilles; $name$ er den stemme. Ikke-modal — en række prøver fortsætter forbi den.",
+    "message": "Kunne ikke afspille prøven for $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Underoverskrift til stemmekatalog-sektionen i fanen AI Chat i indstillinger",
+    "message": "Vælg den stemme, der læser svar højt på hvert websted."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Underoverskrift under overskriften Stemmer i indstillingerne, til rækken af stemmer sorteret efter tonehøjde.",
+    "message": "Alle stemmer, fra dybest til lysest. Lyt, og vælg så."
+  },
+  "voicesSectionTitle": {
+    "description": "Overskrift til stemmekatalog-sektionen i fanen AI Chat i indstillinger",
+    "message": "Stemmer"
+  },
+  "voicesShelfEveryday": {
+    "description": "Gruppeoverskrift for value-tier-stemmer i stemmekataloget i indstillinger. Renderes med store bogstaver af CSS.",
+    "message": "Hverdagsstemmer"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Enlinjenote ved siden af gruppeoverskriften Hverdagsstemmer i Stemmer-studiet; det eneste sted, hvor studiet angiver, hvor meget længere dette niveau rækker end HD.",
+    "message": "Naturlig og klar — du kan lytte cirka 20× længere end med HD."
+  },
+  "voicesShelfHd": {
+    "description": "Gruppeoverskrift for premium (HD)-stemmer i stemmekataloget i indstillinger. Renderes med store bogstaver af CSS.",
+    "message": "HD-stemmer"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Enlinjenote ved siden af HD-gruppeoverskriften i indstillingerne for Stemmer.",
+    "message": "Vores mest fyldige og udtryksfulde lyd."
+  },
+  "voicesShowAll": {
+    "description": "Valgmulighed i 'Vis'-filteret for Stemmer i indstillingerne: ingen filtrering, alle stemmer vises.",
+    "message": "Alle stemmer"
+  },
+  "voicesShowEveryday": {
+    "description": "Valgmulighed i 'Vis'-filteret for Stemmer i indstillingerne: vis kun standardstemmerne (ikke-HD).",
+    "message": "Kun hverdagsstemmer"
+  },
+  "voicesShowHd": {
+    "description": "Valgmulighed i 'Vis'-filteret for Stemmer i indstillingerne: vis kun premium-stemmerne (HD).",
+    "message": "Kun HD"
+  },
+  "voicesShowLabel": {
+    "description": "Etiket på filteret i indstillingerne i stemmekontrollinjen, som indsnævrer hvilke stemmer listen viser.",
+    "message": "Vis"
+  },
+  "voicesShowUnheard": {
+    "description": "Valgmulighed i 'Vis'-filteret for Stemmer i indstillingerne: vis kun de stemmer, brugeren ikke har lyttet til endnu.",
+    "message": "Endnu ikke hørt"
+  },
+  "voicesSpeakingNow": {
+    "description": "Tilstandslabel på værtens aktuelt valgte stemme i indstillingerne (Voices studio) (menyslot og stemmekort).",
+    "message": "Taler nu"
+  },
+  "voicesSpeaksWith": {
+    "description": "Overskriftslinje over den aktuelle stemmes navn på scenen i indstillingerne (Voices studio); $host$ er assistenten (f.eks. Pi). Gengives med store bogstaver via CSS.",
+    "message": "$host$ taler med",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Scenenote når værten leverer sin egen lyd (f.eks. Pi), så valg af en Say, Pi-stemme erstatter værtens.",
+    "message": "$host$ bruger sin egen stemme, indtil du vælger en nedenfor.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Scenenote når værten ikke har sin egen stemme (f.eks. Claude), så intet bliver læst højt, før en Say, Pi-stemme vælges.",
+    "message": "$host$ læser ikke svar højt, før du vælger en nedenfor.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Overskrift på scenen i Stemmer-studiet i indstillingerne, når værten ikke har nogen SayPi-stemme valgt; $host$ er assistenten (f.eks. Pi, Claude). Vises i navnestørrelse.",
+    "message": "Vælg hvordan $host$ lyder",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Knap på scenen i Stemmer-studiet i indstillingerne, som afspiller den aktuelle stemmes gratis prøveklip.",
+    "message": "Hør en prøve"
+  },
+  "voicesStopPlayback": {
+    "description": "Knap i indstillingskontrollen for Stemmer, som stopper rækken af prøver startet af \"Afspil alle\".",
+    "message": "Stop"
+  },
+  "voicesSweepPosition": {
+    "description": "Live positionsvisning i indstillingerne i stemmekontrollinjen, mens 'Afspil alle' går gennem listen; $index$ er den stemme, der afspilles nu, og $total$ hvor mange der er i kø.",
+    "message": "$index$ af $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Tilgængelig etiket for sammenligningskontrollen i indstillingskontrollen for Stemmer, som afspiller den anden stemme af de sidste to, der blev hørt; $name$ er den stemme.",
+    "message": "Skift tilbage til $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Linje i indstillingerne i stemmekontrollinjen, når 'Afspil alle' trykkes på en liste, der er for lang at lytte til; $count$ er hvor mange stemmer og $minutes$ cirka hvor mange minutter de vil tage. Forkortet 'min' så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",
+    "message": "Det er $count$ stemmer — cirka $minutes$ min. Indsnævr listen først.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Tilgængelig etiket for knappen 'brug denne stemme' pr. vært i indstillingernes stemmekatalog; $name$ er stemmen, $host$ er assistenten (f.eks. Pi, Claude).",
+    "message": "Brug $name$ på $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Kort etiket på knappen 'brug denne stemme' pr. vært i den samlede stemmekatalogvisning i indstillingerne (værten vises ved siden af).",
+    "message": "Brug"
+  },
+  "voicesYourVoice": {
+    "description": "Knap i kontrolbjælken i indstillingslisten over Stemmer, som flytter fokus til rækken for den stemme, som denne vært bruger i øjeblikket; $name$ er den stemme.",
+    "message": "Din stemme: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Fejl, der kastes, når browseren ikke kan allokere tilstrækkelig WebAssembly-hukommelse til stemmedetektionsmodellen.",
+    "message": "Stemmedetektion kan ikke starte: ikke nok WebAssembly-hukommelse til stemmemodellen. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Fejl, der kastes, når browseren ikke eksponerer den indledende WebAssembly-hukommelse, der er nødvendig for at køre stemmedetektionsmodellen.",
+    "message": "Stemmedetektion kan ikke starte: WebAssembly-hukommelse er ikke tilgængelig i denne browser."
   }
 }

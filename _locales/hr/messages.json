@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Prednost navedena u modalu za prijavu - povećana ograničenja korištenja.",
+    "message": "Veća ograničenja korištenja uz besplatan račun"
+  },
+  "authBenefitPremium": {
+    "description": "Prednost navedena u modalu za prijavu - premium značajke u chatbotovima.",
+    "message": "Premium značajke i podrška za chatbotove"
+  },
+  "authBenefitSupport": {
+    "description": "Prednost navedena u modalu za prijavu - prioritetna podrška.",
+    "message": "Prioritetna podrška za probleme"
+  },
+  "authBenefitSync": {
+    "description": "Prednost navedena u modalu za prijavu - sinkronizacija postavki.",
+    "message": "Sinkronizirajte postavke glasova posvuda"
+  },
+  "authBenefitTTS": {
+    "description": "Prednost navedena u modalu za prijavu - značajka TTS.",
+    "message": "Glasovi za pretvorbu teksta u govor (plaćeni planovi)"
+  },
+  "authBenefitUsage": {
+    "description": "Prednost navedena u modalu za prijavu - praćenje korištenja.",
+    "message": "Pratite korištenje glasova na svim uređajima"
+  },
+  "authPromptModalFull": {
+    "description": "Opis za puni modalni upit za prijavu/autentifikaciju s vrijednosnom ponudom.",
+    "message": "Vidimo da često koristite Say, Pi. Prijavite se za veća ograničenja, glasove za pretvorbu teksta u govor i premium značajke u svim podržanim chatbotovima."
+  },
+  "authPromptModalSoft": {
+    "description": "Opis za blagi modalni upit za prijavu/autentifikaciju.",
+    "message": "Izradite besplatan Say, Pi račun za veća ograničenja korištenja i pristup premium glasovnim značajkama."
+  },
+  "authPromptTitle": {
+    "description": "Naslov za modal za prijavu/autentifikaciju.",
+    "message": "Otključajte više glasovnih značajki"
+  },
+  "authPromptToast": {
+    "description": "Toast obavijest koja potiče korisnika da se prijavi.",
+    "message": "Prijavite se u Say, Pi za veća ograničenja i premium značajke"
+  },
   "autoReadAloudChatGPT": {
     "description": "Oznaka za okvir za potvrdu kojim se omogućuje ili onemogućuje automatsko čitanje ChatGPT odgovora tijekom glasovnih poziva.",
     "message": "Automatsko glasno čitanje (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Onemogućite tekst u govor"
   },
+  "dismiss": {
+    "message": "Razumijem",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Odbaci"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Usredotoči se"
   },
+  "errorVadInitFailed": {
+    "description": "Poruka o pogrešci prikazana kada se detekcija glasovne aktivnosti ne uspije pokrenuti.",
+    "message": "Nije uspjelo pokretanje detekcije glasa"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Poruka o pogrešci prikazana kada dođe do neočekivane pogreške tijekom postavljanja snimanja glasa.",
+    "message": "Nije uspjelo postavljanje snimanja glasa"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Poruka o pogrešci prikazana kada klijent za detekciju glasa ne uspije pokrenuti snimanje.",
+    "message": "Nije uspjelo pokretanje snimanja glasa"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Poruka o pogrešci prikazana kada klijent za detekciju glasa (VAD) nije dostupan, pa snimanje ne može započeti.",
+    "message": "Snimanje glasa nije dostupno"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Izađi iz fokusiranog načina"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Jednoredna napomena prikazana u izbornicima glasova kada su dostupni i premium (HD) i value glasovi",
+    "message": "HD glasovi troše vašu mjesečnu kvotu oko 20× brže."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Uguravanje ovoga ..."
   },
+  "maybeLater": {
+    "description": "Tekst gumba za odbacivanje upita za prijavu/autentifikaciju.",
+    "message": "Možda poslije"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Vaše postavke mikrofona ne zadovoljavaju potrebne specifikacije. \nPokušajte upotrijebiti drugi mikrofon ili prilagoditi postavke zvuka."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Nije moguće pristupiti mikrofonu. \nProvjerite postavke uređaja i pokušajte ponovno."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Poruka o pogrešci prikazana kada je dopuštenje za mikrofon odbijeno nakon tijeka upita za dopuštenje.",
+    "message": "Dopuštenje za mikrofon nije odobreno. Provjerite jeste li dopustili pristup u upitu i u postavkama proširenja."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "točnost"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Najbrži odgovor, ali manje točan. \nSklon prekidanju."
   },
+  "moreVoices": {
+    "description": "Redak izbornika koji vodi iz izbornika glasova na stranici na puni katalog glasova u postavkama proširenja.",
+    "message": "Više glasova…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Nadimak asistenta"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nije prijavljen"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Oznaka gumba koja otvara ChatGPT.",
+    "message": "Otvori ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Oznaka gumba koji otvara Claude.ai.",
+    "message": "Otvori Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Oznaka gumba koji otvara Pi.ai.",
+    "message": "Otvori Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Opcija okruženja: u blizini drugih ljudi.",
+    "message": "U blizini drugih ljudi"
+  },
+  "onboarding_envMixed": {
+    "description": "Opcija okruženja: kombinacija privatnih i zajedničkih prostora.",
+    "message": "Malo ovdje, malo tamo"
+  },
+  "onboarding_envPrivate": {
+    "description": "Opcija okruženja: privatni prostor.",
+    "message": "Negdje privatno"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Potvrda koja se prikazuje kada odgovor o okruženju ostavlja tihi način isključenim.",
+    "message": "U redu — zadržat ćemo standardne postavke slušanja i reprodukcije."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Potvrda prikazana kada odgovor o okruženju uključi tihi način.",
+    "message": "Tihi način je uključen — prepoznat ćemo tiši govor i odgovarati tiho, pa možeš razgovarati diskretno."
+  },
+  "onboarding_envTitle": {
+    "description": "Naslov za uvodno pitanje o korisnikovom okruženju.",
+    "message": "Gdje ćeš najčešće razgovarati?"
+  },
+  "onboarding_footer": {
+    "description": "Tekst u podnožju na stranici uvodnog prikaza pri prvom pokretanju.",
+    "message": "Ovo možeš ponovno otvoriti bilo kada u postavkama za Say, Pi. Tvoja privatnost je važna — zvuk se snima samo tijekom aktivnog poziva."
+  },
+  "onboarding_heading": {
+    "description": "Glavni naslov na onboarding stranici pri prvom pokretanju.",
+    "message": "🗣️ Dobro došli u Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Uvodni odlomak na onboarding stranici pri prvom pokretanju.",
+    "message": "Dva ste koraka udaljeni od svog prvog razgovora s AI-jem. Govor je oko 3× brži od tipkanja — postavimo sve kako treba."
+  },
+  "onboarding_micTestButton": {
+    "description": "Gumb koji pokreće bezopasni uvodni test mikrofona.",
+    "message": "🎤 Testiraj mikrofon"
+  },
+  "onboarding_micTestDone": {
+    "description": "Status prikazan nakon uspješnog završetka uvodnog testa mikrofona.",
+    "message": "Super — mikrofon radi. 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Status prikazan dok uvodni test mikrofona mjeri ulaz.",
+    "message": "Slušam — reci nešto. 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Status prikazan dok uvodni test mikrofona čeka dopuštenje.",
+    "message": "Tražim pristup mikrofonu…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Oznaka gumba za zaustavljanje uvodnog testa mikrofona dok je u tijeku.",
+    "message": "Zaustavi test"
+  },
+  "onboarding_step1Body": {
+    "description": "Tekst prvog onboarding koraka koji objašnjava kako prikvačiti proširenje.",
+    "message": "Kliknite ikonu slagalice 🧩 u gornjem desnom kutu preglednika, zatim pribadaču 📌 pokraj Say, Pi. Tako je gumb za poziv uvijek na jedan klik."
+  },
+  "onboarding_step1Title": {
+    "description": "Naslov prvog onboarding koraka (prikvačivanje proširenja).",
+    "message": "Prikvačite Say, Pi na alatnu traku"
+  },
+  "onboarding_step2Body": {
+    "description": "Tekst drugog onboarding koraka koji objašnjava kako započeti glasovni razgovor.",
+    "message": "Idite na jednog od podržanih asistenata u nastavku, zatim dodirnite gumb za poziv Say, Pi i pozdravite se. Prvi put ćemo zatražiti pristup mikrofonu — to je očekivano, a slušamo samo dok ste aktivno u pozivu."
+  },
+  "onboarding_step2Title": {
+    "description": "Naslov drugog onboarding koraka (započinjanje razgovora).",
+    "message": "Otvorite AI chat i počnite govoriti"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Odobrenje mikrofona"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Upute za oporavak kada je dopuštenje za mikrofon blokirano.",
+    "message": "Vaš preglednik blokira mikrofon. Kliknite ikonu kamere ili lokota u adresnoj traci, postavite Mikrofon na \"Dopusti\", a zatim pokušajte ponovno. Na macOS-u također provjerite Postavke sustava → Privatnost i sigurnost → Mikrofon."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Naslov panela za oporavak kada je dopuštenje za mikrofon odbijeno/blokirano.",
+    "message": "Pristup mikrofonu je blokiran"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Upute za oporavak kada se mikrofon koristi na drugom mjestu.",
+    "message": "Druga aplikacija ili kartica možda koristi vaš mikrofon. Zatvorite sve što bi moglo snimati (videopozivi, glasovne bilješke), a zatim pokušajte ponovno."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Naslov panela za oporavak kada mikrofon koristi druga aplikacija.",
+    "message": "Vaš mikrofon je zauzet"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Upute za oporavak kada nije dostupan nijedan uređaj mikrofona.",
+    "message": "Nismo pronašli mikrofon. Priključite ga (ili povežite slušalice), provjerite je li odabran kao ulazni uređaj, a zatim pokušajte ponovno."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Naslov panela za oporavak kada nije dostupan nijedan uređaj mikrofona.",
+    "message": "Nije pronađen mikrofon"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Upute za oporavak za nepoznatu pogrešku mikrofona.",
+    "message": "Nešto je pošlo po zlu pri pristupu vašem mikrofonu. Provjerite je li povezan i dopušten u postavkama preglednika, a zatim pokušajte ponovno."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Naslov panela za oporavak za nepoznatu pogrešku mikrofona.",
+    "message": "Nismo mogli pristupiti vašem mikrofonu"
+  },
+  "permissions_retryButton": {
+    "description": "Oznaka gumba koji ponovno traži dopuštenje za mikrofon.",
+    "message": "Pokušaj ponovno"
+  },
+  "permissions_revokedHeading": {
+    "description": "Naslov koji se prikazuje kada je pristup mikrofonu ranije bio odobren, ali je u međuvremenu opozvan.",
+    "message": "🎙️ Ponovno povežimo vaš mikrofon"
+  },
+  "permissions_revokedInfo": {
+    "description": "Informativni tekst koji se prikazuje kada je pristup mikrofonu opozvan nakon što je bio odobren.",
+    "message": "Pristup vašem mikrofonu je isključen — to se često dogodi nakon ažuriranja preglednika ili sustava. Ponovno ga odobrite u nastavku i $productName$ će opet slušati kada ste u pozivu.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Oznaka za prekidač koji uključuje tihi/šaputajući način.",
+    "message": "Tihi način"
+  },
+  "quietModeTooltip": {
+    "description": "Opis alata koji objašnjava što radi tihi/šaputajući način.",
+    "message": "Govori tiho — hvata tiši govor i smanjuje glasnoću odgovora asistenta, kako biste mogli koristiti glas u blizini drugih."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Tekst za gumb za prijavu dok je provjera autentičnosti u tijeku.",
+    "message": "Prijava u tijeku..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Zvučni efekti"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Zvučni efekti su onemogućeni u Firefoxu kako bi se spriječili problemi sa zvučnim povratnim informacijama."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Naslov jednokratne obavijesti o dobitku u brzini prikazane nakon prve izgovorene razmjene.",
+    "message": "Lijepo — govor je oko 3× brži od tipkanja."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "Neobavezni drugi redak obavijesti o dobitku u brzini koji prikazuje ušteđene cijele minute.",
+    "message": "Već ste govorili otprilike $minutes$ min brže nego da ste to tipkali.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Pošaljite samo kada pritisnete gumb"
   },
+  "surveyQuestion": {
+    "description": "Jedino pitanje jednokratne mikro-ankete nakon uspjeha.",
+    "message": "Kako ti zasad radi glas?"
+  },
+  "surveyRatingLabel": {
+    "description": "Pristupačna oznaka za gumb ocjene u anketi.",
+    "message": "Ocijeni $rating$ od 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Zahvala prikazana nakon što korisnik odgovori na anketu nakon uspjeha.",
+    "message": "Hvala — to nam pomaže da Say, Pi bude bolji. 🙏"
+  },
   "tabAIChat": {
     "description": "Oznaka kartice za odjeljak postavki AI chata.",
     "message": "AI Chat"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Oznaka kartice za odjeljak općih postavki.",
     "message": "Općenito"
+  },
+  "tabVoices": {
+    "description": "Oznaka kartice za odjeljak postavki glasova (katalog glasova po web-mjestu).",
+    "message": "Glasovi"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "zasluga"
   },
+  "ttsCreditsRemaining": {
+    "description": "Tekst koji prikazuje preostalu TTS kvotu kao skup kredita po glasu (saypi-api #181 Stage 2), a ne sirove znakove.",
+    "message": "Preostalo kredita: $credits$",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Višejezični glasovi trenutno nisu podržani u Safariju."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Generacija glasa"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Pozor! Reprodukcija govora još nije dostupna na $browserName$ s $chatbotName$. Dobre vijesti? Glasovni unos radi odlično! Za TTS, isprobajte Chrome ili Edge na radnoj površini.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS nije dostupan na $browserName$ + $chatbotName$. Glasovni unos radi! Isprobajte Chrome radnu površinu za TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS glas"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "VAD detalj kada je otkriven audio nalik govoru, ali je bio preslab / s preniskom pouzdanošću za transkripciju (odbačeno na strani klijenta na admission-gateu).",
+    "message": "Zvuk je preslab za transkripciju"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "VAD detalj koji objašnjava da je poziv završio jer je mikrofon preuzela novija kartica.",
+    "message": "Glasovni unos premješten je na drugu karticu"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Glas nije dostupan. \nIsprobajte Chrome ili Firefox na radnoj površini."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Pozor! Reprodukcija govora još nije dostupna na $browserName$ s $chatbotName$. Dobre vijesti? Glasovni unos radi odlično! Za TTS, isprobajte Chrome ili Edge na radnoj površini.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS nije dostupan na $browserName$ + $chatbotName$. Glasovni unos radi! Isprobajte Chrome radnu površinu za TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Razumijem",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "VAD status prikazan na kartici kojoj je unos glasa preuzela druga kartica.",
+    "message": "Pauzirano"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Pogledajte detalje"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Generički izgovoreni uvod koji se pušta kada odabrani glas u Say, Pi nema uvodnu skriptu specifičnu za taj glas (i nema nedavne poruke za pročitati).",
+    "message": "Bok, ja sam $voice$. Ovako zvučim. Nadam se da vam se sviđa ovaj glas.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Zdravo! \nPrivet! \n你好! \nJa sam Pi, vaš poliglot AI pomoćnik. \nS 32 jezika kojima upravljam, možemo istraživati ​​ideje i kulture iz cijelog svijeta. \nŠto mislite o ovom glasu?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Glasovne postavke"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Rezervni podnaslov za redak glasa u katalogu glasova u postavkama kada glas nema opis; $count$ je broj jezika koje glas podržava.",
+    "message": "Govori $count$ jezika",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Autorski slogan osobnosti za glas 'Addison' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Vedra i razgovijetna"
+  },
+  "voiceTagline_alloy": {
+    "description": "Autorski slogan osobnosti za glas 'Alloy' (studio Glasova u postavkama; mapa identiteta glasa na strani klijenta).",
+    "message": "Uravnotežen i svestran"
+  },
+  "voiceTagline_ash": {
+    "description": "Autorski slogan osobnosti za glas 'Ash' (studio Glasova u postavkama; mapa identiteta glasa na strani klijenta).",
+    "message": "Dubok, promišljen, smiren"
+  },
+  "voiceTagline_ballad": {
+    "description": "Autorski slogan osobnosti za glas 'Ballad' (studio Glasova u postavkama; mapa identiteta glasa na strani klijenta).",
+    "message": "Ugodan i melodičan"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Autorski slogan osobnosti za glas 'Cassidy' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Srdačan i konkretan"
+  },
+  "voiceTagline_cedar": {
+    "description": "Napisani slogan osobnosti za glas 'Cedar' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Postojan i umirujući"
+  },
+  "voiceTagline_coral": {
+    "description": "Napisani slogan osobnosti za glas 'Coral' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Vedra, poletna energija"
+  },
+  "voiceTagline_echo": {
+    "description": "Napisani slogan osobnosti za glas 'Echo' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Čist i neutralan"
+  },
+  "voiceTagline_fable": {
+    "description": "Napisani slogan osobnosti za glas 'Fable' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Pripovjedački šarm"
+  },
+  "voiceTagline_finn": {
+    "description": "Autorski slogan osobnosti za glas 'Finn' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Svjež i energičan"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Autorski slogan osobnosti za glas 'Jamahal' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Pun i magnetičan"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Napisani slogan osobnosti za glas 'Jarnathan' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Baršunasti noćni bariton"
+  },
+  "voiceTagline_jeff": {
+    "description": "Autorski slogan osobnosti za glas 'Jeff' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Izravan i staložen"
+  },
+  "voiceTagline_jessica": {
+    "description": "Autorski slogan osobnosti za glas 'Jessica' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Topla, uglađena smirenost"
+  },
+  "voiceTagline_joey": {
+    "description": "Napisani slogan osobnosti za glas 'Joey' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Ležeran, razgovorni američki stil"
+  },
+  "voiceTagline_juniper": {
+    "description": "Autorski slogan osobnosti za glas 'Juniper' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Jasan, vedar, živahan"
+  },
+  "voiceTagline_lucy": {
+    "description": "Autorski slogan osobnosti za glas 'Lucy' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Nježna i blistava"
+  },
+  "voiceTagline_marin": {
+    "description": "Napisani slogan osobnosti za glas 'Marin' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Topla, jutarnje-radijska smirenost"
+  },
+  "voiceTagline_mark": {
+    "description": "Autorski slogan osobnosti za glas 'Mark' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Jasan, samouvjeren pripovjedač"
+  },
+  "voiceTagline_nova": {
+    "description": "Napisani slogan osobnosti za glas 'Nova' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Brz i znatiželjan"
+  },
+  "voiceTagline_onyx": {
+    "description": "Napisani slogan osobnosti za glas 'Onyx' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Duboka, rezonantna ozbiljnost"
+  },
+  "voiceTagline_paola": {
+    "description": "Napisani slogan osobnosti za glas 'Paola' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Izražajna talijanska toplina"
+  },
+  "voiceTagline_sage": {
+    "description": "Napisani slogan osobnosti za glas 'Sage' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Tiha jasnoća"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Napisani slogan osobnosti za glas 'Shimmer' (postavke Voices studio; mapiranje identiteta glasa na strani klijenta).",
+    "message": "Lagan i prozračan"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Kratka oznaka na prekidaču pribadače na kartici glasa (isključeno stanje) u studiju Glasovi u postavkama; pritiskom se glas dodaje u hostov izbornik u chatu.",
+    "message": "+ Izbornik"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Oznaka za pristupačnost za prekidač pribadače na kartici glasa (isključeno stanje); $name$ je glas, $host$ je asistent.",
+    "message": "Dodaj $name$ u izbornik za $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Oznaka na prekidaču u kontrolnoj traci Glasova koja kaže hoće li kretanje popisom strelicama reproducirati svaki glas kad fokus dođe do njega.",
+    "message": "Reproduciraj dok se krećete"
+  },
+  "voicesArrowsLive": {
+    "description": "Potvrda čitaču zaslona, dodana prvoj najavi \"Reproducira se <glas>\" u popisu Glasovi u postavkama, koja kaže da su tipke strelica upravo postale zvučne. Odražava formulaciju preklopnika \"Reproduciraj tijekom kretanja\".",
+    "message": "Strelice sada reproduciraju dok se krećete. Esc zaustavlja."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Napomena ispod mjesta u izborniku za hostove koji dolaze s izvornim glasovima (npr. Pi-jevih 8 ugrađenih), kojima studio ne upravlja; $host$ je asistent.",
+    "message": "$host$ovi ugrađeni glasovi uvijek se također pojavljuju u njegovu izborniku.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Varijanta voicesBuiltinsNote za host bez izbornika glasova u chatu (Pi je 2026. ukinuo svoj izbornik), gdje bi obećanje iz originala da se ugrađeni glasovi 'pojavljuju u njegovu izborniku' bilo netočno; $host$ je asistent.",
+    "message": "$host$ također ima vlastite ugrađene glasove, koji ovdje nisu navedeni.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Prikaz napretka u traci kontrola Glasovi u postavkama: koliko je navedenih glasova korisnik već preslušao. Goli brojevi, pa se ispravno čita i za 1 — Chrome i18n nema oblike množine.",
+    "message": "Preslušano: $heard$ od $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Dio pristupačnog naziva retka glasa u popisu Glasovi u postavkama, kojim se označava glas koji je ovaj profil već poslušao. Vizualno je to prikazano gustoćom tinte na zvučnom otisku glasa, što čitač zaslona ne može vidjeti.",
+    "message": "Preslušano"
+  },
+  "voicesInHostMenu": {
+    "description": "Naslov odjeljka iznad retka s mjestima u izborniku u studiju Glasovi u postavkama; $host$ je asistent.",
+    "message": "U izborniku za $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Kratka oznaka na prekidaču pribadače na kartici glasa (uključeno stanje) u studiju Glasovi u postavkama.",
+    "message": "✓ U izborniku"
+  },
+  "voicesInUse": {
+    "description": "Trajna oznaka na trenutačno odabranom glasu hosta na popisu Glasovi u postavkama, prikazana velikim slovima. Namjerno NIJE 'Sada govori': na ovoj stranici redci reproduciraju svoje ogledne isječke, pa odabrani, ali tihi glas ne smije tvrditi da govori dok je odabran drugi redak.",
+    "message": "U upotrebi"
+  },
+  "voicesKeyboardHint": {
+    "description": "Jednoredni savjet za tipkovnicu u traci kontrola Glasovi u postavkama. Znakovi su tipke: razmaknica, strelice gore/dolje i Shift+Razmak.",
+    "message": "Pritisnite razmaknicu za slušanje, ↑↓ za kretanje među glasovima, ⇧Razmak za povratak."
+  },
+  "voicesLoadError": {
+    "description": "Stanje pogreške unutar studija jednog hosta kada se katalog glasova tog hosta nije uspio učitati; $host$ je asistent.",
+    "message": "Nije moguće učitati glasove za $host$. Pokušajte ponovno kasnije.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Opis alata/savjet na onemogućenom prekidaču '+ Izbornik' kada hostov izbornik u chatu već ima maksimalan broj glasova.",
+    "message": "Izbornik je pun, ukloni glas da dodaš drugi"
+  },
+  "voicesMenuHint": {
+    "description": "Jednoredni savjet uz naslov 'U {host}ovom izborniku', koji objašnjava da redak s mjestima preslikava izbornik glasova u chatu.",
+    "message": "Što ćeš vidjeti u chatu"
+  },
+  "voicesMenuOverflow": {
+    "description": "Napomena ispod mjesta u izborniku kada korisnik ima više prikvačenih glasova nego što izbornik u chatu može prikazati (naslijeđeno stanje); $count$ je koliko ih ne stane, $cap$ je veličina izbornika.",
+    "message": "Još $count$ prikvačenih glasova čeka izvan $cap$ mjesta u izborniku.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Jednina za voicesMenuOverflow, koristi se kada točno jedan prikvačeni glas ne stane u izbornik u chatu; $cap$ je veličina izbornika.",
+    "message": "Još 1 prikvačeni glas čeka izvan $cap$ mjesta u izborniku.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Sažetak ispod popisa Glasovi u postavkama koji govori koliko je popunjen hostov izbornik glasova u chatu; $host$ je asistent, $used$ koliko je mjesta zauzeto, $cap$ koliko ih ima. Sročeno tako da se ispravno čita i za 1 — Chrome i18n nema oblike množine.",
+    "message": "Izbornik za $host$: $used$ od $cap$ mjesta",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Naslov za grupu na kraju popisa Glasovi u postavkama koja sadrži glasove bez isječka uzorka za reprodukciju; $count$ je koliko ih je. Sročeno tako da se ispravno čita i za 1 — Chrome i18n nema oblike množine.",
+    "message": "Još nema uzorka ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Prikazuje se u katalogu glasova u postavkama kada je popis glasova prazan za prijavljenog korisnika (npr. problem s mrežom).",
+    "message": "Glasovi se trenutačno ne mogu učitati. Pokušajte ponovno kasnije."
+  },
+  "voicesNowPlaying": {
+    "description": "Najava čitaču zaslona kada se u popisu Glasovi u postavkama počne reproducirati isječak uzorka glasa; $name$ je glas.",
+    "message": "Reproducira se $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Gumb u traci kontrola Glasovi u postavkama koji reproducira svaki trenutno prikazani glas, jedan za drugim; $count$ je koliko ih je. Sročeno tako da se ispravno čita i za 1 — Chrome i18n nema oblike množine.",
+    "message": "Reproduciraj sve ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Gumb u traci kontrola Glasovi u postavkama pri ponovnom posjetu: reproducira samo navedene glasove koje još niste preslušali; $count$ je koliko ih je. Sročeno tako da se ispravno čita i za 1 — Chrome i18n nema oblike množine.",
+    "message": "Reproduciraj nove ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Redak u traci s kontrolama Glasova u postavkama kada je preglednik odbio reproducirati uzorak jer još nije bilo interakcije korisnika sa stranicom.",
+    "message": "Kliknite bilo koji glas da omogućite zvuk."
+  },
+  "voicesPreview": {
+    "description": "Pristupačna oznaka za gumb za reprodukciju (▶) koji preslušava besplatni ogledni isječak glasa u retku glasa; $name$ je naziv glasa.",
+    "message": "Pusti uzorak za $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Pristupačni naziv popisa Glasovi u postavkama (listbox svih glasova, po jedan redak za svaki).",
+    "message": "Glasovi, poredani od najdubljeg do najsvjetlijeg"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Oznaka za pristupačnost za prekidač pribadače na kartici glasa (uključeno stanje) i gumb za uklanjanje mjesta u izborniku; $name$ je glas, $host$ je asistent.",
+    "message": "Ukloni $name$ iz izbornika za $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Redak u traci s kontrolama Glasova u postavkama kada se uzorak jednog glasa nije uspio učitati ili reproducirati; $name$ je taj glas. Nije modalno — niz uzoraka nastavlja dalje.",
+    "message": "Nije moguće reproducirati uzorak za $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Podnaslov odjeljka kataloga glasova u kartici AI Chat u postavkama.",
+    "message": "Odaberi glas koji naglas čita odgovore na svakoj web-lokaciji."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Podnaslov ispod naslova postavki Glasovi, za traku glasova poredanih po visini tona.",
+    "message": "Svaki glas, od najdubljeg do najsvjetlijeg. Poslušajte pa odaberite."
+  },
+  "voicesSectionTitle": {
+    "description": "Naslov odjeljka kataloga glasova u kartici AI Chat u postavkama.",
+    "message": "Glasovi"
+  },
+  "voicesShelfEveryday": {
+    "description": "Naslov grupe za glasove povoljnije razine u katalogu glasova u postavkama. CSS prikazuje velikim slovima.",
+    "message": "Svakodnevni glasovi"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Jednoredna napomena uz naslov grupe Svakodnevni glasovi u studiju Glasovi u postavkama; jedino mjesto gdje studio navodi koliko ova razina traje dulje od HD.",
+    "message": "Prirodno i jasno — možeš slušati oko 20× dulje nego s HD glasovima."
+  },
+  "voicesShelfHd": {
+    "description": "Naslov grupe za premium (HD) glasove u katalogu glasova u postavkama. CSS prikazuje velikim slovima.",
+    "message": "HD glasovi"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Jednoredna napomena uz naslov HD grupe u studiju Glasovi u postavkama.",
+    "message": "Naš najbogatiji i najizražajniji zvuk."
+  },
+  "voicesShowAll": {
+    "description": "Opcija u filtru 'Prikaži' u postavkama Glasovi: bez filtriranja, naveden je svaki glas.",
+    "message": "Svi glasovi"
+  },
+  "voicesShowEveryday": {
+    "description": "Opcija u filtru 'Prikaži' u postavkama Glasovi: navedi samo standardne (ne-HD) glasove.",
+    "message": "Samo standardni"
+  },
+  "voicesShowHd": {
+    "description": "Opcija u filtru 'Prikaži' u postavkama Glasovi: navedi samo premium (HD) glasove.",
+    "message": "Samo HD"
+  },
+  "voicesShowLabel": {
+    "description": "Oznaka na filtru u traci s kontrolama Glasova u postavkama koji sužava koje glasove popis prikazuje.",
+    "message": "Prikaži"
+  },
+  "voicesShowUnheard": {
+    "description": "Opcija u filtru 'Prikaži' u postavkama Glasovi: navedi samo glasove koje korisnik još nije poslušao.",
+    "message": "Još nije poslušano"
+  },
+  "voicesSpeakingNow": {
+    "description": "Oznaka stanja na trenutačno odabranom glasu hosta u studiju Glasovi u postavkama (mjesto u izborniku i kartica glasa).",
+    "message": "Sada govori"
+  },
+  "voicesSpeaksWith": {
+    "description": "Redak iznad naziva trenutačnog glasa na pozornici studija Glasovi u postavkama; $host$ je asistent (npr. Pi). CSS ga prikazuje velikim slovima.",
+    "message": "$host$ govori s",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Napomena na pozornici kada host pruža vlastiti zvuk (npr. Pi), pa odabir glasa Say, Pi zamjenjuje hostov.",
+    "message": "$host$ koristi vlastiti glas dok dolje ne odaberete jedan.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Napomena na pozornici kada host nema vlastiti glas (npr. Claude), pa se ništa ne čita naglas dok se ne odabere glas Say, Pi.",
+    "message": "$host$ neće čitati odgovore naglas dok dolje ne odaberete jedan.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Naslov na pozornici studija Glasovi u postavkama kada host nema odabran SayPi glas; $host$ je asistent (npr. Pi, Claude). Prikazuje se u veličini teksta za naziv.",
+    "message": "Odaberite kako $host$ zvuči",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Gumb na pozornici studija Glasovi u postavkama koji reproducira besplatni uzorak isječka trenutačnog glasa.",
+    "message": "Poslušajte uzorak"
+  },
+  "voicesStopPlayback": {
+    "description": "Gumb u traci kontrola Glasovi u postavkama koji zaustavlja niz uzoraka pokrenut naredbom \"Reproduciraj sve\".",
+    "message": "Zaustavi"
+  },
+  "voicesSweepPosition": {
+    "description": "Prikaz trenutačne pozicije u traci s kontrolama Glasova u postavkama dok opcija 'Reproduciraj sve' prolazi popis; $index$ je glas koji se trenutačno reproducira, a $total$ koliko ih je u redu.",
+    "message": "$index$ od $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Pristupačna oznaka za kontrolu usporedbe u traci kontrola Glasovi u postavkama, koja ponovno reproducira drugi glas od posljednja dva preslušana; $name$ je taj glas.",
+    "message": "Vrati se na $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Redak u traci s kontrolama Glasova u postavkama kada se pritisne 'Reproduciraj sve' na predugom popisu; $count$ je broj glasova, a $minutes$ približno broj minuta koliko bi trajali. Skraćeno 'min' kako bi ispravno glasilo i za 1 — Chrome i18n nema množinske oblike.",
+    "message": "To je $count$ glasova — oko $minutes$ min. Prvo suzite popis.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Oznaka za pristupačnost za gumb 'koristi ovaj glas' po hostu u katalogu glasova u postavkama; $name$ je glas, $host$ je asistent (npr. Pi, Claude).",
+    "message": "Koristi $name$ na $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Kratka oznaka na gumbu 'koristi ovaj glas' po hostu u objedinjenom katalogu glasova u postavkama (host je prikazan uz njega).",
+    "message": "Koristi"
+  },
+  "voicesYourVoice": {
+    "description": "Gumb u traci kontrola na popisu Glasovi u postavkama koji prebacuje fokus na redak glasa koji ovaj host trenutačno koristi; $name$ je taj glas.",
+    "message": "Vaš glas: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Pogreška koja se javlja kada preglednik ne može dodijeliti dovoljno WebAssembly memorije za model za detekciju glasa.",
+    "message": "Detekcija glasa se ne može pokrenuti: nema dovoljno WebAssembly memorije za glasovni model. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Pogreška koja se javlja kada preglednik ne izlaže početnu WebAssembly memoriju potrebnu za pokretanje modela za detekciju glasa.",
+    "message": "Detekcija glasa se ne može pokrenuti: WebAssembly memorija nije dostupna u ovom pregledniku."
   }
 }

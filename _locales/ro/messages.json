@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "Beneficiu listat în modalul de autentificare - limite de utilizare crescute.",
+    "message": "Limite de utilizare mai mari cu un cont gratuit"
+  },
+  "authBenefitPremium": {
+    "description": "Beneficiu listat în modalul de autentificare - funcții premium în chatboturi.",
+    "message": "Funcții premium și suport pentru chatboturi"
+  },
+  "authBenefitSupport": {
+    "description": "Beneficiu listat în modalul de autentificare - asistență prioritară.",
+    "message": "Asistență prioritară pentru probleme"
+  },
+  "authBenefitSync": {
+    "description": "Beneficiu listat în modalul de autentificare - sincronizarea setărilor.",
+    "message": "Sincronizează setările vocii peste tot"
+  },
+  "authBenefitTTS": {
+    "description": "Beneficiu listat în modalul de autentificare - funcția TTS.",
+    "message": "Voci text-în-vorbire (planuri plătite)"
+  },
+  "authBenefitUsage": {
+    "description": "Beneficiu listat în modalul de autentificare - urmărirea utilizării.",
+    "message": "Urmărește-ți utilizarea vocii pe toate dispozitivele"
+  },
+  "authPromptModalFull": {
+    "description": "Descriere pentru promptul de autentificare din fereastra modală completă, cu propunerea de valoare.",
+    "message": "Folosești Say, Pi foarte mult. Conectează-te pentru limite mai mari, voci de tip text-în-vorbire și funcții premium în toate chatboturile acceptate."
+  },
+  "authPromptModalSoft": {
+    "description": "Descriere pentru promptul de autentificare din fereastra modală soft.",
+    "message": "Creează un cont Say, Pi gratuit pentru limite de utilizare mai mari și acces la funcții vocale premium."
+  },
+  "authPromptTitle": {
+    "description": "Titlu pentru fereastra modală de autentificare.",
+    "message": "Deblochează mai multe funcții vocale"
+  },
+  "authPromptToast": {
+    "description": "Notificare toast care încurajează utilizatorul să se conecteze.",
+    "message": "Conectează-te la Say, Pi pentru limite mai mari și funcții premium"
+  },
   "autoReadAloudChatGPT": {
     "description": "Etichetă pentru caseta de selectare care activează sau dezactivează citirea automată a răspunsurilor ChatGPT în timpul apelurilor vocale.",
     "message": "Citire automată cu voce tare (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "Dezactivați text-la-speech"
   },
+  "dismiss": {
+    "message": "Am înțeles",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "Renunță"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Concentrează-te"
   },
+  "errorVadInitFailed": {
+    "description": "Toast de eroare afișat când detectarea activității vocale nu reușește să se inițializeze.",
+    "message": "Inițializarea detectării vocale a eșuat"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "Toast de eroare afișat când apare o eroare neașteptată în timpul configurării înregistrării vocale.",
+    "message": "Configurarea înregistrării vocale a eșuat"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "Toast de eroare afișat când clientul de detectare vocală nu reușește să pornească înregistrarea.",
+    "message": "Pornirea înregistrării vocale a eșuat"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "Toast de eroare afișat când clientul de detectare vocală (VAD) nu este disponibil, astfel încât înregistrarea nu poate începe.",
+    "message": "Înregistrarea vocală nu este disponibilă"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Ieși din modul concentrație"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "Notă pe un singur rând afișată în meniurile de voci când sunt disponibile atât voci premium (HD), cât și voci value",
+    "message": "Vocile HD îți consumă alocația lunară de aproximativ 20× mai repede."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "Îndepărtând asta ..."
   },
+  "maybeLater": {
+    "description": "Textul butonului pentru a închide promptul de autentificare.",
+    "message": "Poate mai târziu"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "Setările microfonului nu îndeplinesc specificațiile necesare. \nÎncercați să utilizați un alt microfon sau să ajustați setările audio."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "Nu se poate accesa microfonul. \nVerificați setările dispozitivului și încercați din nou."
   },
+  "microphonePermissionDeniedError": {
+    "description": "Toast de eroare afișat când permisiunea pentru microfon a fost refuzată după fluxul ferestrei de solicitare a permisiunii.",
+    "message": "Permisiunea pentru microfon nu a fost acordată. Asigură-te că ai permis accesul în fereastra de solicitare și în setările extensiei."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "acuratețe"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "Cel mai rapid răspuns, dar mai puțin precis. \nPredispus la întrerupere."
   },
+  "moreVoices": {
+    "description": "Rând de meniu care leagă din meniul de voci din pagină către catalogul complet de voci din setările extensiei.",
+    "message": "Mai multe voci…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Porecla asistentului"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nu a fost conectat"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "Etichetă de buton care deschide ChatGPT.",
+    "message": "Deschide ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "Etichetă de buton care deschide Claude.ai.",
+    "message": "Deschide Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "Etichetă de buton care deschide Pi.ai.",
+    "message": "Deschide Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "Opțiune de mediu: în preajma altor oameni.",
+    "message": "În preajma altor oameni"
+  },
+  "onboarding_envMixed": {
+    "description": "Opțiune de mediu: un amestec de spații private și partajate.",
+    "message": "Un mix de locuri"
+  },
+  "onboarding_envPrivate": {
+    "description": "Opțiune de mediu: un spațiu privat.",
+    "message": "Undeva privat"
+  },
+  "onboarding_envQuietOff": {
+    "description": "Confirmare afișată când răspunsul despre mediu lasă modul silențios dezactivat.",
+    "message": "Am înțeles — vom păstra setările standard de ascultare și redare."
+  },
+  "onboarding_envQuietOn": {
+    "description": "Confirmare afișată când răspunsul despre mediu activează modul silențios.",
+    "message": "Mod silențios activ — îți vom prelua vocea mai încet și vom răspunde încet, ca să poți vorbi discret."
+  },
+  "onboarding_envTitle": {
+    "description": "Titlu pentru întrebarea din onboarding despre mediul utilizatorului.",
+    "message": "Unde vorbești de obicei?"
+  },
+  "onboarding_footer": {
+    "description": "Text de subsol pe pagina de onboarding la prima rulare.",
+    "message": "Poți reveni la asta oricând din setările Say, Pi. Confidențialitatea ta contează — audio este captat doar în timpul unui apel activ."
+  },
+  "onboarding_heading": {
+    "description": "Titlul principal pe pagina de onboarding la prima rulare.",
+    "message": "🗣️ Bun venit la Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "Paragraful de introducere pe pagina de onboarding la prima rulare.",
+    "message": "Ești la doi pași de prima ta conversație vorbită cu un AI. Vorbitul e de aproximativ 3× mai rapid decât tastatul — hai să te configurăm."
+  },
+  "onboarding_micTestButton": {
+    "description": "Buton care pornește testul de microfon din onboarding, fără miză.",
+    "message": "🎤 Testează-ți microfonul"
+  },
+  "onboarding_micTestDone": {
+    "description": "Stare afișată după ce testul de microfon din onboarding se încheie cu succes.",
+    "message": "Super — microfonul tău funcționează! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "Stare afișată în timp ce testul de microfon din onboarding măsoară semnalul de intrare.",
+    "message": "Ascult — spune ceva! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "Stare afișată în timp ce testul de microfon din onboarding așteaptă permisiunea.",
+    "message": "Se solicită acces la microfon…"
+  },
+  "onboarding_micTestStop": {
+    "description": "Etichetă de buton pentru a opri testul de microfon din onboarding în timp ce rulează.",
+    "message": "Oprește testul"
+  },
+  "onboarding_step1Body": {
+    "description": "Conținutul primului pas de onboarding care explică cum să fixezi extensia.",
+    "message": "Dă clic pe pictograma piesă de puzzle 🧩 din dreapta sus a browserului, apoi pe acul 📌 de lângă Say, Pi. Așa butonul de apel rămâne la un clic distanță."
+  },
+  "onboarding_step1Title": {
+    "description": "Titlul primului pas de onboarding (fixarea extensiei).",
+    "message": "Fixează Say, Pi în bara de instrumente"
+  },
+  "onboarding_step2Body": {
+    "description": "Conținutul celui de-al doilea pas de onboarding care explică cum să pornești o conversație vocală.",
+    "message": "Mergi la unul dintre asistenții acceptați de mai jos, apoi apasă butonul de apel Say, Pi și spune salut. Îți vom cere acces la microfon prima dată — e normal, iar noi ascultăm doar cât timp ești într-un apel."
+  },
+  "onboarding_step2Title": {
+    "description": "Titlul celui de-al doilea pas de onboarding (începerea unei conversații).",
+    "message": "Deschide un chat AI și începe să vorbești"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "Permisiunea microfonului"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "Instrucțiuni de recuperare când permisiunea pentru microfon este blocată.",
+    "message": "Browserul îți blochează microfonul. Apasă pictograma camerei sau a lacătului din bara de adrese, setează Microfon la „Permite”, apoi încearcă din nou. Pe macOS, verifică și Setări sistem → Confidențialitate și securitate → Microfon."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "Titlul panoului de recuperare când permisiunea pentru microfon a fost refuzată/blocată.",
+    "message": "Accesul la microfon este blocat"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "Instrucțiuni de recuperare când microfonul este folosit în altă parte.",
+    "message": "O altă aplicație sau filă poate folosi microfonul. Închide orice altceva care ar putea înregistra (apeluri video, note vocale), apoi încearcă din nou."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "Titlul panoului de recuperare când microfonul este folosit de o altă aplicație.",
+    "message": "Microfonul este ocupat"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "Instrucțiuni de recuperare când nu este disponibil niciun dispoziv microfon.",
+    "message": "Nu am putut găsi un microfon. Conectează unul (sau căștile cu microfon), asigură-te că este selectat ca dispozitiv de intrare, apoi încearcă din nou."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "Titlul panoului de recuperare când nu este disponibil niciun dispozitiv microfon.",
+    "message": "Nu a fost găsit niciun microfon"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "Instrucțiuni de recuperare pentru o eroare necunoscută a microfonului.",
+    "message": "Ceva nu a mers bine la accesarea microfonului. Verifică dacă este conectat și permis în setările browserului, apoi încearcă din nou."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "Titlul panoului de recuperare pentru o eroare necunoscută a microfonului.",
+    "message": "Nu am putut accesa microfonul"
+  },
+  "permissions_retryButton": {
+    "description": "Etichetă pentru butonul care solicită din nou permisiunea pentru microfon.",
+    "message": "Încearcă din nou"
+  },
+  "permissions_revokedHeading": {
+    "description": "Titlu afișat când accesul la microfon a fost acordat anterior, dar între timp a fost revocat.",
+    "message": "🎙️ Să reconectăm microfonul"
+  },
+  "permissions_revokedInfo": {
+    "description": "Text informativ afișat când accesul la microfon a fost revocat după ce fusese acordat.",
+    "message": "Accesul la microfon a fost dezactivat — asta se întâmplă des după o actualizare a browserului sau a sistemului. Permite-l din nou mai jos și $productName$ va asculta din nou când ești într-un apel.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "Profil"
+  },
+  "quietModeLabel": {
+    "description": "Etichetă pentru comutatorul care activează modul silențios/șoaptă.",
+    "message": "Mod silențios"
+  },
+  "quietModeTooltip": {
+    "description": "Tooltip care explică ce face modul silențios/șoaptă.",
+    "message": "Vorbește încet — detectează vorbirea mai discretă și reduce volumul răspunsului asistentului, ca să poți folosi vocea în preajma altora."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,12 +1044,30 @@
       }
     }
   },
+  "signingIn": {
+    "description": "Text pentru butonul de conectare în timp ce autentificarea este în curs.",
+    "message": "Se conectează..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Efecte sonore"
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Efectele sonore sunt dezactivate în Firefox pentru a preveni problemele de feedback audio."
+  },
+  "speedPayoffNoticeHeadline": {
+    "description": "Titlul notificării unice despre câștigul de viteză, afișată după primul schimb vorbit.",
+    "message": "Bine — vorbitul este de aproximativ 3× mai rapid decât tastatul."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "A doua linie opțională a notificării despre câștigul de viteză, care arată minutele întregi economisite.",
+    "message": "Ai vorbit deja cu aproximativ $minutes$ min mai repede decât ai fi tastat.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "Trimiteți doar când apăsați butonul"
   },
+  "surveyQuestion": {
+    "description": "Întrebarea unică din micro-sondajul unic, afișat după un câștig.",
+    "message": "Cum ți se pare vocea până acum?"
+  },
+  "surveyRatingLabel": {
+    "description": "Etichetă accesibilă pentru un buton de evaluare din sondaj.",
+    "message": "Evaluează $rating$ din 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "Mesaj de mulțumire afișat după ce utilizatorul răspunde la sondajul post-câștig.",
+    "message": "Mulțumim — asta ne ajută să facem Say, Pi mai bun. 🙏"
+  },
   "tabAIChat": {
     "description": "Eticheta tab-ului pentru secțiunea setărilor de chat AI.",
     "message": "Chat AI"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "Eticheta tab-ului pentru secțiunea setărilor generale.",
     "message": "General"
+  },
+  "tabVoices": {
+    "description": "Etichetă de filă pentru secțiunea de setări a vocilor (catalog de voci per site).",
+    "message": "Voci"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "credite"
   },
+  "ttsCreditsRemaining": {
+    "description": "Text care arată cota TTS rămasă ca un fond de credite per voce (saypi-api #181 Etapa 2), nu ca număr brut de caractere.",
+    "message": "$credits$ credite rămase",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Vocile multilingve nu sunt acceptate momentan în Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "Generarea vocală"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "Atenție! Redarea vorbirii nu este încă disponibilă pe $browserName$ cu $chatbotName$. Vestea bună? Intrarea vocală funcționează grozav! Pentru TTS, încercați Chrome sau Edge pe desktop.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS indisponibil pe $browserName$ + $chatbotName$. Intrarea vocală funcționează! Încercați Chrome desktop pentru TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Voce tts"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "Activating microphone..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "Detaliu VAD când a fost detectat sunet asemănător vorbirii, dar era prea slab / cu încredere prea mică pentru a fi transcris (renunțare la poarta de admitere pe client).",
+    "message": "Sunet prea slab pentru transcriere"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "VAD service shut down."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "Detaliu VAD care explică faptul că apelul s-a încheiat deoarece microfonul a fost revendicat de un tab mai nou.",
+    "message": "Intrarea vocală a fost mutată în alt tab"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "Vocea nu este disponibilă. \nÎncercați Chrome sau Firefox pe desktop."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "Atenție! Redarea vorbirii nu este încă disponibilă pe $browserName$ cu $chatbotName$. Vestea bună? Intrarea vocală funcționează grozav! Pentru TTS, încercați Chrome sau Edge pe desktop.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS indisponibil pe $browserName$ + $chatbotName$. Intrarea vocală funcționează! Încercați Chrome desktop pentru TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "Am înțeles",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "Misfire"
   },
+  "vadStatusPreempted": {
+    "description": "Stare VAD afișată pe un tab a cărui intrare vocală a fost preluată de un alt tab.",
+    "message": "În pauză"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "Processing"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "Vizualizați detalii"
   },
+  "voiceIntroductionGeneric": {
+    "description": "Introducere vocală generică redată când o voce SayPi selectată nu are un script de introducere specific vocii (și nu există un mesaj recent de citit).",
+    "message": "Salut, sunt $voice$. Așa sun. Sper să îți placă această voce.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "Hola! \nПривет! \n你好! \nEu sunt Pi, asistentul tău poliglot AI. \nCu 32 de limbi la comandă, putem explora idei și culturi din întreaga lume. \nCe părere ai de această voce?"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Setări vocale"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "Subtitlu de rezervă pentru un rând de voce în catalogul de voci din setări când vocea nu are descriere; $count$ este numărul de limbi pe care vocea le acceptă.",
+    "message": "Vorbește $count$ limbi",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "Slogan de personalitate redactat pentru vocea „Addison” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Însorită și articulată"
+  },
+  "voiceTagline_alloy": {
+    "description": "Slogan de personalitate redactat pentru vocea „Alloy” (studioul Voci din setări; hartă de identitate a vocii pe client).",
+    "message": "Echilibrată și bună la orice"
+  },
+  "voiceTagline_ash": {
+    "description": "Slogan de personalitate redactat pentru vocea „Ash” (studioul Voci din setări; hartă de identitate a vocii pe client).",
+    "message": "Gravă, reflexivă, calmă"
+  },
+  "voiceTagline_ballad": {
+    "description": "Slogan de personalitate redactat pentru vocea „Ballad” (studioul Voci din setări; hartă de identitate a vocii pe client).",
+    "message": "Lină și melodioasă"
+  },
+  "voiceTagline_cassidy": {
+    "description": "Slogan de personalitate redactat pentru vocea „Cassidy” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Prietenos și concret"
+  },
+  "voiceTagline_cedar": {
+    "description": "Slogan de personalitate redactat pentru vocea „Cedar” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Stabil și liniștitor"
+  },
+  "voiceTagline_coral": {
+    "description": "Slogan de personalitate redactat pentru vocea „Coral” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Energie luminoasă și optimistă"
+  },
+  "voiceTagline_echo": {
+    "description": "Slogan de personalitate redactat pentru vocea „Echo” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Clar și neutru"
+  },
+  "voiceTagline_fable": {
+    "description": "Slogan de personalitate redactat pentru vocea „Fable” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Cadență de povestitor"
+  },
+  "voiceTagline_finn": {
+    "description": "Slogan de personalitate redactat pentru vocea „Finn” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Proaspătă și energică"
+  },
+  "voiceTagline_jamahal": {
+    "description": "Slogan de personalitate redactat pentru vocea „Jamahal” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Bogată și magnetică"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "Slogan de personalitate redactat pentru vocea „Jarnathan” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Bariton catifelat de noapte târzie"
+  },
+  "voiceTagline_jeff": {
+    "description": "Slogan de personalitate redactat pentru vocea „Jeff” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Direct și echilibrat"
+  },
+  "voiceTagline_jessica": {
+    "description": "Slogan de personalitate redactat pentru vocea „Jessica” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Căldură și eleganță"
+  },
+  "voiceTagline_joey": {
+    "description": "Slogan de personalitate redactat pentru vocea „Joey” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "American relaxat, conversațional"
+  },
+  "voiceTagline_juniper": {
+    "description": "Slogan de personalitate redactat pentru vocea „Juniper” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Clar, luminos, animat"
+  },
+  "voiceTagline_lucy": {
+    "description": "Slogan de personalitate redactat pentru vocea „Lucy” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Blândă și luminoasă"
+  },
+  "voiceTagline_marin": {
+    "description": "Slogan de personalitate redactat pentru vocea „Marin” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Calm cald, ca la radio dimineața"
+  },
+  "voiceTagline_mark": {
+    "description": "Slogan de personalitate redactat pentru vocea „Mark” (setări, studio Voci; mapare de identitate a vocii pe client).",
+    "message": "Narator clar, încrezător"
+  },
+  "voiceTagline_nova": {
+    "description": "Slogan de personalitate redactat pentru vocea „Nova” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Rapid și curios"
+  },
+  "voiceTagline_onyx": {
+    "description": "Slogan de personalitate redactat pentru vocea „Onyx” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Gravitate profundă, rezonantă"
+  },
+  "voiceTagline_paola": {
+    "description": "Slogan de personalitate redactat pentru vocea „Paola” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Căldură italiană expresivă"
+  },
+  "voiceTagline_sage": {
+    "description": "Slogan de personalitate redactat pentru vocea „Sage” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Claritate, cu voce blândă"
+  },
+  "voiceTagline_shimmer": {
+    "description": "Slogan de personalitate redactat pentru vocea „Shimmer” (setări > studioul Voci; hartă de identitate a vocilor pe partea de client).",
+    "message": "Lejer și aerat"
+  },
+  "voicesAddToMenuShort": {
+    "description": "Etichetă scurtă pe comutatorul de fixare al unui card de voce (stare oprită) în studio-ul Voices din setări; apăsarea adaugă vocea în meniul din chat al gazdei.",
+    "message": "+ Meniu"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "Etichetă accesibilă pentru comutatorul de fixare al unui card de voce (stare oprită); $name$ este vocea, $host$ asistentul.",
+    "message": "Adaugă $name$ în meniul lui $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "Etichetă pe comutatorul din bara de control Voci care indică dacă parcurgerea listei cu tastele săgeți redă fiecare voce când focalizarea ajunge la ea.",
+    "message": "Redă pe măsură ce te deplasezi"
+  },
+  "voicesArrowsLive": {
+    "description": "Confirmare pentru cititorul de ecran, adăugată la primul anunț „Se redă <voce>” în lista Voci din setări, care spune că tastele săgeți au devenit tocmai audibile. Reia formularea comutatorului „Redă în timp ce te muți”.",
+    "message": "Săgețile redau acum în timp ce te muți. Esc oprește."
+  },
+  "voicesBuiltinsNote": {
+    "description": "Notă sub locurile meniului pentru hosturi care au voci native (de ex. cele 8 voci încorporate ale lui Pi), pe care studioul nu le gestionează; $host$ este asistentul.",
+    "message": "Vocile încorporate ale lui $host$ apar întotdeauna și în meniul lui.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "Variantă a voicesBuiltinsNote pentru un host fără meniu de voci în chat (Pi și-a retras meniul în 2026), unde promisiunea din original că vocile încorporate „apar în meniul lui” ar fi falsă; $host$ este asistentul.",
+    "message": "$host$ are și voci încorporate, care nu sunt listate aici.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "Indicator de progres în bara de control Voci din setări: câte dintre vocile listate a ascultat deja utilizatorul. Doar numere, ca să se citească corect la 1 — Chrome i18n nu are forme de plural.",
+    "message": "$heard$ din $total$ ascultate",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "Parte din numele accesibil al unui rând de voce în lista Voci din setări, marcând o voce pe care acest profil a ascultat-o deja. Vizual, acest lucru este reprezentat ca densitate a cernelii pe amprenta sonoră a vocii, pe care un cititor de ecran nu o poate vedea.",
+    "message": "Ascultat"
+  },
+  "voicesInHostMenu": {
+    "description": "Titlu de secțiune deasupra rândului cu sloturi de meniu în studio-ul Voices din setări; $host$ este asistentul.",
+    "message": "În meniul lui $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "Etichetă scurtă pe comutatorul de fixare al unui card de voce (stare pornită) în studio-ul Voices din setări.",
+    "message": "✓ În meniu"
+  },
+  "voicesInUse": {
+    "description": "Insignă persistentă pe vocea selectată în prezent pentru gazdă în lista Voices din setări, redată cu majuscule. Deliberat NU „Vorbește acum”: pe această pagină rândurile redau mostre, așa că o voce selectată, dar tăcută, nu trebuie să pretindă că vorbește în timp ce un alt rând o face.",
+    "message": "În uz"
+  },
+  "voicesKeyboardHint": {
+    "description": "Indiciu de tastatură pe un rând în bara de control Voci din setări. Simbolurile sunt taste: Space, săgețile sus/jos și Shift+Space.",
+    "message": "Apasă Space ca să asculți, ↑↓ ca să te muți între voci, ⇧Space ca să revii."
+  },
+  "voicesLoadError": {
+    "description": "Stare de eroare în studioul unui host când catalogul de voci al acelui host nu s-a putut încărca; $host$ este asistentul.",
+    "message": "Nu s-au putut încărca vocile lui $host$. Încearcă din nou mai târziu.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "Tooltip/indiciu pe un comutator „+ Meniu” dezactivat atunci când meniul din chat al gazdei are deja numărul maxim de voci.",
+    "message": "Meniul este plin — elimină o voce ca să adaugi alta"
+  },
+  "voicesMenuHint": {
+    "description": "Indiciu de o linie lângă titlul „În meniul lui {host}”, explicând că rândul cu sloturi reflectă meniul de voci din chat.",
+    "message": "Ce vei vedea în chat"
+  },
+  "voicesMenuOverflow": {
+    "description": "Notă sub locurile meniului când utilizatorul are mai multe voci fixate decât poate afișa meniul din chat (stare veche); $count$ este câte nu încap, $cap$ este dimensiunea meniului.",
+    "message": "Încă $count$ voci fixate așteaptă dincolo de cele $cap$ locuri ale meniului.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "Singularul pentru voicesMenuOverflow, folosit când exact o voce fixată nu încape în meniul din chat; $cap$ este dimensiunea meniului.",
+    "message": "Încă 1 voce fixată așteaptă dincolo de cele $cap$ locuri ale meniului.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "Linie rezumat sub lista Voci din setări care spune cât din meniul de voci din chat al hostului este ocupat; $host$ este asistentul, $used$ câte locuri sunt ocupate, $cap$ câte sunt în total. Formulat să se citească corect și la 1 — Chrome i18n nu are forme de plural.",
+    "message": "Meniul lui $host$: $used$ din $cap$ locuri",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "Titlu pentru grupul de la finalul listei Voci din setări care conține voci fără un clip mostră de redat; $count$ este câte sunt. Formulat să se citească corect și la 1 — Chrome i18n nu are forme de plural.",
+    "message": "Încă fără mostră ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "Afișat în catalogul de voci din setări când lista de voci este goală pentru un utilizator autentificat (de ex., o problemă de rețea).",
+    "message": "Vocile nu au putut fi încărcate acum. Te rugăm să încerci din nou mai târziu."
+  },
+  "voicesNowPlaying": {
+    "description": "Anunț pentru cititorul de ecran când începe redarea clipului mostră al unei voci în lista Voci din setări; $name$ este vocea.",
+    "message": "Se redă $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "Buton în bara de control Voci din setări care redă pe rând fiecare voce listată în prezent; $count$ este câte sunt. Formulat să se citească corect și la 1 — Chrome i18n nu are forme de plural.",
+    "message": "Redă toate ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "Buton în bara de control Voci din setări la o revenire: redă doar vocile listate pe care nu le-ai ascultat încă; $count$ este câte sunt. Formulat să se citească corect și la 1 — Chrome i18n nu are forme de plural.",
+    "message": "Redă noi ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "Linie în bara de control Voci din setări când browserul a refuzat să redea un eșantion deoarece pagina nu a avut încă nicio interacțiune din partea utilizatorului.",
+    "message": "Dă clic pe orice voce ca să activezi sunetul."
+  },
+  "voicesPreview": {
+    "description": "Etichetă accesibilă pentru butonul de redare (▶) care ascultă clipul de exemplu gratuit al unei voci dintr-un rând de voce; $name$ este numele vocii.",
+    "message": "Redă un exemplu pentru $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "Nume accesibil al listei Voci din setări (un listbox cu fiecare voce, câte un rând pentru fiecare).",
+    "message": "Voci, ordonate de la cele mai grave la cele mai luminoase"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "Etichetă accesibilă pentru comutatorul de fixare al unui card de voce (stare pornită) și butonul de eliminare al unui slot de meniu; $name$ este vocea, $host$ asistentul.",
+    "message": "Elimină $name$ din meniul lui $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "Linie în bara de control Voci din setări când eșantionul unei voci nu a reușit să se încarce sau să se redea; $name$ este acea voce. Nemodal — o serie de eșantioane continuă și după ea.",
+    "message": "Nu s-a putut reda eșantionul pentru $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "Subtitlu pentru secțiunea catalogului de voci din fila AI Chat a setărilor.",
+    "message": "Alege vocea care citește cu voce tare răspunsurile pe fiecare site."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "Subtitlu sub titlul setării Voci, pentru șina de voci ordonată după înălțime.",
+    "message": "Fiecare voce, de la cea mai gravă la cea mai luminoasă. Ascultă, apoi alege."
+  },
+  "voicesSectionTitle": {
+    "description": "Titlu pentru secțiunea catalogului de voci din fila AI Chat a setărilor.",
+    "message": "Voci"
+  },
+  "voicesShelfEveryday": {
+    "description": "Titlu de grup pentru vocile din nivelul economic din catalogul de voci din setări. Redat cu majuscule de CSS.",
+    "message": "Voci de zi cu zi"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "Notă de o linie lângă titlul grupului Everyday în studioul de voci din setări; singurul loc în care studioul precizează cât de mult depășește acest nivel HD.",
+    "message": "Natural și clar — poți asculta de aproximativ 20× mai mult decât cu HD."
+  },
+  "voicesShelfHd": {
+    "description": "Titlu de grup pentru vocile premium (HD) din catalogul de voci din setări. Redat cu majuscule de CSS.",
+    "message": "Voci HD"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "Notă de o linie lângă titlul grupului HD în studioul de voci din setări.",
+    "message": "Cel mai bogat și expresiv sunet al nostru."
+  },
+  "voicesShowAll": {
+    "description": "Opțiune în filtrul „Afișează” din Voci (setări): fără filtrare, este listată fiecare voce.",
+    "message": "Toate vocile"
+  },
+  "voicesShowEveryday": {
+    "description": "Opțiune în filtrul „Afișează” din Voci (setări): listează doar vocile standard (non-HD).",
+    "message": "Doar standard"
+  },
+  "voicesShowHd": {
+    "description": "Opțiune în filtrul „Afișează” din Voci (setări): listează doar vocile premium (HD).",
+    "message": "Doar HD"
+  },
+  "voicesShowLabel": {
+    "description": "Etichetă pe filtrul din bara de control Voci din setări care restrânge ce voci arată lista.",
+    "message": "Afișează"
+  },
+  "voicesShowUnheard": {
+    "description": "Opțiune în filtrul „Afișează” din Voci (setări): listează doar vocile pe care utilizatorul nu le-a ascultat încă.",
+    "message": "Neascultate încă"
+  },
+  "voicesSpeakingNow": {
+    "description": "Etichetă de stare pe vocea selectată în prezent pentru gazdă în studio-ul Voices din setări (slot de meniu și card de voce).",
+    "message": "Vorbește acum"
+  },
+  "voicesSpeaksWith": {
+    "description": "Linie tip sprânceană deasupra numelui vocii curente pe scena studio Voices din setări; $host$ este asistentul (de ex. Pi). Redată cu majuscule de CSS.",
+    "message": "$host$ vorbește cu",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "Notă în scenă când hostul își oferă propriul audio (de ex. Pi), astfel încât alegerea unei voci Say, Pi o înlocuiește pe cea a hostului.",
+    "message": "$host$ folosește propria voce până alegi una mai jos.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "Notă în scenă când hostul nu are o voce proprie (de ex. Claude), astfel încât nu se citește nimic cu voce tare până este aleasă o voce Say, Pi.",
+    "message": "$host$ nu va citi răspunsurile cu voce tare până alegi una mai jos.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "Titlu în scena studioului de voci din setări când hostul nu are selectată nicio voce SayPi; $host$ este asistentul (de ex. Pi, Claude). Randat la dimensiunea numelui.",
+    "message": "Alege cum sună $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "Buton pe scena studioului de voci din setări care redă clipul demonstrativ gratuit al vocii curente.",
+    "message": "Ascultă un exemplu"
+  },
+  "voicesStopPlayback": {
+    "description": "Buton în bara de control Voci din setări care oprește rularea mostrelor pornită de „Redă toate”.",
+    "message": "Oprește"
+  },
+  "voicesSweepPosition": {
+    "description": "Afișare în direct a poziției în bara de control Voci din setări, în timp ce „Redă tot” parcurge lista; $index$ este vocea care rulează acum, iar $total$ câte sunt în coadă.",
+    "message": "$index$ din $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "Etichetă accesibilă pentru controlul de comparare din bara de control Voci din setări, care redă cealaltă voce dintre ultimele două ascultate; $name$ este acea voce.",
+    "message": "Revino la $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "Linie în bara de control Voci din setări când se apasă „Redă tot” pe o listă prea lungă ca să o parcurgi; $count$ este câte voci sunt, iar $minutes$ aproximativ câte minute ar dura. Abreviat „min” ca să se citească corect la 1 — Chrome i18n nu are forme de plural.",
+    "message": "Sunt $count$ voci — cam $minutes$ min. Îngustează lista mai întâi.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "Etichetă accesibilă pentru butonul per-gazdă „folosește această voce” din catalogul de voci din setări; $name$ este vocea, $host$ este asistentul (de ex. Pi, Claude).",
+    "message": "Folosește $name$ pe $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "Etichetă scurtă pe butonul per-gazdă „folosește această voce” din catalogul unificat de voci din setări (gazda este afișată alături).",
+    "message": "Folosește"
+  },
+  "voicesYourVoice": {
+    "description": "Buton din bara de control în lista Voci din setări care mută focalizarea la rândul vocii folosite în prezent de acest host; $name$ este acea voce.",
+    "message": "Vocea ta: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "Eroare aruncată când browserul nu poate aloca suficientă memorie WebAssembly pentru modelul de detectare vocală.",
+    "message": "Detectarea vocală nu poate porni: nu există suficientă memorie WebAssembly pentru modelul vocal. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "Eroare aruncată când browserul nu expune memoria WebAssembly inițială necesară pentru a rula modelul de detectare vocală.",
+    "message": "Detectarea vocală nu poate porni: memoria WebAssembly nu este disponibilă în acest browser."
   }
 }

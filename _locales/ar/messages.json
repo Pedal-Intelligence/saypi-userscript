@@ -279,6 +279,46 @@
       }
     }
   },
+  "authBenefitLimits": {
+    "description": "فائدة مذكورة في نافذة تسجيل الدخول - زيادة حدود الاستخدام.",
+    "message": "حدود استخدام أعلى مع حساب مجاني"
+  },
+  "authBenefitPremium": {
+    "description": "فائدة مذكورة في نافذة تسجيل الدخول - ميزات مميزة عبر روبوتات الدردشة.",
+    "message": "ميزات مميزة ودعم روبوتات الدردشة"
+  },
+  "authBenefitSupport": {
+    "description": "فائدة مذكورة في نافذة تسجيل الدخول - دعم بأولوية.",
+    "message": "دعم أولوية للمشكلات"
+  },
+  "authBenefitSync": {
+    "description": "فائدة مذكورة في نافذة تسجيل الدخول - مزامنة الإعدادات.",
+    "message": "زامن إعدادات الصوت في كل مكان"
+  },
+  "authBenefitTTS": {
+    "description": "فائدة مذكورة في نافذة تسجيل الدخول - ميزة تحويل النص إلى كلام.",
+    "message": "أصوات تحويل النص إلى كلام (الخطط المدفوعة)"
+  },
+  "authBenefitUsage": {
+    "description": "فائدة مذكورة في نافذة تسجيل الدخول - تتبّع الاستخدام.",
+    "message": "تتبّع استخدامك للصوت عبر الأجهزة"
+  },
+  "authPromptModalFull": {
+    "description": "وصف نافذة تسجيل الدخول المنبثقة الكاملة مع عرض القيمة.",
+    "message": "أنت تستخدم Say, Pi بشكل رائع. سجّل الدخول لحدود أعلى وأصوات تحويل النص إلى كلام وميزات مميزة عبر جميع روبوتات الدردشة المدعومة."
+  },
+  "authPromptModalSoft": {
+    "description": "وصف نافذة تسجيل الدخول المنبثقة الخفيفة.",
+    "message": "أنشئ حساب Say, Pi مجانيًا لحدود استخدام أعلى والوصول إلى ميزات صوت مميزة."
+  },
+  "authPromptTitle": {
+    "description": "عنوان نافذة تسجيل الدخول المنبثقة.",
+    "message": "افتح مزيدًا من ميزات الصوت"
+  },
+  "authPromptToast": {
+    "description": "إشعار منبثق يشجّع المستخدم على تسجيل الدخول.",
+    "message": "سجّل الدخول إلى Say, Pi لحدود أعلى وميزات مميزة"
+  },
   "autoReadAloudChatGPT": {
     "description": "وصف لمربع الاختيار لتمكين أو تعطيل قراءة ردود ChatGPT تلقائياً خلال المكالمات الصوتية.",
     "message": "القراءة التلقائية بصوت عالٍ (ChatGPT)"
@@ -449,6 +489,10 @@
     "description": "Label for the option to turn off text-to-speech",
     "message": "تعطيل النص إلى الكلام"
   },
+  "dismiss": {
+    "message": "فهمت",
+    "description": "Button text to dismiss a notification or dialog."
+  },
   "dismissAlert": {
     "description": "Label for the button to dismiss a system issue alert.",
     "message": "رفض"
@@ -479,6 +523,22 @@
     "description": "The text of the button to enter immersive mode on desktop.",
     "message": "تركيز"
   },
+  "errorVadInitFailed": {
+    "description": "إشعار خطأ يظهر عندما يفشل اكتشاف نشاط الصوت في التهيئة.",
+    "message": "تعذر تهيئة اكتشاف الصوت"
+  },
+  "errorVoiceRecordingSetupFailed": {
+    "description": "إشعار خطأ يظهر عند حدوث خطأ غير متوقع أثناء إعداد تسجيل الصوت.",
+    "message": "تعذر إعداد تسجيل الصوت"
+  },
+  "errorVoiceRecordingStartFailed": {
+    "description": "إشعار خطأ يظهر عندما يفشل عميل اكتشاف الصوت في بدء التسجيل.",
+    "message": "تعذر بدء تسجيل الصوت"
+  },
+  "errorVoiceRecordingUnavailable": {
+    "description": "إشعار خطأ يظهر عندما لا يكون عميل اكتشاف الصوت (VAD) متاحًا، لذلك لا يمكن بدء التسجيل.",
+    "message": "تسجيل الصوت غير متاح"
+  },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "الخروج من وضع التركيز"
@@ -500,6 +560,10 @@
         "example": "John"
       }
     }
+  },
+  "hdVoicesAllowanceNote": {
+    "description": "ملاحظة من سطر واحد تظهر في قوائم الصوت عندما تكون الأصوات المميزة (عالية الدقة) والأصوات الاقتصادية متاحة معًا",
+    "message": "تستخدم الأصوات عالية الدقة حصتك الشهرية أسرع بنحو 20×."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -568,6 +632,10 @@
     "description": "Friendly label for collapsed assistant maintenance message.",
     "message": "سقيف هذا بعيدا ..."
   },
+  "maybeLater": {
+    "description": "نص زر لتجاهل مطالبة تسجيل الدخول.",
+    "message": "ربما لاحقًا"
+  },
   "microphoneErrorConstraints": {
     "description": "Error message when microphone constraints cannot be satisfied.",
     "message": "إعدادات الميكروفون لديك لا تتوافق مع المواصفات المطلوبة. \nحاول استخدام ميكروفون مختلف أو ضبط إعدادات الصوت."
@@ -608,6 +676,10 @@
     "description": "Generic error message when microphone access fails for unknown reasons.",
     "message": "غير قادر على الوصول إلى الميكروفون. \nيرجى التحقق من إعدادات جهازك والمحاولة مرة أخرى."
   },
+  "microphonePermissionDeniedError": {
+    "description": "إشعار خطأ يظهر عندما يتم رفض إذن الميكروفون بعد تدفق طلب الإذن.",
+    "message": "لم يتم منح إذن الميكروفون. يُرجى التأكد من أنك سمحت بالوصول في النافذة المنبثقة وفي إعدادات الإضافة."
+  },
   "mode_accuracy": {
     "description": "Highest accuracy mode.",
     "message": "دقة"
@@ -632,6 +704,10 @@
     "description": "Description for the speed transcription mode.",
     "message": "أسرع استجابة، ولكن أقل دقة. \nعرضة للمقاطعة."
   },
+  "moreVoices": {
+    "description": "صف في القائمة يربط من قائمة الصوت داخل الصفحة إلى كتالوج الأصوات الكامل في إعدادات الإضافة",
+    "message": "مزيد من الأصوات…"
+  },
   "nicknameLabel": {
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "اسم المساعد"
@@ -643,6 +719,90 @@
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "لم يتم تسجيل الدخول"
+  },
+  "onboarding_ctaChatgpt": {
+    "description": "تسمية الزر الذي يفتح ChatGPT.",
+    "message": "فتح ChatGPT"
+  },
+  "onboarding_ctaClaude": {
+    "description": "تسمية زر يفتح Claude.ai.",
+    "message": "فتح Claude"
+  },
+  "onboarding_ctaPi": {
+    "description": "تسمية زر يفتح Pi.ai.",
+    "message": "فتح Pi"
+  },
+  "onboarding_envAroundOthers": {
+    "description": "خيار البيئة: بالقرب من أشخاص آخرين.",
+    "message": "بين أشخاص آخرين"
+  },
+  "onboarding_envMixed": {
+    "description": "خيار البيئة: مزيج من المساحات الخاصة والمشتركة.",
+    "message": "مزيج من الأماكن"
+  },
+  "onboarding_envPrivate": {
+    "description": "خيار البيئة: مساحة خاصة.",
+    "message": "مكان خاص"
+  },
+  "onboarding_envQuietOff": {
+    "description": "تأكيد يُعرض عندما يترك جواب البيئة وضع الهدوء معطّلًا.",
+    "message": "حسنًا، سنبقي إعدادات الاستماع والتشغيل القياسية."
+  },
+  "onboarding_envQuietOn": {
+    "description": "تأكيد يظهر عندما يؤدي جواب البيئة إلى تفعيل الوضع الهادئ.",
+    "message": "تم تشغيل الوضع الهادئ — سنلتقط الكلام المنخفض ونرد بهدوء، لتتحدث بسرية."
+  },
+  "onboarding_envTitle": {
+    "description": "عنوان لسؤال الإعداد حول بيئة المستخدم.",
+    "message": "أين تتحدث عادةً؟"
+  },
+  "onboarding_footer": {
+    "description": "نص التذييل في صفحة الإعداد عند التشغيل لأول مرة.",
+    "message": "يمكنك الرجوع إلى هذا في أي وقت من إعدادات Say, Pi. خصوصيتك مهمة — لا يُلتقط الصوت إلا أثناء مكالمة نشطة."
+  },
+  "onboarding_heading": {
+    "description": "العنوان الرئيسي في صفحة الإعداد عند التشغيل لأول مرة.",
+    "message": "🗣️ مرحبًا بك في Say, Pi"
+  },
+  "onboarding_intro": {
+    "description": "فقرة المقدمة في صفحة الإعداد عند التشغيل لأول مرة.",
+    "message": "تفصلك خطوتان عن أول محادثة صوتية لك مع ذكاء اصطناعي. التحدث أسرع بنحو 3× من الكتابة، فلنقم بإعدادك."
+  },
+  "onboarding_micTestButton": {
+    "description": "زر يبدأ اختبار الميكروفون في الإعداد بدون أي تبعات.",
+    "message": "🎤 اختبر الميكروفون"
+  },
+  "onboarding_micTestDone": {
+    "description": "حالة تظهر بعد اكتمال اختبار الميكروفون في الإعداد بنجاح.",
+    "message": "جميل — الميكروفون يعمل! 🎉"
+  },
+  "onboarding_micTestListening": {
+    "description": "حالة تظهر بينما يقيس اختبار الميكروفون في الإعداد مستوى الإدخال.",
+    "message": "جارٍ الاستماع — قل شيئًا! 🎙️"
+  },
+  "onboarding_micTestRequesting": {
+    "description": "حالة تظهر أثناء انتظار اختبار الميكروفون في الإعداد للحصول على الإذن.",
+    "message": "جارٍ طلب إذن الميكروفون…"
+  },
+  "onboarding_micTestStop": {
+    "description": "تسمية زر لإيقاف اختبار الميكروفون في الإعداد أثناء تشغيله.",
+    "message": "إيقاف الاختبار"
+  },
+  "onboarding_step1Body": {
+    "description": "نص خطوة الإعداد الأولى الذي يشرح كيفية تثبيت الإضافة.",
+    "message": "انقر أيقونة قطعة الأحجية 🧩 أعلى يمين المتصفح، ثم دبوس التثبيت 📌 بجوار Say, Pi. بهذا يبقى زر الاتصال على بعد نقرة واحدة."
+  },
+  "onboarding_step1Title": {
+    "description": "عنوان خطوة الإعداد الأولى (تثبيت الإضافة).",
+    "message": "ثبّت Say, Pi في شريط الأدوات"
+  },
+  "onboarding_step2Body": {
+    "description": "نص خطوة الإعداد الثانية الذي يشرح كيفية بدء محادثة صوتية.",
+    "message": "انتقل إلى أحد المساعدين المدعومين أدناه، ثم اضغط زر اتصال Say, Pi وقل مرحبًا. سنطلب إذن الوصول إلى الميكروفون في المرة الأولى، وهذا متوقع، ولا نستمع إلا أثناء كونك في مكالمة بشكل فعلي."
+  },
+  "onboarding_step2Title": {
+    "description": "عنوان خطوة الإعداد الثانية (بدء محادثة).",
+    "message": "افتح دردشة ذكاء اصطناعي وابدأ التحدث"
   },
   "permissions_errorDomLoadFailure": {
     "description": "Error message sent via runtime message if the DOM fails to load.",
@@ -681,6 +841,56 @@
   "permissions_promptTitle": {
     "description": "Title of the permissions prompt page.",
     "message": "إذن الميكروفون"
+  },
+  "permissions_recoveryDeniedBody": {
+    "description": "إرشادات الاستعادة عندما يكون إذن الميكروفون محظورًا.",
+    "message": "المتصفح يحظر الميكروفون. انقر على أيقونة الكاميرا أو القفل في شريط العنوان، واضبط Microphone على \"Allow\"، ثم حاول مرة أخرى. على macOS، تحقّق أيضًا من System Settings → Privacy & Security → Microphone."
+  },
+  "permissions_recoveryDeniedTitle": {
+    "description": "عنوان لوحة الاستعادة عندما يكون إذن الميكروفون مرفوضًا/محظورًا.",
+    "message": "تم حظر الوصول إلى الميكروفون"
+  },
+  "permissions_recoveryInUseBody": {
+    "description": "إرشادات الاستعادة عندما يكون الميكروفون مستخدمًا في مكان آخر.",
+    "message": "قد يكون تطبيق أو علامة تبويب أخرى يستخدم الميكروفون. أغلق أي شيء آخر قد يكون يسجل (مكالمات فيديو، مذكرات صوتية)، ثم حاول مرة أخرى."
+  },
+  "permissions_recoveryInUseTitle": {
+    "description": "عنوان لوحة الاستعادة عندما يكون الميكروفون قيد الاستخدام من تطبيق آخر.",
+    "message": "الميكروفون قيد الاستخدام"
+  },
+  "permissions_recoveryNoDeviceBody": {
+    "description": "إرشادات الاستعادة عندما لا يتوفر جهاز ميكروفون.",
+    "message": "لم نتمكن من العثور على ميكروفون. صِل واحدًا (أو صِل سماعة الرأس)، وتأكد من تحديده كجهاز إدخال، ثم حاول مرة أخرى."
+  },
+  "permissions_recoveryNoDeviceTitle": {
+    "description": "عنوان لوحة الاستعادة عندما لا يتوفر جهاز ميكروفون.",
+    "message": "لم يتم العثور على ميكروفون"
+  },
+  "permissions_recoveryUnknownBody": {
+    "description": "إرشادات الاستعادة لخطأ ميكروفون غير معروف.",
+    "message": "حدث خطأ أثناء الوصول إلى الميكروفون. تحقّق من أنه متصل ومسموح به في إعدادات المتصفح، ثم حاول مرة أخرى."
+  },
+  "permissions_recoveryUnknownTitle": {
+    "description": "عنوان لوحة الاستعادة لخطأ ميكروفون غير معروف.",
+    "message": "لم نتمكن من الوصول إلى الميكروفون"
+  },
+  "permissions_retryButton": {
+    "description": "تسمية الزر الذي يعيد طلب إذن الميكروفون.",
+    "message": "حاول مرة أخرى"
+  },
+  "permissions_revokedHeading": {
+    "description": "عنوان يُعرض عندما كان الوصول إلى الميكروفون مُنح سابقًا ثم تم سحبه لاحقًا.",
+    "message": "🎙️ لنعِد توصيل الميكروفون"
+  },
+  "permissions_revokedInfo": {
+    "description": "نص معلوماتي يُعرض عندما تم سحب الوصول إلى الميكروفون بعد منحه.",
+    "message": "تم إيقاف الوصول إلى الميكروفون — وغالبًا ما يحدث هذا بعد تحديث للمتصفح أو للنظام. اسمح به مجددًا أدناه وسيعود $productName$ للاستماع عندما تكون في مكالمة.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "permissions_statusPermissionDenied": {
     "description": "Status message shown when permission is denied, includes the error name.",
@@ -725,6 +935,14 @@
   "profile": {
     "description": "Label for the user profile section.",
     "message": "حساب تعريفي"
+  },
+  "quietModeLabel": {
+    "description": "تسمية لمفتاح التبديل الذي يفعّل وضع الهدوء/الهمس.",
+    "message": "الوضع الهادئ"
+  },
+  "quietModeTooltip": {
+    "description": "تلميح يوضح ما يفعله وضع الهدوء/الهمس.",
+    "message": "تحدث بهدوء — يلتقط الكلام الأكثر هدوءًا ويخفض مستوى صوت رد المساعد، لتتمكن من استخدام الصوت قرب الآخرين."
   },
   "quotaCredits": {
     "description": "Unit label for TTS credits",
@@ -826,6 +1044,10 @@
       }
     }
   },
+  "signingIn": {
+    "description": "نص زر تسجيل الدخول أثناء تقدّم عملية المصادقة.",
+    "message": "جارٍ تسجيل الدخول..."
+  },
   "soundEffects": {
     "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "تأثيرات الصوت"
@@ -833,9 +1055,23 @@
   "soundEffectsFirefoxDisabled": {
     "message": "تم تعطيل المؤثرات الصوتية في Firefox لمنع حدوث مشكلات في التعليقات الصوتية."
   },
+  "speedPayoffNoticeHeadline": {
+    "description": "عنوان إشعار فائدة السرعة الذي يظهر مرة واحدة بعد أول تبادل صوتي.",
+    "message": "جميل — التحدث أسرع بنحو 3× من الكتابة."
+  },
+  "speedPayoffNoticeMinutes": {
+    "description": "سطر ثانٍ اختياري في إشعار فائدة السرعة يعرض عدد الدقائق الكاملة التي تم توفيرها.",
+    "message": "لقد تحدثت بالفعل أسرع من كتابته بنحو $minutes$ دقيقة.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "sttMinutesRemaining": {
     "description": "Text showing remaining STT quota in minutes.",
-    "message": "$minutes$ دقيقة متبقية",
+    "message": "متبقّي $minutes$ دقيقة$plural$",
     "placeholders": {
       "minutes": {
         "content": "$1",
@@ -921,6 +1157,24 @@
     "description": "Description for the manual submission mode.",
     "message": "إرسال فقط عند الضغط على الزر"
   },
+  "surveyQuestion": {
+    "description": "السؤال الوحيد في الاستبيان المصغّر الذي يظهر مرة واحدة بعد الفوز.",
+    "message": "كيف تسير تجربة الصوت معك حتى الآن؟"
+  },
+  "surveyRatingLabel": {
+    "description": "تسمية ميسّرة لزر تقييم الاستبيان.",
+    "message": "قيّم $rating$ من 5",
+    "placeholders": {
+      "rating": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "surveyThanks": {
+    "description": "رسالة إقرار تظهر بعد أن يجيب المستخدم عن الاستبيان الذي يظهر بعد الفوز.",
+    "message": "شكرًا، هذا يساعدنا على تحسين Say, Pi. 🙏"
+  },
   "tabAIChat": {
     "description": "تسمية التبويب لإعدادات الدردشة الذكية.",
     "message": "الدردشة الذكية"
@@ -936,6 +1190,10 @@
   "tabGeneral": {
     "description": "تسمية التبويب للقسم العام.",
     "message": "عام"
+  },
+  "tabVoices": {
+    "description": "تسمية علامة التبويب لقسم إعدادات الأصوات (كتالوج الأصوات لكل موقع).",
+    "message": "الأصوات"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
@@ -987,6 +1245,16 @@
     "description": "The term used for the credits currency in the text-to-speech feature.",
     "message": "الاعتمادات"
   },
+  "ttsCreditsRemaining": {
+    "description": "نص يعرض حصة تحويل النص إلى كلام المتبقية كمخزون أرصدة لكل صوت (saypi-api #181 المرحلة 2)، وليس كعدد أحرف خام.",
+    "message": "متبقّي $credits$ رصيد",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "500"
+      }
+    }
+  },
   "ttsDisabledSafari": {
     "description": "Message shown when TTS is disabled in Safari",
     "message": "الأصوات متعددة اللغات غير مدعومة حاليًا في Safari."
@@ -1027,6 +1295,34 @@
     "description": "Label for the TTS quota remaining display.",
     "message": "جيل الصوت"
   },
+  "ttsUnavailableBrowserChatbot": {
+    "message": "انتبه! تشغيل الكلام غير متاح على $browserName$ مع $chatbotName$ حتى الآن. الأخبار الجيدة؟ إدخال الصوت يعمل بشكل رائع! بالنسبة لـ TTS، جرب Chrome أو Edge على سطح المكتب.",
+    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "ttsUnavailableBrowserChatbotShort": {
+    "message": "TTS غير متاح على $browserName$ + $chatbotName$. إدخال الصوت يعمل! جرب Chrome على سطح المكتب لـ TTS.",
+    "description": "Short notification message when TTS is unavailable but voice input works.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Firefox Mobile"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "صوت TTS"
@@ -1060,6 +1356,10 @@
   "vadDetailActivatingMicrophone": {
     "description": "VAD detail when activating the microphone.",
     "message": "تنشيط الميكروفون ..."
+  },
+  "vadDetailAudioTooFaint": {
+    "description": "تفصيل VAD عندما تم رصد صوت يشبه الكلام لكنه كان خافتًا جدًا / منخفض الثقة بحيث لا يمكن تفريغه (إسقاط بوابة القبول على جانب العميل).",
+    "message": "الصوت خافت جدًا ولا يمكن تفريغه"
   },
   "vadDetailCommLinkFailed": {
     "description": "VAD detail when the communication port link fails.",
@@ -1187,6 +1487,10 @@
     "description": "VAD detail indicating VAD service has been shut down.",
     "message": "خدمة VAD أغلق."
   },
+  "vadDetailVoiceMovedToOtherTab": {
+    "description": "تفصيل VAD يوضح أن المكالمة انتهت لأن الميكروفون تم حجزه بواسطة علامة تبويب أحدث.",
+    "message": "تم نقل إدخال الصوت إلى علامة تبويب أخرى"
+  },
   "vadDetailWaitingForSpeech": {
     "description": "VAD detail when waiting for user to speak.",
     "message": "في انتظار الكلام"
@@ -1226,38 +1530,6 @@
   "vadErrorBrowserNotSupportedShort": {
     "description": "Short generic error message for notifications when voice features are not supported.",
     "message": "صوت غير متوفر. \nجرب Chrome أو Firefox على سطح المكتب."
-  },
-  "ttsUnavailableBrowserChatbot": {
-    "message": "انتبه! تشغيل الكلام غير متاح على $browserName$ مع $chatbotName$ حتى الآن. الأخبار الجيدة؟ إدخال الصوت يعمل بشكل رائع! بالنسبة لـ TTS، جرب Chrome أو Edge على سطح المكتب.",
-    "description": "Message shown when TTS is unavailable due to browser/chatbot combination (Firefox/Safari/mobile browsers + Claude/ChatGPT). Voice input continues to work.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "ttsUnavailableBrowserChatbotShort": {
-    "message": "TTS غير متاح على $browserName$ + $chatbotName$. إدخال الصوت يعمل! جرب Chrome على سطح المكتب لـ TTS.",
-    "description": "Short notification message when TTS is unavailable but voice input works.",
-    "placeholders": {
-      "browserName": {
-        "content": "$1",
-        "example": "Firefox Mobile"
-      },
-      "chatbotName": {
-        "content": "$2",
-        "example": "Claude"
-      }
-    }
-  },
-  "dismiss": {
-    "message": "فهمت",
-    "description": "Button text to dismiss a notification or dialog."
   },
   "vadErrorMobileBrowserLimited": {
     "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
@@ -1301,6 +1573,10 @@
     "description": "VAD status when a misfire (non-speech) is detected.",
     "message": "اختل"
   },
+  "vadStatusPreempted": {
+    "description": "حالة VAD المعروضة على علامة تبويب تم الاستيلاء على إدخالها الصوتي بواسطة علامة تبويب أخرى.",
+    "message": "متوقف مؤقتًا"
+  },
   "vadStatusProcessing": {
     "description": "VAD status when processing audio.",
     "message": "يعالج"
@@ -1329,6 +1605,16 @@
     "description": "Text for the link to view full quota details on the dashboard.",
     "message": "عرض التفاصيل"
   },
+  "voiceIntroductionGeneric": {
+    "description": "مقدمة صوتية عامة تُشغَّل عندما لا يحتوي صوت SayPi المحدد على نص تقديم خاص بالصوت (ولا توجد رسالة حديثة لقراءتها).",
+    "message": "مرحبًا، أنا $voice$. هكذا يبدو صوتي. آمل أن يعجبك هذا الصوت.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Jarnathan"
+      }
+    }
+  },
   "voiceIntroduction_joey": {
     "description": "Introduction for the Joey voice.",
     "message": "مرحبا! \nخاص! \n你好! \nأنا باي، مساعد الذكاء الاصطناعي متعدد اللغات الخاص بك. \nومع وجود 32 لغة تحت تصرفي، يمكننا استكشاف الأفكار والثقافات من جميع أنحاء العالم. \nما رأيك في هذا الصوت؟"
@@ -1348,5 +1634,523 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "إعدادات الصوت"
+  },
+  "voiceSpeaksNLanguages": {
+    "description": "عنوان فرعي احتياطي لصف صوت في كتالوج الأصوات ضمن الإعدادات عندما لا يملك الصوت وصفًا؛ $count$ هو عدد اللغات التي يدعمها الصوت.",
+    "message": "يتحدث $count$ لغة",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "33"
+      }
+    }
+  },
+  "voiceTagline_addison": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Addison\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "مشرق ولبق"
+  },
+  "voiceTagline_alloy": {
+    "description": "سطر تعريفي بالشخصية مُؤلف لصوت \"Alloy\" (استوديو الأصوات في الإعدادات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "متوازن ومتعدد الاستخدامات"
+  },
+  "voiceTagline_ash": {
+    "description": "سطر تعريفي بالشخصية مُؤلف لصوت \"Ash\" (استوديو الأصوات في الإعدادات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "عميق، متأمل، هادئ"
+  },
+  "voiceTagline_ballad": {
+    "description": "سطر تعريفي بالشخصية مُؤلف لصوت \"Ballad\" (استوديو الأصوات في الإعدادات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "ناعم ولحني"
+  },
+  "voiceTagline_cassidy": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Cassidy\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "ودود وواضح"
+  },
+  "voiceTagline_cedar": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Cedar\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "ثابت ومطمئن"
+  },
+  "voiceTagline_coral": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Coral\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "طاقة مشرقة ومفعمة بالحيوية"
+  },
+  "voiceTagline_echo": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Echo\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "واضح ومحايد"
+  },
+  "voiceTagline_fable": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Fable\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "نبرة راوٍ للحكايات"
+  },
+  "voiceTagline_finn": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Finn\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "منعش ومفعم بالحيوية"
+  },
+  "voiceTagline_jamahal": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Jamahal\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "غني وجذاب"
+  },
+  "voiceTagline_jarnathan": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Jarnathan\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "باريتون مخملي متأخر ليلًا"
+  },
+  "voiceTagline_jeff": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Jeff\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "واضح وثابت"
+  },
+  "voiceTagline_jessica": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Jessica\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "دفء ورزانة مصقولة"
+  },
+  "voiceTagline_joey": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Joey\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "أمريكي سهل وحواري"
+  },
+  "voiceTagline_juniper": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Juniper\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "نقي ومشرق وحيوي"
+  },
+  "voiceTagline_lucy": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Lucy\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "لطيف ومشرق"
+  },
+  "voiceTagline_marin": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Marin\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "هدوء دافئ كإذاعة الصباح"
+  },
+  "voiceTagline_mark": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Mark\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "راوٍ واضح وواثق"
+  },
+  "voiceTagline_nova": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Nova\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "سريع وفضولي"
+  },
+  "voiceTagline_onyx": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Onyx\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "عمق ورنين مهيب"
+  },
+  "voiceTagline_paola": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Paola\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "دفء إيطالي معبّر"
+  },
+  "voiceTagline_sage": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Sage\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "وضوح بصوت هادئ"
+  },
+  "voiceTagline_shimmer": {
+    "description": "شعار شخصية مُعدّ مسبقًا لصوت \"Shimmer\" (إعدادات استوديو الأصوات؛ خريطة هوية الصوت على جهة العميل).",
+    "message": "خفيف وهوائي"
+  },
+  "voicesAddToMenuShort": {
+    "description": "تسمية قصيرة على زر التثبيت في بطاقة الصوت (حالة الإيقاف) في استوديو الأصوات ضمن الإعدادات؛ الضغط يضيف الصوت إلى قائمة $host$ داخل الدردشة.",
+    "message": "+ القائمة"
+  },
+  "voicesAddVoiceToMenu": {
+    "description": "تسمية تسهيل الوصول لزر التثبيت في بطاقة الصوت (حالة الإيقاف)؛ $name$ هو الصوت، و$host$ هو المساعد.",
+    "message": "أضف $name$ إلى قائمة $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesArrowAudition": {
+    "description": "تسمية على زر التبديل في شريط التحكم بالأصوات توضح ما إذا كان التنقّل في القائمة بمفاتيح الأسهم يشغّل كل صوت عند وصول التركيز إليه.",
+    "message": "تشغيل أثناء التنقّل"
+  },
+  "voicesArrowsLive": {
+    "description": "تأكيد لقارئ الشاشة، يُضاف إلى أول إعلان \"يتم تشغيل <صوت>\" في قائمة الأصوات ضمن الإعدادات، يفيد بأن مفاتيح الأسهم أصبحت مسموعة للتو. يعكس صياغة خيار \"التشغيل أثناء التنقل\" نفسه.",
+    "message": "الأسهم تشغّل الآن أثناء التنقل. Esc يوقف."
+  },
+  "voicesBuiltinsNote": {
+    "description": "ملاحظة أسفل خانات القائمة للمضيفين الذين يأتون بأصوات أصلية (مثل 8 أصوات مدمجة لـ Pi)، والتي لا يديرها الاستوديو؛ $host$ هو المساعد.",
+    "message": "أصوات $host$ المدمجة الخاصة به تظهر دائمًا في قائمته أيضًا.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesBuiltinsNoteNoMenu": {
+    "description": "صيغة بديلة لـ voicesBuiltinsNote لمضيف لا يملك قائمة أصوات داخل الدردشة (أزال Pi قائمته في 2026)، حيث سيكون وعد الأصل بأن الأصوات المدمجة \"تظهر في قائمته\" غير صحيح؛ $host$ هو المساعد.",
+    "message": "لدى $host$ أيضًا أصوات مدمجة خاصة به، لكنها غير مدرجة هنا.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesHeardCount": {
+    "description": "مؤشر تقدم في شريط التحكم بالأصوات ضمن الإعدادات: عدد الأصوات المُدرجة التي سبق أن استمع إليها المستخدم. أرقام فقط، لذا يُقرأ بشكل صحيح عند 1 أيضًا — لا يحتوي Chrome i18n على صيغ جمع.",
+    "message": "تم الاستماع إلى $heard$ من $total$",
+    "placeholders": {
+      "heard": {
+        "content": "$1",
+        "example": "9"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesHeardMark": {
+    "description": "جزء من الاسم القابل للوصول لصف صوت في قائمة الأصوات ضمن الإعدادات، يميز صوتًا سبق لهذا الملف الاستماع إليه. بصريًا يُرسم ذلك كثافة حبر على بصمة الصوت، وهو ما لا يمكن لقارئ الشاشة رؤيته.",
+    "message": "تم الاستماع"
+  },
+  "voicesInHostMenu": {
+    "description": "عنوان قسم فوق صف خانات القائمة في استوديو الأصوات ضمن الإعدادات؛ $host$ هو المساعد.",
+    "message": "في قائمة $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesInMenuShort": {
+    "description": "تسمية قصيرة على زر التثبيت في بطاقة الصوت (حالة التشغيل) في استوديو الأصوات ضمن الإعدادات.",
+    "message": "✓ في القائمة"
+  },
+  "voicesInUse": {
+    "description": "شارة ثابتة على الصوت المحدد حاليًا للمضيف في قائمة الأصوات ضمن الإعدادات، تُعرض بأحرف كبيرة. ليست عمدًا «يتحدث الآن»: في هذه الصفحة تشغّل الصفوف مقاطعها التجريبية، لذا لا يجب أن يدّعي صوت محدد لكنه صامت أنه يتحدث بينما صف مختلف هو الذي يُشغَّل.",
+    "message": "قيد الاستخدام"
+  },
+  "voicesKeyboardHint": {
+    "description": "تلميح لوحة مفاتيح من سطر واحد في شريط التحكم بالأصوات ضمن الإعدادات. الرموز هي مفاتيح: Space، وسهما الأعلى/الأسفل، وShift+Space.",
+    "message": "اضغط على Space للاستماع، وعلى ↑↓ للتنقل بين الأصوات، وعلى ⇧Space للتبديل للعودة."
+  },
+  "voicesLoadError": {
+    "description": "حالة خطأ داخل استوديو مضيف واحد عندما يفشل تحميل كتالوج أصوات ذلك المضيف؛ $host$ هو المساعد.",
+    "message": "تعذّر تحميل أصوات $host$. يُرجى المحاولة لاحقًا.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesMenuFull": {
+    "description": "تلميح/إرشاد على زر «+ القائمة» المعطّل عندما تكون قائمة $host$ داخل الدردشة قد وصلت إلى الحد الأقصى من الأصوات.",
+    "message": "القائمة ممتلئة — أزل صوتًا لإضافة صوت آخر"
+  },
+  "voicesMenuHint": {
+    "description": "تلميح من سطر واحد بجوار عنوان «في قائمة {host}»، يوضح أن صف الخانات يطابق قائمة الأصوات داخل الدردشة.",
+    "message": "ما ستراه في الدردشة"
+  },
+  "voicesMenuOverflow": {
+    "description": "ملاحظة أسفل خانات القائمة عندما يكون لدى المستخدم أصوات مثبّتة أكثر مما تستطيع قائمة الدردشة عرضَه (حالة قديمة)؛ $count$ هو عدد الأصوات التي لا تتسع، و$cap$ هو حجم القائمة.",
+    "message": "هناك $count$ من الأصوات المثبّتة الأخرى بانتظارك خارج $cap$ من خانات القائمة.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "cap": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuOverflowOne": {
+    "description": "صيغة المفرد لـ voicesMenuOverflow، تُستخدم عندما لا يتسع صوت مثبّت واحد بالضبط في قائمة الدردشة؛ $cap$ هو حجم القائمة.",
+    "message": "هناك صوت مثبّت واحد إضافي بانتظارك خارج $cap$ من خانات القائمة.",
+    "placeholders": {
+      "cap": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "voicesMenuSummary": {
+    "description": "سطر ملخص تحت قائمة الأصوات في الإعدادات يوضح مقدار امتلاء قائمة الأصوات داخل الدردشة لدى المضيف؛ $host$ هو المساعد، و$used$ عدد المقاعد المشغولة، و$cap$ العدد الإجمالي. مصاغ ليُقرأ بشكل صحيح عند 1 أيضًا — لا يحتوي Chrome i18n على صيغ جمع.",
+    "message": "قائمة $host$: $used$ من $cap$ مقعد",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      },
+      "used": {
+        "content": "$2",
+        "example": "3"
+      },
+      "cap": {
+        "content": "$3",
+        "example": "4"
+      }
+    }
+  },
+  "voicesNoSampleGroup": {
+    "description": "عنوان للمجموعة في نهاية قائمة الأصوات في الإعدادات التي تضم الأصوات التي لا تحتوي على مقطع عينة للتشغيل؛ $count$ هو العدد. مصاغ ليُقرأ بشكل صحيح عند 1 أيضًا — لا يحتوي Chrome i18n على صيغ جمع.",
+    "message": "لا توجد عينة بعد ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "voicesNoneAvailable": {
+    "description": "يُعرض في كتالوج الأصوات ضمن الإعدادات عندما تكون قائمة الأصوات فارغة لمستخدم سجّل الدخول (مثلًا بسبب مشكلة في الشبكة).",
+    "message": "تعذر تحميل الأصوات الآن. يُرجى المحاولة لاحقًا."
+  },
+  "voicesNowPlaying": {
+    "description": "إعلان لقارئ الشاشة عند بدء تشغيل مقطع عينة صوت في قائمة الأصوات ضمن الإعدادات؛ $name$ هو الصوت.",
+    "message": "يتم تشغيل $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Onyx"
+      }
+    }
+  },
+  "voicesPlayAllN": {
+    "description": "زر في شريط التحكم بالأصوات ضمن الإعدادات يشغّل كل صوت مُدرج حاليًا، واحدًا تلو الآخر؛ $count$ هو العدد. مصاغ ليُقرأ بشكل صحيح عند 1 أيضًا — لا يحتوي Chrome i18n على صيغ جمع.",
+    "message": "تشغيل الكل ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "voicesPlayNewN": {
+    "description": "زر في شريط التحكم بالأصوات ضمن الإعدادات عند زيارة العودة: يشغّل فقط الأصوات المُدرجة التي لم تستمع إليها بعد؛ $count$ هو العدد. مصاغ ليُقرأ بشكل صحيح عند 1 أيضًا — لا يحتوي Chrome i18n على صيغ جمع.",
+    "message": "تشغيل الجديد ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "13"
+      }
+    }
+  },
+  "voicesPlaybackBlocked": {
+    "description": "سطر في شريط التحكم بالأصوات في الإعدادات عندما يرفض المتصفح تشغيل عينة لأن الصفحة لم تتلقَّ أي تفاعل من المستخدم بعد.",
+    "message": "انقر على أي صوت لتفعيل الصوت."
+  },
+  "voicesPreview": {
+    "description": "تسمية تسهيل الوصول لزر التشغيل (▶) الذي يختبر مقطع العيّنة المجاني لصوت ضمن صف صوت؛ $name$ هو اسم الصوت.",
+    "message": "تشغيل عيّنة من $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      }
+    }
+  },
+  "voicesRailLabel": {
+    "description": "الاسم المتاح لقائمة الأصوات في الإعدادات (قائمة اختيار تحتوي على كل الأصوات، صف واحد لكل صوت).",
+    "message": "الأصوات، مرتّبة من الأعمق إلى الأكثر سطوعًا"
+  },
+  "voicesRemoveVoiceFromMenu": {
+    "description": "تسمية تسهيل الوصول لزر التثبيت في بطاقة الصوت (حالة التشغيل) وزر الإزالة في خانة القائمة؛ $name$ هو الصوت، و$host$ هو المساعد.",
+    "message": "أزل $name$ من قائمة $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nova"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSampleFailed": {
+    "description": "سطر في شريط التحكم بالأصوات في الإعدادات عندما تفشل عينة صوت واحد في التحميل أو التشغيل؛ $name$ هو ذلك الصوت. غير نمطي — يستمر تشغيل سلسلة العينات بعده.",
+    "message": "تعذّر تشغيل عينة $name$.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesSectionDescription": {
+    "description": "عنوان فرعي لقسم كتالوج الأصوات في تبويب AI Chat ضمن الإعدادات",
+    "message": "اختر الصوت الذي يقرأ الردود بصوت عالٍ على كل موقع."
+  },
+  "voicesSectionDescriptionListen": {
+    "description": "عنوان فرعي أسفل عنوان إعدادات الأصوات، لمسار الأصوات المرتّبة حسب الحدة.",
+    "message": "كل صوت، من الأعمق إلى الأكثر سطوعًا. استمع ثم اختر."
+  },
+  "voicesSectionTitle": {
+    "description": "عنوان قسم كتالوج الأصوات في تبويب AI Chat ضمن الإعدادات",
+    "message": "الأصوات"
+  },
+  "voicesShelfEveryday": {
+    "description": "عنوان مجموعة للأصوات ذات الفئة الاقتصادية في كتالوج الأصوات ضمن الإعدادات. تُعرض بأحرف كبيرة عبر CSS.",
+    "message": "أصوات يومية"
+  },
+  "voicesShelfEverydayBlurb": {
+    "description": "ملاحظة من سطر واحد بجانب عنوان مجموعة Everyday في استوديو الأصوات؛ المكان الوحيد الذي يذكر فيه الاستوديو مقدار زيادة هذه الفئة مقارنةً بـ HD.",
+    "message": "طبيعي وواضح، ويمكنك الاستماع لمدة أطول بنحو 20× مقارنةً بـ HD."
+  },
+  "voicesShelfHd": {
+    "description": "عنوان مجموعة للأصوات المميّزة (HD) في كتالوج الأصوات ضمن الإعدادات. تُعرض بأحرف كبيرة عبر CSS.",
+    "message": "أصوات HD"
+  },
+  "voicesShelfHdBlurb": {
+    "description": "ملاحظة من سطر واحد بجانب عنوان مجموعة HD في استوديو الأصوات ضمن الإعدادات.",
+    "message": "أغنى صوت لدينا وأكثره تعبيرًا."
+  },
+  "voicesShowAll": {
+    "description": "خيار في عامل تصفية \"إظهار\" ضمن أصوات الإعدادات: بدون تصفية، تُعرض جميع الأصوات.",
+    "message": "كل الأصوات"
+  },
+  "voicesShowEveryday": {
+    "description": "خيار في عامل تصفية \"إظهار\" ضمن أصوات الإعدادات: اعرض فقط الأصوات القياسية (غير HD).",
+    "message": "اليومي فقط"
+  },
+  "voicesShowHd": {
+    "description": "خيار في عامل تصفية \"إظهار\" ضمن أصوات الإعدادات: اعرض فقط الأصوات المميزة (HD).",
+    "message": "HD فقط"
+  },
+  "voicesShowLabel": {
+    "description": "تسمية عامل التصفية في شريط التحكم بالأصوات في الإعدادات الذي يضيّق نطاق الأصوات التي تعرضها القائمة.",
+    "message": "إظهار"
+  },
+  "voicesShowUnheard": {
+    "description": "خيار في عامل تصفية \"إظهار\" ضمن أصوات الإعدادات: اعرض فقط الأصوات التي لم يستمع إليها المستخدم بعد.",
+    "message": "لم يُستمع إليه بعد"
+  },
+  "voicesSpeakingNow": {
+    "description": "تسمية حالة على الصوت المحدد حاليًا للمضيف في استوديو الأصوات ضمن الإعدادات (في خانة القائمة وبطاقة الصوت).",
+    "message": "يتحدث الآن"
+  },
+  "voicesSpeaksWith": {
+    "description": "سطر عنوان صغير فوق اسم الصوت الحالي على مسرح الاستوديو في إعدادات الأصوات؛ $host$ هو المساعد (مثل Pi). يُعرض بأحرف كبيرة عبر CSS.",
+    "message": "$host$ يتحدث بصوت",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteReplace": {
+    "description": "ملاحظة على المنصة عندما يقدّم المضيف صوته الخاص (مثل Pi)، لذا فإن اختيار صوت من Say, Pi يستبدل صوت المضيف.",
+    "message": "سيستخدم $host$ صوته الخاص إلى أن تختار واحدًا أدناه.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStageEmptyNoteSilent": {
+    "description": "ملاحظة على المنصة عندما لا يملك المضيف صوتًا خاصًا به (مثل Claude)، لذا لن تتم القراءة بصوت عالٍ حتى يتم اختيار صوت من Say, Pi.",
+    "message": "لن يقرأ $host$ الردود بصوت عالٍ إلى أن تختار واحدًا أدناه.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesStageEmptyTitle": {
+    "description": "عنوان رئيسي على منصة استوديو الأصوات في الإعدادات عندما لا يكون لدى المضيف أي صوت من Say, Pi محدّد؛ $host$ هو المساعد (مثل Pi أو Claude). يُعرض بحجم الاسم.",
+    "message": "اختر كيف سيبدو صوت $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesStagePlay": {
+    "description": "زر على منصة استوديو الأصوات في الإعدادات يشغّل مقطع العيّنة المجاني للصوت الحالي.",
+    "message": "استمع إلى عيّنة"
+  },
+  "voicesStopPlayback": {
+    "description": "زر في شريط التحكم بالأصوات ضمن الإعدادات يوقف تسلسل العينات الذي بدأه \"تشغيل الكل\".",
+    "message": "إيقاف"
+  },
+  "voicesSweepPosition": {
+    "description": "قراءة مباشرة للموقع في شريط التحكم بالأصوات في الإعدادات أثناء تنقّل خيار \"تشغيل الكل\" عبر القائمة؛ $index$ هو الصوت الذي يتم تشغيله الآن و $total$ عدد الأصوات الموجودة في قائمة الانتظار.",
+    "message": "$index$ من $total$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "6"
+      },
+      "total": {
+        "content": "$2",
+        "example": "22"
+      }
+    }
+  },
+  "voicesSwitchBackTo": {
+    "description": "تسمية تسهيل الوصول لعنصر المقارنة في شريط التحكم بالأصوات ضمن الإعدادات، والذي يعيد تشغيل الصوت الآخر من آخر صوتين تم سماعهما؛ $name$ هو ذلك الصوت.",
+    "message": "بدّل للعودة إلى $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Coral"
+      }
+    }
+  },
+  "voicesTooManyToPlay": {
+    "description": "سطر في شريط التحكم بالأصوات في الإعدادات عند الضغط على \"تشغيل الكل\" في قائمة طويلة جداً لا يمكن متابعتها؛ $count$ هو عدد الأصوات و $minutes$ تقريباً عدد الدقائق التي ستستغرقها. اختصار \"min\" بحيث تُقرأ بشكل صحيح عند 1 — لا يوفّر Chrome i18n صيغ جمع.",
+    "message": "هذا $count$ صوت — نحو $minutes$ دقيقة. ضيّق القائمة أولاً.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "34"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "voicesUseOnHost": {
+    "description": "تسمية تسهيل الوصول لزر «استخدم هذا الصوت» لكل مضيف في كتالوج الأصوات ضمن الإعدادات؛ $name$ هو الصوت، و$host$ هو المساعد (مثل Pi وClaude).",
+    "message": "استخدم $name$ على $host$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "voicesUseShort": {
+    "description": "تسمية قصيرة على زر «استخدم هذا الصوت» لكل مضيف في كتالوج الأصوات ضمن الإعدادات الموحّدة (يُعرض المضيف بجانبه).",
+    "message": "استخدم"
+  },
+  "voicesYourVoice": {
+    "description": "زر في شريط التحكم ضمن قائمة الأصوات في الإعدادات ينقل التركيز إلى صف الصوت الذي يستخدمه هذا المضيف حاليًا؛ $name$ هو ذلك الصوت.",
+    "message": "صوتك: $name$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Marin"
+      }
+    }
+  },
+  "webAssemblyInsufficientMemory": {
+    "description": "خطأ يُرمى عندما لا يستطيع المتصفح تخصيص ذاكرة WebAssembly كافية لنموذج اكتشاف الصوت.",
+    "message": "لا يمكن بدء اكتشاف الصوت: لا توجد ذاكرة WebAssembly كافية لنموذج الصوت. $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Required: 32768KB, Available: 16384KB"
+      }
+    }
+  },
+  "webAssemblyMemoryUnavailable": {
+    "description": "خطأ يُرمى عندما لا يوفّر المتصفح ذاكرة WebAssembly الأولية اللازمة لتشغيل نموذج اكتشاف الصوت.",
+    "message": "لا يمكن بدء اكتشاف الصوت: ذاكرة WebAssembly غير متاحة في هذا المتصفح."
   }
 }
