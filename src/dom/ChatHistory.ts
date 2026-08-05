@@ -53,7 +53,15 @@ class ChatHistoryRootElementObserver extends BaseObserver {
     selector: string,
     speechSynthesis: SpeechSynthesisModule,
     private chatbot: Chatbot,
-    initialRun: boolean = true
+    initialRun: boolean = true,
+    /**
+     * Called once the present/most-recent container has been found and labelled,
+     * so its OWNER can take over observing it. Only the owner (the speech
+     * manager) can attach the additions observer, which is the sole path that
+     * SYNTHESISES speech for a new reply — see {@link ensureRecentMessages}.
+     * Without it this observer falls back to decoration-only.
+     */
+    private onRecentContainer?: (container: HTMLElement) => void
   ) {
     super(chatHistoryElement, selector);
     this.speechSynthesis = speechSynthesis;
@@ -153,7 +161,22 @@ class ChatHistoryRootElementObserver extends BaseObserver {
     recentContainer.classList.add("chat-history", "present-messages");
     if (this.recentMessageObserver) {
       this.recentMessageObserver.disconnect();
+      this.recentMessageObserver = null;
     }
+
+    if (this.onRecentContainer) {
+      // Hand the container to its owner, which observes it with the ADDITIONS
+      // observer. That distinction is the whole point: an old-message observer
+      // only ever replays speech already in the history, so if it owned this
+      // container a brand-new reply would be decorated "incomplete" (a Generate
+      // Audio button) and the user's chosen voice would never speak — the past
+      // container's semantics silently applied to the present one (#597).
+      this.onRecentContainer(recentContainer as HTMLElement);
+      return;
+    }
+
+    // No owner (direct construction): degrade to decoration-only, so the most
+    // recent message still gets its controls.
     this.recentMessageObserver = new ChatHistoryOldMessageObserver(
       this.chatHistoryElement,
       `${recentContainer.tagName.toLowerCase()}.chat-history.present-messages`,
