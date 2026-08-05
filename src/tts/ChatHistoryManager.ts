@@ -36,6 +36,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private observers: Observer[] = [];
 
   private newMessageObserver: ChatHistoryAdditionsObserver | null = null;
+  /** The present container `newMessageObserver` is bound to, for idempotence. */
+  private observedPresentContainer: Element | null = null;
   private static pendingSpeeches: Map<
     string,
     {
@@ -183,7 +185,16 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       chatHistoryElement,
       "#saypi-chat-history",
       this.speechSynthesis,
-      this.chatbot
+      this.chatbot,
+      true,
+      // pi.ai mounts the present container AFTER the chat history is decorated,
+      // so the one-shot setup below finds nothing to observe on first run. Take
+      // the container as soon as it appears (or is replaced) — otherwise new
+      // replies never reach the additions observer, and therefore never get a
+      // SayPi voice (#597).
+      () => {
+        void this.registerPresentChatHistoryListener(chatHistoryElement);
+      }
     );
     rootChatHistoryObserver.observe({
       childList: true,
@@ -192,22 +203,45 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.observers.push(rootChatHistoryObserver);
   }
 
+  /**
+   * Give the present/most-recent container to the additions observer — the only
+   * observer that synthesises speech for a new reply.
+   *
+   * Re-runnable, because the container is not always there when the manager is
+   * built: pi.ai mounts it later (and can replace it), so the root observer
+   * calls back when it appears. Idempotent per container element — a second
+   * call for the same container keeps the observer already watching it, so the
+   * constructor's call and the root observer's callback can't produce two
+   * observers racing to stream the same message.
+   */
   async registerPresentChatHistoryListener(
     chatHistoryElement: HTMLElement
-  ): Promise<ChatHistoryAdditionsObserver> {
+  ): Promise<ChatHistoryAdditionsObserver | null> {
     const selector = ".chat-history.present-messages";
+    const recentContainer = findRootAncestor(chatHistoryElement).querySelector(
+      selector
+    ) as HTMLElement | null;
+    // Nothing to observe yet; the root observer calls back when it mounts.
+    if (!recentContainer) return null;
+    if (recentContainer === this.observedPresentContainer) {
+      return this.newMessageObserver;
+    }
+    this.observedPresentContainer = recentContainer;
+    this.releaseObserver(this.newMessageObserver);
+    this.newMessageObserver = null;
+
+    // One-shot pass over what is ALREADY on screen: decorate it and replay any
+    // speech from history. These messages become the additions observer's
+    // ignore list, so arriving mid-thread never re-reads what the user has
+    // already seen.
     const existingMessagesObserver = new ChatHistoryOldMessageObserver(
       chatHistoryElement,
       selector,
       this.speechSynthesis,
       this.chatbot
     );
-    const recentContainer = findRootAncestor(chatHistoryElement).querySelector(
-      selector
-    ) as HTMLElement | null;
-    const initialMessages = recentContainer
-      ? await existingMessagesObserver.runOnce(recentContainer)
-      : [];
+    const initialMessages =
+      await existingMessagesObserver.runOnce(recentContainer);
     if (initialMessages.length > 0) {
       logger.debug(
         `Found ${initialMessages.length} recent assistant message(s)`
@@ -229,7 +263,18 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       attributeOldValue: true, // Enable tracking of old attribute values for debugging
     });
     this.observers.push(newMessagesObserver);
+    this.newMessageObserver = newMessagesObserver;
     return newMessagesObserver;
+  }
+
+  /** Disconnect an observer this manager owns and stop tracking it. */
+  private releaseObserver(observer: Observer | null): void {
+    if (!observer) return;
+    observer.disconnect();
+    const index = this.observers.indexOf(observer);
+    if (index >= 0) {
+      this.observers.splice(index, 1);
+    }
   }
 
   // Register event listeners and store them for later removal
@@ -375,12 +420,13 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   // Constructor
   constructor(private chatbot: Chatbot, chatHistoryElement: HTMLElement) {
     this.addIdChatHistory(chatHistoryElement);
+    // Registers the root observer, which calls back to set up the present
+    // container — immediately if it is already mounted, later on the host that
+    // defers it (pi.ai). The explicit call below covers hosts whose present
+    // container IS the chat history element (Claude/ChatGPT), which the root
+    // observer deliberately leaves alone.
     this.registerPastChatHistoryListener(chatHistoryElement);
-    this.registerPresentChatHistoryListener(chatHistoryElement).then(
-      (observer) => {
-        this.newMessageObserver = observer;
-      }
-    );
+    void this.registerPresentChatHistoryListener(chatHistoryElement);
     this.registerSpeechStreamListeners(chatHistoryElement);
     this.registerMessageErrorListeners();
     this.registerMessageChargeListeners();
