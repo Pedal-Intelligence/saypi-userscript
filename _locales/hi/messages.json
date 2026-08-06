@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "गूंजना"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "सहायक के सेटिंग पेज पर अपनी आवाज़ों के ग्रिड के ऊपर दिखाया जाता है, जब Say, Pi की आवाज़ ने बोलने की जगह ले ली हो और सहायक की चुनी हुई मूल आवाज़ वह न हो जो उपयोगकर्ता सुनता है; $voice$ Say, Pi की आवाज़ का नाम है, जैसे Shimmer।",
+    "message": "Say, Pi $voice$ की आवाज़ में बोल रहा है — नीचे दी गई आवाज़ें उपयोग में नहीं हैं।",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "आवाज रोका -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Voices नियंत्रण पट्टी में तब दिखाया जाता है, जब Say, Pi की कोई आवाज़ चुनी न हो और सहायक अपनी अंतर्निहित आवाज़ों में से किसी एक में जवाब दे; $host$ सहायक का नाम है, जैसे Pi।",
+    "message": "आपकी आवाज़: $host$ की अपनी",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Voices नियंत्रण पट्टी में तब दिखाया जाता है, जब ऐसे सहायक के लिए कोई आवाज़ चुनी न हो जिसकी अपनी अंतर्निहित आवाज़ें नहीं हैं, इसलिए कुछ भी बोलकर नहीं सुनाया जाता।",
+    "message": "कोई आवाज़ नहीं — जवाब ज़ोर से नहीं पढ़े जाते"
   },
   "voicesHeardCount": {
     "description": "सेटिंग्स के Voices कंट्रोल बार में प्रगति रीडआउट: सूचीबद्ध आवाज़ों में से कितनी को उपयोगकर्ता पहले ही सुन चुका है। सिर्फ़ संख्याएँ, ताकि 1 पर भी सही पढ़े — Chrome i18n में बहुवचन रूप नहीं हैं।",

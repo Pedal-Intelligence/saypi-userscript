@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Voce oprit"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Afișat deasupra grilei cu vocile proprii ale asistentului în pagina de setări, când o voce Say, Pi a preluat redarea, astfel încât vocea nativă evidențiată a asistentului nu este cea auzită de utilizator; $voice$ este numele vocii Say, Pi, de exemplu Shimmer.",
+    "message": "Say, Pi vorbește cu $voice$ — vocile de mai jos nu sunt folosite.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Vocea pusă în pauză -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Afișat în bara de control Vocile când nu este selectată nicio voce SayPi, iar asistentul răspunde folosind una dintre vocile sale integrate; $host$ este asistentul, de exemplu Pi.",
+    "message": "Vocea ta: cea proprie a lui $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Afișat în bara de control Vocile când nu este selectată nicio voce pentru un asistent care nu are propriile voci integrate, astfel încât nimic nu este rostit.",
+    "message": "Nicio voce — răspunsurile nu sunt citite cu voce tare"
   },
   "voicesHeardCount": {
     "description": "Indicator de progres în bara de control Voci din setări: câte dintre vocile listate a ascultat deja utilizatorul. Doar numere, ca să se citească corect la 1 — Chrome i18n nu are forme de plural.",

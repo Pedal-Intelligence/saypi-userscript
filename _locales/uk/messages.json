@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Озвучувати"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Показується над сіткою власних голосів асистента на його сторінці налаштувань, коли голос Say, Pi замінив відтворення, тому вибраний вбудований голос асистента не чути; $voice$ — назва голосу Say, Pi, наприклад Shimmer.",
+    "message": "Say, Pi говорить голосом $voice$ — наведені нижче голоси не використовуються.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Голос зробив паузу -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Показується на панелі керування голосами, коли голос Say, Pi не вибрано, а асистент відповідає одним зі своїх вбудованих голосів; $host$ — назва асистента, наприклад Pi.",
+    "message": "Ваш голос: власний голос $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Показується на панелі керування голосами, коли на асистенті без власних вбудованих голосів не вибрано голос, тому нічого не озвучується.",
+    "message": "Без голосу — відповіді не озвучуються"
   },
   "voicesHeardCount": {
     "description": "Індикатор прогресу в панелі керування «Голоси» в налаштуваннях: скільки голосів зі списку користувач уже прослухав. Лише числа, тож читається правильно при 1 — у Chrome i18n немає форм множини.",

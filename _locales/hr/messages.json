@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Odbiti"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Prikazuje se iznad mreže izvornih glasova asistenta na stranici s postavkama kada je glas Say, Pi preuzeo reprodukciju, pa označeni izvorni glas asistenta nije ono što korisnik čuje; $voice$ je naziv glasa Say, Pi, npr. Shimmer.",
+    "message": "Say, Pi govori glasom $voice$ — navedeni glasovi nisu u upotrebi.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Glas zastao -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Prikazuje se na traci za upravljanje glasom kada nije odabran glas Say, Pi i asistent odgovara jednim od svojih ugrađenih glasova; $host$ je naziv asistenta, npr. Pi.",
+    "message": "Vaš glas: izvorni glas asistenta $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Prikazuje se na traci za upravljanje glasom kada na asistentu bez vlastitih ugrađenih glasova nije odabran nijedan glas, pa se ništa ne izgovara.",
+    "message": "Bez glasa — odgovori se ne čitaju naglas"
   },
   "voicesHeardCount": {
     "description": "Prikaz napretka u traci kontrola Glasovi u postavkama: koliko je navedenih glasova korisnik već preslušao. Goli brojevi, pa se ispravno čita i za 1 — Chrome i18n nema oblike množine.",

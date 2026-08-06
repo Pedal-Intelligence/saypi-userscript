@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Stemme væk"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Vises over assistentens eget stemmegitter på indstillingssiden, når en Say, Pi-stemme har overtaget afspilningen, så assistentens fremhævede indbyggede stemme ikke er den, brugeren hører; $voice$ er navnet på Say, Pi-stemmen, f.eks. Shimmer.",
+    "message": "Say, Pi taler med $voice$ — stemmerne nedenfor bruges ikke.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Stemme pausede -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Vises i stemmekontrollinjen, når ingen Say, Pi-stemme er valgt, og assistenten i stedet svarer med en af sine egne indbyggede stemmer; $host$ er assistenten, f.eks. Pi.",
+    "message": "Din stemme: $host$'s egen",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Vises i stemmekontrollinjen, når ingen stemme er valgt for en assistent, der ikke har egne indbyggede stemmer, så intet bliver læst op.",
+    "message": "Ingen stemme — svar læses ikke højt"
   },
   "voicesHeardCount": {
     "description": "Status i indstillingskontrollen for Stemmer: hvor mange af de viste stemmer brugeren allerede har lyttet til. Kun tal, så det læses korrekt ved 1 — Chrome i18n har ingen flertalsformer.",

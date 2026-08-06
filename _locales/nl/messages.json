@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Stemmen"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Wordt boven het eigen stemoverzicht van de assistent op de instellingenpagina weergegeven wanneer een Say, Pi-stem het afspelen heeft overgenomen. De gemarkeerde ingebouwde stem van de assistent is dan niet te horen; $voice$ is de naam van de Say, Pi-stem, bijvoorbeeld Shimmer.",
+    "message": "Say, Pi spreekt met $voice$ — de onderstaande stemmen worden niet gebruikt.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Stem gepauzeerd -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Wordt in de stemmenbalk weergegeven wanneer er geen Say, Pi-stem is geselecteerd en de assistent antwoordt met een van de eigen ingebouwde stemmen; $host$ is de assistent, bijvoorbeeld Pi.",
+    "message": "Je stem: die van $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Wordt in de stemmenbalk weergegeven wanneer er geen stem is geselecteerd bij een assistent zonder eigen ingebouwde stemmen, zodat er niets wordt uitgesproken.",
+    "message": "Geen stem — antwoorden worden niet voorgelezen"
   },
   "voicesHeardCount": {
     "description": "Voortgangsweergave in de bedieningsbalk Stemmen in de instellingen: hoeveel van de vermelde stemmen de gebruiker al heeft beluisterd. Kale getallen, zodat het ook bij 1 klopt — Chrome i18n heeft geen meervoudsvormen.",

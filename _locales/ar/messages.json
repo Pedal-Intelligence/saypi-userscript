@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "صوت قبالة"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "يظهر فوق شبكة أصوات المساعد في صفحة إعداداته عندما يتولى صوت من Say, Pi تشغيل الردود، لذلك لا يكون صوت المساعد الأصلي المميز هو المسموع؛ $voice$ هو اسم صوت Say, Pi، مثل Shimmer.",
+    "message": "يتحدث Say, Pi بصوت $voice$ — الأصوات أدناه غير مستخدمة.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "توقف الصوت مؤقتًا -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "يظهر في شريط التحكم بالأصوات عند عدم تحديد صوت من Say, Pi واستجابة المساعد بأحد أصواته المدمجة؛ $host$ هو اسم المساعد، مثل Pi.",
+    "message": "صوتك: صوت $host$ الأصلي",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "يظهر في شريط التحكم بالأصوات عند عدم تحديد صوت في مساعد لا يملك أصواتًا مدمجة، لذلك لا يُنطق شيء.",
+    "message": "لا يوجد صوت — لا تُقرأ الردود بصوت عالٍ"
   },
   "voicesHeardCount": {
     "description": "مؤشر تقدم في شريط التحكم بالأصوات ضمن الإعدادات: عدد الأصوات المُدرجة التي سبق أن استمع إليها المستخدم. أرقام فقط، لذا يُقرأ بشكل صحيح عند 1 أيضًا — لا يحتوي Chrome i18n على صيغ جمع.",

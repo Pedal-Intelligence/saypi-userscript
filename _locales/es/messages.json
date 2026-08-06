@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Salir"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Se muestra sobre la cuadrícula de voces del asistente en su página de ajustes cuando una voz de Say, Pi se ha impuesto para la reproducción, por lo que la voz nativa destacada del asistente no es la que oye el usuario; $voice$ es el nombre de la voz de Say, Pi, por ejemplo, Shimmer.",
+    "message": "Say, Pi habla con $voice$; las voces de abajo no se usan.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Voz en pausa -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Se muestra en la barra de control Voces cuando no se ha seleccionado ninguna voz de Say, Pi y el asistente responde con una de sus voces integradas; $host$ es el asistente, por ejemplo, Pi.",
+    "message": "Tu voz: la propia de $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Se muestra en la barra de control Voces cuando no se ha seleccionado ninguna voz en un asistente que no tiene voces integradas, por lo que no se reproduce nada.",
+    "message": "Sin voz; las respuestas no se leen en voz alta"
   },
   "voicesHeardCount": {
     "description": "Lectura de progreso en la barra de control de Voces en ajustes: cuántas de las voces listadas el usuario ya ha escuchado. Números sin más, para que se lea bien con 1 — Chrome i18n no tiene formas plurales.",

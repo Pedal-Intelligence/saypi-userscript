@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Menyuarakan"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Ditampilkan di atas daftar suara bawaan asisten pada halaman pengaturan saat suara Say, Pi mengambil alih pemutaran, sehingga suara bawaan asisten yang disorot bukan suara yang didengar pengguna; $voice$ adalah nama suara Say, Pi, misalnya Shimmer.",
+    "message": "Say, Pi berbicara dengan suara $voice$ — suara di bawah tidak digunakan.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Suara berhenti -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Ditampilkan di bilah kontrol Suara saat tidak ada suara Say, Pi yang dipilih dan asisten menjawab dengan salah satu suara bawaannya; $host$ adalah nama asisten, misalnya Pi.",
+    "message": "Suara Anda: bawaan $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Ditampilkan di bilah kontrol Suara saat tidak ada suara yang dipilih pada asisten yang tidak memiliki suara bawaan, sehingga tidak ada yang dibacakan.",
+    "message": "Tanpa suara — balasan tidak dibacakan"
   },
   "voicesHeardCount": {
     "description": "Tampilan progres di bilah kontrol Suara pada setelan: berapa banyak dari suara yang terdaftar sudah didengarkan pengguna. Angka tanpa kata, sehingga terbaca benar saat 1 — Chrome i18n tidak memiliki bentuk jamak.",
