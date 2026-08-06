@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 // ConfigModule reads injected env at import time; stub it (mirrors the sibling specs).
 vi.mock("../../src/ConfigModule", () => ({
@@ -239,5 +241,25 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     notice(grid)!.remove(); // React drops the foreign child
     settings.ensureSettingsDoor(); // the same mutation path that heals the door
     expect(grid.querySelectorAll(".saypi-voice-override-notice").length).toBe(1);
+  });
+});
+
+describe("PiVoiceSettings — painting the notice on first load", () => {
+  it("reads the voice in use when the surface is built, not only on a change", () => {
+    // The base renders on an auth or preference CHANGE. Neither happens on an
+    // ordinary page load, so a surface that waits for one shows its door and
+    // nothing else — which is exactly what the live host showed with a voice
+    // selected. Verified against the real construction path.
+    const source = readFileSync(
+      resolve(__dirname, "..", "..", "src/chatbots/PiVoiceSettings.ts"),
+      "utf8"
+    );
+    const constructorBody = source.match(/constructor\([\s\S]*?\n {2}\}/)?.[0];
+    expect(constructorBody).toMatch(/refreshOverrideNotice\(\)/);
+    const refresh = source.match(
+      /refreshOverrideNotice\(\): Promise<void> \{[\s\S]*?\n {2}\}/
+    )?.[0];
+    expect(refresh).toMatch(/getVoice\(this\.chatbot\)/);
+    expect(refresh).toMatch(/applySelectedVoice\(/);
   });
 });

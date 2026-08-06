@@ -61,6 +61,12 @@ export class PiVoiceSettings extends VoiceSelector {
     this.addIdVoiceMenu(element);
     this.ensureSettingsDoor();
     this.observeSettingsGrid();
+    // The door needs no data, so it paints immediately — but the override
+    // notice does, and nothing else fetches it on this surface. The base only
+    // renders on an auth or preference CHANGE, so without this the notice was
+    // absent on every first load: measured on the live host with a voice
+    // selected, door present, notice missing.
+    void this.refreshOverrideNotice();
   }
 
   /**
@@ -95,6 +101,21 @@ export class PiVoiceSettings extends VoiceSelector {
   ): void {
     this.overridingVoice = voice;
     this.ensureSettingsDoor();
+  }
+
+  /**
+   * Read the stored voice and paint the notice from it. Only the preference is
+   * needed — not the catalog — so this asks for that alone rather than going
+   * through the base's full gather-then-render. Never rejects: a surface that
+   * can't say what's speaking should still show its door.
+   */
+  private async refreshOverrideNotice(): Promise<void> {
+    try {
+      const voice = await this.userPreferences.getVoice(this.chatbot);
+      this.applySelectedVoice(voice ?? null);
+    } catch (error) {
+      console.debug("[SayPi] Could not read the voice in use for Pi", error);
+    }
   }
 
   /**

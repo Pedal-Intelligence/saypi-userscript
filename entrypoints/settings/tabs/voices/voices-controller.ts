@@ -2090,14 +2090,15 @@ export class VoicesController {
    *
    * The two cases are genuinely different outcomes, not two phrasings of one:
    * a host that ships its own voices answers in one of them, and a host that
-   * doesn't stays silent. `hasBuiltins` — voices the API marks `default`, which
-   * the rail lists nowhere — is the studio's existing signal for which host
-   * this is, so no new configuration decides it.
+   * doesn't stays silent. Which host this is comes from `host.hasOwnVoice`, NOT
+   * from `hasBuiltins`: the API doesn't mark Pi's built-ins `default` in
+   * practice, so the catalog-derived signal is false even on Pi — measured on
+   * the live host, where it produced exactly the wrong sentence.
    */
   private renderFallbackVoice(vm: StudioViewModel): HTMLElement {
     const line = document.createElement("span");
     line.classList.add("voice-fallback");
-    if (vm.hasBuiltins) {
+    if (vm.host.hasOwnVoice) {
       line.classList.add("voice-fallback-host");
       // No data-i18n: substituted ($host$) text, which replaceI18n would strip.
       line.textContent = getMessage("voicesFallbackHostVoice", [vm.host.label]);

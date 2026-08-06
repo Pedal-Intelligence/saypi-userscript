@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { VOICE_HOSTS } from "../../../entrypoints/settings/tabs/voices/voices-view-model";
+import { audioProviders } from "../../../src/tts/SpeechModel";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -399,4 +401,27 @@ describe("the two things the ink cannot say out loud", () => {
     expect(controllerSrc).toMatch(/voice-hd-note/);
     expect(controllerSrc).toMatch(/aria-describedby/);
   });
+});
+
+/**
+ * `hasOwnVoice` decides which sentence the control bar shows when nothing of
+ * ours is in use, and getting it backwards is silent — the bar still renders,
+ * it just lies. The audio layer already answers the same question when it picks
+ * a default provider for a host, so pin the two together rather than trusting
+ * a hand-maintained flag.
+ *
+ * This is the check that would have caught reading it from `hasBuiltins`: the
+ * API doesn't mark Pi's built-ins `default`, so that signal is false on Pi and
+ * the studio told live users their replies weren't read aloud at all.
+ */
+describe("the studio agrees with the audio layer about who speaks", () => {
+  it.each(VOICE_HOSTS.map((host) => [host.id, host.hasOwnVoice] as const))(
+    "%s: hasOwnVoice=%s matches its default audio provider",
+    (id, hasOwnVoice) => {
+      const speaksWithoutUs =
+        audioProviders.getDefaultForChatbot(id) !== audioProviders.SayPi &&
+        audioProviders.getDefaultForChatbot(id) !== audioProviders.None;
+      expect(hasOwnVoice).toBe(speaksWithoutUs);
+    }
+  );
 });
