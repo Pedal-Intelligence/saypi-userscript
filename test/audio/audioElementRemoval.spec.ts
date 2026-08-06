@@ -186,13 +186,45 @@ describe("AudioModule removal-observer wiring", () => {
     );
   });
 
-  it("releases the audio element and arms the swap listener on removal", () => {
+  it("releases the audio element and recovers the binding on removal", () => {
     const handler = source.match(
       /createAudioRemovalObserverCallback\([\s\S]*?\n {6}\);/
     )?.[0];
     expect(handler).toBeDefined();
     expect(handler).toMatch(/this\.cleanupAudioElement\(this\.audioElement\)/);
     expect(handler).toMatch(/this\.audioElement = null/);
-    expect(handler).toMatch(/this\.listenForAudioElementSwap\(\)/);
+    // Recovery goes through rebindAudioElement, which takes up a replacement
+    // that is ALREADY in the document and only falls back to waiting for an
+    // insertion when there is none. Going straight to the swap listener was
+    // #602: on a host that replaces its player, nothing is ever added
+    // afterwards, so the binding was lost for the life of the page.
+    expect(handler).toMatch(/this\.rebindAudioElement\(\)/);
+  });
+
+  it("rebinds to an existing element before falling back to waiting", () => {
+    const rebind = source.match(/rebindAudioElement\(\)\s*\{[\s\S]*?\n {2}\}/)?.[0];
+    expect(rebind).toBeDefined();
+    expect(rebind).toMatch(/findHostAudioElement\(/);
+    expect(rebind).toMatch(/this\.swapAudioElement\(/);
+    expect(rebind).toMatch(/this\.listenForAudioElementSwap\(\)/);
+    // The fallback must come after the take-it-now path, not instead of it.
+    expect(rebind!.indexOf("swapAudioElement")).toBeLessThan(
+      rebind!.indexOf("listenForAudioElementSwap")
+    );
+  });
+
+  it("holds the host's audio muted from the provider, not from playback events", () => {
+    // The mute is an invariant: re-asserted whenever the element changes and
+    // whenever the provider does, so a track the host started before we bound
+    // to it can't stay audible for its whole length (#602).
+    expect(source).toMatch(/applyHostAudioMute\(\)\s*\{/);
+    expect(source).toMatch(/shouldMuteHostAudio\(\{/);
+    const onProviderChange = source.match(
+      /EventBus\.on\("audio:changeProvider"[\s\S]*?\n {4}\}\);/
+    )?.[0];
+    expect(onProviderChange).toMatch(/providerIsSayPi = /);
+    expect(onProviderChange).toMatch(/this\.applyHostAudioMute\(\)/);
+    const swap = source.match(/swapAudioElement\(newAudioElement\)\s*\{[\s\S]*?\n {2}\}/)?.[0];
+    expect(swap).toMatch(/this\.applyHostAudioMute\(\)/);
   });
 });
