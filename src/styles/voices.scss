@@ -29,6 +29,21 @@ button.saypi-more-voices {
   opacity: 0.7;
   font-size: 0.9em;
 }
+// What's actually speaking, stated above the host's own voice cards (#600).
+// Spans every column so it reads as a line, not a card — the grid is the
+// host's, and its column count is whatever the host's breakpoint says.
+.saypi-voice-override-notice {
+  grid-column: 1 / -1;
+  margin: 0 0 0.25rem;
+  font-size: 0.9em;
+  opacity: 0.75;
+}
+// The glance-level half of the same statement: the host's highlighted card
+// stops claiming to be the voice you hear. Dimmed, never disabled — it is
+// still a real preference, and still what would speak with SayPi's voice off.
+.saypi-voices-overridden > button:not(.saypi-more-voices) {
+  opacity: 0.5;
+}
 // ▶ free-sample preview affordance in the in-page voice menus (design §4).
 // A target of its own, separate from selecting the row. Fully SayPi-styled so
 // it renders identically on every host (never relying on the host's Tailwind),

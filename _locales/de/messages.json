@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Stimme ab"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Wird auf der Einstellungsseite über dem Stimmenraster des Assistenten angezeigt, wenn eine Say, Pi-Stimme die Wiedergabe übernommen hat und die hervorgehobene integrierte Stimme des Assistenten daher nicht zu hören ist; $voice$ ist der Name der Say, Pi-Stimme, z. B. Shimmer.",
+    "message": "Say, Pi spricht mit $voice$ – die folgenden Stimmen werden nicht verwendet.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Stimme pausierte -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Wird in der Stimmenleiste angezeigt, wenn keine Say, Pi-Stimme ausgewählt ist und der Assistent stattdessen mit einer seiner integrierten Stimmen antwortet; $host$ ist der Assistent, z. B. Pi.",
+    "message": "Deine Stimme: die von $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Wird in der Stimmenleiste angezeigt, wenn bei einem Assistenten ohne eigene integrierte Stimmen keine Stimme ausgewählt ist und daher nichts vorgelesen wird.",
+    "message": "Keine Stimme – Antworten werden nicht vorgelesen"
   },
   "voicesHeardCount": {
     "description": "Fortschrittsanzeige in der Steuerleiste „Stimmen“ in den Einstellungen: wie viele der gelisteten Stimmen der Nutzer bereits angehört hat. Nur Zahlen, sodass es bei 1 ebenso korrekt klingt – Chrome i18n hat keine Pluralformen.",

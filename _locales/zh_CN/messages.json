@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "发出声音"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "当 Say, Pi 的语音接管播放时，显示在助手设置页自身语音网格上方；助手突出显示的原生语音并不是用户听到的语音；$voice$ 是 Say, Pi 的语音名称，例如 Shimmer。",
+    "message": "Say, Pi 正在使用 $voice$ 朗读 — 以下语音未在使用。",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "声音暂停 - "
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "当未选择 SayPi 语音且助手使用其自带语音回答时，显示在语音控制栏中；$host$ 是助手名称，例如 Pi。",
+    "message": "你的语音：$host$ 自带语音",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "当未在没有自带语音的助手上选择语音时，显示在语音控制栏中，此时不会朗读任何内容。",
+    "message": "无语音 — 不会朗读回复"
   },
   "voicesHeardCount": {
     "description": "设置的“语音”控制栏中的进度读数：用户已试听过列表中多少个语音。为纯数字形式，因此在为 1 时也能读起来自然——Chrome i18n 没有复数形式。",

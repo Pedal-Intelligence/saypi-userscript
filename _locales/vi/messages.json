@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Giọng nói tắt"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Hiển thị phía trên lưới giọng nói riêng của trợ lý trong trang cài đặt khi giọng Say, Pi thay thế giọng phát, vì vậy giọng gốc được trợ lý đánh dấu không phải là giọng người dùng nghe thấy; $voice$ là tên giọng Say, Pi, ví dụ Shimmer.",
+    "message": "Say, Pi đang nói bằng giọng $voice$ — các giọng bên dưới không được dùng.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Giọng nói dừng lại -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Hiển thị trong thanh điều khiển Giọng nói khi chưa chọn giọng Say, Pi và trợ lý trả lời bằng một trong các giọng tích hợp riêng; $host$ là tên trợ lý, ví dụ Pi.",
+    "message": "Giọng của bạn: giọng riêng của $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Hiển thị trong thanh điều khiển Giọng nói khi chưa chọn giọng trên trợ lý không có giọng tích hợp riêng, nên không có nội dung nào được đọc.",
+    "message": "Không có giọng — câu trả lời không được đọc thành tiếng"
   },
   "voicesHeardCount": {
     "description": "Chỉ báo tiến độ trong thanh điều khiển Giọng nói của phần cài đặt: số giọng trong danh sách mà người dùng đã nghe. Chỉ là số nên đọc đúng khi là 1 vì Chrome i18n không có dạng số nhiều.",

@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Rösta sig"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Visas ovanför assistentens egna röstfält på inställningssidan när en Say, Pi-röst har tagit över uppspelningen, så att assistentens markerade inbyggda röst inte är den användaren hör; $voice$ är namnet på Say, Pi-rösten, till exempel Shimmer.",
+    "message": "Say, Pi talar med $voice$ – rösterna nedan används inte.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Röst pausade -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Visas i röstfältet när ingen Say, Pi-röst är vald och assistenten svarar med en av sina egna inbyggda röster; $host$ är assistenten, till exempel Pi.",
+    "message": "Din röst: $host$:s egen",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Visas i röstfältet när ingen röst är vald för en assistent som saknar egna inbyggda röster, så inget läses upp.",
+    "message": "Ingen röst – svar läses inte upp"
   },
   "voicesHeardCount": {
     "description": "Förloppsvisning i inställningarnas kontrollrad för Röster: hur många av de listade rösterna användaren redan har lyssnat på. Bara siffror, så att det läses korrekt även vid 1 — Chrome i18n har inga pluralformer.",

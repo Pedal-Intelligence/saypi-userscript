@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "ভয়েস অফ"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Say, Pi-এর কোনো ভয়েস প্লেব্যাকের দায়িত্ব নিলে সহকারীর সেটিংস পৃষ্ঠায় নিজস্ব ভয়েসগুলোর গ্রিডের ওপরে দেখানো হয়, তাই সহকারীর হাইলাইট করা নিজস্ব ভয়েসটি ব্যবহারকারী শুনছেন না; $voice$ হলো Say, Pi-এর ভয়েসের নাম, যেমন Shimmer।",
+    "message": "Say, Pi $voice$ হিসেবে কথা বলছে — নিচের ভয়েসগুলো ব্যবহার হচ্ছে না।",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "ভয়েস বিরতি -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "কোনো SayPi ভয়েস নির্বাচিত না থাকলে এবং সহকারী তার নিজস্ব অন্তর্নির্মিত ভয়েসগুলোর একটিতে উত্তর দিলে Voices নিয়ন্ত্রণ বারে দেখানো হয়; $host$ হলো সহকারীর নাম, যেমন Pi।",
+    "message": "আপনার ভয়েস: $host$-এর নিজস্ব",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "নিজস্ব কোনো অন্তর্নির্মিত ভয়েস নেই এমন সহকারীর জন্য কোনো ভয়েস নির্বাচিত না থাকলে Voices নিয়ন্ত্রণ বারে দেখানো হয়, তাই কিছুই বলা হয় না।",
+    "message": "কোনো ভয়েস নেই — উত্তর পড়ে শোনানো হয় না"
   },
   "voicesHeardCount": {
     "description": "সেটিংসের Voices কন্ট্রোল বারে অগ্রগতির রিডআউট: তালিকাভুক্ত ভয়েসগুলোর মধ্যে ব্যবহারকারী কতগুলো ইতিমধ্যে শুনেছেন। খালি সংখ্যা, তাই ১ হলেও ঠিকভাবে পড়ে — Chrome i18n-এ plural ফর্ম নেই।",

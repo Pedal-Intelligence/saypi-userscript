@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Głos"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Wyświetlane nad własną siatką głosów asystenta na stronie ustawień, gdy głos Say, Pi przejął odtwarzanie, więc wyróżniony natywny głos asystenta nie jest tym, który słyszy użytkownik; $voice$ to nazwa głosu Say, Pi, np. Shimmer.",
+    "message": "Say, Pi mówi głosem $voice$ — poniższe głosy nie są używane.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Głos wstrzymany -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Wyświetlane na pasku wyboru głosu, gdy nie wybrano głosu Say, Pi i asystent odpowiada jednym z własnych wbudowanych głosów; $host$ to nazwa asystenta, np. Pi.",
+    "message": "Twój głos: własny głos $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Wyświetlane na pasku wyboru głosu, gdy nie wybrano głosu w asystencie, który nie ma własnych wbudowanych głosów, więc nic nie jest odczytywane.",
+    "message": "Brak głosu — odpowiedzi nie są odczytywane na głos"
   },
   "voicesHeardCount": {
     "description": "Wskaźnik postępu na pasku sterowania Głosy w ustawieniach: ile z wymienionych głosów użytkownik już odsłuchał. Same liczby, więc brzmi poprawnie przy 1 — Chrome i18n nie ma form liczby mnogiej.",

@@ -74,6 +74,21 @@ describe("the rail says what it is", () => {
     expect(en.voicesKeyboardHint.message).toMatch(/^Press /);
   });
 
+  it("says what speaks when no voice of ours does", () => {
+    // The bar's one statement about the present. Two different outcomes, so
+    // two sentences: a host with its own voices answers in one of them; a host
+    // without stays quiet. One line covering both would have to be vague about
+    // whichever it wasn't written for.
+    expect(en.voicesFallbackHostVoice?.message).toBe("Your voice: $host$'s own");
+    expect(en.voicesFallbackNoVoice?.message).toBe(
+      "No voice — replies aren't read aloud"
+    );
+    // The silent case names no host, so it stays a plain data-i18n key.
+    expect(en.voicesFallbackNoVoice.message).not.toMatch(/\$.+\$/);
+    expect(controllerSrc).toMatch(/voicesFallbackHostVoice/);
+    expect(controllerSrc).toMatch(/voicesFallbackNoVoice/);
+  });
+
   it("labels the arming toggle in the second person, not as a mode", () => {
     // `Arrow keys play` names the mechanism; `Play as you move` names what
     // happens to YOU, and it reads straight into the hint line beneath it.
@@ -85,6 +100,7 @@ describe("the rail says what it is", () => {
 describe("every substituted string declares its placeholders", () => {
   const substituted = [
     ["voicesYourVoice", 1],
+    ["voicesFallbackHostVoice", 1],
     ["voicesSwitchBackTo", 1],
     ["voicesNoSampleGroup", 1],
     ["voicesNowPlaying", 1],

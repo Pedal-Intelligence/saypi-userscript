@@ -18,6 +18,15 @@ vi.mock("../../src/JwtManager", () => ({
   }),
 }));
 
+// The shared chrome.i18n mock returns the KEY and drops substitutions, which
+// would hide the one thing the notice has to get right: the voice's name
+// reaching the sentence. Render key + substitutions instead; the English
+// wording itself is pinned by the locale-backed copy contract specs.
+vi.mock("../../src/i18n", () => ({
+  default: (key: string, subs: string[] = []) =>
+    subs.length ? `${key}:${subs.join("|")}` : key,
+}));
+
 const openSettingsMock = vi.fn();
 vi.mock("../../src/popup/popupopener", () => ({
   openSettings: (...args: unknown[]) => openSettingsMock(...args),
@@ -173,5 +182,62 @@ describe("PiVoiceSettings — 'More voices' door on Pi's Voice settings page (#4
     const d = door(grid);
     expect(d).not.toBeNull(); // now injected...
     expect(d!.classList.contains("rounded-[10px]")).toBe(true); // ...and native-styled (cloned)
+  });
+});
+
+/**
+ * Pi's grid is the surface Pi now sends people to for voice choice, so it is
+ * where a user checks what they sound like. When a SayPi voice has overridden
+ * that choice, saying nothing here leaves the highlighted native card claiming
+ * a job it isn't doing (#600).
+ */
+describe("PiVoiceSettings — what's actually speaking", () => {
+  const notice = (grid: HTMLElement) =>
+    grid.querySelector<HTMLElement>(".saypi-voice-override-notice");
+
+  const voice = (name: string) =>
+    ({ id: name.toLowerCase(), name, powered_by: "OpenAI" }) as any;
+
+  it("says which SayPi voice is speaking, and that Pi's cards aren't in use", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], voice("Shimmer"));
+    expect(notice(grid)).not.toBeNull();
+    expect(notice(grid)!.textContent).toContain("Shimmer");
+    // The glance-level half: the native cards stop reading as active.
+    expect(grid.classList.contains("saypi-voices-overridden")).toBe(true);
+  });
+
+  it("stays out of the way when Pi's own voice is the one speaking", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], null);
+    expect(notice(grid)).toBeNull();
+    expect(grid.classList.contains("saypi-voices-overridden")).toBe(false);
+    // The door is SayPi's only mark on an un-overridden grid.
+    expect(door(grid)).not.toBeNull();
+  });
+
+  it("follows a voice chosen elsewhere, without a repopulate", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], null);
+    settings.applySelectedVoice(voice("Marin"));
+    expect(notice(grid)!.textContent).toContain("Marin");
+    settings.applySelectedVoice(null);
+    expect(notice(grid)).toBeNull();
+    expect(grid.classList.contains("saypi-voices-overridden")).toBe(false);
+  });
+
+  it("is idempotent, and re-appears if Pi's re-render drops it", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], voice("Shimmer"));
+    settings.renderMenu([], voice("Shimmer"));
+    expect(grid.querySelectorAll(".saypi-voice-override-notice").length).toBe(1);
+
+    notice(grid)!.remove(); // React drops the foreign child
+    settings.ensureSettingsDoor(); // the same mutation path that heals the door
+    expect(grid.querySelectorAll(".saypi-voice-override-notice").length).toBe(1);
   });
 });

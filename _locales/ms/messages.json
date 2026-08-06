@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Suara"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Dipaparkan di atas grid suara pembantu sendiri pada halaman tetapannya apabila suara Say, Pi mengambil alih main balik, jadi suara asli pembantu yang disorot bukan suara yang didengar pengguna; $voice$ ialah nama suara Say, Pi, contohnya Shimmer.",
+    "message": "Say, Pi sedang bercakap menggunakan $voice$ — suara di bawah tidak digunakan.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Suara dijeda -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Dipaparkan dalam bar kawalan Suara apabila tiada suara Say, Pi dipilih dan pembantu menjawab menggunakan salah satu suara terbina dalamnya sendiri; $host$ ialah nama pembantu, contohnya Pi.",
+    "message": "Suara anda: suara asal $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Dipaparkan dalam bar kawalan Suara apabila tiada suara dipilih pada pembantu yang tidak mempunyai suara terbina dalam sendiri, jadi tiada apa-apa yang dibacakan.",
+    "message": "Tiada suara — balasan tidak dibacakan"
   },
   "voicesHeardCount": {
     "description": "Paparan kemajuan dalam bar kawalan Suara di tetapan: berapa banyak suara yang disenaraikan sudah didengar oleh pengguna. Nombor semata-mata, jadi ia dibaca betul pada 1 — Chrome i18n tiada bentuk jamak.",
