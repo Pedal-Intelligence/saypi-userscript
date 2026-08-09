@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Voice off"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Zobrazuje se nad vlastní mřížkou hlasů asistenta na stránce nastavení, když Say, Pi převezme přehrávání, takže zvýrazněný nativní hlas asistenta není hlas, který uživatel slyší; $voice$ je název hlasu Say, Pi, například Shimmer.",
+    "message": "Say, Pi mluví hlasem $voice$ — hlasy níže se nepoužívají.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Hlas se zastavil -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Zobrazuje se na liště Ovládání hlasu, když není vybrán hlas Say, Pi a asistent odpovídá jedním ze svých vlastních vestavěných hlasů; $host$ je asistent, například Pi.",
+    "message": "Váš hlas: vlastní hlas $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Zobrazuje se na liště Ovládání hlasu, když u asistenta bez vlastních vestavěných hlasů není vybrán žádný hlas, takže se nic nepřehrává.",
+    "message": "Bez hlasu — odpovědi se nepředčítají"
   },
   "voicesHeardCount": {
     "description": "Ukazatel průběhu v ovládací liště Hlasů v nastavení: kolik z uvedených hlasů si už uživatel poslechl. Holá čísla, takže to zní správně i při 1 — Chrome i18n nemá plurálové tvary.",

@@ -976,6 +976,16 @@
     "message": "More voices…",
     "description": "Menu row linking from the in-page voice menu to the full voice catalog in the extension settings"
   },
+  "voiceOverriddenBySayPi": {
+    "message": "Say, Pi is speaking as $voice$ — the voices below aren't in use.",
+    "description": "Shown above the assistant's own voice grid on its settings page when a Say, Pi voice has taken over playback, so the assistant's highlighted native voice is not what the user hears; $voice$ is the Say, Pi voice name, e.g. Shimmer.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicesSectionTitle": {
     "message": "Voices",
     "description": "Heading for the voice catalog section in the settings AI Chat tab"
@@ -1213,6 +1223,20 @@
         "example": "Marin"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "message": "Your voice: $host$'s own",
+    "description": "Shown in the Voices control bar when no SayPi voice is selected and the assistant answers in one of its own built-in voices instead; $host$ is the assistant, e.g. Pi.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "message": "No voice — replies aren't read aloud",
+    "description": "Shown in the Voices control bar when no voice is selected on an assistant that has no built-in voices of its own, so nothing is spoken."
   },
   "voicesNoSampleGroup": {
     "message": "No sample yet ($count$)",

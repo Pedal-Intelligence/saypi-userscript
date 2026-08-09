@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Lehangol"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Az asszisztens beállítási oldalán, a saját hangjait tartalmazó rács felett jelenik meg, amikor egy Say, Pi-hang veszi át a lejátszást, ezért a felhasználó nem az asszisztens kiemelt natív hangját hallja; a $voice$ a Say, Pi hangjának neve, például Shimmer.",
+    "message": "A Say, Pi a(z) $voice$ hangján beszél — az alábbi hangok nincsenek használatban.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "A hang megállt -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "A Hangok vezérlősávjában jelenik meg, amikor nincs Say, Pi-hang kiválasztva, és az asszisztens a saját beépített hangjainak egyikén válaszol; a $host$ az asszisztens, például Pi.",
+    "message": "Saját hang: $host$ hangja",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "A Hangok vezérlősávjában jelenik meg, amikor egy saját beépített hangokkal nem rendelkező asszisztensnél nincs hang kiválasztva, ezért semmi nem hangzik el.",
+    "message": "Nincs hang — a válaszok nem hangzanak el"
   },
   "voicesHeardCount": {
     "description": "Állapotjelző a Beállítások Hangok vezérlősávjában: hány hangot hallgatott már meg a felhasználó a listából. Csak számok, így 1-nél is helyesen olvasható — a Chrome i18n nem támogat többes számot.",

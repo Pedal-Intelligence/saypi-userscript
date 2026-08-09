@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "목소리"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Say, Pi 음성이 재생을 대신할 때 어시스턴트 설정 페이지의 자체 음성 목록 위에 표시됩니다. 따라서 어시스턴트에서 강조된 기본 음성은 실제로 들리지 않습니다. $voice$는 Say, Pi 음성 이름입니다(예: Shimmer).",
+    "message": "Say, Pi가 $voice$ 음성으로 말하고 있습니다 — 아래 음성은 사용되지 않습니다.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "음성 일시 정지 -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Say, Pi 음성을 선택하지 않아 어시스턴트가 자체 내장 음성으로 답변할 때 Voices 컨트롤 바에 표시됩니다. $host$는 어시스턴트 이름입니다(예: Pi).",
+    "message": "내 음성: $host$ 기본 음성",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "자체 내장 음성이 없는 어시스턴트에서 음성을 선택하지 않았을 때 Voices 컨트롤 바에 표시되며, 아무것도 음성으로 재생되지 않습니다.",
+    "message": "음성 없음 — 답변을 소리 내어 읽지 않음"
   },
   "voicesHeardCount": {
     "description": "설정의 음성 제어 막대에 표시되는 진행 상황으로, 사용자가 목록의 음성 중 얼마나 많이 이미 들어봤는지 보여줍니다. 숫자만 사용하므로 1일 때도 올바르게 읽힙니다. Chrome i18n에는 복수형이 없습니다.",

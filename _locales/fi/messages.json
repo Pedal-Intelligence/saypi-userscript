@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Äänestää"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Näytetään avustajan asetussivun oman äänivalikoiman yläpuolella, kun Say, Pi -ääni on ottanut toiston käyttöön, joten avustajan korostettu oma ääni ei ole käyttäjän kuulema; $voice$ on Say, Pi -äänen nimi, esimerkiksi Shimmer.",
+    "message": "Say, Pi puhuu äänellä $voice$ — alla olevat äänet eivät ole käytössä.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Ääni pysähtyi -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Näytetään Äänet-ohjauspalkissa, kun Say, Pi -ääntä ei ole valittu ja avustaja vastaa sen omalla sisäänrakennetulla äänellä; $host$ on avustaja, esimerkiksi Pi.",
+    "message": "Ääni: $host$:n oma",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Näytetään Äänet-ohjauspalkissa, kun ääntä ei ole valittu avustajalla, jolla ei ole omia sisäänrakennettuja ääniä, joten mitään ei puhuta ääneen.",
+    "message": "Ei ääntä — vastauksia ei lueta ääneen"
   },
   "voicesHeardCount": {
     "description": "Edistymisnäyttö asetusten Äänet-ohjauspalkissa: kuinka monta luetelluista äänistä käyttäjä on jo kuunnellut. Pelkät numerot, jotta se toimii oikein myös arvolla 1 — Chrome i18n:ssa ei ole monikkoja.",

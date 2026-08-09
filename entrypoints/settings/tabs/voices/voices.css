@@ -242,6 +242,14 @@
 .voice-compare-swap:hover {
   color: #241d14;
 }
+/* The same slot as `Your voice ↗`, saying what speaks when no row does (#599).
+   A statement, not a control — nothing to press, so nothing that looks
+   pressable: no pointer, and the bar's quieter ink, since the page's business
+   is still the rail below it. */
+.voice-fallback {
+  padding: 2px 0;
+  opacity: 0.72;
+}
 /* The chip is the arming rule made visible AND its permanent escape hatch: it
    lights when arrows are auditioning, and pressing it turns focus-plays off
    for good. One green, one meaning — now. */

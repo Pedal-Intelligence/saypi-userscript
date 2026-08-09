@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Boses"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Ipinapakita sa itaas ng sariling grid ng boses ng assistant sa pahina ng mga setting kapag isang boses ng Say, Pi ang pumalit sa pag-playback, kaya hindi ang naka-highlight na katutubong boses ng assistant ang naririnig ng user; ang $voice$ ay pangalan ng boses ng Say, Pi, gaya ng Shimmer.",
+    "message": "Si Say, Pi ang nagsasalita gamit ang $voice$ — hindi ginagamit ang mga boses sa ibaba.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Tumigil ang boses -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Ipinapakita sa control bar ng Mga Boses kapag walang napiling boses ng SayPi at sumasagot ang assistant gamit ang isa sa sarili nitong built-in na boses; ang $host$ ay ang assistant, gaya ng Pi.",
+    "message": "Boses mo: sariling boses ni $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Ipinapakita sa control bar ng Mga Boses kapag walang napiling boses sa isang assistant na walang sariling built-in na boses, kaya walang binibigkas.",
+    "message": "Walang boses — hindi binabasa nang malakas ang mga sagot"
   },
   "voicesHeardCount": {
     "description": "Progress readout sa control bar ng Voices sa settings: kung ilang boses sa listahan ang napakinggan na ng user. Hubad na numero, kaya bumabasa nang tama sa 1 — walang plural forms ang Chrome i18n.",

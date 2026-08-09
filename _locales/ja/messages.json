@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "声をかけます"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Say, Pi の音声が再生を引き継いだときに、アシスタントの設定ページにある固有音声一覧の上に表示されます。ユーザーが聞くのは、アシスタントでハイライトされた標準音声ではありません。$voice$ は Say, Pi の音声名です（例: Shimmer）。",
+    "message": "Say, Pi が $voice$ として話しています — 以下の音声は使用されていません。",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "声が一時停止 - "
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Say, Pi の音声が選択されておらず、アシスタントが内蔵音声のいずれかで応答するときに、音声コントロールバーに表示されます。$host$ はアシスタント名です（例: Pi）。",
+    "message": "音声: $host$ 固有の音声",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "独自の内蔵音声を持たないアシスタントで音声が選択されておらず、何も読み上げられないときに、音声コントロールバーに表示されます。",
+    "message": "音声なし — 返信は読み上げられません"
   },
   "voicesHeardCount": {
     "description": "設定の「音声」コントロールバーの進捗表示。一覧の音声のうち、ユーザーがすでに聴いた数を示す。数値のみなので、Chrome i18n に複数形がなくても1で正しく読める。",

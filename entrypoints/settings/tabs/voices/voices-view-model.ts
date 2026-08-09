@@ -50,13 +50,26 @@ export const VOICE_HOSTS: ReadonlyArray<{
    * that would do nothing.
    */
   menuCap?: number;
+  /**
+   * Does this assistant speak on its own, with no voice of ours selected?
+   *
+   * Decides what the control bar says when nothing here is in use: Pi answers
+   * in her own voice, Claude says nothing at all. Declared rather than derived
+   * from the catalog — the API does not mark a host's built-ins `default` in
+   * practice, so `hasBuiltins` is false even on Pi and reading it here got the
+   * sentence backwards on the live host. `voices-view-model.spec` pins this
+   * against `audioProviders.getDefaultForChatbot`, which is the audio layer's
+   * own answer to the same question.
+   */
+  hasOwnVoice: boolean;
 }> = [
-  { id: "pi", label: "Pi", logo: "/icons/logos/pi.png" },
+  { id: "pi", label: "Pi", logo: "/icons/logos/pi.png", hasOwnVoice: true },
   {
     id: "claude",
     label: "Claude",
     logo: "/icons/logos/claude.png",
     menuCap: CLAUDE_MENU_CAP,
+    hasOwnVoice: false,
   },
 ];
 

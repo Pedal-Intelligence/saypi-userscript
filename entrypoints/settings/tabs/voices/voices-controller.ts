@@ -930,6 +930,10 @@ export class VoicesController {
       jump.appendChild(arrow);
       jump.addEventListener("click", () => this.jumpToCurrent());
       top.appendChild(jump);
+    } else {
+      // Nothing of ours is speaking. Say what is (#599) — the page's one
+      // statement about the present, in the slot the eye already reads for it.
+      top.appendChild(this.renderFallbackVoice(vm));
     }
 
     const chip = document.createElement("button");
@@ -2078,6 +2082,32 @@ export class VoicesController {
       row?.el.scrollIntoView?.({ block: opts.block ?? "nearest" });
     }
     this.updateControlBar();
+  }
+
+  /**
+   * What speaks when no row is in use — the sentence that stands where
+   * `Your voice: … ↗` would be (#599).
+   *
+   * The two cases are genuinely different outcomes, not two phrasings of one:
+   * a host that ships its own voices answers in one of them, and a host that
+   * doesn't stays silent. Which host this is comes from `host.hasOwnVoice`, NOT
+   * from `hasBuiltins`: the API doesn't mark Pi's built-ins `default` in
+   * practice, so the catalog-derived signal is false even on Pi — measured on
+   * the live host, where it produced exactly the wrong sentence.
+   */
+  private renderFallbackVoice(vm: StudioViewModel): HTMLElement {
+    const line = document.createElement("span");
+    line.classList.add("voice-fallback");
+    if (vm.host.hasOwnVoice) {
+      line.classList.add("voice-fallback-host");
+      // No data-i18n: substituted ($host$) text, which replaceI18n would strip.
+      line.textContent = getMessage("voicesFallbackHostVoice", [vm.host.label]);
+    } else {
+      line.classList.add("voice-fallback-none");
+      line.setAttribute("data-i18n", "voicesFallbackNoVoice");
+      line.textContent = getMessage("voicesFallbackNoVoice");
+    }
+    return line;
   }
 
   private jumpToCurrent(): void {

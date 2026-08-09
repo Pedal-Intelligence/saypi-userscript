@@ -1627,6 +1627,16 @@
     "description": "Label for when text-to-speech is disabled",
     "message": "Seslendirmek"
   },
+  "voiceOverriddenBySayPi": {
+    "description": "Say, Pi sesi oynatmayı devraldığında asistanın ayarlar sayfasındaki kendi ses ızgarasının üzerinde gösterilir; bu nedenle asistanın vurgulanan yerleşik sesi kullanıcının duyduğu ses değildir. $voice$, Shimmer gibi Say, Pi sesinin adıdır.",
+    "message": "Say, Pi $voice$ olarak konuşuyor — aşağıdaki sesler kullanılmıyor.",
+    "placeholders": {
+      "voice": {
+        "content": "$1",
+        "example": "Shimmer"
+      }
+    }
+  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Ses durakladı -"
@@ -1786,6 +1796,20 @@
         "example": "Pi"
       }
     }
+  },
+  "voicesFallbackHostVoice": {
+    "description": "Hiçbir Say, Pi sesi seçilmediğinde ve asistan bunun yerine kendi yerleşik seslerinden biriyle yanıt verdiğinde Sesler kontrol çubuğunda gösterilir; $host$, Pi gibi asistanın adıdır.",
+    "message": "Sesiniz: $host$'un kendi sesi",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesFallbackNoVoice": {
+    "description": "Kendi yerleşik sesleri olmayan bir asistanda hiçbir ses seçilmediğinde, dolayısıyla hiçbir şey seslendirilmediğinde Sesler kontrol çubuğunda gösterilir.",
+    "message": "Ses yok — yanıtlar sesli okunmuyor"
   },
   "voicesHeardCount": {
     "description": "Ayarlar Sesler kontrol çubuğundaki ilerleme göstergesi: kullanıcı listelenen seslerin kaçını zaten dinledi. Sadece sayılar, bu yüzden 1 için de doğru okunur — Chrome i18n'de çoğul formlar yoktur.",

@@ -794,6 +794,45 @@ describe("VoicesController — the control bar", () => {
     const { container } = await mount(deps);
     expect(rowOf(container, "voice1")).toBeNull();
     expect(q(container, ".voice-your-voice")).toBeNull();
+    // …but it still says what speaks: a built-in is the host's own voice.
+    expect(q(container, ".voice-fallback-host")).not.toBeNull();
+  });
+
+  it("names the host's own voice as what speaks when none is chosen", async () => {
+    // The gap #599 is about: no SayPi voice selected, so Pi answers in her own
+    // voice — and until now the bar said nothing at all.
+    const deps = makeDeps({
+      pi: [mkVoice("voice1", { default: true, name: "Aria" }), mkVoice("marin")],
+      piCurrent: null,
+    });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-your-voice")).toBeNull();
+    const fallback = q(container, ".voice-fallback-host")!;
+    expect(fallback).not.toBeNull();
+    // Substituted ($host$) text must NOT carry data-i18n (replaceI18n clobber).
+    expect(fallback.dataset.i18n).toBeUndefined();
+  });
+
+  it("says replies aren't read aloud on a host with no voice of its own", async () => {
+    // Claude ships no built-ins, so "nothing selected" means silence, not a
+    // fallback voice — a different sentence, from the same missing state.
+    const deps = makeDeps({ claude: [mkVoice("marin")], claudeCurrent: null });
+    const { container } = await mount(deps, { initialHost: "claude" });
+    expect(q(container, ".voice-fallback-host")).toBeNull();
+    const fallback = q(container, ".voice-fallback-none")!;
+    expect(fallback).not.toBeNull();
+    // No substitution here, so this one is a plain data-i18n key.
+    expect(fallback.dataset.i18n).toBe("voicesFallbackNoVoice");
+  });
+
+  it("drops the fallback line once a voice is chosen", async () => {
+    const deps = makeDeps({
+      pi: [mkVoice("voice1", { default: true, name: "Aria" }), mkVoice("marin")],
+      piCurrent: mkVoice("marin"),
+    });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-fallback")).toBeNull();
+    expect(q(container, ".voice-your-voice")).not.toBeNull();
   });
 
   it("carries the keyboard hint, which is the page's only instruction", async () => {

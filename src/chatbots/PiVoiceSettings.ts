@@ -1,6 +1,7 @@
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
 import { VoiceSelector } from "../tts/VoiceMenu";
+import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { Chatbot } from "./Chatbot";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
@@ -60,20 +61,62 @@ export class PiVoiceSettings extends VoiceSelector {
     this.addIdVoiceMenu(element);
     this.ensureSettingsDoor();
     this.observeSettingsGrid();
+    // The door needs no data, so it paints immediately — but the override
+    // notice does, and nothing else fetches it on this surface. The base only
+    // renders on an auth or preference CHANGE, so without this the notice was
+    // absent on every first load: measured on the live host with a voice
+    // selected, door present, notice missing.
+    void this.refreshOverrideNotice();
   }
+
+  /**
+   * The SayPi voice currently overriding Pi's own, as last rendered.
+   *
+   * A render cache, not the state of record — the stored preference is still
+   * the only source of truth, fetched by the base's `refreshMenu`. It exists
+   * because Pi's React drops our foreign children and the re-injection runs
+   * from a MutationObserver callback, which is synchronous and has no chance to
+   * re-read storage: without this, a healed notice would come back blank.
+   */
+  private overridingVoice: SpeechSynthesisVoiceRemote | null = null;
 
   getId(): string {
     return "saypi-voice-settings";
   }
 
-  // Also reached on auth changes via the base refreshMenu → re-ensure the door,
-  // never draw inline voice rows (door-first).
-  protected override renderMenu(): void {
+  // Also reached on auth changes via the base refreshMenu → re-ensure SayPi's
+  // marks on the grid, never draw inline voice rows (door-first).
+  protected override renderMenu(
+    _voices: SpeechSynthesisVoiceRemote[],
+    storedVoice: SpeechSynthesisVoiceRemote | null
+  ): void {
+    this.overridingVoice = storedVoice;
     this.ensureSettingsDoor();
   }
 
-  // Door-only surface: no per-row selection to reflect.
-  protected override applySelectedVoice(): void {}
+  // No per-row selection to reflect on a door-only surface — but the grid's
+  // whole meaning changes when a SayPi voice takes over, so that much is.
+  protected override applySelectedVoice(
+    voice: SpeechSynthesisVoiceRemote | null
+  ): void {
+    this.overridingVoice = voice;
+    this.ensureSettingsDoor();
+  }
+
+  /**
+   * Read the stored voice and paint the notice from it. Only the preference is
+   * needed — not the catalog — so this asks for that alone rather than going
+   * through the base's full gather-then-render. Never rejects: a surface that
+   * can't say what's speaking should still show its door.
+   */
+  private async refreshOverrideNotice(): Promise<void> {
+    try {
+      const voice = await this.userPreferences.getVoice(this.chatbot);
+      this.applySelectedVoice(voice ?? null);
+    } catch (error) {
+      console.debug("[SayPi] Could not read the voice in use for Pi", error);
+    }
+  }
 
   /**
    * Inject the "More voices" door as the last card of Pi's settings grid,
@@ -82,6 +125,7 @@ export class PiVoiceSettings extends VoiceSelector {
    */
   private ensureSettingsDoor(): void {
     const grid = this.element;
+    this.ensureOverrideNotice();
     if (grid.querySelector(".saypi-more-voices")) return;
     // Clone a native card for styling. If Pi hasn't rendered its card buttons
     // yet (empty grid), wait: observeSettingsGrid re-fires when they arrive, so
@@ -89,6 +133,45 @@ export class PiVoiceSettings extends VoiceSelector {
     const template = grid.querySelector<HTMLElement>(":scope > button");
     if (!template) return;
     grid.appendChild(buildMoreVoicesDoor(template));
+  }
+
+  /**
+   * State, in a sentence, above Pi's cards: which SayPi voice has taken over,
+   * and that the cards below aren't the ones speaking (#600).
+   *
+   * Lives INSIDE the grid, as its first cell spanning every column, rather than
+   * as a sibling above it — a sibling is outside what `observeSettingsGrid`
+   * watches, so a React re-render would drop it for good, while a child heals
+   * on the same mutation that heals the door.
+   *
+   * Pi's own highlighted card is left highlighted: it is a real preference, and
+   * it IS what would speak if the SayPi voice were switched off. It just stops
+   * looking like the answer to "what do I sound like right now".
+   */
+  private ensureOverrideNotice(): void {
+    const grid = this.element;
+    const existing = grid.querySelector<HTMLElement>(
+      ".saypi-voice-override-notice"
+    );
+    if (!this.overridingVoice) {
+      existing?.remove();
+      grid.classList.remove("saypi-voices-overridden");
+      return;
+    }
+    grid.classList.add("saypi-voices-overridden");
+    const text = getMessage("voiceOverriddenBySayPi", [
+      this.overridingVoice.name,
+    ]);
+    if (existing) {
+      // No data-i18n anywhere on it: the text is substituted, and replaceI18n
+      // would erase the voice name on the next settings paint.
+      if (existing.textContent !== text) existing.textContent = text;
+      return;
+    }
+    const notice = document.createElement("p");
+    notice.className = "saypi-voice-override-notice";
+    notice.textContent = text;
+    grid.prepend(notice);
   }
 
   /**
