@@ -15,6 +15,8 @@ import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
 import { createAudioRemovalObserverCallback } from "./audioElementRemoval.ts";
+import { findHostAudioElement, shouldMuteHostAudio } from "./hostAudio.ts";
+import { audioProviders } from "../tts/SpeechModel.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
 
@@ -26,6 +28,8 @@ export default class AudioModule {
 
     this.AUDIO_ELEMENT_ID = "saypi-audio-main";
     this.audioElement = null;
+    /** Are WE the voice? Set from audio:changeProvider; decides the host's mute. */
+    this.providerIsSayPi = false;
     this.mutationObserver = null;
     this.swapObserver = null;
     
@@ -250,6 +254,7 @@ export default class AudioModule {
     }
     this.decorateAudioElement(this.audioElement);
     this.registerRemovalListener();
+    this.applyHostAudioMute();
   }
 
   swapAudioElement(newAudioElement) {
@@ -263,7 +268,7 @@ export default class AudioModule {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
     }
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
-    
+
     // handle slow responses from pi.ai - since 2024-07 (Pi.ai only)
     if (ChatbotIdentifier.isChatbotType("pi")) {
       this.initializeSlowResponseHandler();
@@ -274,6 +279,29 @@ export default class AudioModule {
     }
     this.registerRemovalListener();
     this.registerLifecycleDebug();
+    // A fresh element arrives unmuted, and the host may already be playing
+    // through it, so re-assert the invariant rather than waiting for a
+    // loadstart we might have just missed (#602).
+    this.applyHostAudioMute();
+  }
+
+  /**
+   * Hold the host's audio silent while SayPi is the voice — an invariant, not a
+   * reaction to a `loadstart` we have to be attached in time to see (#602).
+   * Re-applied whenever the element changes or the provider does.
+   */
+  applyHostAudioMute() {
+    if (!this.audioElement) return;
+    const mute = shouldMuteHostAudio({
+      providerIsSayPi: this.providerIsSayPi,
+      playbackIsOffscreen: this.useOffscreenAudio,
+    });
+    if (this.audioElement.muted !== mute) {
+      logger.debug(
+        `[AudioModule] ${mute ? "Muting" : "Unmuting"} the host's audio element`
+      );
+      this.audioElement.muted = mute;
+    }
   }
 
   registerRemovalListener() {
@@ -290,7 +318,7 @@ export default class AudioModule {
             logger.debug("Audio element removed from the document");
             this.cleanupAudioElement(this.audioElement);
             this.audioElement = null;
-            this.listenForAudioElementSwap();
+            this.rebindAudioElement();
           }
         )
       );
@@ -346,6 +374,27 @@ export default class AudioModule {
     this.lastSource = null;
 
     logger.debug("Cleaned up audio element");
+  }
+
+  /**
+   * Take up whatever audio element the host has NOW, and only wait for one if
+   * there genuinely isn't one.
+   *
+   * The old recovery went straight to `listenForAudioElementSwap()`, whose
+   * observer fires for newly ADDED subtrees. A host that replaces its player
+   * rather than reusing it (pi.ai) has already inserted the replacement by the
+   * time we notice ours is gone, so nothing was ever added afterwards to react
+   * to: the observer waited forever, no `loadstart` reached the output machine,
+   * and the host's own voice played on top of ours (#602).
+   */
+  rebindAudioElement() {
+    const replacement = findHostAudioElement(document, this.AUDIO_ELEMENT_ID);
+    if (replacement) {
+      logger.debug("[AudioModule] Rebinding to the host's audio element");
+      this.swapAudioElement(replacement);
+      return;
+    }
+    this.listenForAudioElementSwap();
   }
 
   listenForAudioElementSwap() {
@@ -510,6 +559,12 @@ export default class AudioModule {
       if (outputActor) {
         outputActor.send({ type: "changeProvider", ...detail });
       }
+      // Whether the host may be heard is decided by who is speaking, so it is
+      // settled here rather than at each playback event (#602). Matched by
+      // identity against the SayPi provider — `matches(source)` answers a
+      // different question (does this URL belong to it).
+      this.providerIsSayPi = detail?.provider === audioProviders.SayPi;
+      this.applyHostAudioMute();
     });
     EventBus.on("audio:changeVoice", (detail) => {
       if (outputActor) {
