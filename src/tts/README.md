@@ -2,6 +2,43 @@
 
 This module provides text-to-speech capabilities for the application.
 
+## Audio engines (providers)
+
+The extension **never calls a TTS vendor directly**. Every engine — ElevenLabs,
+OpenAI, 60dB, and the Pi value‑tier voices — is proxied by the SayPi backend
+(`api.saypi.ai`). The content script only speaks SayPi's own contract
+(`/voices`, `/speak/{uuid}/stream`, `/transcribe`), so all engines share one
+unified voice menu, one billing model, and one audio pipeline.
+
+Each voice the server returns carries a `powered_by` string. `SpeechModel.ts`
+(`audioProviders.retrieveProviderByEngine`) maps it to the domain that actually
+streams the audio:
+
+| `powered_by` | Streamed from | Audio provider |
+| --- | --- | --- |
+| `ElevenLabs` | api.saypi.ai | SayPi |
+| `OpenAI` | api.saypi.ai | SayPi |
+| `60dB` | api.saypi.ai | SayPi |
+| `inflection.ai` | pi.ai | Pi |
+| *(anything else)* | api.saypi.ai (assumed) | SayPi (logs a warning) |
+
+> **Adding an engine** is therefore a one‑line `case` here plus a logo asset at
+> `public/icons/logos/<powered_by lowercased>.svg` (the voice menu builds the
+> logo path from `powered_by`, see `TTSControlsModule.createTtsLogo`). The
+> `powered_by` literal is the single coupling between client and backend: the
+> routing `switch` matches it **case‑sensitively** and the logo filename is its
+> lowercase form.
+
+### 60dB
+
+60dB (`api.60db.ai`) is wired on the **client** (routing `case "60dB"`, logo
+`public/icons/logos/60db.svg`, regression test in
+`test/tts/AudioProviders.spec.ts`). It is fully active only once the
+**api.saypi.ai backend** proxies 60dB behind `/voices`, `/speak`, and
+`/transcribe`. The end‑to‑end contract (voice‑field mapping, the 60dB WebSocket
+`create_context → send_text → flush/close` lifecycle, and STT routing) is
+specified in [`doc/60db-integration.md`](../../doc/60db-integration.md).
+
 ## Handling Failed Utterances
 
 The TTS service can now handle expected failures (like insufficient credits) by returning a `FailedSpeechUtterance` object instead of throwing an error. Here's an example of how to handle this in a UI component:
