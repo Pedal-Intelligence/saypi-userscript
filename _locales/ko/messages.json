@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "프리미엄(HD) 음성과 밸류 음성이 모두 제공될 때 음성 메뉴에 표시되는 한 줄 안내",
-    "message": "HD 음성은 월간 사용 한도를 약 20배 더 빨리 소모합니다."
+    "message": "HD 음성은 월간 사용 한도를 더 많이 소모합니다. 샘플은 무료입니다."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "브라우저가 음성 감지 모델을 실행하는 데 필요한 초기 WebAssembly 메모리를 제공하지 않을 때 발생하는 오류.",
     "message": "음성 감지를 시작할 수 없어요: 이 브라우저에서는 WebAssembly 메모리를 사용할 수 없어요."
+  },
+  "voicesListeningOptions": {
+    "message": "듣기 옵션",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "음성을 클릭하면 무료 샘플을 들을 수 있습니다. 마음에 드는 음성을 찾으면 ‘사용’을 선택하세요.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "$host$에서 사용",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$에서 사용할 음성이 $name$(으)로 설정되었습니다.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "음성을 저장하지 못했습니다. 다시 시도해 주세요.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$의 기본 음성 사용",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "저장한 음성을 지금은 사용할 수 없습니다. 나중에 다시 시도하거나 다른 음성을 선택하세요.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

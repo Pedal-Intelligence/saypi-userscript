@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Jednoredna napomena prikazana u izbornicima glasova kada su dostupni i premium (HD) i value glasovi",
-    "message": "HD glasovi troše vašu mjesečnu kvotu oko 20× brže."
+    "message": "HD glasovi troše više vaše mjesečne kvote. Uzorci su besplatni."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Pogreška koja se javlja kada preglednik ne izlaže početnu WebAssembly memoriju potrebnu za pokretanje modela za detekciju glasa.",
     "message": "Detekcija glasa se ne može pokrenuti: WebAssembly memorija nije dostupna u ovom pregledniku."
+  },
+  "voicesListeningOptions": {
+    "message": "Opcije slušanja",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Klikni na glas da čuješ besplatan uzorak. Odaberi „Koristi” kada pronađeš glas koji ti se sviđa.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Koristi za $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ je sada tvoj glas za $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Tvoj glas nije moguće spremiti. Pokušaj ponovno.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Koristi izvorni glas usluge $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tvoj spremljeni glas trenutačno nije dostupan. Pokušaj ponovno kasnije ili odaberi drugi glas.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

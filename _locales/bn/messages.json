@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "প্রিমিয়াম (HD) এবং ভ্যালু ভয়েস—দুটিই উপলব্ধ থাকলে ভয়েস মেনুতে দেখানো একলাইন নোট",
-    "message": "HD ভয়েসে আপনার মাসিক বরাদ্দ প্রায় ২০× দ্রুত খরচ হয়।"
+    "message": "HD ভয়েস আপনার মাসিক বরাদ্দের বেশি ব্যবহার করে। নমুনাগুলো বিনামূল্যে শোনা যায়।"
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "ভয়েস-ডিটেকশন মডেল চালাতে প্রয়োজনীয় প্রাথমিক WebAssembly মেমরি ব্রাউজার সরবরাহ না করলে যে ত্রুটি দেখায়।",
     "message": "ভয়েস ডিটেকশন শুরু করা যাচ্ছে না: এই ব্রাউজারে WebAssembly মেমরি উপলব্ধ নয়।"
+  },
+  "voicesListeningOptions": {
+    "message": "শোনার বিকল্প",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "বিনামূল্যে নমুনা শুনতে একটি কণ্ঠে ক্লিক করুন। পছন্দের কণ্ঠ পেলে “ব্যবহার করুন” বেছে নিন।",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "$host$-এর জন্য ব্যবহার করুন",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$-এর জন্য এখন আপনার কণ্ঠ হলো $name$।",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "আপনার কণ্ঠ সংরক্ষণ করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$-এর নিজস্ব কণ্ঠ ব্যবহার করুন",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "আপনার সংরক্ষিত কণ্ঠ এখন উপলব্ধ নেই। পরে আবার চেষ্টা করুন, অথবা অন্য কণ্ঠ বেছে নিন।",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

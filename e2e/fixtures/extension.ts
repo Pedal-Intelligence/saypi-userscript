@@ -15,9 +15,12 @@ export const test = base.extend<{
    * specs; everything else keeps the quieter default.
    */
   showScrollbars: boolean;
+  /** Opt-in: exercise the browser's real autoplay policy, with no bypass flag. */
+  browserAutoplayPolicy: "allow" | "default";
 }>({
   showScrollbars: [false, { option: true }],
-  context: async ({ showScrollbars }, use) => {
+  browserAutoplayPolicy: ["allow", { option: true }],
+  context: async ({ showScrollbars, browserAutoplayPolicy }, use) => {
     const piPort = Number(process.env.SAYPI_E2E_PI_PORT);
     const apiPort = Number(process.env.SAYPI_E2E_API_PORT);
     // Isolation by construction (#462): zero the mock API's transcribe state
@@ -30,7 +33,9 @@ export const test = base.extend<{
     await fetch(`https://127.0.0.1:${apiPort}/__transcribe-hits/reset`, { method: "POST" });
     const context = await chromium.launchPersistentContext("", {
       channel: "chromium",
-      args: buildLaunchArgs({ extensionDir: EXT_DIR, piPort, apiPort, wavPath: WAV }),
+      args: buildLaunchArgs({ extensionDir: EXT_DIR, piPort, apiPort, wavPath: WAV }).filter(
+        (arg) => browserAutoplayPolicy !== "default" || arg !== "--autoplay-policy=no-user-gesture-required",
+      ),
       ignoreHTTPSErrors: true,
       ...(showScrollbars ? { ignoreDefaultArgs: ["--hide-scrollbars"] } : {}),
     });

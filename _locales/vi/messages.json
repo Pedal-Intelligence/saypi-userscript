@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Ghi chú một dòng hiển thị trong menu giọng nói khi có cả giọng cao cấp (HD) và giọng tiết kiệm.",
-    "message": "Giọng HD dùng hạn mức hằng tháng của bạn nhanh hơn khoảng 20×."
+    "message": "Giọng HD sử dụng nhiều hơn hạn mức hằng tháng của bạn. Các mẫu nghe thử miễn phí."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Lỗi được đưa ra khi trình duyệt không cung cấp bộ nhớ WebAssembly ban đầu cần để chạy mô hình phát hiện giọng nói.",
     "message": "Không thể bắt đầu phát hiện giọng nói: trình duyệt này không hỗ trợ bộ nhớ WebAssembly."
+  },
+  "voicesListeningOptions": {
+    "message": "Tùy chọn nghe",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Nhấp vào một giọng nói để nghe mẫu miễn phí. Chọn “Dùng” khi bạn tìm được giọng mình thích.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Dùng cho $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ hiện là giọng nói của bạn cho $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Không thể lưu giọng nói của bạn. Vui lòng thử lại.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Dùng giọng nói riêng của $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "Giọng nói bạn đã lưu hiện không khả dụng. Hãy thử lại sau hoặc chọn giọng khác.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

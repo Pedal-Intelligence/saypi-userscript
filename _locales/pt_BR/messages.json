@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Nota de uma linha mostrada nos menus de voz quando vozes premium (HD) e vozes econômicas estão disponíveis",
-    "message": "As vozes HD usam sua cota mensal cerca de 20× mais rápido."
+    "message": "As vozes HD consomem mais da sua cota mensal. As amostras são gratuitas."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Erro lançado quando o navegador não expõe a memória inicial do WebAssembly necessária para executar o modelo de detecção de voz.",
     "message": "A detecção de voz não pode iniciar: a memória do WebAssembly não está disponível neste navegador."
+  },
+  "voicesListeningOptions": {
+    "message": "Opções de escuta",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Clique em uma voz para ouvir uma amostra grátis. Escolha “Usar” quando encontrar uma de que goste.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Usar para $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ agora é sua voz para $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Não foi possível salvar sua voz. Tente novamente.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Usar a voz própria de $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "Sua voz salva está indisponível no momento. Tente novamente mais tarde ou escolha outra voz.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

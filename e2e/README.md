@@ -97,6 +97,12 @@ panel left empty by a chunk/import break.
   to every Layer-3 Chrome, so chained playback is licensed here regardless; see
   the header comment in the spec.
 
+- **`specs/voices-release.e2e.ts` — REQUIRED (in the CI gate).** Covers saved
+  choice, native return, cross-document refresh, narrow-layout labels, and real
+  media progress during preview/comparison/Play all. It opts out of the harness’s
+  autoplay bypass and first requires a gestureless ordinary-page negative control
+  to fail, so its positive sequence result establishes normal-policy behavior.
+
 - **`specs/settings.visual.ts` — ON-DEMAND (NOT in the CI gate).** Pixel
   baselines per tab via `toHaveScreenshot`, with auth/quota/status regions
   masked. Run via its own config (`playwright.visual.config.ts`, `testMatch:

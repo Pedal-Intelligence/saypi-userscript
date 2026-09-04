@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "प्रीमियम (HD) और वैल्यू वॉइस दोनों उपलब्ध होने पर वॉइस मेनू में दिखाया जाने वाला एक-पंक्ति नोट",
-    "message": "HD वॉइस आपकी मासिक सीमा को लगभग 20× तेज़ी से उपयोग करती हैं।"
+    "message": "HD आवाज़ें आपके मासिक कोटे का अधिक उपयोग करती हैं। नमूने सुनना मुफ़्त है।"
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "एरर, जब ब्राउज़र वॉइस-डिटेक्शन मॉडल चलाने के लिए ज़रूरी शुरुआती WebAssembly मेमोरी उपलब्ध नहीं कराता।",
     "message": "वॉइस डिटेक्शन शुरू नहीं हो सकता: इस ब्राउज़र में WebAssembly मेमोरी उपलब्ध नहीं है।"
+  },
+  "voicesListeningOptions": {
+    "message": "सुनने के विकल्प",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "मुफ़्त नमूना सुनने के लिए किसी आवाज़ पर क्लिक करें। पसंद की आवाज़ मिलने पर “उपयोग करें” चुनें।",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "$host$ के लिए उपयोग करें",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$ के लिए अब आपकी आवाज़ $name$ है।",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "आपकी आवाज़ सहेजी नहीं जा सकी। कृपया फिर से कोशिश करें।",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$ की अपनी आवाज़ का उपयोग करें",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "आपकी सहेजी गई आवाज़ अभी उपलब्ध नहीं है। बाद में फिर से कोशिश करें या दूसरी आवाज़ चुनें।",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Yhden rivin huomautus, joka näytetään ääni-valikoissa, kun sekä premium- (HD) että value-äänet ovat saatavilla",
-    "message": "HD-äänet kuluttavat kuukausikiintiötäsi noin 20× nopeammin."
+    "message": "HD-äänet kuluttavat enemmän kuukausikiintiötäsi. Ääninäytteet ovat ilmaisia."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Virhe, joka heitetään, kun selain ei tarjoa alkuperäistä WebAssembly-muistia, jota tarvitaan puheentunnistusmallin ajamiseen.",
     "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muisti ei ole käytettävissä tässä selaimessa."
+  },
+  "voicesListeningOptions": {
+    "message": "Kuunteluasetukset",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Kuuntele ilmainen näyte napsauttamalla ääntä. Valitse ”Käytä”, kun löydät mieluisan äänen.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Käytä palvelussa $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ on nyt äänesi palvelussa $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Ääntäsi ei voitu tallentaa. Yritä uudelleen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Käytä palvelun $host$ omaa ääntä",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

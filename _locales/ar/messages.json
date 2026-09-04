@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "ملاحظة من سطر واحد تظهر في قوائم الصوت عندما تكون الأصوات المميزة (عالية الدقة) والأصوات الاقتصادية متاحة معًا",
-    "message": "تستخدم الأصوات عالية الدقة حصتك الشهرية أسرع بنحو 20×."
+    "message": "تستهلك أصوات HD قدرًا أكبر من رصيدك الشهري. العينات مجانية."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "خطأ يُرمى عندما لا يوفّر المتصفح ذاكرة WebAssembly الأولية اللازمة لتشغيل نموذج اكتشاف الصوت.",
     "message": "لا يمكن بدء اكتشاف الصوت: ذاكرة WebAssembly غير متاحة في هذا المتصفح."
+  },
+  "voicesListeningOptions": {
+    "message": "خيارات الاستماع",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "انقر على صوت لسماع عينة مجانية. اختر «استخدم» عندما تجد صوتًا يعجبك.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "استخدم مع $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "أصبح $name$ صوتك الآن على $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "تعذّر حفظ اختيار الصوت. يُرجى المحاولة مرة أخرى.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "استخدم صوت $host$ الأصلي",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "صوتك المحفوظ غير متاح حاليًا. حاول مرة أخرى لاحقًا، أو اختر صوتًا آخر.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

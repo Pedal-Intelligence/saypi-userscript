@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Einzeiliger Hinweis in Sprachmenüs, wenn sowohl Premium- (HD) als auch Value-Stimmen verfügbar sind",
-    "message": "HD-Stimmen verbrauchen dein monatliches Kontingent etwa 20× schneller."
+    "message": "HD-Stimmen verbrauchen mehr von deinem monatlichen Kontingent. Hörproben sind kostenlos."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fehler, der ausgelöst wird, wenn der Browser den initialen WebAssembly-Speicher nicht bereitstellt, der zum Ausführen des Spracherkennungsmodells benötigt wird.",
     "message": "Spracherkennung kann nicht starten: WebAssembly-Speicher ist in diesem Browser nicht verfügbar."
+  },
+  "voicesListeningOptions": {
+    "message": "Höroptionen",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Klicke auf eine Stimme, um eine kostenlose Hörprobe anzuhören. Wähle „Verwenden“, wenn du eine gefunden hast, die dir gefällt.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Für $host$ verwenden",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ ist jetzt deine Stimme für $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Deine Stimme konnte nicht gespeichert werden. Bitte versuche es erneut.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Die eigene Stimme von $host$ verwenden",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "Deine gespeicherte Stimme ist gerade nicht verfügbar. Versuche es später erneut oder wähle eine andere Stimme.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

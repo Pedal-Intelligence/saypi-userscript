@@ -78,6 +78,7 @@ function makeDeps(cfg: DepsConfig = {}) {
     getVoices: vi.fn(async (host: string) => byHost[host]),
     getVoice: vi.fn(async (host: string) => currentByHost[host]),
     setVoice: vi.fn(async () => {}),
+    unsetVoice: vi.fn(async () => {}),
     isAuthenticated: vi.fn(() => cfg.authenticated ?? true),
     playPreview: vi.fn(
       (
@@ -168,6 +169,125 @@ const playingState = (voiceId: string): AuditionState => ({
   loadingVoiceId: null,
   position: { index: 1, total: 1 },
   error: null,
+});
+
+describe("VoicesController — release choice journey", () => {
+  it("puts the current choice first and keeps browsing preferences in closed options", async () => {
+    const { container } = await mount(makeDeps({ pi: [mkVoice("marin")], piCurrent: mkVoice("marin") }));
+    const bar = q(container, ".voice-rail-controls")!;
+    expect(bar.firstElementChild?.classList.contains("voice-current-choice")).toBe(true);
+    const options = q(container, "details.voice-listening-options") as HTMLDetailsElement;
+    expect(options).toBeTruthy();
+    expect(options.open).toBe(false);
+    expect(options.querySelector(".voice-arrow-chip")).toBeTruthy();
+    expect(options.querySelector(".voice-heard-count")).toBeTruthy();
+    expect(options.querySelector(".voice-keyboard-help")).toBeTruthy();
+    expect(q(container, ".voice-play-all")?.closest("details")).toBeNull();
+  });
+
+  it("shows the HD consequence when focusing an HD voice from All voices", async () => {
+    const { container } = await mount(makeDeps({ pi: [mkVoice("marin"), mkHdVoice("joey")] }));
+    rowOf(container, "joey")!.click();
+    const note = q(container, "#voice-hd-note")!;
+    expect(note.classList.contains("voice-visually-hidden")).toBe(false);
+    expect(note.textContent).toContain("hdVoicesAllowanceNote");
+    rowOf(container, "marin")!.click();
+    expect(note.classList.contains("voice-visually-hidden")).toBe(true);
+  });
+
+  it("keeps the saved-choice explanation and native return available during a catalog outage", async () => {
+    const deps = makeDeps({ overrides: {
+      getVoices: vi.fn(async () => { throw new Error("offline"); }),
+      hasVoice: vi.fn(async () => true),
+    } });
+    const { container } = await mount(deps);
+    expect(q(container, ".voice-fallback-unavailable")?.textContent).toBe("voicesSavedUnavailable");
+    expect(q(container, ".voice-fallback-host")).toBeNull();
+    expect(q(container, ".voice-studio-empty")).toBeTruthy();
+    q(container, ".voice-native-return")!.click();
+    await vi.waitFor(() => expect(deps.unsetVoice).toHaveBeenCalledWith("pi"));
+    await vi.waitFor(() => expect(q(container, ".voice-fallback-host")).toBeTruthy());
+  });
+
+  it("refreshes a previously visited assistant after its voice changes elsewhere", async () => {
+    let piCurrent = mkVoice("marin");
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("ash")], claude: [mkVoice("marin")], overrides: {
+      getVoice: vi.fn(async (host: string) => host === "pi" ? piCurrent : null),
+    } });
+    const { container } = await mount(deps);
+    q(container, '.voice-host-tab[data-host="claude"]')!.click();
+    await vi.waitFor(() => expect(q(container, '.voice-studio-body')?.dataset.host).toBe("claude"));
+    piCurrent = mkVoice("ash");
+    q(container, '.voice-host-tab[data-host="pi"]')!.click();
+    await vi.waitFor(() => expect(rowOf(container, "ash")?.getAttribute("aria-selected")).toBe("true"));
+    expect(deps.getVoices.mock.calls.filter(([host]) => host === "pi")).toHaveLength(1);
+  });
+
+  it("announces a saved choice through the existing stable live region", async () => {
+    const { container } = await mount(makeDeps({ pi: [mkVoice("marin"), mkVoice("ash")], piCurrent: mkVoice("marin") }));
+    const region = q(container, "#voice-status")!;
+    rowOf(container, "ash")!.querySelector<HTMLButtonElement>(".voice-use")!.click();
+    await vi.waitFor(() => expect(region.textContent).toBe("voicesSelectedOnHost"));
+    expect(q(container, "#voice-status")).toBe(region);
+  });
+
+  it("returns Pi to its own voice without changing another assistant", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin")], piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    const native = q(container, ".voice-native-return");
+    expect(native).toBeTruthy();
+    native!.click();
+    await flushAsync();
+    expect(deps.unsetVoice).toHaveBeenCalledExactlyOnceWith("pi");
+    expect(deps.setVoice).not.toHaveBeenCalled();
+    expect(q(container, ".voice-fallback-host")).toBeTruthy();
+    expect(qa(container, '[aria-selected="true"]')).toHaveLength(0);
+  });
+
+  it("confirms a committed voice and host separately from preview status", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("ash")], piCurrent: mkVoice("marin") });
+    const { container } = await mount(deps);
+    rowOf(container, "ash")!.querySelector<HTMLButtonElement>(".voice-use")!.click();
+    await flushAsync();
+    expect(q(container, ".voice-choice-status")?.textContent).toBe("voicesSelectedOnHost");
+    expect(chrome.i18n.getMessage).toHaveBeenCalledWith("voicesSelectedOnHost", ["Ash", "Pi"]);
+    expect(rowOf(container, "ash")?.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("keeps the old selection and a retryable action when saving fails", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("ash")], piCurrent: mkVoice("marin"), overrides: { setVoice: vi.fn().mockRejectedValue(new Error("storage unavailable")) } });
+    const { container } = await mount(deps);
+    rowOf(container, "ash")!.querySelector<HTMLButtonElement>(".voice-use")!.click();
+    await flushAsync();
+    expect(rowOf(container, "marin")?.getAttribute("aria-selected")).toBe("true");
+    expect(q(container, ".voice-choice-status")?.textContent).toBe("voicesSaveFailed");
+    expect(rowOf(container, "ash")?.querySelector<HTMLButtonElement>(".voice-use")?.disabled).toBe(false);
+  });
+
+  it("refreshes an external selection on return without refetching the catalog", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("ash")], piCurrent: mkVoice("marin") });
+    const { container, controller } = await mount(deps);
+    controller.onHidden();
+    deps.getVoice.mockResolvedValue(mkVoice("ash"));
+    controller.onShown();
+    await flushAsync();
+    expect(rowOf(container, "ash")?.getAttribute("aria-selected")).toBe("true");
+    expect(deps.getVoices).toHaveBeenCalledTimes(1);
+  });
+
+  it("cannot overwrite a new commitment with an older in-flight refresh", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("ash")], piCurrent: mkVoice("marin") });
+    const { container, controller } = await mount(deps);
+    let resolveOld!: (voice: SpeechSynthesisVoiceRemote) => void;
+    deps.getVoice.mockImplementationOnce(() => new Promise((resolve) => { resolveOld = resolve; }));
+    controller.onShown();
+    rowOf(container, "ash")!.querySelector<HTMLButtonElement>(".voice-use")!.click();
+    await flushAsync();
+    expect(resolveOld).toBeTypeOf("function");
+    resolveOld(mkVoice("marin"));
+    await flushAsync();
+    expect(rowOf(container, "ash")?.getAttribute("aria-selected")).toBe("true");
+  });
 });
 
 /** Hand the controller a "this voice is sounding" snapshot for call #n. */
@@ -835,11 +955,11 @@ describe("VoicesController — the control bar", () => {
     expect(q(container, ".voice-your-voice")).not.toBeNull();
   });
 
-  it("carries the keyboard hint, which is the page's only instruction", async () => {
+  it("carries a plain listening instruction with keyboard help in listening options", async () => {
     const deps = makeDeps({ pi: [mkVoice("marin")] });
     const { container } = await mount(deps);
     expect(q(container, ".voice-rail-hint")!.dataset.i18n).toBe(
-      "voicesKeyboardHint"
+      "voicesListenHint"
     );
   });
 
@@ -2401,7 +2521,7 @@ describe("VoicesController — a sweep that would take too long is refused, not 
     const { container } = await mount(deps);
     sweepButton(container)!.click();
     expect(deps.playSequence).toHaveBeenCalledTimes(1);
-    expect(hintOf(container).textContent).toBe("voicesKeyboardHint");
+    expect(hintOf(container).textContent).toBe("voicesListenHint");
   });
 
   it("takes the refusal back the moment the list is narrowed", async () => {
@@ -2412,8 +2532,8 @@ describe("VoicesController — a sweep that would take too long is refused, not 
     sweepButton(container)!.click();
     expect(hintOf(container).textContent).toBe("voicesTooManyToPlay");
     chooseFilter(container, "hd");
-    expect(hintOf(container).textContent).toBe("voicesKeyboardHint");
-    expect(hintOf(container).dataset.i18n).toBe("voicesKeyboardHint");
+    expect(hintOf(container).textContent).toBe("voicesListenHint");
+    expect(hintOf(container).dataset.i18n).toBe("voicesListenHint");
   });
 });
 
@@ -2582,8 +2702,8 @@ describe("VoicesController — the states playback can be in", () => {
       error: { voiceId: "onyx", kind: "blocked" },
     });
     emit(deps, 0, playingState("coral"));
-    expect(hintOf(container).textContent).toBe("voicesKeyboardHint");
-    expect(hintOf(container).dataset.i18n).toBe("voicesKeyboardHint");
+    expect(hintOf(container).textContent).toBe("voicesListenHint");
+    expect(hintOf(container).dataset.i18n).toBe("voicesListenHint");
   });
 
   it("says nothing per clip during a sweep — the audio is the output", async () => {
@@ -3447,5 +3567,36 @@ describe("VoicesController — the rail says when the arrows go live", () => {
     press(container, " ");
     emit(deps, 0, playingState("onyx"));
     expect(q(container, "#voice-status")!.textContent).toBe("voicesNowPlaying");
+  });
+});
+
+describe("adversarial release current choice", () => {
+  it("keeps the saved remote summary and native action when filtering it out", async () => {
+    const { container } = await mount(makeDeps({ pi: [mkVoice("marin"), mkHdVoice("joey")], piCurrent: mkVoice("marin") }));
+    chooseFilter(container, "hd");
+    await flushAsync();
+    expect(rowOf(container, "marin")).toBeNull();
+    expect(q(container, ".voice-fallback-host")).toBeNull();
+    expect(q(container, ".voice-current-choice")?.textContent).toContain("Marin");
+    expect(q(container, ".voice-native-return")).toBeTruthy();
+  });
+  it("reflects an external choice notification received during a pending save", async () => {
+    let notify!: () => void;
+    let finishSave!: () => void;
+    let current = mkVoice("marin");
+    const deps = makeDeps({ pi: [mkVoice("marin"), mkVoice("ash"), mkVoice("shimmer")], overrides: {
+      getVoice: vi.fn(async () => current),
+      onVoiceChange: (fn: () => void) => { notify = fn; return () => {}; },
+      setVoice: vi.fn(() => new Promise<void>((resolve) => { finishSave = resolve; })),
+    } });
+    const { container } = await mount(deps);
+    rowOf(container, "ash")!.querySelector<HTMLButtonElement>(".voice-use")!.click();
+    // Another extension document makes a newer choice after this document's
+    // write but before its additional asynchronous preference work completes.
+    current = mkVoice("shimmer");
+    notify();
+    finishSave();
+    await flushAsync();
+    expect(rowOf(container, "shimmer")?.getAttribute("aria-selected")).toBe("true");
   });
 });

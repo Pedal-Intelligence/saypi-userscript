@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "En linje note, der vises i stemmemenuer, når både premium (HD) og value-stemmer er tilgængelige",
-    "message": "HD-stemmer bruger din månedlige kvote ca. 20× hurtigere."
+    "message": "HD-stemmer bruger mere af din månedlige kvote. Stemmeprøver er gratis."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -2176,5 +2176,55 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fejl, der kastes, når browseren ikke eksponerer den indledende WebAssembly-hukommelse, der er nødvendig for at køre stemmedetektionsmodellen.",
     "message": "Stemmedetektion kan ikke starte: WebAssembly-hukommelse er ikke tilgængelig i denne browser."
+  },
+  "voicesListeningOptions": {
+    "message": "Lytteindstillinger",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Klik på en stemme for at høre en gratis prøve. Vælg »Brug«, når du finder en, du kan lide.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Brug til $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ er nu din stemme til $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Din stemme kunne ikke gemmes. Prøv igen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Brug $host$s egen stemme",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSavedUnavailable": {
+    "message": "Din gemte stemme er ikke tilgængelig lige nu. Prøv igen senere, eller vælg en anden stemme.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

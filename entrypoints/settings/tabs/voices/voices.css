@@ -182,12 +182,10 @@
   z-index: 2;
   background: #fbf7f0;
   border-bottom: 1px solid #eadfcc;
-  /* 44px when its two rows each hold one line: 3 + 18 + 1 + 18 + 4. Not a
-     fixed height — see the wrap note below. */
-  padding: 3px 0 4px;
+  padding: 10px 0 12px;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 8px;
   font-size: 12px;
   color: rgba(36, 29, 20, 0.62);
   font-variant-numeric: tabular-nums;
@@ -214,12 +212,59 @@
   gap: 4px 14px;
   min-height: 18px;
 }
-/* `.voice-rail-hint` needs no rule of its own any more, and that is the fix:
-   it used to be one nowrap, ellipsised line, which made it both the longest
-   unbreakable string on the page (426px of a 428px rail — the whole of the
-   pane's min-content width) and the one place an alert the reader has to act
-   on could be cut off mid-sentence. It wraps now, like everything else outside
-   the rail, and the bar grows the line it was already built to grow. */
+.voice-current-choice {
+  gap: 6px 10px;
+  font-size: 15px;
+  color: #241d14;
+}
+.voice-current-host {
+  font-weight: 500;
+}
+.voice-current-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2c5a42;
+}
+.voice-current-choice .voice-your-voice {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2c5a42;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.voice-native-return {
+  margin-left: auto;
+  border: 1px solid #eadfcc;
+  border-radius: 6px;
+  background: transparent;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 12px;
+  color: #2c5a42;
+  cursor: pointer;
+}
+.voice-choice-status {
+  color: #2c5a42;
+  font-weight: 600;
+}
+.voice-choice-status:empty {
+  display: none;
+}
+.voice-listening-options summary {
+  cursor: pointer;
+  width: fit-content;
+  padding: 3px 0;
+}
+.voice-listening-options[open] summary {
+  margin-bottom: 8px;
+}
+.voice-keyboard-help {
+  margin: 8px 0 0;
+}
+.voice-hd-allowance {
+  color: rgba(36, 29, 20, 0.66);
+  margin: 0;
+}
 .voice-compare {
   margin-left: auto;
 }
@@ -242,13 +287,10 @@
 .voice-compare-swap:hover {
   color: #241d14;
 }
-/* The same slot as `Your voice ↗`, saying what speaks when no row does (#599).
-   A statement, not a control — nothing to press, so nothing that looks
-   pressable: no pointer, and the bar's quieter ink, since the page's business
-   is still the rail below it. */
+/* Current native, silent, or unavailable state needs no jump-to-row control. */
 .voice-fallback {
   padding: 2px 0;
-  opacity: 0.72;
+  color: rgba(36, 29, 20, 0.66);
 }
 /* The chip is the arming rule made visible AND its permanent escape hatch: it
    lights when arrows are auditioning, and pressing it turns focus-plays off
@@ -362,9 +404,6 @@
    exists only while HD is what you chose to look at, directly under the
    control that undoes that choice. Quiet, because it is a caveat about the
    filter, not a warning about the page. */
-.voice-filter-note {
-  color: rgba(36, 29, 20, 0.38);
-}
 /* Blocked playback, a failed clip and a refused sweep all replace the keyboard
    hint IN PLACE — one line, non-modal, never a dialog, and full ink because
    unlike the hint they are things you have to read. */
@@ -374,7 +413,7 @@
 
 /* --- the rail --------------------------------------------------------------
    One listbox, one tab stop, 42px rows on an 8px grid. Row columns:
-   [3px focus rule][14][192px print][20][name 96px][12][desc flex][badges][96][20]
+   [3px focus rule][14][192px print][20][name 128px][12][desc flex][badges][128][20]
 
    Those numbers are budgeted against a 692px rail, which is what the settings
    TAB's fixed 756px content column gives this pane at a full-screen window —
@@ -421,9 +460,9 @@
      named once, because the narrow layout below has to know exactly how much
      room to leave beside the description and that number lives in a rule forty
      lines away. Two spenders, one source. */
-  --voice-actions-w: 96px;
+  --voice-actions-w: 120px;
   --voice-actions-gap: 12px;
-  /* [3px focus rule][14][192px print][20][name 96][12][desc][badges][96][20] */
+  /* [3px focus rule][14][192px print][20][name 96][12][desc][badges][128][20] */
   padding: 0 20px 0 14px;
   border-left: 3px solid transparent;
   /* Rounded, so standing on a row is a soft tile rather than a scanline. The
@@ -499,7 +538,7 @@
   border-left-color: #2c5a42;
 }
 
-/* THE ROW IS THE PLAY TARGET, said on the row you are pointing at.
+/* The persistent play mark makes the whole-row audition target discoverable.
    There is deliberately no per-row play BUTTON: nesting one inside a
    `role="option"` is exactly what the whole-row target exists to avoid, and 22
    of them would make the resting page a wall — the opposite of "calm at rest,
@@ -519,8 +558,8 @@
   align-items: center;
   font-size: 8px;
   line-height: 1;
-  color: rgba(36, 29, 20, 0.38);
-  opacity: 0;
+  color: rgba(36, 29, 20, 0.66);
+  opacity: 1;
   transition: opacity 0.12s ease-out;
   pointer-events: none;
 }
@@ -566,10 +605,10 @@
 }
 /* 648px: the rail width at which an HD row's description would otherwise drop
    under its floor.
-   608px is where the same arithmetic runs out — one more step of print buys
+   648px is where the same arithmetic runs out — one more step of print buys
    only 24px and the description is under its floor again 26px later — so that
    is where the row stops being one line at all. See the narrow block below. */
-@container (max-width: 648px) {
+@container (max-width: 688px) {
   .voice-row-print {
     flex-basis: 152px;
   }
@@ -636,14 +675,11 @@
 }
 /* Twin display names (#474 — the two Paolas) are the exception the demotion
    needs: their subtitle is the only thing that tells the rows apart, so it
-   never hides. Ink 38 at rest — the HD-badge step, quiet enough to read as a
-   disambiguator rather than a description — rising to the tagline's own 66
-   when the row is the one you are looking at, on the same darker ground and
-   for the same reason. */
+   never hides. It takes the same readable ink as the focused description,
+   so the distinction remains legible before a listener points at either row. */
 .voice-row-desc-dup {
   opacity: 1;
-  color: rgba(36, 29, 20, 0.38);
-  transition: color 0.12s ease-out;
+  color: rgba(36, 29, 20, 0.66);
   /* AND IT WRAPS, where every other line on the row ellipsises.
 
      This is the twins' second exception, and it exists for the same reason as
@@ -651,7 +687,7 @@
      the line above it is the same broken page as no line at all. `Speaks 33
      languages` wants 121px in this face; the 152px floor above clears it on
      one line, and at 320px — where the row is two lines and the description
-     shares its line with the actions' 108px reservation — it gets 104 and was
+     shares its line with the actions' 132px reservation — it gets 104 and was
      losing its last word. Measured on the author's own machine, in English.
 
      Ellipsising was never a number that could be re-tuned into safety. It is
@@ -688,14 +724,14 @@
    It was doing exactly that. Between a 609px and a 649px rail — an ordinary
    ~700px window, which is where the mobile shell's full-width column lands —
    the one-line layout has to draw a print (152), a name at its 64px floor, a
-   description at its 152px floor, a full set of badges and a 96px actions
+   description at its 152px floor, a full set of badges and a 128px actions
    column. In English that fits. With `HD` and `In use` in a language 40%
    longer it is 36px short, and because every remaining item refused to
    shrink, the 36px came off the END: the `Use` button, drawn 20px outside the
    card. Measured, in a simulated locale, on this machine.
 
    The refusal is `min-width: auto` — a flex item's automatic minimum is its
-   own content, so `flex: 0 0 96px` is a floor of `max(96px, whatever is
+   own content, so `flex: 0 0 128px` is a floor of `max(128px, whatever is
    inside)` and a nowrap badge is a floor of its own string. Same defect as the
    keyboard hint, one containment boundary further in.
 
@@ -712,7 +748,7 @@
    The point of doing it this way is that the row's minimum stops being
    text-derived. It is now [34 padding][192 print][20][64 name][12][152 desc]
    [12][96 actions][12] = 594px — nine constants and not one string — against
-   the 608px at which the row takes a second line. Every width the one-line
+   the 648px at which the row takes a second line. Every width the one-line
    layout is drawn at can draw the widest row it has, in any locale, in any
    face, and `voices-studio-layout.spec.ts` recomputes that sum from this
    stylesheet rather than restating it. */
@@ -753,12 +789,17 @@
   margin-left: var(--voice-actions-gap);
   visibility: hidden;
   /* The declared basis IS the width. Without this, `min-width: auto` quietly
-     turns `flex: 0 0 96px` into `max(96px, the buttons' own width)`, and a
+     turns `flex: 0 0 128px` into `max(128px, the buttons' own width)`, and a
      longer word for `Use` widens the one column the narrow layout does its
      arithmetic against (`calc(100% - var(--voice-actions-w) …)`) — the
      description's line stops adding up and the row overflows. See the badges
      above. */
   min-width: 0;
+}
+/* Current Pi has no row actions; give that unused column back to its label. */
+.voice-row-actions:empty {
+  flex-basis: 0;
+  margin-left: 0;
 }
 .voice-row:hover .voice-row-actions,
 .voice-row.focused .voice-row-actions {
@@ -766,7 +807,7 @@
 }
 
 /* --- narrow rails: the row takes a second line -----------------------------
-   The row above is one line of seven things, and below ~608px of rail there is
+   The row above is one line of seven things, and below ~648px of rail there is
    no honest way to keep it that way. The print can step (it does, at 648), the
    name can shrink (it does, to 64px), and past that the only column left to
    take from is the description — which is the one column that must not give,
@@ -775,7 +816,7 @@
    it is a page with two identical rows on it. That is what a 440px rail — an
    ordinary half-screen desktop window, since #584 — was doing.
 
-   So below 608px the row spends the axis it has plenty of. VERTICAL. Line one
+   So below 648px the row spends the axis it has plenty of. VERTICAL. Line one
    is the row at rest: the mark, the name, the badges. Line two is what the row
    says when you are standing on it: the description, and the actions. The
    split is not arbitrary — it is the same "calm at rest, informative on
@@ -801,7 +842,7 @@
 
    The cost is height: 42px becomes 60px, and a rail of 22 voices gets taller
    than a phone screen. It was already taller than a phone screen. */
-@container (max-width: 608px) {
+@container (max-width: 648px) {
   .voice-row {
     flex-wrap: wrap;
     /* The height comes from the lines and the padding — 5 + 26 + 6 + 18, ≈60px
@@ -813,9 +854,17 @@
        on. The gap is 6px because a loud frame can overhang the 26px band by
        3px, and it has line two directly under it now rather than 8px of row. */
     align-content: flex-start;
-    row-gap: 6px;
+    row-gap: 3px;
     height: auto;
     padding: 5px 20px 5px 14px;
+  }
+  /* An explicit break keeps short descriptions from squeezing names onto
+     the same flex line when the phone-sized print gets narrower. */
+  .voice-row::after {
+    content: "";
+    flex-basis: 100%;
+    height: 0;
+    order: 1;
   }
   /* Full size again — see the block comment. */
   .voice-row-print {
@@ -859,6 +908,9 @@
   .voice-row-actions {
     order: 3;
   }
+  .voice-row:has(.voice-row-actions:empty) .voice-row-desc {
+    flex-basis: 100%;
+  }
   /* The ▶ says "this row is the play target"; it belongs beside the mark, not
      halfway down a two-line row. Pinned to line one's band. */
   .voice-row[data-print-voice]::before {
@@ -871,7 +923,7 @@
    name's own 64px. Below this the row is on a phone. */
 @container (max-width: 404px) {
   .voice-row-print {
-    flex-basis: 128px;
+    flex-basis: 96px;
   }
 }
 
@@ -1018,7 +1070,7 @@
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: rgba(36, 29, 20, 0.38);
+  color: rgba(36, 29, 20, 0.66);
   white-space: nowrap;
 }
 
@@ -1052,20 +1104,18 @@
 /* The one commit action on the page takes the one green. */
 .voice-use {
   border: none;
-  background: transparent;
-  padding: 2px 0;
+  border-radius: 5px;
+  background: rgba(44, 90, 66, 0.08);
+  padding: 4px 6px;
   font-size: 12px;
   line-height: 1.2;
   font-weight: 600;
   color: #2c5a42;
   cursor: pointer;
-  white-space: nowrap;
-  /* As `.voice-pin-toggle`. The full sentence is on the button's aria-label
-     (`Use <voice> on <host>`), so an ellipsised label costs the reader a tail
-     and costs a screen reader nothing. */
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+
 }
 /* One green means one green: hover underlines rather than inventing a second
    shade of it. */
@@ -1073,6 +1123,8 @@
   text-decoration: underline;
 }
 
+.voice-native-return:focus-visible,
+.voice-listening-options summary:focus-visible,
 .voice-host-tab:focus-visible,
 .voice-pin-toggle:focus-visible,
 .voice-use:focus-visible,
