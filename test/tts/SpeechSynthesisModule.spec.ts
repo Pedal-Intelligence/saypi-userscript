@@ -3,7 +3,7 @@ import type { Mock } from "vitest";
 import { SpeechSynthesisModule } from "../../src/tts/SpeechSynthesisModule";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
-import { mockVoices } from "../data/Voices";
+import { mockVoices, openAiMockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import {
   audioProviders,
@@ -11,6 +11,10 @@ import {
   SpeechSynthesisVoiceRemote,
 } from "../../src/tts/SpeechModel";
 import EventBus from "../../src/events/EventBus";
+import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
+import { audioOutputMachine } from "../../src/state-machines/AudioOutputMachine";
+import { shouldMuteHostAudio } from "../../src/audio/hostAudio";
+import { createTestActor } from "../state-machines/support/testActor";
 
 // Controllable stand-in for the JwtManager singleton: the voice cache's
 // validity is keyed off the auth state it reports (#456).
@@ -137,6 +141,45 @@ describe("SpeechSynthesisModule", () => {
 
     expect(voice).toEqual(mockVoice);
     expect(textToSpeechServiceMock.getVoiceById).not.toHaveBeenCalled();
+  });
+
+  it("refreshes a cached omission once so a disabled provider can return", async () => {
+    speechSynthesisModule._cacheVoices(mockVoices, "pi");
+    speechSynthesisModule._cacheVoices(mockVoices, "claude");
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue([
+      ...mockVoices, ...openAiMockVoices,
+    ]);
+
+    const voice = await speechSynthesisModule.getVoiceById("alloy", "pi");
+
+    expect(voice.id).toBe("alloy");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledExactlyOnceWith(undefined, "pi");
+    expect(await speechSynthesisModule.getVoices("claude")).toEqual(mockVoices);
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not retry a freshly fetched omission in the same lookup", async () => {
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
+      .rejects.toThrow("Voice with id alloy not found");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
+
+    // A later demand may retry, once: there is no polling loop when still absent.
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
+      .rejects.toThrow("Voice with id alloy not found");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(2);
+  });
+
+  it("shares the refresh when concurrent lookups miss the same cached catalog", async () => {
+    speechSynthesisModule._cacheVoices(mockVoices, "pi");
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue(openAiMockVoices);
+
+    const voices = await Promise.all([
+      speechSynthesisModule.getVoiceById("alloy", "pi"),
+      speechSynthesisModule.getVoiceById("shimmer", "pi"),
+    ]);
+
+    expect(voices.map((voice) => voice.id)).toEqual(["alloy", "shimmer"]);
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
   });
 
   it("should create a speech stream", async () => {
@@ -369,6 +412,7 @@ describe("SpeechSynthesisModule", () => {
 
   it("disables Say Pi provider when no voice preference is set for Claude", async () => {
     (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(false);
 
     const claudeChatbot = { getID: () => "claude" } as any;
 
@@ -381,6 +425,7 @@ describe("SpeechSynthesisModule", () => {
 
   it("falls back to native providers when no Say Pi voices are selected", async () => {
     (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(false);
 
     const chatgptChatbot = { getID: () => "chatgpt" } as any;
 
@@ -391,6 +436,67 @@ describe("SpeechSynthesisModule", () => {
     expect(provider).toEqual(
       audioProviders.getDefaultForChatbot("chatgpt")
     );
+  });
+
+  it("keeps SayPi ownership through an outage so recovered speech passes the output guard", async () => {
+    // Drain the constructor's initial provider resolution before simulating startup.
+    await speechSynthesisModule.getActiveAudioProvider("pi");
+    fakeAuth.authenticated = true;
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(true);
+    const appIdSpy = vi.spyOn(ChatbotIdentifier, "getAppId").mockReturnValue("pi");
+    const actor = createTestActor(audioOutputMachine.provide({
+      actions: { notifySpeechStart: vi.fn() }, // external source parsing is not this seam
+    })).start();
+    let onProvider: (detail: any) => void = () => {};
+
+    try {
+      await new Promise<void>((resolve) => {
+        onProvider = ({ provider }) => {
+          actor.send({ type: "changeProvider", provider });
+          resolve();
+        };
+        EventBus.on("audio:changeProvider", onProvider);
+        speechSynthesisModule.initProvider();
+      });
+      const provider = actor.state.context.provider;
+      expect(provider).toBe(audioProviders.SayPi);
+      expect(shouldMuteHostAudio({
+        providerIsSayPi: provider === audioProviders.SayPi,
+        playbackIsOffscreen: true,
+      })).toBe(true);
+      const chatbot = { getID: () => "pi" } as any;
+      const silent = await speechSynthesisModule.createSpeechStreamOrPlaceholder(provider, chatbot);
+      expect(isPlaceholderUtterance(silent)).toBe(true);
+      expect(silent.provider).toBe(audioProviders.None);
+      expect(audioStreamManagerMock.createStream).not.toHaveBeenCalled();
+      actor.send({ type: "loadstart", source: "https://pi.ai/audio/native.mp3" });
+      expect(actor.state.matches("idle")).toBe(true);
+
+      // Catalog recovery needs no second provider event or machine reset.
+      (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(mockVoices[0]);
+      const recovered = {
+        id: "recovered", lang: "en-US", voice: mockVoices[0],
+        uri: "https://api.saypi.ai/speak/recovered/stream", provider: audioProviders.SayPi,
+      };
+      (audioStreamManagerMock.createStream as Mock).mockResolvedValue(recovered);
+      const utterance = await speechSynthesisModule.createSpeechStreamOrPlaceholder(
+        await speechSynthesisModule.getActiveAudioProvider("pi"), chatbot,
+      );
+      expect(utterance).toBe(recovered);
+      actor.send({ type: "loadstart", source: utterance.uri });
+      expect(actor.state.matches("loading")).toBe(true);
+    } finally {
+      EventBus.off("audio:changeProvider", onProvider);
+      appIdSpy.mockRestore();
+      actor.stop();
+    }
+  });
+
+  it("uses Pi's own provider when the user explicitly clears the saved choice", async () => {
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(false);
+    expect(await speechSynthesisModule.getActiveAudioProvider('pi')).toBe(audioProviders.Pi);
   });
 
   // The voice list is auth-dependent (401 → [], plus per-user custom voices),

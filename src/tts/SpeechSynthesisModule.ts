@@ -201,9 +201,22 @@ class SpeechSynthesisModule {
     chatbot?: Chatbot | string,
     chatbotIdOverride?: string
   ): Promise<SpeechSynthesisVoiceRemote> {
-    const voices = await this.getVoices(chatbot, chatbotIdOverride); // populate cache
+    const cacheKey = this.resolveChatbotKey(chatbot, chatbotIdOverride) ?? UNKNOWN_CHATBOT_CACHE_KEY;
+    this.syncVoicesCacheWithAuthState();
+    const cached = this.voicesCache.get(cacheKey);
+    let voices = await this.getVoices(chatbot, chatbotIdOverride);
+    let foundVoice = voices.find((voice) => voice.id === id);
 
-    const foundVoice = voices.find((voice) => voice.id === id);
+    // Providers can disappear temporarily from an otherwise valid catalog.
+    // Retry a cached omission once on demand, sharing any concurrent fetch.
+    // A freshly fetched omission waits for the next lookup rather than looping.
+    if (!foundVoice && cached?.length && voices === cached) {
+      if (this.voicesCache.get(cacheKey) === cached) {
+        this.voicesCache.delete(cacheKey);
+      }
+      voices = await this.getVoices(chatbot, chatbotIdOverride);
+      foundVoice = voices.find((voice) => voice.id === id);
+    }
     if (!foundVoice) {
       throw new Error(`Voice with id ${id} not found`);
     }
@@ -300,8 +313,8 @@ class SpeechSynthesisModule {
     const preferedLang = await this.userPreferences.getLanguage();
     if (!preferedVoice || !getJwtManagerSync().isAuthenticated()) {
       // Degrade to a silent placeholder rather than attempting synthesis when:
-      //  - Voice is off, or the voice was cleared between the provider check and
-      //    here (a race when toggling voice mid-response); or
+      //  - Voice is off, temporarily unavailable, or was cleared between the
+      //    provider check and here (a race when toggling voice mid-response); or
       //  - The user is signed out. SayPi TTS is an authenticated/premium feature,
       //    and a user who selected a voice while signed in, then signed out, still
       //    has that voice persisted — attempting a stream then fails with an
@@ -454,6 +467,12 @@ class SpeechSynthesisModule {
     const voice = await this.userPreferences.getVoice(preferenceScope);
     if (voice) {
       return audioProviders.retreiveProviderByVoice(voice);
+    }
+    // Native Pi IDs resolve locally. An unresolved saved remote choice keeps
+    // SayPi's ownership, suppressing host fallback while createSpeechStream
+    // returns a silent placeholder. Recovery then needs no provider transition.
+    if (await this.userPreferences.hasVoice(preferenceScope)) {
+      return audioProviders.SayPi;
     }
 
     const defaultProvider = audioProviders.getDefaultForChatbot(chatbotId);
