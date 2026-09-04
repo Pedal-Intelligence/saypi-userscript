@@ -60,8 +60,16 @@ class OffscreenManager {
       throw new Error("Offscreen documents API not available in this browser");
     }
     
-    // Check if the document already exists.
-    if (await this.hasDocument()) {
+    const exists = await this.hasDocument();
+    // Chrome can report existence before createDocument resolves and the message
+    // listener is ready. Check after the await: another caller may also have
+    // started creation while this existence query was pending.
+    if (this.creating) {
+      await this.creating;
+      return;
+    }
+
+    if (exists) {
       const now = Date.now();
       if (now - this.lastOffscreenExistsLog > this.offscreenExistsThrottleMs) {
         logger.debug("[OffscreenManager] Reusing existing offscreen document for media coordination.", {
@@ -70,11 +78,6 @@ class OffscreenManager {
         });
         this.lastOffscreenExistsLog = now;
       }
-      return;
-    }
-
-    if (this.creating) {
-      await this.creating;
       return;
     }
 
