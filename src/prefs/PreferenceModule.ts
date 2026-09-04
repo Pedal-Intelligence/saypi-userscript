@@ -850,19 +850,12 @@ class UserPreferenceModule {
     const chatbotInstance = typeof chatbot === "string" ? undefined : chatbot;
     try {
       return await tts.getVoiceById(voiceIdToFetch, chatbotInstance, chatbotId);
-    } catch (error: any) {
-      if (!getJwtManagerSync().isAuthenticated()) {
-        // While signed out, /voices returns [] (401 shape), so the failed
-        // lookup says nothing about whether the voice still exists on the
-        // user's account. Keep the stored preference so it survives a
-        // sign-out → sign-in cycle (#456).
-        console.info(`Voice with ID ${voiceIdToFetch} unavailable while signed out; keeping stored preference for ${chatbotId}.`);
-        return null;
-      }
-      console.info(`Voice with ID ${voiceIdToFetch} not found for ${chatbotId}. Clearing stored voice preference.`);
-      const updatedPreferences = { ...preferences };
-      delete updatedPreferences[chatbotId];
-      await this.persistVoicePreferences(updatedPreferences);
+    } catch {
+      // A failed request OR a successful catalog omission can be temporary:
+      // disabling a provider hides its voices, including from the by-ID API.
+      // Only explicit set/unset owns the saved choice. Returning null reports
+      // this attempt's unavailability; hasVoice still reports the saved intent.
+      console.info(`Voice with ID ${voiceIdToFetch} unavailable; keeping stored preference for ${chatbotId}.`);
       return null;
     }
   }

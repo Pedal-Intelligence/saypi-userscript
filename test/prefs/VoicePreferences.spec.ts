@@ -136,6 +136,26 @@ describe('UserPreferenceModule voice scoping', () => {
 // Deleting the stored preference there would silently erase the user's chosen
 // voice across a sign-out → sign-in cycle (#456).
 describe('UserPreferenceModule voice preference across auth changes (#456)', () => {
+  it.each([
+    new TypeError('Failed to fetch'),
+    new Error('Failed to get voices: 503'),
+    new Error('Failed to get voices: 401'),
+    new SyntaxError('Invalid catalog JSON'),
+    new Error('Voice with id shimmer not found'),
+  ])('preserves a signed-in choice when the catalog is unavailable: %s', async (failure) => {
+    store.voicePreferences = { pi: 'shimmer', claude: 'marin' };
+    fakeAuth.authenticated = true;
+    speechSynthesisMock.getVoiceById.mockRejectedValue(failure);
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    expect(await prefs.getVoice('pi')).toBeNull();
+    expect(store.voicePreferences).toEqual({ pi: 'shimmer', claude: 'marin' });
+
+    const recoveredVoice = { ...createPiVoice('shimmer', 'Shimmer'), powered_by: 'OpenAI' };
+    speechSynthesisMock.getVoiceById.mockResolvedValue(recoveredVoice);
+    expect(await prefs.getVoice('pi')).toEqual(recoveredVoice);
+  });
+
   it('keeps the stored voice preference when the lookup fails while signed out', async () => {
     store.voicePreferences = { claude: 'custom-voice-abc' };
     fakeAuth.authenticated = false;
@@ -150,18 +170,43 @@ describe('UserPreferenceModule voice preference across auth changes (#456)', () 
     expect(store.voicePreferences).toEqual({ claude: 'custom-voice-abc' });
   });
 
-  it('still clears a genuinely missing voice preference while signed in', async () => {
+  it('keeps an omitted voice so a temporarily disabled provider can return', async () => {
     store.voicePreferences = { claude: 'deleted-voice' };
     fakeAuth.authenticated = true;
-    speechSynthesisMock.getVoiceById.mockRejectedValue(
-      new Error('Voice with id deleted-voice not found')
-    );
+    speechSynthesisMock.getVoiceById.mockRejectedValue(new Error('Voice with id deleted-voice not found'));
 
     const prefs = prefsModule.UserPreferenceModule.getInstance();
     const voice = await prefs.getVoice('claude');
 
     expect(voice).toBeNull();
-    expect(store.voicePreferences).toEqual({});
+    expect(store.voicePreferences).toEqual({ claude: 'deleted-voice' });
+    expect(await prefs.hasVoice('claude')).toBe(true);
+    const availableAgain = { ...createPiVoice('deleted-voice', 'Shimmer'), powered_by: 'OpenAI' };
+    speechSynthesisMock.getVoiceById.mockResolvedValue(availableAgain);
+    expect(await prefs.getVoice('claude')).toEqual(availableAgain);
+  });
+
+  it.each(['pi', 'claude'])('keeps a newer %s choice when an older Pi lookup cannot resolve its voice', async (changedHost) => {
+    store.voicePreferences = { pi: 'deleted-voice', claude: 'marin' };
+    fakeAuth.authenticated = true;
+    let rejectLookup!: (error: Error) => void;
+    let lookupStarted!: () => void;
+    const started = new Promise<void>((resolve) => { lookupStarted = resolve; });
+    speechSynthesisMock.getVoiceById.mockImplementation(() => new Promise((_resolve, reject) => {
+      rejectLookup = reject;
+      lookupStarted();
+    }));
+
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    const lookup = prefs.getVoice('pi');
+    await started;
+    await prefs.setVoice(createPiVoice('voice2', 'Pi 2'), changedHost);
+    rejectLookup(new Error('Voice with id deleted-voice not found'));
+    await lookup;
+
+    expect(store.voicePreferences).toEqual(changedHost === 'pi'
+      ? { pi: 'voice2', claude: 'marin' }
+      : { pi: 'deleted-voice', claude: 'voice2' });
   });
 });
 

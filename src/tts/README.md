@@ -2,6 +2,28 @@
 
 This module provides text-to-speech capabilities for the application.
 
+## Resolving a saved voice
+
+A failed catalog request is not evidence that a saved voice was removed. Even
+a successful catalog omission or a by-ID 404 can mean that the API temporarily
+disabled that provider. Preference lookup therefore preserves the saved ID when
+it cannot resolve it (#604); explicit set/unset actions own changes to the choice.
+This also prevents a delayed lookup from overwriting newer choices.
+
+`getVoice` returns null while the voice is unavailable, while `hasVoice` remains
+true because the choice is still saved. Callers must distinguish that state from
+an explicit native-voice/voice-off choice. An unresolved remote choice retains
+SayPi as the selected provider, keeping host audio suppressed; synthesis returns
+a silent placeholder until that voice resolves. Keeping provider ownership
+stable lets recovered speech pass the existing output guard without a new
+provider event. Native Pi IDs resolve locally and remain usable without the API.
+Settings can use the two preference reads to explain unavailability honestly.
+
+A missing ID in a previously cached catalog triggers one host-scoped refresh,
+shared by concurrent lookups. Fresh omissions do not retry within the same
+lookup; later demand may retry. Valid cached choices incur no extra request,
+and there is no background polling or by-ID probe.
+
 ## Handling Failed Utterances
 
 The TTS service can now handle expected failures (like insufficient credits) by returning a `FailedSpeechUtterance` object instead of throwing an error. Here's an example of how to handle this in a UI component:
@@ -47,4 +69,4 @@ To add a new failure reason:
 
 1. Add the reason to the `SpeechFailureReason` enum
 2. Update the TTS service to return the new reason when appropriate
-3. Update UI handlers to display appropriate messages for the new reason 
+3. Update UI handlers to display appropriate messages for the new reason
