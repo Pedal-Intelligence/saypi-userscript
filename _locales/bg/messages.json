@@ -1628,14 +1628,18 @@
     "message": "Гласувайте"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Показва се над мрежата с вградени гласове на асистента в страницата с настройки, когато глас на Say, Pi е поел възпроизвеждането, така че маркираният вграден глас на асистента не е този, който потребителят чува; $voice$ е името на гласа на Say, Pi, например Shimmer.",
-    "message": "Say, Pi говори с $voice$ — гласовете по-долу не се използват.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi говори с гласа $voice$. Изберете глас на Pi по-долу, за да се върнете към него.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Промяна на гласа",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

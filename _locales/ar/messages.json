@@ -1628,14 +1628,18 @@
     "message": "صوت قبالة"
   },
   "voiceOverriddenBySayPi": {
-    "description": "يظهر فوق شبكة أصوات المساعد في صفحة إعداداته عندما يتولى صوت من Say, Pi تشغيل الردود، لذلك لا يكون صوت المساعد الأصلي المميز هو المسموع؛ $voice$ هو اسم صوت Say, Pi، مثل Shimmer.",
-    "message": "يتحدث Say, Pi بصوت $voice$ — الأصوات أدناه غير مستخدمة.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "يتحدث Say, Pi بصوت $voice$. اختر أحد أصوات Pi أدناه للعودة إليه.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "تغيير الصوت",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

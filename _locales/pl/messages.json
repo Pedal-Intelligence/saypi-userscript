@@ -1628,14 +1628,18 @@
     "message": "Głos"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Wyświetlane nad własną siatką głosów asystenta na stronie ustawień, gdy głos Say, Pi przejął odtwarzanie, więc wyróżniony natywny głos asystenta nie jest tym, który słyszy użytkownik; $voice$ to nazwa głosu Say, Pi, np. Shimmer.",
-    "message": "Say, Pi mówi głosem $voice$ — poniższe głosy nie są używane.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi mówi głosem $voice$. Wybierz poniżej głos Pi, aby do niego wrócić.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Zmień głos",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

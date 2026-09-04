@@ -1628,14 +1628,18 @@
     "message": "Salir"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Se muestra sobre la cuadrícula de voces del asistente en su página de ajustes cuando una voz de Say, Pi se ha impuesto para la reproducción, por lo que la voz nativa destacada del asistente no es la que oye el usuario; $voice$ es el nombre de la voz de Say, Pi, por ejemplo, Shimmer.",
-    "message": "Say, Pi habla con $voice$; las voces de abajo no se usan.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi habla con la voz $voice$. Elige una voz de Pi abajo para volver a usarla.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Cambiar voz",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

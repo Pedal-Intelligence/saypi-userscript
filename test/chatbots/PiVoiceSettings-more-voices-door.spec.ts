@@ -35,6 +35,7 @@ vi.mock("../../src/popup/popupopener", () => ({
 }));
 
 import { PiVoiceSettings } from "../../src/chatbots/PiVoiceSettings";
+import { PiAIVoice } from "../../src/tts/SpeechModel";
 
 /**
  * A faithful fixture of pi.ai's CURRENT Voice settings grid (captured live via
@@ -206,8 +207,6 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     settings.renderMenu([], voice("Shimmer"));
     expect(notice(grid)).not.toBeNull();
     expect(notice(grid)!.textContent).toContain("Shimmer");
-    // The glance-level half: the native cards stop reading as active.
-    expect(grid.classList.contains("saypi-voices-overridden")).toBe(true);
   });
 
   it("stays out of the way when Pi's own voice is the one speaking", () => {
@@ -215,9 +214,98 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     const settings = makeSettings(grid);
     settings.renderMenu([], null);
     expect(notice(grid)).toBeNull();
-    expect(grid.classList.contains("saypi-voices-overridden")).toBe(false);
     // The door is SayPi's only mark on an un-overridden grid.
     expect(door(grid)).not.toBeNull();
+  });
+
+  it("does not claim a stored native Pi voice is a SayPi override", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], new PiAIVoice(4));
+    expect(notice(grid)).toBeNull();
+
+    settings.applySelectedVoice(voice("Shimmer"));
+    settings.applySelectedVoice(new PiAIVoice(2));
+    expect(notice(grid)).toBeNull();
+  });
+
+  it("uses Pi's readable theme color for the current-voice notice", () => {
+    const style = document.createElement("style");
+    style.textContent = ".text-text-secondary { color: rgb(193, 191, 181); }";
+    document.body.appendChild(style);
+    const grid = buildSettingsGrid();
+    document.body.appendChild(grid);
+    makeSettings(grid).renderMenu([], voice("Shimmer"));
+    expect(window.getComputedStyle(notice(grid)!).color).toBe("rgb(193, 191, 181)");
+  });
+
+  it("offers Change voice alongside the voice in use, including after a change", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], voice("Shimmer"));
+    settings.applySelectedVoice(voice("Marin"));
+    const change = notice(grid)?.querySelector<HTMLButtonElement>("button");
+    expect(change?.textContent).toBe("voicesChangeVoice");
+    change!.click();
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+  });
+
+  it("returns to Pi when a native card is clicked, preserving Pi's own click handler", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    const native = grid.querySelector<HTMLButtonElement>(":scope > button")!;
+    const selectPiVoice = vi.fn();
+    native.addEventListener("click", selectPiVoice);
+    native.querySelector("span")!.click();
+    await vi.waitFor(() => expect(notice(grid)).toBeNull());
+    expect(settings.userPreferences.unsetVoice).toHaveBeenCalledWith(settings.chatbot);
+    expect(selectPiVoice).toHaveBeenCalledOnce();
+  });
+
+  it("clears a stored native voice too, so it cannot override the newly clicked Pi card", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], new PiAIVoice(4));
+    grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
+    await vi.waitFor(() => expect(settings.userPreferences.unsetVoice).toHaveBeenCalledOnce());
+  });
+
+  it("returns to Pi even if its selection handler replaces the clicked card", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    const native = grid.querySelector<HTMLButtonElement>(":scope > button")!;
+    native.addEventListener("click", () => native.remove());
+    native.click();
+    await vi.waitFor(() => expect(notice(grid)).toBeNull());
+    expect(settings.userPreferences.unsetVoice).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the active SayPi notice if releasing the stored preference fails", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.unsetVoice.mockRejectedValue(new Error("Storage unavailable"));
+    const debug = vi.spyOn(console, "debug").mockImplementation(() => {});
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
+    await vi.waitFor(() => expect(settings.userPreferences.unsetVoice).toHaveBeenCalledOnce());
+    expect(notice(grid)?.textContent).toContain("Shimmer");
+    debug.mockRestore();
+  });
+
+  it("does not relinquish the current voice when opening More voices", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    door(grid)!.click();
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
   });
 
   it("follows a voice chosen elsewhere, without a repopulate", () => {
@@ -228,7 +316,6 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     expect(notice(grid)!.textContent).toContain("Marin");
     settings.applySelectedVoice(null);
     expect(notice(grid)).toBeNull();
-    expect(grid.classList.contains("saypi-voices-overridden")).toBe(false);
   });
 
   it("is idempotent, and re-appears if Pi's re-render drops it", () => {

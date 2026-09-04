@@ -1628,14 +1628,18 @@
     "message": "गूंजना"
   },
   "voiceOverriddenBySayPi": {
-    "description": "सहायक के सेटिंग पेज पर अपनी आवाज़ों के ग्रिड के ऊपर दिखाया जाता है, जब Say, Pi की आवाज़ ने बोलने की जगह ले ली हो और सहायक की चुनी हुई मूल आवाज़ वह न हो जो उपयोगकर्ता सुनता है; $voice$ Say, Pi की आवाज़ का नाम है, जैसे Shimmer।",
-    "message": "Say, Pi $voice$ की आवाज़ में बोल रहा है — नीचे दी गई आवाज़ें उपयोग में नहीं हैं।",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi $voice$ की आवाज़ में बोल रहा है। वापस जाने के लिए नीचे Pi की कोई आवाज़ चुनें।",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "आवाज़ बदलें",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

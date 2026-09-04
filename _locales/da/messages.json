@@ -1628,14 +1628,18 @@
     "message": "Stemme væk"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Vises over assistentens eget stemmegitter på indstillingssiden, når en Say, Pi-stemme har overtaget afspilningen, så assistentens fremhævede indbyggede stemme ikke er den, brugeren hører; $voice$ er navnet på Say, Pi-stemmen, f.eks. Shimmer.",
-    "message": "Say, Pi taler med $voice$ — stemmerne nedenfor bruges ikke.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi taler med stemmen $voice$. Vælg en Pi-stemme nedenfor for at skifte tilbage.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Skift stemme",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

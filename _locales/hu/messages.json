@@ -1628,14 +1628,18 @@
     "message": "Lehangol"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Az asszisztens beállítási oldalán, a saját hangjait tartalmazó rács felett jelenik meg, amikor egy Say, Pi-hang veszi át a lejátszást, ezért a felhasználó nem az asszisztens kiemelt natív hangját hallja; a $voice$ a Say, Pi hangjának neve, például Shimmer.",
-    "message": "A Say, Pi a(z) $voice$ hangján beszél — az alábbi hangok nincsenek használatban.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "A Say, Pi a(z) $voice$ hangján beszél. A visszaváltáshoz válasszon alább egy Pi-hangot.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Hang módosítása",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

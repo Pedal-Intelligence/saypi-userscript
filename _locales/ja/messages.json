@@ -1628,14 +1628,18 @@
     "message": "声をかけます"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Say, Pi の音声が再生を引き継いだときに、アシスタントの設定ページにある固有音声一覧の上に表示されます。ユーザーが聞くのは、アシスタントでハイライトされた標準音声ではありません。$voice$ は Say, Pi の音声名です（例: Shimmer）。",
-    "message": "Say, Pi が $voice$ として話しています — 以下の音声は使用されていません。",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi が $voice$ の音声で話しています。元に戻すには、下から Pi の音声を選んでください。",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "音声を変更",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",

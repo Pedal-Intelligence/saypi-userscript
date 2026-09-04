@@ -1628,14 +1628,18 @@
     "message": "Boses"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Ipinapakita sa itaas ng sariling grid ng boses ng assistant sa pahina ng mga setting kapag isang boses ng Say, Pi ang pumalit sa pag-playback, kaya hindi ang naka-highlight na katutubong boses ng assistant ang naririnig ng user; ang $voice$ ay pangalan ng boses ng Say, Pi, gaya ng Shimmer.",
-    "message": "Si Say, Pi ang nagsasalita gamit ang $voice$ — hindi ginagamit ang mga boses sa ibaba.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Nagsasalita ang Say, Pi gamit ang boses na $voice$. Pumili ng boses ng Pi sa ibaba para bumalik dito.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Palitan ang boses",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
