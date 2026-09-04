@@ -1628,8 +1628,8 @@
     "message": "குரல் அணைக்கவும்"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Say, Pi குரல் இயக்கத்தை எடுத்துக்கொண்டால், உதவியாளரின் அமைப்புப் பக்கத்தில் அதன் சொந்தக் குரல் கட்டத்தின் மேலே காட்டப்படும். ஆகவே, உதவியாளரால் முன்னிலைப்படுத்தப்பட்ட சொந்தக் குரலைப் பயனர் கேட்கமாட்டார்; $voice$ என்பது Say, Pi குரலின் பெயர், எடுத்துக்காட்டாக Shimmer.",
-    "message": "Say, Pi $voice$ குரலில் பேசுகிறது — கீழுள்ள குரல்கள் பயன்பாட்டில் இல்லை.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi $voice$ குரலில் பேசுகிறது. மீண்டும் Pi குரலுக்கு மாற, கீழே ஒரு Pi குரலைத் தேர்வுசெய்யவும்.",
     "placeholders": {
       "voice": {
         "content": "$1",
@@ -2226,5 +2226,9 @@
   "voicesSavedUnavailable": {
     "message": "நீங்கள் சேமித்த குரல் தற்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும் அல்லது வேறொரு குரலைத் தேர்ந்தெடுக்கவும்.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "குரலை மாற்று",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

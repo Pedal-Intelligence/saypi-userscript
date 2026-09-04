@@ -13,6 +13,7 @@ import {
 const pems = await selfsigned.generate([{ name: "commonName", value: "saypi-e2e" }], { days: 1 });
 const tls = { key: pems.private, cert: pems.cert };
 const PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-pi-page.html"), "utf8");
+const PI_VOICE_SETTINGS_PAGE = readFileSync(resolve(import.meta.dirname, "mock-pi-voice-settings.html"), "utf8");
 const CLAUDE_PAGE = readFileSync(resolve(import.meta.dirname, "mock-claude-page.html"), "utf8");
 const HEY_PI_PAGE = readFileSync(resolve(import.meta.dirname, "mock-hey-pi-page.html"), "utf8");
 
@@ -70,7 +71,9 @@ export async function startMockServers(): Promise<MockServers> {
       ? HEY_PI_PAGE
       : host.includes("claude.ai")
         ? CLAUDE_PAGE
-        : PI_PAGE;
+        : new URL(req.url ?? "/", "https://pi.ai").pathname === "/profile/settings"
+          ? PI_VOICE_SETTINGS_PAGE
+          : PI_PAGE;
     res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
     res.end(page);
   });

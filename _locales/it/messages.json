@@ -1628,8 +1628,8 @@
     "message": "Voce"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Mostrato sopra la griglia delle voci dell'assistente nella pagina delle impostazioni quando una voce di Say, Pi ha preso il controllo della riproduzione, quindi la voce nativa evidenziata dell'assistente non è quella che l'utente sente; $voice$ è il nome della voce di Say, Pi, ad esempio Shimmer.",
-    "message": "Say, Pi parla con $voice$ — le voci sotto non sono in uso.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi parla con la voce $voice$. Scegli una voce di Pi qui sotto per tornare a usarla.",
     "placeholders": {
       "voice": {
         "content": "$1",
@@ -2226,5 +2226,9 @@
   "voicesSavedUnavailable": {
     "message": "La voce che hai salvato non è disponibile al momento. Riprova più tardi o scegli un’altra voce.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Cambia voce",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

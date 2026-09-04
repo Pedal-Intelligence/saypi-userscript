@@ -1628,8 +1628,8 @@
     "message": "ভয়েস অফ"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Say, Pi-এর কোনো ভয়েস প্লেব্যাকের দায়িত্ব নিলে সহকারীর সেটিংস পৃষ্ঠায় নিজস্ব ভয়েসগুলোর গ্রিডের ওপরে দেখানো হয়, তাই সহকারীর হাইলাইট করা নিজস্ব ভয়েসটি ব্যবহারকারী শুনছেন না; $voice$ হলো Say, Pi-এর ভয়েসের নাম, যেমন Shimmer।",
-    "message": "Say, Pi $voice$ হিসেবে কথা বলছে — নিচের ভয়েসগুলো ব্যবহার হচ্ছে না।",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi $voice$ কণ্ঠে কথা বলছে। ফিরে যেতে নিচে Pi-এর একটি কণ্ঠ বেছে নিন।",
     "placeholders": {
       "voice": {
         "content": "$1",
@@ -2226,5 +2226,9 @@
   "voicesSavedUnavailable": {
     "message": "আপনার সংরক্ষিত কণ্ঠ এখন উপলব্ধ নেই। পরে আবার চেষ্টা করুন, অথবা অন্য কণ্ঠ বেছে নিন।",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "কণ্ঠ পরিবর্তন করুন",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

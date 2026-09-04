@@ -977,8 +977,8 @@
     "description": "Menu row linking from the in-page voice menu to the full voice catalog in the extension settings"
   },
   "voiceOverriddenBySayPi": {
-    "message": "Say, Pi is speaking as $voice$ — the voices below aren't in use.",
-    "description": "Shown above the assistant's own voice grid on its settings page when a Say, Pi voice has taken over playback, so the assistant's highlighted native voice is not what the user hears; $voice$ is the Say, Pi voice name, e.g. Shimmer.",
+    "message": "Say, Pi is speaking as $voice$. Choose a Pi voice below to switch back.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
     "placeholders": {
       "voice": {
         "content": "$1",
@@ -2223,5 +2223,9 @@
   "voicesSavedUnavailable": {
     "message": "Your saved voice is unavailable right now. Try again later, or choose another voice.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Change voice",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

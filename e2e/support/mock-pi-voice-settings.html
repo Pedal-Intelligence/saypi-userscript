@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Pi voice settings mock</title>
+    <style>
+      /* Native grid shape/classes mirror the recorded Pi settings fixture.
+         The theme utilities are representative host colors, not SayPi CSS.
+         Deliberately leave body text black in dark mode: Pi's grid does not
+         supply a foreground, so injected copy must choose the host utility. */
+      body { margin: 0; background: #f5f3ec; color: #000; font: 16px Arial, sans-serif; }
+      html[data-pi-theme="dark"] body { background: #121212; }
+      .text-text-secondary { color: #514d43; }
+      html[data-pi-theme="dark"] .text-text-secondary { color: #c1bfb5; }
+      .mx-auto { margin: 0 auto; }
+      .max-w-2xl { max-width: 672px; }
+      .px-6 { padding: 24px; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; }
+      .gap-4 { gap: 16px; }
+      button.native-voice { min-height: 56px; border: 1px solid #777; border-radius: 10px; padding: 0 24px; text-align: left; background: transparent; font: inherit; cursor: pointer; }
+      button.native-voice[aria-pressed="true"] { background: #e0dccf; }
+      html[data-pi-theme="dark"] button.native-voice[aria-pressed="true"] { background: #383630; }
+    </style>
+  </head>
+  <body>
+    <main id="__next"><div id="mock-mount"></div></main>
+    <script>
+      // Pi owns its theme independently of SayPi's body classes. Keeping this
+      // on a host attribute prevents SayPi's default theme initialization from
+      // silently turning the dark test into a second light test.
+      document.documentElement.dataset.piTheme = new URLSearchParams(location.search).get("theme") || "light";
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          var column = document.createElement("div");
+          column.className = "mx-auto w-full max-w-2xl px-6";
+          var heading = document.createElement("h1");
+          heading.className = "text-text-secondary";
+          heading.textContent = "Voice settings";
+          var grid = document.createElement("div");
+          grid.className = "grid grid-cols-1 gap-4 sm:grid-cols-2";
+          var selected = localStorage.getItem("mock-pi-native-voice") || "voice4";
+          for (var i = 1; i <= 8; i++) {
+            var card = document.createElement("button");
+            card.type = "button";
+            card.className = "native-voice inline-flex items-center whitespace-nowrap transition-colors h-[56px] w-full min-w-0 max-w-[22.0625rem] rounded-[10px] border border-divider-stroke px-[24px] py-0 bg-secondary-default text-text-secondary";
+            card.dataset.nativeVoice = "voice" + i;
+            card.setAttribute("aria-pressed", String(card.dataset.nativeVoice === selected));
+            var label = document.createElement("span");
+            label.className = "text-action-m relative min-w-0 flex-1 truncate text-left";
+            label.textContent = "Pi " + i;
+            card.appendChild(label);
+            card.addEventListener("click", function () {
+              localStorage.setItem("mock-pi-native-voice", this.dataset.nativeVoice);
+              grid.querySelectorAll("[data-native-voice]").forEach(function (button) {
+                button.setAttribute("aria-pressed", String(button.dataset.nativeVoice === localStorage.getItem("mock-pi-native-voice")));
+              });
+            });
+            grid.appendChild(card);
+          }
+          column.append(heading, grid);
+          document.getElementById("mock-mount").appendChild(column);
+        }, 300);
+      });
+    </script>
+  </body>
+</html>

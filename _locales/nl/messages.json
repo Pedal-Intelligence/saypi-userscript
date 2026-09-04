@@ -1628,8 +1628,8 @@
     "message": "Stemmen"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Wordt boven het eigen stemoverzicht van de assistent op de instellingenpagina weergegeven wanneer een Say, Pi-stem het afspelen heeft overgenomen. De gemarkeerde ingebouwde stem van de assistent is dan niet te horen; $voice$ is de naam van de Say, Pi-stem, bijvoorbeeld Shimmer.",
-    "message": "Say, Pi spreekt met $voice$ — de onderstaande stemmen worden niet gebruikt.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi spreekt met de stem $voice$. Kies hieronder een Pi-stem om terug te schakelen.",
     "placeholders": {
       "voice": {
         "content": "$1",
@@ -2226,5 +2226,9 @@
   "voicesSavedUnavailable": {
     "message": "Je opgeslagen stem is op dit moment niet beschikbaar. Probeer het later opnieuw of kies een andere stem.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Stem wijzigen",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

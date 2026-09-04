@@ -157,11 +157,15 @@ export abstract class VoiceSelector {
         }
         // Re-read through the preference module (its cache is already
         // updated) so we apply a resolved voice object, not a bare id.
-        this.userPreferences.getVoice(this.chatbot).then((voice) => {
-          this.applySelectedVoice(voice ?? null);
-        });
+        void this.refreshSelectedVoice();
       }
     );
+  }
+
+  /** Resolve an external selection; surfaces can guard asynchronous reads. */
+  protected async refreshSelectedVoice(): Promise<void> {
+    const voice = await this.userPreferences.getVoice(this.chatbot);
+    this.applySelectedVoice(voice ?? null);
   }
 
   /**

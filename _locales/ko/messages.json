@@ -1628,8 +1628,8 @@
     "message": "목소리"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Say, Pi 음성이 재생을 대신할 때 어시스턴트 설정 페이지의 자체 음성 목록 위에 표시됩니다. 따라서 어시스턴트에서 강조된 기본 음성은 실제로 들리지 않습니다. $voice$는 Say, Pi 음성 이름입니다(예: Shimmer).",
-    "message": "Say, Pi가 $voice$ 음성으로 말하고 있습니다 — 아래 음성은 사용되지 않습니다.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi가 $voice$ 음성으로 말하고 있습니다. 다시 전환하려면 아래에서 Pi 음성을 선택하세요.",
     "placeholders": {
       "voice": {
         "content": "$1",
@@ -2226,5 +2226,9 @@
   "voicesSavedUnavailable": {
     "message": "저장한 음성을 지금은 사용할 수 없습니다. 나중에 다시 시도하거나 다른 음성을 선택하세요.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "음성 변경",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

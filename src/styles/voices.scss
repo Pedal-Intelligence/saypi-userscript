@@ -36,13 +36,25 @@ button.saypi-more-voices {
   grid-column: 1 / -1;
   margin: 0 0 0.25rem;
   font-size: 0.9em;
-  opacity: 0.75;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
 }
-// The glance-level half of the same statement: the host's highlighted card
-// stops claiming to be the voice you hear. Dimmed, never disabled — it is
-// still a real preference, and still what would speak with SayPi's voice off.
-.saypi-voices-overridden > button:not(.saypi-more-voices) {
-  opacity: 0.5;
+button.saypi-change-voice {
+  background: transparent;
+  border: 0;
+  padding: 0.25rem 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+button.saypi-change-voice:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }
 // ▶ free-sample preview affordance in the in-page voice menus (design §4).
 // A target of its own, separate from selecting the row. Fully SayPi-styled so
