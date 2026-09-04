@@ -2177,5 +2177,9 @@
   "maybeLater": {
     "message": "Maybe Later",
     "description": "Button text to dismiss auth prompt."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Your saved voice is unavailable right now. Try again later, or choose another voice.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

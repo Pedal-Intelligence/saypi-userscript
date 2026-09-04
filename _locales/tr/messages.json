@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Tarayıcı, ses algılama modelini çalıştırmak için gereken başlangıç WebAssembly belleğini sağlamadığında oluşturulan hata.",
     "message": "Ses algılama başlatılamıyor: bu tarayıcıda WebAssembly belleği kullanılamıyor."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Kayıtlı sesiniz şu anda kullanılamıyor. Daha sonra tekrar deneyin veya başka bir ses seçin.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

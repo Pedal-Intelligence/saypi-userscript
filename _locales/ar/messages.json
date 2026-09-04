@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "خطأ يُرمى عندما لا يوفّر المتصفح ذاكرة WebAssembly الأولية اللازمة لتشغيل نموذج اكتشاف الصوت.",
     "message": "لا يمكن بدء اكتشاف الصوت: ذاكرة WebAssembly غير متاحة في هذا المتصفح."
+  },
+  "voicesSavedUnavailable": {
+    "message": "صوتك المحفوظ غير متاح حاليًا. حاول مرة أخرى لاحقًا، أو اختر صوتًا آخر.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

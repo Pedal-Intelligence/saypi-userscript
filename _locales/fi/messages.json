@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Virhe, joka heitetään, kun selain ei tarjoa alkuperäistä WebAssembly-muistia, jota tarvitaan puheentunnistusmallin ajamiseen.",
     "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muisti ei ole käytettävissä tässä selaimessa."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "குரல்-கண்டறிதல் மாதிரியை இயக்க தேவையான ஆரம்ப WebAssembly நினைவகத்தை உலாவி வழங்காதபோது ஏற்படும் பிழை.",
     "message": "குரல் கண்டறிதல் தொடங்க முடியாது: இந்த உலாவியில் WebAssembly நினைவகம் கிடைக்கவில்லை."
+  },
+  "voicesSavedUnavailable": {
+    "message": "நீங்கள் சேமித்த குரல் தற்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும் அல்லது வேறொரு குரலைத் தேர்ந்தெடுக்கவும்.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

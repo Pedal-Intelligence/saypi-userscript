@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Eroare aruncată când browserul nu expune memoria WebAssembly inițială necesară pentru a rula modelul de detectare vocală.",
     "message": "Detectarea vocală nu poate porni: memoria WebAssembly nu este disponibilă în acest browser."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Vocea ta salvată nu este disponibilă momentan. Încearcă din nou mai târziu sau alege altă voce.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

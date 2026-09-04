@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fejl, der kastes, når browseren ikke eksponerer den indledende WebAssembly-hukommelse, der er nødvendig for at køre stemmedetektionsmodellen.",
     "message": "Stemmedetektion kan ikke starte: WebAssembly-hukommelse er ikke tilgængelig i denne browser."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Din gemte stemme er ikke tilgængelig lige nu. Prøv igen senere, eller vælg en anden stemme.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

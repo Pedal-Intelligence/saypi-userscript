@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "音声検出モデルの実行に必要な初期 WebAssembly メモリがブラウザで公開されていない場合に投げられるエラー。",
     "message": "音声検出を開始できません: このブラウザでは WebAssembly メモリを利用できません。"
+  },
+  "voicesSavedUnavailable": {
+    "message": "保存した音声は現在利用できません。しばらくしてからもう一度試すか、別の音声を選んでください。",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

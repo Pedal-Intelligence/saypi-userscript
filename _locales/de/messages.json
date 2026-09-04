@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fehler, der ausgelöst wird, wenn der Browser den initialen WebAssembly-Speicher nicht bereitstellt, der zum Ausführen des Spracherkennungsmodells benötigt wird.",
     "message": "Spracherkennung kann nicht starten: WebAssembly-Speicher ist in diesem Browser nicht verfügbar."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Deine gespeicherte Stimme ist gerade nicht verfügbar. Versuche es später erneut oder wähle eine andere Stimme.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

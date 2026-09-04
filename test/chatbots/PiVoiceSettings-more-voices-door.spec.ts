@@ -36,6 +36,7 @@ vi.mock("../../src/popup/popupopener", () => ({
 
 import { PiVoiceSettings } from "../../src/chatbots/PiVoiceSettings";
 import { PiAIVoice } from "../../src/tts/SpeechModel";
+import EventBus from "../../src/events/EventBus";
 
 /**
  * A faithful fixture of pi.ai's CURRENT Voice settings grid (captured live via
@@ -66,10 +67,12 @@ function makeSettings(grid: HTMLElement): any {
   settings.chatbot = { getID: () => "pi" };
   settings.userPreferences = {
     getVoice: vi.fn(async () => null),
+    hasVoice: vi.fn(async () => false),
     setVoice: vi.fn(async () => {}),
     unsetVoice: vi.fn(async () => {}),
   };
   settings.element = grid;
+  settings.selectionRevision = 0;
   return settings;
 }
 
@@ -79,6 +82,7 @@ const door = (grid: HTMLElement) =>
 beforeEach(() => {
   openSettingsMock.mockReset();
   document.body.innerHTML = "";
+  EventBus.removeAllListeners();
 });
 
 describe("PiVoiceSettings — 'More voices' door on Pi's Voice settings page (#491 follow-up, door-first)", () => {
@@ -133,10 +137,10 @@ describe("PiVoiceSettings — 'More voices' door on Pi's Voice settings page (#4
     expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 
-  it("renderMenu (the auth-change path) just re-ensures the door — never draws voice rows", () => {
+  it("refreshMenu (the auth-change path) re-ensures the door without fetching a catalog", async () => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);
-    settings.renderMenu([], null);
+    await settings.refreshMenu();
     expect(door(grid)).not.toBeNull();
     expect(grid.querySelectorAll(".saypi-custom-voice").length).toBe(0);
   });
@@ -209,10 +213,10 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     expect(notice(grid)!.textContent).toContain("Shimmer");
   });
 
-  it("stays out of the way when Pi's own voice is the one speaking", () => {
+  it("stays out of the way when Pi's own voice is the one speaking", async () => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);
-    settings.renderMenu([], null);
+    await settings.applySelectedVoice(null);
     expect(notice(grid)).toBeNull();
     // The door is SayPi's only mark on an un-overridden grid.
     expect(door(grid)).not.toBeNull();
@@ -308,13 +312,52 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
   });
 
-  it("follows a voice chosen elsewhere, without a repopulate", () => {
+  it("keeps an unavailable notice when a saved remote voice cannot resolve", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.hasVoice.mockResolvedValue(true);
+    await settings.applySelectedVoice(null);
+    expect(notice(grid)).not.toBeNull();
+    expect(notice(grid)!.textContent).toContain("voicesSavedUnavailable");
+    expect(notice(grid)?.textContent).not.toContain("voiceOverriddenBySayPi");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+    settings.observeSettingsGrid();
+    settings.userPreferences.unsetVoice.mockImplementation(async () => {
+      settings.userPreferences.hasVoice.mockResolvedValue(false);
+    });
+    grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
+    await vi.waitFor(() => expect(notice(grid)).toBeNull());
+  });
+
+  it.each(["initial", "external"])("ignores a late %s read after a native choice", async (source) => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    let resolveVoice!: (voice: unknown) => void;
+    const pending = new Promise((resolve) => { resolveVoice = resolve; });
+    settings.userPreferences.getVoice.mockReturnValueOnce(pending);
+    settings.observeSettingsGrid();
+    settings.ensureSettingsDoor();
+    let refresh: Promise<void> | undefined;
+    if (source === "initial") {
+      refresh = settings.refreshOverrideNotice();
+    } else {
+      settings.registerVoicePreferenceChangeHandler();
+      EventBus.emit("userPreferenceChanged", { voicePreferences: { pi: "shimmer" }, voiceChatbotId: "pi" });
+    }
+    await settings.useNativeVoice();
+    resolveVoice(voice("Shimmer"));
+    await pending;
+    await refresh;
+    expect(notice(grid)).toBeNull();
+  });
+
+  it("follows a voice chosen elsewhere, without a repopulate", async () => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);
     settings.renderMenu([], null);
     settings.applySelectedVoice(voice("Marin"));
     expect(notice(grid)!.textContent).toContain("Marin");
-    settings.applySelectedVoice(null);
+    await settings.applySelectedVoice(null);
     expect(notice(grid)).toBeNull();
   });
 

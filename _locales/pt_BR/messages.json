@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Erro lançado quando o navegador não expõe a memória inicial do WebAssembly necessária para executar o modelo de detecção de voz.",
     "message": "A detecção de voz não pode iniciar: a memória do WebAssembly não está disponível neste navegador."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Sua voz salva está indisponível no momento. Tente novamente mais tarde ou escolha outra voz.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

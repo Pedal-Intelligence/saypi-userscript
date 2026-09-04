@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "एरर, जब ब्राउज़र वॉइस-डिटेक्शन मॉडल चलाने के लिए ज़रूरी शुरुआती WebAssembly मेमोरी उपलब्ध नहीं कराता।",
     "message": "वॉइस डिटेक्शन शुरू नहीं हो सकता: इस ब्राउज़र में WebAssembly मेमोरी उपलब्ध नहीं है।"
+  },
+  "voicesSavedUnavailable": {
+    "message": "आपकी सहेजी गई आवाज़ अभी उपलब्ध नहीं है। बाद में फिर से कोशिश करें या दूसरी आवाज़ चुनें।",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

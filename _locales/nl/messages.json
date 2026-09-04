@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fout die wordt opgegooid wanneer de browser het initiële WebAssembly-geheugen dat nodig is om het spraakdetectiemodel te draaien niet aanbiedt.",
     "message": "Spraakdetectie kan niet starten: WebAssembly-geheugen is niet beschikbaar in deze browser."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Je opgeslagen stem is op dit moment niet beschikbaar. Probeer het later opnieuw of kies een andere stem.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

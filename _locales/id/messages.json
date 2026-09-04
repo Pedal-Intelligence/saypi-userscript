@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Error yang muncul ketika browser tidak menyediakan memori WebAssembly awal yang diperlukan untuk menjalankan model pendeteksi suara.",
     "message": "Pendeteksian suara tidak dapat dimulai: memori WebAssembly tidak tersedia di browser ini."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Suara yang Anda simpan sedang tidak tersedia. Coba lagi nanti, atau pilih suara lain.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

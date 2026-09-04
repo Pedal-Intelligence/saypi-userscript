@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Помилка, яка виникає, коли браузер не надає початкову памʼять WebAssembly, потрібну для запуску моделі виявлення голосу.",
     "message": "Виявлення голосу не може запуститися: у цьому браузері недоступна памʼять WebAssembly."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Збережений голос зараз недоступний. Спробуйте пізніше або виберіть інший голос.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

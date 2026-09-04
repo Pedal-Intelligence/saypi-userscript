@@ -12,7 +12,11 @@ used with offscreen playback. No new audio event or provider contract is needed.
 Stored native Pi ids are cleared on native card clicks too, so an old persisted
 Pi voice cannot override the card just chosen. Native provider identity also
 determines whether an override notice belongs on the page; a non-null stored
-voice alone does not.
+voice alone does not. When the stored id exists but its voice cannot currently
+resolve, the page says the saved voice is unavailable and keeps Change voice
+accessible; it does not describe Pi as the active provider. Initial, auth and
+external preference reads share a revision guard, so an older read cannot put a
+SayPi notice back after the user has chosen a native voice.
 
 The notice uses Pi’s compiled `text-text-secondary` theme utility rather than
 inheriting the grid’s foreground, which was black even in dark mode. A nearby
@@ -24,5 +28,11 @@ repaired if Pi replaces its grid children.
 The DOM regression suite proves native-provider classification, theme-color
 inheritance, direct navigation, native-card click handling, failed persistence,
 and replacement-node recovery. The existing audio tests cover provider-based
-muting and release. Real-host confirmation belongs to the combined release E2E
-pass; this slice itself spends no real-host turns.
+muting and release. `e2e/specs/pi-voice-settings.e2e.ts` adds a real development
+extension and isolated Chromium profile against the local Pi settings fixture:
+it verifies real preference writes, native card handling, catalog navigation,
+and notice contrast in light/dark themes, plus return from an unresolved saved
+voice. The fixture leaves `/talk` unchanged. Its host-theme attribute is separate
+from SayPi's theme classes, and the test asserts the actual background before
+measuring contrast so a mislabeled light rendering cannot pass as dark coverage.
+This slice spends no real-host turns.

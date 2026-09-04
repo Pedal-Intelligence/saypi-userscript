@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Chyba vyhozená, když prohlížeč neposkytuje počáteční paměť WebAssembly potřebnou pro spuštění modelu detekce hlasu.",
     "message": "Detekci hlasu nelze spustit: v tomto prohlížeči není k dispozici paměť WebAssembly."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Váš uložený hlas je momentálně nedostupný. Zkuste to později nebo vyberte jiný hlas.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

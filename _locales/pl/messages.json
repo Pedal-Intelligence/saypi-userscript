@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Błąd zgłaszany, gdy przeglądarka nie udostępnia początkowej pamięci WebAssembly potrzebnej do uruchomienia modelu wykrywania głosu.",
     "message": "Nie można uruchomić wykrywania głosu: pamięć WebAssembly jest niedostępna w tej przeglądarce."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Twój zapisany głos jest teraz niedostępny. Spróbuj ponownie później lub wybierz inny głos.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

@@ -73,31 +73,57 @@ export class PiVoiceSettings extends VoiceSelector {
    * The SayPi voice currently overriding Pi's own, as last rendered.
    *
    * A render cache, not the state of record — the stored preference is still
-   * the only source of truth, fetched by the base's `refreshMenu`. It exists
+   * the only source of truth, fetched by `refreshOverrideNotice`. It exists
    * because Pi's React drops our foreign children and the re-injection runs
    * from a MutationObserver callback, which is synchronous and has no chance to
    * re-read storage: without this, a healed notice would come back blank.
    */
   private overridingVoice: SpeechSynthesisVoiceRemote | null = null;
+  private savedVoiceUnavailable = false;
+  private selectionRevision = 0;
 
   getId(): string {
     return "saypi-voice-settings";
   }
 
-  // Also reached on auth changes via the base refreshMenu → re-ensure SayPi's
-  // marks on the grid, never draw inline voice rows (door-first).
+  // This surface renders only the current choice. Catalog and pin fetches from
+  // the base refresh are unnecessary here; auth and storage updates share the
+  // same guarded read as initial load.
+  override async refreshMenu(): Promise<void> {
+    await this.refreshOverrideNotice();
+  }
+
+  protected override async refreshSelectedVoice(): Promise<void> {
+    await this.refreshOverrideNotice();
+  }
+
+  // Fulfil the base selector's render contract without adding catalog rows.
   protected override renderMenu(
     _voices: SpeechSynthesisVoiceRemote[],
     storedVoice: SpeechSynthesisVoiceRemote | null
   ): void {
-    this.applySelectedVoice(storedVoice);
+    void this.applySelectedVoice(storedVoice);
   }
 
   // No per-row selection to reflect on a door-only surface — but the grid's
   // whole meaning changes when a SayPi voice takes over, so that much is.
-  protected override applySelectedVoice(
+  protected override async applySelectedVoice(
     voice: SpeechSynthesisVoiceRemote | null
-  ): void {
+  ): Promise<void> {
+    const revision = ++this.selectionRevision;
+    let unavailable = false;
+    if (!voice) {
+      try {
+        // An unresolved saved remote id still reserves SayPi playback. A null
+        // catalog result must not make this page claim that Pi is speaking.
+        unavailable = await this.userPreferences.hasVoice(this.chatbot);
+      } catch (error) {
+        console.debug("[SayPi] Could not read Pi's saved voice preference", error);
+        return;
+      }
+      if (revision !== this.selectionRevision) return;
+    }
+    this.savedVoiceUnavailable = unavailable;
     // A persisted Pi voice is a native choice too. Use the same provider
     // resolution as playback, rather than treating every stored object as an
     // override (or mistaking `default`, which is catalog metadata, for one).
@@ -115,9 +141,11 @@ export class PiVoiceSettings extends VoiceSelector {
    * can't say what's speaking should still show its door.
    */
   private async refreshOverrideNotice(): Promise<void> {
+    const revision = ++this.selectionRevision;
     try {
       const voice = await this.userPreferences.getVoice(this.chatbot);
-      this.applySelectedVoice(voice ?? null);
+      if (revision !== this.selectionRevision) return;
+      await this.applySelectedVoice(voice ?? null);
     } catch (error) {
       console.debug("[SayPi] Could not read the voice in use for Pi", error);
     }
@@ -157,13 +185,13 @@ export class PiVoiceSettings extends VoiceSelector {
     const existing = grid.querySelector<HTMLElement>(
       ".saypi-voice-override-notice"
     );
-    if (!this.overridingVoice) {
+    if (!this.overridingVoice && !this.savedVoiceUnavailable) {
       existing?.remove();
       return;
     }
-    const text = getMessage("voiceOverriddenBySayPi", [
-      this.overridingVoice.name,
-    ]);
+    const text = this.savedVoiceUnavailable
+      ? getMessage("voicesSavedUnavailable")
+      : getMessage("voiceOverriddenBySayPi", [this.overridingVoice!.name]);
     if (existing) {
       // No data-i18n anywhere on it: the text is substituted, and replaceI18n
       // would erase the voice name on the next settings paint.
@@ -189,13 +217,16 @@ export class PiVoiceSettings extends VoiceSelector {
   }
 
   private async useNativeVoice(): Promise<void> {
+    const revision = ++this.selectionRevision;
     try {
       // Pi owns which native card was chosen. Clearing our preference also
       // changes the audio provider back to Pi and releases the host mute.
       // Clear stored native ids too, so the converter cannot restore an older
       // Pi voice over the card the user just selected.
       await this.userPreferences.unsetVoice(this.chatbot);
-      this.applySelectedVoice(null);
+      if (revision === this.selectionRevision) {
+        await this.applySelectedVoice(null);
+      }
     } catch (error) {
       // Keep the notice honest if storage fails: SayPi is still the provider.
       console.debug("[SayPi] Could not return to Pi's own voice", error);

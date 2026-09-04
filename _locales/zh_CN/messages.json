@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "当浏览器未提供运行语音检测模型所需的初始 WebAssembly 内存时抛出的错误。",
     "message": "无法开始语音检测：此浏览器中 WebAssembly 内存不可用。"
+  },
+  "voicesSavedUnavailable": {
+    "message": "你保存的语音暂时不可用。请稍后重试，或选择其他语音。",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

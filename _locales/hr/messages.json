@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Pogreška koja se javlja kada preglednik ne izlaže početnu WebAssembly memoriju potrebnu za pokretanje modela za detekciju glasa.",
     "message": "Detekcija glasa se ne može pokrenuti: WebAssembly memorija nije dostupna u ovom pregledniku."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tvoj spremljeni glas trenutačno nije dostupan. Pokušaj ponovno kasnije ili odaberi drugi glas.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

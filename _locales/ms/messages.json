@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Ralat yang dibuang apabila pelayar tidak mendedahkan memori WebAssembly awal yang diperlukan untuk menjalankan model pengesanan suara.",
     "message": "Pengesanan suara tidak boleh bermula: memori WebAssembly tidak tersedia dalam pelayar ini."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Suara yang anda simpan tidak tersedia buat masa ini. Cuba lagi kemudian, atau pilih suara lain.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

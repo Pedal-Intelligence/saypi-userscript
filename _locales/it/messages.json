@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Errore generato quando il browser non espone la memoria WebAssembly iniziale necessaria per eseguire il modello di rilevamento vocale.",
     "message": "Impossibile avviare il rilevamento vocale: la memoria WebAssembly non è disponibile in questo browser."
+  },
+  "voicesSavedUnavailable": {
+    "message": "La voce che hai salvato non è disponibile al momento. Riprova più tardi o scegli un’altra voce.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

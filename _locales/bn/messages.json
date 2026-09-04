@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "ভয়েস-ডিটেকশন মডেল চালাতে প্রয়োজনীয় প্রাথমিক WebAssembly মেমরি ব্রাউজার সরবরাহ না করলে যে ত্রুটি দেখায়।",
     "message": "ভয়েস ডিটেকশন শুরু করা যাচ্ছে না: এই ব্রাউজারে WebAssembly মেমরি উপলব্ধ নয়।"
+  },
+  "voicesSavedUnavailable": {
+    "message": "আপনার সংরক্ষিত কণ্ঠ এখন উপলব্ধ নেই। পরে আবার চেষ্টা করুন, অথবা অন্য কণ্ঠ বেছে নিন।",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Грешка, хвърляна когато браузърът не предоставя началната WebAssembly памет, нужна за изпълнение на модела за засичане на глас.",
     "message": "Засичането на глас не може да стартира: в този браузър не е налична памет за WebAssembly."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Запазеният ти глас в момента не е наличен. Опитай отново по-късно или избери друг глас.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

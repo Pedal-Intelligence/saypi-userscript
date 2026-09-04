@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Error na ibinabato kapag hindi inilalantad ng browser ang initial WebAssembly memory na kailangan para patakbuhin ang voice-detection model.",
     "message": "Hindi makapagsimula ang voice detection: hindi available ang WebAssembly memory sa browser na ito."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Hindi available ngayon ang naka-save mong boses. Subukang muli mamaya, o pumili ng ibang boses.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

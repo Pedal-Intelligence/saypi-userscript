@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Lỗi được đưa ra khi trình duyệt không cung cấp bộ nhớ WebAssembly ban đầu cần để chạy mô hình phát hiện giọng nói.",
     "message": "Không thể bắt đầu phát hiện giọng nói: trình duyệt này không hỗ trợ bộ nhớ WebAssembly."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Giọng nói bạn đã lưu hiện không khả dụng. Hãy thử lại sau hoặc chọn giọng khác.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

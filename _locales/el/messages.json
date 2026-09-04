@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Σφάλμα που προκύπτει όταν το πρόγραμμα περιήγησης δεν εκθέτει την αρχική μνήμη WebAssembly που απαιτείται για την εκτέλεση του μοντέλου ανίχνευσης φωνής.",
     "message": "Η ανίχνευση φωνής δεν μπορεί να ξεκινήσει: η μνήμη WebAssembly δεν είναι διαθέσιμη σε αυτό το πρόγραμμα περιήγησης."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Η αποθηκευμένη φωνή σου δεν είναι διαθέσιμη αυτή τη στιγμή. Δοκίμασε ξανά αργότερα ή επίλεξε άλλη φωνή.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

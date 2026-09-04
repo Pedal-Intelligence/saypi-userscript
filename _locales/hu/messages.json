@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Hiba, amely akkor keletkezik, ha a böngésző nem teszi elérhetővé a hangérzékelő modell futtatásához szükséges kezdeti WebAssembly-memóriát.",
     "message": "A hangérzékelés nem indítható el: ebben a böngészőben nem érhető el a WebAssembly-memória."
+  },
+  "voicesSavedUnavailable": {
+    "message": "A mentett hangod jelenleg nem érhető el. Próbáld újra később, vagy válassz másik hangot.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

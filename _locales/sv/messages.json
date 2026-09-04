@@ -2180,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fel som uppstår när webbläsaren inte exponerar det initiala WebAssembly-minnet som behövs för att köra röstigenkänningsmodellen.",
     "message": "Röstigenkänning kan inte starta: WebAssembly-minne är inte tillgängligt i den här webbläsaren."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Din sparade röst är inte tillgänglig just nu. Försök igen senare eller välj en annan röst.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }
