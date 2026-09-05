@@ -1,12 +1,4 @@
-/**
- * Two decisions about the HOST's audio element, kept out of AudioModule.js so
- * they can be tested (that module's constructor drags in the whole content-script
- * bootstrap — the same reason `audioElementRemoval.ts` exists).
- *
- * Both exist to serve one rule: when a SayPi voice is selected for the active
- * host, SayPi is the text-to-speech provider — the host's own audio is silenced
- * and ours plays instead (#602).
- */
+/** Shared audio discovery and the default mute decision used by AudioModule. */
 
 /**
  * The element to bind to after losing the tracked one.
@@ -29,8 +21,15 @@ export function findHostAudioElement(
   if (!root) return null;
   // Matched by property rather than by an interpolated `#id` selector: the id
   // never needs escaping, and this can't throw on a hostile one.
-  const elements = [...root.querySelectorAll<HTMLAudioElement>("audio")];
+  const elements = findHostAudioElements(root);
   return elements.find((el) => el.id === decoratedId) ?? elements[0] ?? null;
+}
+
+/** Include a directly inserted <audio>, as well as players in an added subtree. */
+export function findHostAudioElements(root: Document | Element): HTMLAudioElement[] {
+  const descendants = [...root.querySelectorAll<HTMLAudioElement>("audio")];
+  return root.nodeType === 1 && (root as Element).tagName === "AUDIO"
+    ? [root as HTMLAudioElement, ...descendants] : descendants;
 }
 
 /**

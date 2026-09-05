@@ -204,7 +204,7 @@ describe("AudioModule removal-observer wiring", () => {
   it("rebinds to an existing element before falling back to waiting", () => {
     const rebind = source.match(/rebindAudioElement\(\)\s*\{[\s\S]*?\n {2}\}/)?.[0];
     expect(rebind).toBeDefined();
-    expect(rebind).toMatch(/findHostAudioElement\(/);
+    expect(rebind).toMatch(/this\.findAudioElement\(document\)/);
     expect(rebind).toMatch(/this\.swapAudioElement\(/);
     expect(rebind).toMatch(/this\.listenForAudioElementSwap\(\)/);
     // The fallback must come after the take-it-now path, not instead of it.

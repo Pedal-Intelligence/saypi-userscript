@@ -43,6 +43,36 @@ test("an open Pi conversation follows a voice selected in another extension docu
   // This catches a mute attached only to the next loadstart instead of ownership.
   expect(await player.evaluate((audio: HTMLAudioElement) => audio.paused)).toBe(false);
 
+  // Native players can coexist, arrive directly, or be nested in one DOM batch.
+  // Every native stream must stay silent without losing its host-owned source.
+  await player.evaluate((audio: HTMLAudioElement) => { audio.dataset.nativeTest = "original"; });
+  await pi.evaluate(async () => {
+    const direct = document.createElement("audio");
+    const nested = document.createElement("audio");
+    const wrapper = document.createElement("div");
+    wrapper.append(nested);
+    for (const [index, audio] of [direct, nested].entries()) {
+      audio.dataset.nativeTest = String(index);
+      audio.src = `https://pi.ai/api/chat/voice?voice=voice4&messageSid=native-${index}`;
+      audio.loop = true;
+    }
+    document.body.append(direct, wrapper);
+    await Promise.all([direct.play(), nested.play()]);
+  });
+  await expect.poll(() => pi.locator("audio[data-native-test]").evaluateAll((elements: HTMLAudioElement[]) =>
+    elements.every(audio => audio.muted && !audio.paused && audio.currentTime > 0.15),
+  )).toBe(true);
+  await expect(pi.locator("audio#saypi-audio-main")).toHaveCount(1);
+
+  await settings.evaluate(() => chrome.storage.local.set({ voicePreferences: {} }));
+  await expect.poll(() => pi.locator("audio[data-native-test]").evaluateAll((elements: HTMLAudioElement[]) =>
+    elements.every(audio => !audio.muted && !audio.paused),
+  )).toBe(true);
+  await settings.evaluate((id) => chrome.storage.local.set({ voicePreferences: { pi: id } }), MOCK_VOICE_IDS.onyx);
+  await expect.poll(() => pi.locator("audio[data-native-test]").evaluateAll((elements: HTMLAudioElement[]) =>
+    elements.every(audio => audio.muted),
+  )).toBe(true);
+
   // A resumed SPA route retains the live actor. A full reload separately proves
   // that a choice made before audio startup is picked up too.
   await pi.evaluate(() => history.pushState({}, "", "/talk/existing-conversation"));
