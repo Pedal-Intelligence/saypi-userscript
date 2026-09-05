@@ -1,5 +1,5 @@
 import getMessage from "../../../../src/i18n";
-import { SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
+import { audioProviders, SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
 import { getJwtManagerSync } from "../../../../src/JwtManager";
@@ -955,7 +955,9 @@ export class VoicesController {
     scope.textContent = getMessage("voicesSpeaksWith", [vm.host.label]);
     current.appendChild(scope);
     const currentHasRow = this.rows.some((row) => row.voice.id === vm.currentId);
-    const selectedRemote = vm.stagedCurrent && !vm.stagedCurrent.default ? vm.stagedCurrent : null;
+    const selectedRemote = vm.stagedCurrent &&
+      audioProviders.retreiveProviderByVoice(vm.stagedCurrent) === audioProviders.SayPi
+      ? vm.stagedCurrent : null;
     if (selectedRemote && currentHasRow) {
       const jump = document.createElement("button");
       jump.type = "button";

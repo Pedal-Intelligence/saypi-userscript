@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Lyhyt teksti yhtenäisen asetusten ääniluettelon isäntäkohtaisessa ”käytä tätä ääntä” -painikkeessa (isäntä näkyy sen vieressä).",
-    "message": "Käytä"
-  },
   "voicesYourVoice": {
     "description": "Ohjauspalkin painike asetusten Äänet-luettelossa, joka siirtää kohdistuksen sen äänen riville, jota tämä isäntä käyttää tällä hetkellä; $name$ on kyseinen ääni.",
     "message": "Äänesi: $name$",

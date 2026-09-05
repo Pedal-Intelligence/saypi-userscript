@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Kurze Beschriftung auf der Buttonbeschriftung „diese Stimme verwenden“ pro Host im einheitlichen Einstellungen‑Stimmkatalog (der Host wird daneben angezeigt).",
-    "message": "Verwenden"
-  },
   "voicesYourVoice": {
     "description": "Schaltfläche in der Steuerleiste der Liste „Stimmen“ in den Einstellungen, die den Fokus zur Zeile der Stimme verschiebt, die dieser Host aktuell verwendet; $name$ ist diese Stimme.",
     "message": "Deine Stimme: $name$",

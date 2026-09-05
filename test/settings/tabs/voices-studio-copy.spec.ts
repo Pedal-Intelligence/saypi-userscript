@@ -272,10 +272,11 @@ describe("the stage and the slots section are retired", () => {
     expect(controllerSrc).not.toMatch(new RegExp(`"${key}"`));
   });
 
-  it("keeps the retired keys in the locale — 31 translations, zero cost", () => {
-    for (const key of retired) {
+  it("keeps historical keys apart from the replaced generic Use label", () => {
+    for (const key of retired.filter((key) => key !== "voicesUseShort")) {
       expect(en[key], `${key} should stay in messages.json`).toBeTruthy();
     }
+    expect(en.voicesUseShort).toBeUndefined();
   });
 
   it("retires voicesNoStageVoice — key deleted and nothing references it", () => {

@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Kratka oznaka na gumbu 'koristi ovaj glas' po hostu u objedinjenom katalogu glasova u postavkama (host je prikazan uz njega).",
-    "message": "Koristi"
-  },
   "voicesYourVoice": {
     "description": "Gumb u traci kontrola na popisu Glasovi u postavkama koji prebacuje fokus na redak glasa koji ovaj host trenutačno koristi; $name$ je taj glas.",
     "message": "Vaš glas: $name$",

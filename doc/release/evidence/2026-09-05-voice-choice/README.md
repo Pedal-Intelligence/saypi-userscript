@@ -7,9 +7,9 @@ catalog failures, and returning to an assistant's own voice remains available.
 Pi's native settings show a readable current-voice notice with Change voice
 beside it, and choosing a Pi card relinquishes SayPi's override.
 
-The assembled source revision is
+The initial assembled source revision was
 [`418ee7190b29469774dcfd81f65ced01ffc8bd37`](https://github.com/Pedal-Intelligence/saypi-userscript/commit/418ee7190b29469774dcfd81f65ced01ffc8bd37),
-based on `0891244`. It combines the work in these open review PRs:
+based on `0891244`. It combines the work in these PRs:
 
 | PR | Contribution |
 | --- | --- |
@@ -20,7 +20,23 @@ based on `0891244`. It combines the work in these open review PRs:
 
 The proposed release target is **1.14.0**, from read-only release planning. No
 version bump, production packaging, signing or store submission is recorded by
-this evidence. The PRs remain open for review.
+this evidence. PR #611 has merged; the remaining PRs are undergoing the final
+review follow-up described below.
+
+## Final review follow-up
+
+The studio now identifies the saved voice by its audio provider. A voice's
+`default` flag does not identify who speaks: native Pi 4 is not the default,
+while a remote voice can carry that flag. The previous test fixture incorrectly
+labelled an OpenAI voice as native. Tests now use actual `PiAIVoice` instances
+for Pi 1, 4 and 8, and separately cover a default remote voice. Pi 4 and 8 and
+the remote case failed before the correction. A browser regression seeds Pi 4
+in real extension storage and checks the studio after reopening.
+
+The generic `voicesUseShort` translation key was also removed from all 32
+bundles after verifying that no runtime call uses it. The explicit host-scoped
+Use action already replaces it. An independent reviewer approved the provider
+classification and verified that the locale edit changes no other values.
 
 ## Verification
 

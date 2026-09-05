@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Etiqueta corta en el botón por host de \"usar esta voz\" en el catálogo unificado de voces de ajustes (el host se muestra junto a él).",
-    "message": "Usar"
-  },
   "voicesYourVoice": {
     "description": "Botón de la barra de control en la lista de Voces de ajustes que mueve el foco a la fila de la voz que usa actualmente este host; $name$ es esa voz.",
     "message": "Tu voz: $name$",

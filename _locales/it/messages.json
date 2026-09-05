@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Etichetta breve sul pulsante per host \"usa questa voce\" nel catalogo voci delle impostazioni unificate (l'host è mostrato accanto).",
-    "message": "Usa"
-  },
   "voicesYourVoice": {
     "description": "Pulsante nella barra di controllo nell'elenco Voci delle impostazioni che sposta il focus sulla riga della voce usata attualmente da questo host; $name$ è quella voce.",
     "message": "La tua voce: $name$",

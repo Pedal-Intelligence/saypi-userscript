@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Krátký štítek na tlačítku „použít tento hlas“ pro konkrétního hostitele v jednotném katalogu hlasů v nastavení (hostitel se zobrazuje vedle něj).",
-    "message": "Použít"
-  },
   "voicesYourVoice": {
     "description": "Tlačítko v ovládací liště v seznamu Hlasů v nastavení, které přesune fokus na řádek hlasu, který tento hostitel aktuálně používá; $name$ je tento hlas.",
     "message": "Váš hlas: $name$",

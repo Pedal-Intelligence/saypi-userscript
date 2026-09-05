@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Label ringkas pada butang per hos 'guna suara ini' dalam katalog suara tetapan bersatu (hos dipaparkan di sebelahnya).",
-    "message": "Guna"
-  },
   "voicesYourVoice": {
     "description": "Butang bar kawalan dalam senarai Suara di tetapan yang mengalihkan fokus ke baris suara yang sedang digunakan oleh hos ini; $name$ ialah suara itu.",
     "message": "Suara anda: $name$",

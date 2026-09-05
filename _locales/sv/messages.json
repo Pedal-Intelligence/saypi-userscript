@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Kort etikett på knappen ”använd den här rösten” per värd i den enhetliga röstkatalogen i inställningarna (värden visas bredvid).",
-    "message": "Använd"
-  },
   "voicesYourVoice": {
     "description": "Knapp i kontrollraden i inställningarnas lista för Röster som flyttar fokus till raden för den röst som den här värden använder just nu; $name$ är den rösten.",
     "message": "Din röst: $name$",

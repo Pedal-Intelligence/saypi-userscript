@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Libellé court sur le bouton « utiliser cette voix » par hôte dans le catalogue de voix des paramètres unifiés (l’hôte est affiché à côté).",
-    "message": "Utiliser"
-  },
   "voicesYourVoice": {
     "description": "Bouton de la barre de contrôle dans la liste Voix des paramètres qui déplace le focus vers la ligne de la voix actuellement utilisée par cet hôte ; $name$ est cette voix.",
     "message": "Votre voix : $name$",

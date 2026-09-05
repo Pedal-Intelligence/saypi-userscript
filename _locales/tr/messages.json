@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Birleşik ayarlar ses kataloğunda, her ana bilgisayar için yer alan “bu sesi kullan” düğmesindeki kısa etiket (ana bilgisayar yanında gösterilir).",
-    "message": "Kullan"
-  },
   "voicesYourVoice": {
     "description": "Ayarlar Sesler listesindeki kontrol çubuğu düğmesi; odağı bu ana makinenin şu anda kullandığı sesin satırına taşır; $name$ o sestir.",
     "message": "Senin sesin: $name$",

@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Etichetă scurtă pe butonul per-gazdă „folosește această voce” din catalogul unificat de voci din setări (gazda este afișată alături).",
-    "message": "Folosește"
-  },
   "voicesYourVoice": {
     "description": "Buton din bara de control în lista Voci din setări care mută focalizarea la rândul vocii folosite în prezent de acest host; $name$ este acea voce.",
     "message": "Vocea ta: $name$",

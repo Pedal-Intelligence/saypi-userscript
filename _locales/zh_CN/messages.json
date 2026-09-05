@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "在统一设置的语音目录中，每个主机对应的“使用此语音”按钮上的短标签（旁边会显示主机）。",
-    "message": "使用"
-  },
   "voicesYourVoice": {
     "description": "设置的“语音”列表中控制栏按钮，将焦点移到此 host 当前使用的语音所在行；$name$ 是该语音。",
     "message": "你的语音：$name$",

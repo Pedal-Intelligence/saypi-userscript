@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Korte label op de per-hostknop 'gebruik deze stem' in de gecombineerde instellingen-stemcatalogus (de host wordt ernaast getoond).",
-    "message": "Gebruik"
-  },
   "voicesYourVoice": {
     "description": "Knop in de bedieningsbalk in de lijst Stemmen in de instellingen die de focus naar de rij verplaatst van de stem die deze host momenteel gebruikt; $name$ is die stem.",
     "message": "Jouw stem: $name$",

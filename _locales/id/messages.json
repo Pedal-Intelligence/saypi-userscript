@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Label singkat pada tombol per-host 'gunakan suara ini' di katalog suara pengaturan terpadu (host ditampilkan di sebelahnya).",
-    "message": "Gunakan"
-  },
   "voicesYourVoice": {
     "description": "Tombol bilah kontrol di daftar Suara pada setelan yang memindahkan fokus ke baris suara yang saat ini digunakan host ini; $name$ adalah suara tersebut.",
     "message": "Suara Anda: $name$",

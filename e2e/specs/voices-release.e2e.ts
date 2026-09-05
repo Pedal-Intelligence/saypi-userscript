@@ -85,6 +85,25 @@ test.describe("voices release candidate: normal autoplay and saved choice", () =
   // Default suite behaviour is unchanged. This opt-in removes its autoplay bypass.
   test.use({ browserAutoplayPolicy: "default" });
 
+  test("a saved native Pi voice stays native in the studio after reopening", async ({
+    context, extensionId, serviceWorker,
+  }) => {
+    await seedChoices(serviceWorker);
+    await serviceWorker.evaluate(async () => {
+      const voices = (await chrome.storage.local.get("voicePreferences")).voicePreferences;
+      await chrome.storage.local.set({ voicePreferences: { ...voices, pi: "voice4" } });
+    });
+    const page = await context.newPage();
+    await openVoicesRail(page, extensionId);
+    await showHost(page, "pi");
+    await expect(page.locator(".voice-fallback-host")).toBeVisible();
+    await expect(page.locator(".voice-native-return, .voice-current-name, .voice-your-voice")).toHaveCount(0);
+    await expect(page.locator('.voice-row[aria-selected="true"]')).toHaveCount(0);
+    await page.reload();
+    await expect(page.locator(".voice-fallback-host")).toBeVisible();
+    expect(await savedVoices(serviceWorker)).toEqual({ pi: "voice4", claude: MOCK_VOICE_IDS.alloy });
+  });
+
   test("ordinary page rejects gestureless sound; a gesture in Voices starts a progressing sequence that Escape stops", async ({
     context, extensionId, serviceWorker,
   }) => {

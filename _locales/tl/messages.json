@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Maikling label sa button na 'gamitin ang boses na ito' kada host sa pinag-isang voice catalog ng settings (ipinapakita rin ang host sa tabi nito).",
-    "message": "Gamitin"
-  },
   "voicesYourVoice": {
     "description": "Button sa control bar sa listahan ng Voices sa settings na inililipat ang focus sa row ng boses na kasalukuyang ginagamit ng host na ito; $name$ ang boses na iyon.",
     "message": "Boses mo: $name$",

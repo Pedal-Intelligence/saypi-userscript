@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Kort etiket på knappen 'brug denne stemme' pr. vært i den samlede stemmekatalogvisning i indstillingerne (værten vises ved siden af).",
-    "message": "Brug"
-  },
   "voicesYourVoice": {
     "description": "Knap i kontrolbjælken i indstillingslisten over Stemmer, som flytter fokus til rækken for den stemme, som denne vært bruger i øjeblikket; $name$ er den stemme.",
     "message": "Din stemme: $name$",

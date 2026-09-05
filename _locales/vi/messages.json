@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Nhãn ngắn trên nút \"dùng giọng này\" theo từng host trong danh mục giọng của cài đặt hợp nhất (host được hiển thị bên cạnh).",
-    "message": "Dùng"
-  },
   "voicesYourVoice": {
     "description": "Nút trên thanh điều khiển trong danh sách Giọng nói của phần cài đặt, đưa tiêu điểm đến hàng của giọng mà máy chủ hiện đang dùng; $name$ là giọng đó.",
     "message": "Giọng của bạn: $name$",

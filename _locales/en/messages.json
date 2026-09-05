@@ -1010,10 +1010,6 @@
     "message": "Natural and clear — you can listen about 20× longer than with HD.",
     "description": "One-line note beside the Everyday group heading in the settings Voices studio; the one place the studio states how much further this tier goes than HD."
   },
-  "voicesUseShort": {
-    "message": "Use",
-    "description": "Short label on the per-host 'use this voice' button in the unified settings voice catalog (the host is shown alongside it)."
-  },
   "voicesUseOnHost": {
     "message": "Use $name$ on $host$",
     "description": "Accessible label for the per-host 'use this voice' button in the settings voice catalog; $name$ is the voice, $host$ is the assistant (e.g. Pi, Claude).",

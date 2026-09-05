@@ -7,7 +7,7 @@ import {
   sweepMinutes,
   VoicesController,
 } from "../../../entrypoints/settings/tabs/voices/voices-controller";
-import { SpeechSynthesisVoiceRemote } from "../../../src/tts/SpeechModel";
+import { PiAIVoice, SpeechSynthesisVoiceRemote } from "../../../src/tts/SpeechModel";
 import type { HostPinOverlay } from "../../../src/tts/VoicePins";
 import {
   AuditionItem,
@@ -172,6 +172,25 @@ const playingState = (voiceId: string): AuditionState => ({
 });
 
 describe("VoicesController — release choice journey", () => {
+  it.each([1, 4, 8])("recognizes saved Pi %s as a native voice", async (voiceNumber) => {
+    const { container } = await mount(makeDeps({
+      pi: [mkVoice("marin")],
+      piCurrent: new PiAIVoice(voiceNumber),
+    }));
+    expect(q(container, ".voice-fallback-host")?.textContent).toBe("voicesFallbackHostVoice");
+    expect(q(container, ".voice-native-return")).toBeNull();
+    expect(q(container, ".voice-current-name")).toBeNull();
+    expect(qa(container, '[aria-selected="true"]')).toHaveLength(0);
+  });
+
+  it("recognizes a default remote voice as SayPi-owned", async () => {
+    const current = mkVoice("marin", { default: true });
+    const { container } = await mount(makeDeps({ pi: [current], piCurrent: current }));
+    expect(q(container, ".voice-current-name")?.textContent).toBe("Marin");
+    expect(q(container, ".voice-native-return")).toBeTruthy();
+    expect(q(container, ".voice-fallback-host")).toBeNull();
+  });
+
   it("puts the current choice first and keeps browsing preferences in closed options", async () => {
     const { container } = await mount(makeDeps({ pi: [mkVoice("marin")], piCurrent: mkVoice("marin") }));
     const bar = q(container, ".voice-rail-controls")!;
@@ -907,9 +926,10 @@ describe("VoicesController — the control bar", () => {
 
   it("offers no jump when the current voice has no row to jump to", async () => {
     // A host built-in is the current voice and never gets a row.
+    const native = new PiAIVoice(1);
     const deps = makeDeps({
-      pi: [mkVoice("voice1", { default: true, name: "Aria" }), mkVoice("marin")],
-      piCurrent: mkVoice("voice1", { default: true, name: "Aria" }),
+      pi: [native, mkVoice("marin")],
+      piCurrent: native,
     });
     const { container } = await mount(deps);
     expect(rowOf(container, "voice1")).toBeNull();

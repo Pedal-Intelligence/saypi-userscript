@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Rövid címke az egységes beállítások hangkatalógusában található, gazdagépenkénti „használd ezt a hangot” gombon (a gazdagép mellette látható).",
-    "message": "Használat"
-  },
   "voicesYourVoice": {
     "description": "Vezérlősáv gomb a Beállítások Hangok listában, amely a fókuszt arra a sorra viszi, amelyik hangot ez a host jelenleg használja; $name$ az a hang.",
     "message": "A te hangod: $name$",

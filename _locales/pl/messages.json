@@ -2149,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Krótka etykieta na przycisku „użyj tego głosu” dla danego hosta w ujednoliconym katalogu głosów w ustawieniach (host jest pokazany obok).",
-    "message": "Użyj"
-  },
   "voicesYourVoice": {
     "description": "Przycisk na pasku sterowania na liście Głosy w ustawieniach, który przenosi fokus do wiersza głosu, którego obecnie używa ten host; $name$ to ten głos.",
     "message": "Twój głos: $name$",
