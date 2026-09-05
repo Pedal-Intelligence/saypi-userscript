@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Főcím az első indításkor megjelenő bevezető oldalon.",
-    "message": "🗣️ Üdv a Say, Pi-ban"
+    "message": "Üdv a Say, Pi-ban"
   },
   "onboarding_intro": {
     "description": "Bevezető bekezdés az első indításkor megjelenő bevezető oldalon.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Gomb, amely elindítja a tét nélküli onboarding mikrofontesztet.",
-    "message": "🎤 Mikrofon tesztelése"
+    "message": "Mikrofon tesztelése"
   },
   "onboarding_micTestDone": {
     "description": "Állapot, amely az onboarding mikrofonteszt sikeres befejezése után jelenik meg.",

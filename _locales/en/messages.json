@@ -1731,7 +1731,7 @@
     "description": "VAD detail when releasing VAD resources."
   },
   "onboarding_heading": {
-    "message": "🗣️ Welcome to Say, Pi",
+    "message": "Welcome to Say, Pi",
     "description": "Main heading on the first-run onboarding page."
   },
   "onboarding_intro": {
@@ -1771,7 +1771,7 @@
     "description": "Footer text on the first-run onboarding page."
   },
   "onboarding_micTestButton": {
-    "message": "🎤 Test your microphone",
+    "message": "Test your microphone",
     "description": "Button that starts the no-stakes onboarding microphone test."
   },
   "onboarding_micTestRequesting": {

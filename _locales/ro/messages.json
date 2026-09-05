@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Titlul principal pe pagina de onboarding la prima rulare.",
-    "message": "🗣️ Bun venit la Say, Pi"
+    "message": "Bun venit la Say, Pi"
   },
   "onboarding_intro": {
     "description": "Paragraful de introducere pe pagina de onboarding la prima rulare.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Buton care pornește testul de microfon din onboarding, fără miză.",
-    "message": "🎤 Testează-ți microfonul"
+    "message": "Testează-ți microfonul"
   },
   "onboarding_micTestDone": {
     "description": "Stare afișată după ce testul de microfon din onboarding se încheie cu succes.",

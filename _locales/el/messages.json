@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Κύρια επικεφαλίδα στη σελίδα πρώτης εκτέλεσης του onboarding.",
-    "message": "🗣️ Καλώς ήρθατε στο Say, Pi"
+    "message": "Καλώς ήρθατε στο Say, Pi"
   },
   "onboarding_intro": {
     "description": "Εισαγωγική παράγραφος στη σελίδα πρώτης εκτέλεσης του onboarding.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Κουμπί που ξεκινά τη δοκιμή μικροφώνου στο onboarding, χωρίς επιπτώσεις.",
-    "message": "🎤 Δοκίμασε το μικρόφωνό σου"
+    "message": "Δοκίμασε το μικρόφωνό σου"
   },
   "onboarding_micTestDone": {
     "description": "Κατάσταση που εμφανίζεται αφού η δοκιμή μικροφώνου στο onboarding ολοκληρωθεί με επιτυχία.",

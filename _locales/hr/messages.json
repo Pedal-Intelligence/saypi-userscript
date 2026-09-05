@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Glavni naslov na onboarding stranici pri prvom pokretanju.",
-    "message": "🗣️ Dobro došli u Say, Pi"
+    "message": "Dobro došli u Say, Pi"
   },
   "onboarding_intro": {
     "description": "Uvodni odlomak na onboarding stranici pri prvom pokretanju.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Gumb koji pokreće bezopasni uvodni test mikrofona.",
-    "message": "🎤 Testiraj mikrofon"
+    "message": "Testiraj mikrofon"
   },
   "onboarding_micTestDone": {
     "description": "Status prikazan nakon uspješnog završetka uvodnog testa mikrofona.",

@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Pääotsikko ensimmäisen käynnistyksen opastussivulla.",
-    "message": "🗣️ Tervetuloa käyttämään Say, Pi"
+    "message": "Tervetuloa käyttämään Say, Pi"
   },
   "onboarding_intro": {
     "description": "Johdantokappale ensimmäisen käynnistyksen opastussivulla.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Painike, joka käynnistää riskittömän mikrofonitestin käyttöönoton yhteydessä.",
-    "message": "🎤 Testaa mikrofonisi"
+    "message": "Testaa mikrofonisi"
   },
   "onboarding_micTestDone": {
     "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti valmistuu onnistuneesti.",

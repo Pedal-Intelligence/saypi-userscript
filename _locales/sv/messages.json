@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Huvudrubrik på introduktionssidan vid första körningen.",
-    "message": "🗣️ Välkommen till Say, Pi"
+    "message": "Välkommen till Say, Pi"
   },
   "onboarding_intro": {
     "description": "Ingress på introduktionssidan vid första körningen.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Knapp som startar det riskfria mikrofontestet i introduktionen.",
-    "message": "🎤 Testa din mikrofon"
+    "message": "Testa din mikrofon"
   },
   "onboarding_micTestDone": {
     "description": "Status som visas efter att mikrofontestet i introduktionen har slutförts.",

@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Tiêu đề chính trên trang hướng dẫn lần chạy đầu tiên.",
-    "message": "🗣️ Chào mừng đến với Say, Pi"
+    "message": "Chào mừng đến với Say, Pi"
   },
   "onboarding_intro": {
     "description": "Đoạn giới thiệu trên trang hướng dẫn lần chạy đầu tiên.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Nút bắt đầu bài kiểm tra mic trong phần giới thiệu, không có rủi ro.",
-    "message": "🎤 Thử mic của bạn"
+    "message": "Thử mic của bạn"
   },
   "onboarding_micTestDone": {
     "description": "Trạng thái hiển thị sau khi bài kiểm tra mic trong phần giới thiệu hoàn tất thành công.",

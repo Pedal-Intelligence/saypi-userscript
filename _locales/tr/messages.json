@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "İlk çalıştırma tanıtım sayfasındaki ana başlık.",
-    "message": "🗣️ Say, Pi'ye hoş geldiniz"
+    "message": "Say, Pi'ye hoş geldiniz"
   },
   "onboarding_intro": {
     "description": "İlk çalıştırma tanıtım sayfasındaki giriş paragrafı.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Risksiz tanıtım mikrofon testini başlatan düğme.",
-    "message": "🎤 Mikrofonunuzu test edin"
+    "message": "Mikrofonunuzu test edin"
   },
   "onboarding_micTestDone": {
     "description": "Tanıtım mikrofon testi başarıyla tamamlandıktan sonra gösterilen durum.",

@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "初回オンボーディング ページのメイン見出し。",
-    "message": "🗣️ Say, Pi へようこそ"
+    "message": "Say, Pi へようこそ"
   },
   "onboarding_intro": {
     "description": "初回オンボーディング ページの導入段落。",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "リスクなしのオンボーディング用マイクテストを開始するボタン。",
-    "message": "🎤 マイクをテスト"
+    "message": "マイクをテスト"
   },
   "onboarding_micTestDone": {
     "description": "オンボーディングのマイクテストが正常に完了した後に表示されるステータス。",
