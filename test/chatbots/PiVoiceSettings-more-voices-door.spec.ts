@@ -366,6 +366,26 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     expect(grid.querySelectorAll(".saypi-voice-override-notice")).toHaveLength(1);
   });
 
+  it("offers sign-in when cached remote details remain available after signing out", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.getVoice.mockResolvedValue(voice("Shimmer"));
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voiceOverriddenBySayPi:Shimmer");
+
+    fakeAuth.authenticated = false;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("signInForTTS");
+    expect(notice(grid)?.textContent).not.toContain("voiceOverriddenBySayPi");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("signIn");
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+
+    fakeAuth.authenticated = true;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voiceOverriddenBySayPi:Shimmer");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+  });
+
   it.each(["initial", "external"])("ignores a late %s read after a native choice", async (source) => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);

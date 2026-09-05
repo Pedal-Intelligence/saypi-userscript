@@ -1,5 +1,18 @@
 import { test, expect } from "../fixtures/extension";
 import { MOCK_VOICE_IDS } from "../support/voice-catalog";
+import type { Worker } from "@playwright/test";
+
+async function seedSignedInUser(serviceWorker: Worker): Promise<void> {
+  await serviceWorker.evaluate(async () => {
+    const expiresAt = Date.now() + 60 * 60 * 1000;
+    // Unsigned test data for the hermetic API, never a real account credential.
+    const claims = btoa(JSON.stringify({ sub: "e2e-pi-user", exp: expiresAt / 1000 }));
+    await chrome.storage.local.set({
+      jwtToken: `e30.${claims}.hermetic`,
+      tokenExpiresAt: expiresAt,
+    });
+  });
+}
 
 /**
  * The real content script on the hermetic Pi settings route: stored voice →
@@ -12,6 +25,7 @@ test.describe("Pi voice settings return path", () => {
     test(`shows the current voice and returns to Pi in ${theme} mode`, async ({
       context, serviceWorker, extensionId,
     }, testInfo) => {
+      await seedSignedInUser(serviceWorker);
       await serviceWorker.evaluate(async (ids) => {
         await chrome.storage.local.set({
           prefs_migration_completed: true,
@@ -97,6 +111,7 @@ test.describe("Pi voice settings return path", () => {
   }
 
   test("a stored native Pi voice is not presented as a SayPi override", async ({ context, serviceWorker }) => {
+    await seedSignedInUser(serviceWorker);
     await serviceWorker.evaluate(() => chrome.storage.local.set({
       prefs_migration_completed: true,
       shareData: false,
@@ -125,35 +140,40 @@ test.describe("Pi voice settings return path", () => {
     await expect(page.getByRole("button", { name: "Pi 3", exact: true })).toHaveAttribute("aria-pressed", "true");
   });
 
-  test("a signed-out saved voice offers sign-in and can be relinquished", async ({ context, serviceWorker, extensionId }) => {
-    await serviceWorker.evaluate(() => chrome.storage.local.set({
-      prefs_migration_completed: true,
-      shareData: false,
-      saypi_voice_default_pending_hosts: [],
-      voicePreferences: { pi: "e2e-unavailable" },
-    }));
-    const page = await context.newPage();
-    await page.goto("https://pi.ai/profile/settings?theme=dark");
-    const notice = page.locator(".saypi-voice-override-notice");
-    await expect(notice).toContainText("Sign in for text-to-speech", { timeout: 20_000 });
-    await expect(notice).not.toContainText("unavailable right now");
-    await expect(notice).not.toContainText("is speaking");
-    const signIn = notice.getByRole("button", { name: "Sign In", exact: true });
-    await expect(signIn).toBeVisible();
-    const settingsOpened = context.waitForEvent("page");
-    await signIn.click();
-    const settings = await settingsOpened;
-    await settings.waitForURL(`chrome-extension://${extensionId}/settings.html`);
-    await expect.poll(() => serviceWorker.evaluate(async () =>
-      (await chrome.storage.local.get("voicePreferences")).voicePreferences,
-    )).toEqual({ pi: "e2e-unavailable" });
-    await settings.close();
-    await page.getByRole("button", { name: "Pi 2", exact: true }).click();
-    await expect.poll(() => serviceWorker.evaluate(async () =>
-      (await chrome.storage.local.get("voicePreferences")).voicePreferences,
-    )).toEqual({});
-    await expect(notice).toHaveCount(0);
-  });
+  for (const [state, voiceId] of [
+    ["unresolved", "e2e-unavailable"],
+    ["resolved", MOCK_VOICE_IDS.onyx],
+  ] as const) {
+    test(`a signed-out ${state} saved voice offers sign-in and can be relinquished`, async ({ context, serviceWorker, extensionId }) => {
+      await serviceWorker.evaluate((id) => chrome.storage.local.set({
+        prefs_migration_completed: true,
+        shareData: false,
+        saypi_voice_default_pending_hosts: [],
+        voicePreferences: { pi: id },
+      }), voiceId);
+      const page = await context.newPage();
+      await page.goto("https://pi.ai/profile/settings?theme=dark");
+      const notice = page.locator(".saypi-voice-override-notice");
+      await expect(notice).toContainText("Sign in for text-to-speech", { timeout: 20_000 });
+      await expect(notice).not.toContainText("unavailable right now");
+      await expect(notice).not.toContainText("is speaking");
+      const signIn = notice.getByRole("button", { name: "Sign In", exact: true });
+      await expect(signIn).toBeVisible();
+      const settingsOpened = context.waitForEvent("page");
+      await signIn.click();
+      const settings = await settingsOpened;
+      await settings.waitForURL(`chrome-extension://${extensionId}/settings.html`);
+      await expect.poll(() => serviceWorker.evaluate(async () =>
+        (await chrome.storage.local.get("voicePreferences")).voicePreferences,
+      )).toEqual({ pi: voiceId });
+      await settings.close();
+      await page.getByRole("button", { name: "Pi 2", exact: true }).click();
+      await expect.poll(() => serviceWorker.evaluate(async () =>
+        (await chrome.storage.local.get("voicePreferences")).voicePreferences,
+      )).toEqual({});
+      await expect(notice).toHaveCount(0);
+    });
+  }
 
   test("an explicit native pick seals a pending first-install default even without an override", async ({ context, serviceWorker }) => {
     await serviceWorker.evaluate(() => chrome.storage.local.set({

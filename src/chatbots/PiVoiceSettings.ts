@@ -114,8 +114,8 @@ export class PiVoiceSettings extends VoiceSelector {
     let unavailable = false;
     if (!voice) {
       try {
-        // An unresolved saved remote id still reserves SayPi playback. A null
-        // catalog result must not make this page claim that Pi is speaking.
+        // Keep the saved choice visible even when its metadata cannot resolve.
+        // Authentication decides whether to offer sign-in or recovery later.
         unavailable = await this.userPreferences.hasVoice(this.chatbot);
       } catch (error) {
         console.debug("[SayPi] Could not read Pi's saved voice preference", error);
@@ -189,7 +189,9 @@ export class PiVoiceSettings extends VoiceSelector {
       existing?.remove();
       return;
     }
-    const requiresSignIn = this.ttsRequiresSignIn(this.savedVoiceUnavailable);
+    // Cached remote metadata can still resolve after sign-out, but SayPi TTS
+    // still requires authentication. The notice must reflect that requirement.
+    const requiresSignIn = this.ttsRequiresSignIn(true);
     const text = requiresSignIn
       ? getMessage("signInForTTS")
       : this.savedVoiceUnavailable
