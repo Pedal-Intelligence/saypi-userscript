@@ -704,10 +704,9 @@
      everywhere: one line stays one line. Where it doesn't fit, the twin's row
      takes a second line of 12px text — inside the row's own 42px on the
      one-line layout, and growing the row on the narrow one, which is the axis
-     that layout already spends. Ordinary taglines keep the ellipsis on
-     purpose: they are one voice's description rather than two rows' only
-     difference, and wrapping all 22 of them would make every row taller at
-     rest to save a word nobody is reading yet. */
+     that layout already spends. Ordinary taglines keep the ellipsis in the
+     one-line layout. Narrow rows wrap every description below, since their
+     action column leaves too little room to guarantee a line in every face. */
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -904,6 +903,11 @@
     order: 2;
     flex-basis: calc(100% - var(--voice-actions-w) - var(--voice-actions-gap));
     min-width: 0;
+    /* The action reservation can leave a tagline narrower than its text in
+       another system font. Spend height instead of losing words; the row is
+       already auto-height and keeps every print aligned at the top. */
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
   .voice-row-actions {
     order: 3;

@@ -355,71 +355,101 @@ test.describe("settings → voices: the audition room", () => {
    * one y for every line, or the traces stop registering into a single chart
    * and the rail is 22 unrelated pictures.
    */
-  test("at 390px the twins are still legible and the chart is still one chart", async ({
-    context,
-    extensionId,
-    serviceWorker,
-  }) => {
-    await seedConsentDecision(serviceWorker);
-    const page = await context.newPage();
-    await openVoicesRail(page, extensionId);
-    await page.setViewportSize({ width: 390, height: 844 });
+  for (const face of ["system", "wide"] as const) {
+    test(`at 390px the twins are still legible and the chart is still one chart (${face} face)`, async ({
+      context,
+      extensionId,
+      serviceWorker,
+    }) => {
+      await seedConsentDecision(serviceWorker);
+      const page = await context.newPage();
+      await openVoicesRail(page, extensionId);
+      await page.setViewportSize({ width: 390, height: 844 });
+      // A wider installed face reproduces CI glyph metrics on the author’s Mac.
+      // Keep the ordinary face too: both must preserve every description.
+      if (face === "wide") await widenGlyphs(page);
 
-    const rail = await page.evaluate(() =>
-      [
-        ...document.querySelectorAll<HTMLElement>(
-          "#tab-voices .voice-row[data-print-voice]",
-        ),
-      ].map((row) => {
-        const desc = row.querySelector<HTMLElement>(".voice-row-desc")!;
-        const print = row.querySelector<HTMLElement>(".voice-print")!;
-        const ref = row.querySelector<HTMLElement>(".voice-print-ref")!;
-        return {
-          name: row.querySelector(".voice-row-name")?.textContent ?? "",
-          text: desc.textContent ?? "",
-          shownAtRest:
-            getComputedStyle(desc).opacity === "1" &&
-            !row.classList.contains("focused"),
-          clipped: desc.scrollWidth > desc.clientWidth,
-          printWidth: Math.round(print.getBoundingClientRect().width),
-          referenceY: +(
-            ref.getBoundingClientRect().top - row.getBoundingClientRect().top
-          ).toFixed(1),
-        };
-      }),
-    );
-    expect(rail.length).toBe(AUDITIONABLE_COUNT);
+      const rail = await page.evaluate(() =>
+        [
+          ...document.querySelectorAll<HTMLElement>(
+            "#tab-voices .voice-row[data-print-voice]",
+          ),
+        ].map((row) => {
+          const desc = row.querySelector<HTMLElement>(".voice-row-desc")!;
+          const print = row.querySelector<HTMLElement>(".voice-print")!;
+          const ref = row.querySelector<HTMLElement>(".voice-print-ref")!;
+          return {
+            name: row.querySelector(".voice-row-name")?.textContent ?? "",
+            text: desc.textContent ?? "",
+            shownAtRest:
+              getComputedStyle(desc).opacity === "1" &&
+              !row.classList.contains("focused"),
+            clipped: desc.scrollWidth > desc.clientWidth,
+            clippedVertically:
+              desc.scrollHeight > desc.clientHeight ||
+              desc.getBoundingClientRect().bottom > row.getBoundingClientRect().bottom,
+            descriptionWidth: desc.clientWidth,
+            textWidth: desc.scrollWidth,
+            font: getComputedStyle(desc).font,
+            whiteSpace: getComputedStyle(desc).whiteSpace,
+            printWidth: Math.round(print.getBoundingClientRect().width),
+            referenceY: +(
+              ref.getBoundingClientRect().top - row.getBoundingClientRect().top
+            ).toFixed(1),
+          };
+        }),
+      );
+      await test.info().attach(`390px-${face}-geometry`, {
+        body: JSON.stringify(rail, null, 2),
+        contentType: "application/json",
+      });
+      expect(rail.length).toBe(AUDITIONABLE_COUNT);
 
-    const twins = rail.filter((row) => row.name === "Paola");
-    expect(twins).toHaveLength(2);
-    for (const twin of twins) {
+      const twins = rail.filter((row) => row.name === "Paola");
+      expect(twins).toHaveLength(2);
+      for (const twin of twins) {
+        expect(
+          twin.shownAtRest,
+          `the narrow rail hides ${twin.name}'s disambiguator until focus — two rows now read the same`,
+        ).toBe(true);
+        expect(
+          twin.clipped,
+          `"${twin.text}" is ellipsised at 390px, which is the twins told apart by an ellipsis`,
+        ).toBe(false);
+      }
+      expect(twins[0].text).not.toBe(twins[1].text);
+      // Not just the twins: at this width no tagline should have to give.
       expect(
-        twin.shownAtRest,
-        `the narrow rail hides ${twin.name}'s disambiguator until focus — two rows now read the same`,
-      ).toBe(true);
+        rail.filter((row) => row.clipped).map((row) => row.text),
+        "a description is ellipsised at 390px — the description is the column that must not yield",
+      ).toEqual([]);
+
       expect(
-        twin.clipped,
-        `"${twin.text}" is ellipsised at 390px, which is the twins told apart by an ellipsis`,
-      ).toBe(false);
-    }
-    expect(twins[0].text).not.toBe(twins[1].text);
-    // Not just the twins: at this width no tagline should have to give.
-    expect(
-      rail.filter((row) => row.clipped).map((row) => row.text),
-      "a description is ellipsised at 390px — the description is the column that must not yield",
-    ).toEqual([]);
+        rail.filter((row) => row.clippedVertically).map((row) => row.text),
+        "a wrapped description is cut off below the row at 390px",
+      ).toEqual([]);
 
-    expect(
-      [...new Set(rail.map((row) => row.printWidth))],
-      "the prints are not all one width, so trace length no longer means clip length",
-    ).toHaveLength(1);
-    expect(
-      [...new Set(rail.map((row) => row.referenceY))],
-      "the reference line sits at a different height on different rows — the traces no longer register into one chart",
-    ).toHaveLength(1);
+      expect(
+        [...new Set(rail.map((row) => row.printWidth))],
+        "the prints are not all one width, so trace length no longer means clip length",
+      ).toHaveLength(1);
+      expect(
+        [...new Set(rail.map((row) => row.referenceY))],
+        "the reference line sits at a different height on different rows — the traces no longer register into one chart",
+      ).toHaveLength(1);
 
-    await page.close();
-  });
+      const rowan = page.locator(ROW(MOCK_VOICE_IDS.rowan));
+      await rowan.hover();
+      await expect(rowan.locator(".voice-row-desc")).toHaveCSS("opacity", "1");
+      const screenshot = test.info().outputPath(`voices-390-${face}.png`);
+      await page.screenshot({ path: screenshot, fullPage: true });
+      await test.info().attach(`390px-${face}-readable-description`, {
+        path: screenshot,
+        contentType: "image/png",
+      });
+      await page.close();
+    });
+  }
 
   /**
    * 320px — the narrowest width anything ships at — where the twins were still
