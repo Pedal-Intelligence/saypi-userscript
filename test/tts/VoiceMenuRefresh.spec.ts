@@ -182,3 +182,26 @@ describe("refreshMenu resolves user pins and forwards them to renderMenu", () =>
     expect(renderSpy.mock.calls[0][2]).toBeNull();
   });
 });
+
+it("waits for an asynchronous selection renderer before completing its refresh", async () => {
+  let finishApply!: () => void;
+  const applying = new Promise<void>((resolve) => { finishApply = resolve; });
+  class AsyncSelector extends TestGrid {
+    protected override applySelectedVoice(): Promise<void> { return applying; }
+    public override refreshSelectedVoice(): Promise<void> { return super.refreshSelectedVoice(); }
+  }
+  const selector = new AsyncSelector({ getID: () => "pi" } as any, {
+    getVoice: vi.fn().mockResolvedValue(null),
+  } as any, document.createElement("div"));
+  let finished = false;
+  const refreshing = selector.refreshSelectedVoice().then(() => { finished = true; });
+  // Yield a task so a refresh that incorrectly ignores `applying` can settle.
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  try {
+    expect(finished).toBe(false);
+  } finally {
+    finishApply();
+    await refreshing;
+  }
+  expect(finished).toBe(true);
+});

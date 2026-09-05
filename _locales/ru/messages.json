@@ -1628,14 +1628,18 @@
     "message": "Голос"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Показывается над сеткой собственных голосов ассистента на странице его настроек, когда голос Say, Pi заменяет голос ассистента, поэтому выбранный встроенный голос ассистента не слышен; $voice$ — название голоса Say, Pi, например Shimmer.",
-    "message": "Say, Pi говорит голосом $voice$ — голоса ниже не используются.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi говорит голосом $voice$. Выберите голос Pi ниже, чтобы вернуться к нему.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Изменить голос",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
@@ -2176,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Ошибка, возникающая, когда браузер не предоставляет начальную память WebAssembly, необходимую для запуска модели распознавания голоса.",
     "message": "Распознавание голоса не может запуститься: в этом браузере недоступна память WebAssembly."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Сохранённый голос сейчас недоступен. Попробуйте позже или выберите другой голос.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

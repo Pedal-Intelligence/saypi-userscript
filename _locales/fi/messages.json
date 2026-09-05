@@ -1628,14 +1628,18 @@
     "message": "Äänestää"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Näytetään avustajan asetussivun oman äänivalikoiman yläpuolella, kun Say, Pi -ääni on ottanut toiston käyttöön, joten avustajan korostettu oma ääni ei ole käyttäjän kuulema; $voice$ on Say, Pi -äänen nimi, esimerkiksi Shimmer.",
-    "message": "Say, Pi puhuu äänellä $voice$ — alla olevat äänet eivät ole käytössä.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi puhuu äänellä $voice$. Vaihda takaisin valitsemalla Pi-ääni alta.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Vaihda ääntä",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
@@ -2176,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Virhe, joka heitetään, kun selain ei tarjoa alkuperäistä WebAssembly-muistia, jota tarvitaan puheentunnistusmallin ajamiseen.",
     "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muisti ei ole käytettävissä tässä selaimessa."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

@@ -13,9 +13,10 @@ vi.mock("../../src/ConfigModule", () => ({
   },
 }));
 
+const fakeAuth = vi.hoisted(() => ({ authenticated: true }));
 vi.mock("../../src/JwtManager", () => ({
   getJwtManagerSync: () => ({
-    isAuthenticated: () => true,
+    isAuthenticated: () => fakeAuth.authenticated,
     getClaims: () => ({ ttsQuotaRemaining: 1000 }),
   }),
 }));
@@ -35,6 +36,8 @@ vi.mock("../../src/popup/popupopener", () => ({
 }));
 
 import { PiVoiceSettings } from "../../src/chatbots/PiVoiceSettings";
+import { PiAIVoice } from "../../src/tts/SpeechModel";
+import EventBus from "../../src/events/EventBus";
 
 /**
  * A faithful fixture of pi.ai's CURRENT Voice settings grid (captured live via
@@ -65,10 +68,12 @@ function makeSettings(grid: HTMLElement): any {
   settings.chatbot = { getID: () => "pi" };
   settings.userPreferences = {
     getVoice: vi.fn(async () => null),
+    hasVoice: vi.fn(async () => false),
     setVoice: vi.fn(async () => {}),
     unsetVoice: vi.fn(async () => {}),
   };
   settings.element = grid;
+  settings.selectionRevision = 0;
   return settings;
 }
 
@@ -76,8 +81,10 @@ const door = (grid: HTMLElement) =>
   grid.querySelector<HTMLElement>("button.saypi-more-voices");
 
 beforeEach(() => {
+  fakeAuth.authenticated = true;
   openSettingsMock.mockReset();
   document.body.innerHTML = "";
+  EventBus.removeAllListeners();
 });
 
 describe("PiVoiceSettings — 'More voices' door on Pi's Voice settings page (#491 follow-up, door-first)", () => {
@@ -132,10 +139,10 @@ describe("PiVoiceSettings — 'More voices' door on Pi's Voice settings page (#4
     expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
   });
 
-  it("renderMenu (the auth-change path) just re-ensures the door — never draws voice rows", () => {
+  it("refreshMenu (the auth-change path) re-ensures the door without fetching a catalog", async () => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);
-    settings.renderMenu([], null);
+    await settings.refreshMenu();
     expect(door(grid)).not.toBeNull();
     expect(grid.querySelectorAll(".saypi-custom-voice").length).toBe(0);
   });
@@ -206,29 +213,209 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     settings.renderMenu([], voice("Shimmer"));
     expect(notice(grid)).not.toBeNull();
     expect(notice(grid)!.textContent).toContain("Shimmer");
-    // The glance-level half: the native cards stop reading as active.
-    expect(grid.classList.contains("saypi-voices-overridden")).toBe(true);
   });
 
-  it("stays out of the way when Pi's own voice is the one speaking", () => {
+  it("stays out of the way when Pi's own voice is the one speaking", async () => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);
-    settings.renderMenu([], null);
+    await settings.applySelectedVoice(null);
     expect(notice(grid)).toBeNull();
-    expect(grid.classList.contains("saypi-voices-overridden")).toBe(false);
     // The door is SayPi's only mark on an un-overridden grid.
     expect(door(grid)).not.toBeNull();
   });
 
-  it("follows a voice chosen elsewhere, without a repopulate", () => {
+  it("does not claim a stored native Pi voice is a SayPi override", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], new PiAIVoice(4));
+    expect(notice(grid)).toBeNull();
+
+    settings.applySelectedVoice(voice("Shimmer"));
+    settings.applySelectedVoice(new PiAIVoice(2));
+    expect(notice(grid)).toBeNull();
+  });
+
+  it("uses Pi's readable theme color for the current-voice notice", () => {
+    const style = document.createElement("style");
+    style.textContent = ".text-text-secondary { color: rgb(193, 191, 181); }";
+    document.body.appendChild(style);
+    const grid = buildSettingsGrid();
+    document.body.appendChild(grid);
+    makeSettings(grid).renderMenu([], voice("Shimmer"));
+    expect(window.getComputedStyle(notice(grid)!).color).toBe("rgb(193, 191, 181)");
+  });
+
+  it("offers Change voice alongside the voice in use, including after a change", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.renderMenu([], voice("Shimmer"));
+    settings.applySelectedVoice(voice("Marin"));
+    const change = notice(grid)?.querySelector<HTMLButtonElement>("button");
+    expect(change?.textContent).toBe("voicesChangeVoice");
+    change!.click();
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+  });
+
+  it("returns to Pi when a native card is clicked, preserving Pi's own click handler", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    const native = grid.querySelector<HTMLButtonElement>(":scope > button")!;
+    const selectPiVoice = vi.fn();
+    native.addEventListener("click", selectPiVoice);
+    native.querySelector("span")!.click();
+    await vi.waitFor(() => expect(notice(grid)).toBeNull());
+    expect(settings.userPreferences.unsetVoice).toHaveBeenCalledWith(settings.chatbot);
+    expect(selectPiVoice).toHaveBeenCalledOnce();
+  });
+
+  it("clears a stored native voice too, so it cannot override the newly clicked Pi card", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], new PiAIVoice(4));
+    grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
+    await vi.waitFor(() => expect(settings.userPreferences.unsetVoice).toHaveBeenCalledOnce());
+  });
+
+  it("returns to Pi even if its selection handler replaces the clicked card", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    const native = grid.querySelector<HTMLButtonElement>(":scope > button")!;
+    native.addEventListener("click", () => native.remove());
+    native.click();
+    await vi.waitFor(() => expect(notice(grid)).toBeNull());
+    expect(settings.userPreferences.unsetVoice).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the active SayPi notice if releasing the stored preference fails", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.unsetVoice.mockRejectedValue(new Error("Storage unavailable"));
+    const debug = vi.spyOn(console, "debug").mockImplementation(() => {});
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
+    await vi.waitFor(() => expect(settings.userPreferences.unsetVoice).toHaveBeenCalledOnce());
+    expect(notice(grid)?.textContent).toContain("Shimmer");
+    debug.mockRestore();
+  });
+
+  it("does not relinquish the current voice when opening More voices", () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.observeSettingsGrid();
+    settings.renderMenu([], voice("Shimmer"));
+    door(grid)!.click();
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+  });
+
+  it("keeps an unavailable notice when a saved remote voice cannot resolve", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.hasVoice.mockResolvedValue(true);
+    await settings.applySelectedVoice(null);
+    expect(notice(grid)).not.toBeNull();
+    expect(notice(grid)!.textContent).toContain("voicesSavedUnavailable");
+    expect(notice(grid)?.textContent).not.toContain("voiceOverriddenBySayPi");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+    settings.observeSettingsGrid();
+    settings.userPreferences.unsetVoice.mockImplementation(async () => {
+      settings.userPreferences.hasVoice.mockResolvedValue(false);
+    });
+    grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
+    await vi.waitFor(() => expect(notice(grid)).toBeNull());
+  });
+
+  it("offers sign-in for an unresolved saved voice while signed out", async () => {
+    fakeAuth.authenticated = false;
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.hasVoice.mockResolvedValue(true);
+    await settings.applySelectedVoice(null);
+    expect(notice(grid)?.textContent).toContain("signInForTTS");
+    expect(notice(grid)?.textContent).not.toContain("voicesSavedUnavailable");
+    const signIn = notice(grid)?.querySelector<HTMLButtonElement>("button");
+    expect(signIn?.textContent).toBe("signIn");
+    signIn!.click();
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+  });
+
+  it("updates the unresolved notice and action when authentication changes", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.hasVoice.mockResolvedValue(true);
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voicesSavedUnavailable");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+
+    fakeAuth.authenticated = false;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("signInForTTS");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("signIn");
+
+    fakeAuth.authenticated = true;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voicesSavedUnavailable");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+    expect(grid.querySelectorAll(".saypi-voice-override-notice")).toHaveLength(1);
+  });
+
+  it("offers sign-in when cached remote details remain available after signing out", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.getVoice.mockResolvedValue(voice("Shimmer"));
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voiceOverriddenBySayPi:Shimmer");
+
+    fakeAuth.authenticated = false;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("signInForTTS");
+    expect(notice(grid)?.textContent).not.toContain("voiceOverriddenBySayPi");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("signIn");
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+
+    fakeAuth.authenticated = true;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voiceOverriddenBySayPi:Shimmer");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+  });
+
+  it.each(["initial", "external"])("ignores a late %s read after a native choice", async (source) => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    let resolveVoice!: (voice: unknown) => void;
+    const pending = new Promise((resolve) => { resolveVoice = resolve; });
+    settings.userPreferences.getVoice.mockReturnValueOnce(pending);
+    settings.observeSettingsGrid();
+    settings.ensureSettingsDoor();
+    let refresh: Promise<void> | undefined;
+    if (source === "initial") {
+      refresh = settings.refreshOverrideNotice();
+    } else {
+      settings.registerVoicePreferenceChangeHandler();
+      EventBus.emit("userPreferenceChanged", { voicePreferences: { pi: "shimmer" }, voiceChatbotId: "pi" });
+    }
+    await settings.useNativeVoice();
+    resolveVoice(voice("Shimmer"));
+    await pending;
+    await refresh;
+    expect(notice(grid)).toBeNull();
+  });
+
+  it("follows a voice chosen elsewhere, without a repopulate", async () => {
     const grid = buildSettingsGrid();
     const settings = makeSettings(grid);
     settings.renderMenu([], null);
     settings.applySelectedVoice(voice("Marin"));
     expect(notice(grid)!.textContent).toContain("Marin");
-    settings.applySelectedVoice(null);
+    await settings.applySelectedVoice(null);
     expect(notice(grid)).toBeNull();
-    expect(grid.classList.contains("saypi-voices-overridden")).toBe(false);
   });
 
   it("is idempotent, and re-appears if Pi's re-render drops it", () => {

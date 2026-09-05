@@ -1628,14 +1628,18 @@
     "message": "Menyuarakan"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Ditampilkan di atas daftar suara bawaan asisten pada halaman pengaturan saat suara Say, Pi mengambil alih pemutaran, sehingga suara bawaan asisten yang disorot bukan suara yang didengar pengguna; $voice$ adalah nama suara Say, Pi, misalnya Shimmer.",
-    "message": "Say, Pi berbicara dengan suara $voice$ — suara di bawah tidak digunakan.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi berbicara dengan suara $voice$. Pilih suara Pi di bawah untuk beralih kembali.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Ganti suara",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
@@ -2176,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Error yang muncul ketika browser tidak menyediakan memori WebAssembly awal yang diperlukan untuk menjalankan model pendeteksi suara.",
     "message": "Pendeteksian suara tidak dapat dimulai: memori WebAssembly tidak tersedia di browser ini."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Suara yang Anda simpan sedang tidak tersedia. Coba lagi nanti, atau pilih suara lain.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

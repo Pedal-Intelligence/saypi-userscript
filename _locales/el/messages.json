@@ -1628,14 +1628,18 @@
     "message": "Εκφοβίζω"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Εμφανίζεται πάνω από το πλέγμα φωνών του βοηθού στη σελίδα ρυθμίσεων, όταν μια φωνή του Say, Pi έχει αναλάβει την αναπαραγωγή, επομένως η επιλεγμένη ενσωματωμένη φωνή του βοηθού δεν είναι αυτή που ακούει ο χρήστης· το $voice$ είναι το όνομα της φωνής του Say, Pi, π.χ. Shimmer.",
-    "message": "Το Say, Pi μιλά με τη φωνή $voice$ — οι παρακάτω φωνές δεν χρησιμοποιούνται.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Το Say, Pi μιλά με τη φωνή $voice$. Επιλέξτε μια φωνή του Pi παρακάτω για να επιστρέψετε σε αυτή.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Αλλαγή φωνής",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
@@ -2176,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Σφάλμα που προκύπτει όταν το πρόγραμμα περιήγησης δεν εκθέτει την αρχική μνήμη WebAssembly που απαιτείται για την εκτέλεση του μοντέλου ανίχνευσης φωνής.",
     "message": "Η ανίχνευση φωνής δεν μπορεί να ξεκινήσει: η μνήμη WebAssembly δεν είναι διαθέσιμη σε αυτό το πρόγραμμα περιήγησης."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Η αποθηκευμένη φωνή σου δεν είναι διαθέσιμη αυτή τη στιγμή. Δοκίμασε ξανά αργότερα ή επίλεξε άλλη φωνή.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

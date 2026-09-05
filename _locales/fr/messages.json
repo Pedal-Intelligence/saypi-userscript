@@ -1628,14 +1628,18 @@
     "message": "Exprimer"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Affiché au-dessus de la grille des voix de l’assistant dans sa page de réglages lorsqu’une voix de Say, Pi prend en charge la lecture, de sorte que la voix native sélectionnée de l’assistant n’est pas celle que l’utilisateur entend ; $voice$ est le nom de la voix de Say, Pi, par exemple Shimmer.",
-    "message": "Say, Pi parle avec $voice$ — les voix ci-dessous ne sont pas utilisées.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi parle avec la voix $voice$. Choisissez une voix de Pi ci-dessous pour y revenir.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Changer de voix",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
@@ -2176,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Erreur levée lorsque le navigateur n’expose pas la mémoire WebAssembly initiale nécessaire pour exécuter le modèle de détection vocale.",
     "message": "La détection vocale ne peut pas démarrer : la mémoire WebAssembly n’est pas disponible dans ce navigateur."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Votre voix enregistrée est indisponible pour le moment. Réessayez plus tard ou choisissez une autre voix.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }

@@ -193,6 +193,7 @@ instead of silently calling the real internet.
 | `support/mock-servers.ts` | self-signed HTTPS page server (Host-routed Pi/Claude pages) + saypi-api (`/transcribe`, hit/content-type diagnostics + per-test reset route, `/voices` catalog + `/voices/<id>/sample` clips, GA catch-all) |
 | `support/voice-catalog.ts` | the `GET /voices` fixture: a seven-voice catalog shaped to exercise the Voices rail (both tiers, a duplicate-named pair, a clipless voice, measurable pitch spread) |
 | `support/mock-pi-page.html` | minimal Pi.ai-shaped DOM the content script decorates |
+| `support/mock-pi-voice-settings.html` | route-specific Pi native voice grid for `/profile/settings`, with light/dark host colors and a persistent native selection handler |
 | `support/mock-claude-page.html` | minimal claude.ai stand-in (defines no `--black`) for the host-CSS contrast spec |
 | `support/mock-hey-pi-page.html` | Pi's logged-out marketing splash stand-in — an ordinary form field, no composer — for the chat-adjacent dictation spec (#559) |
 | `support/transcribe-response.ts` | the STT contract: shape of the `/transcribe` response |
@@ -203,6 +204,16 @@ instead of silently calling the real internet.
 | `support/lifecycle.ts` | MV3 lifecycle drivers (`evictServiceWorker`, `reacquireServiceWorker`, `isWorkerDead`, `triggerOffscreenShutdown`, `hasOffscreenDocument`, `getConnectedTabCount`) — see the section below |
 | `support/lifecycle-targets.ts` | pure CDP-target predicates (`isExtensionServiceWorkerTarget`, `pickExtensionServiceWorkerTarget`); unit-tested in the **required** gate (`test/e2e/lifecycle-targets.spec.ts`) |
 | `specs/*.e2e.ts` | the tests |
+
+`specs/pi-voice-settings.e2e.ts` exercises the actual content script on Pi's
+mock settings route: a stored SayPi voice appears in a readable notice in both
+themes, Change voice opens the candidate catalog without changing the stored
+choice, and a native Pi card both runs Pi's own selection handler and clears the
+SayPi override in real `chrome.storage.local`. It also covers a native id arriving
+through a storage change, without treating it as a SayPi override, and returning
+to Pi from an unresolved saved voice. The test
+attaches light/dark screenshots; it measures contrast from the built extension
+CSS and representative host-theme utilities rather than keeping pixel baselines.
 
 ## The dual-env gotcha (read this before editing launch/build config)
 

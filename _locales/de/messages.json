@@ -1628,14 +1628,18 @@
     "message": "Stimme ab"
   },
   "voiceOverriddenBySayPi": {
-    "description": "Wird auf der Einstellungsseite über dem Stimmenraster des Assistenten angezeigt, wenn eine Say, Pi-Stimme die Wiedergabe übernommen hat und die hervorgehobene integrierte Stimme des Assistenten daher nicht zu hören ist; $voice$ ist der Name der Say, Pi-Stimme, z. B. Shimmer.",
-    "message": "Say, Pi spricht mit $voice$ – die folgenden Stimmen werden nicht verwendet.",
+    "description": "Shown above Pi’s native voice grid when Say, Pi provides the current voice. Explains how choosing a Pi card returns to native playback; $voice$ is the current Say, Pi voice name.",
+    "message": "Say, Pi spricht mit der Stimme $voice$. Wähle unten eine Pi-Stimme, um zurückzuwechseln.",
     "placeholders": {
       "voice": {
         "content": "$1",
         "example": "Shimmer"
       }
     }
+  },
+  "voicesChangeVoice": {
+    "message": "Stimme ändern",
+    "description": "Action beside the current voice that opens the full voice catalog."
   },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
@@ -2176,5 +2180,9 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fehler, der ausgelöst wird, wenn der Browser den initialen WebAssembly-Speicher nicht bereitstellt, der zum Ausführen des Spracherkennungsmodells benötigt wird.",
     "message": "Spracherkennung kann nicht starten: WebAssembly-Speicher ist in diesem Browser nicht verfügbar."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Deine gespeicherte Stimme ist gerade nicht verfügbar. Versuche es später erneut oder wähle eine andere Stimme.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
   }
 }
