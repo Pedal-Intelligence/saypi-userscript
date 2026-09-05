@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Основний заголовок на сторінці першого запуску (onboarding).",
-    "message": "🗣️ Ласкаво просимо до Say, Pi"
+    "message": "Ласкаво просимо до Say, Pi"
   },
   "onboarding_intro": {
     "description": "Вступний абзац на сторінці першого запуску (onboarding).",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Кнопка, що запускає безстресовий тест мікрофона під час onboarding.",
-    "message": "🎤 Перевірити мікрофон"
+    "message": "Перевірити мікрофон"
   },
   "onboarding_micTestDone": {
     "description": "Статус, що показується після успішного завершення тесту мікрофона під час onboarding.",

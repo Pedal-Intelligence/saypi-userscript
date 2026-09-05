@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "首次运行引导页上的主标题。",
-    "message": "🗣️ 欢迎使用 Say, Pi"
+    "message": "欢迎使用 Say, Pi"
   },
   "onboarding_intro": {
     "description": "首次运行引导页上的介绍段落。",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "开始无压力的新手引导麦克风测试的按钮。",
-    "message": "🎤 测试你的麦克风"
+    "message": "测试你的麦克风"
   },
   "onboarding_micTestDone": {
     "description": "新手引导麦克风测试成功完成后显示的状态。",

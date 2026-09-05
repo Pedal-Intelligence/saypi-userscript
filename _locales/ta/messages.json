@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "முதல் இயக்கத்தின் onboarding பக்கத்தில் உள்ள முதன்மை தலைப்பு.",
-    "message": "🗣️ Say, Pi-க்கு வரவேற்கிறோம்"
+    "message": "Say, Pi-க்கு வரவேற்கிறோம்"
   },
   "onboarding_intro": {
     "description": "முதல் இயக்கத்தின் onboarding பக்கத்தில் உள்ள அறிமுகப் பத்தி.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "அபாயமில்லா வழிகாட்டி மைக்ரோஃபோன் சோதனையைத் தொடங்கும் பொத்தான்.",
-    "message": "🎤 உங்கள் மைக்ரோஃபோனைச் சோதிக்கவும்"
+    "message": "உங்கள் மைக்ரோஃபோனைச் சோதிக்கவும்"
   },
   "onboarding_micTestDone": {
     "description": "வழிகாட்டி மைக் சோதனை வெற்றிகரமாக முடிந்த பிறகு காட்டப்படும் நிலை.",

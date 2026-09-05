@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Tajuk utama pada halaman onboarding kali pertama dijalankan.",
-    "message": "🗣️ Selamat datang ke Say, Pi"
+    "message": "Selamat datang ke Say, Pi"
   },
   "onboarding_intro": {
     "description": "Perenggan pengenalan pada halaman onboarding kali pertama dijalankan.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Butang yang memulakan ujian mikrofon onboarding tanpa risiko.",
-    "message": "🎤 Uji mikrofon anda"
+    "message": "Uji mikrofon anda"
   },
   "onboarding_micTestDone": {
     "description": "Status yang dipaparkan selepas ujian mikrofon onboarding berjaya diselesaikan.",

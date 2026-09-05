@@ -4,45 +4,89 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Welcome to Say, Pi</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
     <script type="module" src="./index.ts"></script>
   </head>
   <body>
-    <main class="card">
-      <h1 id="onboarding-heading">🗣️ Welcome to Say, Pi</h1>
-      <p id="onboarding-intro" class="lead">
-        You're two steps away from your first spoken conversation with an AI. Talking is
-        about 3× faster than typing — let's get you set up.
-      </p>
-
+    <header class="brand">
+      <img src="../../src/icons/bubble-green.svg" width="38" height="38" alt="" />
+      <span>Say, Pi</span>
+    </header>
+    <main aria-labelledby="onboarding-heading">
+      <div class="welcome">
+        <div class="welcome-copy">
+          <h1 id="onboarding-heading">Welcome to Say, Pi</h1>
+          <p id="onboarding-intro" class="lead">
+            You're two steps away from your first spoken conversation with an AI. Talking is
+            about 3× faster than typing — let's get you set up.
+          </p>
+        </div>
+        <div class="voice-art" aria-hidden="true">
+          <svg viewBox="0 0 360 192" fill="none">
+            <path class="voice-bubble" d="M36 30h248a28 28 0 0 1 28 28v63a28 28 0 0 1-28 28h-44l-29 24 5-24H36a28 28 0 0 1-28-28V58a28 28 0 0 1 28-28Z" />
+            <g class="voice-wave" stroke-linecap="round" stroke-width="5">
+              <path d="M36 86v8m13-19v30m13-40v50m13-59v68m13-80v92m13-64v36m13-28v20m13-14v8" />
+              <path d="M234 86v8m13-19v30m13-41v52m13-67v82m13-62v42" />
+            </g>
+            <circle cx="180" cy="90" r="43" class="voice-disc" />
+            <rect x="172" y="67" width="16" height="32" rx="8" class="voice-mic" />
+            <path d="M164 91a16 16 0 0 0 32 0m-16 16v10m-8 0h16" class="voice-mic" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="m324 32 3-9 3 9 9 3-9 3-3 9-3-9-9-3 9-3Z" class="voice-spark" />
+          </svg>
+        </div>
+      </div>
       <ol class="steps">
-        <li>
-          <h2 id="onboarding-step1-title">Pin Say, Pi to your toolbar</h2>
+        <li class="setup-step pin-step">
+          <div class="step-heading">
+            <span class="step-number" aria-hidden="true">1</span>
+            <h2 id="onboarding-step1-title">Pin Say, Pi to your toolbar</h2>
+          </div>
           <p id="onboarding-step1-body">
             Click the puzzle-piece <span aria-hidden="true">🧩</span> icon at the top-right
             of your browser, then the pin <span aria-hidden="true">📌</span> next to
             Say, Pi. That keeps the call button one click away.
           </p>
+          <div class="toolbar-example" aria-hidden="true">
+            <div class="browser-toolbar">
+              <span class="browser-dot"></span><span class="browser-dot"></span><span class="browser-dot"></span>
+              <span class="browser-address"></span>
+              <svg class="puzzle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M9 3H4v6h2a3 3 0 1 1 0 6H4v6h6v-2a3 3 0 1 1 6 0v2h5v-6h-2a3 3 0 1 1 0-6h2V3h-6V2a3 3 0 0 0-6 0Z" /></svg>
+            </div>
+            <div class="extension-example">
+              <img src="../../src/icons/bubble-green.svg" width="28" height="28" alt="" />
+              <span>Say, Pi</span>
+              <span class="pin-highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 5 5-3 1-4 4v4l-3-3-6 6m6-6-4-4h4l4-4 1-3Z" /></svg></span>
+            </div>
+          </div>
         </li>
-        <li>
-          <h2 id="onboarding-step2-title">Open an AI chat and start talking</h2>
+        <li class="setup-step talk-step">
+          <div class="step-heading">
+            <span class="step-number" aria-hidden="true">2</span>
+            <h2 id="onboarding-step2-title">Open an AI chat and start talking</h2>
+          </div>
           <p id="onboarding-step2-body">
             Head to one of the supported assistants below, then tap the Say, Pi call
             button and say hello. We'll ask for microphone access the first time — that's
             expected, and we only listen while you're actively in a call.
           </p>
           <div class="cta-row">
-            <a class="cta" id="onboarding-cta-pi" href="https://pi.ai/talk" target="_blank" rel="noopener noreferrer">Open Pi</a>
-            <a class="cta" id="onboarding-cta-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude</a>
-            <a class="cta" id="onboarding-cta-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT</a>
+            <a class="assistant-link" href="https://pi.ai/talk" target="_blank" rel="noopener noreferrer">
+              <img src="/icons/logos/pi.png" width="34" height="34" alt="" />
+              <span id="onboarding-cta-pi">Open Pi</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 5h11v11M19 5 5 19" /></svg>
+            </a>
+            <a class="assistant-link" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">
+              <img src="/icons/logos/claude.png" width="34" height="34" alt="" />
+              <span id="onboarding-cta-claude">Open Claude</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 5h11v11M19 5 5 19" /></svg>
+            </a>
+            <a class="assistant-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">
+              <img src="/icons/logos/openai.svg" width="34" height="34" alt="" />
+              <span id="onboarding-cta-chatgpt">Open ChatGPT</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 5h11v11M19 5 5 19" /></svg>
+            </a>
           </div>
           <div class="mic-test">
-            <button type="button" id="onboarding-mic-test-btn" class="cta secondary">🎤 Test your microphone</button>
+            <button type="button" id="onboarding-mic-test-btn">Test your microphone</button>
             <div class="meter" id="onboarding-mic-meter" hidden aria-hidden="true">
               <div class="meter-fill" id="onboarding-mic-meter-fill" style="width: 0%"></div>
             </div>
@@ -50,8 +94,7 @@
           </div>
         </li>
       </ol>
-
-      <section class="env-question">
+      <section class="env-question" aria-labelledby="onboarding-env-title">
         <h2 id="onboarding-env-title">Where will you usually talk?</h2>
         <div class="env-options" role="radiogroup" aria-labelledby="onboarding-env-title">
           <label class="env-option">
@@ -69,11 +112,10 @@
         </div>
         <p class="env-status" id="onboarding-env-status" role="status" aria-live="polite"></p>
       </section>
-
-      <p class="footer-text" id="onboarding-footer">
-        You can revisit this any time from Say, Pi's settings. Your privacy matters — audio
-        is only captured during an active call.
-      </p>
+      <footer class="footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></svg>
+        <p id="onboarding-footer">You can revisit this any time from Say, Pi's settings. Your privacy matters — audio is only captured during an active call.</p>
+      </footer>
     </main>
   </body>
 </html>

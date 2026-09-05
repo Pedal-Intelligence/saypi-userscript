@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Pangunahing heading sa first-run onboarding page.",
-    "message": "🗣️ Maligayang pagdating sa Say, Pi"
+    "message": "Maligayang pagdating sa Say, Pi"
   },
   "onboarding_intro": {
     "description": "Panimulang talata sa first-run onboarding page.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Button na nagsisimula ng onboarding microphone test na walang risk.",
-    "message": "🎤 Subukan ang mikropono mo"
+    "message": "Subukan ang mikropono mo"
   },
   "onboarding_micTestDone": {
     "description": "Status na ipinapakita pagkatapos matagumpay na matapos ang onboarding mic test.",

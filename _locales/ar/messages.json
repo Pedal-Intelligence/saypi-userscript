@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "العنوان الرئيسي في صفحة الإعداد عند التشغيل لأول مرة.",
-    "message": "🗣️ مرحبًا بك في Say, Pi"
+    "message": "مرحبًا بك في Say, Pi"
   },
   "onboarding_intro": {
     "description": "فقرة المقدمة في صفحة الإعداد عند التشغيل لأول مرة.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "زر يبدأ اختبار الميكروفون في الإعداد بدون أي تبعات.",
-    "message": "🎤 اختبر الميكروفون"
+    "message": "اختبر الميكروفون"
   },
   "onboarding_micTestDone": {
     "description": "حالة تظهر بعد اكتمال اختبار الميكروفون في الإعداد بنجاح.",

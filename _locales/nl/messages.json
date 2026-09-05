@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Hoofdkop op de onboardingpagina die bij de eerste keer openen wordt getoond.",
-    "message": "🗣️ Welkom bij Say, Pi"
+    "message": "Welkom bij Say, Pi"
   },
   "onboarding_intro": {
     "description": "Intro-alinea op de onboardingpagina die bij de eerste keer openen wordt getoond.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Knop die de onboarding-microfoontest zonder gevolgen start.",
-    "message": "🎤 Je microfoon testen"
+    "message": "Je microfoon testen"
   },
   "onboarding_micTestDone": {
     "description": "Status die wordt getoond nadat de onboarding-microfoontest succesvol is afgerond.",

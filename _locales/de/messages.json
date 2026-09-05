@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Hauptüberschrift auf der Onboarding-Seite beim ersten Start.",
-    "message": "🗣️ Willkommen bei Say, Pi"
+    "message": "Willkommen bei Say, Pi"
   },
   "onboarding_intro": {
     "description": "Einleitungstext auf der Onboarding-Seite beim ersten Start.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Schaltfläche, die den unverbindlichen Mikrofontest im Onboarding startet.",
-    "message": "🎤 Mikrofon testen"
+    "message": "Mikrofon testen"
   },
   "onboarding_micTestDone": {
     "description": "Status, der angezeigt wird, nachdem der Mikrofontest im Onboarding erfolgreich abgeschlossen wurde.",

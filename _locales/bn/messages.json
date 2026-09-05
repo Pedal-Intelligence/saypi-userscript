@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "প্রথমবার চালুর অনবোর্ডিং পাতার প্রধান শিরোনাম।",
-    "message": "🗣️ Say, Pi-এ স্বাগতম"
+    "message": "Say, Pi-এ স্বাগতম"
   },
   "onboarding_intro": {
     "description": "প্রথমবার চালুর অনবোর্ডিং পাতার পরিচিতি অনুচ্ছেদ।",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "ঝুঁকিমুক্ত অনবোর্ডিং মাইক্রোফোন টেস্ট শুরু করে এমন বোতাম।",
-    "message": "🎤 আপনার মাইক্রোফোন পরীক্ষা করুন"
+    "message": "আপনার মাইক্রোফোন পরীক্ষা করুন"
   },
   "onboarding_micTestDone": {
     "description": "অনবোর্ডিং মাইক টেস্ট সফলভাবে শেষ হলে দেখানো স্ট্যাটাস।",

@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "최초 실행 온보딩 페이지의 메인 제목.",
-    "message": "🗣️ Say, Pi에 오신 것을 환영합니다"
+    "message": "Say, Pi에 오신 것을 환영합니다"
   },
   "onboarding_intro": {
     "description": "최초 실행 온보딩 페이지의 소개 문단.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "부담 없이 진행하는 온보딩 마이크 테스트를 시작하는 버튼입니다.",
-    "message": "🎤 마이크 테스트"
+    "message": "마이크 테스트"
   },
   "onboarding_micTestDone": {
     "description": "온보딩 마이크 테스트가 성공적으로 완료된 후 표시되는 상태입니다.",

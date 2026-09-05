@@ -762,7 +762,7 @@
   },
   "onboarding_heading": {
     "description": "Hlavný nadpis na úvodnej stránke pri prvom spustení.",
-    "message": "🗣️ Vitajte v Say, Pi"
+    "message": "Vitajte v Say, Pi"
   },
   "onboarding_intro": {
     "description": "Úvodný odsek na úvodnej stránke pri prvom spustení.",
@@ -770,7 +770,7 @@
   },
   "onboarding_micTestButton": {
     "description": "Tlačidlo, ktoré spustí nezáväzný test mikrofónu v úvodnom sprievodcovi.",
-    "message": "🎤 Otestovať mikrofón"
+    "message": "Otestovať mikrofón"
   },
   "onboarding_micTestDone": {
     "description": "Stav zobrazený po úspešnom dokončení testu mikrofónu v úvodnom sprievodcovi.",
