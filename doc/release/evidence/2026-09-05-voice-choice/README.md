@@ -7,9 +7,11 @@ catalog failures, and returning to an assistant's own voice remains available.
 Pi's native settings show a readable current-voice notice with Change voice
 beside it, and choosing a Pi card relinquishes SayPi's override.
 
-The initial assembled source revision was
-[`418ee7190b29469774dcfd81f65ced01ffc8bd37`](https://github.com/Pedal-Intelligence/saypi-userscript/commit/418ee7190b29469774dcfd81f65ced01ffc8bd37),
-based on `0891244`. It combines the work in these PRs:
+The reviewed source revision is
+[`8d91a5b81e5c0c8accb34d3a8711f34b25d8a018`](https://github.com/Pedal-Intelligence/saypi-userscript/commit/8d91a5b81e5c0c8accb34d3a8711f34b25d8a018),
+based on `9d0e620` after the three supporting slices merged. Its complete tree
+is identical to the locally tested `e5fe164`; the intervening merge only
+synchronizes history. It combines the work in these PRs:
 
 | PR | Contribution |
 | --- | --- |
@@ -20,8 +22,8 @@ based on `0891244`. It combines the work in these PRs:
 
 The proposed release target is **1.14.0**, from read-only release planning. No
 version bump, production packaging, signing or store submission is recorded by
-this evidence. PR #611 has merged; the remaining PRs are undergoing the final
-review follow-up described below.
+this evidence. PRs #607, #608 and #611 have merged after independent review and green CI.
+The remaining studio PR #609 contains the final review follow-up below.
 
 ## Final review follow-up
 
@@ -47,6 +49,14 @@ rendering from the supplied authentication state, not live authentication
 handoff to an already-running audio actor.
 
 ## Verification
+
+The final combined source (`e5fe164`, tree-identical to `8d91a5b`) passes
+typecheck, Jest **2/2**, Vitest **2,752 passed / one unchanged skip**, and
+**25 Chromium settings/voice/Pi E2E tests** with no retries. These runs include
+the final signed-out fixes and the native Pi 4 regression. The earlier
+full Chrome CI and supplementary Firefox observations below retain their
+original revision labels; the final PR checks are the merge gate for all
+combined source changes.
 
 | Evidence | Revision and result | What it establishes |
 | --- | --- | --- |
@@ -125,9 +135,9 @@ A targeted read of the authenticated Pi page found exactly one SayPi call
 button and the prompt. Its build stamp was still `b2c87a2`, so these observations
 do not claim a live pass of the later offscreen and mobile corrections.
 
-The final `418ee71` development artifact is built in the same unpacked path.
-Reloading that extension and checking its page build stamp remain necessary
-before the live candidate pass. Computer use subsequently reported the Mac
+The unpacked development path remains available. Rebuild from the merged
+revision, reload that extension and check its page build stamp before the live
+candidate pass. Computer use subsequently reported the Mac
 locked; the live pass paused there. Authentication is complete, but actual
 remote TTS, return to native Pi speech, and first-turn completion still need
 an attended check. The screen-reader pass was interrupted by a native-tool
@@ -140,7 +150,8 @@ granting it did not produce a completed acquisition during observation.
 
 The remaining attended checklist is bounded:
 
-- Confirm the installed page stamp is `418ee71`, the tested runtime source.
+- Confirm the installed page stamp matches the merged revision used to build
+  the development artifact.
 - On a fresh Pi conversation, verify one remote-voice reply and that Thinking
   clears; this confirms the first-turn behavior tracked in #365 against the
   newer reply-observer fix. Return to a native Pi voice and verify the next
@@ -167,10 +178,10 @@ still requires an actual decision: explicitly accept the residual risk of the
 client-side voice-menu/studio behavior, or provide a tested remote lever that
 returns it to a safe baseline. Server control of catalog content and samples
 cannot repair a defect in local controls. This evidence does not accept that
-risk on the founder's behalf. The assembled source has an
-[independent approval](https://github.com/Pedal-Intelligence/saypi-userscript/pull/609#issuecomment-5550327387).
-Complete the attended checks above and obtain the review and release decisions
-before treating the candidate as cleared for stores.
+risk on the founder's behalf. The initial approval was superseded by the final review, whose native-voice
+and signed-out findings are addressed above and in the supporting PRs. Complete
+the attended checks above and obtain the release decision before treating the
+candidate as cleared for stores.
 
 The English [release notes](../../../../_locales/en/release_notes.txt) are drafted
 for founder review and now describe the voice release rather than the previous
