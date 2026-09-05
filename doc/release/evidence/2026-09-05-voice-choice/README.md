@@ -85,8 +85,9 @@ from the fixed message-delivery race.
 A fresh Google Chrome for Testing **148.0.7778.96** profile, with **no extension
 loaded**, also left a plain `getUserMedia({audio:true})` request pending for
 15 seconds. It used the same fake-device, fake-permission and WAV-capture flags
-on macOS **26.3.1**. That control excludes the candidate code as the cause of
-this local stall. It does not identify a browser/OS/device root cause. No
+on macOS **26.3.1**. The same stall occurs without the candidate extension, so
+the candidate is not required to reproduce it. The control does not identify
+a browser/OS/device root cause or explain every failing test independently. No
 service, permission or device setting was changed by the diagnostic. Final CI
 results must provide the capture-check evidence; successful physical microphone
 acquisition is not claimed here.
@@ -112,6 +113,19 @@ timeout and is also incomplete; the temporary VoiceOver process was stopped.
 Physical microphone capture and human-audited speaker output are not established
 by the hermetic results. The microphone test reached Chrome's permission prompt;
 granting it did not produce a completed acquisition during observation.
+
+The remaining attended checklist is bounded:
+
+- Confirm the installed page stamp is `418ee71`, the tested runtime source.
+- On a fresh Pi conversation, verify one remote-voice reply and that Thinking
+  clears; this confirms the first-turn behavior tracked in #365 against the
+  newer reply-observer fix. Return to a native Pi voice and verify the next
+  reply uses it without overlapping SayPi speech.
+- Confirm ChatGPT's call control appears after hydration and starts a call
+  (#595); appearance alone does not establish that the control works.
+- Complete a real screen-reader pass of current choice, preview, explicit Use,
+  save confirmation and native return. Record physical microphone and audible
+  output observations separately from synthetic-input and media-progress tests.
 
 ## Deferred work and release decisions
 
