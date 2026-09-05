@@ -1,9 +1,14 @@
-This release is all about your first minutes with Say, Pi.
+Find a voice that feels right for your conversations.
 
-✨ New
-• A proper welcome for new installs — a first-run tab that gets you set up, with a live "try it yourself" mic-test meter so you can see your voice working before your first real conversation.
-• Quiet mode, suggested automatically when you tell us you're somewhere a hands-free voice doesn't quite fit.
-• Clearer recovery when your microphone access is denied or gets lost after a browser update, so you're never left wondering why voice stopped working.
-• A quick nod after your first successful voice turn, showing how much time you just saved.
+✨ More voices, easier to choose
+• Explore the Voices tab, listen to free samples, and compare voices before choosing. Listening never changes the voice you've saved.
+• See which voice is in use and choose it for Pi or Claude. Your choices stay separate for each assistant.
+• Browse the full collection in one place. HD voices are clearly marked, with a reminder of how they use your allowance.
+• Switch back to Pi's own voices directly from its voice settings or Say, Pi's Voices tab.
+
+🐛 More dependable conversations
+• Your saved voice survives temporary catalog problems.
+• Clearer voice status and controls follow the latest Pi, Claude, and ChatGPT layouts.
+• More reliable audio startup, response playback, and dictation.
 
 Plus the usual under-the-hood work to keep Say, Pi fast and dependable.
