@@ -19,6 +19,7 @@ This page does not itself collect goal analytics: it sets `quietMode` locally. G
 - The 71 existing onboarding tests pass, plus five new integration tests against the actual HTML. The artwork/localization test first failed against the old markup.
 - A real extension-browser test checks offline font/artwork loading, secure assistant destinations, stored quiet mode, synthetic microphone start/stop, the hidden meter, keyboard focus, and narrow overflow. No real host conversation is needed.
 - Independent visual review checked desktop/360px screenshots and 30 width/language combinations: 320, 375, 701, 800, and 1080px with English, German, French, Tamil, Arabic, and Russian. No heading or action-card overflow was found.
+- Full validation on current main: typecheck and Jest pass (2 tests); Vitest passes (2,757 tests, 1 existing skip); the required E2E suite passes (44 tests).
 - The font license is verified in the generated extension output.
 
 Related functional issues remain tracked separately: #612 (toolbar versus in-page call instructions), #613 (Settings return path), #614 (quiet-mode explanation/persistence feedback), and #615 (microphone success evidence). This proposal does not claim to resolve them.
