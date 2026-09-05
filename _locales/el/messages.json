@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Μονόγραμμη σημείωση που εμφανίζεται στα μενού φωνής όταν υπάρχουν διαθέσιμες τόσο premium (HD) όσο και value φωνές",
-    "message": "Οι φωνές HD καταναλώνουν το μηνιαίο όριό σας περίπου 20× πιο γρήγορα."
+    "message": "Οι φωνές HD καταναλώνουν περισσότερο από το μηνιαίο όριό σας. Τα δείγματα είναι δωρεάν."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Αλλαγή φωνής",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Η φωνή σταμάτησε -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Σύντομη ετικέτα στο κουμπί «χρήση αυτής της φωνής» ανά host στον ενοποιημένο κατάλογο φωνών στις ρυθμίσεις (ο host εμφανίζεται δίπλα).",
-    "message": "Χρήση"
-  },
   "voicesYourVoice": {
     "description": "Κουμπί στη γραμμή ελέγχου στη λίστα Φωνών των ρυθμίσεων που μεταφέρει την εστίαση στη γραμμή της φωνής που χρησιμοποιεί αυτή τη στιγμή αυτός ο host· το $name$ είναι αυτή η φωνή.",
     "message": "Η φωνή σας: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Σφάλμα που προκύπτει όταν το πρόγραμμα περιήγησης δεν εκθέτει την αρχική μνήμη WebAssembly που απαιτείται για την εκτέλεση του μοντέλου ανίχνευσης φωνής.",
     "message": "Η ανίχνευση φωνής δεν μπορεί να ξεκινήσει: η μνήμη WebAssembly δεν είναι διαθέσιμη σε αυτό το πρόγραμμα περιήγησης."
   },
+  "voicesListeningOptions": {
+    "message": "Επιλογές ακρόασης",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Κάνε κλικ σε μια φωνή για να ακούσεις ένα δωρεάν δείγμα. Επίλεξε «Χρήση» όταν βρεις κάποια που σου αρέσει.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Χρήση για $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "Η φωνή σου για το $host$ είναι πλέον η $name$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Δεν ήταν δυνατή η αποθήκευση της φωνής σου. Δοκίμασε ξανά.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Χρήση της ενσωματωμένης φωνής του $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Η αποθηκευμένη φωνή σου δεν είναι διαθέσιμη αυτή τη στιγμή. Δοκίμασε ξανά αργότερα ή επίλεξε άλλη φωνή.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Αλλαγή φωνής",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

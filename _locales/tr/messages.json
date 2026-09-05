@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Hem premium (HD) hem de value sesler mevcutken ses menülerinde gösterilen tek satırlık not",
-    "message": "HD sesler aylık kotanı yaklaşık 20× daha hızlı kullanır."
+    "message": "HD sesler aylık kotanızdan daha fazla kullanır. Örnekler ücretsizdir."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Sesi değiştir",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Ses durakladı -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Birleşik ayarlar ses kataloğunda, her ana bilgisayar için yer alan “bu sesi kullan” düğmesindeki kısa etiket (ana bilgisayar yanında gösterilir).",
-    "message": "Kullan"
-  },
   "voicesYourVoice": {
     "description": "Ayarlar Sesler listesindeki kontrol çubuğu düğmesi; odağı bu ana makinenin şu anda kullandığı sesin satırına taşır; $name$ o sestir.",
     "message": "Senin sesin: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Tarayıcı, ses algılama modelini çalıştırmak için gereken başlangıç WebAssembly belleğini sağlamadığında oluşturulan hata.",
     "message": "Ses algılama başlatılamıyor: bu tarayıcıda WebAssembly belleği kullanılamıyor."
   },
+  "voicesListeningOptions": {
+    "message": "Dinleme seçenekleri",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Ücretsiz bir örnek dinlemek için bir sese tıklayın. Beğendiğiniz bir ses bulduğunuzda “Kullan” seçeneğini seçin.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "$host$ için kullan",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$ için sesiniz artık $name$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Sesiniz kaydedilemedi. Lütfen tekrar deneyin.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$ için yerleşik sesi kullan",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Kayıtlı sesiniz şu anda kullanılamıyor. Daha sonra tekrar deneyin veya başka bir ses seçin.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Sesi değiştir",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

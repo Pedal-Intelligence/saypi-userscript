@@ -182,9 +182,9 @@ describe("the tier shelves are gone, but the allowance note is not", () => {
     expect(controllerSrc).not.toMatch(/"voicesShelfEveryday"/);
   });
 
-  it("leaves hdVoicesAllowanceNote and its in-chat callers untouched", () => {
+  it("explains HD allowance use without assuming all HD variants cost the same", () => {
     expect(en.hdVoicesAllowanceNote?.message).toBe(
-      "HD voices use your monthly allowance about 20× faster."
+      "HD voices use more of your monthly allowance. Samples are free."
     );
     const callers = claudeMenuSrc.match(/hdVoicesAllowanceNote/g) ?? [];
     expect(callers.length).toBe(2); // HD chip tooltip + menu footnote
@@ -260,7 +260,7 @@ describe("the sweep and the filter say what they do", () => {
 describe("the stage and the slots section are retired", () => {
   const retired = [
     "voicesStagePlay",
-    "voicesSpeaksWith",
+    "voicesUseShort",
     "voicesStageEmptyTitle",
     "voicesStageEmptyNoteReplace",
     "voicesStageEmptyNoteSilent",
@@ -272,10 +272,11 @@ describe("the stage and the slots section are retired", () => {
     expect(controllerSrc).not.toMatch(new RegExp(`"${key}"`));
   });
 
-  it("keeps the retired keys in the locale — 31 translations, zero cost", () => {
-    for (const key of retired) {
+  it("keeps historical keys apart from the replaced generic Use label", () => {
+    for (const key of retired.filter((key) => key !== "voicesUseShort")) {
       expect(en[key], `${key} should stay in messages.json`).toBeTruthy();
     }
+    expect(en.voicesUseShort).toBeUndefined();
   });
 
   it("retires voicesNoStageVoice — key deleted and nothing references it", () => {
@@ -287,7 +288,7 @@ describe("the stage and the slots section are retired", () => {
 describe("the strings the rail still reuses, unchanged in 31 locales", () => {
   const reused = [
     "voicesSectionTitle",
-    "voicesUseShort",
+    "voicesSpeaksWith",
     "voicesUseOnHost",
     "voicesAddToMenuShort",
     "voicesInMenuShort",

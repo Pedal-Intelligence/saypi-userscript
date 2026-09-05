@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Nota satu baris yang dipaparkan dalam menu suara apabila suara premium (HD) dan suara nilai kedua-duanya tersedia",
-    "message": "Suara HD menggunakan kuota bulanan anda kira-kira 20× lebih cepat."
+    "message": "Suara HD menggunakan lebih banyak kuota bulanan anda. Sampel adalah percuma."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Tukar suara",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Suara dijeda -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Label ringkas pada butang per hos 'guna suara ini' dalam katalog suara tetapan bersatu (hos dipaparkan di sebelahnya).",
-    "message": "Guna"
-  },
   "voicesYourVoice": {
     "description": "Butang bar kawalan dalam senarai Suara di tetapan yang mengalihkan fokus ke baris suara yang sedang digunakan oleh hos ini; $name$ ialah suara itu.",
     "message": "Suara anda: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Ralat yang dibuang apabila pelayar tidak mendedahkan memori WebAssembly awal yang diperlukan untuk menjalankan model pengesanan suara.",
     "message": "Pengesanan suara tidak boleh bermula: memori WebAssembly tidak tersedia dalam pelayar ini."
   },
+  "voicesListeningOptions": {
+    "message": "Pilihan mendengar",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Klik suara untuk mendengar sampel percuma. Pilih “Guna” apabila anda menemui suara yang anda suka.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Guna untuk $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ kini menjadi suara anda untuk $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Suara anda tidak dapat disimpan. Sila cuba lagi.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Guna suara asal $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Suara yang anda simpan tidak tersedia buat masa ini. Cuba lagi kemudian, atau pilih suara lain.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Tukar suara",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

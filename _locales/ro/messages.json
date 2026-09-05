@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Notă pe un singur rând afișată în meniurile de voci când sunt disponibile atât voci premium (HD), cât și voci value",
-    "message": "Vocile HD îți consumă alocația lunară de aproximativ 20× mai repede."
+    "message": "Vocile HD consumă mai mult din limita lunară. Mostrele sunt gratuite."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Schimbă vocea",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Vocea pusă în pauză -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Etichetă scurtă pe butonul per-gazdă „folosește această voce” din catalogul unificat de voci din setări (gazda este afișată alături).",
-    "message": "Folosește"
-  },
   "voicesYourVoice": {
     "description": "Buton din bara de control în lista Voci din setări care mută focalizarea la rândul vocii folosite în prezent de acest host; $name$ este acea voce.",
     "message": "Vocea ta: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Eroare aruncată când browserul nu expune memoria WebAssembly inițială necesară pentru a rula modelul de detectare vocală.",
     "message": "Detectarea vocală nu poate porni: memoria WebAssembly nu este disponibilă în acest browser."
   },
+  "voicesListeningOptions": {
+    "message": "Opțiuni de ascultare",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Fă clic pe o voce pentru a asculta o mostră gratuită. Alege „Folosește” când găsești una care îți place.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Folosește pentru $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ este acum vocea ta pentru $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Vocea ta nu a putut fi salvată. Încearcă din nou.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Folosește vocea proprie a serviciului $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Vocea ta salvată nu este disponibilă momentan. Încearcă din nou mai târziu sau alege altă voce.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Schimbă vocea",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

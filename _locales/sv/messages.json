@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Enradig notis som visas i röstmenyer när både premiumröster (HD) och värderöster finns tillgängliga",
-    "message": "HD-röster använder din månadsgräns ungefär 20× snabbare."
+    "message": "HD-röster använder mer av din månadskvot. Röstprover är gratis."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Byt röst",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Röst pausade -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Kort etikett på knappen ”använd den här rösten” per värd i den enhetliga röstkatalogen i inställningarna (värden visas bredvid).",
-    "message": "Använd"
-  },
   "voicesYourVoice": {
     "description": "Knapp i kontrollraden i inställningarnas lista för Röster som flyttar fokus till raden för den röst som den här värden använder just nu; $name$ är den rösten.",
     "message": "Din röst: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Fel som uppstår när webbläsaren inte exponerar det initiala WebAssembly-minnet som behövs för att köra röstigenkänningsmodellen.",
     "message": "Röstigenkänning kan inte starta: WebAssembly-minne är inte tillgängligt i den här webbläsaren."
   },
+  "voicesListeningOptions": {
+    "message": "Lyssningsalternativ",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Klicka på en röst för att höra ett gratis prov. Välj ”Använd” när du hittar en du gillar.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Använd för $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ är nu din röst för $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Det gick inte att spara din röst. Försök igen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Använd $host$s egen röst",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Din sparade röst är inte tillgänglig just nu. Försök igen senare eller välj en annan röst.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Byt röst",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

@@ -638,13 +638,20 @@ describe("nothing outside the rail exports a width", () => {
         ".voice-row-inuse",
         ".voice-tier-chip",
         ".voice-pin-toggle",
-        ".voice-use",
       ]),
     );
   });
 });
 
 describe("nothing inside a row exports a width either", () => {
+  it("wraps the translated commit label so the host scope stays visible", () => {
+    const body = ruleBody(".voice-use");
+    expect(body).toMatch(/min-width:\s*0/);
+    expect(body).toMatch(/white-space:\s*normal/);
+    expect(body).toMatch(/overflow-wrap:\s*anywhere/);
+    expect(body).not.toMatch(/text-overflow:\s*ellipsis/);
+  });
+
   /**
    * The same defect, one containment boundary further in — and it fails
    * silently there, because the rail's `container-type` means a row that
@@ -672,7 +679,6 @@ describe("nothing inside a row exports a width either", () => {
     for (const selector of [
       ".voice-tier-chip, .voice-row-inuse",
       ".voice-pin-toggle",
-      ".voice-use",
     ]) {
       const body = ruleBody(selector);
       expect(body, `${selector} should be able to yield`).toMatch(
@@ -798,9 +804,7 @@ describe("one green, one meaning: now", () => {
     const inUse = ruleBody(".voice-row-inuse");
     expect(fontSizePx(inUse)).toBe(10);
     expect(inUse).toMatch(/text-transform:\s*uppercase/);
-    expect(inkDensity(ruleBody(".voice-tier-chip"))).toBeLessThan(
-      inkDensity(ruleBody(".voice-row-desc"))
-    );
+    expect(contrast(over(INK, inkDensity(ruleBody(".voice-tier-chip")), FOCUS_GROUND), FOCUS_GROUND)).toBeGreaterThanOrEqual(4.5);
   });
 });
 
@@ -890,11 +894,9 @@ describe("the sweep, its readout, and the Show: filter", () => {
     );
   });
 
-  it("sets the allowance note quieter than the hint it sits under", () => {
-    // A caveat about the filter, not a warning about the page.
-    expect(inkDensity(ruleBody(".voice-filter-note"))).toBeLessThan(
-      inkDensity(ruleBody(".voice-rail-controls"))
-    );
+  it("keeps the allowance note readable when it affects a choice", () => {
+    const alpha = inkDensity(ruleBody(".voice-hd-allowance"));
+    expect(contrast(over(INK, alpha, GROUND), GROUND)).toBeGreaterThanOrEqual(4.5);
   });
 
   it("gives the bar's one message slot full ink when it has something to say", () => {
@@ -1035,7 +1037,7 @@ describe("Play all is an option, not the page's call to action", () => {
     );
   });
 
-  it("says the whole row is the play target, on the row you are pointing at", () => {
+  it("keeps the play affordance visible before pointing at a row", () => {
     // NOT 22 persistent buttons: a button nested in a role="option" is exactly
     // what the whole-row target exists to avoid. A pseudo-element in the 14px
     // of padding the row already has costs the print nothing and adds nothing
@@ -1043,7 +1045,7 @@ describe("Play all is an option, not the page's call to action", () => {
     const glyph = ruleBody('.voice-row[data-print-voice]::before');
     expect(glyph).toMatch(/content:\s*"▶"/);
     expect(glyph).toMatch(/position:\s*absolute/);
-    expect(glyph).toMatch(/opacity:\s*0/);
+    expect(glyph).toMatch(/opacity:\s*1/);
     expect(glyph).toMatch(/pointer-events:\s*none/);
     expect(
       ruleBody(

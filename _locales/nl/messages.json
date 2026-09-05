@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Regel met uitleg die in stemmenu’s wordt getoond wanneer zowel premium- (HD) als value-stemmen beschikbaar zijn",
-    "message": "HD-stemmen verbruiken je maandelijkse limiet ongeveer 20× sneller."
+    "message": "HD-stemmen verbruiken meer van je maandelijkse tegoed. Fragmenten zijn gratis."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Stem wijzigen",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Stem gepauzeerd -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Korte label op de per-hostknop 'gebruik deze stem' in de gecombineerde instellingen-stemcatalogus (de host wordt ernaast getoond).",
-    "message": "Gebruik"
-  },
   "voicesYourVoice": {
     "description": "Knop in de bedieningsbalk in de lijst Stemmen in de instellingen die de focus naar de rij verplaatst van de stem die deze host momenteel gebruikt; $name$ is die stem.",
     "message": "Jouw stem: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Fout die wordt opgegooid wanneer de browser het initiële WebAssembly-geheugen dat nodig is om het spraakdetectiemodel te draaien niet aanbiedt.",
     "message": "Spraakdetectie kan niet starten: WebAssembly-geheugen is niet beschikbaar in deze browser."
   },
+  "voicesListeningOptions": {
+    "message": "Luisteropties",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Klik op een stem om een gratis voorbeeld te horen. Kies ‘Gebruik’ zodra je er een vindt die je bevalt.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Gebruik voor $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ is nu je stem voor $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Je stem kon niet worden opgeslagen. Probeer het opnieuw.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Gebruik de eigen stem van $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Je opgeslagen stem is op dit moment niet beschikbaar. Probeer het later opnieuw of kies een andere stem.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Stem wijzigen",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

@@ -1,0 +1,91 @@
+{
+  "candidateCommit": "418ee7190b29469774dcfd81f65ced01ffc8bd37",
+  "verifiedAt": "2026-09-05T07:43:54.592Z",
+  "firefoxVersion": "155.0.1",
+  "manifestVersion": 2,
+  "result": "PASS",
+  "testSetup": {
+    "systemAccess": "Mozilla geckodriver --allow-system-access; disposable test process only",
+    "externalNetworking": "Fail-closed loopback proxy",
+    "autoplayPreferences": "Unmodified"
+  },
+  "checks": [
+    "exact MV2 development artifact temporary-installed",
+    "saved per-host choice resolved through local catalog",
+    "keyboard preview produces real media progress without changing preferences",
+    "explicit choice survives settings reload and leaves Claude unchanged",
+    "Play all advances across two sources and Escape stops playback",
+    "Pi native return survives settings reload and preserves Claude",
+    "settings unload completes before Firefox shutdown"
+  ],
+  "mediaSummary": [
+    {
+      "source": "https://api.saypi.ai/voices/e2e-paola-multilingual/sample?v=e2e0002",
+      "maximumPositionSeconds": 0.413628,
+      "errors": []
+    },
+    {
+      "source": "https://api.saypi.ai/voices/e2e-rowan/sample?v=e2e0006",
+      "maximumPositionSeconds": 2.711995,
+      "errors": []
+    },
+    {
+      "source": "https://api.saypi.ai/voices/onyx/sample?v=e2e0004",
+      "maximumPositionSeconds": 0.285192,
+      "errors": []
+    }
+  ],
+  "selectionTrace": [
+    {
+      "step": "initial",
+      "voicePreferences": {
+        "pi": "onyx",
+        "claude": "alloy"
+      }
+    },
+    {
+      "step": "after preview",
+      "voicePreferences": {
+        "pi": "onyx",
+        "claude": "alloy"
+      }
+    },
+    {
+      "step": "after Enter and reload",
+      "voicePreferences": {
+        "claude": "alloy",
+        "pi": "e2e-paola-multilingual"
+      }
+    },
+    {
+      "step": "after native return and reload",
+      "voicePreferences": {
+        "claude": "alloy"
+      }
+    }
+  ],
+  "artifactHashes": {
+    "chrome-mv3-dev": {
+      "artifact": "/Users/rosscado/SayPi/saypi-userscript/.worktrees/release-voice-choice/.output/chrome-mv3-dev",
+      "files": 424,
+      "sha256": "40e2fb9f34bcdab29541f0bcd24e45382ab561b92fcbaffd42bc4dfd76747590"
+    },
+    "firefox-mv2-dev": {
+      "artifact": "/Users/rosscado/SayPi/saypi-userscript/.worktrees/release-voice-choice/.output/firefox-mv2-dev",
+      "files": 416,
+      "sha256": "0c6be57407e4667002d4b038a5be351ea4132ea83c98edd2dd20b8f3f1c2f891"
+    }
+  },
+  "liveHostTurns": 0,
+  "limitations": [
+    "Hermetic headless Firefox proves media decoding/progress, not human-audited speaker sound or live-host response audio.",
+    "Native return is proven through real settings actions and extension-local persistence, not live Pi speech.",
+    "This desktop Firefox WebDriver session clamps window width to 500px; strict 390px mobile assertions could not be exercised. Separate Chrome coverage validates that layout."
+  ],
+  "mobileProbe": {
+    "requestedWidth": 390,
+    "minimumWindowWidth": 500,
+    "result": "not exercised at 390px",
+    "reason": "After explicit WebDriver tab activation, actual innerWidth was 500px. The desktop window clamped the requested size."
+  }
+}

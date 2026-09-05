@@ -1,5 +1,5 @@
 import getMessage from "../../../../src/i18n";
-import { SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
+import { audioProviders, SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
 import { getJwtManagerSync } from "../../../../src/JwtManager";
@@ -112,6 +112,9 @@ export interface VoiceStudioDeps {
   getVoices(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote[]>;
   getVoice(host: VoiceHostId): Promise<SpeechSynthesisVoiceRemote | null>;
   setVoice(voice: SpeechSynthesisVoiceRemote, host: VoiceHostId): Promise<void>;
+  unsetVoice?(host: VoiceHostId): Promise<void>;
+  hasVoice?(host: VoiceHostId): Promise<boolean>;
+  onVoiceChange?(fn: () => void): () => void;
   isAuthenticated(): boolean;
   /**
    * Play the voice's free canned sample clip (design §4), replacing whatever
@@ -244,6 +247,15 @@ function defaultDeps(): VoiceStudioDeps {
     getVoice: (host) =>
       prefs.getVoice(host) as Promise<SpeechSynthesisVoiceRemote | null>,
     setVoice: (voice, host) => prefs.setVoice(voice, host).then(() => {}),
+    unsetVoice: (host) => prefs.unsetVoice(host),
+    hasVoice: (host) => prefs.hasVoice(host),
+    onVoiceChange: (fn) => {
+      const listener = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
+        if (area === "local" && changes.voicePreferences) fn();
+      };
+      chrome.storage.onChanged.addListener(listener);
+      return () => chrome.storage.onChanged.removeListener(listener);
+    },
     isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
     // A single audition IS a one-item sequence — same queue, same beat, same
     // cancellation — so both entry points are this one call.
@@ -333,6 +345,13 @@ export class VoicesController {
   private rail: HTMLElement | null = null;
   private controls: HTMLElement | null = null;
   private focusIndex = 0;
+  private currentReadToken = 0;
+  private savingChoice = false;
+  private choiceRefreshPending = false;
+  private choiceMessage = "";
+  private optionsOpen = false;
+  private destroyed = false;
+  private unsubscribeVoice: (() => void) | null = null;
   /**
    * Which voice focus is on, carried ACROSS repaints. `useVoice` rebuilds the
    * body from scratch, and landing the reader back at the top of a 22-row rail
@@ -364,6 +383,7 @@ export class VoicesController {
    * tab the reader moved on to.
    */
   private wantsRailFocus = false;
+  private renderedAuthenticated: boolean | null = null;
   /**
    * The arming rule (design §3). Arrow keys move focus silently until the user
    * has explicitly played something in this session; after that, focus
@@ -513,6 +533,8 @@ export class VoicesController {
     this.unsubscribeHeard =
       this.deps.onHeard?.((voiceId) => this.onVoiceHeard(voiceId)) ?? null;
     await this.render();
+    this.unsubscribeVoice = this.deps.onVoiceChange?.(this.onVoiceChange) ?? null;
+    window.addEventListener("focus", this.onVoiceChange);
   }
 
   // --- leaving (design §5.2's interruption matrix) --------------------------
@@ -556,6 +578,40 @@ export class VoicesController {
   onShown(): void {
     this.wantsRailFocus = true;
     this.claimRailFocus();
+    void this.refreshCurrentVoice();
+  }
+
+  private readonly onVoiceChange = (): void => {
+    void this.refreshCurrentVoice();
+  };
+
+  /** Refresh the choice, keeping the expensive catalog and sample cache. */
+  private async refreshCurrentVoice(): Promise<void> {
+    const host = this.activeHost;
+    const data = this.cache.get(host);
+    if (!data || this.destroyed) return;
+    if (this.savingChoice) {
+      this.choiceRefreshPending = true;
+      return;
+    }
+    const token = ++this.currentReadToken;
+    try {
+      const [current, saved] = await Promise.all([
+        this.deps.getVoice(host), this.deps.hasVoice?.(host) ?? Promise.resolve(false),
+      ]);
+      if (token !== this.currentReadToken || this.destroyed) return;
+      const unavailable = saved && !current;
+      if ((data.current?.id ?? null) === (current?.id ?? null) && !!data.unavailable === unavailable &&
+        this.renderedAuthenticated === this.deps.isAuthenticated()) return;
+      data.current = current;
+      data.unavailable = unavailable;
+      if (host === this.activeHost) {
+        this.choiceMessage = "";
+        this.paintBody(host, data);
+      }
+    } catch {
+      // A temporary read failure gives no new information about the choice.
+    }
   }
 
   /**
@@ -593,8 +649,8 @@ export class VoicesController {
    * voice for — so stopping on blur would make the feature feel broken.
    */
   private readonly onVisibilityChange = (): void => {
-    if (document.visibilityState !== "hidden") return;
-    this.stopSequence();
+    if (document.visibilityState === "hidden") this.stopSequence();
+    else void this.refreshCurrentVoice();
   };
 
   /** Belt and braces for settings-in-a-tab, where visibilitychange may not fire. */
@@ -630,6 +686,11 @@ export class VoicesController {
 
   /** Release the page-level listeners this studio installed. */
   destroy(): void {
+    this.destroyed = true;
+    this.currentReadToken++;
+    this.unsubscribeVoice?.();
+    this.unsubscribeVoice = null;
+    window.removeEventListener("focus", this.onVoiceChange);
     this.wantsRailFocus = false;
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     document.removeEventListener("keydown", this.onDocumentKeyDown);
@@ -683,6 +744,7 @@ export class VoicesController {
   private showHost(host: VoiceHostId): void {
     if (host === this.activeHost) return;
     this.activeHost = host;
+    this.choiceMessage = "";
     this.container
       .querySelectorAll<HTMLButtonElement>(".voice-host-tab")
       .forEach((tab) =>
@@ -698,7 +760,10 @@ export class VoicesController {
     this.stopAudition();
     this.focusedVoiceId = null;
     this.landed = false;
-    void this.render();
+    const revisit = this.cache.has(host);
+    void this.render().then(() => {
+      if (revisit && host === this.activeHost) return this.refreshCurrentVoice();
+    });
   }
 
   /**
@@ -732,21 +797,23 @@ export class VoicesController {
 
   private async fetchHost(host: VoiceHostId): Promise<HostStudioData> {
     let failed = false;
-    const [voices, current, overlay] = await Promise.all([
+    const [voices, current, overlay, saved] = await Promise.all([
       this.deps.getVoices(host).catch(() => {
         failed = true;
         return [] as SpeechSynthesisVoiceRemote[];
       }),
       this.deps.getVoice(host).catch(() => null),
       this.deps.loadPins(host).catch(() => null),
+      this.deps.hasVoice?.(host).catch(() => false) ?? Promise.resolve(false),
     ]);
-    return { voices, current, overlay, failed };
+    return { voices, current, overlay, failed, unavailable: saved && !current };
   }
 
   // --- painting -------------------------------------------------------------
 
   private paintBody(hostId: VoiceHostId, data: HostStudioData): void {
     if (!this.body) return;
+    this.renderedAuthenticated = this.deps.isAuthenticated();
     const body = this.body;
     body.classList.remove("voice-studio-loading");
     body.dataset.host = hostId;
@@ -777,6 +844,8 @@ export class VoicesController {
 
     if (vm.catalog.length === 0 && !vm.hasBuiltins) {
       this.paintedOrder = [];
+      this.controls = this.renderControlBar(vm);
+      body.appendChild(this.controls);
       body.appendChild(this.renderEmptyState(vm, data));
       return;
     }
@@ -805,12 +874,13 @@ export class VoicesController {
     // built carrying `aria-describedby`, and a description that resolves to
     // nothing is a description a screen reader silently drops.
     const hdNote = this.renderHdNote(vm);
-    if (hdNote) body.appendChild(hdNote);
+
     // The rail is built FIRST, even though it paints second: the control bar
     // offers to jump to the current voice, and it can only honestly offer that
     // once it knows the current voice has a row (a host built-in does not).
     const rail = this.renderRail(vm);
     this.controls = this.renderControlBar(vm);
+    if (hdNote) this.controls.appendChild(hdNote);
     body.appendChild(this.controls);
     body.appendChild(rail);
     const summary = this.renderMenuSummary(vm);
@@ -877,105 +947,102 @@ export class VoicesController {
 
   // --- the control bar ------------------------------------------------------
 
-  /**
-   * Sticky, opaque, one rule under it — one of exactly two rules on the page.
-   * It carries where your voice is, the sweep and its position, how much of
-   * the rail you have listened to, whether arrows audition, which slice of the
-   * catalog is showing, what the keys do, and what the last two voices you
-   * heard were.
-   */
+  /** The choice leads; browsing options stay available without leading it. */
   private renderControlBar(vm: StudioViewModel): HTMLElement {
     const bar = document.createElement("div");
     bar.classList.add("voice-rail-controls");
-
-    const top = document.createElement("div");
-    top.classList.add("voice-rail-controls-row");
-
-    // Auto-advance is the OTHER comparison gesture (design §4) — but never the
-    // opening one: the page's invitation is to hear ONE voice, not to commit a
-    // minute. No player wired, or nothing auditionable to walk, and the button
-    // does not exist rather than sitting there doing nothing.
-    if (this.deps.playSequence && this.playableRows().length > 0) {
-      top.appendChild(this.renderSweepButton());
-      const position = document.createElement("span");
-      position.classList.add("voice-sweep-position");
-      top.appendChild(position);
-    }
-
-    // `9 of 22 heard` — the half of heard memory that actually makes a hundred
-    // voices tractable (design §8). Filled by updateControlBar, because it
-    // ticks up while the rail is playing itself and the rail is not repainted
-    // for that.
-    const heard = document.createElement("span");
-    heard.classList.add("voice-heard-count");
-    top.appendChild(heard);
-
-    // No dead controls: the jump only exists when there is a row to jump to.
-    // A host built-in (Pi's own voices) is the current voice with no row.
-    const currentHasRow = this.rows.some(
-      (row) => row.voice.id === vm.currentId
-    );
-    if (vm.stagedCurrent && currentHasRow) {
+    const current = document.createElement("div");
+    current.className = "voice-current-choice voice-rail-controls-row";
+    const scope = document.createElement("span");
+    scope.className = "voice-current-host";
+    scope.textContent = this.deps.isAuthenticated()
+      ? getMessage("voicesSpeaksWith", [vm.host.label])
+      : getMessage("signInForTTS");
+    current.appendChild(scope);
+    const currentHasRow = this.rows.some((row) => row.voice.id === vm.currentId);
+    const selectedRemote = vm.stagedCurrent &&
+      audioProviders.retreiveProviderByVoice(vm.stagedCurrent) === audioProviders.SayPi
+      ? vm.stagedCurrent : null;
+    if (selectedRemote && currentHasRow) {
       const jump = document.createElement("button");
       jump.type = "button";
-      jump.classList.add("voice-your-voice");
-      // No data-i18n: substituted text (replaceI18n would strip the name).
-      jump.textContent = getMessage("voicesYourVoice", [
-        vm.stagedCurrent.name,
-      ]);
-      const arrow = document.createElement("span");
-      arrow.classList.add("voice-your-voice-arrow");
-      arrow.setAttribute("aria-hidden", "true");
-      arrow.textContent = " ↗";
-      jump.appendChild(arrow);
+      jump.className = "voice-your-voice";
+      jump.textContent = selectedRemote.name;
+      jump.setAttribute("aria-label", getMessage("voicesYourVoice", [selectedRemote.name]));
       jump.addEventListener("click", () => this.jumpToCurrent());
-      top.appendChild(jump);
+      current.appendChild(jump);
+    } else if (selectedRemote) {
+      const name = document.createElement("span");
+      name.className = "voice-current-name";
+      name.textContent = selectedRemote.name;
+      current.appendChild(name);
     } else {
-      // Nothing of ours is speaking. Say what is (#599) — the page's one
-      // statement about the present, in the slot the eye already reads for it.
-      top.appendChild(this.renderFallbackVoice(vm));
+      scope.remove();
+      current.appendChild(this.renderFallbackVoice(vm));
     }
+    if (vm.host.hasOwnVoice && this.deps.unsetVoice && (selectedRemote || vm.unavailable)) {
+      const native = document.createElement("button");
+      native.type = "button";
+      native.className = "voice-native-return";
+      native.textContent = getMessage("voicesUseNativeHost", [vm.host.label]);
+      native.disabled = this.savingChoice;
+      native.addEventListener("click", () => { void this.saveChoice(null); });
+      current.appendChild(native);
+    }
+    bar.appendChild(current);
 
+    const status = document.createElement("div");
+    status.className = "voice-choice-status";
+    status.textContent = this.choiceMessage;
+    bar.appendChild(status);
+    if (this.rows.length === 0) return bar;
+
+    const hint = document.createElement("div");
+    hint.className = "voice-rail-hint";
+    bar.appendChild(hint);
+    const playback = document.createElement("div");
+    playback.className = "voice-rail-controls-row";
+    if (this.deps.playSequence && this.playableRows().length > 0) {
+      playback.appendChild(this.renderSweepButton());
+      const position = document.createElement("span");
+      position.className = "voice-sweep-position";
+      playback.appendChild(position);
+    }
+    const compare = document.createElement("span");
+    compare.className = "voice-compare";
+    playback.appendChild(compare);
+    const filterSlot = document.createElement("span");
+    filterSlot.className = "voice-filter-slot";
+    playback.appendChild(filterSlot);
+    bar.appendChild(playback);
+
+    const options = document.createElement("details");
+    options.className = "voice-listening-options";
+    options.open = this.optionsOpen;
+    options.addEventListener("toggle", () => { this.optionsOpen = options.open; });
+    const summary = document.createElement("summary");
+    summary.textContent = getMessage("voicesListeningOptions");
+    summary.dataset.i18n = "voicesListeningOptions";
+    options.appendChild(summary);
+    const tools = document.createElement("div");
+    tools.className = "voice-rail-controls-row";
     const chip = document.createElement("button");
     chip.type = "button";
-    chip.classList.add("voice-arrow-chip");
-    chip.setAttribute("data-i18n", "voicesArrowAudition");
+    chip.className = "voice-arrow-chip";
+    chip.dataset.i18n = "voicesArrowAudition";
     chip.textContent = getMessage("voicesArrowAudition");
     chip.addEventListener("click", () => this.toggleArrowAudition());
-    top.appendChild(chip);
-
-    // A slot, not the control: the option set is not static — `Not yet heard`
-    // appears the moment anything has been heard and disables itself once
-    // everything has, neither of which repaints the rail.
-    const filterSlot = document.createElement("span");
-    filterSlot.classList.add("voice-filter-slot");
-    top.appendChild(filterSlot);
-    bar.appendChild(top);
-
-    const bottom = document.createElement("div");
-    bottom.classList.add("voice-rail-controls-row");
-    const hint = document.createElement("span");
-    hint.classList.add("voice-rail-hint");
-    hint.setAttribute("data-i18n", "voicesKeyboardHint");
-    hint.textContent = getMessage("voicesKeyboardHint");
-    bottom.appendChild(hint);
-    const compare = document.createElement("span");
-    compare.classList.add("voice-compare");
-    bottom.appendChild(compare);
-    bar.appendChild(bottom);
-
-    // The allowance note is the HD filter's HELPER LINE, not a shelf blurb.
-    // Same sentence, different job: on the retired shelves it was decoration
-    // above a heading nobody asked for, and here it only exists while HD is
-    // the thing you chose to look at — with the control that undoes that
-    // choice sitting directly above it. Actionable rather than ornamental.
-    if (this.filter === "hd") {
-      const note = document.createElement("div");
-      note.classList.add("voice-rail-controls-row", "voice-filter-note");
-      note.setAttribute("data-i18n", "hdVoicesAllowanceNote");
-      note.textContent = getMessage("hdVoicesAllowanceNote");
-      bar.appendChild(note);
-    }
+    tools.appendChild(chip);
+    const heard = document.createElement("span");
+    heard.className = "voice-heard-count";
+    tools.appendChild(heard);
+    options.appendChild(tools);
+    const keys = document.createElement("p");
+    keys.className = "voice-keyboard-help";
+    keys.dataset.i18n = "voicesKeyboardHint";
+    keys.textContent = getMessage("voicesKeyboardHint");
+    options.appendChild(keys);
+    bar.appendChild(options);
     return bar;
   }
 
@@ -1120,6 +1187,10 @@ export class VoicesController {
     this.updateHint(bar);
     const compare = bar.querySelector<HTMLElement>(".voice-compare");
     if (compare) this.updateCompareReadout(compare);
+    const note = bar.querySelector<HTMLElement>(`#${HD_NOTE_ID}`);
+    const focused = this.rows[this.focusIndex]?.voice;
+    note?.classList.toggle("voice-filter-note", this.filter === "hd");
+    note?.classList.toggle("voice-visually-hidden", this.filter !== "hd" && (!focused || getVoiceTier(focused) !== "hd"));
   }
 
   /**
@@ -1221,8 +1292,8 @@ export class VoicesController {
       };
     }
     return {
-      text: getMessage("voicesKeyboardHint"),
-      i18nKey: "voicesKeyboardHint",
+      text: getMessage("voicesListenHint"),
+      i18nKey: "voicesListenHint",
       alert: false,
     };
   }
@@ -1610,8 +1681,8 @@ export class VoicesController {
         "aria-label",
         getMessage("voicesUseOnHost", [voice.name, vm.host.label])
       );
-      use.setAttribute("data-i18n", "voicesUseShort");
-      use.textContent = getMessage("voicesUseShort");
+      use.textContent = getMessage("voicesUseForHost", [vm.host.label]);
+      use.disabled = this.savingChoice;
       use.addEventListener("click", (event) => {
         event.stopPropagation();
         // Committing to a row IS standing on it. The actions are revealed on
@@ -1722,7 +1793,7 @@ export class VoicesController {
     if (!vm.catalog.some((voice) => getVoiceTier(voice) === "hd")) return null;
     const note = document.createElement("div");
     note.id = HD_NOTE_ID;
-    note.classList.add("voice-visually-hidden");
+    note.classList.add("voice-hd-allowance", "voice-visually-hidden");
     note.setAttribute("data-i18n", "hdVoicesAllowanceNote");
     note.textContent = getMessage("hdVoicesAllowanceNote");
     return note;
@@ -2098,7 +2169,12 @@ export class VoicesController {
   private renderFallbackVoice(vm: StudioViewModel): HTMLElement {
     const line = document.createElement("span");
     line.classList.add("voice-fallback");
-    if (vm.host.hasOwnVoice) {
+    if (vm.unavailable) {
+      line.classList.add("voice-fallback-unavailable");
+      const key = this.deps.isAuthenticated() ? "voicesSavedUnavailable" : "signInForTTS";
+      line.dataset.i18n = key;
+      line.textContent = getMessage(key);
+    } else if (vm.host.hasOwnVoice) {
       line.classList.add("voice-fallback-host");
       // No data-i18n: substituted ($host$) text, which replaceI18n would strip.
       line.textContent = getMessage("voicesFallbackHostVoice", [vm.host.label]);
@@ -2629,10 +2705,37 @@ export class VoicesController {
    * would punish them for choosing.
    */
   private async useVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+    await this.saveChoice(voice);
+  }
+
+  private async saveChoice(voice: SpeechSynthesisVoiceRemote | null): Promise<void> {
+    if (this.savingChoice || (!voice && !this.deps.unsetVoice)) return;
     const host = this.activeHost;
-    await this.deps.setVoice(voice, host);
-    const data = this.cache.get(host);
-    if (data) data.current = voice;
+    this.savingChoice = true;
+    ++this.currentReadToken;
+    this.body?.querySelectorAll<HTMLButtonElement>(".voice-use, .voice-native-return")
+      .forEach((button) => { button.disabled = true; });
+    let message: string;
+    try {
+      if (voice) await this.deps.setVoice(voice, host);
+      else await this.deps.unsetVoice!(host);
+      const data = this.cache.get(host);
+      if (data) { data.current = voice; data.unavailable = false; }
+      message = voice
+        ? getMessage("voicesSelectedOnHost", [voice.name, VOICE_HOSTS.find((item) => item.id === host)!.label])
+        : getMessage("voicesFallbackHostVoice", [VOICE_HOSTS.find((item) => item.id === host)!.label]);
+    } catch {
+      message = getMessage("voicesSaveFailed");
+    } finally {
+      this.savingChoice = false;
+    }
+    if (this.destroyed) return;
+    if (host === this.activeHost) this.choiceMessage = message;
     await this.render();
+    if (this.choiceRefreshPending) {
+      this.choiceRefreshPending = false;
+      await this.refreshCurrentVoice();
+    }
+    if (host === this.activeHost && this.choiceMessage === message) this.announce(message);
   }
 }

@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "பிரீமியம் (HD) மற்றும் மதிப்பு குரல்கள் இரண்டும் கிடைக்கும் போது குரல் மெனுக்களில் காட்டப்படும் ஒரு வரி குறிப்பு",
-    "message": "HD குரல்கள் உங்கள் மாதாந்திர அளவுத்தொகையை சுமார் 20× வேகமாக பயன்படுத்தும்."
+    "message": "HD குரல்கள் உங்கள் மாதாந்திர ஒதுக்கீட்டை அதிகமாகப் பயன்படுத்துகின்றன. குரல் மாதிரிகள் இலவசம்."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "குரலை மாற்று",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "குரல் இடைநிறுத்தப்பட்டது -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "ஒருங்கிணைந்த அமைப்புகள் குரல் பட்டியலில், ஒவ்வொரு ஹோஸ்ட்-க்கும் இருக்கும் 'இந்தக் குரலைப் பயன்படுத்து' பொத்தானில் காணும் குறுகிய லேபல் (அதன் அருகில் ஹோஸ்ட் காட்டப்படும்).",
-    "message": "பயன்படுத்து"
-  },
   "voicesYourVoice": {
     "description": "அமைப்புகள் குரல்கள் பட்டியலின் கட்டுப்பாட்டு பட்டியில் உள்ள பொத்தான்; இந்த ஹோஸ்ட் தற்போது பயன்படுத்தும் குரலின் வரிசைக்கு கவனத்தை நகர்த்தும். $name$ அந்த குரல்.",
     "message": "உங்கள் குரல்: $name$",
@@ -2181,8 +2173,58 @@
     "description": "குரல்-கண்டறிதல் மாதிரியை இயக்க தேவையான ஆரம்ப WebAssembly நினைவகத்தை உலாவி வழங்காதபோது ஏற்படும் பிழை.",
     "message": "குரல் கண்டறிதல் தொடங்க முடியாது: இந்த உலாவியில் WebAssembly நினைவகம் கிடைக்கவில்லை."
   },
+  "voicesListeningOptions": {
+    "message": "கேட்பதற்கான விருப்பங்கள்",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "இலவச மாதிரியைக் கேட்க ஒரு குரலைக் கிளிக் செய்யவும். உங்களுக்குப் பிடித்த குரலைக் கண்டறிந்ததும் “பயன்படுத்து” என்பதைத் தேர்ந்தெடுக்கவும்.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "$host$-க்குப் பயன்படுத்து",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$-க்கான உங்கள் குரல் இப்போது $name$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "உங்கள் குரலைச் சேமிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$-இன் சொந்தக் குரலைப் பயன்படுத்து",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "நீங்கள் சேமித்த குரல் தற்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும் அல்லது வேறொரு குரலைத் தேர்ந்தெடுக்கவும்.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "குரலை மாற்று",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

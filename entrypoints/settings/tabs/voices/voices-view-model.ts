@@ -82,6 +82,8 @@ export interface HostStudioData {
   overlay: HostPinOverlay | null;
   /** The voices fetch itself failed (network/API) — distinct from empty. */
   failed: boolean;
+  /** A saved choice exists but cannot currently be resolved from the catalog. */
+  unavailable?: boolean;
 }
 
 /** Everything one paint needs, derived fresh from a host's cached data. */
@@ -91,6 +93,7 @@ export interface StudioViewModel {
   catalog: SpeechSynthesisVoiceRemote[];
   /** Host-owned built-ins exist (e.g. Pi's) — they get a note, not cards. */
   hasBuiltins: boolean;
+  unavailable: boolean;
   currentId: string | null;
   /**
    * The voice the stage announces: the FRESH catalog entry for the current
@@ -254,6 +257,7 @@ export function viewModel(
     host,
     catalog,
     hasBuiltins,
+    unavailable: data.unavailable ?? false,
     currentId,
     stagedCurrent,
     featuredIds,

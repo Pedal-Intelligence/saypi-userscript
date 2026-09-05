@@ -986,10 +986,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Change voice",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicesSectionTitle": {
     "message": "Voices",
     "description": "Heading for the voice catalog section in the settings AI Chat tab"
@@ -1013,10 +1009,6 @@
   "voicesShelfEverydayBlurb": {
     "message": "Natural and clear — you can listen about 20× longer than with HD.",
     "description": "One-line note beside the Everyday group heading in the settings Voices studio; the one place the studio states how much further this tier goes than HD."
-  },
-  "voicesUseShort": {
-    "message": "Use",
-    "description": "Short label on the per-host 'use this voice' button in the unified settings voice catalog (the host is shown alongside it)."
   },
   "voicesUseOnHost": {
     "message": "Use $name$ on $host$",
@@ -1509,7 +1501,7 @@
     }
   },
   "hdVoicesAllowanceNote": {
-    "message": "HD voices use your monthly allowance about 20× faster.",
+    "message": "HD voices use more of your monthly allowance. Samples are free.",
     "description": "One-line note shown in voice menus when premium (HD) and value voices are both available"
   },
   "ttsVoice": {
@@ -2178,8 +2170,58 @@
     "message": "Maybe Later",
     "description": "Button text to dismiss auth prompt."
   },
+  "voicesListeningOptions": {
+    "message": "Listening options",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Click a voice to hear a free sample. Choose Use when you find one you like.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Use for $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ is now your voice for $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Couldn’t save your voice. Please try again.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Use $host$’s own voice",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Your saved voice is unavailable right now. Try again later, or choose another voice.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Change voice",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

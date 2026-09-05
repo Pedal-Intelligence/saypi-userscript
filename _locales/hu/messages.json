@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Egysoros megjegyzés, amely a hangmenükben jelenik meg, amikor prémium (HD) és value hangok is elérhetők",
-    "message": "A HD hangok kb. 20× gyorsabban fogyasztják a havi keretedet."
+    "message": "A HD hangok többet használnak fel a havi keretedből. A hangminták ingyenesek."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Hang módosítása",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "A hang megállt -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Rövid címke az egységes beállítások hangkatalógusában található, gazdagépenkénti „használd ezt a hangot” gombon (a gazdagép mellette látható).",
-    "message": "Használat"
-  },
   "voicesYourVoice": {
     "description": "Vezérlősáv gomb a Beállítások Hangok listában, amely a fókuszt arra a sorra viszi, amelyik hangot ez a host jelenleg használja; $name$ az a hang.",
     "message": "A te hangod: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Hiba, amely akkor keletkezik, ha a böngésző nem teszi elérhetővé a hangérzékelő modell futtatásához szükséges kezdeti WebAssembly-memóriát.",
     "message": "A hangérzékelés nem indítható el: ebben a böngészőben nem érhető el a WebAssembly-memória."
   },
+  "voicesListeningOptions": {
+    "message": "Hallgatási beállítások",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Kattints egy hangra az ingyenes minta meghallgatásához. Ha találtál egyet, amelyik tetszik, válaszd a „Használat” lehetőséget.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Használat itt: $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "A kiválasztott hangod mostantól $name$ a(z) $host$ felületén.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Nem sikerült menteni a hangodat. Próbáld újra.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "A(z) $host$ saját hangjának használata",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "A mentett hangod jelenleg nem érhető el. Próbáld újra később, vagy válassz másik hangot.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Hang módosítása",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Едноредова бележка, показвана в менютата за глас, когато са налични както премиум (HD), така и value гласове",
-    "message": "HD гласовете изразходват месечната ви квота около 20× по-бързо."
+    "message": "HD гласовете използват повече от месечния ви лимит. Мострите са безплатни."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Промяна на гласа",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Гласът спря -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Кратък етикет върху бутона „използвай този глас“ за конкретен хост в единния каталог с гласове в настройките (хостът се показва до него).",
-    "message": "Използвай"
-  },
   "voicesYourVoice": {
     "description": "Бутон в лентата за управление в списъка „Гласове“ в настройките, който премества фокуса към реда на гласа, който този хост използва в момента; $name$ е този глас.",
     "message": "Вашият глас: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Грешка, хвърляна когато браузърът не предоставя началната WebAssembly памет, нужна за изпълнение на модела за засичане на глас.",
     "message": "Засичането на глас не може да стартира: в този браузър не е налична памет за WebAssembly."
   },
+  "voicesListeningOptions": {
+    "message": "Опции за слушане",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Щракни върху глас, за да чуеш безплатна проба. Избери „Използвай“, когато намериш глас, който ти харесва.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Използвай за $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ вече е твоят глас за $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Гласът ти не можа да бъде запазен. Опитай отново.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Използвай собствения глас на $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Запазеният ти глас в момента не е наличен. Опитай отново по-късно или избери друг глас.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Промяна на гласа",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Однорядкова примітка, що показується в меню голосів, коли доступні і преміум (HD), і value-голоси",
-    "message": "HD-голоси витрачають ваш місячний ліміт приблизно у 20× швидше."
+    "message": "Голоси HD витрачають більше місячного ліміту. Зразки безкоштовні."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Змінити голос",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Голос зробив паузу -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Короткий напис на кнопці «використати цей голос» для кожного хоста в об’єднаному каталозі голосів у налаштуваннях (поруч показано хост).",
-    "message": "Використати"
-  },
   "voicesYourVoice": {
     "description": "Кнопка на панелі керування в списку «Голоси» в налаштуваннях, яка переводить фокус на рядок голосу, який зараз використовує цей хост; $name$ — це той голос.",
     "message": "Ваш голос: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Помилка, яка виникає, коли браузер не надає початкову памʼять WebAssembly, потрібну для запуску моделі виявлення голосу.",
     "message": "Виявлення голосу не може запуститися: у цьому браузері недоступна памʼять WebAssembly."
   },
+  "voicesListeningOptions": {
+    "message": "Параметри прослуховування",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Натисніть на голос, щоб послухати безкоштовний зразок. Виберіть «Використати», коли знайдете той, що вам подобається.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Використати для $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ тепер ваш голос для $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "Не вдалося зберегти ваш голос. Спробуйте ще раз.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Використати власний голос $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Збережений голос зараз недоступний. Спробуйте пізніше або виберіть інший голос.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Змінити голос",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

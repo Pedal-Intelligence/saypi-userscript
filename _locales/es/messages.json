@@ -563,7 +563,7 @@
   },
   "hdVoicesAllowanceNote": {
     "description": "Nota de una línea que se muestra en los menús de voz cuando están disponibles tanto voces premium (HD) como voces económicas",
-    "message": "Las voces HD consumen tu asignación mensual unas 20× más rápido."
+    "message": "Las voces HD consumen más de tu cuota mensual. Las muestras son gratuitas."
   },
   "instructionLabel_context": {
     "description": "Friendly label for user instruction that provides background information.",
@@ -1637,10 +1637,6 @@
       }
     }
   },
-  "voicesChangeVoice": {
-    "message": "Cambiar voz",
-    "description": "Action beside the current voice that opens the full voice catalog."
-  },
   "voicePaused": {
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Voz en pausa -"
@@ -2153,10 +2149,6 @@
       }
     }
   },
-  "voicesUseShort": {
-    "description": "Etiqueta corta en el botón por host de \"usar esta voz\" en el catálogo unificado de voces de ajustes (el host se muestra junto a él).",
-    "message": "Usar"
-  },
   "voicesYourVoice": {
     "description": "Botón de la barra de control en la lista de Voces de ajustes que mueve el foco a la fila de la voz que usa actualmente este host; $name$ es esa voz.",
     "message": "Tu voz: $name$",
@@ -2181,8 +2173,58 @@
     "description": "Error que se lanza cuando el navegador no expone la memoria inicial de WebAssembly necesaria para ejecutar el modelo de detección de voz.",
     "message": "No se puede iniciar la detección de voz: la memoria de WebAssembly no está disponible en este navegador."
   },
+  "voicesListeningOptions": {
+    "message": "Opciones de escucha",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
+  },
+  "voicesListenHint": {
+    "message": "Haz clic en una voz para escuchar una muestra gratuita. Elige «Usar» cuando encuentres una que te guste.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesUseForHost": {
+    "message": "Usar para $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ es ahora tu voz para $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesSaveFailed": {
+    "message": "No se pudo guardar tu voz. Inténtalo de nuevo.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesUseNativeHost": {
+    "message": "Usar la voz propia de $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesSavedUnavailable": {
     "message": "Tu voz guardada no está disponible en este momento. Inténtalo de nuevo más tarde o elige otra voz.",
     "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
+  "voicesChangeVoice": {
+    "message": "Cambiar voz",
+    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }
