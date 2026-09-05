@@ -1,6 +1,6 @@
 # #414 Phase 2 — Opus `/transcribe` upload (design)
 
-**Status:** implemented on `fix/414-opus-upload`; needs founder sign-off + Layer-4 real-host confirmation before merge.
+**Status:** historical implementation design for `fix/414-opus-upload`. Current merge and release requirements come from [AGENTS.md](../../AGENTS.md#autonomous-engineering-mandate); this older plan adds no attended audio prerequisite.
 **Builds on:** Phase 1 (#417, merged) — 16-bit PCM WAV upload, which becomes the fallback here.
 
 ## Goal
@@ -55,9 +55,9 @@ The WAV→Float32→Opus round-trip wastes a cheap synchronous WAV encode, but b
 ## Verification
 - **Layer 1 (Vitest/JSDOM) — green:** capability probe (false when `AudioEncoder` absent; true+cached when mocked supported; throwing probe → false); `transcodeForUpload` → `audio/webm` when supported (passing the decoded samples), original blob when unsupported / non-WAV / on encode error; `decodePcm16Wav` round-trips 16-bit PCM and rejects float/non-RIFF bytes. The whole `npm test` gate stays green (1415 Vitest + Jest + typecheck) — note `transcodeForUpload` is a no-op in JSDOM (no WebCodecs), so it can't perturb existing upload-path tests.
 - **Layer 3 (headless Chrome — real WebCodecs) — green:** new `e2e/specs/opus-upload.e2e.ts` drives the synthetic voice turn and asserts the mock `/transcribe` received `audio/webm` (Opus actually ran) **and** the transcript landed; environment-adaptive (asserts `audio/wav` where Opus is unsupported). The full 12-spec e2e suite passes, incl. the baseline synthetic + dictation turns (proving the pipeline timing is untouched). The mock server was extended to expose the uploaded audio Content-Type.
-- **Layer 4 (real host, founder-gated) — PENDING:** confirm pi.ai/claude.ai/chatgpt.com transcribe the Opus upload correctly with no accuracy regression. Bundle: `webm-muxer` measured at **27 KB min / 7.5 KB gzip** — negligible vs AMO's 5 MB non-binary limit.
+- **Layer 4 (historical evidence limit):** this document records no real-host accuracy result for Opus uploads on pi.ai/claude.ai/chatgpt.com. The original proposed attended confirmation is not a current release prerequisite (founder decision, 2026-09-05). Bundle: `webm-muxer` measured at **27 KB min / 7.5 KB gzip** — negligible vs AMO's 5 MB non-binary limit.
 
 ## Risks
-- WebCodecs `AudioEncoder` availability in a **content-script isolated world** on real hosts — mitigated by the PCM fallback; confirmed at Layer 4.
+- WebCodecs `AudioEncoder` availability in a **content-script isolated world** on real hosts — mitigated by the PCM fallback; real-host confirmation is not recorded here.
 - Firefox MV2 native WebCodecs Opus is uncertain (130+ only, extension-context exposure unverified) → falls back to PCM there, consistent with the existing degraded-on-Firefox model.
 - Bundle: `webm-muxer` measured against the Firefox AMO 5 MB non-binary limit in the build step.

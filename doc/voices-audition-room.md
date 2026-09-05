@@ -464,8 +464,10 @@ Honest list, for whoever picks this up.
   precisely what arriving used to avoid by leaving focus unvisited. That trade is deliberate — a
   focus ring below the fold is worse than a scrolled page — but it is a trade, and the honest fix
   further out is a shorter route to your own voice rather than a longer scroll to it.
-- **Sticky autoplay activation is designed around, not verified.** The automated harness disables
-  autoplay policy outright, so a green test there proves nothing. It needs a real browser check.
+- **The original autoplay evidence gap has automated coverage.**
+  `e2e/specs/voices-release.e2e.ts` uses the browser’s default autoplay policy, a gestureless
+  negative control and real media progression after a gesture. The earlier harness bypass
+  no longer requires a separate attended check.
 - **Two server-side asks are outstanding**, both with measurements attached: the ten HD clips should
   be re-rendered on the line the Everyday clips already share, and one voice (Sage) ships about 7 dB
   quieter than the pack, which makes it lose comparisons for reasons that have nothing to do with how
