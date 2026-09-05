@@ -16,7 +16,8 @@ harness's static dev build) **temporary-installs into a real headless Firefox**,
 the background starts, the universal dictation content script
 (`entrypoints/saypi-universal.content.ts`, matches `http://*/*`) injects into a
 plain-HTTP localhost fixture page, and a focused text field gets a visible
-`.saypi-dictation-button`.
+`.saypi-dictation-button`. The smoke also blurs and immediately refocuses the
+field, then verifies visibility after the delayed blur handler has run (#622).
 
 - Manifest rejection, bundle-load errors, content-script injection breakage on
   Gecko, and decoration regressions all fail the smoke.
