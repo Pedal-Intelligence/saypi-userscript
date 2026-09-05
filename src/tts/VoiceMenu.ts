@@ -80,10 +80,11 @@ export abstract class VoiceSelector {
   /**
    * Reflect an externally-changed stored voice on this surface without a
    * repopulate (and therefore without disturbing an open menu).
+   * Async renderers return their completion so the refresh can await it.
    */
   protected abstract applySelectedVoice(
     voice: SpeechSynthesisVoiceRemote | null
-  ): void;
+  ): void | Promise<void>;
 
   /**
    * Gather-then-render: fetch the catalog and the stored voice TOGETHER, then
@@ -165,7 +166,7 @@ export abstract class VoiceSelector {
   /** Resolve an external selection; surfaces can guard asynchronous reads. */
   protected async refreshSelectedVoice(): Promise<void> {
     const voice = await this.userPreferences.getVoice(this.chatbot);
-    this.applySelectedVoice(voice ?? null);
+    await this.applySelectedVoice(voice ?? null);
   }
 
   /**

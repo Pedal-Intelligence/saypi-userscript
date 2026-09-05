@@ -13,9 +13,10 @@ vi.mock("../../src/ConfigModule", () => ({
   },
 }));
 
+const fakeAuth = vi.hoisted(() => ({ authenticated: true }));
 vi.mock("../../src/JwtManager", () => ({
   getJwtManagerSync: () => ({
-    isAuthenticated: () => true,
+    isAuthenticated: () => fakeAuth.authenticated,
     getClaims: () => ({ ttsQuotaRemaining: 1000 }),
   }),
 }));
@@ -80,6 +81,7 @@ const door = (grid: HTMLElement) =>
   grid.querySelector<HTMLElement>("button.saypi-more-voices");
 
 beforeEach(() => {
+  fakeAuth.authenticated = true;
   openSettingsMock.mockReset();
   document.body.innerHTML = "";
   EventBus.removeAllListeners();
@@ -327,6 +329,41 @@ describe("PiVoiceSettings — what's actually speaking", () => {
     });
     grid.querySelector<HTMLButtonElement>(":scope > button")!.click();
     await vi.waitFor(() => expect(notice(grid)).toBeNull());
+  });
+
+  it("offers sign-in for an unresolved saved voice while signed out", async () => {
+    fakeAuth.authenticated = false;
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.hasVoice.mockResolvedValue(true);
+    await settings.applySelectedVoice(null);
+    expect(notice(grid)?.textContent).toContain("signInForTTS");
+    expect(notice(grid)?.textContent).not.toContain("voicesSavedUnavailable");
+    const signIn = notice(grid)?.querySelector<HTMLButtonElement>("button");
+    expect(signIn?.textContent).toBe("signIn");
+    signIn!.click();
+    expect(openSettingsMock).toHaveBeenCalledWith("voices/pi");
+    expect(settings.userPreferences.unsetVoice).not.toHaveBeenCalled();
+  });
+
+  it("updates the unresolved notice and action when authentication changes", async () => {
+    const grid = buildSettingsGrid();
+    const settings = makeSettings(grid);
+    settings.userPreferences.hasVoice.mockResolvedValue(true);
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voicesSavedUnavailable");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+
+    fakeAuth.authenticated = false;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("signInForTTS");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("signIn");
+
+    fakeAuth.authenticated = true;
+    await settings.refreshMenu();
+    expect(notice(grid)?.textContent).toContain("voicesSavedUnavailable");
+    expect(notice(grid)?.querySelector("button")?.textContent).toBe("voicesChangeVoice");
+    expect(grid.querySelectorAll(".saypi-voice-override-notice")).toHaveLength(1);
   });
 
   it.each(["initial", "external"])("ignores a late %s read after a native choice", async (source) => {
