@@ -383,6 +383,7 @@ export class VoicesController {
    * tab the reader moved on to.
    */
   private wantsRailFocus = false;
+  private renderedAuthenticated: boolean | null = null;
   /**
    * The arming rule (design §3). Arrow keys move focus silently until the user
    * has explicitly played something in this session; after that, focus
@@ -600,7 +601,8 @@ export class VoicesController {
       ]);
       if (token !== this.currentReadToken || this.destroyed) return;
       const unavailable = saved && !current;
-      if ((data.current?.id ?? null) === (current?.id ?? null) && !!data.unavailable === unavailable) return;
+      if ((data.current?.id ?? null) === (current?.id ?? null) && !!data.unavailable === unavailable &&
+        this.renderedAuthenticated === this.deps.isAuthenticated()) return;
       data.current = current;
       data.unavailable = unavailable;
       if (host === this.activeHost) {
@@ -811,6 +813,7 @@ export class VoicesController {
 
   private paintBody(hostId: VoiceHostId, data: HostStudioData): void {
     if (!this.body) return;
+    this.renderedAuthenticated = this.deps.isAuthenticated();
     const body = this.body;
     body.classList.remove("voice-studio-loading");
     body.dataset.host = hostId;
@@ -952,7 +955,9 @@ export class VoicesController {
     current.className = "voice-current-choice voice-rail-controls-row";
     const scope = document.createElement("span");
     scope.className = "voice-current-host";
-    scope.textContent = getMessage("voicesSpeaksWith", [vm.host.label]);
+    scope.textContent = this.deps.isAuthenticated()
+      ? getMessage("voicesSpeaksWith", [vm.host.label])
+      : getMessage("signInForTTS");
     current.appendChild(scope);
     const currentHasRow = this.rows.some((row) => row.voice.id === vm.currentId);
     const selectedRemote = vm.stagedCurrent &&
@@ -2166,8 +2171,9 @@ export class VoicesController {
     line.classList.add("voice-fallback");
     if (vm.unavailable) {
       line.classList.add("voice-fallback-unavailable");
-      line.dataset.i18n = "voicesSavedUnavailable";
-      line.textContent = getMessage("voicesSavedUnavailable");
+      const key = this.deps.isAuthenticated() ? "voicesSavedUnavailable" : "signInForTTS";
+      line.dataset.i18n = key;
+      line.textContent = getMessage(key);
     } else if (vm.host.hasOwnVoice) {
       line.classList.add("voice-fallback-host");
       // No data-i18n: substituted ($host$) text, which replaceI18n would strip.

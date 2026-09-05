@@ -155,6 +155,8 @@ test.describe("voices release candidate: normal autoplay and saved choice", () =
     await observeMedia(page);
     await openVoicesRail(page, extensionId);
     await showHost(page, "pi");
+    // The catalog is public; a saved choice can resolve while signed out.
+    await expect(page.locator(".voice-current-host")).toHaveText("Sign in for text-to-speech");
     await page.locator(".voice-your-voice").click();
     expect(await railHasDomFocus(page)).toBe(true);
     expect(await cursorVoiceId(page)).toBe(MOCK_VOICE_IDS.onyx);

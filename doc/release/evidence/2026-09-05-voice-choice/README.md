@@ -38,6 +38,14 @@ bundles after verifying that no runtime call uses it. The explicit host-scoped
 Use action already replaces it. An independent reviewer approved the provider
 classification and verified that the locale edit changes no other values.
 
+The signed-out summary uses the existing sign-in guidance for both a resolved
+remote choice and an unresolved saved ID. Rechecking the choice also repaints
+when authentication changes even if its ID is unchanged; it keeps the catalog
+cached and does not write the preference. Two controller cases reproduced the
+incorrect speaking/unavailable wording before this correction. This establishes
+rendering from the supplied authentication state, not live authentication
+handoff to an already-running audio actor.
+
 ## Verification
 
 | Evidence | Revision and result | What it establishes |

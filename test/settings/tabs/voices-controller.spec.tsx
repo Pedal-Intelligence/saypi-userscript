@@ -172,6 +172,31 @@ const playingState = (voiceId: string): AuditionState => ({
 });
 
 describe("VoicesController — release choice journey", () => {
+  it("asks for sign-in for an unresolved saved choice while signed out", async () => {
+    const { container } = await mount(makeDeps({ authenticated: false, overrides: {
+      hasVoice: vi.fn(async () => true),
+    } }));
+    expect(q(container, ".voice-fallback-unavailable")?.textContent).toBe("signInForTTS");
+  });
+
+  it("reflects sign-out and sign-in without changing a resolved saved voice", async () => {
+    const deps = makeDeps({ pi: [mkVoice("marin")], piCurrent: mkVoice("marin") });
+    const { container, controller } = await mount(deps);
+    expect(q(container, ".voice-current-host")?.textContent).toBe("voicesSpeaksWith");
+    deps.isAuthenticated.mockReturnValue(false);
+    controller.onShown();
+    await flushAsync();
+    expect(q(container, ".voice-current-host")?.textContent).toBe("signInForTTS");
+    expect(q(container, ".voice-your-voice")?.textContent).toBe("Marin");
+    deps.isAuthenticated.mockReturnValue(true);
+    controller.onShown();
+    await flushAsync();
+    expect(q(container, ".voice-current-host")?.textContent).toBe("voicesSpeaksWith");
+    expect(deps.setVoice).not.toHaveBeenCalled();
+    expect(deps.unsetVoice).not.toHaveBeenCalled();
+    expect(deps.getVoices).toHaveBeenCalledTimes(1);
+  });
+
   it.each([1, 4, 8])("recognizes saved Pi %s as a native voice", async (voiceNumber) => {
     const { container } = await mount(makeDeps({
       pi: [mkVoice("marin")],
