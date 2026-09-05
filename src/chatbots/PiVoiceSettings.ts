@@ -114,8 +114,8 @@ export class PiVoiceSettings extends VoiceSelector {
     let unavailable = false;
     if (!voice) {
       try {
-        // An unresolved saved remote id still reserves SayPi playback. A null
-        // catalog result must not make this page claim that Pi is speaking.
+        // Keep the saved choice visible even when its metadata cannot resolve.
+        // Authentication decides whether to offer sign-in or recovery later.
         unavailable = await this.userPreferences.hasVoice(this.chatbot);
       } catch (error) {
         console.debug("[SayPi] Could not read Pi's saved voice preference", error);
@@ -189,14 +189,22 @@ export class PiVoiceSettings extends VoiceSelector {
       existing?.remove();
       return;
     }
-    const text = this.savedVoiceUnavailable
-      ? getMessage("voicesSavedUnavailable")
-      : getMessage("voiceOverriddenBySayPi", [this.overridingVoice!.name]);
+    // Cached remote metadata can still resolve after sign-out, but SayPi TTS
+    // still requires authentication. The notice must reflect that requirement.
+    const requiresSignIn = this.ttsRequiresSignIn(true);
+    const text = requiresSignIn
+      ? getMessage("signInForTTS")
+      : this.savedVoiceUnavailable
+        ? getMessage("voicesSavedUnavailable")
+        : getMessage("voiceOverriddenBySayPi", [this.overridingVoice!.name]);
+    const actionText = getMessage(requiresSignIn ? "signIn" : "voicesChangeVoice");
     if (existing) {
       // No data-i18n anywhere on it: the text is substituted, and replaceI18n
       // would erase the voice name on the next settings paint.
       const copy = existing.querySelector(".saypi-voice-override-copy");
       if (copy && copy.textContent !== text) copy.textContent = text;
+      const action = existing.querySelector(".saypi-change-voice");
+      if (action && action.textContent !== actionText) action.textContent = actionText;
       return;
     }
     const notice = document.createElement("div");
@@ -210,7 +218,7 @@ export class PiVoiceSettings extends VoiceSelector {
     const change = document.createElement("button");
     change.type = "button";
     change.className = "saypi-change-voice";
-    change.textContent = getMessage("voicesChangeVoice");
+    change.textContent = actionText;
     change.addEventListener("click", () => openSettings("voices/pi"));
     notice.append(copy, change);
     grid.prepend(notice);
@@ -223,6 +231,8 @@ export class PiVoiceSettings extends VoiceSelector {
       // changes the audio provider back to Pi and releases the host mute.
       // Clear stored native ids too, so the converter cannot restore an older
       // Pi voice over the card the user just selected.
+      // Even with no stored override, this explicit native choice seals Pi's
+      // pending first-install default so signing in cannot replace it with Marin.
       await this.userPreferences.unsetVoice(this.chatbot);
       if (revision === this.selectionRevision) {
         await this.applySelectedVoice(null);

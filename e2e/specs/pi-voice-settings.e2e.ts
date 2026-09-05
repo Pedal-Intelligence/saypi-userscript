@@ -1,5 +1,18 @@
 import { test, expect } from "../fixtures/extension";
 import { MOCK_VOICE_IDS } from "../support/voice-catalog";
+import type { Worker } from "@playwright/test";
+
+async function seedSignedInUser(serviceWorker: Worker): Promise<void> {
+  await serviceWorker.evaluate(async () => {
+    const expiresAt = Date.now() + 60 * 60 * 1000;
+    // Unsigned test data for the hermetic API, never a real account credential.
+    const claims = btoa(JSON.stringify({ sub: "e2e-pi-user", exp: expiresAt / 1000 }));
+    await chrome.storage.local.set({
+      jwtToken: `e30.${claims}.hermetic`,
+      tokenExpiresAt: expiresAt,
+    });
+  });
+}
 
 /**
  * The real content script on the hermetic Pi settings route: stored voice →
@@ -12,6 +25,7 @@ test.describe("Pi voice settings return path", () => {
     test(`shows the current voice and returns to Pi in ${theme} mode`, async ({
       context, serviceWorker, extensionId,
     }, testInfo) => {
+      await seedSignedInUser(serviceWorker);
       await serviceWorker.evaluate(async (ids) => {
         await chrome.storage.local.set({
           prefs_migration_completed: true,
@@ -97,6 +111,7 @@ test.describe("Pi voice settings return path", () => {
   }
 
   test("a stored native Pi voice is not presented as a SayPi override", async ({ context, serviceWorker }) => {
+    await seedSignedInUser(serviceWorker);
     await serviceWorker.evaluate(() => chrome.storage.local.set({
       prefs_migration_completed: true,
       shareData: false,
@@ -125,26 +140,66 @@ test.describe("Pi voice settings return path", () => {
     await expect(page.getByRole("button", { name: "Pi 3", exact: true })).toHaveAttribute("aria-pressed", "true");
   });
 
-  test("an unresolved saved voice stays visible and can be relinquished", async ({ context, serviceWorker }) => {
+  for (const [state, voiceId] of [
+    ["unresolved", "e2e-unavailable"],
+    ["resolved", MOCK_VOICE_IDS.onyx],
+  ] as const) {
+    test(`a signed-out ${state} saved voice offers sign-in and can be relinquished`, async ({ context, serviceWorker, extensionId }) => {
+      await serviceWorker.evaluate((id) => chrome.storage.local.set({
+        prefs_migration_completed: true,
+        shareData: false,
+        saypi_voice_default_pending_hosts: [],
+        voicePreferences: { pi: id },
+      }), voiceId);
+      const page = await context.newPage();
+      await page.goto("https://pi.ai/profile/settings?theme=dark");
+      const notice = page.locator(".saypi-voice-override-notice");
+      await expect(notice).toContainText("Sign in for text-to-speech", { timeout: 20_000 });
+      await expect(notice).not.toContainText("unavailable right now");
+      await expect(notice).not.toContainText("is speaking");
+      const signIn = notice.getByRole("button", { name: "Sign In", exact: true });
+      await expect(signIn).toBeVisible();
+      const settingsOpened = context.waitForEvent("page");
+      await signIn.click();
+      const settings = await settingsOpened;
+      await settings.waitForURL(`chrome-extension://${extensionId}/settings.html`);
+      await expect.poll(() => serviceWorker.evaluate(async () =>
+        (await chrome.storage.local.get("voicePreferences")).voicePreferences,
+      )).toEqual({ pi: voiceId });
+      await settings.close();
+      await page.getByRole("button", { name: "Pi 2", exact: true }).click();
+      await expect.poll(() => serviceWorker.evaluate(async () =>
+        (await chrome.storage.local.get("voicePreferences")).voicePreferences,
+      )).toEqual({});
+      await expect(notice).toHaveCount(0);
+    });
+  }
+
+  test("an explicit native pick seals a pending first-install default even without an override", async ({ context, serviceWorker }) => {
     await serviceWorker.evaluate(() => chrome.storage.local.set({
       prefs_migration_completed: true,
       shareData: false,
-      saypi_voice_default_pending_hosts: [],
-      voicePreferences: { pi: "e2e-unavailable" },
+      saypi_voice_default_pending_hosts: ["pi", "claude"],
+      voicePreferences: {},
     }));
     const page = await context.newPage();
-    await page.goto("https://pi.ai/profile/settings?theme=dark");
-    const notice = page.locator(".saypi-voice-override-notice");
-    await expect(notice).toContainText("Your saved voice is unavailable right now.", { timeout: 20_000 });
-    await expect(notice).not.toContainText("is speaking");
-    await expect(notice.getByRole("button", { name: "Change voice" })).toBeVisible();
+    await page.goto("https://pi.ai/profile/settings");
+    await expect(page.locator("#saypi-voice-settings .saypi-more-voices")).toBeVisible({ timeout: 20_000 });
+    // Viewing settings does not opt the user out. Choosing a native card does.
     await expect.poll(() => serviceWorker.evaluate(async () =>
-      (await chrome.storage.local.get("voicePreferences")).voicePreferences,
-    )).toEqual({ pi: "e2e-unavailable" });
+      (await chrome.storage.local.get("saypi_voice_default_pending_hosts")).saypi_voice_default_pending_hosts.sort(),
+    )).toEqual(["claude", "pi"]);
     await page.getByRole("button", { name: "Pi 2", exact: true }).click();
     await expect.poll(() => serviceWorker.evaluate(async () =>
-      (await chrome.storage.local.get("voicePreferences")).voicePreferences,
-    )).toEqual({});
-    await expect(notice).toHaveCount(0);
+      (await chrome.storage.local.get("saypi_voice_default_pending_hosts")).saypi_voice_default_pending_hosts,
+    )).toEqual(["claude"]);
+    await expect(page.getByRole("button", { name: "Pi 2", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.reload();
+    await expect(page.locator("#saypi-voice-settings .saypi-more-voices")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Pi 2", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect.poll(() => serviceWorker.evaluate(async () => chrome.storage.local.get([
+      "voicePreferences", "saypi_voice_default_pending_hosts",
+    ]))).toEqual({ voicePreferences: {}, saypi_voice_default_pending_hosts: ["claude"] });
+    await expect(page.locator(".saypi-voice-override-notice")).toHaveCount(0);
   });
 });
