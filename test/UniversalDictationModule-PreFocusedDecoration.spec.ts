@@ -64,6 +64,7 @@ describe("UniversalDictationModule — decoration of an already-focused field (i
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     module.destroy();
     (UniversalDictationModule as any).instance = undefined;
     document.body.innerHTML = "";
@@ -124,4 +125,34 @@ describe("UniversalDictationModule — decoration of an already-focused field (i
     expect(document.querySelectorAll(".saypi-dictation-button").length).toBe(1);
     expect(buttonDisplay()).toBe("none");
   });
+
+  it("keeps the button visible after a blur followed by rapid refocus (#622)", () => {
+    vi.useFakeTimers();
+    const input = document.createElement("input");
+    document.body.appendChild(input);
+    module.initialize();
+    input.focus();
+    input.blur();
+    vi.advanceTimersByTime(50);
+    input.focus();
+    expect(buttonDisplay()).toBe("flex");
+
+    vi.advanceTimersByTime(150);
+    expect(document.activeElement).toBe(input);
+    expect(buttonDisplay()).toBe("flex");
+  });
+
+  it("still hides an idle button after the field loses focus", () => {
+    vi.useFakeTimers();
+    const input = document.createElement("input");
+    document.body.appendChild(input);
+    module.initialize();
+    input.focus();
+    input.blur();
+    vi.advanceTimersByTime(149);
+    expect(buttonDisplay()).toBe("flex");
+    vi.advanceTimersByTime(1);
+    expect(buttonDisplay()).toBe("none");
+  });
+
 });

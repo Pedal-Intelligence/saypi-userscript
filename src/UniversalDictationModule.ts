@@ -364,7 +364,8 @@ export class UniversalDictationModule {
 
       // Use setTimeout to delay hiding so click event can fire first
       setTimeout(() => {
-        if (button && !this.currentActiveTarget) {
+        // A quick refocus can happen before this click grace period ends.
+        if (button && !this.currentActiveTarget && document.activeElement !== element) {
           button.style.display = "none";
         }
       }, 150);

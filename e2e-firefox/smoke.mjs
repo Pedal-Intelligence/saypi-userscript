@@ -205,6 +205,18 @@ async function main() {
       );
     }
 
+    // A delayed blur must not hide a field that regained focus (#622).
+    // Check after the 150 ms click grace period, using real browser focus events.
+    await driver.executeScript(
+      "const el = document.getElementById('smoke-input'); el.blur(); el.focus();",
+    );
+    await new Promise((r) => setTimeout(r, 250));
+    state = await driver.executeScript(PROBE_SCRIPT);
+    if (!state.present || state.display === "none" || state.activeElementId !== "smoke-input") {
+      await dumpFailureArtifacts(driver, state);
+      throw new Error(`Rapid refocus hid the dictation button: ${JSON.stringify(state)}`);
+    }
+
     console.log(
       `[e2e-firefox] PASS: .saypi-dictation-button visible on the focused input ` +
         `(probe: ${JSON.stringify(state)})`,
