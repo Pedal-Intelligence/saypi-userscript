@@ -482,9 +482,9 @@ Nothing else animates. **No hover lift, no scale, no shadow transitions, no fade
 
 ## 12. Risks, and what I could not establish
 
-**Autoplay is designed around, not proven.** Chrome gates media on *sticky* document activation, so one click should license every later `play()` for the document's lifetime. I could not confirm this for a `chrome-extension://` document, and **Layer 3 structurally cannot prove it**: `e2e/fixtures/launch-args.ts:42` passes `--autoplay-policy=no-user-gesture-required` to every Layer-3 Chrome, so a green assertion there is a guaranteed false pass. **Verify at Layer 4 CDP before slice 3 merges.** Mitigation if it fails: `NotAllowedError` already surfaces as an actionable state for every item, so the failure mode is explained rather than a silent stall.
+**Autoplay needs the browser’s ordinary policy.** The original harness bypassed autoplay restrictions. The release now has automated coverage in `e2e/specs/voices-release.e2e.ts` that opts into the default policy, requires a gestureless negative control to fail, and observes real media progress after a user gesture. This replaces the original Layer 4 prerequisite. `NotAllowedError` remains an actionable state for every item.
 
-**Focus-triggers-playback needs a real screen-reader pass.** The arming rule plus the persistent off-toggle should resolve the collision, but Logic Pro and Splice are desktop-app precedents that do not settle the web-a11y question. **VoiceOver + NVDA before slice 2 merges.** A bad result flips arrow-audition from opt-out to opt-in — one constant, not a redesign.
+**Focus-triggered playback must respect the arming rule and persistent off-toggle.** Cover keyboard state, selection semantics and announcements with automated regression tests. The founder removed attended screen-reader checks as a merge or release prerequisite on 2026-09-05; see [AGENTS.md](../../AGENTS.md#autonomous-engineering-mandate).
 
 **Script sharing is inferred, not transcribed.** The envelope correlation, the pause-position cluster, and the absence of any textual correlation are strong converging evidence, but I did not transcribe the clips (no local ASR). **A 10-second check reverses this call: listen to Coral then Onyx back to back.** If they say different things, own-words comes back off the cut list (see `cut`), because the free comparison would no longer be honest.
 
@@ -692,7 +692,7 @@ Rows replace stage + slots + shelves + cards. Pitch ordering from `VoicePitch.ts
 
 *Proves:* the page is a listening room. Still no auto-advance, no filters, no heard state — and it is already complete.
 
-*Tested at:* Layer 1/2 for ordering, keyboard state machine, pair semantics, focus restoration across a `useVoice` repaint, the `replaceI18n` clobber-immunity suite extended to every new substituted string. **VoiceOver + NVDA pass before merge** — a bad result flips arrow-audition to opt-in. Layer 4 CDP for the founder look.
+*Tested at:* Layer 1/2 for ordering, keyboard state machine, pair semantics, focus restoration across a `useVoice` repaint, the `replaceI18n` clobber-immunity suite extended to every new substituted string. Automated DOM/ARIA and keyboard regressions cover selection and announcements. Layer 4 CDP remains available for on-demand host spot-checks.
 
 ---
 
@@ -700,7 +700,7 @@ Rows replace stage + slots + shelves + cards. Pitch ordering from `VoicePitch.ts
 
 `Play all (N)` / `Stop` / position readout, the 320 ms deadline-scheduled beat, N+1 prefetch, the `Show:` filter, `TabController.onHidden` + `visibilitychange` + `pagehide` stops, `NotAllowedError` / clip-failure states.
 
-*Prerequisite:* **verify sticky autoplay at Layer 4 CDP.** A green Layer 3 proves nothing — `launch-args.ts:42` sets `--autoplay-policy=no-user-gesture-required`.
+*Autoplay verification:* use the ordinary-policy regression in `e2e/specs/voices-release.e2e.ts`, including its gestureless negative control and real media progression. The original Layer 4 prerequisite is superseded by this automated coverage.
 
 *Tested at:* Layer 1/2 by driving the injected callback by hand — advance order, interrupt cancels the sweep, boundary stops, two-consecutive-failures stops. Add the `/voices` route plus tiny sample-audio bodies to `e2e/support/mock-servers.ts` here; that converts `settings.e2e.ts`'s "the panel has children" into real Layer-3 coverage and is the permanent CI-resident replacement for the lost `drive-studio.mjs`. Instrument the beat in-page (`performance.now()` at `ended(N)` → first rAF where `currentTime > 0` on N+1); acceptance p50 within ±40 ms of 320 ms, p95 ≤ 440 ms, zero transitions > 500 ms on a second pass over the same list (that last assertion proves the `immutable` cache is working).
 

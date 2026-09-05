@@ -19,6 +19,8 @@ Since 2026-06-13, saypi-userscript is maintained as an **autonomously engineered
 
 **Merge gate (default):** CI green (`npm test` — `tsc --noEmit` type-check, **then** Jest **and** Vitest; plus the required `e2e` check) **plus** a reviewer-subagent verdict on the PR. No flake exceptions until a specific chronic flake is documented in an issue with its exact signature.
 
+**Release verification scope (founder decision, 2026-09-05):** Attended audio checks (including microphone/speaker listening) and manual screen-reader checks (including VoiceOver/NVDA) are not prerequisites for release preparation, merge, or store submission. Do not add them to pre-release checklists or treat missing attended results as blockers. This supersedes earlier design-plan and candidate-checklist requirements. Keep automated audio, keyboard and accessibility regression coverage, and report only verification actually performed. Store-release authorization remains governed by the release rules below.
+
 **High-blast-radius changes — multi-lens adversarial review + founder sign-off before merge:**
 - Auth / JWT (`src/JwtManager.ts`, OAuth/PKCE in `src/auth/`).
 - Request-contract changes with saypi-api that *require the server (saypi-api/saypi-saas) to also change* (new/changed fields/headers the server must parse, origin/CORS, auth). Backward-compatible *adoption* of a contract the server already supports is normal-gate.

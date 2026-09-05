@@ -126,7 +126,7 @@ service, permission or device setting was changed by the diagnostic. Final CI
 results must provide the capture-check evidence; successful physical microphone
 acquisition is not claimed here.
 
-## Live checks
+## Historical live observations
 
 The founder installed the combined development extension in Chrome for Testing
 and authenticated SayPi and Pi. The live Voices tab loaded 15 voices, showed
@@ -135,32 +135,20 @@ A targeted read of the authenticated Pi page found exactly one SayPi call
 button and the prompt. Its build stamp was still `b2c87a2`, so these observations
 do not claim a live pass of the later offscreen and mobile corrections.
 
-The unpacked development path remains available. Rebuild from the merged
-revision, reload that extension and check its page build stamp before the live
-candidate pass. Computer use subsequently reported the Mac
-locked; the live pass paused there. Authentication is complete, but actual
-remote TTS, return to native Pi speech, and first-turn completion still need
-an attended check. The screen-reader pass was interrupted by a native-tool
-timeout and is also incomplete; the temporary VoiceOver process was stopped.
+Computer use subsequently reported the Mac locked and the live observation
+paused. Remote TTS, return to native Pi speech and first-turn completion were
+not established by that observation. A native-tool timeout interrupted the
+screen-reader attempt; the temporary VoiceOver process was stopped.
 
 **Zero Layer-4 voice turns** or live STT/TTS calls were made in this review.
 Physical microphone capture and human-audited speaker output are not established
 by the hermetic results. The microphone test reached Chrome's permission prompt;
 granting it did not produce a completed acquisition during observation.
 
-The remaining attended checklist is bounded:
-
-- Confirm the installed page stamp matches the merged revision used to build
-  the development artifact.
-- On a fresh Pi conversation, verify one remote-voice reply and that Thinking
-  clears; this confirms the first-turn behavior tracked in #365 against the
-  newer reply-observer fix. Return to a native Pi voice and verify the next
-  reply uses it without overlapping SayPi speech.
-- Confirm ChatGPT's call control appears after hydration and starts a call
-  (#595); appearance alone does not establish that the control works.
-- Complete a real screen-reader pass of current choice, preview, explicit Use,
-  save confirmation and native return. Record physical microphone and audible
-  output observations separately from synthetic-input and media-progress tests.
+The founder removed attended audio and screen-reader checks from the pre-release
+checklist on 2026-09-05. These historical evidence limits do not block release;
+the [release runbook](../../README.md#verification-scope) records the current
+verification scope.
 
 ## Deferred work and release decisions
 
@@ -170,8 +158,7 @@ The separate onboarding findings are tracked for the requested follow-up work:
 [honest Quiet mode setup state (#614)](https://github.com/Pedal-Intelligence/saypi-userscript/issues/614),
 [microphone-test success claims (#615)](https://github.com/Pedal-Intelligence/saypi-userscript/issues/615),
 and [consent modal accessibility (#616)](https://github.com/Pedal-Intelligence/saypi-userscript/issues/616).
-They remain open; this candidate does not claim to resolve them. DOM/ARIA and
-keyboard assertions also do not substitute for a completed screen-reader pass.
+They remain open; this candidate does not claim to resolve them.
 
 Before a store release, [#544](https://github.com/Pedal-Intelligence/saypi-userscript/issues/544)
 still requires an actual decision: explicitly accept the residual risk of the
@@ -179,9 +166,8 @@ client-side voice-menu/studio behavior, or provide a tested remote lever that
 returns it to a safe baseline. Server control of catalog content and samples
 cannot repair a defect in local controls. This evidence does not accept that
 risk on the founder's behalf. The initial approval was superseded by the final review, whose native-voice
-and signed-out findings are addressed above and in the supporting PRs. Complete
-the attended checks above and obtain the release decision before treating the
-candidate as cleared for stores.
+and signed-out findings are addressed above and in the supporting PRs. Obtain
+the release decision before treating the candidate as cleared for stores.
 
 The English [release notes](../../../../_locales/en/release_notes.txt) are drafted
 for founder review and now describe the voice release rather than the previous

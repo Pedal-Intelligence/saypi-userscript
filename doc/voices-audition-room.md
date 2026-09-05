@@ -446,15 +446,16 @@ Honest list, for whoever picks this up.
 - **The row is wide and the middle is quiet.** At rest, the space between a voice's name and the
   right edge is empty. It is deliberate (detail on focus only) and it is the thing most likely to
   read as institutional rather than calm. If you want one thing to improve, this is it.
-- **The page has still never met a real screen reader.** The gap is narrower than it was — selection
+- **The original implementation was verified through DOM/ARIA tests.** The gap is narrower than it was — selection
   now marks the voice in use rather than the arrow cursor, heard state is in the accessible name, HD's
   cost is an ARIA description, and the moment the arrows become audible is announced — but every one
   of those was reasoned from the APG and verified with `getAttribute`, not with a reader. What a
   headless probe cannot tell you is how much of it is *too much*: whether "Marin — Heard — In use,
   selected" is informative or a mouthful, whether the HD description lands as a footnote or as an
   interruption, and whether the arming confirmation is heard at all over the sample it rides on. A
-  VoiceOver and NVDA pass is the outstanding work. If focus-triggered playback goes badly there, the
-  fix is still to flip arrow-audition to opt-in — a single constant, not a redesign.
+  live reader evaluation was not performed for that implementation. This is a historical evidence
+  limit; attended screen-reader checks are not merge or release prerequisites under the founder’s
+  [2026-09-05 decision](../AGENTS.md#autonomous-engineering-mandate).
 - **Arriving now travels a little, where it used to travel not at all.** Taking DOM focus uses
   `preventScroll` on the listbox — otherwise the browser scrolls to the *top* of a 22-row element,
   which is both a jump and the wrong place — plus the row's own `nearest` scroll. `nearest` moves

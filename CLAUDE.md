@@ -124,6 +124,8 @@ WXT discovers entry points in **`entrypoints/`**; each is a thin shim that impor
 
 ### Testing
 
+Follow the [release verification scope in AGENTS.md](AGENTS.md#autonomous-engineering-mandate): attended audio and manual screen-reader checks are not merge or release prerequisites (founder decision, 2026-09-05). Use automated regression evidence and preserve accurate records of what was tested.
+
 - **Jest** for JavaScript modules and integration tests
 - **Vitest** for TypeScript/ESM modules
 - **JSDOM** test environment for DOM manipulation testing

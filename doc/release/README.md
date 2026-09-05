@@ -6,7 +6,7 @@ versioned build. It backs the local `release-extension` Claude skill
 (`.claude/skills/release-extension/SKILL.md`, gitignored like all `.claude/` skills) — but
 this doc, the scripts, and the config are tracked so the machinery is shared and CI-tested.
 
-Design rationale: [`doc/specs/2026-06-20-release-extension-skill-design.md`](specs/2026-06-20-release-extension-skill-design.md).
+Design rationale: [`doc/specs/2026-06-20-release-extension-skill-design.md`](../specs/2026-06-20-release-extension-skill-design.md).
 
 ## ⛔ Release is founder-only
 
@@ -20,6 +20,10 @@ auto-update**, and store-submission plumbing is founder-gated.
 - **Shipped something bad?** The reverse path is
   [`doc/release/incident-response.md`](incident-response.md) — server-side kill-switch
   first, expedited patch second; escalate to the founder immediately.
+
+## Verification scope
+
+Per the founder’s 2026-09-05 decision in [AGENTS.md](../../AGENTS.md#autonomous-engineering-mandate), attended audio and manual screen-reader checks are not pre-release requirements. Omit them from release checklists and readiness blockers. Use the required automated checks and their recorded results; historical gaps in attended testing are evidence limits, not additional release gates.
 
 ## Layout
 
