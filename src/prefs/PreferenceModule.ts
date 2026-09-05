@@ -1,6 +1,5 @@
 import { config } from "../ConfigModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
-import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
 import {
   audioProviders,
@@ -953,9 +952,6 @@ class UserPreferenceModule {
       voicePreferences: updatedPreferences,
       voiceChatbotId: chatbotId,
     });
-
-    const audioControls = new AudioControlsModule();
-    audioControls.notifyAudioVoiceSelection(voice);
   }
 
   public async unsetVoice(chatbot?: Chatbot | string): Promise<void> {
@@ -974,8 +970,6 @@ class UserPreferenceModule {
         voicePreferences: preferences,
         voiceChatbotId: chatbotId,
       });
-      const audioControls = new AudioControlsModule();
-      audioControls.notifyAudioVoiceDeselection();
       return;
     }
 
@@ -989,9 +983,6 @@ class UserPreferenceModule {
       voicePreferences: updatedPreferences,
       voiceChatbotId: chatbotId,
     });
-
-    const audioControls = new AudioControlsModule();
-    audioControls.notifyAudioVoiceDeselection();
   }
   
   // Allow Interruptions (now local, was sync)

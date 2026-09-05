@@ -1,14 +1,4 @@
 import EventBus from "../events/EventBus";
-import { logger } from "../LoggingModule";
-import {
-  AIVoice,
-  AudioProvider,
-  audioProviders,
-  ChangeVoiceEvent,
-  MatchableVoice,
-  SpeechSynthesisVoiceRemote,
-  VoiceFactory,
-} from "../tts/SpeechModel";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { getAudioOutputToggle } from "../chatbots/AudioOutputToggle";
 
@@ -87,38 +77,4 @@ export default class AudioControlsModule {
     return svgPath === activePath;
   }
 
-  notifyAudioProviderSelection(provider: AudioProvider): void {
-    logger.debug(`Speech provided by ${provider.name}`);
-    EventBus.emit("audio:changeProvider", { provider });
-  }
-
-  notifyAudioVoiceSelection(voice: AIVoice | SpeechSynthesisVoiceRemote): void {
-    logger.debug(`Using ${voice.name} voice for speech`);
-    const matchableVoice =
-      voice instanceof AIVoice
-        ? voice
-        : VoiceFactory.matchableFromVoiceRemote(voice);
-    const event = new ChangeVoiceEvent(matchableVoice);
-    EventBus.emit(
-      "audio:changeVoice",
-      event as { voice: MatchableVoice | null }
-    );
-    this.notifyAudioProviderSelection(
-      audioProviders.retreiveProviderByVoice(voice)
-    );
-  }
-
-  notifyAudioVoiceDeselection(): void {
-    logger.debug("Using default voice for speech");
-    EventBus.emit("audio:changeVoice", { voice: null });
-    const chatbotId = ChatbotIdentifier.identifyChatbot();
-    const defaultProvider = chatbotId
-      ? audioProviders.getDefaultForChatbot(chatbotId)
-      : audioProviders.getDefault();
-    const provider =
-      defaultProvider === audioProviders.SayPi
-        ? audioProviders.None
-        : defaultProvider;
-    this.notifyAudioProviderSelection(provider);
-  }
 }

@@ -15,6 +15,7 @@ import EventBus from "../../src/events/EventBus";
 import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
 import { audioOutputMachine } from "../../src/state-machines/AudioOutputMachine";
 import { shouldMuteHostAudio } from "../../src/audio/hostAudio";
+import { AudioSelectionSync } from "../../src/audio/AudioSelectionSync";
 import { createTestActor } from "../state-machines/support/testActor";
 
 // Controllable stand-in for the JwtManager singleton: the voice cache's
@@ -91,6 +92,7 @@ describe("SpeechSynthesisModule", () => {
     // Some tests register menu-style listeners on the shared singleton
     // EventBus; drop them so they can't leak into unrelated tests.
     EventBus.removeAllListeners("saypi:auth:status-changed");
+    EventBus.removeAllListeners("userPreferenceChanged");
     vi.useRealTimers();
     vi.unstubAllEnvs();
     vi.clearAllMocks();
@@ -100,10 +102,16 @@ describe("SpeechSynthesisModule", () => {
     expect(speechSynthesisModule).toBeInstanceOf(SpeechSynthesisModule);
   });
 
-  it("should initialize the provider", () => {
-    const initProviderSpy = vi.spyOn(speechSynthesisModule, "initProvider");
-    speechSynthesisModule.initProvider();
-    expect(initProviderSpy).toHaveBeenCalled();
+  it("does not publish playback ownership from a TTS constructor", async () => {
+    const changed = vi.fn();
+    EventBus.on("audio:changeProvider", changed);
+    try {
+      const tts = new SpeechSynthesisModule(textToSpeechServiceMock, audioStreamManagerMock, userPreferenceModuleMock);
+      await tts.getActiveAudioProvider("pi");
+      expect(changed).not.toHaveBeenCalled();
+    } finally {
+      EventBus.off("audio:changeProvider", changed);
+    }
   });
 
   it("should get voices from the cache if available", async () => {
@@ -518,17 +526,17 @@ describe("SpeechSynthesisModule", () => {
     const actor = createTestActor(audioOutputMachine.provide({
       actions: { notifySpeechStart: vi.fn() },
     })).start();
-    let onProvider: (detail: any) => void = () => {};
 
     try {
-      await new Promise<void>((resolve) => {
-        onProvider = ({ provider }) => {
+      await new AudioSelectionSync({
+        hostId: "pi",
+        resolve: () => speechSynthesisModule.getActiveAudioSelection("pi"),
+        apply: ({ provider, voice }) => {
           actor.send({ type: "changeProvider", provider });
-          resolve();
-        };
-        EventBus.on("audio:changeProvider", onProvider);
-        speechSynthesisModule.initProvider();
-      });
+          actor.send({ type: "changeVoice", voice });
+        },
+        onError: error => { throw error; },
+      }).start();
       const provider = actor.state.context.provider;
       expect(provider).toBe(audioProviders.Pi);
       expect(shouldMuteHostAudio({
@@ -548,7 +556,6 @@ describe("SpeechSynthesisModule", () => {
       fakeAuth.authenticated = true;
       expect(await speechSynthesisModule.getActiveAudioProvider("pi")).toBe(audioProviders.SayPi);
     } finally {
-      EventBus.off("audio:changeProvider", onProvider);
       appIdSpy.mockRestore();
       actor.stop();
     }
@@ -582,8 +589,6 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("keeps authenticated SayPi ownership through an outage so recovered speech passes the output guard", async () => {
-    // Drain the constructor's initial provider resolution before simulating startup.
-    await speechSynthesisModule.getActiveAudioProvider("pi");
     fakeAuth.authenticated = true;
     (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
     (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(true);
@@ -591,17 +596,17 @@ describe("SpeechSynthesisModule", () => {
     const actor = createTestActor(audioOutputMachine.provide({
       actions: { notifySpeechStart: vi.fn() }, // external source parsing is not this seam
     })).start();
-    let onProvider: (detail: any) => void = () => {};
 
     try {
-      await new Promise<void>((resolve) => {
-        onProvider = ({ provider }) => {
+      await new AudioSelectionSync({
+        hostId: "pi",
+        resolve: () => speechSynthesisModule.getActiveAudioSelection("pi"),
+        apply: ({ provider, voice }) => {
           actor.send({ type: "changeProvider", provider });
-          resolve();
-        };
-        EventBus.on("audio:changeProvider", onProvider);
-        speechSynthesisModule.initProvider();
-      });
+          actor.send({ type: "changeVoice", voice });
+        },
+        onError: error => { throw error; },
+      }).start();
       const provider = actor.state.context.provider;
       expect(provider).toBe(audioProviders.SayPi);
       expect(shouldMuteHostAudio({
@@ -630,7 +635,6 @@ describe("SpeechSynthesisModule", () => {
       actor.send({ type: "loadstart", source: utterance.uri });
       expect(actor.state.matches("loading")).toBe(true);
     } finally {
-      EventBus.off("audio:changeProvider", onProvider);
       appIdSpy.mockRestore();
       actor.stop();
     }
@@ -694,6 +698,7 @@ describe("SpeechSynthesisModule", () => {
 
     // Mirror bootstrap order: menu listener first, module constructed second.
     EventBus.removeAllListeners("saypi:auth:status-changed");
+    EventBus.removeAllListeners("userPreferenceChanged");
     let voicesSeenByMenu: Promise<SpeechSynthesisVoiceRemote[]> | undefined;
     EventBus.on("saypi:auth:status-changed", () => {
       voicesSeenByMenu = lateModule.getVoices(undefined, "claude");
