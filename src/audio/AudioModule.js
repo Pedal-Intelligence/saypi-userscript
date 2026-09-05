@@ -15,10 +15,11 @@ import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
 import { createAudioRemovalObserverCallback } from "./audioElementRemoval.ts";
-import { findHostAudioElement, shouldMuteHostAudio } from "./hostAudio.ts";
+import { findHostAudioElements, shouldMuteHostAudio } from "./hostAudio.ts";
 import { audioProviders } from "../tts/SpeechModel.ts";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule.ts";
 import { isVoiceSampleUrl } from "../tts/SpeechSourceParsers.ts";
+import { PiNativeAudioGuard, audioSource, isPiNativeSpeechSource } from "./PiNativeAudioGuard.ts";
 import { AudioSelectionSync } from "./AudioSelectionSync.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
@@ -264,16 +265,19 @@ export default class AudioModule {
     }
   }
 
+  isHostAudioCandidate(audio) {
+    return !ChatbotIdentifier.isChatbotType("pi") || !audioSource(audio) || isPiNativeSpeechSource(audioSource(audio));
+  }
+
   findAudioElement(searchRoot) {
-    let audioElement = searchRoot.querySelector(`#${this.AUDIO_ELEMENT_ID}`);
-    if (!audioElement) {
-      audioElement = searchRoot.querySelector("audio");
-    }
-    return audioElement;
+    const candidates = findHostAudioElements(searchRoot).filter(audio => audio === this.audioElement || this.isHostAudioCandidate(audio));
+    return candidates.find(audio => audio.id === this.AUDIO_ELEMENT_ID) ?? candidates[0] ?? null;
   }
 
   decorateAudioElement(audioElement) {
     if (audioElement) {
+      this.originalAudioIds ??= new WeakMap();
+      if (!this.originalAudioIds.has(audioElement)) this.originalAudioIds.set(audioElement, audioElement.id);
       audioElement.id = this.AUDIO_ELEMENT_ID;
     }
   }
@@ -292,7 +296,7 @@ export default class AudioModule {
 
   swapAudioElement(newAudioElement) {
     if (this.audioElement) {
-      this.cleanupAudioElement(this.audioElement);
+      this.cleanupAudioElement(this.audioElement, this.audioElement.isConnected);
     }
 
     this.audioElement = newAudioElement;
@@ -324,6 +328,14 @@ export default class AudioModule {
    * Re-applied whenever the element changes or the provider does.
    */
   applyHostAudioMute() {
+    if (ChatbotIdentifier.isChatbotType("pi")) {
+      this.piNativeAudioGuard ??= new PiNativeAudioGuard();
+      this.piNativeAudioGuard.reconcile([...document.querySelectorAll("audio")], {
+        customVoice: this.providerIsSayPi, offscreen: this.useOffscreenAudio, tracked: this.audioElement,
+        sharedOutput: this.isSharedPlayback(this.audioElement) ? this.audioElement : null,
+      });
+      return;
+    }
     if (!this.audioElement) return;
     const mute = shouldMuteHostAudio({
       providerIsSayPi: this.providerIsSayPi,
@@ -362,34 +374,20 @@ export default class AudioModule {
     }
   }
 
-  cleanupAudioElement(audioElement) {
-    if (!audioElement) {
-      // Nothing to clean up
-      return;
+  cleanupAudioElement(audioElement, preserveMedia = false) {
+    if (!audioElement) return;
+    for (const [event, listener] of this.audioPlaybackListeners?.get(audioElement) ?? []) {
+      audioElement.removeEventListener(event, listener);
     }
-    // Deregister all event listeners
-    const events = [
-      "loadedmetadata",
-      "canplaythrough",
-      "play",
-      "pause",
-      "ended",
-      "seeked",
-      "emptied",
-      "playing",
-      "loadstart",
-      "error",
-      "loadeddata",
-      "canplay",
-      "canplaythrough",
-    ];
-
-    events.forEach((event) => {
-      audioElement.removeEventListener(event, this[`on${event}`]);
-    });
-
-    // Remove source change listener if it exists
-    audioElement.removeEventListener("loadstart", this.onSourceChange);
+    this.audioPlaybackListeners?.delete(audioElement);
+    if (audioElement === this.audioElement) this.sharedPlaybackSource = null;
+    if (audioElement.id === this.AUDIO_ELEMENT_ID && this.originalAudioIds?.has(audioElement)) {
+      audioElement.id = this.originalAudioIds.get(audioElement);
+      this.originalAudioIds.delete(audioElement);
+    }
+    // A retained host player still belongs to Pi. Detach our listeners without
+    // clearing its source or pausing unrelated/native host playback.
+    if (preserveMedia) return;
 
     // Stop any ongoing playback
     audioElement.pause();
@@ -421,7 +419,7 @@ export default class AudioModule {
    * and the host's own voice played on top of ours (#602).
    */
   rebindAudioElement() {
-    const replacement = findHostAudioElement(document, this.AUDIO_ELEMENT_ID);
+    const replacement = this.findAudioElement(document);
     if (replacement) {
       logger.debug("[AudioModule] Rebinding to the host's audio element");
       this.swapAudioElement(replacement);
@@ -431,31 +429,40 @@ export default class AudioModule {
   }
 
   listenForAudioElementSwap() {
-    if (this.swapObserver) {
-      this.swapObserver.disconnect();
+    this.swapObserver?.disconnect();
+    if (ChatbotIdentifier.isChatbotType("pi") && !this.onHostAudioPlayback) {
+      this.onHostAudioPlayback = () => this.applyHostAudioMute();
+      for (const type of ["loadstart", "play", "playing"]) {
+        document.addEventListener(type, this.onHostAudioPlayback, true);
+      }
     }
-
-    const config = { childList: true, subtree: true };
-
     this.swapObserver = new MutationObserver((mutations) => {
+      const addedPlayers = [];
       for (const mutation of mutations) {
-        if (mutation.type === "childList") {
-          for (const addedNode of mutation.addedNodes) {
-            if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              const newAudioElement = this.findAudioElement(addedNode);
-              if (newAudioElement && newAudioElement !== this.audioElement) {
-                logger.debug("New audio element found", newAudioElement);
-                this.swapAudioElement(newAudioElement);
-                // Don't disconnect the observer, keep listening for future swaps
-                return;
-              }
-            }
-          }
+        for (const addedNode of mutation.addedNodes) {
+          if (addedNode.nodeType === Node.ELEMENT_NODE) addedPlayers.push(...findHostAudioElements(addedNode));
         }
       }
+      if (!addedPlayers.length) return;
+      this.applyHostAudioMute();
+      // Preserve the shared output throughout buffering, playing and pausing,
+      // including an explicit replay of an older native Pi reply.
+      if (ChatbotIdentifier.isChatbotType("pi") && this.isSharedPlayback(this.audioElement)) return;
+      const next = addedPlayers.find(audio => audio.isConnected && audio !== this.audioElement && this.isHostAudioCandidate(audio));
+      if (next) this.swapAudioElement(next);
     });
+    this.swapObserver.observe(document.body, { childList: true, subtree: true });
+  }
 
-    this.swapObserver.observe(document.body, config);
+  isSharedPlayback(audio) {
+    if (!audio || this.useOffscreenAudio || audio !== this.audioElement) return false;
+    const source = audioSource(audio);
+    return !!source && source === this.sharedPlaybackSource;
+  }
+
+  shouldIgnoreHostPlayback(audio) {
+    return this.providerIsSayPi && ChatbotIdentifier.isChatbotType("pi") &&
+      isPiNativeSpeechSource(audioSource(audio)) && !this.isSharedPlayback(audio);
   }
 
   /**
@@ -463,38 +470,40 @@ export default class AudioModule {
    * @param {HTMLAudioElement} audio
    * @param {some interpreted state machine} actor
    */
+  addAudioListener(audio, event, listener) {
+    this.audioPlaybackListeners ??= new Map();
+    const listeners = this.audioPlaybackListeners.get(audio) ?? [];
+    this.audioPlaybackListeners.set(audio, listeners);
+    listeners.push([event, listener]);
+    audio.addEventListener(event, listener);
+  }
+
   registerAudioPlaybackEvents(audio, actor) {
-    const events = [
-      "loadedmetadata",
-      "canplaythrough",
-      "pause",
-      "ended",
-      "seeked",
-      "emptied",
-    ];
-
-    const sourcedEvents = ["loadstart", "play", "error"];
-    sourcedEvents.forEach((event) => {
-      audio.addEventListener(event, (e) => {
-        const detail = { source: audio.currentSrc };
-        actor.send({ type: event, ...detail });
-      });
-    });
-
-    events.forEach((event) => {
-      audio.addEventListener(event, () => {
-        actor.send({ type: event });
-      });
-    });
-
-    audio.addEventListener("playing", () => {
-      actor.send({ type: "play", source: audio.currentSrc });
-    });
+    const sourced = new Set(["loadstart", "play", "error", "playing"]);
+    const events = ["loadedmetadata", "canplaythrough", "pause", "ended", "seeked", "emptied", ...sourced];
+    for (const event of events) {
+      const listener = () => {
+        // Muted/paused native speech must not drive the custom output actor:
+        // its skipCurrent transition would stop the actual SayPi speech too.
+        if (this.shouldIgnoreHostPlayback(audio)) {
+          this.applyHostAudioMute();
+          return;
+        }
+        if (audio === this.audioElement && ((event === "ended" && audio.ended) ||
+            (event === "emptied" && !audioSource(audio)))) {
+          this.sharedPlaybackSource = null;
+        }
+        actor.send({ type: event === "playing" ? "play" : event,
+          ...(sourced.has(event) ? { source: audio.currentSrc } : {}) });
+      };
+      this.addAudioListener(audio, event, listener);
+    }
   }
 
   registerSourceChangeEvents(audio, actor) {
     this.lastSource = audio.src;
-    audio.addEventListener("loadstart", () => {
+    this.addAudioListener(audio, "loadstart", () => {
+      if (this.shouldIgnoreHostPlayback(audio)) return;
       if (audio.currentSrc !== this.lastSource) {
         actor.send({ type: "sourceChanged" });
         this.lastSource = audio.currentSrc;
@@ -541,6 +550,7 @@ export default class AudioModule {
           const url = audio.src;
           audio.src = CacheBuster.addCacheBuster(url);
         }
+        this.sharedPlaybackSource = audio.src;
         audio.load();
         if (reloadAudioRequest?.playImmediately) {
           audio.play();
@@ -656,6 +666,7 @@ export default class AudioModule {
   }
 
   stopOnscreenAudio() {
+    this.sharedPlaybackSource = null;
     this.cancelPendingPlayback();
     this.audioElement.pause();
 
@@ -687,6 +698,9 @@ export default class AudioModule {
         return;
       }
       
+      // Track this explicit load independently of the URL retained for reload.
+      // Stop/completion revoke the shared-player exemption; pause preserves it.
+      this.sharedPlaybackSource = url;
       // Fallback to in-page audio. Quiet/whisper mode plays the reply softly (#437).
       audioElement.src = url;
       audioElement.volume = ttsVolumeForQuietMode(
@@ -976,7 +990,8 @@ export default class AudioModule {
     }
     
     // Handle explicit errors
-    audio.addEventListener("error", (event) => {
+    this.addAudioListener(audio, "error", (event) => {
+      if (this.shouldIgnoreHostPlayback(audio)) return;
       actor.send({
         type: "error",
         source: audio.currentSrc,
@@ -985,7 +1000,8 @@ export default class AudioModule {
     });
 
     // Handle Safari range request failures
-    audio.addEventListener("stalled", (event) => {
+    this.addAudioListener(audio, "stalled", (event) => {
+      if (this.shouldIgnoreHostPlayback(audio)) return;
       const isPotentialRangeRequestFailure = 
         audio.networkState === 2 && // NETWORK_LOADING
         audio.readyState === 1 &&   // HAVE_METADATA

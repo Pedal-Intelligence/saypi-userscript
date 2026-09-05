@@ -223,8 +223,10 @@ CSS and representative host-theme utilities rather than keeping pixel baselines.
 
 `specs/pi-audio-ownership.e2e.ts` keeps real native media playing on the mock Pi
 conversation while a separate extension document changes the saved voice. It
-checks immediate host muting, SPA navigation, saved ownership after reload, and
-native playback after clearing the override. The test waits for fresh-install
+checks immediate host muting, direct/nested insertion of simultaneous native
+players, SPA navigation, saved ownership after reload, and native playback after
+clearing the override. All three native media clocks advance while muted, then
+resume audible playback together when native ownership returns. The test waits for fresh-install
 seeding before representing an existing user, so a late onboarding writer cannot
 silently adopt a default during the return-to-Pi assertion.
 

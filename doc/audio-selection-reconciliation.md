@@ -36,6 +36,28 @@ real extension storage from a separate document while native media advances,
 then covers SPA navigation, reload, and return to native playback. It does not
 claim an audible real-host sign-out/sign-in or Firefox browser confirmation.
 
-Audio-element insertion/replacement is a distinct lifecycle boundary; this change
-does not claim to cover every simultaneously present native player. Store release
-and attended real-host confirmation are separate from the hermetic checks.
+Pi audio-element insertion and replacement also reconcile ownership. Discovery
+includes a directly added audio node and every player in an added subtree, then
+binds at most one connected candidate per batch. Retired players lose SayPi's
+listeners and assigned ID without losing host-owned media that remains connected.
+
+`PiNativeAudioGuard` suppresses only `https://pi.ai/api/chat/voice` sources (plus
+the empty tracked bootstrap player). Chrome holds all those native players muted
+and restores each original mute value when custom ownership ends or a player
+changes to unrelated media. Capture-phase media events cover sources assigned
+after insertion. Suppressed native lifecycle events do not reach the custom
+output actor, whose skip transition would otherwise stop the real SayPi speech.
+
+Firefox/Safari pause only automatic native speech. The shared SayPi output remains
+bound through buffering and paused states as well as playback. An explicit reply
+replay loaded by SayPi may carry an older native Pi URL; that shared output keeps
+its lifecycle events and is exempt from autoplay suppression. That exemption
+belongs to the explicit shared load: stopping, completing or removing it releases
+ownership; an intentional pause or source-replacement emptied event does not. The browser test
+now proves three native players continue advancing silently, then become audible
+again when the override is cleared. It covers direct and nested same-batch
+insertion; the runtime tests additionally cover replacement, retired listeners,
+source changes, unrelated media and shared-page replay/resume.
+
+Store release and attended real-host confirmation remain separate from these
+hermetic checks.
