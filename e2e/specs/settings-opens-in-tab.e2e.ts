@@ -23,12 +23,14 @@ test.describe("settings tab flow", () => {
     const trigger = await context.newPage();
     await trigger.goto(`chrome-extension://${extensionId}/permissions.html`);
 
-    const pagePromise = context.waitForEvent("page");
+    const settingsUrl = `chrome-extension://${extensionId}/settings.html`;
     await trigger.evaluate(() =>
       chrome.runtime.sendMessage({ action: "openPopup" }),
     );
-    const settingsPage = await pagePromise;
-    await settingsPage.waitForURL(/settings\.html/);
+    // Installation can open onboarding concurrently. Match the requested tab
+    // instead of assuming the next page event belongs to this message.
+    await expect.poll(() => context.pages().filter(page => page.url() === settingsUrl).length).toBe(1);
+    const settingsPage = context.pages().find(page => page.url() === settingsUrl)!;
 
     // The page must live in a normal (tabbed) window — no popup-type window
     // may have been created anywhere in the browser.
