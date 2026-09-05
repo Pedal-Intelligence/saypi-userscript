@@ -12,17 +12,26 @@ This also prevents a delayed lookup from overwriting newer choices.
 
 `getVoice` returns null while the voice is unavailable, while `hasVoice` remains
 true because the choice is still saved. Callers must distinguish that state from
-an explicit native-voice/voice-off choice. An unresolved remote choice retains
-SayPi as the selected provider, keeping host audio suppressed; synthesis returns
-a silent placeholder until that voice resolves. Keeping provider ownership
-stable lets recovered speech pass the existing output guard without a new
-provider event. Native Pi IDs resolve locally and remain usable without the API.
-Settings can use the two preference reads to explain unavailability honestly.
+an explicit native-voice/voice-off choice. While signed in, an unresolved remote
+choice retains SayPi as the selected provider, keeping host audio suppressed;
+synthesis returns a silent placeholder until that voice resolves. Keeping
+provider ownership stable lets recovered speech pass the existing output guard
+without a new provider event. While signed out, a remote choice falls back to
+the host's native provider (Pi or ChatGPT, otherwise none), whether the voice
+resolved or is unavailable, since SayPi cannot synthesize without authentication.
+Auth is checked after the preference reads, including a sign-out during lookup.
+The saved choice survives both states. Native Pi IDs resolve locally and remain
+usable without the API. Settings can use the
+two preference reads to explain unavailability honestly.
 
-A missing ID in a previously cached catalog triggers one host-scoped refresh,
-shared by concurrent lookups. Fresh omissions do not retry within the same
-lookup; later demand may retry. Valid cached choices incur no extra request,
-and there is no background polling or by-ID probe.
+A missing ID can trigger a host-scoped refresh once the last successful catalog
+response is at least 60 seconds old. Concurrent lookups share that refresh, and
+successful empty catalogs observe the same cooldown. This bounds repeated
+lookups from message decoration and speech creation while allowing a disabled
+provider to recover on later demand. Auth/account changes invalidate the cache
+and cooldown immediately. Valid cached choices incur no extra request, and
+there is no background polling or by-ID probe. Failed requests do not populate
+the cache; the next caller may retry them.
 
 ## Handling Failed Utterances
 

@@ -15,8 +15,8 @@ vi.mock('../../src/tts/SpeechSynthesisModule', () => ({
   SpeechSynthesisModule: { getInstance: () => speechSynthesisMock },
 }));
 
-// getVoice() consults the auth state before treating a failed lookup as a
-// deleted voice (#456).
+// Default adoption consults auth; saved choices survive lookup failure in
+// either auth state (#456, #604).
 const fakeAuth = vi.hoisted(() => ({ authenticated: false }));
 vi.mock('../../src/JwtManager', () => {
   const fakeJwtManager = { isAuthenticated: () => fakeAuth.authenticated };

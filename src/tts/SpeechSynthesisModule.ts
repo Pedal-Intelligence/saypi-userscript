@@ -20,6 +20,7 @@ import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { getJwtManagerSync } from "../JwtManager";
 
 const UNKNOWN_CHATBOT_CACHE_KEY = "__unknown__";
+const VOICE_CATALOG_RETRY_DELAY_MS = 60_000;
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -105,7 +106,10 @@ class SpeechSynthesisModule {
     });
   }
 
-  private voicesCache: Map<string, SpeechSynthesisVoiceRemote[]> = new Map();
+  private voicesCache = new Map<string, {
+    voices: SpeechSynthesisVoiceRemote[];
+    fetchedAt: number;
+  }>();
   private voicesLoading: Map<string, Promise<void>> = new Map();
   /** Auth state the caches were populated under — see {@link syncVoicesCacheWithAuthState}. */
   private voicesCacheAuthFingerprint: string | null = null;
@@ -168,8 +172,9 @@ class SpeechSynthesisModule {
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
     this.syncVoicesCacheWithAuthState();
     const cached = this.voicesCache.get(cacheKey);
-    if (cached && cached.length > 0) {
-      return cached;
+    if (cached && (cached.voices.length > 0 ||
+      Date.now() - cached.fetchedAt < VOICE_CATALOG_RETRY_DELAY_MS)) {
+      return cached.voices;
     }
     if (!this.voicesLoading.has(cacheKey)) {
       const fingerprintAtFetchStart = this.voicesCacheAuthFingerprint;
@@ -180,7 +185,7 @@ class SpeechSynthesisModule {
           // flight; caching its result would resurrect the previous auth
           // state's voice list (#456).
           if (this.voicesCacheAuthFingerprint === fingerprintAtFetchStart) {
-            this.voicesCache.set(cacheKey, voices);
+            this.voicesCache.set(cacheKey, { voices, fetchedAt: Date.now() });
           }
         })
         .finally(() => {
@@ -193,7 +198,7 @@ class SpeechSynthesisModule {
       this.voicesLoading.set(cacheKey, loadPromise);
     }
     await this.voicesLoading.get(cacheKey);
-    return this.voicesCache.get(cacheKey) ?? [];
+    return this.voicesCache.get(cacheKey)?.voices ?? [];
   }
 
   async getVoiceById(
@@ -208,9 +213,12 @@ class SpeechSynthesisModule {
     let foundVoice = voices.find((voice) => voice.id === id);
 
     // Providers can disappear temporarily from an otherwise valid catalog.
-    // Retry a cached omission once on demand, sharing any concurrent fetch.
-    // A freshly fetched omission waits for the next lookup rather than looping.
-    if (!foundVoice && cached?.length && voices === cached) {
+    // Retry an omission on demand at most once per minute after a successful
+    // catalog response. Several consumers resolve the same saved ID per reply.
+    // If a concurrent caller already invalidated this entry, join its refresh.
+    if (!foundVoice && cached?.voices.length && voices === cached.voices &&
+      (Date.now() - cached.fetchedAt >= VOICE_CATALOG_RETRY_DELAY_MS ||
+        this.voicesCache.get(cacheKey) !== cached)) {
       if (this.voicesCache.get(cacheKey) === cached) {
         this.voicesCache.delete(cacheKey);
       }
@@ -247,7 +255,7 @@ class SpeechSynthesisModule {
     const appId = chatbotId ?? ChatbotIdentifier.getAppId();
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
     this.syncVoicesCacheWithAuthState(); // stamp: cached under the current auth state
-    this.voicesCache.set(cacheKey, voices);
+    this.voicesCache.set(cacheKey, { voices, fetchedAt: Date.now() });
   }
 
   async createSpeech(
@@ -465,14 +473,20 @@ class SpeechSynthesisModule {
 
     const preferenceScope = chatbot ?? chatbotId;
     const voice = await this.userPreferences.getVoice(preferenceScope);
+    let preferredProvider: AudioProvider = audioProviders.None;
     if (voice) {
-      return audioProviders.retreiveProviderByVoice(voice);
+      preferredProvider = audioProviders.retreiveProviderByVoice(voice);
+    } else if (await this.userPreferences.hasVoice(preferenceScope)) {
+      // An unresolved saved remote choice retains SayPi ownership through an
+      // outage so catalog recovery needs no provider transition.
+      preferredProvider = audioProviders.SayPi;
     }
-    // Native Pi IDs resolve locally. An unresolved saved remote choice keeps
-    // SayPi's ownership, suppressing host fallback while createSpeechStream
-    // returns a silent placeholder. Recovery then needs no provider transition.
-    if (await this.userPreferences.hasVoice(preferenceScope)) {
-      return audioProviders.SayPi;
+    // Resolve auth after the asynchronous preference reads. SayPi cannot
+    // synthesize while signed out, even if the remote voice resolved. Native
+    // Pi voices resolve locally and remain usable without authentication.
+    if (preferredProvider !== audioProviders.None &&
+      (preferredProvider !== audioProviders.SayPi || getJwtManagerSync().isAuthenticated())) {
+      return preferredProvider;
     }
 
     const defaultProvider = audioProviders.getDefaultForChatbot(chatbotId);
