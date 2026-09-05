@@ -8,6 +8,7 @@ import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import {
   audioProviders,
   isPlaceholderUtterance,
+  PiAIVoice,
   SpeechSynthesisVoiceRemote,
 } from "../../src/tts/SpeechModel";
 import EventBus from "../../src/events/EventBus";
@@ -90,6 +91,7 @@ describe("SpeechSynthesisModule", () => {
     // Some tests register menu-style listeners on the shared singleton
     // EventBus; drop them so they can't leak into unrelated tests.
     EventBus.removeAllListeners("saypi:auth:status-changed");
+    vi.useRealTimers();
     vi.unstubAllEnvs();
     vi.clearAllMocks();
   });
@@ -130,8 +132,10 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("should get voice by ID from the cache if available", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     const mockVoice = mockVoices[0];
     speechSynthesisModule._cacheVoices([mockVoice], "claude");
+    vi.setSystemTime(Date.now() + 60_000);
 
     const voice = await speechSynthesisModule.getVoiceById(
       mockVoice.id,
@@ -141,11 +145,14 @@ describe("SpeechSynthesisModule", () => {
 
     expect(voice).toEqual(mockVoice);
     expect(textToSpeechServiceMock.getVoiceById).not.toHaveBeenCalled();
+    expect(textToSpeechServiceMock.getVoices).not.toHaveBeenCalled();
   });
 
   it("refreshes a cached omission once so a disabled provider can return", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     speechSynthesisModule._cacheVoices(mockVoices, "pi");
     speechSynthesisModule._cacheVoices(mockVoices, "claude");
+    vi.setSystemTime(Date.now() + 60_000);
     (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue([
       ...mockVoices, ...openAiMockVoices,
     ]);
@@ -158,19 +165,80 @@ describe("SpeechSynthesisModule", () => {
     expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
   });
 
-  it("does not retry a freshly fetched omission in the same lookup", async () => {
+  it("bounds successful catalog omission retries to once per minute, then recovers on demand", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    const fetchedAt = Date.now();
     await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
       .rejects.toThrow("Voice with id alloy not found");
     expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
 
-    // A later demand may retry, once: there is no polling loop when still absent.
+    // One reply can consult the same saved choice several times.
     await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
       .rejects.toThrow("Voice with id alloy not found");
+    vi.setSystemTime(fetchedAt + 59_999);
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
+      .rejects.toThrow("Voice with id alloy not found");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
+
+    vi.setSystemTime(fetchedAt + 60_000);
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue(openAiMockVoices);
+    expect((await speechSynthesisModule.getVoiceById("alloy", "pi")).id).toBe("alloy");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(2);
+  });
+
+  it("also bounds retries when the successful catalog is empty", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    const fetchedAt = Date.now();
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue([]);
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
+      .rejects.toThrow("Voice with id alloy not found");
+    expect(await speechSynthesisModule.getVoices("pi")).toEqual([]);
+    vi.setSystemTime(fetchedAt + 59_999);
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi"))
+      .rejects.toThrow("Voice with id alloy not found");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(1);
+
+    vi.setSystemTime(fetchedAt + 60_000);
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue(openAiMockVoices);
+    expect((await speechSynthesisModule.getVoiceById("alloy", "pi")).id).toBe("alloy");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps omission retry times independent for each host", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    const fetchedAt = Date.now();
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi")).rejects.toThrow();
+    vi.setSystemTime(fetchedAt + 30_000);
+    await expect(speechSynthesisModule.getVoiceById("alloy", "claude")).rejects.toThrow();
+
+    vi.setSystemTime(fetchedAt + 60_000);
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue(openAiMockVoices);
+    expect((await speechSynthesisModule.getVoiceById("alloy", "pi")).id).toBe("alloy");
+    await expect(speechSynthesisModule.getVoiceById("alloy", "claude")).rejects.toThrow();
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(3);
+
+    vi.setSystemTime(fetchedAt + 90_000);
+    expect((await speechSynthesisModule.getVoiceById("alloy", "claude")).id).toBe("alloy");
+    expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(4);
+  });
+
+  it.each([false, true])("clears an omission cooldown immediately on sign-in or account switch (was authenticated: %s)", async (wasAuthenticated) => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    fakeAuth.authenticated = wasAuthenticated;
+    fakeAuth.userId = wasAuthenticated ? "user-a" : undefined;
+    await expect(speechSynthesisModule.getVoiceById("alloy", "pi")).rejects.toThrow();
+    fakeAuth.authenticated = true;
+    fakeAuth.userId = "user-b";
+    (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue(openAiMockVoices);
+
+    expect((await speechSynthesisModule.getVoiceById("alloy", "pi")).id).toBe("alloy");
     expect(textToSpeechServiceMock.getVoices).toHaveBeenCalledTimes(2);
   });
 
   it("shares the refresh when concurrent lookups miss the same cached catalog", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     speechSynthesisModule._cacheVoices(mockVoices, "pi");
+    vi.setSystemTime(Date.now() + 60_000);
     (textToSpeechServiceMock.getVoices as Mock).mockResolvedValue(openAiMockVoices);
 
     const voices = await Promise.all([
@@ -352,6 +420,7 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("keeps native audio for chatbots without a Say Pi voice selection", async () => {
+    fakeAuth.authenticated = true;
     const preferredVoice = mockVoices[0];
     (userPreferenceModuleMock.hasVoice as Mock).mockImplementation(
       async (chatbotArg?: any) => {
@@ -383,6 +452,7 @@ describe("SpeechSynthesisModule", () => {
   });
 
   it("uses per-chatbot Say Pi voices without affecting other chatbots", async () => {
+    fakeAuth.authenticated = true;
     const claudeVoice = { ...mockVoices[0] };
     const chatgptVoice = { ...mockVoices[0], id: "other", name: "Other Voice" };
 
@@ -438,7 +508,80 @@ describe("SpeechSynthesisModule", () => {
     );
   });
 
-  it("keeps SayPi ownership through an outage so recovered speech passes the output guard", async () => {
+  it.each([
+    { state: "unresolved", voice: null }, { state: "resolved", voice: mockVoices[0] },
+  ])("keeps Pi's native audio audible when signed out with a $state saved voice", async ({ voice }) => {
+    await speechSynthesisModule.getActiveAudioProvider("pi");
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(voice);
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(true);
+    const appIdSpy = vi.spyOn(ChatbotIdentifier, "getAppId").mockReturnValue("pi");
+    const actor = createTestActor(audioOutputMachine.provide({
+      actions: { notifySpeechStart: vi.fn() },
+    })).start();
+    let onProvider: (detail: any) => void = () => {};
+
+    try {
+      await new Promise<void>((resolve) => {
+        onProvider = ({ provider }) => {
+          actor.send({ type: "changeProvider", provider });
+          resolve();
+        };
+        EventBus.on("audio:changeProvider", onProvider);
+        speechSynthesisModule.initProvider();
+      });
+      const provider = actor.state.context.provider;
+      expect(provider).toBe(audioProviders.Pi);
+      expect(shouldMuteHostAudio({
+        providerIsSayPi: provider === audioProviders.SayPi,
+        playbackIsOffscreen: true,
+      })).toBe(false);
+      const utterance = await speechSynthesisModule.createSpeechStreamOrPlaceholder(
+        provider, { getID: () => "pi" } as any,
+      );
+      expect(isPlaceholderUtterance(utterance)).toBe(true);
+      expect(utterance.provider).toBe(audioProviders.Pi);
+      expect(audioStreamManagerMock.createStream).not.toHaveBeenCalled();
+      actor.send({ type: "loadstart", source: "https://pi.ai/audio/native.mp3" });
+      expect(actor.state.matches("loading")).toBe(true);
+
+      // Signing back in reclaims the saved SayPi choice, even during an outage.
+      fakeAuth.authenticated = true;
+      expect(await speechSynthesisModule.getActiveAudioProvider("pi")).toBe(audioProviders.SayPi);
+    } finally {
+      EventBus.off("audio:changeProvider", onProvider);
+      appIdSpy.mockRestore();
+      actor.stop();
+    }
+  });
+
+  it("uses current auth when a saved remote voice finishes resolving after sign-out", async () => {
+    await speechSynthesisModule.getActiveAudioProvider("pi");
+    fakeAuth.authenticated = true;
+    let resolveVoice!: (voice: SpeechSynthesisVoiceRemote) => void;
+    (userPreferenceModuleMock.getVoice as Mock).mockReturnValueOnce(
+      new Promise<SpeechSynthesisVoiceRemote>((resolve) => { resolveVoice = resolve; }),
+    );
+    const pendingProvider = speechSynthesisModule.getActiveAudioProvider("pi");
+    fakeAuth.authenticated = false;
+    resolveVoice(mockVoices[0]);
+
+    expect(await pendingProvider).toBe(audioProviders.Pi);
+  });
+
+  it("uses a locally resolved Pi voice without authentication", async () => {
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(PiAIVoice.fromVoiceId("voice1"));
+    expect(await speechSynthesisModule.getActiveAudioProvider("pi")).toBe(audioProviders.Pi);
+  });
+
+  it.each([
+    ["chatgpt", audioProviders.ChatGPT], ["claude", audioProviders.None],
+  ])("retains the %s signed-out default for an unresolved saved voice", async (host, expected) => {
+    (userPreferenceModuleMock.getVoice as Mock).mockResolvedValue(null);
+    (userPreferenceModuleMock.hasVoice as Mock).mockResolvedValue(true);
+    expect(await speechSynthesisModule.getActiveAudioProvider(host as string)).toBe(expected);
+  });
+
+  it("keeps authenticated SayPi ownership through an outage so recovered speech passes the output guard", async () => {
     // Drain the constructor's initial provider resolution before simulating startup.
     await speechSynthesisModule.getActiveAudioProvider("pi");
     fakeAuth.authenticated = true;
