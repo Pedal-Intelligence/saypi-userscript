@@ -17,6 +17,9 @@ import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule
 import { createAudioRemovalObserverCallback } from "./audioElementRemoval.ts";
 import { findHostAudioElement, shouldMuteHostAudio } from "./hostAudio.ts";
 import { audioProviders } from "../tts/SpeechModel.ts";
+import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule.ts";
+import { isVoiceSampleUrl } from "../tts/SpeechSourceParsers.ts";
+import { AudioSelectionSync } from "./AudioSelectionSync.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
 
@@ -28,7 +31,7 @@ export default class AudioModule {
 
     this.AUDIO_ELEMENT_ID = "saypi-audio-main";
     this.audioElement = null;
-    /** Are WE the voice? Set from audio:changeProvider; decides the host's mute. */
+    /** Are WE the voice? Reconciled from current preferences and auth. */
     this.providerIsSayPi = false;
     this.mutationObserver = null;
     this.swapObserver = null;
@@ -45,7 +48,7 @@ export default class AudioModule {
     
     if (this.needsAudioOutput) {
       // Dynamically import and initialize audio output machine only when needed
-      this.initializeAudioOutputMachine();
+      this.audioOutputReady = this.initializeAudioOutputMachine();
     }
 
     this.audioInputActor = createActor(audioInputMachine);
@@ -90,6 +93,7 @@ export default class AudioModule {
 
   async start() {
     try {
+      await this.audioOutputReady;
       // Initialize offscreen bridge and check if supported
       this.useOffscreenAudio = await this.offscreenBridge.isSupported();
 
@@ -125,17 +129,15 @@ export default class AudioModule {
       // (offscreen or in-page)
       this.registerAudioCommands(
         this.audioInputActor,
-        this.audioOutputActor,
-        this.voiceConverter
+        this.audioOutputActor
       );
       
-      // Initialize voice converter
-      this.initializeVoiceConverter();
 
       // Register EventBus listeners for offscreen audio events and forward them to audio actors
       if (this.audioOutputActor) {
         this.registerOffscreenAudioEvents(this.audioOutputActor);
       }
+      await this.initializeAudioSelection();
     } catch (error) {
       logger.error("[AudioModule] Error during start:", error);
       // Fallback to in-page audio if there was an error with offscreen initialization
@@ -152,8 +154,7 @@ export default class AudioModule {
       }
       this.audioInputActor.start();
       this.voiceConverter.start();
-      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor, this.voiceConverter);
-      this.initializeVoiceConverter();
+      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
       
       // Ensure audio element swapping is monitored in fallback mode
       this.listenForAudioElementSwap();
@@ -163,6 +164,7 @@ export default class AudioModule {
       if (this.audioOutputActor) {
         this.registerOffscreenAudioEvents(this.audioOutputActor);
       }
+      await this.initializeAudioSelection();
     }
   }
 
@@ -198,18 +200,49 @@ export default class AudioModule {
     }
   }
 
-  initializeVoiceConverter() {
-    const prefs = UserPreferenceModule.getInstance();
-    ChatbotService.getChatbot().then((chatbot) => {
-      prefs.getVoice(chatbot).then((voice) => {
-        if (voice) {
-          logger.debug("Preferred voice is", voice);
-          this.voiceConverter.send({ type: "changeVoice", voice });
-        } else {
-          logger.debug("Default voice is preferred");
-        }
+  async initializeAudioSelection() {
+    if (!this.needsAudioOutput) return;
+    if (!this.selectionSync) {
+      const chatbot = await ChatbotService.getChatbot();
+      this.selectionSync = new AudioSelectionSync({
+        hostId: chatbot.getID(),
+        resolve: () => SpeechSynthesisModule.getInstance().getActiveAudioSelection(chatbot),
+        apply: (selection) => this.applyAudioSelection(selection),
+        onError: (error) => logger.error("[AudioModule] Could not reconcile voice selection", error),
       });
-    });
+    }
+    await this.selectionSync.start();
+  }
+
+  applyAudioSelection({ provider, voice }) {
+    this.audioOutputActor?.send({ type: "changeVoice", voice });
+    this.audioOutputActor?.send({ type: "changeProvider", provider });
+    this.voiceConverter.send({ type: "changeVoice", voice });
+    this.providerIsSayPi = provider === audioProviders.SayPi;
+    this.applyHostAudioMute();
+
+    // Auth refreshes and other hosts' storage writes can resolve the same
+    // selection again. Preserve intentional historical replays in that case.
+    const previous = this.appliedSelection;
+    this.appliedSelection = { provider, voice };
+    if (previous?.provider === provider && (previous.voice?.id ?? null) === (voice?.id ?? null)) return;
+
+    const offscreenSource = this.lastAudioUrl;
+    if (this.useOffscreenAudio && offscreenSource && !isVoiceSampleUrl(offscreenSource) &&
+        (!provider.matches(offscreenSource) || (voice && !voice.matchesSource(offscreenSource)))) {
+      this.lastAudioUrl = null;
+      this.offscreenBridge.stopAudio().catch((error) => {
+        logger.error("[AudioModule] Could not stop the previous voice", error);
+      });
+    }
+
+    // Firefox/Safari share the page player with SayPi. Muting would silence
+    // our speech too, but an already-playing native source must still stop.
+    const source = this.audioElement?.currentSrc || this.audioElement?.src;
+    if (!this.useOffscreenAudio && source && !isVoiceSampleUrl(source) &&
+        (!provider.matches(source) || (voice && !voice.matchesSource(source)))) {
+      this.stopOnscreenAudio();
+    }
   }
 
   async initializeSlowResponseHandler() {
@@ -479,6 +512,7 @@ export default class AudioModule {
       "audio:load",
       async (detail) => {
         logger.debug("audio:load", detail, this.useOffscreenAudio ? "offscreen" : "in-page");
+        this.lastAudioUrl = detail.url;
         if (this.useOffscreenAudio) {
           // Use offscreen bridge if available - now use loadAudio instead of playAudio
           await this.offscreenBridge.loadAudio(detail.url, true);
@@ -516,7 +550,7 @@ export default class AudioModule {
   }
 
   /* These events are used to control/pass requests to the audio module from other modules */
-  registerAudioCommands(inputActor, outputActor, voiceConverter) {
+  registerAudioCommands(inputActor, outputActor) {
     // audio input (recording) commands
     EventBus.on("audio:setupRecording", function (e) {
       inputActor.send({ type: "acquire" });
@@ -555,23 +589,6 @@ export default class AudioModule {
     });
 
     // audio output (playback) commands
-    EventBus.on("audio:changeProvider", (detail) => {
-      if (outputActor) {
-        outputActor.send({ type: "changeProvider", ...detail });
-      }
-      // Whether the host may be heard is decided by who is speaking, so it is
-      // settled here rather than at each playback event (#602). Matched by
-      // identity against the SayPi provider — `matches(source)` answers a
-      // different question (does this URL belong to it).
-      this.providerIsSayPi = detail?.provider === audioProviders.SayPi;
-      this.applyHostAudioMute();
-    });
-    EventBus.on("audio:changeVoice", (detail) => {
-      if (outputActor) {
-        outputActor.send({ type: "changeVoice", ...detail });
-      }
-      voiceConverter.send({ type: "changeVoice", ...detail });
-    });
     EventBus.on("audio:skipNext", (e) => {
       logger.debug("Skipping next audio");
       if (outputActor) {

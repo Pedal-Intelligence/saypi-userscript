@@ -1,6 +1,6 @@
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { config } from "../ConfigModule";
-import AudioControlsModule from "../audio/AudioControlsModule";
+import type { AudioSelection } from "../audio/AudioSelectionSync";
 import { AudioStreamManager } from "./AudioStreamManager";
 import { TextToSpeechService } from "./TextToSpeechService";
 import EventBus from "../events/EventBus";
@@ -96,14 +96,6 @@ class SpeechSynthesisModule {
     this.audioStreamManager = audioStreamManager;
     this.userPreferences = userPreferenceModule;
     this.registerEventListeners();
-    this.initProvider();
-  }
-
-  initProvider(): void {
-    const audioControls = new AudioControlsModule();
-    this.getActiveAudioProvider().then((provider) => {
-      audioControls.notifyAudioProviderSelection(provider);
-    });
   }
 
   private voicesCache = new Map<string, {
@@ -461,14 +453,18 @@ class SpeechSynthesisModule {
    * @returns {Promise<AudioProvider>}
    */
   async getActiveAudioProvider(chatbot?: Chatbot | string): Promise<AudioProvider> {
+    return (await this.getActiveAudioSelection(chatbot)).provider;
+  }
+
+  async getActiveAudioSelection(chatbot?: Chatbot | string): Promise<AudioSelection> {
     const chatbotId = this.resolveChatbotKey(chatbot);
 
     if (!chatbotId) {
-      return audioProviders.None;
+      return { provider: audioProviders.None, voice: null };
     }
 
     if (chatbotId === "web") {
-      return audioProviders.None;
+      return { provider: audioProviders.None, voice: null };
     }
 
     const preferenceScope = chatbot ?? chatbotId;
@@ -486,15 +482,18 @@ class SpeechSynthesisModule {
     // Pi voices resolve locally and remain usable without authentication.
     if (preferredProvider !== audioProviders.None &&
       (preferredProvider !== audioProviders.SayPi || getJwtManagerSync().isAuthenticated())) {
-      return preferredProvider;
+      return {
+        provider: preferredProvider,
+        voice: voice ? VoiceFactory.matchableFromVoiceRemote(voice) : null,
+      };
     }
 
     const defaultProvider = audioProviders.getDefaultForChatbot(chatbotId);
     if (defaultProvider === audioProviders.SayPi) {
-      return audioProviders.None;
+      return { provider: audioProviders.None, voice: null };
     }
 
-    return defaultProvider;
+    return { provider: defaultProvider, voice: null };
   }
 
   private isStreamOpen(utteranceId: string): boolean {

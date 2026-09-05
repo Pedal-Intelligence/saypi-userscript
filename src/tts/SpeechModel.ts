@@ -86,7 +86,7 @@ const audioProviders = {
         // unrecognised powered_by must NOT crash voice selection the way
         // "OpenAI" did before this fix (#215/#92): treat any future API-added
         // provider as SayPi-served and warn, rather than throwing into the
-        // synchronous setVoice / notifyAudioVoiceSelection call paths.
+        // voice preference and playback reconciliation paths.
         console.warn(
           `Unrecognised TTS provider "${powered_by}"; treating as SayPi-served.`
         );
@@ -300,7 +300,7 @@ interface MatchableVoice {
 class VoiceFactory {
   static matchableFromVoiceRemote(
     v: SpeechSynthesisVoiceRemote
-  ): MatchableVoice {
+  ): AIVoice {
     const provider = audioProviders.retrieveProviderByEngine(v.powered_by);
     switch (provider) {
       case audioProviders.SayPi:
