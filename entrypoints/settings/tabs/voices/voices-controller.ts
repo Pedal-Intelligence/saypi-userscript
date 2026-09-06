@@ -2,7 +2,10 @@ import getMessage from "../../../../src/i18n";
 import { audioProviders, SpeechSynthesisVoiceRemote } from "../../../../src/tts/SpeechModel";
 import { SpeechSynthesisModule } from "../../../../src/tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../../../../src/prefs/PreferenceModule";
-import { getJwtManagerSync } from "../../../../src/JwtManager";
+import {
+  isSettingsAuthenticated,
+  onSettingsAuthChange,
+} from "../../shared/auth-sync";
 import {
   HostPinOverlay,
   loadHostOverlay,
@@ -115,6 +118,22 @@ export interface VoiceStudioDeps {
   unsetVoice?(host: VoiceHostId): Promise<void>;
   hasVoice?(host: VoiceHostId): Promise<boolean>;
   onVoiceChange?(fn: () => void): () => void;
+  /**
+   * Subscribe to a change of SESSION — sign-in, sign-out, or one account
+   * replaced by another. Distinct from `onVoiceChange`, which reports a
+   * changed preference within one session: this one invalidates the catalog
+   * itself, because a different account can be offered a different voice list.
+   *
+   * Optional, like the other subscriptions: a studio wired without it simply
+   * never hears about auth (which is what most unit tests want).
+   */
+  onAuthChange?(fn: () => void): () => void;
+  /**
+   * Is the page authenticated? Read through the settings-scoped state
+   * (`shared/auth-sync.ts`), never straight off the JwtManager singleton — a
+   * sign-out broadcast deliberately leaves that singleton's in-memory token
+   * alone (#227), and the rail must not render or fetch as the previous user.
+   */
   isAuthenticated(): boolean;
   /**
    * Play the voice's free canned sample clip (design §4), replacing whatever
@@ -240,6 +259,13 @@ function auditionThrough(
 // carry an explicit chatbot id — the no-arg default resolves to "web" here.
 function defaultDeps(): VoiceStudioDeps {
   const speech = SpeechSynthesisModule.getInstance();
+  // The TTS module keys its voice cache on who is signed in — and decides
+  // whether to fetch a catalog at all — and on this page the JwtManager
+  // singleton is not that answer: a sign-out broadcast leaves its token in
+  // place on purpose (#227). Hand the module the settings-scoped truth, or the
+  // rail re-reads the catalog: served the previous account's list out of the
+  // cache, or fetched fresh on that account's still-live bearer.
+  speech.setAuthStateReader(isSettingsAuthenticated);
   const prefs = UserPreferenceModule.getInstance();
   const storage = defaultLocalStorage();
   return {
@@ -256,7 +282,8 @@ function defaultDeps(): VoiceStudioDeps {
       chrome.storage.onChanged.addListener(listener);
       return () => chrome.storage.onChanged.removeListener(listener);
     },
-    isAuthenticated: () => getJwtManagerSync().isAuthenticated(),
+    isAuthenticated: () => isSettingsAuthenticated(),
+    onAuthChange: (fn) => onSettingsAuthChange(fn),
     // A single audition IS a one-item sequence — same queue, same beat, same
     // cancellation — so both entry points are this one call.
     playPreview: (voice, onState, gain = 1) => {
@@ -338,6 +365,17 @@ export class VoicesController {
   private auditionState: AuditionState = IDLE_AUDITION;
   private cache = new Map<VoiceHostId, HostStudioData>();
   private loading = new Map<VoiceHostId, Promise<HostStudioData>>();
+  /**
+   * Which SESSION the cached catalogs belong to.
+   *
+   * Bumped whenever the caches are thrown away wholesale (an auth change).
+   * A fetch issued for the previous session can still be in flight when that
+   * happens, and it resolves into `ensureData` — which would otherwise write
+   * the old account's catalog over the new one's and un-register the new
+   * fetch. The render token can't cover this: it guards the PAINT, and the
+   * cache write happens before it.
+   */
+  private dataEpoch = 0;
 
   // --- the rail's own state -------------------------------------------------
 
@@ -352,6 +390,7 @@ export class VoicesController {
   private optionsOpen = false;
   private destroyed = false;
   private unsubscribeVoice: (() => void) | null = null;
+  private unsubscribeAuth: (() => void) | null = null;
   /**
    * Which voice focus is on, carried ACROSS repaints. `useVoice` rebuilds the
    * body from scratch, and landing the reader back at the top of a 22-row rail
@@ -534,6 +573,7 @@ export class VoicesController {
       this.deps.onHeard?.((voiceId) => this.onVoiceHeard(voiceId)) ?? null;
     await this.render();
     this.unsubscribeVoice = this.deps.onVoiceChange?.(this.onVoiceChange) ?? null;
+    this.unsubscribeAuth = this.deps.onAuthChange?.(this.onAuthChange) ?? null;
     window.addEventListener("focus", this.onVoiceChange);
   }
 
@@ -583,6 +623,28 @@ export class VoicesController {
 
   private readonly onVoiceChange = (): void => {
     void this.refreshCurrentVoice();
+  };
+
+  /**
+   * The session changed under the open page (#227) — signed in, signed out, or
+   * one account swapped for another.
+   *
+   * Unlike a voice-preference change, this invalidates the CATALOG: the voice
+   * list is fetched per account, so what is cached here was fetched for a
+   * session that is over. Drop it and re-render rather than repainting the
+   * previous user's rail with the new user's copy around it — that is the
+   * "don't retain the previous account's catalog" half of the fix; the copy
+   * half falls out of `deps.isAuthenticated()` now reading the settings-scoped
+   * state.
+   */
+  private readonly onAuthChange = (): void => {
+    if (this.destroyed) return;
+    this.dataEpoch++;
+    this.cache.clear();
+    this.loading.clear();
+    // A choice read still in flight was started for the previous session.
+    this.currentReadToken++;
+    void this.render();
   };
 
   /** Refresh the choice, keeping the expensive catalog and sample cache. */
@@ -690,6 +752,8 @@ export class VoicesController {
     this.currentReadToken++;
     this.unsubscribeVoice?.();
     this.unsubscribeVoice = null;
+    this.unsubscribeAuth?.();
+    this.unsubscribeAuth = null;
     window.removeEventListener("focus", this.onVoiceChange);
     this.wantsRailFocus = false;
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
@@ -784,12 +848,18 @@ export class VoicesController {
   private async ensureData(host: VoiceHostId): Promise<HostStudioData> {
     const cached = this.cache.get(host);
     if (cached) return cached;
+    const epoch = this.dataEpoch;
     let inFlight = this.loading.get(host);
     if (!inFlight) {
       inFlight = this.fetchHost(host);
       this.loading.set(host, inFlight);
     }
     const data = await inFlight;
+    // The session changed while this was in flight: the answer describes an
+    // account that is no longer signed in. Hand it back to a caller whose
+    // render token will drop it, but keep it out of the cache — and leave the
+    // replacement fetch registered.
+    if (epoch !== this.dataEpoch) return data;
     this.loading.delete(host);
     this.cache.set(host, data);
     return data;

@@ -10,6 +10,10 @@ import { DictationTab } from "./tabs/dictation";
 import { VoicesTab, setInitialVoicesHost } from "./tabs/voices";
 import { AboutTab } from "./tabs/about";
 import { replaceI18n } from "./shared/i18n";
+import {
+  installSettingsAuthSync,
+  onSettingsAuthChange,
+} from "./shared/auth-sync";
 import type { TabController } from "./shared/types";
 import {
   SETTINGS_DEEP_LINK_KEY,
@@ -52,6 +56,23 @@ class SettingsApp {
 
   async init(): Promise<void> {
     console.info("[Settings] Bootstrap starting");
+
+    // Before anything renders: a sign-in, sign-out or account switch that
+    // happens while this page is open has to reach the tabs, and a broadcast
+    // that lands mid-bootstrap must not fall on the floor (#227). The header
+    // has always re-rendered on these signals; until this, nothing reconciled
+    // the page's own JwtManager, so the Voices tab went on reading the
+    // previous session until the user reloaded the tab.
+    installSettingsAuthSync();
+    onSettingsAuthChange(() => {
+      // The quota panel is auth-scoped too, and it is the OTHER half of "don't
+      // keep showing the previous account". Re-run the status subscription's
+      // own entry point (it re-checks auth with the background and either
+      // hides the bars or refetches them) rather than teaching this file how
+      // quota works. Absent until status-subscription.js has loaded, which is
+      // why it is resolved at call time.
+      void (window as any).refreshQuotaStatus?.();
+    });
 
     const headerRoot = document.querySelector<HTMLElement>('.settings-header');
     if (!headerRoot) {

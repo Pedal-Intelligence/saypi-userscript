@@ -105,6 +105,33 @@ class SpeechSynthesisModule {
   private voicesLoading: Map<string, Promise<void>> = new Map();
   /** Auth state the caches were populated under — see {@link syncVoicesCacheWithAuthState}. */
   private voicesCacheAuthFingerprint: string | null = null;
+  /**
+   * Where "am I signed in?" comes from, when the JwtManager singleton is not
+   * the honest answer.
+   *
+   * A content script's singleton IS the honest answer — its reconciler clears
+   * the stale token on sign-out. An extension page's is not: clearing there
+   * would destroy the extension-wide refresh alarm the background owns, so the
+   * settings page deliberately keeps a token it has been told is dead and
+   * tracks the truth beside it (entrypoints/settings/shared/auth-sync.ts,
+   * #227). Without this hook the fingerprint below would stay `user:A` after a
+   * sign-out and go on serving the previous account's voice list — and
+   * {@link getVoices} would go on FETCHING it, carrying that account's still-
+   * live bearer out of a page that has been told the session is over.
+   *
+   * Per-instance, not static: each extension context has its own module
+   * instance, so the settings page sets this without any reach into the
+   * content scripts'.
+   */
+  private authStateReader: (() => boolean) | null = null;
+
+  /**
+   * Teach this module where auth truth lives in this context. Idempotent;
+   * called by the settings page's studio deps.
+   */
+  public setAuthStateReader(read: () => boolean): void {
+    this.authStateReader = read;
+  }
 
   /**
    * The voice list is auth-dependent: signed-out requests 401 → [], and each
@@ -113,10 +140,54 @@ class SpeechSynthesisModule {
    */
   private currentAuthFingerprint(): string {
     const jwtManager = getJwtManagerSync();
-    if (!jwtManager.isAuthenticated()) {
+    const authenticated = this.authStateReader
+      ? this.authStateReader()
+      : jwtManager.isAuthenticated();
+    if (!authenticated) {
       return "anonymous";
     }
     return `user:${jwtManager.getClaims()?.userId ?? "authenticated"}`;
+  }
+
+  /**
+   * Would a request from here carry a credential this context has already
+   * disowned?
+   *
+   * Three things have to be true at once, and the conjunction is the point.
+   *
+   * 1. A reader was injected — {@link setAuthStateReader} — which is an
+   *    assertion that the JwtManager singleton is NOT the truth in this
+   *    context. Only the settings page says that today.
+   * 2. That reader says signed out.
+   * 3. The manager would nonetheless still attach an `Authorization` header.
+   *
+   * On the settings page all three hold after a sign-out broadcast, by design:
+   * the page records the sign-out in its own state and deliberately does NOT
+   * clear the singleton, because `clear()` would destroy the extension-wide
+   * refresh alarm the background owns (#227). `callApi` builds its header from
+   * a manager — this page's on the direct path, the background's on the
+   * proxied one — and never from the reader, so the catalog fetch would leave
+   * carrying the previous account's bearer and come back with their voice
+   * list, under a UI that has already said "sign in for TTS". The quota panel
+   * avoids exactly this by asking the background and returning before any
+   * fetch.
+   *
+   * Condition 3 is what keeps this narrow, and it is load-bearing. A page that
+   * was NEVER signed in holds nothing to leak, and suppressing its request
+   * would only deny an anonymous visitor whatever catalog the server is
+   * willing to serve one — a judgement that belongs to the server, not to a
+   * client reading a stateless bearer's client-side expiry. (Layer 3 proves
+   * this is not hypothetical: the mock API serves `/voices` to an
+   * unauthenticated caller, and the E2E settings page never signs in.)
+   * Condition 1 keeps content scripts on exactly their previous behaviour,
+   * where the singleton IS the truth and the server is still the arbiter.
+   */
+  private wouldCarryStaleCredentials(): boolean {
+    return (
+      this.authStateReader !== null &&
+      !this.authStateReader() &&
+      getJwtManagerSync().getAuthHeader() !== null
+    );
   }
 
   /**
@@ -163,6 +234,13 @@ class SpeechSynthesisModule {
     const appId = this.resolveChatbotKey(chatbot, chatbotIdOverride);
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
     this.syncVoicesCacheWithAuthState();
+    // The request would authenticate itself against this context's own
+    // judgement — see wouldCarryStaleCredentials(). Placed after the
+    // fingerprint sync so the caches are still dropped on the way through, and
+    // before the cache read so a stale entry cannot answer either.
+    if (this.wouldCarryStaleCredentials()) {
+      return [];
+    }
     const cached = this.voicesCache.get(cacheKey);
     if (cached && (cached.voices.length > 0 ||
       Date.now() - cached.fetchedAt < VOICE_CATALOG_RETRY_DELAY_MS)) {

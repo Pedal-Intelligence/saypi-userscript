@@ -3646,6 +3646,144 @@ describe("adversarial release current choice", () => {
   });
 });
 
+describe("VoicesController — the session can change under an open page (#227)", () => {
+  /** Mount a studio whose auth dep and auth subscription the test drives. */
+  async function mountWithAuth(
+    cfg: Parameters<typeof makeDeps>[0] & { authenticated?: boolean } = {}
+  ) {
+    let fire: (() => void) | undefined;
+    let unsubscribed = false;
+    let authenticated = cfg.authenticated ?? true;
+    const deps = makeDeps({
+      ...cfg,
+      overrides: {
+        isAuthenticated: vi.fn(() => authenticated),
+        onAuthChange: (fn: () => void) => {
+          fire = fn;
+          return () => {
+            unsubscribed = true;
+          };
+        },
+        ...cfg.overrides,
+      },
+    });
+    const mounted = await mount(deps);
+    return {
+      ...mounted,
+      /** The settings page's reconciler has settled and announced the change. */
+      async announce(nowAuthenticated: boolean) {
+        authenticated = nowAuthenticated;
+        fire?.();
+        await flushAsync();
+      },
+      wasUnsubscribed: () => unsubscribed,
+    };
+  }
+
+  it("re-renders on a sign-out that happened elsewhere, with no reload and no gesture", async () => {
+    const { container, announce } = await mountWithAuth({
+      pi: [mkVoice("marin")],
+      piCurrent: mkVoice("marin"),
+    });
+    expect(q(container, ".voice-current-host")?.textContent).toBe(
+      "voicesSpeaksWith"
+    );
+
+    await announce(false);
+
+    // Nobody clicked anything and nobody reloaded the tab.
+    expect(q(container, ".voice-current-host")?.textContent).toBe(
+      "signInForTTS"
+    );
+  });
+
+  it("re-reads the catalog rather than repainting the previous session's", async () => {
+    const piVoices = [mkVoice("marin")];
+    const { container, deps, announce } = await mountWithAuth({
+      pi: piVoices,
+      piCurrent: mkVoice("marin"),
+    });
+    expect(deps.getVoices).toHaveBeenCalledTimes(1);
+
+    // The new session is offered a different list — the catalog is fetched per
+    // account, so what was cached belongs to a session that is over.
+    piVoices.splice(0, piVoices.length, mkVoice("ash"));
+    await announce(true);
+
+    expect(deps.getVoices).toHaveBeenCalledTimes(2);
+    expect(rowIds(container)).toEqual(["ash"]);
+    expect(rowOf(container, "marin")).toBeNull();
+  });
+
+  it("re-renders on a sign-in that happened elsewhere", async () => {
+    const { container, announce } = await mountWithAuth({
+      authenticated: false,
+      pi: [mkVoice("marin")],
+      piCurrent: mkVoice("marin"),
+    });
+    expect(q(container, ".voice-current-host")?.textContent).toBe(
+      "signInForTTS"
+    );
+
+    await announce(true);
+
+    expect(q(container, ".voice-current-host")?.textContent).toBe(
+      "voicesSpeaksWith"
+    );
+  });
+
+  it("never lets the previous session's in-flight catalog land in the cache", async () => {
+    // A catalog fetch issued for the old session can still be in flight when
+    // the next one starts. Its answer belongs to an account that is no longer
+    // signed in, and the render token only guards the PAINT — a cache write
+    // happens before it, and would resurface on the next revisit.
+    let pending: ((voices: SpeechSynthesisVoiceRemote[]) => void) | undefined;
+    let nextVoices: SpeechSynthesisVoiceRemote[] | "pending" = [mkVoice("marin")];
+    const { container, announce } = await mountWithAuth({
+      claude: [mkVoice("nova")],
+      overrides: {
+        getVoices: vi.fn((host: string) => {
+          if (host === "claude") return Promise.resolve([mkVoice("nova")]);
+          if (nextVoices === "pending") {
+            return new Promise<SpeechSynthesisVoiceRemote[]>((resolve) => {
+              pending = resolve;
+            });
+          }
+          return Promise.resolve(nextVoices);
+        }),
+      },
+    });
+    expect(rowIds(container)).toEqual(["marin"]);
+
+    // Session 2's fetch never settles...
+    nextVoices = "pending";
+    await announce(true);
+    // ...before session 3 replaces it and settles first.
+    nextVoices = [mkVoice("ash")];
+    await announce(true);
+    expect(rowIds(container)).toEqual(["ash"]);
+
+    // The abandoned fetch finally answers, for a session two changes ago.
+    pending?.([mkVoice("marin")]);
+    await flushAsync();
+
+    // Leave and come back: the revisit reads the cache.
+    hostTab(container, "claude")!.click();
+    await flushAsync();
+    hostTab(container, "pi")!.click();
+    await flushAsync();
+    expect(rowIds(container)).toEqual(["ash"]);
+  });
+
+  it("stops listening for auth when the studio is destroyed", async () => {
+    const { controller, wasUnsubscribed } = await mountWithAuth({
+      pi: [mkVoice("marin")],
+    });
+    controller.destroy();
+    expect(wasUnsubscribed()).toBe(true);
+  });
+});
+
 /**
  * `availability` in the studio (#568).
  *
