@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Safari 目前不支持多语言语音。"
   },
+  "ttsPlaybackRateLabel": {
+    "description": "设置助手语音朗读速度的滑块标签。",
+    "message": "速度"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "解释语音播放速度滑块的提示。",
+    "message": "Say, Pi 的语音朗读速度。从下一条回复开始生效。"
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "由$ttsEngine$驱动的文字转语音",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS声音"
+  },
+  "ttsVolumeLabel": {
+    "description": "设置助手语音音量的滑块标签。",
+    "message": "音量"
+  },
+  "ttsVolumeTooltip": {
+    "description": "解释语音播放音量滑块的提示。",
+    "message": "Say, Pi 的语音音量，相对于系统音量的大小。从下一条回复开始生效。"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "声音暂停 - "
   },
+  "voicePlaybackHeading": {
+    "description": "控制助手语音播放方式的设置组标题。",
+    "message": "语音播放"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "语音设置"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "更改语音",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "当未选择 SayPi 语音且助手使用其自带语音回答时，显示在语音控制栏中；$host$ 是助手名称，例如 Pi。",
     "message": "你的语音：$host$ 自带语音",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "设置的“语音”控制栏中的一行键盘提示。图标是按键：空格键、上下方向键，以及 Shift+空格键。",
     "message": "按空格键试听，↑↓在语音间移动，⇧空格键切回。"
+  },
+  "voicesListenHint": {
+    "message": "点击语音即可收听免费示例。找到喜欢的语音后，选择“使用”。",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "试听选项",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "在某个 host 的工作室中，当该 host 的语音目录加载失败时的错误状态；$host$ 是助手名称。",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "无法保存你的语音选择。请重试。",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "你保存的语音暂时不可用。请稍后重试，或选择其他语音。",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "设置中 AI Chat 选项卡里声音目录部分的副标题。",
     "message": "为每个网站选择朗读回复的声音。"
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "设置中 AI Chat 选项卡里声音目录部分的标题。",
     "message": "声音"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$的语音现已设为$name$。",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "设置的声音目录中，超值档声音的分组标题。由 CSS 渲染为全大写。",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "用于$host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "使用$host$自带的语音",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "设置语音目录中，每个主机对应的“使用此语音”按钮的无障碍标签；$name$ 是语音，$host$ 是助手（例如 Pi、Claude）。",
     "message": "在 $host$ 上使用 $name$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "当浏览器未提供运行语音检测模型所需的初始 WebAssembly 内存时抛出的错误。",
     "message": "无法开始语音检测：此浏览器中 WebAssembly 内存不可用。"
-  },
-  "voicesListeningOptions": {
-    "message": "试听选项",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "点击语音即可收听免费示例。找到喜欢的语音后，选择“使用”。",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "用于$host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$的语音现已设为$name$。",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "无法保存你的语音选择。请重试。",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "使用$host$自带的语音",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "你保存的语音暂时不可用。请稍后重试，或选择其他语音。",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "更改语音",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

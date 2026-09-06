@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Nhãn cho thanh trượt điều chỉnh tốc độ nói của giọng trợ lý.",
+    "message": "Tốc độ"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Chú giải giải thích thanh trượt tốc độ phát giọng nói.",
+    "message": "Tốc độ nói của các giọng trong Say, Pi. Áp dụng từ câu trả lời tiếp theo."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Chuyển văn bản thành giọng nói được hỗ trợ bởi $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Voice"
+  },
+  "ttsVolumeLabel": {
+    "description": "Nhãn cho thanh trượt điều chỉnh độ lớn của giọng trợ lý.",
+    "message": "Âm lượng"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Chú giải giải thích thanh trượt âm lượng phát giọng nói.",
+    "message": "Độ lớn của các giọng trong Say, Pi so với âm lượng hệ thống. Áp dụng từ câu trả lời tiếp theo."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Giọng nói dừng lại -"
   },
+  "voicePlaybackHeading": {
+    "description": "Tiêu đề cho nhóm cài đặt kiểm soát cách phát giọng nói của trợ lý.",
+    "message": "Phát giọng nói"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Cài đặt giọng nói"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Đổi giọng",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Hiển thị trong thanh điều khiển Giọng nói khi chưa chọn giọng Say, Pi và trợ lý trả lời bằng một trong các giọng tích hợp riêng; $host$ là tên trợ lý, ví dụ Pi.",
     "message": "Giọng của bạn: giọng riêng của $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Gợi ý phím tắt một dòng trong thanh điều khiển Giọng nói của phần cài đặt. Các ký hiệu là phím: Space, mũi tên lên/xuống và Shift+Space.",
     "message": "Nhấn Space để nghe, ↑↓ để chuyển giữa các giọng, ⇧Space để chuyển lại."
+  },
+  "voicesListenHint": {
+    "message": "Nhấp vào một giọng nói để nghe mẫu miễn phí. Chọn “Dùng” khi bạn tìm được giọng mình thích.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Tùy chọn nghe",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Trạng thái lỗi bên trong studio của một host khi danh mục giọng nói của host đó không tải được; $host$ là trợ lý.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Không thể lưu giọng nói của bạn. Vui lòng thử lại.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Giọng nói bạn đã lưu hiện không khả dụng. Hãy thử lại sau hoặc chọn giọng khác.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Tiêu đề phụ cho phần danh mục giọng nói trong tab AI Chat của phần cài đặt.",
     "message": "Chọn giọng đọc to câu trả lời trên từng trang web."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Tiêu đề cho phần danh mục giọng nói trong tab AI Chat của phần cài đặt.",
     "message": "Giọng nói"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ hiện là giọng nói của bạn cho $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Tiêu đề nhóm cho các giọng ở phân khúc tiết kiệm trong danh mục giọng nói ở phần cài đặt. Được CSS hiển thị bằng chữ in hoa.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Dùng cho $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Dùng giọng nói riêng của $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Nhãn trợ năng cho nút \"dùng giọng này\" theo từng host trong danh mục giọng của cài đặt; $name$ là giọng, $host$ là trợ lý (ví dụ: Pi, Claude).",
     "message": "Dùng $name$ trên $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Lỗi được đưa ra khi trình duyệt không cung cấp bộ nhớ WebAssembly ban đầu cần để chạy mô hình phát hiện giọng nói.",
     "message": "Không thể bắt đầu phát hiện giọng nói: trình duyệt này không hỗ trợ bộ nhớ WebAssembly."
-  },
-  "voicesListeningOptions": {
-    "message": "Tùy chọn nghe",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Nhấp vào một giọng nói để nghe mẫu miễn phí. Chọn “Dùng” khi bạn tìm được giọng mình thích.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Dùng cho $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ hiện là giọng nói của bạn cho $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Không thể lưu giọng nói của bạn. Vui lòng thử lại.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Dùng giọng nói riêng của $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Giọng nói bạn đã lưu hiện không khả dụng. Hãy thử lại sau hoặc chọn giọng khác.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Đổi giọng",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

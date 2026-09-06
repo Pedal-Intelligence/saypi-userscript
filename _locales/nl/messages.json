@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Meertalige stemmen worden momenteel niet ondersteund in Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Label voor de schuifregelaar waarmee wordt ingesteld hoe snel de stem van de assistent spreekt.",
+    "message": "Snelheid"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Toelichting bij de schuifregelaar voor de afspeelsnelheid van de stem.",
+    "message": "Hoe snel de stemmen van Say, Pi spreken. Geldt vanaf het volgende antwoord."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Tekst-naar-spraak aangedreven door $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -stem"
+  },
+  "ttsVolumeLabel": {
+    "description": "Label voor de schuifregelaar waarmee wordt ingesteld hoe luid de stem van de assistent klinkt.",
+    "message": "Volume"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Toelichting bij de schuifregelaar voor het volume van de stem.",
+    "message": "Hoe luid de stemmen van Say, Pi klinken ten opzichte van het systeemvolume. Geldt vanaf het volgende antwoord."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Stem gepauzeerd -"
   },
+  "voicePlaybackHeading": {
+    "description": "Kop voor de groep instellingen voor het afspelen van de stem van de assistent.",
+    "message": "Spraakweergave"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Spraakinstellingen"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Stem wijzigen",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Wordt in de stemmenbalk weergegeven wanneer er geen Say, Pi-stem is geselecteerd en de assistent antwoordt met een van de eigen ingebouwde stemmen; $host$ is de assistent, bijvoorbeeld Pi.",
     "message": "Je stem: die van $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Hint van één regel voor het toetsenbord in de bedieningsbalk Stemmen in de instellingen. De symbolen zijn toetsen: Spatie, de pijlen omhoog/omlaag en Shift+Spatie.",
     "message": "Druk op Spatie om te luisteren, ↑↓ om tussen stemmen te gaan, ⇧Spatie om terug te schakelen."
+  },
+  "voicesListenHint": {
+    "message": "Klik op een stem om een gratis voorbeeld te horen. Kies ‘Gebruik’ zodra je er een vindt die je bevalt.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Luisteropties",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Foutstatus binnen de studio van één host wanneer de stemmencatalogus van die host niet kon worden geladen; $host$ is de assistent.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Je stem kon niet worden opgeslagen. Probeer het opnieuw.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Je opgeslagen stem is op dit moment niet beschikbaar. Probeer het later opnieuw of kies een andere stem.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Subkop voor de sectie stemcatalogus in het tabblad AI Chat van de instellingen.",
     "message": "Kies de stem die antwoorden op elke site voorleest."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Kop voor de sectie stemcatalogus in het tabblad AI Chat van de instellingen.",
     "message": "Stemmen"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ is nu je stem voor $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Groepskop voor stemmen uit de voordeligere categorie in de stemcatalogus van de instellingen. Wordt door CSS in hoofdletters weergegeven.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Gebruik voor $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Gebruik de eigen stem van $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Toegankelijkheidslabel voor de per-hostknop 'gebruik deze stem' in de instellingen-stemcatalogus; $name$ is de stem, $host$ is de assistent (bijv. Pi, Claude).",
     "message": "Gebruik $name$ op $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fout die wordt opgegooid wanneer de browser het initiële WebAssembly-geheugen dat nodig is om het spraakdetectiemodel te draaien niet aanbiedt.",
     "message": "Spraakdetectie kan niet starten: WebAssembly-geheugen is niet beschikbaar in deze browser."
-  },
-  "voicesListeningOptions": {
-    "message": "Luisteropties",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Klik op een stem om een gratis voorbeeld te horen. Kies ‘Gebruik’ zodra je er een vindt die je bevalt.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Gebruik voor $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ is nu je stem voor $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Je stem kon niet worden opgeslagen. Probeer het opnieuw.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Gebruik de eigen stem van $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Je opgeslagen stem is op dit moment niet beschikbaar. Probeer het later opnieuw of kies een andere stem.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Stem wijzigen",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

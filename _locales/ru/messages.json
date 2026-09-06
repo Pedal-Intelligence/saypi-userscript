@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Многоязычная речь в настоящее время не поддерживается в Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Подпись ползунка, задающего скорость речи ассистента.",
+    "message": "Скорость"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Подсказка о ползунке скорости воспроизведения голоса.",
+    "message": "Скорость речи голосов Say, Pi. Применяется со следующего ответа."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Текст в речь, работающий на движке $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS голос"
+  },
+  "ttsVolumeLabel": {
+    "description": "Подпись ползунка, задающего громкость голоса ассистента.",
+    "message": "Громкость"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Подсказка о ползунке громкости воспроизведения голоса.",
+    "message": "Громкость голосов Say, Pi относительно громкости системы. Применяется со следующего ответа."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Голос остановился -"
   },
+  "voicePlaybackHeading": {
+    "description": "Заголовок группы настроек воспроизведения голоса ассистента.",
+    "message": "Воспроизведение голоса"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Настройки голоса"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Изменить голос",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Показывается на панели выбора голоса, когда голос Say, Pi не выбран и ассистент отвечает одним из собственных встроенных голосов; $host$ — название ассистента, например Pi.",
     "message": "Ваш голос: собственный голос $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Однострочная подсказка по клавишам в панели управления «Голоса» в настройках. Символы — это клавиши: Space, стрелки вверх/вниз и Shift+Space.",
     "message": "Нажмите Space, чтобы слушать, ↑↓ для перехода между голосами, ⇧Space чтобы вернуться."
+  },
+  "voicesListenHint": {
+    "message": "Нажмите на голос, чтобы послушать бесплатный образец. Выберите «Использовать», когда найдёте тот, который вам нравится.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Параметры прослушивания",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Состояние ошибки внутри студии одного хоста, когда не удалось загрузить каталог голосов этого хоста; $host$ — ассистент.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Не удалось сохранить ваш голос. Попробуйте ещё раз.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Сохранённый голос сейчас недоступен. Попробуйте позже или выберите другой голос.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Подзаголовок раздела каталога голосов на вкладке AI Chat в настройках.",
     "message": "Выберите голос, который будет читать ответы вслух на каждом сайте."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Заголовок раздела каталога голосов на вкладке AI Chat в настройках.",
     "message": "Голоса"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ теперь ваш голос для $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Заголовок группы голосов уровня value в каталоге голосов в настройках. Отображается в верхнем регистре с помощью CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Использовать для $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Использовать собственный голос $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Доступная подпись для кнопки «использовать этот голос» для конкретного хоста в каталоге голосов в настройках; $name$ — голос, $host$ — ассистент (например, Pi, Claude).",
     "message": "Использовать $name$ в $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Ошибка, возникающая, когда браузер не предоставляет начальную память WebAssembly, необходимую для запуска модели распознавания голоса.",
     "message": "Распознавание голоса не может запуститься: в этом браузере недоступна память WebAssembly."
-  },
-  "voicesListeningOptions": {
-    "message": "Параметры прослушивания",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Нажмите на голос, чтобы послушать бесплатный образец. Выберите «Использовать», когда найдёте тот, который вам нравится.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Использовать для $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ теперь ваш голос для $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Не удалось сохранить ваш голос. Попробуйте ещё раз.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Использовать собственный голос $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Сохранённый голос сейчас недоступен. Попробуйте позже или выберите другой голос.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Изменить голос",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

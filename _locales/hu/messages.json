@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "A Safari jelenleg nem támogatja a többnyelvű hangokat."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "A segéd beszédsebességét beállító csúszka címkéje.",
+    "message": "Sebesség"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "A hang lejátszási sebességét beállító csúszka magyarázata.",
+    "message": "Milyen gyorsan beszélnek a Say, Pi hangjai. A következő választól érvényes."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Szövegbeszéd által működtetve: $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS hang"
+  },
+  "ttsVolumeLabel": {
+    "description": "A segéd hangerejét beállító csúszka címkéje.",
+    "message": "Hangerő"
+  },
+  "ttsVolumeTooltip": {
+    "description": "A hang lejátszási hangerejét beállító csúszka magyarázata.",
+    "message": "Milyen hangosak a Say, Pi hangjai a rendszer hangerejéhez képest. A következő választól érvényes."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "A hang megállt -"
   },
+  "voicePlaybackHeading": {
+    "description": "A segéd hangjának lejátszását vezérlő beállításcsoport címe.",
+    "message": "Hang lejátszása"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Hangbeállítások"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Hang módosítása",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "A Hangok vezérlősávjában jelenik meg, amikor nincs Say, Pi-hang kiválasztva, és az asszisztens a saját beépített hangjainak egyikén válaszol; a $host$ az asszisztens, például Pi.",
     "message": "Saját hang: $host$ hangja",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Egysoros billentyűzetes súgó a Beállítások Hangok vezérlősávjában. A jelek billentyűk: Szóköz, fel/le nyilak és Shift+Szóköz.",
     "message": "Nyomj szóközt a meghallgatáshoz, ↑↓ a hangok közti lépkedéshez, ⇧Szóköz a visszaváltáshoz."
+  },
+  "voicesListenHint": {
+    "message": "Kattints egy hangra az ingyenes minta meghallgatásához. Ha találtál egyet, amelyik tetszik, válaszd a „Használat” lehetőséget.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Hallgatási beállítások",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Hibaállapot egy hoszt stúdióján belül, amikor a hoszt hangkatalógusát nem sikerült betölteni; $host$ az asszisztens.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Nem sikerült menteni a hangodat. Próbáld újra.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "A mentett hangod jelenleg nem érhető el. Próbáld újra később, vagy válassz másik hangot.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Alcím a hangkatalógus szakaszához a beállítások AI Chat lapján.",
     "message": "Válaszd ki, melyik hang olvassa fel az adott oldalon a válaszokat."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Címsor a hangkatalógus szakaszához a beállítások AI Chat lapján.",
     "message": "Hangok"
+  },
+  "voicesSelectedOnHost": {
+    "message": "A kiválasztott hangod mostantól $name$ a(z) $host$ felületén.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Csoportcím a kedvezőbb árú hangokhoz a beállítások hangkatalógusában. CSS nagybetűssé alakítja.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Használat itt: $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "A(z) $host$ saját hangjának használata",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Akadálymentes címke a beállítások hangkatalógusában található, gazdagépenkénti „használd ezt a hangot” gombhoz; $name$ a hang, $host$ az asszisztens (pl. Pi, Claude).",
     "message": "$name$ használata itt: $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Hiba, amely akkor keletkezik, ha a böngésző nem teszi elérhetővé a hangérzékelő modell futtatásához szükséges kezdeti WebAssembly-memóriát.",
     "message": "A hangérzékelés nem indítható el: ebben a böngészőben nem érhető el a WebAssembly-memória."
-  },
-  "voicesListeningOptions": {
-    "message": "Hallgatási beállítások",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Kattints egy hangra az ingyenes minta meghallgatásához. Ha találtál egyet, amelyik tetszik, válaszd a „Használat” lehetőséget.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Használat itt: $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "A kiválasztott hangod mostantól $name$ a(z) $host$ felületén.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Nem sikerült menteni a hangodat. Próbáld újra.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "A(z) $host$ saját hangjának használata",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "A mentett hangod jelenleg nem érhető el. Próbáld újra később, vagy válassz másik hangot.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Hang módosítása",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

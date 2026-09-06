@@ -16,7 +16,12 @@ vi.mock("../../src/state-machines/AudioRetryMachine", () => ({ machine: {} }));
 vi.mock("../../src/chatbots/ChatbotService", () => ({ ChatbotService: {} }));
 vi.mock("../../src/compat/BrowserCompatibilityModule", () => ({ BrowserCompatibilityModule: { getInstance: () => ({ checkTTSCompatibility() {} }) } }));
 vi.mock("../../src/audio/OffscreenAudioBridge.js", () => ({ default: {} }));
-vi.mock("../../src/prefs/PreferenceModule", () => ({ UserPreferenceModule: { getInstance: () => ({ getCachedQuietMode: () => false }) } }));
+vi.mock("../../src/prefs/PreferenceModule", () => ({ UserPreferenceModule: { getInstance: () => ({
+  getCachedQuietMode: () => false,
+  // loadAudio also resolves the voice-playback preferences (#96/#117).
+  getCachedTtsVolume: () => 100,
+  getCachedTtsPlaybackRate: () => 1,
+}) } }));
 vi.mock("../../src/tts/SpeechSynthesisModule", () => ({ SpeechSynthesisModule: {} }));
 vi.mock("../../src/ConfigModule", () => ({ config: { apiServerUrl: "https://api.saypi.ai" } }));
 

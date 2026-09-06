@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "বহুভাষিক ভয়েস বর্তমানে সাফারিতে সমর্থিত নয়।"
   },
+  "ttsPlaybackRateLabel": {
+    "description": "সহকারীর কণ্ঠ কত দ্রুত কথা বলবে, তা নির্ধারণকারী স্লাইডারের লেবেল।",
+    "message": "গতি"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "ভয়েস প্লেব্যাকের গতি স্লাইডার ব্যাখ্যা করা টুলটিপ।",
+    "message": "Say, Pi-এর কণ্ঠ কত দ্রুত কথা বলবে। পরের উত্তরের ক্ষেত্রে প্রযোজ্য।"
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$ দ্বারা পরিচালিত টেক্সট-টু-স্পিচ",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "টিটিএস ভয়েস"
+  },
+  "ttsVolumeLabel": {
+    "description": "সহকারীর কণ্ঠ কত জোরে শোনা যাবে, তা নির্ধারণকারী স্লাইডারের লেবেল।",
+    "message": "ভলিউম"
+  },
+  "ttsVolumeTooltip": {
+    "description": "ভয়েস প্লেব্যাকের ভলিউম স্লাইডার ব্যাখ্যা করা টুলটিপ।",
+    "message": "সিস্টেমের ভলিউমের তুলনায় Say, Pi-এর কণ্ঠ কত জোরে শোনা যাবে। পরের উত্তরের ক্ষেত্রে প্রযোজ্য।"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "ভয়েস বিরতি -"
   },
+  "voicePlaybackHeading": {
+    "description": "সহকারীর কণ্ঠ কীভাবে প্লে হবে, তা নিয়ন্ত্রণকারী সেটিংসের গ্রুপের শিরোনাম।",
+    "message": "ভয়েস প্লেব্যাক"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "ভয়েস সেটিংস"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "কণ্ঠ পরিবর্তন করুন",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "কোনো SayPi ভয়েস নির্বাচিত না থাকলে এবং সহকারী তার নিজস্ব অন্তর্নির্মিত ভয়েসগুলোর একটিতে উত্তর দিলে Voices নিয়ন্ত্রণ বারে দেখানো হয়; $host$ হলো সহকারীর নাম, যেমন Pi।",
     "message": "আপনার ভয়েস: $host$-এর নিজস্ব",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "সেটিংসের Voices কন্ট্রোল বারে এক লাইনের কীবোর্ড হিন্ট। চিহ্নগুলো কীগুলোর নাম: Space, আপ/ডাউন অ্যারো, এবং Shift+Space।",
     "message": "শুনতে Space চাপুন, ভয়েস বদলাতে ↑↓, আগেরটিতে ফিরতে ⇧Space।"
+  },
+  "voicesListenHint": {
+    "message": "বিনামূল্যে নমুনা শুনতে একটি কণ্ঠে ক্লিক করুন। পছন্দের কণ্ঠ পেলে “ব্যবহার করুন” বেছে নিন।",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "শোনার বিকল্প",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "একটি হোস্টের স্টুডিওর ভেতরে ত্রুটি অবস্থা, যখন ওই হোস্টের ভয়েস ক্যাটালগ লোড হতে ব্যর্থ হয়; $host$ হলো সহকারী।",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "আপনার কণ্ঠ সংরক্ষণ করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "আপনার সংরক্ষিত কণ্ঠ এখন উপলব্ধ নেই। পরে আবার চেষ্টা করুন, অথবা অন্য কণ্ঠ বেছে নিন।",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "সেটিংসের AI Chat ট্যাবে ভয়েস ক্যাটালগ সেকশনের উপশিরোনাম।",
     "message": "প্রতিটি সাইটে উত্তরগুলো যে ভয়েসে জোরে পড়ে শোনায়, সেটি বেছে নিন।"
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "সেটিংসের AI Chat ট্যাবে ভয়েস ক্যাটালগ সেকশনের শিরোনাম।",
     "message": "ভয়েস"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$-এর জন্য এখন আপনার কণ্ঠ হলো $name$।",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "সেটিংস ভয়েস ক্যাটালগে ভ্যালু-টিয়ার ভয়েসগুলোর গ্রুপ শিরোনাম। CSS দিয়ে বড় হাতের অক্ষরে দেখানো হয়।",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "$host$-এর জন্য ব্যবহার করুন",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$-এর নিজস্ব কণ্ঠ ব্যবহার করুন",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "সেটিংসের ভয়েস ক্যাটালগে প্রতি-হোস্ট “এই ভয়েস ব্যবহার করুন” বোতামের অ্যাক্সেসিবল লেবেল; $name$ হলো ভয়েস, $host$ হলো অ্যাসিস্ট্যান্ট (যেমন Pi, Claude)।",
     "message": "$host$-এ $name$ ব্যবহার করুন",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "ভয়েস-ডিটেকশন মডেল চালাতে প্রয়োজনীয় প্রাথমিক WebAssembly মেমরি ব্রাউজার সরবরাহ না করলে যে ত্রুটি দেখায়।",
     "message": "ভয়েস ডিটেকশন শুরু করা যাচ্ছে না: এই ব্রাউজারে WebAssembly মেমরি উপলব্ধ নয়।"
-  },
-  "voicesListeningOptions": {
-    "message": "শোনার বিকল্প",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "বিনামূল্যে নমুনা শুনতে একটি কণ্ঠে ক্লিক করুন। পছন্দের কণ্ঠ পেলে “ব্যবহার করুন” বেছে নিন।",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "$host$-এর জন্য ব্যবহার করুন",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$-এর জন্য এখন আপনার কণ্ঠ হলো $name$।",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "আপনার কণ্ঠ সংরক্ষণ করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "$host$-এর নিজস্ব কণ্ঠ ব্যবহার করুন",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "আপনার সংরক্ষিত কণ্ঠ এখন উপলব্ধ নেই। পরে আবার চেষ্টা করুন, অথবা অন্য কণ্ঠ বেছে নিন।",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "কণ্ঠ পরিবর্তন করুন",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

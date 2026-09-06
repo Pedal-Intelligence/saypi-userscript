@@ -129,6 +129,26 @@
     "message": "Speak softly — picks up quieter speech and lowers the assistant's reply volume, so you can use voice around others.",
     "description": "Tooltip explaining what quiet/whisper mode does."
   },
+  "voicePlaybackHeading": {
+    "message": "Voice playback",
+    "description": "Heading for the group of settings controlling how the assistant's voice is played back."
+  },
+  "ttsPlaybackRateLabel": {
+    "message": "Speed",
+    "description": "Label for the slider that sets how fast the assistant's voice speaks."
+  },
+  "ttsPlaybackRateTooltip": {
+    "message": "How fast Say, Pi\u2019s voices speak. Applies from the next reply.",
+    "description": "Tooltip explaining the voice playback speed slider."
+  },
+  "ttsVolumeLabel": {
+    "message": "Volume",
+    "description": "Label for the slider that sets how loud the assistant's voice is."
+  },
+  "ttsVolumeTooltip": {
+    "message": "How loud Say, Pi\u2019s voices are, relative to your system volume. Applies from the next reply.",
+    "description": "Tooltip explaining the voice playback volume slider."
+  },
   "preferedLanguage": {
     "message": "Language",
     "description": "Label for a control to select the prefered transcription language."

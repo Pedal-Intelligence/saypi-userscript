@@ -1,5 +1,6 @@
 import { logger } from "../LoggingModule.js";
 import { incrementUsage, decrementUsage, registerMessageHandler } from "./media_coordinator";
+import { loadTtsSource } from "../audio/ttsPlayback";
 
 const audioHandlerGlobal = window as any;
 if (!audioHandlerGlobal.__saypiAudioHandlerLoaded) {
@@ -160,7 +161,13 @@ export function isAudioRequestFromOwner(
   return sourceTabId === currentOwner;
 }
 
-function loadAudio(url: string, tabId: number, playImmediately: boolean = true, volume?: number) {
+function loadAudio(
+  url: string,
+  tabId: number,
+  playImmediately: boolean = true,
+  volume?: number,
+  playbackRate?: number
+) {
   if (!audioElement) {
     initializeAudio();
   }
@@ -223,13 +230,12 @@ function loadAudio(url: string, tabId: number, playImmediately: boolean = true, 
       decrementUsage('audio');
     }) as OnErrorEventHandler;
     
-    // Set the source
-    audioElement.src = url;
-
-    // Apply quiet-mode playback volume when provided (#437); default stays full.
-    if (typeof volume === "number" && isFinite(volume)) {
-      audioElement.volume = Math.min(1, Math.max(0, volume));
-    }
+    // Set the source, then the requesting tab's playback settings. Order
+    // matters (the media load algorithm resets playbackRate on a new src), and
+    // an omitted speed resets this SHARED element to normal rather than
+    // inheriting the previous tab's (#96). Volume is applied only when the
+    // request carries one (#437 / #117).
+    loadTtsSource(audioElement, url, { volume, playbackRate });
 
     if (playImmediately) {
       logger.debug(`[SayPi Audio Handler] Attempting to play audio from: ${url}`);
@@ -459,7 +465,7 @@ if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
     if (message.url) {
       logger.debug(`[SayPi Audio Handler] Processing AUDIO_LOAD_REQUEST with URL: ${message.url}`);
       const autoPlay = message.autoPlay !== false; // Default to true if not specified
-      return loadAudio(message.url, sourceTabId, autoPlay, message.volume);
+      return loadAudio(message.url, sourceTabId, autoPlay, message.volume, message.playbackRate);
     } else {
       logger.warn(`[SayPi Audio Handler] Missing URL in AUDIO_LOAD_REQUEST`);
       return { success: false, error: "No URL provided for loading audio" };

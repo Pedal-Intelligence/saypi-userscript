@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "現在、Safari では多言語音声はサポートされていません。"
   },
+  "ttsPlaybackRateLabel": {
+    "description": "アシスタントの音声が話す速さを設定するスライダーのラベル。",
+    "message": "速度"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "音声再生速度スライダーを説明するツールチップ。",
+    "message": "Say, Piの音声が話す速さ。次の返信から適用されます。"
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$によって駆動されるテキスト読み上げ",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS音声"
+  },
+  "ttsVolumeLabel": {
+    "description": "アシスタントの音声の大きさを設定するスライダーのラベル。",
+    "message": "音量"
+  },
+  "ttsVolumeTooltip": {
+    "description": "音声再生音量スライダーを説明するツールチップ。",
+    "message": "システム音量に対するSay, Piの音声の大きさ。次の返信から適用されます。"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "声が一時停止 - "
   },
+  "voicePlaybackHeading": {
+    "description": "アシスタントの音声の再生方法を設定するグループの見出し。",
+    "message": "音声再生"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "音声設定"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "音声を変更",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Say, Pi の音声が選択されておらず、アシスタントが内蔵音声のいずれかで応答するときに、音声コントロールバーに表示されます。$host$ はアシスタント名です（例: Pi）。",
     "message": "音声: $host$ 固有の音声",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "設定の「音声」コントロールバーにある1行のキーボードヒント。記号はキー（Space、上下矢印、Shift+Space）を表す。",
     "message": "Space で再生、↑↓ で音声を移動、⇧Space で戻す"
+  },
+  "voicesListenHint": {
+    "message": "音声をクリックすると無料サンプルを聴けます。気に入った音声が見つかったら「使う」を選んでください。",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "試聴オプション",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "特定ホストのスタジオ内で、そのホストの音声カタログの読み込みに失敗したときのエラー状態。$host$ はアシスタント名。",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "音声の設定を保存できませんでした。もう一度お試しください。",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "保存した音声は現在利用できません。しばらくしてからもう一度試すか、別の音声を選んでください。",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "設定の AI Chat タブにある音声カタログ セクションのサブ見出し。",
     "message": "各サイトで返信を読み上げる音声を選びます。"
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "設定の AI Chat タブにある音声カタログ セクションの見出し。",
     "message": "音声"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$で使う音声を$name$に設定しました。",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "設定の音声カタログでのバリュー層音声のグループ見出し。CSS により大文字表示される。",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "$host$で使う",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$標準の音声を使う",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "設定の音声カタログで、ホストごとの「この音声を使う」ボタンのアクセシブルなラベル。$name$ は音声名、$host$ はアシスタント（例: Pi、Claude）。",
     "message": "$host$で$name$を使う",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "音声検出モデルの実行に必要な初期 WebAssembly メモリがブラウザで公開されていない場合に投げられるエラー。",
     "message": "音声検出を開始できません: このブラウザでは WebAssembly メモリを利用できません。"
-  },
-  "voicesListeningOptions": {
-    "message": "試聴オプション",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "音声をクリックすると無料サンプルを聴けます。気に入った音声が見つかったら「使う」を選んでください。",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "$host$で使う",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$で使う音声を$name$に設定しました。",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "音声の設定を保存できませんでした。もう一度お試しください。",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "$host$標準の音声を使う",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "保存した音声は現在利用できません。しばらくしてからもう一度試すか、別の音声を選んでください。",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "音声を変更",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

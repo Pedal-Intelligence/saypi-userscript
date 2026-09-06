@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Οι πολύγλωσσες φωνές δεν υποστηρίζονται αυτήν τη στιγμή στο Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Ετικέτα για το ρυθμιστικό που καθορίζει πόσο γρήγορα μιλά η φωνή του βοηθού.",
+    "message": "Ταχύτητα"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Επεξήγηση για το ρυθμιστικό ταχύτητας αναπαραγωγής φωνής.",
+    "message": "Πόσο γρήγορα μιλούν οι φωνές του Say, Pi. Ισχύει από την επόμενη απάντηση."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Σύνθεση ομιλίας που τροφοδοτείται από $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Φωνή TTS"
+  },
+  "ttsVolumeLabel": {
+    "description": "Ετικέτα για το ρυθμιστικό που καθορίζει πόσο δυνατά ακούγεται η φωνή του βοηθού.",
+    "message": "Ένταση"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Επεξήγηση για το ρυθμιστικό έντασης αναπαραγωγής φωνής.",
+    "message": "Πόσο δυνατά ακούγονται οι φωνές του Say, Pi σε σχέση με την ένταση του συστήματός σας. Ισχύει από την επόμενη απάντηση."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Η φωνή σταμάτησε -"
   },
+  "voicePlaybackHeading": {
+    "description": "Επικεφαλίδα για την ομάδα ρυθμίσεων που ελέγχουν τον τρόπο αναπαραγωγής της φωνής του βοηθού.",
+    "message": "Αναπαραγωγή φωνής"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ρυθμίσεις φωνής"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Αλλαγή φωνής",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Εμφανίζεται στη γραμμή ελέγχου «Φωνές» όταν δεν έχει επιλεγεί φωνή του Say, Pi και ο βοηθός απαντά με μία από τις δικές του ενσωματωμένες φωνές· το $host$ είναι ο βοηθός, π.χ. Pi.",
     "message": "Η φωνή σας: της/του $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Υπόδειξη πληκτρολογίου μίας γραμμής στη γραμμή ελέγχου Φωνών στις ρυθμίσεις. Τα σύμβολα είναι πλήκτρα: Space, τα βέλη πάνω/κάτω και Shift+Space.",
     "message": "Πατήστε Space για ακρόαση, ↑↓ για μετακίνηση μεταξύ φωνών, ⇧Space για επιστροφή."
+  },
+  "voicesListenHint": {
+    "message": "Κάνε κλικ σε μια φωνή για να ακούσεις ένα δωρεάν δείγμα. Επίλεξε «Χρήση» όταν βρεις κάποια που σου αρέσει.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Επιλογές ακρόασης",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Κατάσταση σφάλματος μέσα στο στούντιο ενός host όταν απέτυχε να φορτώσει ο κατάλογος φωνών αυτού του host· το $host$ είναι ο βοηθός.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Δεν ήταν δυνατή η αποθήκευση της φωνής σου. Δοκίμασε ξανά.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Η αποθηκευμένη φωνή σου δεν είναι διαθέσιμη αυτή τη στιγμή. Δοκίμασε ξανά αργότερα ή επίλεξε άλλη φωνή.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Υποεπικεφαλίδα για την ενότητα καταλόγου φωνών στις ρυθμίσεις, καρτέλα AI Chat",
     "message": "Διάλεξε τη φωνή που διαβάζει τις απαντήσεις δυνατά σε κάθε ιστότοπο."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Επικεφαλίδα για την ενότητα καταλόγου φωνών στις ρυθμίσεις, καρτέλα AI Chat",
     "message": "Φωνές"
+  },
+  "voicesSelectedOnHost": {
+    "message": "Η φωνή σου για το $host$ είναι πλέον η $name$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Επικεφαλίδα ομάδας για φωνές κατηγορίας value στον κατάλογο φωνών των ρυθμίσεων. Εμφανίζεται με κεφαλαία μέσω CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Χρήση για $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Χρήση της ενσωματωμένης φωνής του $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Ετικέτα προσβασιμότητας για το κουμπί «χρήση αυτής της φωνής» ανά host στον κατάλογο φωνών στις ρυθμίσεις· το $name$ είναι η φωνή, το $host$ είναι ο βοηθός (π.χ. Pi, Claude).",
     "message": "Χρήση του/της $name$ στο $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Σφάλμα που προκύπτει όταν το πρόγραμμα περιήγησης δεν εκθέτει την αρχική μνήμη WebAssembly που απαιτείται για την εκτέλεση του μοντέλου ανίχνευσης φωνής.",
     "message": "Η ανίχνευση φωνής δεν μπορεί να ξεκινήσει: η μνήμη WebAssembly δεν είναι διαθέσιμη σε αυτό το πρόγραμμα περιήγησης."
-  },
-  "voicesListeningOptions": {
-    "message": "Επιλογές ακρόασης",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Κάνε κλικ σε μια φωνή για να ακούσεις ένα δωρεάν δείγμα. Επίλεξε «Χρήση» όταν βρεις κάποια που σου αρέσει.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Χρήση για $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "Η φωνή σου για το $host$ είναι πλέον η $name$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Δεν ήταν δυνατή η αποθήκευση της φωνής σου. Δοκίμασε ξανά.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Χρήση της ενσωματωμένης φωνής του $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Η αποθηκευμένη φωνή σου δεν είναι διαθέσιμη αυτή τη στιγμή. Δοκίμασε ξανά αργότερα ή επίλεξε άλλη φωνή.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Αλλαγή φωνής",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

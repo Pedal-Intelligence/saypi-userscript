@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Flersprogede stemmer understøttes i øjeblikket ikke i Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Etikette til skyderen, der indstiller, hvor hurtigt assistentens stemme taler.",
+    "message": "Hastighed"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Værktøjstip, der forklarer skyderen til stemmeafspilningshastighed.",
+    "message": "Hvor hurtigt Say, Pi’s stemmer taler. Gælder fra næste svar."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Tekst-til-tale drevet af $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts stemme"
+  },
+  "ttsVolumeLabel": {
+    "description": "Etikette til skyderen, der indstiller, hvor højt assistentens stemme afspilles.",
+    "message": "Lydstyrke"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Værktøjstip, der forklarer skyderen til lydstyrken for stemmeafspilning.",
+    "message": "Hvor højt Say, Pi’s stemmer afspilles i forhold til systemets lydstyrke. Gælder fra næste svar."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Stemme pausede -"
   },
+  "voicePlaybackHeading": {
+    "description": "Overskrift for gruppen af indstillinger, der styrer, hvordan assistentens stemme afspilles.",
+    "message": "Stemmeafspilning"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Stemmeindstillinger"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Skift stemme",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Vises i stemmekontrollinjen, når ingen Say, Pi-stemme er valgt, og assistenten i stedet svarer med en af sine egne indbyggede stemmer; $host$ er assistenten, f.eks. Pi.",
     "message": "Din stemme: $host$'s egen",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Hint på én linje til tastaturbrug i indstillingskontrollen for Stemmer. Symbolerne er taster: mellemrum, pil op/ned og Skift+mellemrum.",
     "message": "Tryk på mellemrum for at lytte, ↑↓ for at skifte mellem stemmer, ⇧Mellemrum for at skifte tilbage."
+  },
+  "voicesListenHint": {
+    "message": "Klik på en stemme for at høre en gratis prøve. Vælg »Brug«, når du finder en, du kan lide.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Lytteindstillinger",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Fejltilstand inde i én værts studie, når den værts stemmekatalog ikke kunne indlæses; $host$ er assistenten.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Din stemme kunne ikke gemmes. Prøv igen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Din gemte stemme er ikke tilgængelig lige nu. Prøv igen senere, eller vælg en anden stemme.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Underoverskrift til stemmekatalog-sektionen i fanen AI Chat i indstillinger",
     "message": "Vælg den stemme, der læser svar højt på hvert websted."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Overskrift til stemmekatalog-sektionen i fanen AI Chat i indstillinger",
     "message": "Stemmer"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ er nu din stemme til $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Gruppeoverskrift for value-tier-stemmer i stemmekataloget i indstillinger. Renderes med store bogstaver af CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Brug til $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Brug $host$s egen stemme",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Tilgængelig etiket for knappen 'brug denne stemme' pr. vært i indstillingernes stemmekatalog; $name$ er stemmen, $host$ er assistenten (f.eks. Pi, Claude).",
     "message": "Brug $name$ på $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fejl, der kastes, når browseren ikke eksponerer den indledende WebAssembly-hukommelse, der er nødvendig for at køre stemmedetektionsmodellen.",
     "message": "Stemmedetektion kan ikke starte: WebAssembly-hukommelse er ikke tilgængelig i denne browser."
-  },
-  "voicesListeningOptions": {
-    "message": "Lytteindstillinger",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Klik på en stemme for at høre en gratis prøve. Vælg »Brug«, når du finder en, du kan lide.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Brug til $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ er nu din stemme til $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Din stemme kunne ikke gemmes. Prøv igen.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Brug $host$s egen stemme",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Din gemte stemme er ikke tilgængelig lige nu. Prøv igen senere, eller vælg en anden stemme.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Skift stemme",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

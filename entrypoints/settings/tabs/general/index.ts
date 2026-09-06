@@ -3,6 +3,14 @@ import { TabController } from '../../shared/types';
 import { getStoredValue, setStoredValue } from '../../shared/storage';
 import { sendMessageToActiveTab } from '../../shared/messaging';
 import { mountInto, unmountFrom } from '../../../../src/ui/preact/mount';
+import {
+  DEFAULT_TTS_PLAYBACK_RATE,
+  resolveTtsPlaybackRate,
+} from '../../../../src/tts/playbackRate';
+import {
+  DEFAULT_TTS_VOLUME,
+  resolveTtsVolumeLevel,
+} from '../../../../src/tts/quietVolume';
 import { GeneralPanel } from './GeneralPanel';
 import dataSharingPortraitUrl from '../../../../src/popup/data-sharing-portrait.jpg';
 import './general.css';
@@ -21,6 +29,7 @@ export class GeneralTab implements TabController {
     // Initialize components
     await this.setupSoundEffects();
     await this.setupQuietMode();
+    await this.setupVoicePlayback();
     await this.setupAnalytics();
     await this.setupConsent();
     this.setupClearPreferences();
@@ -83,6 +92,78 @@ export class GeneralTab implements TabController {
         await setStoredValue('quietMode', input.checked);
         input.parentElement?.classList.toggle('checked', input.checked);
         sendMessageToActiveTab({ quietMode: input.checked });
+      } catch (error) {
+        // Error already logged by setStoredValue; prevent unhandled rejection.
+      }
+    });
+  }
+
+  /**
+   * Voice playback (#96 speed / #117 volume). Two sliders over the same
+   * preference plumbing as the toggles: persist on `change` (not on every
+   * `input` frame, which would hammer storage while dragging) and broadcast to
+   * the open chat tab so it applies from its next utterance.
+   */
+  private async setupVoicePlayback(): Promise<void> {
+    await this.setupRangePreference({
+      inputId: 'tts-playback-rate',
+      readoutId: 'tts-playback-rate-value',
+      storageKey: 'ttsPlaybackRate',
+      defaultValue: DEFAULT_TTS_PLAYBACK_RATE,
+      resolve: resolveTtsPlaybackRate,
+      format: (rate) =>
+        `${new Intl.NumberFormat(undefined, {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        }).format(rate)}\u00d7`,
+    });
+
+    await this.setupRangePreference({
+      inputId: 'tts-volume',
+      readoutId: 'tts-volume-value',
+      storageKey: 'ttsVolume',
+      defaultValue: DEFAULT_TTS_VOLUME,
+      resolve: resolveTtsVolumeLevel,
+      format: (level) => `${level}%`,
+    });
+  }
+
+  /**
+   * Wire one numeric range preference: load, show, normalise, persist, publish.
+   * Everything the slider emits goes through `resolve`, so neither the readout
+   * nor storage can ever hold a value the audio path would reject.
+   */
+  private async setupRangePreference(options: {
+    inputId: string;
+    readoutId: string;
+    storageKey: string;
+    defaultValue: number;
+    resolve: (value: unknown) => number;
+    format: (value: number) => string;
+  }): Promise<void> {
+    const { inputId, readoutId, storageKey, defaultValue, resolve, format } = options;
+    const input = this.container.querySelector<HTMLInputElement>(`#${inputId}`);
+    if (!input) return;
+    const readout = this.container.querySelector<HTMLElement>(`#${readoutId}`);
+
+    const show = (value: number) => {
+      input.value = String(value);
+      if (readout) readout.textContent = format(value);
+    };
+
+    show(resolve(await getStoredValue(storageKey, defaultValue)));
+
+    // Live feedback while dragging; storage only settles on release.
+    input.addEventListener('input', () => {
+      if (readout) readout.textContent = format(resolve(input.value));
+    });
+
+    input.addEventListener('change', async () => {
+      const value = resolve(input.value);
+      show(value);
+      try {
+        await setStoredValue(storageKey, value);
+        sendMessageToActiveTab({ [storageKey]: value });
       } catch (error) {
         // Error already logged by setStoredValue; prevent unhandled rejection.
       }

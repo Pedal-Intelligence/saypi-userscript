@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Flerspråkiga röster stöds för närvarande inte i Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Etikett för reglaget som ställer in hur snabbt assistentens röst talar.",
+    "message": "Hastighet"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Beskrivning av reglaget för röstuppspelningshastighet.",
+    "message": "Hur snabbt Say, Pi:s röster talar. Gäller från nästa svar."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Text-till-tal drivet av $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -röst"
+  },
+  "ttsVolumeLabel": {
+    "description": "Etikett för reglaget som ställer in hur högt assistentens röst låter.",
+    "message": "Volym"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Beskrivning av reglaget för röstuppspelningsvolym.",
+    "message": "Hur högt Say, Pi:s röster låter i förhållande till systemvolymen. Gäller från nästa svar."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Röst pausade -"
   },
+  "voicePlaybackHeading": {
+    "description": "Rubrik för gruppen med inställningar som styr hur assistentens röst spelas upp.",
+    "message": "Röstuppspelning"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Röstinställningar"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Byt röst",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Visas i röstfältet när ingen Say, Pi-röst är vald och assistenten svarar med en av sina egna inbyggda röster; $host$ är assistenten, till exempel Pi.",
     "message": "Din röst: $host$:s egen",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Kort tangentbordstips på en rad i inställningarnas kontrollrad för Röster. Symbolerna är tangenter: mellanslag, upp-/nedpilarna och Skift+mellanslag.",
     "message": "Tryck på mellanslag för att lyssna, ↑↓ för att flytta mellan röster, ⇧mellanslag för att växla tillbaka."
+  },
+  "voicesListenHint": {
+    "message": "Klicka på en röst för att höra ett gratis prov. Välj ”Använd” när du hittar en du gillar.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Lyssningsalternativ",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Felläge i en värds studio när värdens röstkatalog inte gick att läsa in; $host$ är assistenten.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Det gick inte att spara din röst. Försök igen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Din sparade röst är inte tillgänglig just nu. Försök igen senare eller välj en annan röst.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Underrubrik för röstkatalogavsnittet i inställningsfliken AI Chat",
     "message": "Välj rösten som läser upp svaren på varje webbplats."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Rubrik för röstkatalogavsnittet i inställningsfliken AI Chat",
     "message": "Röster"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ är nu din röst för $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Grupprubrik för röster i värdeklassen i inställningarnas röstkatalog. Renderas med versaler via CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Använd för $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Använd $host$s egen röst",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Tillgänglighetsetikett för knappen ”använd den här rösten” per värd i röstkatalogen i inställningarna; $name$ är rösten, $host$ är assistenten (t.ex. Pi, Claude).",
     "message": "Använd $name$ på $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Fel som uppstår när webbläsaren inte exponerar det initiala WebAssembly-minnet som behövs för att köra röstigenkänningsmodellen.",
     "message": "Röstigenkänning kan inte starta: WebAssembly-minne är inte tillgängligt i den här webbläsaren."
-  },
-  "voicesListeningOptions": {
-    "message": "Lyssningsalternativ",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Klicka på en röst för att höra ett gratis prov. Välj ”Använd” när du hittar en du gillar.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Använd för $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ är nu din röst för $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Det gick inte att spara din röst. Försök igen.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Använd $host$s egen röst",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Din sparade röst är inte tillgänglig just nu. Försök igen senare eller välj en annan röst.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Byt röst",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }
