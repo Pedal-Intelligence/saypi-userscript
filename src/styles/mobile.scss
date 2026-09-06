@@ -145,8 +145,16 @@ html.immersive-view {
    past the right edge — the literal symptom #94 was filed for ("the button may
    appear off the screen"). Allow it to wrap onto a second line instead. This is a
    no-op whenever the row already fits, and stays scoped to mobile so desktop keeps
-   its single-line bar. */
-html.mobile-device .chat-message .message-action-bar {
+   its single-line bar.
+
+   Scoped to `body.pi` deliberately. `.message-action-bar` is a marker this
+   extension puts on whatever `getActionBarSelector()` finds, on every host — and
+   on Claude that selector is Claude's own native flex container. Only pi.ai
+   actually receives `.saypi-tts-controls` (PiMessageControls.decorateControls is
+   the sole injector), so only pi.ai's bar gains our buttons and can overflow
+   because of them. Writing `flex-wrap` onto the other hosts' native chrome would
+   be changing their layout to fix a problem they do not have. */
+html.mobile-device body.pi .chat-message .message-action-bar {
   flex-wrap: wrap;
 }
 
