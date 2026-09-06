@@ -264,6 +264,17 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     });
     this.observers.push(newMessagesObserver);
     this.newMessageObserver = newMessagesObserver;
+
+    // The container does not always mount BETWEEN turns. On the first turn of a
+    // new pi.ai conversation there is no chat history to find until the turn is
+    // already under way, so the last message above may be Pi's answer caught
+    // half-written — settled-looking, but still growing. Offer it to the
+    // additions observer, which takes it over only if more text actually
+    // arrives (#365).
+    const lastInitialMessage = initialMessages[initialMessages.length - 1];
+    if (lastInitialMessage) {
+      void newMessagesObserver.adoptIfStillWriting(lastInitialMessage);
+    }
     return newMessagesObserver;
   }
 

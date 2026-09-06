@@ -184,3 +184,147 @@ describe("new assistant messages on a deferred present container", () => {
     expect(createSpeechStreamOrPlaceholder).not.toHaveBeenCalled();
   });
 });
+
+/**
+ * The FIRST turn of a BRAND-NEW pi.ai conversation (#365).
+ *
+ * pi.ai has no `div.t-body-chat` at all until a conversation exists, so on a new
+ * chat the chat-history element is born *during* the first turn — and bootstrap's
+ * progressive search can take several seconds to find it. By the time the speech
+ * manager attaches, Pi's answer is already part-written on screen.
+ *
+ * The manager's "what is already here" pass then reads that half-written reply as
+ * settled history. Nothing streams it, so `saypi:piWriting` never fires — the
+ * prompt sits on "Pi is thinking…" until the 15s safety net — and the reply is
+ * never spoken in the user's chosen voice.
+ */
+describe("the first turn of a new conversation, joined mid-reply", () => {
+  const mockVoice: SpeechSynthesisVoiceRemote = {
+    id: "shimmer",
+    name: "Shimmer",
+    lang: "en",
+    localService: false,
+    default: false,
+    price: 0.3,
+    price_per_thousand_chars_in_usd: 0.3,
+    price_per_thousand_chars_in_credits: 300,
+    powered_by: "OpenAI",
+    voiceURI: "",
+  };
+
+  let chatHistory: HTMLElement;
+  let manager: ChatHistorySpeechManager;
+  let createSpeechStreamOrPlaceholder: ReturnType<typeof vi.fn>;
+  let spokenText: string[];
+  let writingEvents: number;
+  let textAddedListener: (event: TextAddedEvent) => void;
+  let writingListener: () => void;
+
+  const settle = () => new Promise((r) => setTimeout(r, 50));
+
+  const assistantMessage = (text: string): HTMLElement => {
+    const message = document.createElement("div");
+    message.classList.add("break-anywhere");
+    const flex = document.createElement("div");
+    flex.classList.add("flex", "items-center");
+    const content = document.createElement("div");
+    content.classList.add("w-full");
+    const paragraph = document.createElement("div");
+    paragraph.classList.add("whitespace-pre-wrap");
+    paragraph.appendChild(document.createTextNode(text));
+    content.appendChild(paragraph);
+    flex.appendChild(content);
+    message.appendChild(flex);
+    return message;
+  };
+
+  /**
+   * The chat history as pi.ai renders it a beat after the first prompt is sent:
+   * containers mounted, and the reply already part-written inside the present one.
+   */
+  const chatHistoryMidReply = (partialReply: string): HTMLElement => {
+    const spacer = document.createElement("div");
+    spacer.className = "relative shrink-0 h-1 z-30";
+    chatHistory.appendChild(spacer);
+
+    const past = document.createElement("div");
+    past.className = "space-y-6";
+    chatHistory.appendChild(past);
+
+    const present = document.createElement("div");
+    present.className = "pb-6 lg:pb-8";
+    present.appendChild(assistantMessage(partialReply));
+    chatHistory.appendChild(present);
+    return present;
+  };
+
+  beforeEach(() => {
+    document.body.innerHTML = "";
+    chatHistory = document.createElement("div");
+    chatHistory.classList.add("t-body-chat");
+    document.body.appendChild(chatHistory);
+
+    const utterance: SpeechUtterance = new SayPiSpeech(
+      "utterance-id",
+      "en",
+      mockVoice,
+      "https://api.saypi.ai/speak/utterance-id/stream"
+    );
+    createSpeechStreamOrPlaceholder = vi.fn(async () => utterance);
+
+    spokenText = [];
+    writingEvents = 0;
+    textAddedListener = (event: TextAddedEvent) => spokenText.push(event.text);
+    writingListener = () => (writingEvents += 1);
+    EventBus.on("saypi:tts:text:added", textAddedListener);
+    EventBus.on("saypi:piWriting", writingListener);
+
+    vi.spyOn(SpeechSynthesisModule, "getInstance").mockReturnValue({
+      getActiveAudioProvider: vi.fn(async () => audioProviders.SayPi),
+      createSpeechStreamOrPlaceholder,
+      createSpeech: vi.fn(),
+      speak: vi.fn(),
+    } as unknown as SpeechSynthesisModule);
+  });
+
+  afterEach(() => {
+    EventBus.off("saypi:tts:text:added", textAddedListener);
+    EventBus.off("saypi:piWriting", writingListener);
+    manager?.teardown();
+    vi.restoreAllMocks();
+  });
+
+  it("announces Pi is writing, and speaks the reply, when it keeps writing after we attach", async () => {
+    const present = chatHistoryMidReply("Apples are");
+    manager = new ChatHistorySpeechManager(new PiAIChatbot(), chatHistory);
+    await settle();
+
+    // Pi carries on writing the same reply.
+    const reply = present.querySelector(".break-anywhere") as HTMLElement;
+    reply.querySelector(".whitespace-pre-wrap")!.textContent =
+      "Apples are a pome fruit.";
+    await settle();
+
+    // The conversation must leave "thinking…" on Pi's own signal, not on the
+    // 15-second safety net.
+    expect(writingEvents).toBeGreaterThan(0);
+    // And the reply is read aloud, the same as every later turn in the thread.
+    expect(createSpeechStreamOrPlaceholder).toHaveBeenCalled();
+    expect(spokenText.join("")).toContain("Apples are a pome fruit.");
+    expect(reply.classList.contains("speech-incomplete")).toBe(false);
+  });
+
+  it("leaves a settled thread alone — no writing signal, no re-reading", async () => {
+    // The same shape, but the user has merely opened a finished conversation:
+    // nothing more is written. Adopting this message would re-read, aloud, a
+    // message the user has already seen.
+    chatHistoryMidReply("A finished answer from an earlier session.");
+    manager = new ChatHistorySpeechManager(new PiAIChatbot(), chatHistory);
+    await settle();
+    await settle();
+
+    expect(writingEvents).toBe(0);
+    expect(createSpeechStreamOrPlaceholder).not.toHaveBeenCalled();
+    expect(spokenText).toEqual([]);
+  });
+});

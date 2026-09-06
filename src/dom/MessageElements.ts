@@ -388,6 +388,20 @@ abstract class AssistantResponse {
     this.messageControls.decorateFailedSpeech(replace);
   }
 
+  /**
+   * Undo {@link decorateIncompleteSpeech}.
+   *
+   * A message can be judged "nothing to speak here" and then turn out to still
+   * be streaming — that is the whole of #365, where the chat history mounts
+   * mid-reply and the half-written answer is first read as settled history.
+   * Once it is adopted for streaming, the offer to generate its audio is stale
+   * and misleading, so it goes away.
+   */
+  clearIncompleteSpeech(): void {
+    this.safeRemoveClass("speech-incomplete");
+    this._element.querySelector(".saypi-regenerate-button")?.remove();
+  }
+
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
     this.safeAddClass("speech-incomplete");
 
