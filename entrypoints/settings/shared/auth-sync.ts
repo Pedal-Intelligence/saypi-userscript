@@ -71,12 +71,14 @@ const AUTH_EVENT = "saypi:auth:status-changed";
 let toldSignedOut = false;
 
 /**
- * The `(authenticated, token)` pair the last reconciliation settled on.
+ * The SESSION the last reconciliation settled on: `authenticated:userId`.
  *
- * Both signals can describe the same change — the background broadcasts AND
- * writes storage — and it re-broadcasts on every service-worker wake. Without
- * this, one sign-in would repaint the Voices tab (and re-fetch its catalog)
- * two or three times.
+ * Identity, not the raw token, and for two reasons. Both signals can describe
+ * the same change — the background broadcasts AND writes storage — and it
+ * re-broadcasts on every service-worker wake, so without this one sign-in
+ * would repaint the Voices tab (and re-fetch its catalog) two or three times.
+ * And the background swaps the token every ~15 minutes on a routine refresh,
+ * which is a new token but the same session: nothing the tabs need to redraw.
  */
 let lastSignature: string | null = null;
 
@@ -126,9 +128,25 @@ async function storedToken(): Promise<string | null> {
   }
 }
 
+/**
+ * WHO the stored token belongs to — the only part of it a settings tab cares
+ * about. Falls back to the raw token when the claims cannot be read, which
+ * errs towards treating an opaque change as a new session.
+ */
+function identityOf(token: string | null): string {
+  if (!token) return "";
+  try {
+    const payload = token.split(".")[1];
+    const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
+    return String(JSON.parse(json).userId ?? token);
+  } catch {
+    return token;
+  }
+}
+
 async function reconcileNow(isAuthenticated: boolean): Promise<void> {
-  const signature = `${isAuthenticated}:${(await storedToken()) ?? ""}`;
-  if (signature === lastSignature) return;
+  const signature = `${isAuthenticated}:${identityOf(await storedToken())}`;
+  const sessionChanged = signature !== lastSignature;
   lastSignature = signature;
 
   if (isAuthenticated) {
@@ -136,7 +154,17 @@ async function reconcileNow(isAuthenticated: boolean): Promise<void> {
     // and handleAuthStatusUpdate emits the event itself once the singleton has
     // loaded the new token.
     toldSignedOut = false;
-    await handleAuthStatusUpdate(true);
+    if (sessionChanged) {
+      await handleAuthStatusUpdate(true);
+      return;
+    }
+    // Same session, new token — the background's routine ~15-minute refresh.
+    // The page's singleton still has to pick it up, or the token it holds
+    // expires under an open settings page and every consumer starts reading a
+    // signed-in user as signed out. But nothing about the SESSION changed, so
+    // the tabs are not told: an announcement here would silently re-fetch the
+    // voice catalog and repaint the rail every quarter of an hour.
+    await getJwtManagerSync().loadFromStorage();
     return;
   }
 
@@ -144,7 +172,7 @@ async function reconcileNow(isAuthenticated: boolean): Promise<void> {
   // false), which would clear() the singleton and with it the background's
   // refresh alarm and stored recovery credentials.
   toldSignedOut = true;
-  EventBus.emit(AUTH_EVENT, false);
+  if (sessionChanged) EventBus.emit(AUTH_EVENT, false);
 }
 
 function reconcile(isAuthenticated: boolean): Promise<void> {
@@ -163,7 +191,7 @@ function reconcile(isAuthenticated: boolean): Promise<void> {
  */
 async function seed(): Promise<void> {
   const token = await storedToken();
-  lastSignature = `${!!token}:${token ?? ""}`;
+  lastSignature = `${!!token}:${identityOf(token)}`;
 }
 
 /**

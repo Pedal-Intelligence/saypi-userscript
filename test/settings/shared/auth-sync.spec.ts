@@ -312,6 +312,29 @@ describe("settings-page auth reconciliation (#227)", () => {
     expect(seen).toEqual([]);
   });
 
+  it("keeps the page's token current across a routine refresh without repainting the tabs", async () => {
+    const tokenA = await openSettingsSignedInAs("user-a");
+    const seen: boolean[] = [];
+    EventBus.on("saypi:auth:status-changed", (auth: boolean) => seen.push(auth));
+
+    // The background refreshes ~every 15 minutes: a new token for the SAME
+    // session. The page's singleton has to pick it up (the one it holds is
+    // about to expire under an open settings page, and an expired token reads
+    // as signed out to every consumer)...
+    const refreshed = makeJwt({ userId: "user-a", iat: 2 });
+    seedStorage({
+      jwtToken: refreshed,
+      tokenExpiresAt: Date.now() + 15 * 60_000,
+    });
+    await storageChanged(tokenA, refreshed);
+
+    expect(getJwtManagerSync().getAuthHeader()).toBe(`Bearer ${refreshed}`);
+    expect(isSettingsAuthenticated()).toBe(true);
+    // ...but nothing about the session changed, so the tabs are not asked to
+    // re-fetch a catalog and repaint a rail every quarter of an hour.
+    expect(seen).toEqual([]);
+  });
+
   it("stops listening once uninstalled", async () => {
     const uninstall = installSettingsAuthSync();
     await settingsAuthSyncSettled();
