@@ -107,6 +107,8 @@ interface PendingTurnOutcome {
   lastSpeechEndedAt: number;      // when the user stopped speaking (timeUserStoppedSpeaking)
   app?: string;                   // pi / claude / chatgpt
   isMaintenance: boolean;         // suppressed buffer flush — excluded from the eval
+  writingStartedAt?: number;      // when the reply text first appeared — the response-start
+                                  // fallback for a turn that is never spoken (#510)
 }
 
 interface ConversationContext {
@@ -539,25 +541,52 @@ const machine = setup({
       };
       return { pendingTurnOutcome: pending };
     }),
-    // Close the resume window and report the outcome (#505). Fired on the single
-    // transition that leaves `responding.piThinking`, so exactly once per turn.
-    // Maintenance messages (suppressed buffer flushes) are excluded from the eval.
+    // The reply text has appeared but nothing is audible yet, so the resume window
+    // stays OPEN (#510). Record when the text appeared: it is the response-start
+    // we report if this turn is never spoken (voice-out off, or TTS unavailable).
+    markResponseWriting: assign(({ context }) => {
+      const pending = context.pendingTurnOutcome;
+      if (!pending) return {};
+      return {
+        pendingTurnOutcome: { ...pending, writingStartedAt: Date.now() },
+      };
+    }),
+    // Close the resume window and report the outcome (#505, #510).
+    //
+    // Window close = the assistant became AUDIBLE (`response-started`, at TTS
+    // start), or the turn ended without ever becoming audible: completed unspoken
+    // (`response-written`, timed from when the text appeared), the user resumed
+    // first (`resumed`), or no response was ever detected (`no-response`).
+    //
+    // Exactly one of those transitions is traversed per turn: piThinking is
+    // entered once per turn and leaves by exactly one edge, and the only edge
+    // that does NOT close the window (-> piWriting) leads to a state whose own
+    // edges all close it. Maintenance messages (suppressed buffer flushes) are
+    // excluded from the eval.
     emitTurnOutcome: (
       { context },
-      params: { kind: "response-started" | "resumed" | "no-response" }
+      params: {
+        kind: "response-started" | "response-written" | "resumed" | "no-response";
+      }
     ) => {
       const pending = context.pendingTurnOutcome;
       if (!pending || pending.isMaintenance) {
         return;
       }
       const now = Date.now();
+      const responseStartedAt =
+        params.kind === "response-started"
+          ? now
+          : params.kind === "response-written"
+          ? pending.writingStartedAt ?? now
+          : null;
       postTurnOutcome({
         sessionId: pending.sessionId,
         lastSequenceNumber: pending.lastSequenceNumber,
         trigger: "auto",
         userResumed: params.kind === "resumed",
         submittedAt: pending.submittedAt,
-        responseStartedAt: params.kind === "response-started" ? now : null,
+        responseStartedAt,
         resumedAt: params.kind === "resumed" ? now : null,
         lastSpeechEndedAt: pending.lastSpeechEndedAt,
         pFinishedSpeaking: pending.pFinishedSpeaking ?? null,
@@ -1333,14 +1362,11 @@ const machine = setup({
         states: {
           piThinking: {
             on: {
-              // Resume-window CLOSE (#505). v1 closes on the FIRST response signal
-              // to leave piThinking — piWriting (text) or piSpeaking (TTS). With
-              // TTS on the order is piThinking->piWriting->piSpeaking, so v1 closes
-              // at text-appear rather than the spec's preferred TTS-start; this
-              // slightly under-counts resumes in the text-shown-not-yet-spoken gap.
-              // Deliberate v1 simplification (founder-approved) — spec-fidelity is
-              // tracked in #510. Emitting on the single piThinking exit keeps it to
-              // exactly one event per turn.
+              // Resume-window CLOSE (#505, #510). The window closes when the
+              // assistant becomes AUDIBLE, so a resume is measured against what the
+              // user could actually hear. With TTS on the order is
+              // piThinking->piWriting->piSpeaking, so this edge is only taken when
+              // speech starts with no writing signal at all.
               "saypi:piSpeaking": {
                 target: "piSpeaking",
                 actions: {
@@ -1348,11 +1374,15 @@ const machine = setup({
                   params: { kind: "response-started" },
                 },
               },
+              // Text on screen is not yet something the user has heard, so this
+              // edge does NOT close the window (#510) — it only records the
+              // text-appear time as the fallback response-start for a turn that
+              // never gets spoken. piWriting closes the window on every one of its
+              // own edges, so the one-event-per-turn invariant survives.
               "saypi:piWriting": {
                 target: "piWriting",
                 actions: {
-                  type: "emitTurnOutcome",
-                  params: { kind: "response-started" },
+                  type: "markResponseWriting",
                 },
               },
               // The user resumed speaking before the response started — a
@@ -1513,13 +1543,44 @@ const machine = setup({
           },
           piWriting: {
             on: {
+              // Resume-window CLOSE: the response is now audible (#510).
               "saypi:piSpeaking": {
                 target: "piSpeaking",
+                actions: {
+                  type: "emitTurnOutcome",
+                  params: { kind: "response-started" },
+                },
               },
+              // Resume-window CLOSE: the response finished without ever being
+              // spoken (voice-out off, or TTS unavailable), so the response-start
+              // we report is when the text appeared (#510).
               "saypi:piStoppedWriting": {
                 target: "#conversation.listening",
+                actions: [
+                  {
+                    type: "suppressWrittenResponseWhenMaintainance",
+                  },
+                  {
+                    type: "emitTurnOutcome",
+                    params: { kind: "response-written" },
+                  },
+                ],
+              },
+              // Resume-window CLOSE: the user has SEEN the reply but HEARD nothing
+              // and started talking again — a plausible false finish, which v1
+              // mis-filed as an out-of-scope barge-in (#510). Same target and guard
+              // as the parent `responding` region's transition (which would
+              // otherwise handle this event identically — v5 transitions are
+              // internal by default, so neither re-enters `responding`); restated
+              // here only to attach the outcome emit, as piThinking does.
+              "saypi:userSpeaking": {
+                target: "#conversation.responding.userInterrupting",
+                guard: {
+                  type: "interruptionsAllowed",
+                },
                 actions: {
-                  type: "suppressWrittenResponseWhenMaintainance",
+                  type: "emitTurnOutcome",
+                  params: { kind: "resumed" },
                 },
               },
             },
