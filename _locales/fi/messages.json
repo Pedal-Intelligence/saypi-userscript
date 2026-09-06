@@ -769,8 +769,8 @@
     "message": "Missä yleensä puhut?"
   },
   "onboarding_footer": {
-    "description": "Esmakordse tutvustuslehe jalusetekst, mis selgitab tagasipääsu ja seda, millal heli salvestatakse. $tab$ on seadetekaardi nimi, kus asub selle juhendi link.",
-    "message": "Selle juhendi saad alati uuesti avada Say, Pi seadetes vahekaardil $tab$. Privaatsus on oluline — salvestame heli kõne ajal ja ülaltoodud mikrofonitesti ajal, kuid heli jääb sinu brauserisse.",
+    "description": "Ensimmäisen käyttökerran perehdytyssivun alatunnisteteksti, jossa kerrotaan paluureitti ja milloin ääntä tallennetaan. $tab$ on sen asetusten välilehden nimi, jolla on linkki takaisin tähän oppaaseen.",
+    "message": "Voit avata tämän oppaan uudelleen milloin tahansa Say, Pi:n asetusten $tab$-välilehdeltä. Yksityisyytesi on meille tärkeä — tallennamme ääntä puhelun aikana ja yllä olevan mikrofonitestin aikana. Ääni pysyy selaimessasi.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,16 +791,16 @@
     "message": "Testaa mikrofonisi"
   },
   "onboarding_micTestDone": {
-    "description": "Olek, mida näidatakse pärast seda, kui tutvustuse mikrofonitest tuvastas kuuldava sisendi.",
-    "message": "Hästi — kuulsime sind! 🎉"
+    "description": "Tila, joka näytetään, kun perehdytyksen mikrofonitesti havaitsi ääntä.",
+    "message": "Hienoa — kuulimme sinut 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti mittaa sisääntuloa.",
     "message": "Kuunnellaan — sano jotain. 🎙️"
   },
   "onboarding_micTestNoInput": {
-    "description": "Olek, mida näidatakse, kui tutvustuse mikrofonitest käivitati, kuid kuuldavat sisendit ei tuvastatud.",
-    "message": "Me ei kuulnud midagi. Kontrolli, et brauseris oleks valitud õige mikrofon ja et see poleks vaigistatud, seejärel proovi uuesti."
+    "description": "Tila, joka näytetään, kun perehdytyksen mikrofonitesti suoritettiin mutta ääntä ei havaittu.",
+    "message": "Emme kuulleet mitään. Tarkista, että selaimessa on valittuna oikea mikrofoni eikä sitä ole mykistetty, ja yritä uudelleen."
   },
   "onboarding_micTestRequesting": {
     "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti odottaa lupaa.",
@@ -811,8 +811,8 @@
     "message": "Lopeta testi"
   },
   "onboarding_micTestStopped": {
-    "description": "Olek, mida näidatakse, kui tutvustuse mikrofonitest peatati enne sisendi tuvastamist.",
-    "message": "Test peatati enne, kui midagi kuulsime. Käivita see uuesti ja ütle paar sõna."
+    "description": "Tila, joka näytetään, kun perehdytyksen mikrofonitesti lopetettiin ennen äänen havaitsemista.",
+    "message": "Testi lopetettiin, ennen kuin kuulimme mitään. Käynnistä se uudelleen ja sano muutama sana."
   },
   "onboarding_step1Body": {
     "description": "Ensimmäisen opastusvaiheen teksti, jossa kerrotaan, miten laajennus kiinnitetään ja mitä työkalupalkkiin kiinnitetty painike avaa.",
@@ -823,8 +823,8 @@
     "message": "Kiinnitä Say, Pi työkalupalkkiin"
   },
   "onboarding_step2Body": {
-    "description": "Teise tutvustusetapi sisu, mis selgitab lehe-sisese helistamisnupu asukohta ja häälvestluse alustamist.",
-    "message": "Ava mõni allolev toetatud assistent. Say, Pi lisab vestluslehele oma helistamisnupu sisestusvälja kõrvale — puuduta seda ja ütle tere. Esimesel korral küsime mikrofonile juurdepääsu — see on ootuspärane. Peale alloleva testi kuulame ainult kõne ajal."
+    "description": "Toisen perehdytysvaiheen teksti, jossa kerrotaan sivulla olevan puhelupainikkeen sijainti ja kuinka äänikeskustelu aloitetaan.",
+    "message": "Siirry johonkin alla tuetuista avustajista. Say, Pi lisää keskustelusivulle oman puhelupainikkeen kirjoituskentän viereen — napauta sitä ja sano hei. Pyydämme mikrofonin käyttöoikeutta ensimmäisellä kerralla — se on odotettua. Testin ulkopuolella kuuntelemme vain puhelun aikana."
   },
   "onboarding_step2Title": {
     "description": "Toisen opastusvaiheen otsikko (keskustelun aloittaminen).",
@@ -1823,6 +1823,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Vaihda ääntä",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Näytetään Äänet-ohjauspalkissa, kun Say, Pi -ääntä ei ole valittu ja avustaja vastaa sen omalla sisäänrakennetulla äänellä; $host$ on avustaja, esimerkiksi Pi.",
     "message": "Ääni: $host$:n oma",
@@ -1876,6 +1880,14 @@
   "voicesKeyboardHint": {
     "description": "Yhden rivin pikanäppäinvihje asetusten Äänet-ohjauspalkissa. Merkit ovat näppäimiä: välilyönti, ylös/alas-nuolet ja Shift+välilyönti.",
     "message": "Paina välilyöntiä kuunnellaksesi, ↑↓ siirtyäksesi äänien välillä, ⇧Välilyönti palataksesi takaisin."
+  },
+  "voicesListenHint": {
+    "message": "Kuuntele ilmainen näyte napsauttamalla ääntä. Valitse ”Käytä”, kun löydät mieluisan äänen.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Kuunteluasetukset",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Virhetila yhden isännän studiossa, kun kyseisen isännän ääniluetteloa ei saatu ladattua; $host$ on avustaja.",
@@ -2023,6 +2035,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Ääntäsi ei voitu tallentaa. Yritä uudelleen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Alaotsikko äänikatalogiosioon asetusten AI Chat -välilehdessä",
     "message": "Valitse ääni, joka lukee vastaukset ääneen kullekin sivustolle."
@@ -2034,6 +2054,20 @@
   "voicesSectionTitle": {
     "description": "Otsikko äänikatalogiosioon asetusten AI Chat -välilehdessä",
     "message": "Äänet"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ on nyt äänesi palvelussa $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Ryhmäotsikko edullisemman tason äänille asetusten äänikatalogissa. CSS muuntaa isoiksi kirjaimiksi.",
@@ -2161,6 +2195,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Käytä palvelussa $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Käytä palvelun $host$ omaa ääntä",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Saavutettava nimi asetusten ääniluettelon isäntäkohtaiselle ”käytä tätä ääntä” -painikkeelle; $name$ on ääni, $host$ on avustaja (esim. Pi, Claude).",
     "message": "Käytä ääntä $name$ kohteessa $host$",
@@ -2198,59 +2252,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Virhe, joka heitetään, kun selain ei tarjoa alkuperäistä WebAssembly-muistia, jota tarvitaan puheentunnistusmallin ajamiseen.",
     "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muisti ei ole käytettävissä tässä selaimessa."
-  },
-  "voicesListeningOptions": {
-    "message": "Kuunteluasetukset",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Kuuntele ilmainen näyte napsauttamalla ääntä. Valitse ”Käytä”, kun löydät mieluisan äänen.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Käytä palvelussa $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ on nyt äänesi palvelussa $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Ääntäsi ei voitu tallentaa. Yritä uudelleen.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Käytä palvelun $host$ omaa ääntä",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Vaihda ääntä",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }
