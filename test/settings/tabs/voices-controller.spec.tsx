@@ -3645,3 +3645,72 @@ describe("adversarial release current choice", () => {
     expect(rowOf(container, "shimmer")?.getAttribute("aria-selected")).toBe("true");
   });
 });
+
+/**
+ * `availability` in the studio (#568).
+ *
+ * The studio is the surface the shortlist logic does NOT cover: it paints the
+ * whole catalog as a rail, not a capped menu, so it needs its own proof that a
+ * hard-down voice stops being offered — and, for the user whose saved voice is
+ * the one that went down, that it keeps being shown, named, and labelled.
+ */
+describe("VoicesController — a voice whose provider is down (#568)", () => {
+  const down = (id: string) => mkHdVoice(id, { availability: "unavailable" } as any);
+
+  it("stops offering a hard-down voice in the rail", async () => {
+    const { container } = await mount(
+      makeDeps({ pi: [mkVoice("nova"), down("paola"), mkVoice("ash")] })
+    );
+    expect(rowIds(container)).not.toContain("paola");
+    expect(rowIds(container)).toEqual(expect.arrayContaining(["nova", "ash"]));
+  });
+
+  it("leaves a degraded voice exactly where it was", async () => {
+    // The server deliberately keeps degraded voices featured — they are still
+    // serving. The client must not be more pessimistic than the server.
+    const { container } = await mount(
+      makeDeps({
+        pi: [mkVoice("nova"), mkVoice("ash", { availability: "degraded" } as any)],
+      })
+    );
+    expect(rowIds(container)).toEqual(expect.arrayContaining(["nova", "ash"]));
+  });
+
+  it("keeps the user's own down voice in the rail rather than vanishing it", async () => {
+    const paola = down("paola");
+    const { container } = await mount(
+      makeDeps({ pi: [mkVoice("nova"), paola], piCurrent: paola })
+    );
+    expect(rowIds(container)).toContain("paola");
+    expect(
+      rowOf(container, "paola")!.classList.contains("voice-row-current")
+    ).toBe(true);
+  });
+
+  it("names the down voice in the control bar AND says it cannot speak right now", async () => {
+    // The whole point of the issue: without this line the user's voice simply
+    // stops working, with nothing on screen to explain it or to act on.
+    const paola = down("paola");
+    const { container } = await mount(
+      makeDeps({ pi: [mkVoice("nova"), paola], piCurrent: paola })
+    );
+    expect(q(container, ".voice-your-voice")?.textContent).toBe("Paola");
+    const note = q(container, ".voice-current-unavailable");
+    expect(note?.textContent).toBe("voicesSavedUnavailable");
+    expect(note?.getAttribute("role")).toBe("status");
+  });
+
+  it("says nothing when the current voice is healthy", async () => {
+    const { container } = await mount(
+      makeDeps({ pi: [mkVoice("nova")], piCurrent: mkVoice("nova") })
+    );
+    expect(q(container, ".voice-current-unavailable")).toBeNull();
+  });
+
+  it("says nothing when the server reports no health at all (fail-open)", async () => {
+    const nova = mkVoice("nova", { availability: null } as any);
+    const { container } = await mount(makeDeps({ pi: [nova], piCurrent: nova }));
+    expect(q(container, ".voice-current-unavailable")).toBeNull();
+    expect(rowIds(container)).toContain("nova");
+  });
+});

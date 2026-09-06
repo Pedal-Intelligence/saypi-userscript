@@ -266,6 +266,26 @@ class UtteranceFactory {
   }
 }
 
+/**
+ * Live provider health for one voice, as served by `GET /voices`
+ * (saypi-api #321, `tts/availability.py`). The server derives it per request
+ * from the TTS monitor's per-provider grade:
+ *
+ * - `"available"`  — the provider is operational, OR nothing is known about it.
+ * - `"degraded"`   — the provider is erroring but still serving. Deliberately
+ *                    NOT de-featured server-side, so the client must not hide
+ *                    it either.
+ * - `"unavailable"` — the provider is hard-down. Excluded from `featured` /
+ *                    `recommended` server-side.
+ *
+ * `null` when the health signal is unknown or switched off (the server's own
+ * kill switch) — and the field is serialized as `null`, not omitted, in that
+ * case. Absence is never read as bad news: hiding a working voice is a worse
+ * failure than briefly offering a broken one, because a user cannot route
+ * around a voice they cannot see.
+ */
+type VoiceAvailability = "available" | "degraded" | "unavailable";
+
 interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   id: string;
   price: number; // price per 1000 characters (legacy field)
@@ -280,9 +300,11 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   sample_url?: string;    // free ~2s canned preview clip; server-served when present (design §4)
   // Curation manifest (design §5; saypi-api #293). All additive and optional —
   // the client obeys them when present and falls back to local heuristics when
-  // absent. featured/section/deprecated are consumed today; recommended,
-  // sibling_id, language and chars_per_minute are preserved for later phases
-  // (defaults + rails, language shelf) but not yet acted on.
+  // absent. Consumed today: featured/section/deprecated (curation),
+  // recommended (default adoption), sample_url (the ▶ preview) and availability
+  // (#568). Still declared-but-unconsumed: sibling_id (the Downshift rescue) and
+  // chars_per_minute (absolute duration figures — the server sends null until
+  // the rate is measured), plus `language` pending the gated language shelf.
   featured?: boolean;         // in the in-host shortlist for this app
   section?: string;           // shelf key: "hd" | "everyday" | "language"
   recommended?: boolean;      // the default for this (host, locale, plan) cohort — exactly one
@@ -290,6 +312,7 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   deprecated?: boolean;       // retired: hidden from the catalog, still served to prior selectors
   language?: string;          // BCP-47 tag driving the gated language shelf (§6)
   chars_per_minute?: number;  // measured speaking rate (drives minute denominations; null until measured)
+  availability?: VoiceAvailability | null; // live provider health (see the type)
 }
 
 interface MatchableVoice {
@@ -466,6 +489,7 @@ export {
   AssistantSpeech,
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
+  VoiceAvailability,
   MatchableVoice,
   VoiceFactory,
   AIVoice,

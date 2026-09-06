@@ -1,6 +1,11 @@
-// Signed-out state (#268): the in-chat voice selector is greyed to signal that
-// TTS requires sign-in, but stays clickable (opens the menu's sign-in item).
-// Kept dimmed on hover too, overriding the host page's hover:opacity utilities.
+// "Can't speak right now" — two causes, one look.
+//   #268: signed out, so the in-chat voice selector is greyed to signal that
+//         TTS requires sign-in, but stays clickable (opens the sign-in item).
+//   #568: the saved voice's provider is hard-down, so its grandfathered row is
+//         greyed while it stays visible and selected (the row also carries the
+//         explanation as its subtitle and title).
+// Both stay clickable and both keep the dim on hover, overriding the host
+// page's hover:opacity utilities.
 .saypi-voice-unavailable,
 .saypi-voice-unavailable:hover {
   opacity: 0.6 !important;

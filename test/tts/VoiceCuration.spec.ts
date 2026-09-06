@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   getVoiceTier,
   curateShortlist,
+  isVoiceUnavailable,
   visibleCatalog,
   CLAUDE_MENU_CAP,
 } from "../../src/tts/VoiceCuration";
@@ -223,6 +224,7 @@ type Manifest = Partial<
     | "sibling_id"
     | "language"
     | "chars_per_minute"
+    | "availability"
   >
 >;
 
@@ -475,5 +477,137 @@ describe("visibleCatalog", () => {
       "b",
       "c",
     ]);
+  });
+});
+
+/**
+ * `availability` — the live provider-health field (saypi-api #321, client #568).
+ *
+ * The server already keeps a hard-down provider out of `featured`/`recommended`,
+ * so these cases pin the residue only the client can close: fill-to-cap padding,
+ * user pins, and the settings studio's full catalog — plus the case the whole
+ * issue is about, the user whose SAVED voice has gone dark.
+ */
+describe("voice availability (#568)", () => {
+  const unavailable = (id: string) =>
+    withManifest(voice(id, id.toUpperCase(), "ElevenLabs", 1000), {
+      availability: "unavailable",
+    });
+  const available = (id: string, availability?: Manifest["availability"]) =>
+    withManifest(voice(id, id.toUpperCase(), "OpenAI", 50), { availability });
+
+  describe("isVoiceUnavailable fails OPEN", () => {
+    it("is true only for a hard-down provider", () => {
+      expect(isVoiceUnavailable(unavailable("paola"))).toBe(true);
+    });
+
+    it("is false for available, degraded, null and absent", () => {
+      // The server sends null whenever health is unknown, on purpose. Silence
+      // is never bad news: a voice you cannot see is a voice you cannot route
+      // around.
+      expect(isVoiceUnavailable(available("a", "available"))).toBe(false);
+      expect(isVoiceUnavailable(available("b", "degraded"))).toBe(false);
+      expect(isVoiceUnavailable(available("c", null))).toBe(false);
+      expect(isVoiceUnavailable(voice("d", "D", "OpenAI", 50))).toBe(false);
+    });
+
+    it("is false for a value this client has never heard of", () => {
+      const future = { ...voice("e", "E", "OpenAI", 50), availability: "brand-new" };
+      expect(isVoiceUnavailable(future as SpeechSynthesisVoiceRemote)).toBe(false);
+    });
+  });
+
+  describe("visibleCatalog", () => {
+    it("stops offering an unavailable voice to new selectors", () => {
+      const catalog = [available("nova"), unavailable("paola"), available("ash")];
+      expect(visibleCatalog(catalog, null).map((v) => v.id)).toEqual([
+        "nova",
+        "ash",
+      ]);
+    });
+
+    it("keeps a degraded voice — the server does not de-feature it, nor may we", () => {
+      const catalog = [available("nova"), available("ash", "degraded")];
+      expect(visibleCatalog(catalog, null).map((v) => v.id)).toEqual([
+        "nova",
+        "ash",
+      ]);
+    });
+
+    it("changes nothing when the whole catalog reports null (today's behaviour)", () => {
+      const catalog = [available("nova", null), available("ash", null)];
+      expect(visibleCatalog(catalog, null).map((v) => v.id)).toEqual([
+        "nova",
+        "ash",
+      ]);
+    });
+  });
+
+  describe("the residue the server cannot fix", () => {
+    it("never pads the menu to its cap with an unavailable voice", () => {
+      // The server features fewer voices than the cap, so fill-to-cap runs —
+      // and used to seat whatever came next in server order, health be damned.
+      const catalog = [
+        withManifest(available("nova"), { featured: true }),
+        unavailable("paola"),
+        available("ash"),
+        available("onyx"),
+      ];
+      const result = curateShortlist(catalog, null, CLAUDE_MENU_CAP);
+      expect(result.voices.map((v) => v.id)).toEqual(["nova", "ash", "onyx"]);
+    });
+
+    it("never seats a pinned voice whose provider is down", () => {
+      // A pin is a choice the user made BEFORE the outage; honouring it here
+      // would put a mute row in a menu the user curated themselves.
+      const catalog = [available("nova"), unavailable("paola"), available("ash")];
+      const result = curateShortlist(
+        catalog,
+        null,
+        CLAUDE_MENU_CAP,
+        new Set(["paola", "ash"])
+      );
+      expect(result.voices.map((v) => v.id)).toEqual(["ash"]);
+    });
+  });
+
+  describe("the saved voice that has gone dark — the case this exists for", () => {
+    const catalog = [
+      available("nova"),
+      unavailable("paola"),
+      available("ash"),
+      available("onyx"),
+    ];
+
+    it("keeps rendering it, first, rather than silently vanishing it", () => {
+      // Grandfathering. Dropping it would leave the user staring at a menu
+      // with no indication of what happened to the voice they picked — the
+      // failure this issue calls worse than showing it with a note.
+      const result = curateShortlist(catalog, "paola", CLAUDE_MENU_CAP);
+      expect(result.voices[0].id).toBe("paola");
+    });
+
+    it("offers working alternatives alongside it, so there is a way out", () => {
+      const result = curateShortlist(catalog, "paola", CLAUDE_MENU_CAP);
+      const others = result.voices.slice(1).map((v) => v.id);
+      expect(others).toEqual(["nova", "ash", "onyx"]);
+      expect(others).not.toContain("paola");
+    });
+
+    it("never renders an empty menu, even if EVERY other voice is down too", () => {
+      const allDown = [
+        unavailable("paola"),
+        unavailable("jarnathan"),
+        unavailable("juniper"),
+      ];
+      const result = curateShortlist(allDown, "paola", CLAUDE_MENU_CAP);
+      expect(result.voices.map((v) => v.id)).toEqual(["paola"]);
+    });
+
+    it("counts the hidden voices honestly, so the door still leads somewhere", () => {
+      const result = curateShortlist(catalog, "paola", CLAUDE_MENU_CAP);
+      // 4 catalog entries, all 4 seated (paola grandfathered + 3 available).
+      expect(result.hiddenCount).toBe(0);
+    });
   });
 });
