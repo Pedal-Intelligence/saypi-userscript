@@ -92,9 +92,12 @@
 // global marker + `:last-of-type` (rather than a per-message class) makes this
 // immune to pi.ai's present-container re-render churn — the latest message is
 // always resolved live.
-// (Mobile: these rules live under html.desktop-view; on mobile the whole
-// .saypi-tts-controls bar is hidden via mobile.scss, so no separate telemetry
-// hide rule is needed there.)
+// (These rules live under html.desktop-view, which is the STANDARD — i.e.
+// non-immersive — view rather than a desktop-only flag, so they apply on phones
+// too. They used to be desktop-only in effect, because mobile.scss hid the whole
+// .saypi-tts-controls bar; that rule was vestigial popup-menu scaffolding and was
+// removed in #94, so the same last-message + recent-telemetry gating is what
+// governs the button on mobile now.)
 .chat-history .assistant-message .saypi-telemetry-button
 {
   display: none;
