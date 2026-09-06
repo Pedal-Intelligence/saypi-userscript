@@ -180,13 +180,10 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getExtraCallButtonClasses(): string[] {
-    return [
-      "fixed",
-      "rounded-full",
-      "bg-cream-550",
-      "enabled:hover:bg-cream-650",
-      "m-2",
-    ];
+    // Colour (incl. hover/tap) is token-driven in pi.scss; Pi's build no longer
+    // ships the `--color-cream-*` tokens, so the old `bg-cream-550` /
+    // `enabled:hover:bg-cream-650` classes were silent no-ops.
+    return ["fixed", "rounded-full", "m-2"];
   }
 
   /**
