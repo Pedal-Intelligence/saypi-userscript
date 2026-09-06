@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Tietoja-välilehden linkki, joka avaa ensimmäisen käyttökerran asennusoppaan ja mikrofonitestin uudelleen.",
+    "message": "Avaa asennusopas"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Kyllä, olen vielä täällä!"
@@ -757,8 +761,14 @@
     "message": "Missä yleensä puhut?"
   },
   "onboarding_footer": {
-    "description": "Alateksti ensimmäisen käynnistyksen opastussivun alareunassa.",
-    "message": "Voit palata tähän milloin tahansa Say, Pi -asetuksista. Yksityisyytesi on tärkeää — ääntä tallennetaan vain aktiivisen puhelun aikana."
+    "description": "Ensimmäisen käyttökerran opastussivun alatunnisteen teksti. $tab$ on Asetukset-välilehden nimi, jossa tämän oppaan linkki on.",
+    "message": "Voit avata tämän oppaan uudelleen milloin tahansa Say, Pi -asetuksista $tab$-välilehdeltä. Yksityisyytesi on tärkeä — ääntä tallennetaan vain aktiivisen puhelun aikana.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Pääotsikko ensimmäisen käynnistyksen opastussivulla.",

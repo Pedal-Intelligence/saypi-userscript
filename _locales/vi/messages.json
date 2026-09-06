@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Liên kết trong tab Giới thiệu để mở lại hướng dẫn thiết lập lần đầu và kiểm tra micrô.",
+    "message": "Mở hướng dẫn thiết lập"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Vâng, tôi vẫn còn ở đây!"
@@ -757,8 +761,14 @@
     "message": "Bạn thường nói chuyện ở đâu?"
   },
   "onboarding_footer": {
-    "description": "Văn bản chân trang trên trang giới thiệu khi chạy lần đầu.",
-    "message": "Bạn có thể xem lại mục này bất cứ lúc nào trong phần cài đặt của Say, Pi. Quyền riêng tư của bạn rất quan trọng — âm thanh chỉ được ghi khi đang trong một cuộc gọi."
+    "description": "Văn bản chân trang trên trang hướng dẫn thiết lập lần đầu. $tab$ là tên của thẻ Cài đặt chứa liên kết quay lại hướng dẫn này.",
+    "message": "Bạn có thể mở lại hướng dẫn này bất cứ lúc nào trong phần cài đặt của Say, Pi, tại thẻ $tab$. Quyền riêng tư của bạn rất quan trọng — âm thanh chỉ được thu trong cuộc gọi đang hoạt động.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Tiêu đề chính trên trang hướng dẫn lần chạy đầu tiên.",

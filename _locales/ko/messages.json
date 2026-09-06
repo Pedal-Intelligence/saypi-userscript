@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "처음 실행할 때 표시되는 설정 안내와 마이크 테스트를 다시 여는 정보 탭 링크입니다.",
+    "message": "설정 안내 열기"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "네, 저는 여전히 여기 있습니다!"
@@ -757,8 +761,14 @@
     "message": "보통 어디에서 대화하나요?"
   },
   "onboarding_footer": {
-    "description": "첫 실행 온보딩 페이지의 하단 문구입니다.",
-    "message": "이는 언제든 Say, Pi 설정에서 다시 볼 수 있어요. 개인 정보는 중요해요. 오디오는 통화가 진행 중일 때만 캡처돼요."
+    "description": "첫 실행 온보딩 페이지의 푸터 텍스트입니다. $tab$은 이 안내로 돌아가는 링크가 있는 설정 탭의 이름입니다.",
+    "message": "Say, Pi 설정의 $tab$ 탭에서 언제든 이 안내를 다시 열 수 있습니다. 개인정보 보호를 중요하게 생각합니다. 오디오는 통화가 활성화된 동안에만 캡처됩니다.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "최초 실행 온보딩 페이지의 메인 제목.",

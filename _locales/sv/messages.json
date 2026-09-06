@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Länk på fliken Om som öppnar installationsguiden och mikrofontestet igen.",
+    "message": "Öppna installationsguiden"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, jag är fortfarande här!"
@@ -757,8 +761,14 @@
     "message": "Var pratar du oftast?"
   },
   "onboarding_footer": {
-    "description": "Sidfotstext på introduktionssidan som visas första gången.",
-    "message": "Du kan gå tillbaka hit när som helst i inställningarna för Say, Pi. Din integritet är viktig — ljud fångas bara upp under ett aktivt samtal."
+    "description": "Sidfotstext på introduktionssidan som visas första gången. $tab$ är namnet på inställningsfliken som innehåller länken tillbaka till den här guiden.",
+    "message": "Du kan öppna den här guiden igen när som helst i Say, Pis inställningar, på fliken $tab$. Din integritet är viktig – ljud spelas bara in under ett aktivt samtal.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Huvudrubrik på introduktionssidan vid första körningen.",

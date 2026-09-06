@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link nella scheda Informazioni che riapre la guida alla configurazione iniziale e il test del microfono.",
+    "message": "Apri la guida alla configurazione"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Sì, sono ancora qui!"
@@ -757,8 +761,14 @@
     "message": "Dove parlerai di solito?"
   },
   "onboarding_footer": {
-    "description": "Testo del piè di pagina nella pagina di onboarding al primo avvio.",
-    "message": "Puoi rivederlo in qualsiasi momento dalle impostazioni di Say, Pi. La tua privacy conta: l'audio viene acquisito solo durante una chiamata attiva."
+    "description": "Testo a piè di pagina nella pagina introduttiva al primo avvio. $tab$ è il nome della scheda delle impostazioni che contiene il link a questa guida.",
+    "message": "Puoi riaprire questa guida in qualsiasi momento dalle impostazioni di Say, Pi, nella scheda $tab$. La tua privacy è importante: l'audio viene acquisito solo durante una chiamata attiva.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Titolo principale nella pagina di onboarding al primo avvio.",

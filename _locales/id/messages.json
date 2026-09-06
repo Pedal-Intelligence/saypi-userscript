@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Tautan di tab Tentang yang membuka kembali panduan penyiapan pertama kali dan pengujian mikrofon.",
+    "message": "Buka panduan penyiapan"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ya, saya masih di sini!"
@@ -757,8 +761,14 @@
     "message": "Biasanya Anda akan berbicara di mana?"
   },
   "onboarding_footer": {
-    "description": "Teks footer pada halaman onboarding saat pertama kali dijalankan.",
-    "message": "Anda bisa melihat ini lagi kapan saja dari pengaturan Say, Pi. Privasi Anda penting — audio hanya direkam selama panggilan aktif."
+    "description": "Teks footer di halaman panduan saat pertama kali dijalankan. $tab$ adalah nama tab Setelan yang berisi tautan kembali ke panduan ini.",
+    "message": "Anda dapat membuka kembali panduan ini kapan saja dari setelan Say, Pi, di tab $tab$. Privasi Anda penting — audio hanya direkam selama panggilan aktif.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Judul utama pada halaman onboarding saat pertama kali dijalankan.",

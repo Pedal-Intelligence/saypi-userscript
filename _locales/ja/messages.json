@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "初回起動時のセットアップガイドとマイクテストを開き直す、概要タブのリンク。",
+    "message": "セットアップガイドを開く"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "はい、まだここにいます！"
@@ -757,8 +761,14 @@
     "message": "普段どこで話しますか"
   },
   "onboarding_footer": {
-    "description": "初回オンボーディングページのフッターテキスト。",
-    "message": "これはいつでも Say, Pi の設定から見直せます。プライバシーは大切です。音声は通話中のみ取得されます。"
+    "description": "初回起動時のオンボーディングページに表示するフッター文。$tab$ は、このガイドへのリンクがある設定タブの名前。",
+    "message": "このガイドは、Say, Pi の設定の「$tab$」タブからいつでも再び開けます。プライバシーを大切にしています。音声が取得されるのは通話中のみです。",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "初回オンボーディング ページのメイン見出し。",

@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link op het tabblad Over waarmee de installatiehandleiding en microfoontest bij het eerste gebruik opnieuw worden geopend.",
+    "message": "Handleiding openen"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, ik ben er nog steeds!"
@@ -757,8 +761,14 @@
     "message": "Waar praat je meestal?"
   },
   "onboarding_footer": {
-    "description": "Voettekst op de onboardingpagina die bij het eerste gebruik wordt getoond.",
-    "message": "Je kunt dit altijd opnieuw bekijken via de instellingen van Say, Pi. Je privacy is belangrijk — audio wordt alleen vastgelegd tijdens een actieve oproep."
+    "description": "Voettekst op de onboardingpagina bij het eerste gebruik. $tab$ is de naam van het tabblad Instellingen met de link naar deze handleiding.",
+    "message": "Je kunt deze handleiding altijd opnieuw openen via de instellingen van Say, Pi, op het tabblad $tab$. Je privacy is belangrijk — audio wordt alleen tijdens een actief gesprek opgenomen.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hoofdkop op de onboardingpagina die bij de eerste keer openen wordt getoond.",

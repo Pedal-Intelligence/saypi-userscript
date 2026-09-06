@@ -56,6 +56,32 @@ describe("applyOnboardingI18n (#437)", () => {
     expect(root.querySelector("#onboarding-heading")!.textContent).toBe("onboarding_heading");
   });
 
+  it("fills the footer's tab name from the Settings tab's own label (#613)", () => {
+    const root = document.createElement("div");
+    root.innerHTML = `<p id="onboarding-footer">English footer</p>`;
+    const dict: Record<string, string> = {
+      tabAbout: "Über",
+      onboarding_footer: "Wieder zu öffnen unter $tab$.",
+    };
+
+    applyOnboardingI18n(root, (k, sub) =>
+      (dict[k] ?? "").replace("$tab$", sub ?? "")
+    );
+
+    expect(root.querySelector("#onboarding-footer")!.textContent).toBe(
+      "Wieder zu öffnen unter Über."
+    );
+  });
+
+  it("keeps the English footer rather than a half-filled sentence when the tab label is missing", () => {
+    const root = document.createElement("div");
+    root.innerHTML = `<p id="onboarding-footer">English footer</p>`;
+
+    applyOnboardingI18n(root, (k) => (k === "tabAbout" ? "" : "Reopen from $tab$."));
+
+    expect(root.querySelector("#onboarding-footer")!.textContent).toBe("English footer");
+  });
+
   it("maps every onboarding element id to a namespaced onboarding_ key", () => {
     for (const key of Object.values(ONBOARDING_I18N_KEYS)) {
       expect(key).toMatch(/^onboarding_/);

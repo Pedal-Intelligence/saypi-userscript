@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link din fila Despre care redeschide ghidul de configurare afișat la prima rulare și testul microfonului.",
+    "message": "Deschide ghidul de configurare"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Da, sunt încă aici!"
@@ -757,8 +761,14 @@
     "message": "Unde vorbești de obicei?"
   },
   "onboarding_footer": {
-    "description": "Text de subsol pe pagina de onboarding la prima rulare.",
-    "message": "Poți reveni la asta oricând din setările Say, Pi. Confidențialitatea ta contează — audio este captat doar în timpul unui apel activ."
+    "description": "Textul din partea de jos a paginii de configurare inițială. $tab$ este numele filei Setări care conține linkul către acest ghid.",
+    "message": "Poți redeschide acest ghid oricând din setările Say, Pi, în fila $tab$. Confidențialitatea ta contează — sunetul este capturat doar în timpul unui apel activ.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Titlul principal pe pagina de onboarding la prima rulare.",

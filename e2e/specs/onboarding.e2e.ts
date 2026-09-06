@@ -17,6 +17,10 @@ test("welcome works offline with local artwork, quiet mode and the microphone te
   await expect(page.getByRole("link", { name: "Open Pi", exact: true })).toHaveAttribute("href", "https://pi.ai/talk");
   expect(await page.locator("img").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 0))).toBe(true);
   expect(await page.evaluate(() => document.fonts.check('600 48px Poppins'))).toBe(true);
+  // The footer takes the tab's name by substitution from `tabAbout`, and only
+  // the real chrome.i18n can prove the substitution reaches the page — a
+  // translate wrapper that names just the key silently drops it (#613).
+  await expect(page.locator("#onboarding-footer")).toContainText("on the About tab");
   expect(requests.filter((url) => /^https?:/.test(url))).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath("onboarding-desktop.png"), fullPage: true });
 

@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link na karcie Informacje, który ponownie otwiera przewodnik konfiguracji przy pierwszym uruchomieniu i test mikrofonu.",
+    "message": "Otwórz przewodnik konfiguracji"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Tak, nadal tu jestem!"
@@ -757,8 +761,14 @@
     "message": "Gdzie najczęściej będziesz rozmawiać?"
   },
   "onboarding_footer": {
-    "description": "Tekst stopki na stronie wdrożenia przy pierwszym uruchomieniu.",
-    "message": "W każdej chwili możesz wrócić do tego w ustawieniach Say, Pi. Twoja prywatność jest ważna — dźwięk jest przechwytywany tylko podczas aktywnej rozmowy."
+    "description": "Tekst stopki na stronie wprowadzającej wyświetlanej przy pierwszym uruchomieniu. $tab$ to nazwa karty Ustawienia zawierającej odnośnik do tego przewodnika.",
+    "message": "Możesz w każdej chwili ponownie otworzyć ten przewodnik w ustawieniach Say, Pi, na karcie $tab$. Twoja prywatność ma znaczenie — dźwięk jest przechwytywany tylko podczas aktywnego połączenia.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Główny nagłówek na stronie pierwszego uruchomienia (onboarding).",

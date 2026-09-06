@@ -1767,8 +1767,18 @@
     "description": "Button label that opens ChatGPT."
   },
   "onboarding_footer": {
-    "message": "You can revisit this any time from Say, Pi's settings. Your privacy matters — audio is only captured during an active call.",
-    "description": "Footer text on the first-run onboarding page."
+    "message": "You can reopen this guide any time from Say, Pi's settings, on the $tab$ tab. Your privacy matters — audio is only captured during an active call.",
+    "description": "Footer text on the first-run onboarding page. $tab$ is the name of the Settings tab that holds the link back to this guide.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
+  },
+  "aboutSayPiSetupGuide": {
+    "message": "Open the setup guide",
+    "description": "About-tab link that reopens the first-run setup guide and microphone test."
   },
   "onboarding_micTestButton": {
     "message": "Test your microphone",

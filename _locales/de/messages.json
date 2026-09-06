@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link im Tab „Über“, der die Einrichtungshilfe für den ersten Start und den Mikrofontest erneut öffnet.",
+    "message": "Einrichtungsanleitung öffnen"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, ich bin noch hier!"
@@ -757,8 +761,14 @@
     "message": "Wo wirst du meist sprechen?"
   },
   "onboarding_footer": {
-    "description": "Fußzeilentext auf der Onboarding-Seite beim ersten Start.",
-    "message": "Du kannst das jederzeit in den Einstellungen von Say, Pi wieder aufrufen. Deine Privatsphäre zählt – Audio wird nur während eines aktiven Anrufs erfasst."
+    "description": "Fußzeile auf der Einführungsseite beim ersten Start. $tab$ ist der Name des Einstellungs-Tabs, der den Link zurück zu dieser Anleitung enthält.",
+    "message": "Du kannst diese Anleitung jederzeit in den Einstellungen von Say, Pi auf dem Tab $tab$ erneut öffnen. Deine Privatsphäre ist uns wichtig – Audio wird nur während eines aktiven Anrufs erfasst.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hauptüberschrift auf der Onboarding-Seite beim ersten Start.",

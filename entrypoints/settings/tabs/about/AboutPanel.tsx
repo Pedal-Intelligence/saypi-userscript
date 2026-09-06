@@ -34,6 +34,11 @@ export function AboutPanel() {
             agent tools for power users.
           </p>
           <div class="about-links">
+            {/* Extension page, so no href here — AboutTab resolves it through
+                browser.runtime.getURL at init (#613). */}
+            <a id="about-setup-guide" data-i18n="aboutSayPiSetupGuide">
+              Open the setup guide
+            </a>
             <a
               href="https://www.saypi.ai"
               data-i18n="aboutSayPiWebsite"

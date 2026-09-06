@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link sa tab na Tungkol dito na muling nagbubukas sa gabay sa pag-set up sa unang paggamit at pagsubok ng mikropono.",
+    "message": "Buksan ang gabay sa pag-set up"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Oo, nandito pa rin ako!"
@@ -757,8 +761,14 @@
     "message": "Saan ka karaniwang magsasalita?"
   },
   "onboarding_footer": {
-    "description": "Teksto sa footer sa unang beses na onboarding page.",
-    "message": "Maaari mong balikan ito anumang oras mula sa settings ng Say, Pi. Mahalaga ang privacy mo — kinukuha lang ang audio habang may aktibong tawag."
+    "description": "Teksto sa ibaba ng pahina ng onboarding sa unang paggamit. Ang $tab$ ay pangalan ng tab na Mga Setting na may link pabalik sa gabay na ito.",
+    "message": "Maaari mong buksan muli ang gabay na ito anumang oras sa mga setting ng Say, Pi, sa tab na $tab$. Mahalaga ang iyong privacy — kumukuha lang ng audio habang may aktibong tawag.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Pangunahing heading sa first-run onboarding page.",

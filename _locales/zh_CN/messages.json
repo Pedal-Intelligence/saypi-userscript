@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "“关于”标签页中的链接，用于重新打开首次运行设置指南和麦克风测试。",
+    "message": "打开设置指南"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "是的，我还在这里！"
@@ -757,8 +761,14 @@
     "message": "你通常会在哪里说话？"
   },
   "onboarding_footer": {
-    "description": "首次运行引导页面底部文本。",
-    "message": "你可以随时在 Say, Pi 的设置中再次查看。你的隐私很重要——只有在通话进行中才会采集音频。"
+    "description": "首次运行引导页面上的页脚文本。$tab$ 是包含返回本指南链接的设置标签页名称。",
+    "message": "你可以随时在 Say, Pi 的设置中的“$tab$”标签页重新打开本指南。你的隐私很重要——只有在通话进行期间才会采集音频。",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "首次运行引导页上的主标题。",

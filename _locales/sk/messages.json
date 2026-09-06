@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Odkaz na karte O aplikácii, ktorý znova otvorí príručku nastavenia pri prvom spustení a test mikrofónu.",
+    "message": "Otvoriť príručku nastavenia"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Áno, stále som tu!"
@@ -757,8 +761,14 @@
     "message": "Kde sa budeš zvyčajne rozprávať?"
   },
   "onboarding_footer": {
-    "description": "Text v pätičke na stránke úvodného sprievodcu pri prvom spustení.",
-    "message": "K tomuto sa môžeš kedykoľvek vrátiť v nastaveniach Say, Pi. Na tvojom súkromí záleží — zvuk sa zachytáva iba počas aktívneho hovoru."
+    "description": "Text v pätičke úvodnej stránky pri prvom spustení. $tab$ je názov karty Nastavenia, na ktorej sa nachádza odkaz späť na túto príručku.",
+    "message": "Túto príručku môžete kedykoľvek znova otvoriť v nastaveniach Say, Pi na karte $tab$. Na vašom súkromí nám záleží — zvuk sa zaznamenáva iba počas aktívneho hovoru.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hlavný nadpis na úvodnej stránke pri prvom spustení.",

@@ -9,9 +9,12 @@
  *    silently, and a fix applied to one alone would reach nobody;
  *  - the claims themselves must match what the extension actually does.
  */
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { ONBOARDING_I18N_KEYS } from "../../src/onboarding/onboarding-page";
+import {
+  ONBOARDING_I18N_KEYS,
+  ONBOARDING_I18N_SUBSTITUTIONS,
+} from "../../src/onboarding/onboarding-page";
 
 const markup = readFileSync(
   new URL("../../entrypoints/onboarding/index.html", import.meta.url),
@@ -23,7 +26,13 @@ const en: Record<string, { message: string }> = JSON.parse(
 
 const page = new DOMParser().parseFromString(markup, "text/html");
 const squash = (s: string) => s.replace(/\s+/g, " ").trim();
-const message = (key: string) => en[key]?.message ?? "";
+
+/** The en message with its one substitution resolved, as the page renders it. */
+function message(key: string): string {
+  const raw = en[key]?.message ?? "";
+  const from = ONBOARDING_I18N_SUBSTITUTIONS[key];
+  return from ? raw.replace(/\$[A-Za-z0-9_]+\$/g, en[from]?.message ?? "") : raw;
+}
 
 describe("onboarding first-run copy", () => {
   it("keeps the inline English identical to the en catalog for every localized element", () => {
@@ -55,6 +64,38 @@ describe("onboarding first-run copy", () => {
       // Not just "the Say, Pi call button" — the reader has to be told it
       // appears in the chat itself, or the toolbar icon is the obvious guess.
       expect(step2).toMatch(/\b(page|chat|composer|where you type)\b/i);
+    });
+  });
+
+  describe("the promised way back into setup (#613)", () => {
+    it("names the tab the return route actually lives on", () => {
+      const footer = message("onboarding_footer");
+      expect(footer).toMatch(/settings/i);
+      // "from Say, Pi's settings" sent people looking through five tabs for a
+      // control that did not exist. Now the link is on About, so say About.
+      expect(footer).toMatch(/\babout\b/i);
+    });
+
+    it("borrows the tab's own label rather than spelling it out again", () => {
+      // A hand-written "About" in 32 catalogs drifts from the tab button: the
+      // first translation pass produced 11 locales whose footer named a tab
+      // that is labelled something else in the sidebar. Substituting the
+      // sidebar's own string makes that impossible.
+      expect(ONBOARDING_I18N_SUBSTITUTIONS.onboarding_footer).toBe("tabAbout");
+      expect(en.onboarding_footer.message).toContain("$tab$");
+    });
+
+    it("declares the substitution in every locale, so no catalog renders a raw token", () => {
+      const localeDirs = new URL("../../_locales/", import.meta.url);
+      for (const loc of readdirSync(localeDirs)) {
+        const catalog = JSON.parse(
+          readFileSync(new URL(`${loc}/messages.json`, localeDirs), "utf8")
+        );
+        const entry = catalog.onboarding_footer;
+        expect(entry?.message, `${loc} has a footer`).toBeDefined();
+        expect(entry.message, `${loc} keeps the token`).toContain("$tab$");
+        expect(entry.placeholders?.tab?.content, `${loc} declares it`).toBe("$1");
+      }
     });
   });
 });

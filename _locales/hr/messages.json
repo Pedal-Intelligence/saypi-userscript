@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Poveznica na kartici O alatu koja ponovno otvara vodič za početno postavljanje i test mikrofona.",
+    "message": "Otvori vodič za postavljanje"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Da, još sam ovdje!"
@@ -757,8 +761,14 @@
     "message": "Gdje ćeš najčešće razgovarati?"
   },
   "onboarding_footer": {
-    "description": "Tekst u podnožju na stranici uvodnog prikaza pri prvom pokretanju.",
-    "message": "Ovo možeš ponovno otvoriti bilo kada u postavkama za Say, Pi. Tvoja privatnost je važna — zvuk se snima samo tijekom aktivnog poziva."
+    "description": "Tekst podnožja na stranici vodiča pri prvom pokretanju. $tab$ je naziv kartice Postavke koja sadrži poveznicu natrag na ovaj vodič.",
+    "message": "Ovaj vodič možete ponovno otvoriti u bilo kojem trenutku u postavkama usluge Say, Pi, na kartici $tab$. Vaša je privatnost važna — zvuk se snima samo tijekom aktivnog poziva.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Glavni naslov na onboarding stranici pri prvom pokretanju.",

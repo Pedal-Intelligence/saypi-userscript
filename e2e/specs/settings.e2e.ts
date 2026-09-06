@@ -82,6 +82,19 @@ test.describe("settings page (Preact migration)", () => {
         );
         await expect(panel.locator(".voice-studio-empty")).toHaveCount(0);
       }
+
+      // The way back into first-run setup (#613). Its href is resolved at
+      // runtime from browser.runtime.getURL, so only a real extension context
+      // can prove it points at a page that exists — a unit test can assert the
+      // wiring, not that `onboarding.html` shipped under this id.
+      if (tab === "about") {
+        const setupGuide = panel.locator("#about-setup-guide");
+        await expect(setupGuide).toBeVisible();
+        await expect(setupGuide).toHaveAttribute(
+          "href",
+          `chrome-extension://${extensionId}/onboarding.html`,
+        );
+      }
     }
 
     expect(

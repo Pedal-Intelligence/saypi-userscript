@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "İlk kullanım kurulum rehberini ve mikrofon testini yeniden açan Hakkında sekmesi bağlantısı.",
+    "message": "Kurulum rehberini aç"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Evet, hala buradayım!"
@@ -757,8 +761,14 @@
     "message": "Genelde nerede konuşacaksınız?"
   },
   "onboarding_footer": {
-    "description": "İlk çalıştırma tanıtım sayfasındaki alt bilgi metni.",
-    "message": "Buna istediğiniz zaman Say, Pi ayarlarından geri dönebilirsiniz. Gizliliğiniz önemli — ses yalnızca etkin bir arama sırasında alınır."
+    "description": "İlk kullanım tanıtım sayfasındaki alt bilgi metni. $tab$, bu kılavuza dönüş bağlantısını içeren Ayarlar sekmesinin adıdır.",
+    "message": "Bu kılavuzu istediğiniz zaman Say, Pi ayarlarında $tab$ sekmesinden yeniden açabilirsiniz. Gizliliğiniz önemlidir — ses yalnızca etkin bir arama sırasında alınır.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "İlk çalıştırma tanıtım sayfasındaki ana başlık.",
