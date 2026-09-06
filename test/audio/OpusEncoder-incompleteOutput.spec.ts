@@ -1,15 +1,19 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 /**
- * Guard against a WebM/Opus upload that carries no audio (#630).
+ * Guard against a WebM/Opus upload the server cannot correctly decode (#630).
  *
  * One Firefox 154 install shipped 47 consecutive uploads whose container had a
  * valid EBML header and no audio blocks at all — every transcription from it
  * failed. `encodeToOpusWebM` awaited `flush()` and finalized the muxer without
- * ever checking that a chunk had reached it, so an encoder that emitted nothing
- * still produced a well-formed, empty file. These tests pin the two ways that
- * happens: `output` never fires, and `output` fires but the muxer throws inside
- * it (a throw the browser swallows, since it owns the callback).
+ * ever checking what had reached it, so an encoder that emitted nothing still
+ * produced a well-formed, empty file.
+ *
+ * These tests pin the three ways a stream can arrive incomplete: `output` never
+ * fires; `output` fires but the muxer throws inside it (a throw the browser
+ * swallows, since it owns the callback); and `output` fires twice, the first
+ * chunk muxing and the second throwing — which finalizes a truncated file that
+ * transcribes to a plausible wrong answer rather than failing outright.
  */
 describe("OpusEncoder — incomplete-output guard (#630)", () => {
   const g = globalThis as any;
