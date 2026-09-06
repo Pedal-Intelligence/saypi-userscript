@@ -740,6 +740,10 @@
     "description": "Umgebungsoption: in der Nähe anderer Menschen.",
     "message": "In der Nähe anderer Menschen"
   },
+  "onboarding_envHelp": {
+    "description": "Erklärt vor der Beantwortung der Umgebungsfrage, dass die Antwort den Ruhemodus aktiviert oder deaktiviert.",
+    "message": "Damit wird der Ruhemodus festgelegt: Wenn andere Menschen in der Nähe sind, wird er aktiviert. Say, Pi erkennt dann leisere Sprache und antwortet mit geringerer Lautstärke. Bei den anderen Antworten bleibt er deaktiviert – du kannst ihn später in den Einstellungen ändern."
+  },
   "onboarding_envMixed": {
     "description": "Umgebungsoption: eine Mischung aus privaten und geteilten Orten.",
     "message": "An verschiedenen Orten"
@@ -749,12 +753,16 @@
     "message": "An einem privaten Ort"
   },
   "onboarding_envQuietOff": {
-    "description": "Bestätigung, die angezeigt wird, wenn die Umgebungsantwort den Ruhemodus deaktiviert lässt.",
-    "message": "Alles klar — wir behalten die Standard-Einstellungen für Zuhören und Wiedergabe bei."
+    "description": "Status bei deaktiviertem Ruhemodus, sowohl nach der Auswahl einer Umgebung als auch beim erneuten Öffnen der Seite.",
+    "message": "Der Ruhemodus ist deaktiviert – wir verwenden die standardmäßigen Einstellungen für Erkennung und Wiedergabe."
   },
   "onboarding_envQuietOn": {
-    "description": "Bestätigung, die angezeigt wird, wenn die Umgebungsantwort den Leise-Modus aktiviert.",
-    "message": "Leise-Modus an – wir erfassen auch leiseres Sprechen und antworten leise, damit du unauffällig sprechen kannst."
+    "description": "Status bei aktiviertem Ruhemodus, sowohl nach der Auswahl einer Umgebung als auch beim erneuten Öffnen der Seite.",
+    "message": "Der Ruhemodus ist aktiviert – wir erkennen leisere Sprache und antworten leise, damit du diskret sprechen kannst."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status bei einem Fehler beim Speichern der Ruhemodus-Einstellung aus der Umgebungsfrage.",
+    "message": "Das konnte nicht gespeichert werden, daher hat sich nichts geändert. Wähle eine Option, um es erneut zu versuchen."
   },
   "onboarding_envTitle": {
     "description": "Überschrift für die Onboarding-Frage zur Umgebung der Nutzerin bzw. des Nutzers.",

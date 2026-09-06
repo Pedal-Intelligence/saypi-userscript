@@ -196,7 +196,8 @@ button { font: inherit; cursor: pointer; }
 .mic-test-status:not(:empty), .env-status:not(:empty) { margin-top: 10px; }
 
 .env-question { padding: 26px 0 20px; border-bottom: 1px solid var(--welcome-border); }
-.env-question h2 { margin-bottom: 14px; font-size: 15px; }
+.env-question h2 { margin-bottom: 8px; font-size: 15px; }
+.env-help { margin-bottom: 14px; max-width: 62ch; color: var(--welcome-muted); font-size: 12px; line-height: 1.7; }
 .env-options { display: flex; flex-wrap: wrap; gap: 10px; }
 .env-option {
   display: flex;

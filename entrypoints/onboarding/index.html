@@ -98,7 +98,12 @@
       </ol>
       <section class="env-question" aria-labelledby="onboarding-env-title">
         <h2 id="onboarding-env-title">Where will you usually talk?</h2>
-        <div class="env-options" role="radiogroup" aria-labelledby="onboarding-env-title">
+        <p class="env-help" id="onboarding-env-help">
+          This sets Quiet mode: around other people turns it on, so Say, Pi listens
+          for softer speech and replies at a lower volume. The other answers leave it
+          off — and you can change it later in Settings.
+        </p>
+        <div class="env-options" role="radiogroup" aria-labelledby="onboarding-env-title" aria-describedby="onboarding-env-help">
           <label class="env-option">
             <input type="radio" name="voice-environment" value="private" />
             <span id="onboarding-env-private-label">Somewhere private</span>

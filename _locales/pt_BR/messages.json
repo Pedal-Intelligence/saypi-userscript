@@ -740,6 +740,10 @@
     "description": "Opção de ambiente: perto de outras pessoas.",
     "message": "Perto de outras pessoas"
   },
+  "onboarding_envHelp": {
+    "description": "Explica, antes de responder à pergunta sobre o ambiente, que a resposta ativa o modo silencioso.",
+    "message": "Isso ativa o modo silencioso: perto de outras pessoas, o Say, Pi passa a ouvir uma fala mais baixa e responder em volume reduzido. As outras opções o mantêm desativado — e você pode alterar isso depois em Configurações."
+  },
   "onboarding_envMixed": {
     "description": "Opção de ambiente: uma mistura de espaços privados e compartilhados.",
     "message": "Em lugares variados"
@@ -749,12 +753,16 @@
     "message": "Em um lugar privado"
   },
   "onboarding_envQuietOff": {
-    "description": "Confirmação mostrada quando a resposta sobre o ambiente deixa o modo silencioso desativado.",
-    "message": "Certo — vamos manter as configurações padrão de escuta e reprodução."
+    "description": "Status mostrado quando o modo silencioso está desativado, tanto após escolher um ambiente quanto ao reabrir a página.",
+    "message": "O modo silencioso está desativado — usaremos as configurações padrão de escuta e reprodução."
   },
   "onboarding_envQuietOn": {
-    "description": "Confirmação mostrada quando a resposta sobre o ambiente ativa o modo silencioso.",
-    "message": "Modo silencioso ativado — vamos captar falas mais baixas e responder em voz baixa, para você falar com discrição."
+    "description": "Status mostrado quando o modo silencioso está ativado, tanto após escolher um ambiente quanto ao reabrir a página.",
+    "message": "O modo silencioso está ativado — vamos captar uma fala mais baixa e responder em volume reduzido, para você falar com discrição."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status mostrado quando ocorre uma falha ao salvar a configuração do modo silencioso a partir da pergunta sobre o ambiente.",
+    "message": "Não foi possível salvar, então nada mudou. Escolha uma opção para tentar novamente."
   },
   "onboarding_envTitle": {
     "description": "Título da pergunta do onboarding sobre o ambiente do usuário.",

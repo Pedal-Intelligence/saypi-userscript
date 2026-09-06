@@ -740,6 +740,10 @@
     "description": "Opcija okruženja: u blizini drugih ljudi.",
     "message": "U blizini drugih ljudi"
   },
+  "onboarding_envHelp": {
+    "description": "Objašnjava, prije odgovora na pitanje o okruženju, da odgovor uključuje Tihi način rada.",
+    "message": "Time se uključuje Tihi način rada: ako ste među drugim ljudima, Say, Pi prepoznaje tiši govor i odgovara manjom glasnoćom. Ostali odgovori ostavljaju ga isključenim — postavku možete promijeniti u Postavkama."
+  },
   "onboarding_envMixed": {
     "description": "Opcija okruženja: kombinacija privatnih i zajedničkih prostora.",
     "message": "Malo ovdje, malo tamo"
@@ -749,12 +753,16 @@
     "message": "Negdje privatno"
   },
   "onboarding_envQuietOff": {
-    "description": "Potvrda koja se prikazuje kada odgovor o okruženju ostavlja tihi način isključenim.",
-    "message": "U redu — zadržat ćemo standardne postavke slušanja i reprodukcije."
+    "description": "Status koji se prikazuje kada je Tihi način rada isključen, nakon odabira okruženja i pri ponovnom otvaranju stranice.",
+    "message": "Tihi način rada isključen je — koristit ćemo standardne postavke slušanja i reprodukcije."
   },
   "onboarding_envQuietOn": {
-    "description": "Potvrda prikazana kada odgovor o okruženju uključi tihi način.",
-    "message": "Tihi način je uključen — prepoznat ćemo tiši govor i odgovarati tiho, pa možeš razgovarati diskretno."
+    "description": "Status koji se prikazuje kada je Tihi način rada uključen, nakon odabira okruženja i pri ponovnom otvaranju stranice.",
+    "message": "Tihi način rada uključen je — prepoznat ćemo tiši govor i tiho odgovarati, kako biste mogli razgovarati diskretno."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status koji se prikazuje kada spremanje postavke tihog načina rada iz pitanja o okruženju ne uspije.",
+    "message": "Nismo to mogli spremiti pa se ništa nije promijenilo. Odaberite opciju i pokušajte ponovno."
   },
   "onboarding_envTitle": {
     "description": "Naslov za uvodno pitanje o korisnikovom okruženju.",

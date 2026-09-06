@@ -740,6 +740,10 @@
     "description": "Option d’environnement : autour d’autres personnes.",
     "message": "Avec d’autres personnes autour"
   },
+  "onboarding_envHelp": {
+    "description": "Explique, avant la réponse à la question sur l’environnement, que la réponse active le mode silencieux.",
+    "message": "Cela active le mode silencieux : en présence d’autres personnes, Say, Pi détecte les voix plus douces et répond à un volume réduit. Les autres réponses le laissent désactivé — vous pourrez modifier ce choix plus tard dans les paramètres."
+  },
   "onboarding_envMixed": {
     "description": "Option d’environnement : un mélange d’espaces privés et partagés.",
     "message": "Un mélange d’endroits"
@@ -749,12 +753,16 @@
     "message": "Quelque part en privé"
   },
   "onboarding_envQuietOff": {
-    "description": "Confirmation affichée lorsque la réponse sur l’environnement laisse le mode silencieux désactivé.",
-    "message": "D’accord, nous garderons les réglages d’écoute et de lecture par défaut."
+    "description": "État affiché lorsque le mode silencieux est désactivé, après le choix d’un environnement comme à la réouverture de la page.",
+    "message": "Le mode silencieux est désactivé — nous utiliserons les paramètres d’écoute et de lecture standard."
   },
   "onboarding_envQuietOn": {
-    "description": "Confirmation affichée lorsque la réponse sur l’environnement active le mode discret.",
-    "message": "Mode discret activé : nous capterons une voix plus douce et répondrons à voix basse, pour que vous puissiez parler discrètement."
+    "description": "État affiché lorsque le mode silencieux est activé, après le choix d’un environnement comme à la réouverture de la page.",
+    "message": "Le mode silencieux est activé — nous détecterons les voix plus douces et répondrons discrètement, pour vous permettre de parler en toute discrétion."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "État affiché lorsque l’enregistrement du mode silencieux depuis la question sur l’environnement échoue.",
+    "message": "Nous n’avons pas pu enregistrer ce choix, rien n’a donc changé. Sélectionnez une option pour réessayer."
   },
   "onboarding_envTitle": {
     "description": "Titre de la question d’onboarding sur l’environnement de l’utilisateur.",

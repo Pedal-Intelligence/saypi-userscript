@@ -740,6 +740,10 @@
     "description": "Miljøvalg: omkring andre mennesker.",
     "message": "Omkring andre mennesker"
   },
+  "onboarding_envHelp": {
+    "description": "Forklarer før besvarelsen af miljøspørgsmålet, at svaret skifter Lydløs tilstand.",
+    "message": "Dette slår Lydløs tilstand til: Vælg omkring andre, så lytter Say, Pi efter svagere tale og svarer ved lavere lydstyrke. De andre svar lader den være slået fra — og du kan ændre det senere under Indstillinger."
+  },
   "onboarding_envMixed": {
     "description": "Miljøvalg: en blanding af private og fælles rum.",
     "message": "En blanding af steder"
@@ -749,12 +753,16 @@
     "message": "Et privat sted"
   },
   "onboarding_envQuietOff": {
-    "description": "Bekræftelse, der vises, når svaret om miljøet efterlader stille tilstand slået fra.",
-    "message": "Okay — vi beholder standardindstillingerne for lytning og afspilning."
+    "description": "Status, der vises, når Lydløs tilstand er slået fra, både efter valg af miljø og når siden åbnes igen.",
+    "message": "Lydløs tilstand er slået fra — vi bruger standardindstillingerne for lytning og afspilning."
   },
   "onboarding_envQuietOn": {
-    "description": "Bekræftelse, der vises, når svaret om omgivelser aktiverer stille tilstand.",
-    "message": "Stille tilstand til — vi opfanger blødere tale og svarer lavt, så du kan tale diskret."
+    "description": "Status, der vises, når Lydløs tilstand er slået til, både efter valg af miljø og når siden åbnes igen.",
+    "message": "Lydløs tilstand er slået til — vi opfanger svagere tale og svarer stille, så du kan tale diskret."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status, der vises, når skrivning af indstillingen for Lydløs tilstand fra miljøspørgsmålet mislykkes.",
+    "message": "Vi kunne ikke gemme det, så intet er ændret. Vælg en mulighed for at prøve igen."
   },
   "onboarding_envTitle": {
     "description": "Overskrift til onboarding-spørgsmålet om brugerens omgivelser.",

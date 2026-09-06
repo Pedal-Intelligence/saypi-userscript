@@ -98,4 +98,34 @@ describe("onboarding first-run copy", () => {
       }
     });
   });
+
+  describe("the environment question (#614)", () => {
+    it("says what the answer changes, before it is answered", () => {
+      // The radios write `quietMode` the instant one is picked. The heading
+      // alone ("Where will you usually talk?") never said so.
+      const help = message("onboarding_envHelp");
+      expect(help).not.toBe("");
+      expect(help).toMatch(/quiet mode/i);
+      expect(page.querySelector("#onboarding-env-help")).not.toBeNull();
+    });
+
+    it("puts the explanation ahead of the options, where it can still inform the choice", () => {
+      const help = page.querySelector("#onboarding-env-help")!;
+      const options = page.querySelector('[role="radiogroup"]')!;
+      expect(
+        help.compareDocumentPosition(options) & Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy();
+    });
+
+    it("describes quiet mode as a state, so the same words serve a fresh answer and a revisit", () => {
+      // These now render on load from stored state as well as after a click,
+      // so "Got it —" style acknowledgements would be a lie on a revisit.
+      expect(message("onboarding_envQuietOn")).toMatch(/quiet mode is on/i);
+      expect(message("onboarding_envQuietOff")).toMatch(/quiet mode is off/i);
+    });
+
+    it("has something honest to say when the setting could not be saved", () => {
+      expect(message("onboarding_envSaveFailed")).not.toBe("");
+    });
+  });
 });

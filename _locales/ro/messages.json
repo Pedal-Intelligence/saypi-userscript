@@ -740,6 +740,10 @@
     "description": "Opțiune de mediu: în preajma altor oameni.",
     "message": "În preajma altor oameni"
   },
+  "onboarding_envHelp": {
+    "description": "Explică, înainte de răspunsul la întrebarea despre mediu, că răspunsul schimbă modul Silențios.",
+    "message": "Acest lucru activează modul Silențios: dacă ești în preajma altor persoane, îl activează, astfel încât Say, Pi ascultă vorbirea mai încet și răspunde la un volum mai redus. Celelalte răspunsuri îl lasă dezactivat — îl poți schimba ulterior din Setări."
+  },
   "onboarding_envMixed": {
     "description": "Opțiune de mediu: un amestec de spații private și partajate.",
     "message": "Un mix de locuri"
@@ -749,12 +753,16 @@
     "message": "Undeva privat"
   },
   "onboarding_envQuietOff": {
-    "description": "Confirmare afișată când răspunsul despre mediu lasă modul silențios dezactivat.",
-    "message": "Am înțeles — vom păstra setările standard de ascultare și redare."
+    "description": "Stare afișată când modul Silențios este dezactivat, atât după alegerea unui mediu, cât și la redeschiderea paginii.",
+    "message": "Modul Silențios este dezactivat — vom folosi setările standard pentru ascultare și redare."
   },
   "onboarding_envQuietOn": {
-    "description": "Confirmare afișată când răspunsul despre mediu activează modul silențios.",
-    "message": "Mod silențios activ — îți vom prelua vocea mai încet și vom răspunde încet, ca să poți vorbi discret."
+    "description": "Stare afișată când modul Silențios este activ, atât după alegerea unui mediu, cât și la redeschiderea paginii.",
+    "message": "Modul Silențios este activ — vom prelua vorbirea mai încet și vom răspunde discret, ca să poți vorbi fără să atragi atenția."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Stare afișată când salvarea setării modului Silențios din întrebarea despre mediu eșuează.",
+    "message": "Nu am putut salva setarea, așa că nimic nu s-a schimbat. Alege o opțiune pentru a încerca din nou."
   },
   "onboarding_envTitle": {
     "description": "Titlu pentru întrebarea din onboarding despre mediul utilizatorului.",

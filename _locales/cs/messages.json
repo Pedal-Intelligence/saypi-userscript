@@ -740,6 +740,10 @@
     "description": "Možnost prostředí: mezi ostatními lidmi.",
     "message": "Mezi ostatními lidmi"
   },
+  "onboarding_envHelp": {
+    "description": "Vysvětluje před zodpovězením otázky na prostředí, že odpověď přepíná tichý režim.",
+    "message": "Tím nastavíte tichý režim: volba „mezi lidmi“ ho zapne, takže Say, Pi zachytí tišší řeč a odpoví s nižší hlasitostí. Ostatní odpovědi ho nechají vypnutý — později to můžete změnit v Nastavení."
+  },
   "onboarding_envMixed": {
     "description": "Možnost prostředí: mix soukromých a sdílených prostor.",
     "message": "Kombinace míst"
@@ -749,12 +753,16 @@
     "message": "Někde v soukromí"
   },
   "onboarding_envQuietOff": {
-    "description": "Potvrzení zobrazené, když odpověď ohledně prostředí ponechá tichý režim vypnutý.",
-    "message": "Dobře, ponecháme standardní nastavení poslechu a přehrávání."
+    "description": "Stav zobrazený, když je tichý režim vypnutý, a to po výběru prostředí i při opětovném otevření stránky.",
+    "message": "Tichý režim je vypnutý — použijeme standardní nastavení poslechu a přehrávání."
   },
   "onboarding_envQuietOn": {
-    "description": "Potvrzení zobrazené, když odpověď na prostředí zapne tichý režim.",
-    "message": "Tichý režim zapnutý — zachytíme i tišší řeč a odpovíme potichu, abyste mohli mluvit diskrétně."
+    "description": "Stav zobrazený, když je tichý režim zapnutý, a to po výběru prostředí i při opětovném otevření stránky.",
+    "message": "Tichý režim je zapnutý — zachytíme tišší řeč a odpovíme potichu, abyste mohli mluvit diskrétně."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Stav zobrazený při neúspěšném uložení nastavení tichého režimu z otázky na prostředí.",
+    "message": "Toto se nepodařilo uložit, takže se nic nezměnilo. Zvolte možnost a zkuste to znovu."
   },
   "onboarding_envTitle": {
     "description": "Nadpis pro otázku v úvodním nastavení o prostředí uživatele.",

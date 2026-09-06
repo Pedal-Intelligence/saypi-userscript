@@ -740,6 +740,10 @@
     "description": "Miljöalternativ: bland andra människor.",
     "message": "Bland andra människor"
   },
+  "onboarding_envHelp": {
+    "description": "Förklarar, innan miljöfrågan besvaras, att svaret ändrar det tysta läget.",
+    "message": "Det här ställer in tyst läge: om du är bland andra aktiveras det, så att Say, Pi lyssnar efter tystare tal och svarar med lägre volym. Övriga svar lämnar det avstängt — och du kan ändra det senare i Inställningar."
+  },
   "onboarding_envMixed": {
     "description": "Miljöalternativ: en blandning av privata och delade platser.",
     "message": "En blandning av platser"
@@ -749,12 +753,16 @@
     "message": "Någonstans privat"
   },
   "onboarding_envQuietOff": {
-    "description": "Bekräftelse som visas när svaret om miljön lämnar tyst läge avstängt.",
-    "message": "Okej, vi behåller standardinställningarna för lyssning och uppspelning."
+    "description": "Status som visas när tyst läge är av, både efter att en miljö har valts och när sidan öppnas igen.",
+    "message": "Tyst läge är av — vi använder standardinställningarna för lyssning och uppspelning."
   },
   "onboarding_envQuietOn": {
-    "description": "Bekräftelse som visas när miljösvaret aktiverar tyst läge.",
-    "message": "Tyst läge är på — vi plockar upp tystare tal och svarar tyst, så att du kan prata diskret."
+    "description": "Status som visas när tyst läge är på, både efter att en miljö har valts och när sidan öppnas igen.",
+    "message": "Tyst läge är på — vi uppfattar tystare tal och svarar tyst, så att du kan prata diskret."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status som visas när det inte gick att spara inställningen för tyst läge från miljöfrågan.",
+    "message": "Det gick inte att spara, så inget har ändrats. Välj ett alternativ och försök igen."
   },
   "onboarding_envTitle": {
     "description": "Rubrik för introduktionsfrågan om användarens miljö.",

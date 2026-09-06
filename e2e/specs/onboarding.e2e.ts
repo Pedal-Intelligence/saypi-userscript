@@ -26,7 +26,7 @@ test("welcome works offline with local artwork, quiet mode and the microphone te
 
   await page.getByRole("radio", { name: "Around other people" }).check();
   await expect.poll(() => serviceWorker.evaluate(async () => (await chrome.storage.local.get("quietMode")).quietMode)).toBe(true);
-  await expect(page.locator("#onboarding-env-status")).toContainText("Quiet mode on");
+  await expect(page.locator("#onboarding-env-status")).toContainText("Quiet mode is on");
   await page.getByRole("radio", { name: "Somewhere private" }).check();
   await expect.poll(() => serviceWorker.evaluate(async () => (await chrome.storage.local.get("quietMode")).quietMode)).toBe(false);
 

@@ -740,6 +740,10 @@
     "description": "Ympäristövaihtoehto: muiden ihmisten lähellä.",
     "message": "Muiden ihmisten lähellä"
   },
+  "onboarding_envHelp": {
+    "description": "Kertoo ennen ympäristöä koskevaan kysymykseen vastaamista, että vastaus vaihtaa hiljaisen tilan asetusta.",
+    "message": "Tämä ottaa hiljaisen tilan käyttöön: muiden ihmisten seurassa se on päällä, joten Say, Pi kuuntelee hiljaisempaa puhetta ja vastaa pienemmällä äänenvoimakkuudella. Muut vastaukset pitävät sen pois päältä — voit muuttaa asetusta myöhemmin Asetuksissa."
+  },
   "onboarding_envMixed": {
     "description": "Ympäristövaihtoehto: sekoitus yksityisiä ja jaettuja tiloja.",
     "message": "Eri paikoissa"
@@ -749,12 +753,16 @@
     "message": "Jossain yksityisessä paikassa"
   },
   "onboarding_envQuietOff": {
-    "description": "Vahvistus, joka näytetään, kun ympäristökysymykseen annettu vastaus jättää hiljaisen tilan pois päältä.",
-    "message": "Selvä — pidämme vakio kuuntelu- ja toistoasetukset."
+    "description": "Tila näytetään, kun hiljainen tila on pois päältä, sekä ympäristön valitsemisen jälkeen että sivun uudelleen avaamisen yhteydessä.",
+    "message": "Hiljainen tila on pois päältä — käytämme kuuntelun ja toiston vakioasetuksia."
   },
   "onboarding_envQuietOn": {
-    "description": "Vahvistus, joka näytetään, kun ympäristövalinta ottaa hiljaisen tilan käyttöön.",
-    "message": "Hiljainen tila päällä — kuulemme myös hiljaisemman puheen ja vastaamme hiljaa, jotta voit puhua huomaamattomasti."
+    "description": "Tila näytetään, kun hiljainen tila on päällä, sekä ympäristön valitsemisen jälkeen että sivun uudelleen avaamisen yhteydessä.",
+    "message": "Hiljainen tila on päällä — tunnistamme hiljaisemman puheen ja vastaamme hiljaa, jotta voit puhua huomaamattomasti."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Tila näytetään, kun hiljaisen tilan asetuksen tallentaminen ympäristöä koskevasta kysymyksestä epäonnistuu.",
+    "message": "Emme voineet tallentaa asetusta, joten mikään ei muuttunut. Valitse vaihtoehto ja yritä uudelleen."
   },
   "onboarding_envTitle": {
     "description": "Otsikko käyttöönoton kysymykselle käyttäjän ympäristöstä.",

@@ -740,6 +740,10 @@
     "description": "Opzione ambiente: in presenza di altre persone.",
     "message": "In mezzo ad altre persone"
   },
+  "onboarding_envHelp": {
+    "description": "Spiega, prima di rispondere alla domanda sull'ambiente, che la risposta attiva la modalità silenziosa.",
+    "message": "Imposta la modalità silenziosa: se ci sono altre persone, si attiva, così Say, Pi ascolta le voci più basse e risponde a volume ridotto. Le altre risposte la lasciano disattivata: puoi cambiarla in Impostazioni."
+  },
   "onboarding_envMixed": {
     "description": "Opzione ambiente: un mix di spazi privati e condivisi.",
     "message": "In luoghi diversi"
@@ -749,12 +753,16 @@
     "message": "In un luogo privato"
   },
   "onboarding_envQuietOff": {
-    "description": "Conferma mostrata quando la risposta sull'ambiente lascia la modalità silenziosa disattivata.",
-    "message": "Va bene, manterremo le impostazioni standard di ascolto e riproduzione."
+    "description": "Stato mostrato quando la modalità silenziosa è disattivata, sia dopo la scelta dell'ambiente sia quando la pagina viene riaperta.",
+    "message": "La modalità silenziosa è disattivata: useremo le impostazioni standard di ascolto e riproduzione."
   },
   "onboarding_envQuietOn": {
-    "description": "Conferma mostrata quando la risposta sull'ambiente attiva la modalità silenziosa.",
-    "message": "Modalità silenziosa attiva: rileveremo anche una voce più bassa e risponderemo a bassa voce, così puoi parlare con discrezione."
+    "description": "Stato mostrato quando la modalità silenziosa è attiva, sia dopo la scelta dell'ambiente sia quando la pagina viene riaperta.",
+    "message": "La modalità silenziosa è attiva: rileveremo le voci più basse e risponderemo a volume ridotto, così puoi parlare con discrezione."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Stato mostrato quando non è stato possibile salvare l'impostazione della modalità silenziosa dalla domanda sull'ambiente.",
+    "message": "Non è stato possibile salvare la modifica, quindi non è cambiato nulla. Scegli un'opzione per riprovare."
   },
   "onboarding_envTitle": {
     "description": "Titolo della domanda dell'onboarding sull'ambiente dell'utente.",

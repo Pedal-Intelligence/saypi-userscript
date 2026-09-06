@@ -740,6 +740,10 @@
     "description": "Opsyon sa kapaligiran: malapit sa ibang tao.",
     "message": "Malapit sa ibang tao"
   },
+  "onboarding_envHelp": {
+    "description": "Ipinapaliwanag, bago sagutin ang tanong tungkol sa kapaligiran, na binabago ng sagot ang quiet mode.",
+    "message": "Itinatakda nito ang Quiet mode: kapag may ibang tao, io-on ito para makinig ang Say, Pi sa mas mahinang pananalita at sumagot sa mas mababang volume. Sa ibang sagot, mananatili itong naka-off — at puwede mo itong baguhin sa Settings."
+  },
   "onboarding_envMixed": {
     "description": "Opsyon sa kapaligiran: halo ng pribado at shared na espasyo.",
     "message": "Halo-halong lugar"
@@ -749,12 +753,16 @@
     "message": "Sa pribadong lugar"
   },
   "onboarding_envQuietOff": {
-    "description": "Kumpirmasyong ipinapakita kapag ang sagot tungkol sa kapaligiran ay hindi nagbubukas ng quiet mode.",
-    "message": "Sige — gagamitin namin ang karaniwang mga setting sa pakikinig at pag-playback."
+    "description": "Ipinapakitang naka-off ang quiet mode matapos pumili ng kapaligiran at kapag muling binuksan ang page.",
+    "message": "Naka-off ang Quiet mode — gagamitin namin ang karaniwang setting ng pakikinig at pag-playback."
   },
   "onboarding_envQuietOn": {
-    "description": "Kumpirmasyong ipinapakita kapag ang sagot sa kapaligiran ay nag-e-enable ng quiet mode.",
-    "message": "Naka-on ang quiet mode — makikinig kami kahit mas mahina ang boses at mahina ring sasagot, para makapagsalita ka nang hindi halata."
+    "description": "Ipinapakitang naka-on ang quiet mode matapos pumili ng kapaligiran at kapag muling binuksan ang page.",
+    "message": "Naka-on ang Quiet mode — makikinig kami sa mas mahinang pananalita at tahimik na sasagot para makapagsalita ka nang hindi gaanong napapansin."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Ipinapakitang nabigo ang pag-save ng setting ng quiet mode mula sa tanong tungkol sa kapaligiran.",
+    "message": "Hindi namin iyon ma-save, kaya walang nagbago. Pumili ng opsyon para subukan muli."
   },
   "onboarding_envTitle": {
     "description": "Heading para sa onboarding na tanong tungkol sa kapaligiran ng user.",

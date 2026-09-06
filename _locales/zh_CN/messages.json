@@ -740,6 +740,10 @@
     "description": "环境选项：在其他人附近。",
     "message": "在别人身边"
   },
+  "onboarding_envHelp": {
+    "description": "说明在回答环境问题前，所选答案会切换安静模式。",
+    "message": "这会设置安静模式：选择“在其他人身边”会开启它，让 Say, Pi 接收更轻的说话声，并以较低音量回复。其他选项会关闭它，你之后也可以在设置中更改。"
+  },
   "onboarding_envMixed": {
     "description": "环境选项：私密空间与共享空间的混合。",
     "message": "在不同地方都有"
@@ -749,12 +753,16 @@
     "message": "在比较私密的地方"
   },
   "onboarding_envQuietOff": {
-    "description": "当环境选择让安静模式保持关闭时显示的确认信息。",
-    "message": "好的，我们会保留标准的监听和播放设置。"
+    "description": "安静模式关闭时显示的状态，包括选择环境后和重新打开页面时。",
+    "message": "安静模式已关闭——我们会使用标准的聆听和播放设置。"
   },
   "onboarding_envQuietOn": {
-    "description": "环境答案启用静音模式时显示的确认信息。",
-    "message": "静音模式已开启——我们会更灵敏地捕捉轻声说话，并轻声回复，让你更隐蔽地交流。"
+    "description": "安静模式开启时显示的状态，包括选择环境后和重新打开页面时。",
+    "message": "安静模式已开启——我们会接收更轻的说话声，并以较低音量回复，让你可以低调交谈。"
+  },
+  "onboarding_envSaveFailed": {
+    "description": "从环境问题保存安静模式设置失败时显示的状态。",
+    "message": "无法保存该设置，因此没有任何更改。请选择一个选项后重试。"
   },
   "onboarding_envTitle": {
     "description": "新手引导中关于用户环境问题的标题。",

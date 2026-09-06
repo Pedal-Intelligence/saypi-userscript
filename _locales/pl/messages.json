@@ -740,6 +740,10 @@
     "description": "Opcja otoczenia: wśród innych osób.",
     "message": "Wśród innych osób"
   },
+  "onboarding_envHelp": {
+    "description": "Wyjaśnia przed udzieleniem odpowiedzi na pytanie o otoczenie, że odpowiedź przełącza tryb cichy.",
+    "message": "To tryb cichy: wybranie opcji „wśród innych osób” go włącza, dzięki czemu Say, Pi wychwytuje cichszą mowę i odpowiada ciszej. Pozostałe odpowiedzi go wyłączają — ustawienie możesz później zmienić w Ustawieniach."
+  },
   "onboarding_envMixed": {
     "description": "Opcja otoczenia: mieszanka miejsc prywatnych i współdzielonych.",
     "message": "W różnych miejscach"
@@ -749,12 +753,16 @@
     "message": "W prywatnym miejscu"
   },
   "onboarding_envQuietOff": {
-    "description": "Potwierdzenie wyświetlane, gdy odpowiedź dotycząca środowiska pozostawia tryb cichy wyłączony.",
-    "message": "Rozumiemy — zostawimy standardowe ustawienia nasłuchiwania i odtwarzania."
+    "description": "Status wyświetlany, gdy tryb cichy jest wyłączony — zarówno po wybraniu otoczenia, jak i po ponownym otwarciu strony.",
+    "message": "Tryb cichy jest wyłączony — użyjemy standardowych ustawień słuchania i odtwarzania."
   },
   "onboarding_envQuietOn": {
-    "description": "Potwierdzenie wyświetlane, gdy odpowiedź dotycząca otoczenia włącza tryb cichy.",
-    "message": "Tryb cichy włączony — wykryjemy cichszą mowę i odpowiemy ciszej, żeby można było rozmawiać dyskretnie."
+    "description": "Status wyświetlany, gdy tryb cichy jest włączony — zarówno po wybraniu otoczenia, jak i po ponownym otwarciu strony.",
+    "message": "Tryb cichy jest włączony — wychwycimy cichszą mowę i odpowiemy ciszej, aby można było rozmawiać dyskretnie."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status wyświetlany, gdy zapisanie ustawienia trybu cichego z poziomu pytania o otoczenie nie powiedzie się.",
+    "message": "Nie udało się tego zapisać, więc nic się nie zmieniło. Wybierz opcję i spróbuj ponownie."
   },
   "onboarding_envTitle": {
     "description": "Nagłówek pytania podczas wdrożenia o otoczenie użytkownika.",

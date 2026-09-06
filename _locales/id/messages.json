@@ -740,6 +740,10 @@
     "description": "Opsi lingkungan: di sekitar orang lain.",
     "message": "Di sekitar orang lain"
   },
+  "onboarding_envHelp": {
+    "description": "Menjelaskan, sebelum pertanyaan tentang lingkungan dijawab, bahwa jawaban akan mengubah mode Hening.",
+    "message": "Ini mengaktifkan mode Hening: memilih di sekitar orang lain akan menyalakannya, sehingga Say, Pi mendengarkan suara yang lebih pelan dan menjawab dengan volume lebih rendah. Pilihan lain akan mematikannya — dan Anda dapat mengubahnya nanti di Setelan."
+  },
   "onboarding_envMixed": {
     "description": "Opsi lingkungan: campuran ruang privat dan bersama.",
     "message": "Campuran beberapa tempat"
@@ -749,12 +753,16 @@
     "message": "Di tempat yang privat"
   },
   "onboarding_envQuietOff": {
-    "description": "Konfirmasi yang ditampilkan saat jawaban lingkungan membiarkan mode senyap tetap mati.",
-    "message": "Baik, kami akan tetap memakai pengaturan standar untuk mendengarkan dan pemutaran."
+    "description": "Status yang ditampilkan saat mode Hening nonaktif, setelah memilih lingkungan maupun saat halaman dibuka kembali.",
+    "message": "Mode Hening nonaktif — kami akan menggunakan setelan pendengaran dan pemutaran standar."
   },
   "onboarding_envQuietOn": {
-    "description": "Konfirmasi yang ditampilkan saat jawaban lingkungan mengaktifkan mode senyap.",
-    "message": "Mode senyap aktif — kami akan menangkap suara yang lebih pelan dan membalas dengan pelan, agar Anda bisa berbicara dengan lebih discreet."
+    "description": "Status yang ditampilkan saat mode Hening aktif, setelah memilih lingkungan maupun saat halaman dibuka kembali.",
+    "message": "Mode Hening aktif — kami akan menangkap suara yang lebih pelan dan menjawab dengan tenang, agar Anda dapat berbicara dengan lebih leluasa."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status yang ditampilkan saat penulisan setelan mode Hening dari pertanyaan tentang lingkungan gagal.",
+    "message": "Kami tidak dapat menyimpannya, jadi tidak ada yang berubah. Pilih opsi untuk mencoba lagi."
   },
   "onboarding_envTitle": {
     "description": "Judul untuk pertanyaan onboarding tentang lingkungan pengguna.",

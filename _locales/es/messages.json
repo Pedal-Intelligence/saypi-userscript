@@ -740,6 +740,10 @@
     "description": "Opción de entorno: con otras personas alrededor.",
     "message": "Con otras personas cerca"
   },
+  "onboarding_envHelp": {
+    "description": "Explica, antes de responder a la pregunta sobre el entorno, que la respuesta activa el modo silencioso.",
+    "message": "Esto activa el modo silencioso: si hay otras personas, se activa para que Say, Pi detecte el habla más suave y responda a menor volumen. Las demás respuestas lo dejan desactivado, y puedes cambiarlo después en Configuración."
+  },
   "onboarding_envMixed": {
     "description": "Opción de entorno: una mezcla de espacios privados y compartidos.",
     "message": "En varios sitios"
@@ -749,12 +753,16 @@
     "message": "En un lugar privado"
   },
   "onboarding_envQuietOff": {
-    "description": "Confirmación que se muestra cuando la respuesta sobre el entorno deja el modo silencioso desactivado.",
-    "message": "Entendido: mantendremos los ajustes estándar de escucha y reproducción."
+    "description": "Estado mostrado cuando el modo silencioso está desactivado, tanto después de elegir un entorno como al volver a abrir la página.",
+    "message": "El modo silencioso está desactivado: usaremos la configuración estándar para escuchar y reproducir el audio."
   },
   "onboarding_envQuietOn": {
-    "description": "Confirmación que se muestra cuando la respuesta sobre el entorno activa el modo silencioso.",
-    "message": "Modo silencioso activado: captaremos una voz más suave y responderemos en voz baja para que puedas hablar discretamente."
+    "description": "Estado mostrado cuando el modo silencioso está activado, tanto después de elegir un entorno como al volver a abrir la página.",
+    "message": "El modo silencioso está activado: detectaremos el habla más suave y responderemos en voz baja para que puedas hablar discretamente."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Estado mostrado cuando falla la escritura de la configuración del modo silencioso desde la pregunta sobre el entorno.",
+    "message": "No pudimos guardar el cambio, así que nada ha cambiado. Elige una opción para volver a intentarlo."
   },
   "onboarding_envTitle": {
     "description": "Título de la pregunta de incorporación sobre el entorno del usuario.",

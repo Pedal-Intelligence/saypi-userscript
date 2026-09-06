@@ -740,6 +740,10 @@
     "description": "Tùy chọn môi trường: ở gần người khác.",
     "message": "Gần người khác"
   },
+  "onboarding_envHelp": {
+    "description": "Giải thích trước khi trả lời câu hỏi về môi trường rằng lựa chọn sẽ thay đổi Chế độ yên lặng.",
+    "message": "Thiết lập này bật Chế độ yên lặng: chọn ở nơi có người xung quanh sẽ bật chế độ này, để Say, Pi nhận giọng nói nhỏ hơn và trả lời với âm lượng thấp hơn. Các lựa chọn khác sẽ tắt chế độ — bạn có thể đổi sau trong Cài đặt."
+  },
   "onboarding_envMixed": {
     "description": "Tùy chọn môi trường: kết hợp không gian riêng tư và dùng chung.",
     "message": "Ở nhiều nơi khác nhau"
@@ -749,12 +753,16 @@
     "message": "Ở nơi riêng tư"
   },
   "onboarding_envQuietOff": {
-    "description": "Xác nhận hiển thị khi câu trả lời về môi trường để chế độ yên lặng tắt.",
-    "message": "Đã rõ — chúng tôi sẽ giữ các cài đặt nghe và phát tiêu chuẩn."
+    "description": "Trạng thái hiển thị khi Chế độ yên lặng đang tắt, cả sau khi chọn môi trường và khi mở lại trang.",
+    "message": "Chế độ yên lặng đang tắt — chúng tôi sẽ dùng cài đặt nghe và phát chuẩn."
   },
   "onboarding_envQuietOn": {
-    "description": "Xác nhận hiển thị khi câu trả lời về môi trường bật chế độ yên lặng.",
-    "message": "Đã bật chế độ yên lặng — chúng tôi sẽ bắt tiếng nói nhỏ hơn và trả lời nhỏ, để bạn có thể trò chuyện kín đáo."
+    "description": "Trạng thái hiển thị khi Chế độ yên lặng đang bật, cả sau khi chọn môi trường và khi mở lại trang.",
+    "message": "Chế độ yên lặng đang bật — chúng tôi sẽ nhận giọng nói nhỏ hơn và trả lời khẽ, để bạn có thể nói chuyện kín đáo."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Trạng thái hiển thị khi không thể lưu cài đặt Chế độ yên lặng từ câu hỏi về môi trường.",
+    "message": "Không thể lưu thay đổi, nên mọi thứ vẫn giữ nguyên. Hãy chọn một tùy chọn để thử lại."
   },
   "onboarding_envTitle": {
     "description": "Tiêu đề cho câu hỏi trong phần giới thiệu về môi trường của người dùng.",

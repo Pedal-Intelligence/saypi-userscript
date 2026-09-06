@@ -740,6 +740,10 @@
     "description": "Környezeti opció: mások között.",
     "message": "Mások között"
   },
+  "onboarding_envHelp": {
+    "description": "Elmagyarázza a környezetre vonatkozó kérdés megválaszolása előtt, hogy a válasz bekapcsolja-e a csendes módot.",
+    "message": "Ez állítja be a csendes módot: ha mások vannak körülötted, bekapcsolja, így a Say, Pi a halkabb beszédet is érzékeli, és halkabban válaszol. A többi válasz kikapcsolva hagyja — később a Beállításokban módosíthatod."
+  },
   "onboarding_envMixed": {
     "description": "Környezeti opció: privát és közös terek keveréke.",
     "message": "Különféle helyeken"
@@ -749,12 +753,16 @@
     "message": "Valahol privát helyen"
   },
   "onboarding_envQuietOff": {
-    "description": "Megerősítés, amikor a környezeti válasz alapján a csendes mód ki van kapcsolva.",
-    "message": "Rendben, maradnak az alapértelmezett figyelési és lejátszási beállítások."
+    "description": "A csendes mód kikapcsolt állapotában jelenik meg, a környezet kiválasztása után és az oldal újbóli megnyitásakor is.",
+    "message": "A csendes mód ki van kapcsolva — a szokásos hallgatási és lejátszási beállításokat használjuk."
   },
   "onboarding_envQuietOn": {
-    "description": "Megerősítés, amely akkor jelenik meg, amikor a környezeti válasz bekapcsolja a csendes módot.",
-    "message": "Csendes mód bekapcsolva — a halkabb beszédet is felvesszük, és halkan válaszolunk, hogy diszkréten beszélhess."
+    "description": "A csendes mód bekapcsolt állapotában jelenik meg, a környezet kiválasztása után és az oldal újbóli megnyitásakor is.",
+    "message": "A csendes mód be van kapcsolva — a halkabb beszédet is érzékeljük, és halkan válaszolunk, hogy diszkréten beszélhess."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Akkor jelenik meg, ha a környezetre vonatkozó kérdésből a csendes mód beállításának mentése sikertelen.",
+    "message": "Nem sikerült menteni, ezért semmi sem változott. Válassz egy lehetőséget az újrapróbálkozáshoz."
   },
   "onboarding_envTitle": {
     "description": "Címsor az onboarding kérdéshez a felhasználó környezetéről.",

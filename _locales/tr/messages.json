@@ -740,6 +740,10 @@
     "description": "Ortam seçeneği: başka insanların yanında.",
     "message": "Başkalarının yanında"
   },
+  "onboarding_envHelp": {
+    "description": "Ortam sorusu yanıtlanmadan önce, yanıtın Sessiz modu değiştirdiğini açıklar.",
+    "message": "Bu, Sessiz modu ayarlar: diğer insanların yanındaysanız açar; böylece Say, Pi daha kısık sesleri dinler ve daha düşük sesle yanıt verir. Diğer seçenekler modu kapalı bırakır; ayarı daha sonra Ayarlar'dan değiştirebilirsiniz."
+  },
   "onboarding_envMixed": {
     "description": "Ortam seçeneği: özel ve paylaşılan alanların karışımı.",
     "message": "Karışık yerlerde"
@@ -749,12 +753,16 @@
     "message": "Özel bir yerde"
   },
   "onboarding_envQuietOff": {
-    "description": "Ortam yanıtı sessiz modu kapalı bıraktığında gösterilen onay.",
-    "message": "Anlaşıldı — standart dinleme ve oynatma ayarlarını koruyacağız."
+    "description": "Hem bir ortam seçildikten sonra hem de sayfa yeniden açıldığında Sessiz mod kapalıyken gösterilen durum.",
+    "message": "Sessiz mod kapalı — standart dinleme ve oynatma ayarlarını kullanırız."
   },
   "onboarding_envQuietOn": {
-    "description": "Ortam yanıtı sessiz modu etkinleştirdiğinde gösterilen onay.",
-    "message": "Sessiz mod açık — daha hafif konuşmayı algılarız ve sessiz yanıt veririz, böylece daha gizli konuşabilirsiniz."
+    "description": "Hem bir ortam seçildikten sonra hem de sayfa yeniden açıldığında Sessiz mod açıkken gösterilen durum.",
+    "message": "Sessiz mod açık — daha kısık sesleri algılar ve gizlice konuşabilmeniz için sessizce yanıt veririz."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Ortam sorusundan Sessiz mod ayarı yazılırken işlem başarısız olduğunda gösterilen durum.",
+    "message": "Bunu kaydedemedik; bu nedenle hiçbir şey değişmedi. Tekrar denemek için bir seçenek belirleyin."
   },
   "onboarding_envTitle": {
     "description": "Kullanıcının ortamıyla ilgili tanıtım sorusunun başlığı.",

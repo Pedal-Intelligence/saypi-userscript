@@ -23,6 +23,7 @@ export const ONBOARDING_I18N_KEYS: Record<string, string> = {
   "onboarding-cta-chatgpt": "onboarding_ctaChatgpt",
   "onboarding-mic-test-btn": "onboarding_micTestButton",
   "onboarding-env-title": "onboarding_envTitle",
+  "onboarding-env-help": "onboarding_envHelp",
   "onboarding-env-private-label": "onboarding_envPrivate",
   "onboarding-env-mixed-label": "onboarding_envMixed",
   "onboarding-env-around-label": "onboarding_envAroundOthers",
@@ -86,6 +87,12 @@ export function setupEnvironmentQuestion(root: ParentNode): void {
   if (!root.querySelector('input[name="voice-environment"]')) return;
   wireEnvironmentQuestion(root, {
     translate: getMessage,
+    getQuietMode: async () => {
+      const stored = await browser.storage.local.get("quietMode");
+      const value = (stored as Record<string, unknown> | undefined)?.quietMode;
+      // Anything that isn't a boolean is "never answered", not "off".
+      return typeof value === "boolean" ? value : undefined;
+    },
     setQuietMode: (on) => browser.storage.local.set({ quietMode: on }),
   });
 }

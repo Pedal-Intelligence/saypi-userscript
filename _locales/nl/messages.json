@@ -740,6 +740,10 @@
     "description": "Omgevingsoptie: in de buurt van andere mensen.",
     "message": "Tussen andere mensen"
   },
+  "onboarding_envHelp": {
+    "description": "Legt vóór het beantwoorden van de omgevingsvraag uit dat het antwoord de stille modus instelt.",
+    "message": "Dit schakelt de stille modus in: met mensen om je heen gaat die aan, zodat Say, Pi zachtere spraak oppikt en op lager volume antwoordt. Bij de andere antwoorden blijft die uit — je kunt dit later wijzigen in Instellingen."
+  },
   "onboarding_envMixed": {
     "description": "Omgevingsoptie: een mix van privé- en gedeelde ruimtes.",
     "message": "Een mix van plekken"
@@ -749,12 +753,16 @@
     "message": "Ergens privé"
   },
   "onboarding_envQuietOff": {
-    "description": "Bevestiging die wordt getoond wanneer het omgevingsantwoord de stille modus uit laat.",
-    "message": "Begrepen, we houden de standaard luister- en afspeelinstellingen aan."
+    "description": "Status die wordt getoond wanneer de stille modus uitstaat, zowel na het kiezen van een omgeving als wanneer de pagina opnieuw wordt geopend.",
+    "message": "De stille modus staat uit — we gebruiken de standaardinstellingen voor luisteren en afspelen."
   },
   "onboarding_envQuietOn": {
-    "description": "Bevestiging die wordt getoond wanneer het omgevingsantwoord de stille modus inschakelt.",
-    "message": "Stille modus aan — we pikken zachtere spraak op en antwoorden rustig, zodat je discreet kunt praten."
+    "description": "Status die wordt getoond wanneer de stille modus aanstaat, zowel na het kiezen van een omgeving als wanneer de pagina opnieuw wordt geopend.",
+    "message": "De stille modus staat aan — we pikken zachtere spraak op en antwoorden zacht, zodat je discreet kunt praten."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status die wordt getoond wanneer het opslaan van de instelling voor de stille modus vanuit de omgevingsvraag mislukt.",
+    "message": "We konden dit niet opslaan, dus er is niets gewijzigd. Kies een optie om het opnieuw te proberen."
   },
   "onboarding_envTitle": {
     "description": "Kop voor de onboarding-vraag over de omgeving van de gebruiker.",

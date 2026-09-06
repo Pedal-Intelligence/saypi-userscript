@@ -740,6 +740,10 @@
     "description": "Pilihan persekitaran: di sekitar orang lain.",
     "message": "Di sekitar orang lain"
   },
+  "onboarding_envHelp": {
+    "description": "Menerangkan, sebelum soalan persekitaran dijawab, bahawa jawapan akan menukar mod Senyap.",
+    "message": "Ini menetapkan mod Senyap: memilih berada di sekitar orang lain akan menghidupkannya, supaya Say, Pi mendengar pertuturan yang lebih perlahan dan menjawab pada kelantangan lebih rendah. Pilihan lain membiarkannya dimatikan — anda boleh mengubahnya kemudian dalam Tetapan."
+  },
   "onboarding_envMixed": {
     "description": "Pilihan persekitaran: campuran ruang peribadi dan ruang berkongsi.",
     "message": "Campuran tempat"
@@ -749,12 +753,16 @@
     "message": "Di tempat yang peribadi"
   },
   "onboarding_envQuietOff": {
-    "description": "Pengesahan yang ditunjukkan apabila jawapan persekitaran membiarkan mod senyap dimatikan.",
-    "message": "Baik — kami akan kekalkan tetapan mendengar dan main balik standard."
+    "description": "Status yang dipaparkan apabila mod Senyap dimatikan, selepas memilih persekitaran dan apabila halaman dibuka semula.",
+    "message": "Mod Senyap dimatikan — kami akan menggunakan tetapan pendengaran dan main balik standard."
   },
   "onboarding_envQuietOn": {
-    "description": "Pengesahan yang dipaparkan apabila jawapan persekitaran mengaktifkan mod senyap.",
-    "message": "Mod senyap dihidupkan — kami akan menangkap pertuturan yang lebih perlahan dan membalas dengan perlahan, supaya anda boleh bercakap secara discreet."
+    "description": "Status yang dipaparkan apabila mod Senyap dihidupkan, selepas memilih persekitaran dan apabila halaman dibuka semula.",
+    "message": "Mod Senyap dihidupkan — kami akan menangkap pertuturan yang lebih perlahan dan menjawab dengan perlahan, supaya anda boleh bercakap secara sulit."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status yang dipaparkan apabila penulisan tetapan mod Senyap daripada soalan persekitaran gagal.",
+    "message": "Kami tidak dapat menyimpannya, jadi tiada apa-apa yang berubah. Pilih satu pilihan untuk cuba lagi."
   },
   "onboarding_envTitle": {
     "description": "Tajuk untuk soalan onboarding tentang persekitaran pengguna.",
