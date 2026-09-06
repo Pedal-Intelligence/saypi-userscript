@@ -1,7 +1,14 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { h } from "preact";
+import { cleanup, render } from "@testing-library/preact";
 import { browser } from "wxt/browser";
+import { VoicesPanel } from "../../../entrypoints/settings/tabs/voices/VoicesPanel";
+import {
+  VoicesController,
+  type VoiceStudioDeps,
+} from "../../../entrypoints/settings/tabs/voices/voices-controller";
 import EventBus from "../../../src/events/EventBus";
 import { getJwtManagerSync } from "../../../src/JwtManager";
 import { SpeechSynthesisModule } from "../../../src/tts/SpeechSynthesisModule";
@@ -12,6 +19,7 @@ import { mockVoices } from "../../data/Voices";
 import {
   installSettingsAuthSync,
   isSettingsAuthenticated,
+  onSettingsAuthChange,
   resetSettingsAuthSyncForTests,
   settingsAuthSyncSettled,
 } from "../../../entrypoints/settings/shared/auth-sync";
@@ -358,6 +366,43 @@ describe("settings-page auth reconciliation (#227)", () => {
 
     expect(browser.runtime.onMessage.removeListener).toHaveBeenCalled();
     expect(browser.storage.onChanged.removeListener).toHaveBeenCalled();
+  });
+
+  it("flips the open Voices tab from signed in to signed out, with no reload (AC 1)", async () => {
+    // The whole chain, end to end: a real background sign-out broadcast, the
+    // real reconciler, and a real VoicesController reading the real
+    // settings-scoped state through the real subscription. Only the studio's
+    // network-bound deps are stubbed.
+    await openSettingsSignedInAs("user-a");
+    const { container } = render(h(VoicesPanel, {}));
+    const studio = new VoicesController(container as HTMLElement, {
+      getVoices: async () => [mockVoices[0] as any],
+      getVoice: async () => mockVoices[0] as any,
+      setVoice: async () => {},
+      hasVoice: async () => true,
+      loadPins: async () => null,
+      setPinned: async () => {},
+      playPreview: () => {},
+      // The two under test, wired exactly as defaultDeps() wires them.
+      isAuthenticated: () => isSettingsAuthenticated(),
+      onAuthChange: (fn: () => void) => onSettingsAuthChange(fn),
+    } as unknown as VoiceStudioDeps);
+    await studio.init();
+    const scope = () =>
+      (container as HTMLElement).querySelector(".voice-current-host")
+        ?.textContent;
+    expect(scope()).toBe("voicesSpeaksWith");
+
+    try {
+      await broadcastAuthStatus(false);
+      // The controller re-renders asynchronously (it re-reads the catalog).
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(scope()).toBe("signInForTTS");
+    } finally {
+      studio.destroy();
+      cleanup();
+    }
   });
 
   it("keeps the Voices tab off the JwtManager singleton", () => {
