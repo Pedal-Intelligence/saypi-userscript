@@ -273,6 +273,20 @@ function cmdBump({ version, yes }) {
 }
 
 /** Releases are cut from main; tag/finalize refuse to run anywhere else. */
+/**
+ * Refuse to run from a linked git worktree (`.worktrees/<task>/`): the release artifacts,
+ * `.env.publish`, and the bump commit all live in the MAIN checkout, and a worktree's
+ * package.json silently reports the wrong version.
+ */
+function assertMainCheckout(cmd) {
+  const gitDir = git(["rev-parse", "--git-dir"], { allowFail: true });
+  const common = git(["rev-parse", "--git-common-dir"], { allowFail: true });
+  if (gitDir && common && resolvePath(repoRoot, gitDir) !== resolvePath(repoRoot, common)) {
+    bad(`\`${cmd}\` must run from the main checkout, not a linked worktree (${repoRoot}). \`cd\` to the repo root first.`);
+    process.exit(2);
+  }
+}
+
 function assertOnMain(cmd) {
   const branch = git(["rev-parse", "--abbrev-ref", "HEAD"], { allowFail: true });
   if (branch !== "main") {
@@ -499,10 +513,21 @@ async function cmdSubmit({ store, version, yes, dryRun }) {
     bad(`\`submit\` needs a store: ${PUBLISH_STORES.join(" | ")} (e.g. \`npm run release:submit -- chrome --dry-run\`).`);
     process.exit(2);
   }
+  // v1.14.0 lesson: a `!`-prefixed command inherits the agent shell's cwd, which had
+  // drifted into a feature worktree — so `submit edge` ran against the unbumped 1.13.0
+  // tree with no .env.publish. Refuse anything but the main checkout on `main`.
+  assertOnMain(`submit ${store}`);
+  assertMainCheckout(`submit ${store}`);
   loadPublishEnv();
   if (!dryRun) requireYes(`submit ${store}`, { yes });
   const v = version || pkgVersion();
   log(`${C.bold}${dryRun ? "Dry-run" : "Submitting"} ${store} — v${v}${C.reset}`);
+  // Never upload what `build` didn't verify: re-check the artifacts against the target
+  // version (catches a stale dist/ from a previous release as well as the cwd drift above).
+  if (!dryRun && !verifyArtifacts(v)) {
+    bad(`aborting ${store} submission — dist/ artifacts don't verify for v${v} (run \`build\` first).`);
+    process.exit(1);
+  }
   if (await checkListingUrls()) {
     bad(`aborting ${store} ${dryRun ? "dry-run" : "submission"} before upload — listing URLs must answer 200.`);
     process.exit(1);

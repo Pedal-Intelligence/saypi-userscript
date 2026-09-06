@@ -17,6 +17,13 @@ auto-update**, and store-submission plumbing is founder-gated.
   copy freely, but **stop at the first mutating/outward gate** and hand off to the founder.
 - The tooling **never loads `.env.production`**, bumps, builds, tags, pushes, or submits
   without the founder. `bump`/`build`/`tag`/`finalize` refuse to run without `--yes`.
+- **When the founder directs a release in-session** ("publish v1.x to the stores"), the
+  division of labour that v1.13.0 and v1.14.0 settled on is: the **founder runs exactly one
+  command — `release:build -- --yes`** (the only step that loads `.env.production`); the
+  agent runs everything else (`bump`, notes, packet, `submit` per store, then `tag` +
+  `finalize` on a **separate** "close out" go-ahead). `submit` reads only the gitignored
+  `.env.publish` (store API keys) so it sits inside the credentials boundary. See
+  "Agent-session gotchas" below for the two traps that cost time on v1.14.0.
 - **Shipped something bad?** The reverse path is
   [`doc/release/incident-response.md`](incident-response.md) — server-side kill-switch
   first, expedited patch second; escalate to the founder immediately.
@@ -134,6 +141,24 @@ Detail + gotchas in `chrome-web-store.md`, `edge-addons.md`, `firefox-amo.md`. K
 to auth-check, then `release:submit -- <store> --yes` to upload + submit via each store's API
 (CWS V2 / Edge v1.1 / AMO `web-ext sign`). Founder-only and irreversible. This is the long-term
 "one-button" path; the manual packet above remains the fallback and for any listing-copy changes.
+
+**Guards on `submit` (v1.14.0 lessons):** it refuses to run off `main` or from a linked
+worktree, re-runs the artifact verification against the target version before uploading,
+and probes the listing URLs. The Edge status poll retries transient network errors and, if
+it still can't confirm, says so explicitly (the operation may have succeeded — poll it before
+re-submitting, or Edge answers `InProgressSubmission`). Issue #628.
+
+### Agent-session gotchas
+- **`!`-prefixed founder commands run in the agent's shell cwd.** If the agent has `cd`'d
+  into a `.worktrees/<task>/` checkout (to build a side PR mid-release), the founder's
+  `! npm run release:submit -- edge --yes` runs there: wrong version, no `.env.publish`. The
+  agent must `cd` back to the repo root before handing over a command; `submit` now also
+  refuses to run from a worktree.
+- **The auto-mode classifier blocks gated commands when they're compound.** A plain
+  `npm run release:submit -- chrome --yes` matches the `Bash(npm run *)` allow rule; the
+  same command piped to `| tail` or chained with `&&` does not, and the classifier then
+  refuses it as store-publishing plumbing. Run gated release commands bare, one per shell
+  call.
 
 ### 6. Finalize ⛔ (founder)
 After all stores are submitted: `node scripts/release.mjs tag <version> --yes` then

@@ -34,6 +34,7 @@ import {
   edgePublishPollUrl,
   operationIdFromLocation,
   interpretEdgeOperation,
+  retryTransient,
   AMO_ENV,
   buildAmoMetadata,
   webExtSignArgs,
@@ -94,9 +95,31 @@ export async function chromeSubmit({ zipPath, env = process.env, dryRun = false,
 }
 
 // ── Microsoft Edge Add-ons (API v1.1) ─────────────────────────────────────────────
+// A poll GET is idempotent, so a transient network error (undici "fetch failed", a reset,
+// a 5xx) must be retried rather than reported as a submission failure: on v1.14.0 the
+// publish had already SUCCEEDED on Microsoft's side when the poll's `fetch failed`
+// surfaced as "edge submission failed", inviting a duplicate re-submit (#628).
+const POLL_RETRY_ATTEMPTS = 4;
+const POLL_RETRY_MS = 2000;
 async function pollEdge(url, headers, label, log) {
   for (let i = 0; i < POLL_MAX; i++) {
-    const res = await fetch(url, { headers });
+    let res;
+    try {
+      res = await retryTransient(
+        async () => {
+          const r = await fetch(url, { headers });
+          if (r.status >= 500) throw new Error(`HTTP ${r.status}`);
+          return r;
+        },
+        { attempts: POLL_RETRY_ATTEMPTS, delayMs: POLL_RETRY_MS, sleep, onRetry: (n, err) => log(`  ⚠ ${label} poll attempt ${n} failed (${err.message}) — retrying…`) },
+      );
+    } catch (err) {
+      throw new Error(
+        `Edge ${label} status could NOT be confirmed after ${POLL_RETRY_ATTEMPTS} attempts (${err.message}). ` +
+          `The ${label} operation may still have succeeded — check ${url} (or Partner Center) BEFORE re-running submit, ` +
+          `or a duplicate submission will be refused with InProgressSubmission.`,
+      );
+    }
     const json = await res.json().catch(() => ({}));
     const op = interpretEdgeOperation(json);
     if (op.ok) return;

@@ -734,3 +734,30 @@ export async function probeListingUrls(urls = [], { fetchImpl, attempts = 3, del
   }
   return results;
 }
+
+// ── Transient-failure retry (#628) ──────────────────────────────────────────────
+//
+// For IDEMPOTENT calls only (status polls, token exchanges) — never wrap an upload or
+// publish POST in this. Linear backoff: delayMs, 2·delayMs, …; the last error is rethrown.
+
+/**
+ * @template T
+ * @param {() => Promise<T>} fn
+ * @param {{ attempts?: number, delayMs?: number, sleep?: (ms: number) => Promise<void>, onRetry?: (attempt: number, err: Error) => void }} [opts]
+ * @returns {Promise<T>}
+ */
+export async function retryTransient(fn, { attempts = 3, delayMs = 1000, sleep, onRetry } = {}) {
+  const wait = sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
+  let lastErr;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastErr = e;
+      if (i === attempts) break;
+      onRetry?.(i, e);
+      await wait(delayMs * i);
+    }
+  }
+  throw lastErr;
+}
