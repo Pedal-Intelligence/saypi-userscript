@@ -81,7 +81,9 @@ needs `.env.production`, which is never copied into a worktree.
 ### 0. Preflight (read-only)
 `node scripts/release.mjs preflight`. Confirms on `main`, tree clean, `HEAD == origin/main`,
 `node`/`npm`/`jq`/`zip` present, `.env.production` exists (existence only), latest `test.yaml`
-green, and prints the version state. Resolve anything blocking first.
+green, **every store-listing URL answers a clean 200** (probed 3× from `stores.json` →
+`listingUrls`; Chrome validates them at publish time and fails with an opaque error
+otherwise — v1.14.0's intermittent 404 on the support URL), and prints the version state. Resolve anything blocking first.
 
 ### 1. Decide the version ⛔
 `node scripts/release.mjs plan`. Derives the version from the **published baseline + the
