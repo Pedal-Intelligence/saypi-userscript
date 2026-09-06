@@ -138,7 +138,7 @@
     "description": "Label for the slider that sets how fast the assistant's voice speaks."
   },
   "ttsPlaybackRateTooltip": {
-    "message": "How fast Say, Pi\u2019s voices speak. Applies from the next reply.",
+    "message": "How fast Say, Pi’s voices speak. Applies from the next reply, and not to Pi’s own voice.",
     "description": "Tooltip explaining the voice playback speed slider."
   },
   "ttsVolumeLabel": {
@@ -146,7 +146,7 @@
     "description": "Label for the slider that sets how loud the assistant's voice is."
   },
   "ttsVolumeTooltip": {
-    "message": "How loud Say, Pi\u2019s voices are, relative to your system volume. Applies from the next reply.",
+    "message": "How loud Say, Pi’s voices are, relative to your system volume. Applies from the next reply, and not to Pi’s own voice.",
     "description": "Tooltip explaining the voice playback volume slider."
   },
   "preferedLanguage": {

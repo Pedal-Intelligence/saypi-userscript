@@ -1264,8 +1264,8 @@
     "message": "Rychlost"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Vysvětlení posuvníku rychlosti přehrávání hlasu.",
-    "message": "Jak rychle mluví hlasy Say, Pi. Použije se od další odpovědi."
+    "description": "Nápověda vysvětlující posuvník rychlosti přehrávání hlasu.",
+    "message": "Jak rychle hlasy Say, Pi mluví. Platí od další odpovědi, nikoli pro vlastní hlas Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Hlasitost"
   },
   "ttsVolumeTooltip": {
-    "description": "Vysvětlení posuvníku hlasitosti přehrávání hlasu.",
-    "message": "Jak hlasité jsou hlasy Say, Pi vzhledem k hlasitosti systému. Použije se od další odpovědi."
+    "description": "Nápověda vysvětlující posuvník hlasitosti přehrávání hlasu.",
+    "message": "Jak hlasité jsou hlasy Say, Pi vzhledem k hlasitosti systému. Platí od další odpovědi, nikoli pro vlastní hlas Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

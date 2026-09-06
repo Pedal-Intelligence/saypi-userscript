@@ -1264,8 +1264,8 @@
     "message": "Snelheid"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Toelichting bij de schuifregelaar voor de afspeelsnelheid van de stem.",
-    "message": "Hoe snel de stemmen van Say, Pi spreken. Geldt vanaf het volgende antwoord."
+    "description": "Tooltip die de schuifregelaar voor de afspeelsnelheid van de stem uitlegt.",
+    "message": "Hoe snel de stemmen van Say, Pi spreken. Geldt vanaf het volgende antwoord, niet voor de stem van Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Volume"
   },
   "ttsVolumeTooltip": {
-    "description": "Toelichting bij de schuifregelaar voor het volume van de stem.",
-    "message": "Hoe luid de stemmen van Say, Pi klinken ten opzichte van het systeemvolume. Geldt vanaf het volgende antwoord."
+    "description": "Tooltip die de schuifregelaar voor het afspeelvolume van de stem uitlegt.",
+    "message": "Hoe hard de stemmen van Say, Pi klinken, in verhouding tot je systeemvolume. Geldt vanaf het volgende antwoord, niet voor de stem van Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

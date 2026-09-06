@@ -1264,8 +1264,8 @@
     "message": "Скорость"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Подсказка о ползунке скорости воспроизведения голоса.",
-    "message": "Скорость речи голосов Say, Pi. Применяется со следующего ответа."
+    "description": "Подсказка, объясняющая ползунок скорости воспроизведения голоса.",
+    "message": "Насколько быстро говорят голоса Say, Pi. Применяется со следующего ответа, но не к голосу Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Громкость"
   },
   "ttsVolumeTooltip": {
-    "description": "Подсказка о ползунке громкости воспроизведения голоса.",
-    "message": "Громкость голосов Say, Pi относительно громкости системы. Применяется со следующего ответа."
+    "description": "Подсказка, объясняющая ползунок громкости воспроизведения голоса.",
+    "message": "Насколько громко звучат голоса Say, Pi, относительно громкости системы. Применяется со следующего ответа, но не к голосу Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

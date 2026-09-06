@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Infobulle expliquant le curseur de vitesse de lecture vocale.",
-    "message": "Vitesse de parole des voix de Say, Pi. S’applique à partir de la prochaine réponse."
+    "message": "Vitesse de parole des voix de Say, Pi. S’applique dès la prochaine réponse, mais pas à la voix de Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "Infobulle expliquant le curseur de volume de lecture vocale.",
-    "message": "Volume des voix de Say, Pi, par rapport au volume du système. S’applique à partir de la prochaine réponse."
+    "message": "Volume des voix de Say, Pi, par rapport au volume du système. S’applique dès la prochaine réponse, mais pas à la voix de Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

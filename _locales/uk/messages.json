@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Підказка, що пояснює повзунок швидкості відтворення голосу.",
-    "message": "Швидкість мовлення голосів Say, Pi. Застосовується з наступної відповіді."
+    "message": "Наскільки швидко говорять голоси Say, Pi. Застосовується з наступної відповіді, але не до власного голосу Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "Підказка, що пояснює повзунок гучності відтворення голосу.",
-    "message": "Гучність голосів Say, Pi відносно гучності системи. Застосовується з наступної відповіді."
+    "message": "Наскільки гучно звучать голоси Say, Pi, відносно гучності системи. Застосовується з наступної відповіді, але не до власного голосу Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

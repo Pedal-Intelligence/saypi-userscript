@@ -1264,8 +1264,8 @@
     "message": "Velocità"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Descrizione del cursore per la velocità di riproduzione della voce.",
-    "message": "Velocità delle voci di Say, Pi. Si applica dalla risposta successiva."
+    "description": "Tooltip che spiega il cursore della velocità di riproduzione vocale.",
+    "message": "A quale velocità parlano le voci di Say, Pi. Si applica dalla risposta successiva e non alla voce di Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Volume"
   },
   "ttsVolumeTooltip": {
-    "description": "Descrizione del cursore per il volume di riproduzione della voce.",
-    "message": "Volume delle voci di Say, Pi rispetto al volume del sistema. Si applica dalla risposta successiva."
+    "description": "Tooltip che spiega il cursore del volume di riproduzione vocale.",
+    "message": "A quale volume parlano le voci di Say, Pi, rispetto al volume del sistema. Si applica dalla risposta successiva e non alla voce di Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Tooltip yang menjelaskan penggeser kecepatan pemutaran suara.",
-    "message": "Seberapa cepat suara Say, Pi berbicara. Berlaku mulai balasan berikutnya."
+    "message": "Seberapa cepat suara Say, Pi berbicara. Berlaku mulai balasan berikutnya, tetapi tidak untuk suara Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "Tooltip yang menjelaskan penggeser volume pemutaran suara.",
-    "message": "Seberapa keras suara Say, Pi terdengar dibandingkan volume sistem Anda. Berlaku mulai balasan berikutnya."
+    "message": "Seberapa keras suara Say, Pi terdengar dibandingkan volume sistem Anda. Berlaku mulai balasan berikutnya, tetapi tidak untuk suara Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

@@ -1264,8 +1264,8 @@
     "message": "Sebesség"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "A hang lejátszási sebességét beállító csúszka magyarázata.",
-    "message": "Milyen gyorsan beszélnek a Say, Pi hangjai. A következő választól érvényes."
+    "description": "Az alapértelmezett beszédsebesség csúszkáját magyarázó eszköztipp.",
+    "message": "Milyen gyorsan beszélnek a Say, Pi hangjai. A következő választól érvényes, és nem vonatkozik Pi saját hangjára."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Hangerő"
   },
   "ttsVolumeTooltip": {
-    "description": "A hang lejátszási hangerejét beállító csúszka magyarázata.",
-    "message": "Milyen hangosak a Say, Pi hangjai a rendszer hangerejéhez képest. A következő választól érvényes."
+    "description": "Az alapértelmezett beszédhangerő csúszkáját magyarázó eszköztipp.",
+    "message": "Milyen hangosan szólnak a Say, Pi hangjai a rendszer hangerejéhez képest. A következő választól érvényes, és nem vonatkozik Pi saját hangjára."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

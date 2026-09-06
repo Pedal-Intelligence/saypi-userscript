@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "تلميح يشرح شريط تمرير سرعة تشغيل الصوت.",
-    "message": "مدى سرعة تحدث أصوات Say, Pi. يُطبَّق بدءًا من الرد التالي."
+    "message": "مدى سرعة نطق أصوات Say, Pi. ينطبق على الرد التالي، ولا ينطبق على صوت Pi نفسه."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "تلميح يشرح شريط تمرير مستوى صوت التشغيل.",
-    "message": "مدى ارتفاع أصوات Say, Pi مقارنةً بمستوى صوت النظام. يُطبَّق بدءًا من الرد التالي."
+    "message": "مدى ارتفاع أصوات Say, Pi مقارنةً بمستوى صوت النظام. ينطبق على الرد التالي، ولا ينطبق على صوت Pi نفسه."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

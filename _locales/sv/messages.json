@@ -1264,8 +1264,8 @@
     "message": "Hastighet"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Beskrivning av reglaget för röstuppspelningshastighet.",
-    "message": "Hur snabbt Say, Pi:s röster talar. Gäller från nästa svar."
+    "description": "Förklaring av reglaget för röstens uppspelningshastighet.",
+    "message": "Hur snabbt Say, Pi-rösterna talar. Gäller från nästa svar, men inte Pis egen röst."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Volym"
   },
   "ttsVolumeTooltip": {
-    "description": "Beskrivning av reglaget för röstuppspelningsvolym.",
-    "message": "Hur högt Say, Pi:s röster låter i förhållande till systemvolymen. Gäller från nästa svar."
+    "description": "Förklaring av reglaget för röstens uppspelningsvolym.",
+    "message": "Hur högt Say, Pi-rösterna låter i förhållande till systemvolymen. Gäller från nästa svar, men inte Pis egen röst."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

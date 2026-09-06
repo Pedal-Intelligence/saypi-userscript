@@ -1264,8 +1264,8 @@
     "message": "Ταχύτητα"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Επεξήγηση για το ρυθμιστικό ταχύτητας αναπαραγωγής φωνής.",
-    "message": "Πόσο γρήγορα μιλούν οι φωνές του Say, Pi. Ισχύει από την επόμενη απάντηση."
+    "description": "Επεξήγηση του ρυθμιστικού ταχύτητας αναπαραγωγής φωνής.",
+    "message": "Πόσο γρήγορα μιλούν οι φωνές του Say, Pi. Ισχύει από την επόμενη απάντηση και όχι για τη φωνή του Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Ένταση"
   },
   "ttsVolumeTooltip": {
-    "description": "Επεξήγηση για το ρυθμιστικό έντασης αναπαραγωγής φωνής.",
-    "message": "Πόσο δυνατά ακούγονται οι φωνές του Say, Pi σε σχέση με την ένταση του συστήματός σας. Ισχύει από την επόμενη απάντηση."
+    "description": "Επεξήγηση του ρυθμιστικού έντασης αναπαραγωγής φωνής.",
+    "message": "Πόσο δυνατά ακούγονται οι φωνές του Say, Pi σε σχέση με την ένταση του συστήματος. Ισχύει από την επόμενη απάντηση και όχι για τη φωνή του Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

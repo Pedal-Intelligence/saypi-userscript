@@ -1264,8 +1264,8 @@
     "message": "Nopeus"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Työkaluvihje, joka selittää äänen toiston nopeuden liukusäätimen.",
-    "message": "Kuinka nopeasti Say, Pi -äänet puhuvat. Koskee seuraavaa vastausta."
+    "description": "Työkaluohje, joka selittää puheen toistonopeuden liukusäätimen.",
+    "message": "Kuinka nopeasti Say, Pi -äänet puhuvat. Koskee seuraavaa vastausta, ei Pi:n omaa ääntä."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Äänenvoimakkuus"
   },
   "ttsVolumeTooltip": {
-    "description": "Työkaluvihje, joka selittää äänen toiston voimakkuuden liukusäätimen.",
-    "message": "Say, Pi -äänien voimakkuus suhteessa järjestelmän äänenvoimakkuuteen. Koskee seuraavaa vastausta."
+    "description": "Työkaluohje, joka selittää puheen toistoäänenvoimakkuuden liukusäätimen.",
+    "message": "Kuinka voimakkaalla Say, Pi -äänet kuuluvat järjestelmän äänenvoimakkuuteen nähden. Koskee seuraavaa vastausta, ei Pi:n omaa ääntä."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

@@ -472,23 +472,19 @@ if (!audioHandlerGlobal.__saypiAudioHandlerRegistered) {
     }
   });
 
-  registerMessageHandler("AUDIO_PLAY_REQUEST", (message, sourceTabId) => {
-    if (message.url) {
-      // Legacy support - if URL is provided, call loadAudio. A load is a
-      // legitimate last-tab-wins takeover, so it is NOT owner-guarded —
-      // loadAudio notifies the displaced owner instead. (#452)
-      logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST with URL: ${message.url}`);
-      return loadAudio(message.url, sourceTabId, true);
-    } else {
-      // Standard usage - no URL means play current audio; only the owner may
-      // resume the shared element. (#452)
-      if (!isAudioRequestFromOwner(sourceTabId, currentAudioTabId)) {
-        logger.debug(`[SayPi Audio Handler] Ignoring AUDIO_PLAY_REQUEST (resume) from non-owner tab ${sourceTabId} (current owner: ${currentAudioTabId}).`);
-        return { success: true, ignored: true };
-      }
-      logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST (resume playback)`);
-      return playAudio();
+  // AUDIO_PLAY_REQUEST resumes the shared element; only its owner may (#452).
+  // It used to accept a `url` and forward to loadAudio as legacy support, but
+  // nothing has sent one for a long time — OffscreenAudioBridge sends this
+  // message with no payload at all. That branch is gone: it called loadAudio
+  // without a volume or rate, which on the one shared <audio> element every tab
+  // uses would have left the previous tab's settings in place for the next one.
+  registerMessageHandler("AUDIO_PLAY_REQUEST", (_message, sourceTabId) => {
+    if (!isAudioRequestFromOwner(sourceTabId, currentAudioTabId)) {
+      logger.debug(`[SayPi Audio Handler] Ignoring AUDIO_PLAY_REQUEST (resume) from non-owner tab ${sourceTabId} (current owner: ${currentAudioTabId}).`);
+      return { success: true, ignored: true };
     }
+    logger.debug(`[SayPi Audio Handler] Processing AUDIO_PLAY_REQUEST (resume playback)`);
+    return playAudio();
   });
 
   registerMessageHandler("AUDIO_PAUSE_REQUEST", (message, sourceTabId) => {

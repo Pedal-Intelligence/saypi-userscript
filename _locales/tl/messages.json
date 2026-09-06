@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Tooltip na nagpapaliwanag sa slider ng bilis ng pag-playback ng boses.",
-    "message": "Kung gaano kabilis magsalita ang mga boses ng Say, Pi. Ilalapat sa susunod na tugon."
+    "message": "Kung gaano kabilis magsalita ang mga boses ng Say, Pi. Mula sa susunod na tugon ito ilalapat, hindi sa sariling boses ni Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "Tooltip na nagpapaliwanag sa slider ng volume ng pag-playback ng boses.",
-    "message": "Kung gaano kalakas ang mga boses ng Say, Pi kumpara sa volume ng iyong system. Ilalapat sa susunod na tugon."
+    "message": "Kung gaano kalakas ang mga boses ng Say, Pi kumpara sa volume ng system mo. Mula sa susunod na tugon ito ilalapat, hindi sa sariling boses ni Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

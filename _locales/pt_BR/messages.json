@@ -1264,8 +1264,8 @@
     "message": "Velocidade"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Dica que explica o controle deslizante de velocidade da reprodução de voz.",
-    "message": "Velocidade das vozes do Say, Pi. Aplica-se a partir da próxima resposta."
+    "description": "Dica sobre o controle deslizante da velocidade de reprodução da voz.",
+    "message": "A velocidade das vozes do Say, Pi. Aplica-se a partir da próxima resposta, mas não à voz do Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Volume"
   },
   "ttsVolumeTooltip": {
-    "description": "Dica que explica o controle deslizante de volume da reprodução de voz.",
-    "message": "Volume das vozes do Say, Pi em relação ao volume do sistema. Aplica-se a partir da próxima resposta."
+    "description": "Dica sobre o controle deslizante do volume de reprodução da voz.",
+    "message": "O volume das vozes do Say, Pi em relação ao volume do sistema. Aplica-se a partir da próxima resposta, mas não à voz do Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

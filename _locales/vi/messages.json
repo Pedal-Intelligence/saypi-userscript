@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Chú giải giải thích thanh trượt tốc độ phát giọng nói.",
-    "message": "Tốc độ nói của các giọng trong Say, Pi. Áp dụng từ câu trả lời tiếp theo."
+    "message": "Tốc độ giọng nói của Say, Pi. Áp dụng từ câu trả lời tiếp theo, không áp dụng cho giọng của Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "Chú giải giải thích thanh trượt âm lượng phát giọng nói.",
-    "message": "Độ lớn của các giọng trong Say, Pi so với âm lượng hệ thống. Áp dụng từ câu trả lời tiếp theo."
+    "message": "Âm lượng giọng nói của Say, Pi so với âm lượng hệ thống. Áp dụng từ câu trả lời tiếp theo, không áp dụng cho giọng của Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

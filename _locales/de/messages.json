@@ -1264,8 +1264,8 @@
     "message": "Geschwindigkeit"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Tooltip zur Erklärung des Reglers für die Wiedergabegeschwindigkeit der Stimme.",
-    "message": "Wie schnell die Stimmen von Say, Pi sprechen. Gilt ab der nächsten Antwort."
+    "description": "Tooltip zur Erklärung des Reglers für die Sprachwiedergabegeschwindigkeit.",
+    "message": "Wie schnell die Stimmen von Say, Pi sprechen. Gilt ab der nächsten Antwort und nicht für Pis eigene Stimme."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Lautstärke"
   },
   "ttsVolumeTooltip": {
-    "description": "Tooltip zur Erklärung des Reglers für die Wiedergabelautstärke der Stimme.",
-    "message": "Wie laut die Stimmen von Say, Pi im Verhältnis zur Systemlautstärke sind. Gilt ab der nächsten Antwort."
+    "description": "Tooltip zur Erklärung des Reglers für die Sprachwiedergabelautstärke.",
+    "message": "Wie laut die Stimmen von Say, Pi im Verhältnis zur Systemlautstärke sind. Gilt ab der nächsten Antwort und nicht für Pis eigene Stimme."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

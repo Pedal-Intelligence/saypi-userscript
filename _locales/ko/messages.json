@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "음성 재생 속도 슬라이더를 설명하는 툴팁입니다.",
-    "message": "Say, Pi 음성의 말하기 속도입니다. 다음 답변부터 적용됩니다."
+    "message": "Say, Pi 음성의 말하기 속도입니다. 다음 답변부터 적용되며 Pi 자체 음성에는 적용되지 않습니다."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "음성 재생 볼륨 슬라이더를 설명하는 툴팁입니다.",
-    "message": "시스템 볼륨을 기준으로 한 Say, Pi 음성의 크기입니다. 다음 답변부터 적용됩니다."
+    "message": "시스템 볼륨을 기준으로 한 Say, Pi 음성의 크기입니다. 다음 답변부터 적용되며 Pi 자체 음성에는 적용되지 않습니다."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

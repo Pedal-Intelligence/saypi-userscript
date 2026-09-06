@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Værktøjstip, der forklarer skyderen til stemmeafspilningshastighed.",
-    "message": "Hvor hurtigt Say, Pi’s stemmer taler. Gælder fra næste svar."
+    "message": "Hvor hurtigt Say, Pi’s stemmer taler. Gælder fra næste svar og ikke Pis egen stemme."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Lydstyrke"
   },
   "ttsVolumeTooltip": {
-    "description": "Værktøjstip, der forklarer skyderen til lydstyrken for stemmeafspilning.",
-    "message": "Hvor højt Say, Pi’s stemmer afspilles i forhold til systemets lydstyrke. Gælder fra næste svar."
+    "description": "Værktøjstip, der forklarer skyderen til stemmeafspilningslydstyrke.",
+    "message": "Hvor højt Say, Pi’s stemmer taler i forhold til systemlydstyrken. Gælder fra næste svar og ikke Pis egen stemme."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

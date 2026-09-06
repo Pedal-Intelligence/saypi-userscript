@@ -1264,8 +1264,8 @@
     "message": "गति"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "आवाज़ चलाने की गति वाले स्लाइडर की व्याख्या करने वाला टूलटिप।",
-    "message": "Say, Pi की आवाज़ें कितनी तेज़ बोलती हैं। अगले जवाब से लागू होगा।"
+    "description": "वॉइस प्लेबैक गति स्लाइडर समझाने वाला टूलटिप।",
+    "message": "Say, Pi की आवाज़ें कितनी तेज़ बोलेंगी। अगले उत्तर से लागू होगा, Pi की अपनी आवाज़ पर नहीं।"
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "वॉल्यूम"
   },
   "ttsVolumeTooltip": {
-    "description": "आवाज़ चलाने के वॉल्यूम वाले स्लाइडर की व्याख्या करने वाला टूलटिप।",
-    "message": "आपके सिस्टम वॉल्यूम के सापेक्ष Say, Pi की आवाज़ों का वॉल्यूम। अगले जवाब से लागू होगा।"
+    "description": "वॉइस प्लेबैक वॉल्यूम स्लाइडर समझाने वाला टूलटिप।",
+    "message": "Say, Pi की आवाज़ें आपके सिस्टम वॉल्यूम के सापेक्ष कितनी तेज़ सुनाई देंगी। अगले उत्तर से लागू होगा, Pi की अपनी आवाज़ पर नहीं।"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

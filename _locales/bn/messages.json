@@ -1264,8 +1264,8 @@
     "message": "গতি"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "ভয়েস প্লেব্যাকের গতি স্লাইডার ব্যাখ্যা করা টুলটিপ।",
-    "message": "Say, Pi-এর কণ্ঠ কত দ্রুত কথা বলবে। পরের উত্তরের ক্ষেত্রে প্রযোজ্য।"
+    "description": "কণ্ঠের প্লেব্যাক গতি স্লাইডার সম্পর্কে টুলটিপ।",
+    "message": "Say, Pi-এর কণ্ঠ কত দ্রুত কথা বলে। পরের উত্তর থেকে প্রযোজ্য, Pi-এর নিজের কণ্ঠে নয়।"
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "ভলিউম"
   },
   "ttsVolumeTooltip": {
-    "description": "ভয়েস প্লেব্যাকের ভলিউম স্লাইডার ব্যাখ্যা করা টুলটিপ।",
-    "message": "সিস্টেমের ভলিউমের তুলনায় Say, Pi-এর কণ্ঠ কত জোরে শোনা যাবে। পরের উত্তরের ক্ষেত্রে প্রযোজ্য।"
+    "description": "কণ্ঠের প্লেব্যাক ভলিউম স্লাইডার সম্পর্কে টুলটিপ।",
+    "message": "সিস্টেমের ভলিউমের তুলনায় Say, Pi-এর কণ্ঠ কত জোরে শোনা যায়। পরের উত্তর থেকে প্রযোজ্য, Pi-এর নিজের কণ্ঠে নয়।"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

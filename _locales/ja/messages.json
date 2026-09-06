@@ -1264,8 +1264,8 @@
     "message": "速度"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "音声再生速度スライダーを説明するツールチップ。",
-    "message": "Say, Piの音声が話す速さ。次の返信から適用されます。"
+    "description": "音声の再生速度スライダーを説明するツールチップ。",
+    "message": "Say, Pi の音声が話す速さです。次の返信から適用され、Pi 自身の音声には適用されません。"
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "音量"
   },
   "ttsVolumeTooltip": {
-    "description": "音声再生音量スライダーを説明するツールチップ。",
-    "message": "システム音量に対するSay, Piの音声の大きさ。次の返信から適用されます。"
+    "description": "音声の再生音量スライダーを説明するツールチップ。",
+    "message": "システム音量に対する Say, Pi の音声の大きさです。次の返信から適用され、Pi 自身の音声には適用されません。"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

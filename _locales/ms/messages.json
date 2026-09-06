@@ -1264,8 +1264,8 @@
     "message": "Kelajuan"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Petua alat yang menerangkan peluncur kelajuan main balik suara.",
-    "message": "Kelajuan suara Say, Pi bercakap. Digunakan mulai balasan seterusnya."
+    "description": "Penerangan tentang peluncur kelajuan main balik suara.",
+    "message": "Kelajuan suara Say, Pi. Berkuat kuasa mulai balasan seterusnya, bukan suara Pi."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Kelantangan"
   },
   "ttsVolumeTooltip": {
-    "description": "Petua alat yang menerangkan peluncur kelantangan main balik suara.",
-    "message": "Kelantangan suara Say, Pi berbanding kelantangan sistem anda. Digunakan mulai balasan seterusnya."
+    "description": "Penerangan tentang peluncur kelantangan main balik suara.",
+    "message": "Kekuatan bunyi suara Say, Pi berbanding kelantangan sistem anda. Berkuat kuasa mulai balasan seterusnya, bukan suara Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

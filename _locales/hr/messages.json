@@ -1265,7 +1265,7 @@
   },
   "ttsPlaybackRateTooltip": {
     "description": "Objašnjenje klizača za brzinu reprodukcije glasa.",
-    "message": "Brzina govora glasova aplikacije Say, Pi. Primjenjuje se od sljedećeg odgovora."
+    "message": "Brzina kojom glasovi Say, Pi govore. Primjenjuje se od sljedećeg odgovora, ali ne i na Piin glas."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1341,7 +1341,7 @@
   },
   "ttsVolumeTooltip": {
     "description": "Objašnjenje klizača za glasnoću reprodukcije glasa.",
-    "message": "Glasnoća glasova aplikacije Say, Pi u odnosu na glasnoću sustava. Primjenjuje se od sljedećeg odgovora."
+    "message": "Glasnoća glasova Say, Pi u odnosu na glasnoću sustava. Primjenjuje se od sljedećeg odgovora, ali ne i na Piin glas."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

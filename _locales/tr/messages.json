@@ -1264,8 +1264,8 @@
     "message": "Hız"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "Ses çalma hızı kaydırıcısını açıklayan araç ipucu.",
-    "message": "Say, Pi seslerinin konuşma hızı. Bir sonraki yanıttan itibaren geçerlidir."
+    "description": "Ses oynatma hızı kaydırıcısını açıklayan araç ipucu.",
+    "message": "Say, Pi seslerinin ne kadar hızlı konuştuğunu ayarlar. Sonraki yanıttan itibaren geçerlidir ve Pi’nin kendi sesi için geçerli değildir."
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "Ses düzeyi"
   },
   "ttsVolumeTooltip": {
-    "description": "Ses çalma ses düzeyi kaydırıcısını açıklayan araç ipucu.",
-    "message": "Say, Pi seslerinin sistem ses düzeyinize göre yüksekliği. Bir sonraki yanıttan itibaren geçerlidir."
+    "description": "Ses oynatma düzeyi kaydırıcısını açıklayan araç ipucu.",
+    "message": "Say, Pi seslerinin sistem ses düzeyinize göre ne kadar yüksek olduğunu ayarlar. Sonraki yanıttan itibaren geçerlidir ve Pi’nin kendi sesi için geçerli değildir."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",

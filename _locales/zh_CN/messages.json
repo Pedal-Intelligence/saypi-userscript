@@ -1264,8 +1264,8 @@
     "message": "速度"
   },
   "ttsPlaybackRateTooltip": {
-    "description": "解释语音播放速度滑块的提示。",
-    "message": "Say, Pi 的语音朗读速度。从下一条回复开始生效。"
+    "description": "解释语音播放速度滑块的工具提示。",
+    "message": "Say, Pi 的语音说话速度。下次回复起生效，不影响 Pi 自己的语音。"
   },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -1340,8 +1340,8 @@
     "message": "音量"
   },
   "ttsVolumeTooltip": {
-    "description": "解释语音播放音量滑块的提示。",
-    "message": "Say, Pi 的语音音量，相对于系统音量的大小。从下一条回复开始生效。"
+    "description": "解释语音播放音量滑块的工具提示。",
+    "message": "Say, Pi 的语音音量，相对于系统音量而言。下次回复起生效，不影响 Pi 自己的语音。"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
