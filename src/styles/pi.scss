@@ -248,6 +248,33 @@ html body.pi {
   #saypi-callButton {
     /* Ensure button stays properly positioned next to both input and textarea */
     align-self: center;
+    /* Match Pi's native send button box (`size-10` = 2.5rem = 40px, all
+       breakpoints). desktop.scss sets a generic 36px width for every host;
+       the extra 4px here is what keeps the two discs the same size side by side. */
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* Idle disc: paint it with Pi's own accent tokens rather than call.svg's
+     baked-in SayPi brand green (#418a2f). The native send button beside it is
+     `bg-accent-alt-default hover:bg-accent-alt-hover active:bg-accent-alt-tap`
+     with a `text-base-contrast` glyph, and Pi redefines all of those under
+     `.dark` — so leaning on the tokens keeps the two buttons the same shade in
+     both themes. Scoped to the idle state: `.disabled` keeps the shared cream
+     disc (common.scss) and `.active` keeps its grey hangup disc (below). The
+     receiver glyph is retinted for every state so it always reads as Pi's
+     icon-on-accent colour. */
+  #saypi-callButton:not(.active):not(.disabled) svg path.background {
+    fill: var(--color-accent-alt-default, #038247);
+  }
+  #saypi-callButton:not(.active):not(.disabled):hover svg path.background {
+    fill: var(--color-accent-alt-hover, #077843);
+  }
+  #saypi-callButton:not(.active):not(.disabled):active svg path.background {
+    fill: var(--color-accent-alt-tap, #0a6e40);
+  }
+  #saypi-callButton svg path.phone-receiver {
+    fill: var(--color-base-contrast, #fcfaf7);
   }
 
   /* In-call (active) state: keep the hangup disc clearly visible — its intended
@@ -267,11 +294,11 @@ html body.pi {
   /* Mobile-specific button sizing to match Pi's native buttons */
   @media (max-width: 768px) {
     #saypi-callButton {
-      /* Match Pi's native submit button size (size-9 = 36px = 2.25rem) */
-      min-width: 2.25rem;
-      min-height: 2.25rem;
-      width: 2.25rem;
-      height: 2.25rem;
+      /* Match Pi's native submit button size (size-10 = 40px = 2.5rem) */
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
       flex-shrink: 0; /* Prevent button from shrinking in flex container */
     }
 
