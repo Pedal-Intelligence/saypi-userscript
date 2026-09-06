@@ -578,6 +578,11 @@ if (document.readyState === 'loading') {
 
 // Export functions to global scope for use in other scripts
 window.updateUnauthenticatedDisplay = updateUnauthenticatedDisplay;
+// Re-run the whole status read after the session changes under an open
+// settings page (#227). getQuotaStatus() re-checks auth with the background
+// and then either hides the bars (signed out) or refetches the numbers, so a
+// new account never inherits the previous one's quota display.
+window.refreshQuotaStatus = initializeStatusSubscription;
 window.updateQuotaDisplayForAuthState = async function() {
   await checkAuthenticationStatus();
   if (!isUserAuthenticated) {
