@@ -62,10 +62,30 @@ Tuning Knobs
   defaults absent p to 0 (maximum patience) and absent tempo to 0 (neutral).
 - `USER_STOPPED_TIMEOUT_MS` — submit regardless after prolonged silence.
 
+Turn Outcomes (the eval's ground truth)
+- The only non-circular answer to "was that really the end of the user's turn?" is whether
+  the user started speaking again right after we submitted. Each auto-submitted turn therefore
+  opens a **resume window** and reports one text-free `/turn-outcome` event when it closes
+  (`src/TurnOutcomeModule.ts`, wired in `ConversationMachine`; issues #505/#510).
+- The window OPENS at auto-submit (`converting.submitting`, action `openTurnOutcome`) and
+  CLOSES when the assistant becomes **audible** — TTS start (`saypi:piSpeaking`) — so a resume
+  is measured against what the user could actually hear, not against text they had merely seen.
+- Closing cases, exactly one per turn:
+  - TTS starts → `response_started_at` = TTS start.
+  - Response completes unspoken (`piWriting` → `saypi:piStoppedWriting`, i.e. voice-out off) →
+    `response_started_at` = when the reply text appeared.
+  - The user resumes first, in `piThinking` **or** `piWriting` → `user_resumed`, `resumed_at`,
+    and a null `response_started_at` (nothing was ever spoken).
+  - `PI_THINKING_TIMEOUT_MS` elapses with no response at all → both timestamps null.
+- Known gaps: a hangup mid-response, and a turn stuck in `piWriting` (host DOM drift, TTS off,
+  `piStoppedWriting` never fires), emit nothing and fall through to the server-side fallback.
+  Maintenance messages (suppressed buffer flushes) are excluded by design.
+
 Tests
 - test/timers/calculateDelay.spec.ts — verifies timing math.
 - test/TranscriptionModule.tempo-forwarding.spec.ts — ensures server `tempo`/`pFinishedSpeaking` propagate.
 - test/state-machines/ConversationMachine-submissionDelay.spec.ts — proves that accumulating holds until the delay elapses and that merges don’t preempt the timer.
+- test/state-machines/ConversationMachine-turnOutcome.spec.ts — pins when the resume window closes and what each closing case reports.
 
 Practical Guidance
 - If you see premature submits, check logs for `noStopYet: true` (guard blocked) or `finalDelay: 0` with a high `pFinished` (the elapsed transcription time consumed the wait).
