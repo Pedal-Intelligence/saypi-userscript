@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Länk på fliken Om som öppnar installationsguiden och mikrofontestet igen.",
+    "message": "Öppna installationsguiden"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, jag är fortfarande här!"
@@ -736,6 +740,10 @@
     "description": "Miljöalternativ: bland andra människor.",
     "message": "Bland andra människor"
   },
+  "onboarding_envHelp": {
+    "description": "Förklarar, innan miljöfrågan besvaras, att svaret ändrar det tysta läget.",
+    "message": "Det här ställer in tyst läge: om du är bland andra aktiveras det, så att Say, Pi lyssnar efter tystare tal och svarar med lägre volym. Övriga svar lämnar det avstängt — och du kan ändra det senare i Inställningar."
+  },
   "onboarding_envMixed": {
     "description": "Miljöalternativ: en blandning av privata och delade platser.",
     "message": "En blandning av platser"
@@ -745,20 +753,30 @@
     "message": "Någonstans privat"
   },
   "onboarding_envQuietOff": {
-    "description": "Bekräftelse som visas när svaret om miljön lämnar tyst läge avstängt.",
-    "message": "Okej, vi behåller standardinställningarna för lyssning och uppspelning."
+    "description": "Status som visas när tyst läge är av, både efter att en miljö har valts och när sidan öppnas igen.",
+    "message": "Tyst läge är av — vi använder standardinställningarna för lyssning och uppspelning."
   },
   "onboarding_envQuietOn": {
-    "description": "Bekräftelse som visas när miljösvaret aktiverar tyst läge.",
-    "message": "Tyst läge är på — vi plockar upp tystare tal och svarar tyst, så att du kan prata diskret."
+    "description": "Status som visas när tyst läge är på, både efter att en miljö har valts och när sidan öppnas igen.",
+    "message": "Tyst läge är på — vi uppfattar tystare tal och svarar tyst, så att du kan prata diskret."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status som visas när det inte gick att spara inställningen för tyst läge från miljöfrågan.",
+    "message": "Det gick inte att spara, så inget har ändrats. Välj ett alternativ och försök igen."
   },
   "onboarding_envTitle": {
     "description": "Rubrik för introduktionsfrågan om användarens miljö.",
     "message": "Var pratar du oftast?"
   },
   "onboarding_footer": {
-    "description": "Sidfotstext på introduktionssidan som visas första gången.",
-    "message": "Du kan gå tillbaka hit när som helst i inställningarna för Say, Pi. Din integritet är viktig — ljud fångas bara upp under ett aktivt samtal."
+    "description": "Sidfotstext på sidan som visas första gången, om hur man hittar tillbaka och när ljud spelas in. $tab$ är namnet på fliken Inställningar där länken tillbaka till guiden finns.",
+    "message": "Du kan öppna guiden igen när som helst från inställningarna för Say, Pi, på fliken $tab$. Din integritet är viktig — vi spelar in ljud under ett samtal och under mikrofontestet ovan, som stannar i din webbläsare.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Huvudrubrik på introduktionssidan vid första körningen.",
@@ -773,12 +791,16 @@
     "message": "Testa din mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Status som visas efter att mikrofontestet i introduktionen har slutförts.",
-    "message": "Bra — din mikrofon fungerar. 🎉"
+    "description": "Status som visas efter att mikrofontestet vid introduktionen registrerat hörbart ljud.",
+    "message": "Bra — vi hörde dig! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status som visas medan mikrofontestet i introduktionen mäter ljudnivån.",
     "message": "Lyssnar — säg något. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status som visas när mikrofontestet vid introduktionen kördes men inte registrerade något hörbart ljud.",
+    "message": "Vi hörde inget. Kontrollera att rätt mikrofon är vald i webbläsaren och att den inte är avstängd, och försök sedan igen."
   },
   "onboarding_micTestRequesting": {
     "description": "Status som visas medan mikrofontestet i introduktionen väntar på behörighet.",
@@ -788,17 +810,21 @@
     "description": "Knappetikett för att stoppa mikrofontestet i introduktionen medan det körs.",
     "message": "Stoppa testet"
   },
+  "onboarding_micTestStopped": {
+    "description": "Status som visas när mikrofontestet vid introduktionen stoppades innan det registrerade något.",
+    "message": "Testet stoppades innan vi hörde något. Starta det igen och säg några ord."
+  },
   "onboarding_step1Body": {
-    "description": "Brödtext för det första introduktionssteget som förklarar hur man fäster tillägget.",
-    "message": "Klicka på pusselbiten 🧩 uppe till höger i webbläsaren och sedan på nålen 📌 bredvid Say, Pi. Då är samtalsknappen bara ett klick bort."
+    "description": "Brödtext i det första introduktionssteget som förklarar hur tillägget nålas fast och vad den nålade verktygsikonen öppnar.",
+    "message": "Klicka på pusselbiten 🧩 uppe till höger i webbläsaren och sedan på nålen 📌 bredvid Say, Pi. Då har du Say, Pi-inställningarna – röst, tyst läge och resten – ett klick bort."
   },
   "onboarding_step1Title": {
     "description": "Rubrik för det första introduktionssteget (fäst tillägget).",
     "message": "Fäst Say, Pi i verktygsfältet"
   },
   "onboarding_step2Body": {
-    "description": "Brödtext för det andra introduktionssteget som förklarar hur man startar en röstkonversation.",
-    "message": "Gå till någon av assistenterna som stöds nedan, tryck på Say, Pi-samtalsknappen och säg hej. Vi ber om åtkomst till mikrofonen första gången, det är som det ska, och vi lyssnar bara när du är aktivt med i ett samtal."
+    "description": "Brödtext för det andra introduktionssteget, som förklarar var samtalsknappen på sidan finns och hur man startar ett röstsamtal.",
+    "message": "Gå till en av assistenterna som stöds nedan. Say, Pi lägger till en egen samtalsknapp på chatsidan, bredvid där du skriver — tryck på den och säg hej. Vi ber om mikrofonåtkomst första gången — det är förväntat, och utanför testet nedan lyssnar vi bara när du deltar i ett samtal."
   },
   "onboarding_step2Title": {
     "description": "Rubrik för det andra introduktionssteget (starta en konversation).",

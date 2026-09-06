@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link på fanen Om, der åbner opsætningsvejledningen og mikrofontesten fra første start igen.",
+    "message": "Åbn opsætningsvejledningen"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, jeg er stadig her!"
@@ -736,6 +740,10 @@
     "description": "Miljøvalg: omkring andre mennesker.",
     "message": "Omkring andre mennesker"
   },
+  "onboarding_envHelp": {
+    "description": "Forklarer før besvarelsen af miljøspørgsmålet, at svaret skifter Lydløs tilstand.",
+    "message": "Dette slår Lydløs tilstand til: Vælg omkring andre, så lytter Say, Pi efter svagere tale og svarer ved lavere lydstyrke. De andre svar lader den være slået fra — og du kan ændre det senere under Indstillinger."
+  },
   "onboarding_envMixed": {
     "description": "Miljøvalg: en blanding af private og fælles rum.",
     "message": "En blanding af steder"
@@ -745,20 +753,30 @@
     "message": "Et privat sted"
   },
   "onboarding_envQuietOff": {
-    "description": "Bekræftelse, der vises, når svaret om miljøet efterlader stille tilstand slået fra.",
-    "message": "Okay — vi beholder standardindstillingerne for lytning og afspilning."
+    "description": "Status, der vises, når Lydløs tilstand er slået fra, både efter valg af miljø og når siden åbnes igen.",
+    "message": "Lydløs tilstand er slået fra — vi bruger standardindstillingerne for lytning og afspilning."
   },
   "onboarding_envQuietOn": {
-    "description": "Bekræftelse, der vises, når svaret om omgivelser aktiverer stille tilstand.",
-    "message": "Stille tilstand til — vi opfanger blødere tale og svarer lavt, så du kan tale diskret."
+    "description": "Status, der vises, når Lydløs tilstand er slået til, både efter valg af miljø og når siden åbnes igen.",
+    "message": "Lydløs tilstand er slået til — vi opfanger svagere tale og svarer stille, så du kan tale diskret."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status, der vises, når skrivning af indstillingen for Lydløs tilstand fra miljøspørgsmålet mislykkes.",
+    "message": "Vi kunne ikke gemme det, så intet er ændret. Vælg en mulighed for at prøve igen."
   },
   "onboarding_envTitle": {
     "description": "Overskrift til onboarding-spørgsmålet om brugerens omgivelser.",
     "message": "Hvor taler du typisk?"
   },
   "onboarding_footer": {
-    "description": "Fodtekst på onboarding-siden ved første kørsel.",
-    "message": "Du kan altid finde dette igen i indstillingerne i Say, Pi. Dit privatliv er vigtigt — lyd optages kun under et aktivt opkald."
+    "description": "Sidefodstekst på siden, der vises første gang, og som beskriver, hvordan man vender tilbage, samt hvornår der optages lyd. $tab$ er navnet på fanen Indstillinger, hvor linket tilbage til denne vejledning findes.",
+    "message": "Du kan når som helst åbne denne vejledning igen fra indstillingerne for Say, Pi på fanen $tab$. Dit privatliv er vigtigt — vi optager lyd under et opkald og under mikrofontesten ovenfor, og optagelserne bliver i din browser.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hovedoverskrift på onboarding-siden ved første kørsel.",
@@ -773,12 +791,16 @@
     "message": "Test din mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Status, der vises, efter onboarding-mikrofontesten er gennemført.",
-    "message": "Fint — din mikrofon virker! 🎉"
+    "description": "Status, der vises, efter mikrofontesten i introduktionen har registreret lyd.",
+    "message": "Fint — vi kunne høre dig 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status, der vises, mens onboarding-mikrofontesten måler input.",
     "message": "Lytter — sig noget! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status, der vises, når mikrofontesten i introduktionen er kørt, men ikke har registreret lyd.",
+    "message": "Vi hørte ikke noget. Kontrollér, at den rigtige mikrofon er valgt i din browser, og at den ikke er slået fra, og prøv igen."
   },
   "onboarding_micTestRequesting": {
     "description": "Status, der vises, mens onboarding-mikrofontesten afventer tilladelse.",
@@ -788,17 +810,21 @@
     "description": "Knaptekst til at stoppe onboarding-mikrofontesten, mens den kører.",
     "message": "Stop test"
   },
+  "onboarding_micTestStopped": {
+    "description": "Status, der vises, når mikrofontesten i introduktionen blev stoppet, før den registrerede noget.",
+    "message": "Testen blev stoppet, før vi hørte noget. Start den igen, og sig et par ord."
+  },
   "onboarding_step1Body": {
-    "description": "Brødtekst til første onboarding-trin, der forklarer hvordan du fastgør udvidelsen.",
-    "message": "Klik på puslespilsikonet 🧩 øverst til højre i din browser, og klik derefter på nålen 📌 ved siden af Say, Pi. Så er opkaldsknappen kun ét klik væk."
+    "description": "Brødtekst til første onboarding-trin, der forklarer, hvordan udvidelsen fastgøres, og hvad den fastgjorte knap på værktøjslinjen åbner.",
+    "message": "Klik på puslespilsbrikken 🧩 øverst til højre i browseren og derefter på nålen 📌 ved siden af Say, Pi. Så er dine Say, Pi-indstillinger — stemme, lydløs tilstand og resten — altid ét klik væk."
   },
   "onboarding_step1Title": {
     "description": "Titel på første onboarding-trin (fastgør udvidelsen).",
     "message": "Fastgør Say, Pi til værktøjslinjen"
   },
   "onboarding_step2Body": {
-    "description": "Brødtekst til andet onboarding-trin, der forklarer hvordan man starter en stemmesamtale.",
-    "message": "Gå til en af de understøttede assistenter nedenfor, tryk på Say, Pi-opkaldsknappen, og sig hej. Første gang beder vi om adgang til mikrofonen, og det er forventet, og vi lytter kun, mens du aktivt er i et opkald."
+    "description": "Brødtekst i andet trin af introduktionen, der forklarer, hvor opkaldsknappen på siden er, og hvordan man starter en talesamtale.",
+    "message": "Gå til en af assistenterne nedenfor. Say, Pi tilføjer sin egen opkaldsknap på chatsiden ved siden af skrivefeltet — tryk på den, og sig hej. Vi beder om adgang til mikrofonen første gang — det er forventet, og bortset fra testen nedenfor lytter vi kun, mens du er i et opkald."
   },
   "onboarding_step2Title": {
     "description": "Titel på andet onboarding-trin (start en samtale).",

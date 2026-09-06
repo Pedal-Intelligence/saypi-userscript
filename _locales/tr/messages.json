@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "İlk kullanım kurulum rehberini ve mikrofon testini yeniden açan Hakkında sekmesi bağlantısı.",
+    "message": "Kurulum rehberini aç"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Evet, hala buradayım!"
@@ -736,6 +740,10 @@
     "description": "Ortam seçeneği: başka insanların yanında.",
     "message": "Başkalarının yanında"
   },
+  "onboarding_envHelp": {
+    "description": "Ortam sorusu yanıtlanmadan önce, yanıtın Sessiz modu değiştirdiğini açıklar.",
+    "message": "Bu, Sessiz modu ayarlar: diğer insanların yanındaysanız açar; böylece Say, Pi daha kısık sesleri dinler ve daha düşük sesle yanıt verir. Diğer seçenekler modu kapalı bırakır; ayarı daha sonra Ayarlar'dan değiştirebilirsiniz."
+  },
   "onboarding_envMixed": {
     "description": "Ortam seçeneği: özel ve paylaşılan alanların karışımı.",
     "message": "Karışık yerlerde"
@@ -745,20 +753,30 @@
     "message": "Özel bir yerde"
   },
   "onboarding_envQuietOff": {
-    "description": "Ortam yanıtı sessiz modu kapalı bıraktığında gösterilen onay.",
-    "message": "Anlaşıldı — standart dinleme ve oynatma ayarlarını koruyacağız."
+    "description": "Hem bir ortam seçildikten sonra hem de sayfa yeniden açıldığında Sessiz mod kapalıyken gösterilen durum.",
+    "message": "Sessiz mod kapalı — standart dinleme ve oynatma ayarlarını kullanırız."
   },
   "onboarding_envQuietOn": {
-    "description": "Ortam yanıtı sessiz modu etkinleştirdiğinde gösterilen onay.",
-    "message": "Sessiz mod açık — daha hafif konuşmayı algılarız ve sessiz yanıt veririz, böylece daha gizli konuşabilirsiniz."
+    "description": "Hem bir ortam seçildikten sonra hem de sayfa yeniden açıldığında Sessiz mod açıkken gösterilen durum.",
+    "message": "Sessiz mod açık — daha kısık sesleri algılar ve gizlice konuşabilmeniz için sessizce yanıt veririz."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Ortam sorusundan Sessiz mod ayarı yazılırken işlem başarısız olduğunda gösterilen durum.",
+    "message": "Bunu kaydedemedik; bu nedenle hiçbir şey değişmedi. Tekrar denemek için bir seçenek belirleyin."
   },
   "onboarding_envTitle": {
     "description": "Kullanıcının ortamıyla ilgili tanıtım sorusunun başlığı.",
     "message": "Genelde nerede konuşacaksınız?"
   },
   "onboarding_footer": {
-    "description": "İlk çalıştırma tanıtım sayfasındaki alt bilgi metni.",
-    "message": "Buna istediğiniz zaman Say, Pi ayarlarından geri dönebilirsiniz. Gizliliğiniz önemli — ses yalnızca etkin bir arama sırasında alınır."
+    "description": "İlk kullanım tanıtım sayfasının alt metni; geri dönüş yolunu ve sesin ne zaman kaydedildiğini açıklar. $tab$, bu kılavuza dönüş bağlantısının bulunduğu Ayarlar sekmesinin adıdır.",
+    "message": "Bu kılavuzu istediğiniz zaman Say, Pi ayarlarında $tab$ sekmesinden yeniden açabilirsiniz. Gizliliğiniz önemlidir — arama sırasında ve yukarıdaki mikrofon testi sırasında ses kaydederiz; kayıt tarayıcınızda kalır.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "İlk çalıştırma tanıtım sayfasındaki ana başlık.",
@@ -773,12 +791,16 @@
     "message": "Mikrofonunuzu test edin"
   },
   "onboarding_micTestDone": {
-    "description": "Tanıtım mikrofon testi başarıyla tamamlandıktan sonra gösterilen durum.",
-    "message": "Güzel — mikrofonunuz çalışıyor 🎉"
+    "description": "Tanıtım mikrofonu testi duyulabilir bir giriş ölçtükten sonra gösterilen durum.",
+    "message": "Harika — sizi duyduk! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Tanıtım mikrofon testi girişi ölçerken gösterilen durum.",
     "message": "Dinliyor — bir şey söyleyin 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Tanıtım mikrofonu testi çalıştığında ancak duyulabilir bir giriş algılanmadığında gösterilen durum.",
+    "message": "Hiçbir şey duyamadık. Tarayıcınızda doğru mikrofonun seçili ve mikrofonun sessizde olmadığını kontrol edip tekrar deneyin."
   },
   "onboarding_micTestRequesting": {
     "description": "Tanıtım mikrofon testi izin beklerken gösterilen durum.",
@@ -788,17 +810,21 @@
     "description": "Tanıtım mikrofon testi çalışırken durdurmak için düğme etiketi.",
     "message": "Testi durdur"
   },
+  "onboarding_micTestStopped": {
+    "description": "Tanıtım mikrofonu testi herhangi bir giriş ölçemeden durdurulduğunda gösterilen durum.",
+    "message": "Hiçbir şey duyamadan test durduruldu. Yeniden başlatıp birkaç kelime söyleyin."
+  },
   "onboarding_step1Body": {
-    "description": "Uzantının nasıl sabitleneceğini açıklayan ilk tanıtım adımının metni.",
-    "message": "Tarayıcınızın sağ üstündeki yapboz parçası 🧩 simgesine, sonra Say, Pi'nin yanındaki sabitleme 📌 simgesine tıklayın. Böylece arama düğmesi tek tık uzağınızda kalır."
+    "description": "Uzantının nasıl sabitleneceğini ve sabitlenen araç çubuğu düğmesinin neyi açtığını açıklayan ilk başlangıç adımının metni.",
+    "message": "Tarayıcınızın sağ üstündeki yapboz 🧩 simgesine, ardından Say, Pi'nin yanındaki raptiyeye 📌 tıklayın. Böylece Say, Pi ayarlarınız — ses, sessiz mod ve diğerleri — tek tık uzağınızda olur."
   },
   "onboarding_step1Title": {
     "description": "İlk tanıtım adımının başlığı (uzantıyı sabitleme).",
     "message": "Say, Pi'yi araç çubuğunuza sabitleyin"
   },
   "onboarding_step2Body": {
-    "description": "Sesli konuşmanın nasıl başlatılacağını açıklayan ikinci tanıtım adımının metni.",
-    "message": "Aşağıdaki desteklenen asistanlardan birine gidin, ardından Say, Pi arama düğmesine dokunup merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz; bu normal, ve yalnızca aktif bir aramadayken dinleriz."
+    "description": "Sayfa içi arama düğmesinin nerede olduğunu ve sesli görüşmenin nasıl başlatılacağını açıklayan ikinci tanıtım adımının metni.",
+    "message": "Aşağıdaki desteklenen asistanlardan birine gidin. Say, Pi sohbet sayfasına, yazdığınız yerin yanına kendi arama düğmesini ekler — dokunup merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz; bu normaldir. Aşağıdaki test dışında yalnızca arama sırasında dinleriz."
   },
   "onboarding_step2Title": {
     "description": "İkinci tanıtım adımının başlığı (sohbete başlama).",

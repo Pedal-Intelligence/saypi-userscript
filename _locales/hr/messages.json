@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Poveznica na kartici O alatu koja ponovno otvara vodič za početno postavljanje i test mikrofona.",
+    "message": "Otvori vodič za postavljanje"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Da, još sam ovdje!"
@@ -736,6 +740,10 @@
     "description": "Opcija okruženja: u blizini drugih ljudi.",
     "message": "U blizini drugih ljudi"
   },
+  "onboarding_envHelp": {
+    "description": "Objašnjava, prije odgovora na pitanje o okruženju, da odgovor uključuje Tihi način rada.",
+    "message": "Time se uključuje Tihi način rada: ako ste među drugim ljudima, Say, Pi prepoznaje tiši govor i odgovara manjom glasnoćom. Ostali odgovori ostavljaju ga isključenim — postavku možete promijeniti u Postavkama."
+  },
   "onboarding_envMixed": {
     "description": "Opcija okruženja: kombinacija privatnih i zajedničkih prostora.",
     "message": "Malo ovdje, malo tamo"
@@ -745,20 +753,30 @@
     "message": "Negdje privatno"
   },
   "onboarding_envQuietOff": {
-    "description": "Potvrda koja se prikazuje kada odgovor o okruženju ostavlja tihi način isključenim.",
-    "message": "U redu — zadržat ćemo standardne postavke slušanja i reprodukcije."
+    "description": "Status koji se prikazuje kada je Tihi način rada isključen, nakon odabira okruženja i pri ponovnom otvaranju stranice.",
+    "message": "Tihi način rada isključen je — koristit ćemo standardne postavke slušanja i reprodukcije."
   },
   "onboarding_envQuietOn": {
-    "description": "Potvrda prikazana kada odgovor o okruženju uključi tihi način.",
-    "message": "Tihi način je uključen — prepoznat ćemo tiši govor i odgovarati tiho, pa možeš razgovarati diskretno."
+    "description": "Status koji se prikazuje kada je Tihi način rada uključen, nakon odabira okruženja i pri ponovnom otvaranju stranice.",
+    "message": "Tihi način rada uključen je — prepoznat ćemo tiši govor i tiho odgovarati, kako biste mogli razgovarati diskretno."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status koji se prikazuje kada spremanje postavke tihog načina rada iz pitanja o okruženju ne uspije.",
+    "message": "Nismo to mogli spremiti pa se ništa nije promijenilo. Odaberite opciju i pokušajte ponovno."
   },
   "onboarding_envTitle": {
     "description": "Naslov za uvodno pitanje o korisnikovom okruženju.",
     "message": "Gdje ćeš najčešće razgovarati?"
   },
   "onboarding_footer": {
-    "description": "Tekst u podnožju na stranici uvodnog prikaza pri prvom pokretanju.",
-    "message": "Ovo možeš ponovno otvoriti bilo kada u postavkama za Say, Pi. Tvoja privatnost je važna — zvuk se snima samo tijekom aktivnog poziva."
+    "description": "Tekst podnožja stranice uvoda pri prvom pokretanju koji objašnjava kako se vratiti na vodič i kada se snima zvuk. $tab$ je naziv kartice Postavke na kojoj se nalazi poveznica natrag na ovaj vodič.",
+    "message": "Ovaj vodič možete ponovno otvoriti u bilo kojem trenutku u postavkama aplikacije Say, Pi, na kartici $tab$. Vaša privatnost nam je važna — zvuk snimamo tijekom poziva i tijekom gornjeg testa mikrofona, a snimke ostaju u vašem pregledniku.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Glavni naslov na onboarding stranici pri prvom pokretanju.",
@@ -773,12 +791,16 @@
     "message": "Testiraj mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Status prikazan nakon uspješnog završetka uvodnog testa mikrofona.",
-    "message": "Super — mikrofon radi. 🎉"
+    "description": "Status koji se prikazuje nakon što test mikrofona u uvodu zabilježi čujni ulaz.",
+    "message": "Odlično — čujemo vas! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status prikazan dok uvodni test mikrofona mjeri ulaz.",
     "message": "Slušam — reci nešto. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status koji se prikazuje kada test mikrofona u uvodu završi, ali ne zabilježi čujni ulaz.",
+    "message": "Nismo ništa čuli. Provjerite je li u pregledniku odabran pravi mikrofon i je li uključen, pa pokušajte ponovno."
   },
   "onboarding_micTestRequesting": {
     "description": "Status prikazan dok uvodni test mikrofona čeka dopuštenje.",
@@ -788,17 +810,21 @@
     "description": "Oznaka gumba za zaustavljanje uvodnog testa mikrofona dok je u tijeku.",
     "message": "Zaustavi test"
   },
+  "onboarding_micTestStopped": {
+    "description": "Status koji se prikazuje kada se test mikrofona u uvodu zaustavi prije nego što išta zabilježi.",
+    "message": "Test je zaustavljen prije nego što smo išta čuli. Pokrenite ga ponovno i izgovorite nekoliko riječi."
+  },
   "onboarding_step1Body": {
-    "description": "Tekst prvog onboarding koraka koji objašnjava kako prikvačiti proširenje.",
-    "message": "Kliknite ikonu slagalice 🧩 u gornjem desnom kutu preglednika, zatim pribadaču 📌 pokraj Say, Pi. Tako je gumb za poziv uvijek na jedan klik."
+    "description": "Tekst prvog koraka uvođenja koji objašnjava kako prikvačiti proširenje i što otvara prikvačeni gumb na alatnoj traci.",
+    "message": "Kliknite ikonu slagalice 🧩 u gornjem desnom kutu preglednika, a zatim pribadaču 📌 pokraj Say, Pi. Tako su postavke za Say, Pi — glas, tihi način rada i ostalo — dostupne jednim klikom."
   },
   "onboarding_step1Title": {
     "description": "Naslov prvog onboarding koraka (prikvačivanje proširenja).",
     "message": "Prikvačite Say, Pi na alatnu traku"
   },
   "onboarding_step2Body": {
-    "description": "Tekst drugog onboarding koraka koji objašnjava kako započeti glasovni razgovor.",
-    "message": "Idite na jednog od podržanih asistenata u nastavku, zatim dodirnite gumb za poziv Say, Pi i pozdravite se. Prvi put ćemo zatražiti pristup mikrofonu — to je očekivano, a slušamo samo dok ste aktivno u pozivu."
+    "description": "Tekst drugog koraka uvoda koji objašnjava gdje se nalazi gumb za poziv na stranici i kako započeti glasovni razgovor.",
+    "message": "Otvorite jednog od podržanih pomoćnika u nastavku. Say, Pi dodaje vlastiti gumb za poziv na stranicu razgovora, pokraj polja za unos — dodirnite ga i pozdravite. Prvi ćemo vas put zatražiti pristup mikrofonu — to je očekivano, a izvan testa u nastavku slušamo samo dok ste u pozivu."
   },
   "onboarding_step2Title": {
     "description": "Naslov drugog onboarding koraka (započinjanje razgovora).",

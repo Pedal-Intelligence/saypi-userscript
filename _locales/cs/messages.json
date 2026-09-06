@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Odkaz na kartě O aplikaci, který znovu otevře příručku k nastavení pro první spuštění a test mikrofonu.",
+    "message": "Otevřít příručku k nastavení"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ano, jsem stále tady!"
@@ -736,6 +740,10 @@
     "description": "Možnost prostředí: mezi ostatními lidmi.",
     "message": "Mezi ostatními lidmi"
   },
+  "onboarding_envHelp": {
+    "description": "Vysvětluje před zodpovězením otázky na prostředí, že odpověď přepíná tichý režim.",
+    "message": "Tím nastavíte tichý režim: volba „mezi lidmi“ ho zapne, takže Say, Pi zachytí tišší řeč a odpoví s nižší hlasitostí. Ostatní odpovědi ho nechají vypnutý — později to můžete změnit v Nastavení."
+  },
   "onboarding_envMixed": {
     "description": "Možnost prostředí: mix soukromých a sdílených prostor.",
     "message": "Kombinace míst"
@@ -745,20 +753,30 @@
     "message": "Někde v soukromí"
   },
   "onboarding_envQuietOff": {
-    "description": "Potvrzení zobrazené, když odpověď ohledně prostředí ponechá tichý režim vypnutý.",
-    "message": "Dobře, ponecháme standardní nastavení poslechu a přehrávání."
+    "description": "Stav zobrazený, když je tichý režim vypnutý, a to po výběru prostředí i při opětovném otevření stránky.",
+    "message": "Tichý režim je vypnutý — použijeme standardní nastavení poslechu a přehrávání."
   },
   "onboarding_envQuietOn": {
-    "description": "Potvrzení zobrazené, když odpověď na prostředí zapne tichý režim.",
-    "message": "Tichý režim zapnutý — zachytíme i tišší řeč a odpovíme potichu, abyste mohli mluvit diskrétně."
+    "description": "Stav zobrazený, když je tichý režim zapnutý, a to po výběru prostředí i při opětovném otevření stránky.",
+    "message": "Tichý režim je zapnutý — zachytíme tišší řeč a odpovíme potichu, abyste mohli mluvit diskrétně."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Stav zobrazený při neúspěšném uložení nastavení tichého režimu z otázky na prostředí.",
+    "message": "Toto se nepodařilo uložit, takže se nic nezměnilo. Zvolte možnost a zkuste to znovu."
   },
   "onboarding_envTitle": {
     "description": "Nadpis pro otázku v úvodním nastavení o prostředí uživatele.",
     "message": "Kde budete obvykle mluvit?"
   },
   "onboarding_footer": {
-    "description": "Text v patičce na úvodní stránce při prvním spuštění.",
-    "message": "Kdykoli se k tomu můžete vrátit v nastavení Say, Pi. Na vašem soukromí záleží — zvuk se snímá jen během aktivního hovoru."
+    "description": "Text v zápatí úvodní stránky při prvním spuštění, který popisuje cestu zpět a okamžiky, kdy se zaznamenává zvuk. $tab$ je název karty Nastavení s odkazem zpět na tohoto průvodce.",
+    "message": "Tento průvodce můžete kdykoli znovu otevřít v nastavení Say, Pi na kartě $tab$. Na vašem soukromí nám záleží — zvuk zaznamenáváme během hovoru a výše uvedeného testu mikrofonu, přičemž zůstává ve vašem prohlížeči.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hlavní nadpis na stránce uvítání při prvním spuštění.",
@@ -773,12 +791,16 @@
     "message": "Otestovat mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Stav zobrazený po úspěšném dokončení testu mikrofonu v úvodním nastavení.",
-    "message": "Skvělé — mikrofon funguje. 🎉"
+    "description": "Stav zobrazený po zaznamenání slyšitelného vstupu během testu mikrofonu v průvodci.",
+    "message": "Skvělé — slyšeli jsme vás! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Stav zobrazený, když test mikrofonu při úvodním nastavení měří vstup.",
     "message": "Posloucháme — řekněte něco. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Stav zobrazený po dokončení testu mikrofonu v průvodci, pokud nebyl zaznamenán žádný slyšitelný vstup.",
+    "message": "Nic jsme neslyšeli. Zkontrolujte, že je v prohlížeči vybrán správný mikrofon a že není ztlumený, a zkuste to znovu."
   },
   "onboarding_micTestRequesting": {
     "description": "Stav zobrazený, když test mikrofonu při úvodním nastavení čeká na povolení.",
@@ -788,17 +810,21 @@
     "description": "Popisek tlačítka pro zastavení běžícího testu mikrofonu v úvodním nastavení.",
     "message": "Zastavit test"
   },
+  "onboarding_micTestStopped": {
+    "description": "Stav zobrazený po ukončení testu mikrofonu v průvodci před zaznamenáním jakéhokoli vstupu.",
+    "message": "Test byl ukončen, než jsme něco uslyšeli. Spusťte ho znovu a řekněte pár slov."
+  },
   "onboarding_step1Body": {
-    "description": "Text prvního kroku úvodního nastavení vysvětlující, jak rozšíření připnout.",
-    "message": "Klikněte na ikonu dílku 🧩 vpravo nahoře v prohlížeči a pak na připínáček 📌 vedle Say, Pi. Tlačítko hovoru tak budete mít na jedno kliknutí."
+    "description": "Text prvního kroku úvodního průvodce s vysvětlením, jak rozšíření připnout a co otevře připnuté tlačítko na panelu nástrojů.",
+    "message": "Klikněte na ikonu puzzle 🧩 v pravém horním rohu prohlížeče a potom na špendlík 📌 vedle Say, Pi. Nastavení Say, Pi — hlas, tichý režim a další — tak budete mít na jedno kliknutí."
   },
   "onboarding_step1Title": {
     "description": "Název prvního kroku úvodního nastavení (připnutí rozšíření).",
     "message": "Připněte si Say, Pi na panel nástrojů"
   },
   "onboarding_step2Body": {
-    "description": "Text druhého kroku úvodního nastavení vysvětlující, jak začít hlasovou konverzaci.",
-    "message": "Přejděte na jednoho z podporovaných asistentů níže, potom klepněte na tlačítko hovoru Say, Pi a pozdravte. Poprvé vás požádáme o přístup k mikrofonu — to je očekávané a posloucháme jen tehdy, když jste aktivně v hovoru."
+    "description": "Text druhého kroku úvodního průvodce vysvětlující, kde najít tlačítko hovoru na stránce a jak zahájit hlasovou konverzaci.",
+    "message": "Přejděte k jednomu z níže uvedených podporovaných asistentů. Say, Pi přidá na stránku chatu vlastní tlačítko hovoru vedle pole pro psaní — klepněte na něj a pozdravte. Při prvním použití požádáme o přístup k mikrofonu — je to očekávané. Mimo níže uvedený test posloucháme jen během hovoru."
   },
   "onboarding_step2Title": {
     "description": "Název druhého kroku úvodního nastavení (zahájení konverzace).",

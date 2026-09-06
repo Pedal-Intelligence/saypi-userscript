@@ -23,6 +23,7 @@ export const ONBOARDING_I18N_KEYS: Record<string, string> = {
   "onboarding-cta-chatgpt": "onboarding_ctaChatgpt",
   "onboarding-mic-test-btn": "onboarding_micTestButton",
   "onboarding-env-title": "onboarding_envTitle",
+  "onboarding-env-help": "onboarding_envHelp",
   "onboarding-env-private-label": "onboarding_envPrivate",
   "onboarding-env-mixed-label": "onboarding_envMixed",
   "onboarding-env-around-label": "onboarding_envAroundOthers",
@@ -30,20 +31,38 @@ export const ONBOARDING_I18N_KEYS: Record<string, string> = {
 };
 
 /**
+ * Onboarding messages that name another piece of Say, Pi's UI, mapped to the
+ * key that piece is labelled from. The name is substituted in rather than
+ * written out, because a hand-written copy drifts: the footer points the
+ * reader at the About tab, and translated independently it named a tab that
+ * the sidebar calls something else in 11 of 32 locales (#613).
+ */
+export const ONBOARDING_I18N_SUBSTITUTIONS: Record<string, string> = {
+  onboarding_footer: "tabAbout",
+};
+
+/**
  * Replaces each known element's text with its localized message when one
  * exists. Missing/empty translations are skipped so the inline English text
- * remains as the fallback.
+ * remains as the fallback — including when a message's substitution can't be
+ * resolved, since a half-filled sentence reads worse than the English one.
  */
 export function applyOnboardingI18n(
   root: ParentNode,
-  translate: (key: string) => string
+  translate: (key: string, substitutions?: string) => string
 ): void {
   for (const [id, key] of Object.entries(ONBOARDING_I18N_KEYS)) {
     const el = root.querySelector(`#${id}`);
     if (!el) continue;
     let msg = "";
     try {
-      msg = translate(key) ?? "";
+      const from = ONBOARDING_I18N_SUBSTITUTIONS[key];
+      if (from) {
+        const substitution = translate(from) ?? "";
+        msg = substitution ? translate(key, substitution) ?? "" : "";
+      } else {
+        msg = translate(key) ?? "";
+      }
     } catch {
       msg = "";
     }
@@ -58,23 +77,28 @@ export function setupMicTest(root: ParentNode): void {
   const fill = root.querySelector<HTMLElement>("#onboarding-mic-meter-fill");
   const status = root.querySelector<HTMLElement>("#onboarding-mic-test-status");
   if (!button || !meter || !fill || !status) return;
-  wireMicTest(
-    { button, meter, fill, status },
-    { translate: (key, sub) => getMessage(key, sub) }
-  );
+  // getMessage passed straight through, never re-wrapped: a lambda that names
+  // only `key` silently drops the substitution argument (#613).
+  wireMicTest({ button, meter, fill, status }, { translate: getMessage });
 }
 
 /** Wires the "where will you usually talk?" question if present (#437). */
 export function setupEnvironmentQuestion(root: ParentNode): void {
   if (!root.querySelector('input[name="voice-environment"]')) return;
   wireEnvironmentQuestion(root, {
-    translate: (key) => getMessage(key),
+    translate: getMessage,
+    getQuietMode: async () => {
+      const stored = await browser.storage.local.get("quietMode");
+      const value = (stored as Record<string, unknown> | undefined)?.quietMode;
+      // Anything that isn't a boolean is "never answered", not "off".
+      return typeof value === "boolean" ? value : undefined;
+    },
     setQuietMode: (on) => browser.storage.local.set({ quietMode: on }),
   });
 }
 
 function init(): void {
-  applyOnboardingI18n(document, (key) => getMessage(key));
+  applyOnboardingI18n(document, getMessage);
   setupMicTest(document);
   setupEnvironmentQuestion(document);
 }

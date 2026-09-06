@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link da aba Sobre que reabre o guia de configuração da primeira execução e o teste do microfone.",
+    "message": "Abrir o guia de configuração"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Sim, eu ainda estou aqui!"
@@ -736,6 +740,10 @@
     "description": "Opção de ambiente: perto de outras pessoas.",
     "message": "Perto de outras pessoas"
   },
+  "onboarding_envHelp": {
+    "description": "Explica, antes de responder à pergunta sobre o ambiente, que a resposta ativa o modo silencioso.",
+    "message": "Isso ativa o modo silencioso: perto de outras pessoas, o Say, Pi passa a ouvir uma fala mais baixa e responder em volume reduzido. As outras opções o mantêm desativado — e você pode alterar isso depois em Configurações."
+  },
   "onboarding_envMixed": {
     "description": "Opção de ambiente: uma mistura de espaços privados e compartilhados.",
     "message": "Em lugares variados"
@@ -745,20 +753,30 @@
     "message": "Em um lugar privado"
   },
   "onboarding_envQuietOff": {
-    "description": "Confirmação mostrada quando a resposta sobre o ambiente deixa o modo silencioso desativado.",
-    "message": "Certo — vamos manter as configurações padrão de escuta e reprodução."
+    "description": "Status mostrado quando o modo silencioso está desativado, tanto após escolher um ambiente quanto ao reabrir a página.",
+    "message": "O modo silencioso está desativado — usaremos as configurações padrão de escuta e reprodução."
   },
   "onboarding_envQuietOn": {
-    "description": "Confirmação mostrada quando a resposta sobre o ambiente ativa o modo silencioso.",
-    "message": "Modo silencioso ativado — vamos captar falas mais baixas e responder em voz baixa, para você falar com discrição."
+    "description": "Status mostrado quando o modo silencioso está ativado, tanto após escolher um ambiente quanto ao reabrir a página.",
+    "message": "O modo silencioso está ativado — vamos captar uma fala mais baixa e responder em volume reduzido, para você falar com discrição."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status mostrado quando ocorre uma falha ao salvar a configuração do modo silencioso a partir da pergunta sobre o ambiente.",
+    "message": "Não foi possível salvar, então nada mudou. Escolha uma opção para tentar novamente."
   },
   "onboarding_envTitle": {
     "description": "Título da pergunta do onboarding sobre o ambiente do usuário.",
     "message": "Onde você costuma falar?"
   },
   "onboarding_footer": {
-    "description": "Texto do rodapé na página de onboarding da primeira execução.",
-    "message": "Você pode ver isso de novo a qualquer momento nas configurações do Say, Pi. Sua privacidade importa — o áudio só é capturado durante uma chamada ativa."
+    "description": "Texto do rodapé da página de integração inicial, explicando como voltar ao guia e quando o áudio é capturado. $tab$ é o nome da aba de configurações que contém o link para este guia.",
+    "message": "Você pode reabrir este guia a qualquer momento nas configurações do Say, Pi, na aba $tab$. Sua privacidade é importante — capturamos áudio durante uma chamada e durante o teste de microfone acima, que permanece no seu navegador.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Título principal na página de onboarding da primeira execução.",
@@ -773,12 +791,16 @@
     "message": "Testar seu microfone"
   },
   "onboarding_micTestDone": {
-    "description": "Status mostrado após o teste de microfone do onboarding ser concluído com sucesso.",
-    "message": "Boa — seu microfone está funcionando 🎉"
+    "description": "Status exibido depois que o teste de microfone da integração detecta entrada audível.",
+    "message": "Tudo certo — ouvimos você! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status mostrado enquanto o teste de microfone do onboarding está medindo a entrada.",
     "message": "Ouvindo — diga algo 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status exibido quando o teste de microfone da integração é executado, mas não detecta entrada audível.",
+    "message": "Não ouvimos nada. Verifique se o microfone correto está selecionado no navegador e se não está mudo. Depois, tente novamente."
   },
   "onboarding_micTestRequesting": {
     "description": "Status mostrado enquanto o teste de microfone do onboarding aguarda permissão.",
@@ -788,17 +810,21 @@
     "description": "Rótulo do botão para interromper o teste de microfone do onboarding enquanto ele está em execução.",
     "message": "Parar teste"
   },
+  "onboarding_micTestStopped": {
+    "description": "Status exibido quando o teste de microfone da integração é interrompido antes de medir qualquer entrada.",
+    "message": "O teste foi interrompido antes de ouvirmos algo. Inicie-o novamente e diga algumas palavras."
+  },
   "onboarding_step1Body": {
-    "description": "Texto do primeiro passo do onboarding explicando como fixar a extensão.",
-    "message": "Clique no ícone de peça de quebra-cabeça 🧩 no canto superior direito do navegador e depois no alfinete 📌 ao lado de Say, Pi. Assim, o botão de chamada fica a um clique."
+    "description": "Texto da primeira etapa de integração, explicando como fixar a extensão e o que o botão fixado na barra de ferramentas abre.",
+    "message": "Clique no ícone de quebra-cabeça 🧩 no canto superior direito do navegador e depois no alfinete 📌 ao lado de Say, Pi. Assim, as configurações do Say, Pi — voz, modo silencioso e o restante — ficam a um clique de distância."
   },
   "onboarding_step1Title": {
     "description": "Título do primeiro passo do onboarding (fixar a extensão).",
     "message": "Fixe o Say, Pi na barra de ferramentas"
   },
   "onboarding_step2Body": {
-    "description": "Texto do segundo passo do onboarding explicando como iniciar uma conversa por voz.",
-    "message": "Acesse um dos assistentes compatíveis abaixo, toque no botão de chamada do Say, Pi e diga oi. Na primeira vez, vamos pedir acesso ao microfone — isso é esperado, e só ouvimos enquanto você estiver em uma chamada."
+    "description": "Texto da segunda etapa da integração, explicando onde fica o botão de chamada na página e como iniciar uma conversa por voz.",
+    "message": "Acesse um dos assistentes compatíveis abaixo. O Say, Pi adiciona seu próprio botão de chamada à página do chat, ao lado de onde você digita — toque nele e diga olá. Na primeira vez, pediremos acesso ao microfone — isso é esperado e, fora do teste abaixo, só ouvimos enquanto você está em uma chamada."
   },
   "onboarding_step2Title": {
     "description": "Título do segundo passo do onboarding (iniciar uma conversa).",

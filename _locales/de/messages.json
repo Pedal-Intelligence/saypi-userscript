@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link im Tab „Über“, der die Einrichtungshilfe für den ersten Start und den Mikrofontest erneut öffnet.",
+    "message": "Einrichtungsanleitung öffnen"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, ich bin noch hier!"
@@ -736,6 +740,10 @@
     "description": "Umgebungsoption: in der Nähe anderer Menschen.",
     "message": "In der Nähe anderer Menschen"
   },
+  "onboarding_envHelp": {
+    "description": "Erklärt vor der Beantwortung der Umgebungsfrage, dass die Antwort den Ruhemodus aktiviert oder deaktiviert.",
+    "message": "Damit wird der Ruhemodus festgelegt: Wenn andere Menschen in der Nähe sind, wird er aktiviert. Say, Pi erkennt dann leisere Sprache und antwortet mit geringerer Lautstärke. Bei den anderen Antworten bleibt er deaktiviert – du kannst ihn später in den Einstellungen ändern."
+  },
   "onboarding_envMixed": {
     "description": "Umgebungsoption: eine Mischung aus privaten und geteilten Orten.",
     "message": "An verschiedenen Orten"
@@ -745,20 +753,30 @@
     "message": "An einem privaten Ort"
   },
   "onboarding_envQuietOff": {
-    "description": "Bestätigung, die angezeigt wird, wenn die Umgebungsantwort den Ruhemodus deaktiviert lässt.",
-    "message": "Alles klar — wir behalten die Standard-Einstellungen für Zuhören und Wiedergabe bei."
+    "description": "Status bei deaktiviertem Ruhemodus, sowohl nach der Auswahl einer Umgebung als auch beim erneuten Öffnen der Seite.",
+    "message": "Der Ruhemodus ist deaktiviert – wir verwenden die standardmäßigen Einstellungen für Erkennung und Wiedergabe."
   },
   "onboarding_envQuietOn": {
-    "description": "Bestätigung, die angezeigt wird, wenn die Umgebungsantwort den Leise-Modus aktiviert.",
-    "message": "Leise-Modus an – wir erfassen auch leiseres Sprechen und antworten leise, damit du unauffällig sprechen kannst."
+    "description": "Status bei aktiviertem Ruhemodus, sowohl nach der Auswahl einer Umgebung als auch beim erneuten Öffnen der Seite.",
+    "message": "Der Ruhemodus ist aktiviert – wir erkennen leisere Sprache und antworten leise, damit du diskret sprechen kannst."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status bei einem Fehler beim Speichern der Ruhemodus-Einstellung aus der Umgebungsfrage.",
+    "message": "Das konnte nicht gespeichert werden, daher hat sich nichts geändert. Wähle eine Option, um es erneut zu versuchen."
   },
   "onboarding_envTitle": {
     "description": "Überschrift für die Onboarding-Frage zur Umgebung der Nutzerin bzw. des Nutzers.",
     "message": "Wo wirst du meist sprechen?"
   },
   "onboarding_footer": {
-    "description": "Fußzeilentext auf der Onboarding-Seite beim ersten Start.",
-    "message": "Du kannst das jederzeit in den Einstellungen von Say, Pi wieder aufrufen. Deine Privatsphäre zählt – Audio wird nur während eines aktiven Anrufs erfasst."
+    "description": "Fußzeilentext der Onboarding-Seite beim ersten Start. Er erklärt, wie die Anleitung erneut geöffnet werden kann und wann Audio aufgenommen wird. $tab$ ist der Name der Registerkarte in den Einstellungen, die den Link zurück zu dieser Anleitung enthält.",
+    "message": "Du kannst diese Anleitung jederzeit in den Einstellungen von Say, Pi auf der Registerkarte $tab$ erneut öffnen. Deine Privatsphäre ist uns wichtig – wir nehmen während eines Anrufs und während des obigen Mikrofontests Audio auf. Die Aufnahme bleibt in deinem Browser.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hauptüberschrift auf der Onboarding-Seite beim ersten Start.",
@@ -773,12 +791,16 @@
     "message": "Mikrofon testen"
   },
   "onboarding_micTestDone": {
-    "description": "Status, der angezeigt wird, nachdem der Mikrofontest im Onboarding erfolgreich abgeschlossen wurde.",
-    "message": "Super – dein Mikrofon funktioniert 🎉"
+    "description": "Statusmeldung, nachdem der Mikrofontest beim Onboarding eine hörbare Eingabe festgestellt hat.",
+    "message": "Prima – wir haben dich gehört! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status, der angezeigt wird, während der Mikrofontest im Onboarding die Eingabe misst.",
     "message": "Höre zu – sag etwas 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Statusmeldung, wenn der Mikrofontest beim Onboarding ausgeführt wurde, aber keine hörbaren Eingaben festgestellt hat.",
+    "message": "Wir haben nichts gehört. Prüfe, ob in deinem Browser das richtige Mikrofon ausgewählt und nicht stummgeschaltet ist, und versuche es erneut."
   },
   "onboarding_micTestRequesting": {
     "description": "Status, der angezeigt wird, während der Mikrofontest im Onboarding auf die Berechtigung wartet.",
@@ -788,17 +810,21 @@
     "description": "Schaltflächenbeschriftung, um den laufenden Mikrofontest im Onboarding zu stoppen.",
     "message": "Test stoppen"
   },
+  "onboarding_micTestStopped": {
+    "description": "Statusmeldung, wenn der Mikrofontest beim Onboarding beendet wurde, bevor er etwas messen konnte.",
+    "message": "Der Test wurde beendet, bevor wir etwas gehört haben. Starte ihn erneut und sag ein paar Worte."
+  },
   "onboarding_step1Body": {
-    "description": "Text des ersten Onboarding-Schritts, der erklärt, wie man die Erweiterung anheftet.",
-    "message": "Klicke oben rechts im Browser auf das Puzzle-🧩-Symbol, dann auf die Pin-📌 neben Say, Pi. So ist die Anruf-Schaltfläche nur einen Klick entfernt."
+    "description": "Text des ersten Einführungsschritts: erklärt, wie die Erweiterung angeheftet wird und was die angeheftete Schaltfläche in der Symbolleiste öffnet.",
+    "message": "Klicke oben rechts im Browser auf das Puzzle-Symbol 🧩 und dann auf die Stecknadel 📌 neben Say, Pi. So sind deine Say, Pi-Einstellungen – Stimme, Ruhemodus und mehr – mit einem Klick erreichbar."
   },
   "onboarding_step1Title": {
     "description": "Titel des ersten Onboarding-Schritts (die Erweiterung anheften).",
     "message": "Say, Pi an die Symbolleiste anheften"
   },
   "onboarding_step2Body": {
-    "description": "Text des zweiten Onboarding-Schritts, der erklärt, wie man ein Sprachgespräch startet.",
-    "message": "Geh zu einem der unten unterstützten Assistenten, tippe dann auf die Say, Pi Anruf-Schaltfläche und sag hallo. Beim ersten Mal fragen wir nach Mikrofonzugriff — das ist normal, und wir hören nur zu, während du aktiv in einem Anruf bist."
+    "description": "Text des zweiten Onboarding-Schritts, der erklärt, wo sich die Anruftaste auf der Seite befindet und wie eine Sprachunterhaltung gestartet wird.",
+    "message": "Öffne einen der unten unterstützten Assistenten. Say, Pi fügt der Chatseite neben dem Eingabefeld eine eigene Anruftaste hinzu – tippe darauf und sag Hallo. Beim ersten Mal fragen wir nach Mikrofonzugriff – das ist normal. Außerhalb des Tests unten hören wir nur zu, während du telefonierst."
   },
   "onboarding_step2Title": {
     "description": "Titel des zweiten Onboarding-Schritts (ein Gespräch starten).",

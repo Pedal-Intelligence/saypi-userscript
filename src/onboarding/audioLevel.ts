@@ -18,6 +18,22 @@ export function computeRms(samples: ArrayLike<number>): number {
   return Math.sqrt(sumSquares / n);
 }
 
+/**
+ * The RMS at or above which we can honestly say we heard something (#615).
+ *
+ * A muted or disconnected source reads exactly 0; a live microphone in a quiet
+ * room sits in the thousandths even with the browser's noise suppression on.
+ * 0.01 — a fortieth of `rmsToMeterPercent`'s full-scale — clears that floor
+ * while staying under a whisper, so quiet-mode users are not told they were
+ * inaudible.
+ */
+export const AUDIBLE_RMS = 0.01;
+
+/** Whether a measured level is loud enough to count as heard input. */
+export function isAudible(rms: number): boolean {
+  return rms >= AUDIBLE_RMS;
+}
+
 export interface MeterScale {
   /** RMS at or above which the meter is full (default 0.4 — comfortable speech). */
   ceil?: number;

@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { wireMicTest, type MicTestElements } from "../../src/onboarding/micTestWiring";
+import {
+  micTestOutcomeKey,
+  wireMicTest,
+  type MicTestElements,
+} from "../../src/onboarding/micTestWiring";
 
 const translate = (k: string) => `t:${k}`;
 
@@ -116,5 +120,79 @@ describe("wireMicTest (#437)", () => {
     expect(els.button.disabled).toBe(false);
     expect(els.meter.hidden).toBe(true);
     expect(els.status.textContent).toBe("t:permissions_recoveryDeniedBody");
+  });
+});
+
+describe("the mic test reports what it measured (#615)", () => {
+  let els: MicTestElements;
+  beforeEach(() => {
+    els = buildEls();
+  });
+
+  it("claims success only when it actually heard something", () => {
+    expect(micTestOutcomeKey({ samples: 12, peakLevel: 0.3 })).toBe(
+      "onboarding_micTestDone"
+    );
+  });
+
+  it("does not call an all-zero source a working microphone", () => {
+    expect(micTestOutcomeKey({ samples: 12, peakLevel: 0 })).toBe(
+      "onboarding_micTestNoInput"
+    );
+  });
+
+  it("distinguishes a test that was cancelled before it measured anything", () => {
+    expect(micTestOutcomeKey({ samples: 0, peakLevel: 0 })).toBe(
+      "onboarding_micTestStopped"
+    );
+  });
+
+  it("shows the no-input status after a silent run rather than congratulating the user", async () => {
+    const h = harness();
+    const release = vi.fn();
+    const acquire = vi.fn().mockResolvedValue({ readLevel: () => 0, release });
+
+    wireMicTest(els, {
+      translate,
+      acquire,
+      schedule: h.schedule,
+      cancel: h.cancel,
+      now: h.now,
+      durationMs: 500,
+    });
+    els.button.click();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    h.tick();
+    h.advance(600);
+    h.tick();
+
+    expect(els.status.textContent).toBe("t:onboarding_micTestNoInput");
+    expect(release).toHaveBeenCalledTimes(1);
+    expect(els.button.textContent).toBe("t:onboarding_micTestButton");
+  });
+
+  it("says the test was stopped when Stop is pressed before the first frame", async () => {
+    const h = harness();
+    const release = vi.fn();
+    const acquire = vi.fn().mockResolvedValue({ readLevel: () => 0.4, release });
+
+    wireMicTest(els, {
+      translate,
+      acquire,
+      schedule: h.schedule,
+      cancel: h.cancel,
+      now: h.now,
+      durationMs: 10000,
+    });
+    els.button.click();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    els.button.click(); // stop, before any frame ran
+
+    expect(els.status.textContent).toBe("t:onboarding_micTestStopped");
+    expect(release).toHaveBeenCalledTimes(1);
   });
 });

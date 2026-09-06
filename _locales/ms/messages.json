@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Pautan pada tab Perihal untuk membuka semula panduan persediaan kali pertama dan ujian mikrofon.",
+    "message": "Buka panduan persediaan"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ya, saya masih di sini!"
@@ -736,6 +740,10 @@
     "description": "Pilihan persekitaran: di sekitar orang lain.",
     "message": "Di sekitar orang lain"
   },
+  "onboarding_envHelp": {
+    "description": "Menerangkan, sebelum soalan persekitaran dijawab, bahawa jawapan akan menukar mod Senyap.",
+    "message": "Ini menetapkan mod Senyap: memilih berada di sekitar orang lain akan menghidupkannya, supaya Say, Pi mendengar pertuturan yang lebih perlahan dan menjawab pada kelantangan lebih rendah. Pilihan lain membiarkannya dimatikan — anda boleh mengubahnya kemudian dalam Tetapan."
+  },
   "onboarding_envMixed": {
     "description": "Pilihan persekitaran: campuran ruang peribadi dan ruang berkongsi.",
     "message": "Campuran tempat"
@@ -745,20 +753,30 @@
     "message": "Di tempat yang peribadi"
   },
   "onboarding_envQuietOff": {
-    "description": "Pengesahan yang ditunjukkan apabila jawapan persekitaran membiarkan mod senyap dimatikan.",
-    "message": "Baik — kami akan kekalkan tetapan mendengar dan main balik standard."
+    "description": "Status yang dipaparkan apabila mod Senyap dimatikan, selepas memilih persekitaran dan apabila halaman dibuka semula.",
+    "message": "Mod Senyap dimatikan — kami akan menggunakan tetapan pendengaran dan main balik standard."
   },
   "onboarding_envQuietOn": {
-    "description": "Pengesahan yang dipaparkan apabila jawapan persekitaran mengaktifkan mod senyap.",
-    "message": "Mod senyap dihidupkan — kami akan menangkap pertuturan yang lebih perlahan dan membalas dengan perlahan, supaya anda boleh bercakap secara discreet."
+    "description": "Status yang dipaparkan apabila mod Senyap dihidupkan, selepas memilih persekitaran dan apabila halaman dibuka semula.",
+    "message": "Mod Senyap dihidupkan — kami akan menangkap pertuturan yang lebih perlahan dan menjawab dengan perlahan, supaya anda boleh bercakap secara sulit."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status yang dipaparkan apabila penulisan tetapan mod Senyap daripada soalan persekitaran gagal.",
+    "message": "Kami tidak dapat menyimpannya, jadi tiada apa-apa yang berubah. Pilih satu pilihan untuk cuba lagi."
   },
   "onboarding_envTitle": {
     "description": "Tajuk untuk soalan onboarding tentang persekitaran pengguna.",
     "message": "Di mana anda biasanya akan bercakap?"
   },
   "onboarding_footer": {
-    "description": "Teks kaki pada halaman onboarding kali pertama dijalankan.",
-    "message": "Anda boleh kembali ke sini pada bila-bila masa melalui tetapan Say, Pi. Privasi anda penting — audio hanya dirakam semasa panggilan aktif."
+    "description": "Teks pengaki pada halaman onboarding kali pertama, meliputi cara kembali dan masa audio dirakam. $tab$ ialah nama tab Tetapan yang mengandungi pautan kembali ke panduan ini.",
+    "message": "Anda boleh membuka semula panduan ini pada bila-bila masa daripada tetapan Say, Pi, di tab $tab$. Privasi anda penting — kami merakam audio semasa panggilan dan semasa ujian mikrofon di atas, yang kekal dalam pelayar anda.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Tajuk utama pada halaman onboarding kali pertama dijalankan.",
@@ -773,12 +791,16 @@
     "message": "Uji mikrofon anda"
   },
   "onboarding_micTestDone": {
-    "description": "Status yang dipaparkan selepas ujian mikrofon onboarding berjaya diselesaikan.",
-    "message": "Bagus — mikrofon anda berfungsi. 🎉"
+    "description": "Status yang dipaparkan selepas ujian mikrofon onboarding mengesan input audio.",
+    "message": "Bagus — kami dapat mendengar anda! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status yang dipaparkan semasa ujian mikrofon onboarding mengukur input.",
     "message": "Mendengar — sebut sesuatu. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status yang dipaparkan apabila ujian mikrofon onboarding dijalankan tetapi tidak mengesan input audio.",
+    "message": "Kami tidak mendengar apa-apa. Semak bahawa mikrofon yang betul dipilih dalam pelayar anda dan tidak diredamkan, kemudian cuba lagi."
   },
   "onboarding_micTestRequesting": {
     "description": "Status yang dipaparkan semasa ujian mikrofon onboarding menunggu kebenaran.",
@@ -788,17 +810,21 @@
     "description": "Label butang untuk menghentikan ujian mikrofon onboarding semasa ia sedang berjalan.",
     "message": "Hentikan ujian"
   },
+  "onboarding_micTestStopped": {
+    "description": "Status yang dipaparkan apabila ujian mikrofon onboarding dihentikan sebelum mengesan sebarang input.",
+    "message": "Ujian dihentikan sebelum kami mendengar apa-apa. Mulakannya semula dan ucapkan beberapa perkataan."
+  },
   "onboarding_step1Body": {
-    "description": "Isi langkah onboarding pertama yang menerangkan cara untuk pin sambungan.",
-    "message": "Klik ikon kepingan puzzle 🧩 di bahagian kanan atas pelayar anda, kemudian pin 📌 di sebelah Say, Pi. Ini memastikan butang panggilan hanya satu klik sahaja."
+    "description": "Teks langkah pertama panduan permulaan yang menerangkan cara menyemat sambungan dan perkara yang dibuka oleh butang bar alat yang disemat.",
+    "message": "Klik ikon teka-teki 🧩 di bahagian kanan atas pelayar anda, kemudian ikon pin 📌 di sebelah Say, Pi. Ini memastikan tetapan Say, Pi anda — suara, mod senyap dan lain-lain — sentiasa boleh dicapai dengan satu klik."
   },
   "onboarding_step1Title": {
     "description": "Tajuk untuk langkah onboarding pertama (pin sambungan).",
     "message": "Pin Say, Pi pada bar alat anda"
   },
   "onboarding_step2Body": {
-    "description": "Isi langkah onboarding kedua yang menerangkan cara untuk memulakan perbualan suara.",
-    "message": "Pergi ke salah satu pembantu yang disokong di bawah, kemudian ketik butang panggilan Say, Pi dan ucapkan hai. Kami akan meminta akses mikrofon kali pertama — itu memang dijangka, dan kami hanya mendengar apabila anda sedang aktif dalam panggilan."
+    "description": "Teks langkah onboarding kedua yang menerangkan lokasi butang panggilan dalam halaman dan cara memulakan perbualan suara.",
+    "message": "Buka salah satu pembantu yang disokong di bawah. Say, Pi menambah butang panggilan pada halaman sembang, di sebelah tempat anda menaip — ketiknya dan ucapkan hai. Kami akan meminta akses mikrofon kali pertama — itu perkara biasa. Di luar ujian di bawah, kami hanya mendengar semasa anda dalam panggilan."
   },
   "onboarding_step2Title": {
     "description": "Tajuk untuk langkah onboarding kedua (mulakan perbualan).",

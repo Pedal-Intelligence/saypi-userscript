@@ -1763,16 +1763,16 @@
     "description": "Title of the first onboarding step (pin the extension)."
   },
   "onboarding_step1Body": {
-    "message": "Click the puzzle-piece 🧩 icon at the top-right of your browser, then the pin 📌 next to Say, Pi. That keeps the call button one click away.",
-    "description": "Body of the first onboarding step explaining how to pin the extension."
+    "message": "Click the puzzle-piece 🧩 icon at the top-right of your browser, then the pin 📌 next to Say, Pi. That keeps your Say, Pi settings — voice, quiet mode and the rest — one click away.",
+    "description": "Body of the first onboarding step explaining how to pin the extension and what the pinned toolbar button opens."
   },
   "onboarding_step2Title": {
     "message": "Open an AI chat and start talking",
     "description": "Title of the second onboarding step (start a conversation)."
   },
   "onboarding_step2Body": {
-    "message": "Head to one of the supported assistants below, then tap the Say, Pi call button and say hello. We'll ask for microphone access the first time — that's expected, and we only listen while you're actively in a call.",
-    "description": "Body of the second onboarding step explaining how to start a voice conversation."
+    "message": "Head to one of the supported assistants below. Say, Pi adds its own call button to the chat page, next to where you type — tap it and say hello. We'll ask for microphone access the first time — that's expected, and outside the test below we only listen while you're in a call.",
+    "description": "Body of the second onboarding step explaining where the in-page call button is and how to start a voice conversation."
   },
   "onboarding_ctaPi": {
     "message": "Open Pi",
@@ -1787,8 +1787,18 @@
     "description": "Button label that opens ChatGPT."
   },
   "onboarding_footer": {
-    "message": "You can revisit this any time from Say, Pi's settings. Your privacy matters — audio is only captured during an active call.",
-    "description": "Footer text on the first-run onboarding page."
+    "message": "You can reopen this guide any time from Say, Pi's settings, on the $tab$ tab. Your privacy matters — we capture audio during a call, and during the microphone test above, which stays in your browser.",
+    "description": "Footer text on the first-run onboarding page, covering the return route and when audio is captured. $tab$ is the name of the Settings tab that holds the link back to this guide.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
+  },
+  "aboutSayPiSetupGuide": {
+    "message": "Open the setup guide",
+    "description": "About-tab link that reopens the first-run setup guide and microphone test."
   },
   "onboarding_micTestButton": {
     "message": "Test your microphone",
@@ -1802,13 +1812,21 @@
     "message": "Listening — say something! 🎙️",
     "description": "Status shown while the onboarding mic test is metering input."
   },
+  "onboarding_micTestNoInput": {
+    "message": "We didn't hear anything. Check that the right microphone is selected in your browser, and that it isn't muted, then try again.",
+    "description": "Status shown when the onboarding mic test ran but measured no audible input."
+  },
+  "onboarding_micTestStopped": {
+    "message": "Test stopped before we heard anything. Start it again and say a few words.",
+    "description": "Status shown when the onboarding mic test was stopped before it measured anything."
+  },
   "onboarding_micTestStop": {
     "message": "Stop test",
     "description": "Button label to stop the onboarding mic test while it is running."
   },
   "onboarding_micTestDone": {
-    "message": "Nice — your microphone works! 🎉",
-    "description": "Status shown after the onboarding mic test completes successfully."
+    "message": "Nice — we heard you! 🎉",
+    "description": "Status shown after the onboarding mic test measured audible input."
   },
   "onboarding_envTitle": {
     "message": "Where will you usually talk?",
@@ -1826,13 +1844,21 @@
     "message": "Around other people",
     "description": "Environment option: around other people."
   },
+  "onboarding_envHelp": {
+    "message": "This sets Quiet mode: around other people turns it on, so Say, Pi listens for softer speech and replies at a lower volume. The other answers leave it off — and you can change it later in Settings.",
+    "description": "Explains, before the environment question is answered, that the answer switches quiet mode."
+  },
   "onboarding_envQuietOn": {
-    "message": "Quiet mode on — we'll pick up softer speech and reply quietly, so you can talk discreetly.",
-    "description": "Confirmation shown when the environment answer enables quiet mode."
+    "message": "Quiet mode is on — we'll pick up softer speech and reply quietly, so you can talk discreetly.",
+    "description": "Status shown when quiet mode is on, both after choosing an environment and when the page is reopened."
   },
   "onboarding_envQuietOff": {
-    "message": "Got it — we'll keep the standard listening and playback settings.",
-    "description": "Confirmation shown when the environment answer leaves quiet mode off."
+    "message": "Quiet mode is off — we'll use the standard listening and playback settings.",
+    "description": "Status shown when quiet mode is off, both after choosing an environment and when the page is reopened."
+  },
+  "onboarding_envSaveFailed": {
+    "message": "We couldn't save that, so nothing has changed. Pick an option to try again.",
+    "description": "Status shown when writing the quiet-mode setting from the environment question failed."
   },
   "permissions_promptTitle": {
     "message": "Microphone Permission",

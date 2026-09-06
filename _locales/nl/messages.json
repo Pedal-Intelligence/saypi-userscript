@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Link op het tabblad Over waarmee de installatiehandleiding en microfoontest bij het eerste gebruik opnieuw worden geopend.",
+    "message": "Handleiding openen"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, ik ben er nog steeds!"
@@ -736,6 +740,10 @@
     "description": "Omgevingsoptie: in de buurt van andere mensen.",
     "message": "Tussen andere mensen"
   },
+  "onboarding_envHelp": {
+    "description": "Legt vóór het beantwoorden van de omgevingsvraag uit dat het antwoord de stille modus instelt.",
+    "message": "Dit schakelt de stille modus in: met mensen om je heen gaat die aan, zodat Say, Pi zachtere spraak oppikt en op lager volume antwoordt. Bij de andere antwoorden blijft die uit — je kunt dit later wijzigen in Instellingen."
+  },
   "onboarding_envMixed": {
     "description": "Omgevingsoptie: een mix van privé- en gedeelde ruimtes.",
     "message": "Een mix van plekken"
@@ -745,20 +753,30 @@
     "message": "Ergens privé"
   },
   "onboarding_envQuietOff": {
-    "description": "Bevestiging die wordt getoond wanneer het omgevingsantwoord de stille modus uit laat.",
-    "message": "Begrepen, we houden de standaard luister- en afspeelinstellingen aan."
+    "description": "Status die wordt getoond wanneer de stille modus uitstaat, zowel na het kiezen van een omgeving als wanneer de pagina opnieuw wordt geopend.",
+    "message": "De stille modus staat uit — we gebruiken de standaardinstellingen voor luisteren en afspelen."
   },
   "onboarding_envQuietOn": {
-    "description": "Bevestiging die wordt getoond wanneer het omgevingsantwoord de stille modus inschakelt.",
-    "message": "Stille modus aan — we pikken zachtere spraak op en antwoorden rustig, zodat je discreet kunt praten."
+    "description": "Status die wordt getoond wanneer de stille modus aanstaat, zowel na het kiezen van een omgeving als wanneer de pagina opnieuw wordt geopend.",
+    "message": "De stille modus staat aan — we pikken zachtere spraak op en antwoorden zacht, zodat je discreet kunt praten."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Status die wordt getoond wanneer het opslaan van de instelling voor de stille modus vanuit de omgevingsvraag mislukt.",
+    "message": "We konden dit niet opslaan, dus er is niets gewijzigd. Kies een optie om het opnieuw te proberen."
   },
   "onboarding_envTitle": {
     "description": "Kop voor de onboarding-vraag over de omgeving van de gebruiker.",
     "message": "Waar praat je meestal?"
   },
   "onboarding_footer": {
-    "description": "Voettekst op de onboardingpagina die bij het eerste gebruik wordt getoond.",
-    "message": "Je kunt dit altijd opnieuw bekijken via de instellingen van Say, Pi. Je privacy is belangrijk — audio wordt alleen vastgelegd tijdens een actieve oproep."
+    "description": "Voettekst op de onboardingpagina bij het eerste gebruik, over hoe je teruggaat en wanneer audio wordt opgenomen. $tab$ is de naam van het tabblad Instellingen met de link naar deze handleiding.",
+    "message": "Je kunt deze handleiding altijd opnieuw openen via de instellingen van Say, Pi, op het tabblad $tab$. Je privacy is belangrijk — we nemen audio op tijdens een gesprek en tijdens de microfoontest hierboven; die opname blijft in je browser.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Hoofdkop op de onboardingpagina die bij de eerste keer openen wordt getoond.",
@@ -773,12 +791,16 @@
     "message": "Je microfoon testen"
   },
   "onboarding_micTestDone": {
-    "description": "Status die wordt getoond nadat de onboarding-microfoontest succesvol is afgerond.",
-    "message": "Mooi — je microfoon werkt! 🎉"
+    "description": "Status die wordt getoond nadat de microfoontest tijdens de onboarding hoorbare invoer heeft gemeten.",
+    "message": "Mooi — we hoorden je! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status die wordt getoond terwijl de onboarding-microfoontest het invoerniveau meet.",
     "message": "Luisteren — zeg iets! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status die wordt getoond wanneer de microfoontest tijdens de onboarding geen hoorbare invoer heeft gemeten.",
+    "message": "We hoorden niets. Controleer of in je browser de juiste microfoon is geselecteerd en niet is gedempt. Probeer het daarna opnieuw."
   },
   "onboarding_micTestRequesting": {
     "description": "Status die wordt getoond terwijl de onboarding-microfoontest wacht op toestemming.",
@@ -788,17 +810,21 @@
     "description": "Knoplabel om de onboarding-microfoontest te stoppen terwijl die actief is.",
     "message": "Test stoppen"
   },
+  "onboarding_micTestStopped": {
+    "description": "Status die wordt getoond wanneer de microfoontest tijdens de onboarding is gestopt voordat er iets werd gemeten.",
+    "message": "De test is gestopt voordat we iets hoorden. Start de test opnieuw en zeg een paar woorden."
+  },
   "onboarding_step1Body": {
-    "description": "Tekst van de eerste onboardingstap die uitlegt hoe je de extensie vastzet.",
-    "message": "Klik op het puzzelstukje 🧩-pictogram rechtsboven in je browser, en daarna op de punaise 📌 naast Say, Pi. Zo staat de belknop altijd op één klik afstand."
+    "description": "Tekst van de eerste onboardingstap waarin wordt uitgelegd hoe je de extensie vastzet en wat de vastgezette werkbalkknop opent.",
+    "message": "Klik rechtsboven in je browser op het puzzelstukje 🧩 en daarna op de punaise 📌 naast Say, Pi. Zo heb je je Say, Pi-instellingen — stem, stille modus en de rest — met één klik bij de hand."
   },
   "onboarding_step1Title": {
     "description": "Titel van de eerste onboardingstap (de extensie vastzetten).",
     "message": "Zet Say, Pi vast op je werkbalk"
   },
   "onboarding_step2Body": {
-    "description": "Tekst van de tweede onboardingstap die uitlegt hoe je een spraakgesprek start.",
-    "message": "Ga naar een van de ondersteunde assistants hieronder, tik op de Say, Pi-belknop en zeg hallo. De eerste keer vragen we om microfoontoegang — dat is normaal, en we luisteren alleen terwijl je actief in een gesprek zit."
+    "description": "Tekst van de tweede onboardingstap die uitlegt waar de belknop op de pagina staat en hoe je een spraakgesprek start.",
+    "message": "Ga naar een van de ondersteunde assistenten hieronder. Say, Pi voegt een eigen belknop toe aan de chatpagina, naast het tekstveld — tik erop en zeg hallo. De eerste keer vragen we toegang tot je microfoon — dat is normaal. Buiten de test hieronder luisteren we alleen tijdens een gesprek."
   },
   "onboarding_step2Title": {
     "description": "Titel van de tweede onboardingstap (een gesprek starten).",

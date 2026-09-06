@@ -1,4 +1,8 @@
 {
+  "aboutSayPiSetupGuide": {
+    "description": "Liên kết trong tab Giới thiệu để mở lại hướng dẫn thiết lập lần đầu và kiểm tra micrô.",
+    "message": "Mở hướng dẫn thiết lập"
+  },
   "activityCheckButton": {
     "description": "The text of the button to indicate that the user is still present.",
     "message": "Vâng, tôi vẫn còn ở đây!"
@@ -736,6 +740,10 @@
     "description": "Tùy chọn môi trường: ở gần người khác.",
     "message": "Gần người khác"
   },
+  "onboarding_envHelp": {
+    "description": "Giải thích trước khi trả lời câu hỏi về môi trường rằng lựa chọn sẽ thay đổi Chế độ yên lặng.",
+    "message": "Thiết lập này bật Chế độ yên lặng: chọn ở nơi có người xung quanh sẽ bật chế độ này, để Say, Pi nhận giọng nói nhỏ hơn và trả lời với âm lượng thấp hơn. Các lựa chọn khác sẽ tắt chế độ — bạn có thể đổi sau trong Cài đặt."
+  },
   "onboarding_envMixed": {
     "description": "Tùy chọn môi trường: kết hợp không gian riêng tư và dùng chung.",
     "message": "Ở nhiều nơi khác nhau"
@@ -745,20 +753,30 @@
     "message": "Ở nơi riêng tư"
   },
   "onboarding_envQuietOff": {
-    "description": "Xác nhận hiển thị khi câu trả lời về môi trường để chế độ yên lặng tắt.",
-    "message": "Đã rõ — chúng tôi sẽ giữ các cài đặt nghe và phát tiêu chuẩn."
+    "description": "Trạng thái hiển thị khi Chế độ yên lặng đang tắt, cả sau khi chọn môi trường và khi mở lại trang.",
+    "message": "Chế độ yên lặng đang tắt — chúng tôi sẽ dùng cài đặt nghe và phát chuẩn."
   },
   "onboarding_envQuietOn": {
-    "description": "Xác nhận hiển thị khi câu trả lời về môi trường bật chế độ yên lặng.",
-    "message": "Đã bật chế độ yên lặng — chúng tôi sẽ bắt tiếng nói nhỏ hơn và trả lời nhỏ, để bạn có thể trò chuyện kín đáo."
+    "description": "Trạng thái hiển thị khi Chế độ yên lặng đang bật, cả sau khi chọn môi trường và khi mở lại trang.",
+    "message": "Chế độ yên lặng đang bật — chúng tôi sẽ nhận giọng nói nhỏ hơn và trả lời khẽ, để bạn có thể nói chuyện kín đáo."
+  },
+  "onboarding_envSaveFailed": {
+    "description": "Trạng thái hiển thị khi không thể lưu cài đặt Chế độ yên lặng từ câu hỏi về môi trường.",
+    "message": "Không thể lưu thay đổi, nên mọi thứ vẫn giữ nguyên. Hãy chọn một tùy chọn để thử lại."
   },
   "onboarding_envTitle": {
     "description": "Tiêu đề cho câu hỏi trong phần giới thiệu về môi trường của người dùng.",
     "message": "Bạn thường nói chuyện ở đâu?"
   },
   "onboarding_footer": {
-    "description": "Văn bản chân trang trên trang giới thiệu khi chạy lần đầu.",
-    "message": "Bạn có thể xem lại mục này bất cứ lúc nào trong phần cài đặt của Say, Pi. Quyền riêng tư của bạn rất quan trọng — âm thanh chỉ được ghi khi đang trong một cuộc gọi."
+    "description": "Chân trang của trang hướng dẫn trong lần chạy đầu tiên, nêu cách quay lại và thời điểm âm thanh được thu. $tab$ là tên tab Cài đặt có liên kết quay lại hướng dẫn này.",
+    "message": "Bạn có thể mở lại hướng dẫn này bất cứ lúc nào từ phần cài đặt của Say, Pi, trong tab $tab$. Quyền riêng tư của bạn rất quan trọng — chúng tôi thu âm trong cuộc gọi và trong bài kiểm tra micrô ở trên; âm thanh vẫn ở trong trình duyệt của bạn.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "About"
+      }
+    }
   },
   "onboarding_heading": {
     "description": "Tiêu đề chính trên trang hướng dẫn lần chạy đầu tiên.",
@@ -773,12 +791,16 @@
     "message": "Thử mic của bạn"
   },
   "onboarding_micTestDone": {
-    "description": "Trạng thái hiển thị sau khi bài kiểm tra mic trong phần giới thiệu hoàn tất thành công.",
-    "message": "Ổn rồi — mic của bạn hoạt động! 🎉"
+    "description": "Trạng thái hiển thị sau khi bài kiểm tra micrô trong hướng dẫn phát hiện âm thanh đầu vào.",
+    "message": "Tốt lắm — chúng tôi đã nghe thấy bạn 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Trạng thái hiển thị khi bài kiểm tra mic trong phần giới thiệu đang đo tín hiệu đầu vào.",
     "message": "Đang nghe — hãy nói gì đó! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Trạng thái hiển thị khi bài kiểm tra micrô trong hướng dẫn đã chạy nhưng không phát hiện âm thanh đầu vào.",
+    "message": "Chúng tôi không nghe thấy gì. Kiểm tra xem bạn đã chọn đúng micrô trong trình duyệt và micrô không bị tắt tiếng, rồi thử lại."
   },
   "onboarding_micTestRequesting": {
     "description": "Trạng thái hiển thị khi bài kiểm tra mic trong phần giới thiệu đang chờ cấp quyền.",
@@ -788,17 +810,21 @@
     "description": "Nhãn nút để dừng bài kiểm tra mic trong phần giới thiệu khi đang chạy.",
     "message": "Dừng thử"
   },
+  "onboarding_micTestStopped": {
+    "description": "Trạng thái hiển thị khi bài kiểm tra micrô trong hướng dẫn bị dừng trước khi đo được âm thanh.",
+    "message": "Bài kiểm tra đã dừng trước khi chúng tôi nghe thấy gì. Hãy bắt đầu lại và nói vài từ."
+  },
   "onboarding_step1Body": {
-    "description": "Nội dung của bước hướng dẫn đầu tiên giải thích cách ghim tiện ích.",
-    "message": "Nhấn biểu tượng mảnh ghép 🧩 ở góc trên bên phải trình duyệt, rồi nhấn ghim 📌 cạnh Say, Pi. Như vậy nút gọi chỉ cách một lần nhấn."
+    "description": "Nội dung bước hướng dẫn đầu tiên, giải thích cách ghim tiện ích và nội dung nút trên thanh công cụ sau khi ghim.",
+    "message": "Nhấn biểu tượng mảnh ghép 🧩 ở góc trên bên phải trình duyệt, rồi nhấn ghim 📌 bên cạnh Say, Pi. Thao tác này giúp bạn mở cài đặt Say, Pi — giọng nói, chế độ im lặng và các mục khác — chỉ bằng một lần nhấn."
   },
   "onboarding_step1Title": {
     "description": "Tiêu đề của bước hướng dẫn đầu tiên (ghim tiện ích).",
     "message": "Ghim Say, Pi vào thanh công cụ"
   },
   "onboarding_step2Body": {
-    "description": "Nội dung của bước hướng dẫn thứ hai giải thích cách bắt đầu cuộc trò chuyện bằng giọng nói.",
-    "message": "Vào một trong các trợ lý được hỗ trợ bên dưới, rồi nhấn nút gọi Say, Pi và chào một câu. Lần đầu chúng tôi sẽ xin quyền micrô — điều đó là bình thường, và chúng tôi chỉ nghe khi bạn đang trong cuộc gọi."
+    "description": "Nội dung bước hướng dẫn thứ hai, giải thích vị trí của nút gọi trên trang và cách bắt đầu trò chuyện bằng giọng nói.",
+    "message": "Mở một trong các trợ lý được hỗ trợ bên dưới. Say, Pi sẽ thêm nút gọi ngay trên trang trò chuyện, cạnh ô nhập — nhấn vào đó và nói xin chào. Lần đầu, chúng tôi sẽ xin quyền dùng micrô — điều này là bình thường; ngoài bài kiểm tra bên dưới, chúng tôi chỉ lắng nghe khi bạn đang gọi."
   },
   "onboarding_step2Title": {
     "description": "Tiêu đề của bước hướng dẫn thứ hai (bắt đầu cuộc trò chuyện).",

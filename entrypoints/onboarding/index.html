@@ -43,7 +43,8 @@
           <p id="onboarding-step1-body">
             Click the puzzle-piece <span aria-hidden="true">🧩</span> icon at the top-right
             of your browser, then the pin <span aria-hidden="true">📌</span> next to
-            Say, Pi. That keeps the call button one click away.
+            Say, Pi. That keeps your Say, Pi settings — voice, quiet mode and the
+            rest — one click away.
           </p>
           <div class="toolbar-example" aria-hidden="true">
             <div class="browser-toolbar">
@@ -64,9 +65,10 @@
             <h2 id="onboarding-step2-title">Open an AI chat and start talking</h2>
           </div>
           <p id="onboarding-step2-body">
-            Head to one of the supported assistants below, then tap the Say, Pi call
-            button and say hello. We'll ask for microphone access the first time — that's
-            expected, and we only listen while you're actively in a call.
+            Head to one of the supported assistants below. Say, Pi adds its own call
+            button to the chat page, next to where you type — tap it and say hello.
+            We'll ask for microphone access the first time — that's expected, and
+            outside the test below we only listen while you're in a call.
           </p>
           <div class="cta-row">
             <a class="assistant-link" href="https://pi.ai/talk" target="_blank" rel="noopener noreferrer">
@@ -96,7 +98,12 @@
       </ol>
       <section class="env-question" aria-labelledby="onboarding-env-title">
         <h2 id="onboarding-env-title">Where will you usually talk?</h2>
-        <div class="env-options" role="radiogroup" aria-labelledby="onboarding-env-title">
+        <p class="env-help" id="onboarding-env-help">
+          This sets Quiet mode: around other people turns it on, so Say, Pi listens
+          for softer speech and replies at a lower volume. The other answers leave it
+          off — and you can change it later in Settings.
+        </p>
+        <div class="env-options" role="radiogroup" aria-labelledby="onboarding-env-title" aria-describedby="onboarding-env-help">
           <label class="env-option">
             <input type="radio" name="voice-environment" value="private" />
             <span id="onboarding-env-private-label">Somewhere private</span>
@@ -114,7 +121,7 @@
       </section>
       <footer class="footer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></svg>
-        <p id="onboarding-footer">You can revisit this any time from Say, Pi's settings. Your privacy matters — audio is only captured during an active call.</p>
+        <p id="onboarding-footer">You can reopen this guide any time from Say, Pi's settings, on the About tab. Your privacy matters — we capture audio during a call, and during the microphone test above, which stays in your browser.</p>
       </footer>
     </main>
   </body>
