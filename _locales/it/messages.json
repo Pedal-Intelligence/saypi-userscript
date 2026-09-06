@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Le voci multilingue non sono attualmente supportate in Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Etichetta del cursore che imposta la velocità con cui parla la voce dell'assistente.",
+    "message": "Velocità"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Tooltip che spiega il cursore della velocità di riproduzione vocale.",
+    "message": "A quale velocità parlano le voci di Say, Pi. Si applica dalla risposta successiva e non alla voce di Pi."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Sintesi vocale basata su $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Voce di TTS"
+  },
+  "ttsVolumeLabel": {
+    "description": "Etichetta del cursore che imposta il volume della voce dell'assistente.",
+    "message": "Volume"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Tooltip che spiega il cursore del volume di riproduzione vocale.",
+    "message": "A quale volume parlano le voci di Say, Pi, rispetto al volume del sistema. Si applica dalla risposta successiva e non alla voce di Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Voce in pausa -"
   },
+  "voicePlaybackHeading": {
+    "description": "Titolo del gruppo di impostazioni che controllano la riproduzione della voce dell'assistente.",
+    "message": "Riproduzione vocale"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Impostazioni vocali"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Cambia voce",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Mostrato nella barra dei controlli delle voci quando non è selezionata alcuna voce di Say, Pi e l'assistente risponde usando una delle proprie voci integrate; $host$ è l'assistente, ad esempio Pi.",
     "message": "La tua voce: quella di $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Suggerimento da una riga per la tastiera nella barra di controllo Voci delle impostazioni. I simboli indicano tasti: Spazio, le frecce su/giù e Maiusc+Spazio.",
     "message": "Premi Spazio per ascoltare, ↑↓ per spostarti tra le voci, ⇧Spazio per tornare indietro."
+  },
+  "voicesListenHint": {
+    "message": "Fai clic su una voce per ascoltare un campione gratuito. Scegli «Usa» quando ne trovi una che ti piace.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Opzioni di ascolto",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Stato di errore nello studio di un host quando il catalogo voci di quell’host non è riuscito a caricarsi; $host$ è l’assistente.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Impossibile salvare la tua voce. Riprova.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "La voce che hai salvato non è disponibile al momento. Riprova più tardi o scegli un’altra voce.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Sottotitolo della sezione del catalogo voci nelle impostazioni, scheda AI Chat.",
     "message": "Scegli la voce che legge ad alta voce le risposte su ciascun sito."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Titolo della sezione del catalogo voci nelle impostazioni, scheda AI Chat.",
     "message": "Voci"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ è ora la tua voce per $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Titolo del gruppo per le voci di fascia economica nel catalogo voci delle impostazioni. Reso in maiuscolo dal CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Usa per $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Usa la voce propria di $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Etichetta accessibile per il pulsante per host \"usa questa voce\" nel catalogo voci delle impostazioni; $name$ è la voce, $host$ è l'assistente (ad es. Pi, Claude).",
     "message": "Usa $name$ su $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Errore generato quando il browser non espone la memoria WebAssembly iniziale necessaria per eseguire il modello di rilevamento vocale.",
     "message": "Impossibile avviare il rilevamento vocale: la memoria WebAssembly non è disponibile in questo browser."
-  },
-  "voicesListeningOptions": {
-    "message": "Opzioni di ascolto",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Fai clic su una voce per ascoltare un campione gratuito. Scegli «Usa» quando ne trovi una che ti piace.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Usa per $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ è ora la tua voce per $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Impossibile salvare la tua voce. Riprova.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Usa la voce propria di $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "La voce che hai salvato non è disponibile al momento. Riprova più tardi o scegli un’altra voce.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Cambia voce",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

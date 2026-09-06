@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Çok dilli sesler şu anda Safari'de desteklenmemektedir."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Asistanın sesinin ne kadar hızlı konuşacağını belirleyen kaydırıcının etiketi.",
+    "message": "Hız"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Ses oynatma hızı kaydırıcısını açıklayan araç ipucu.",
+    "message": "Say, Pi seslerinin ne kadar hızlı konuştuğunu ayarlar. Sonraki yanıttan itibaren geçerlidir ve Pi’nin kendi sesi için geçerli değildir."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$ tarafından desteklenen metinden konuşmaya",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Sesi"
+  },
+  "ttsVolumeLabel": {
+    "description": "Asistanın sesinin ne kadar yüksek olacağını belirleyen kaydırıcının etiketi.",
+    "message": "Ses düzeyi"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Ses oynatma düzeyi kaydırıcısını açıklayan araç ipucu.",
+    "message": "Say, Pi seslerinin sistem ses düzeyinize göre ne kadar yüksek olduğunu ayarlar. Sonraki yanıttan itibaren geçerlidir ve Pi’nin kendi sesi için geçerli değildir."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Ses durakladı -"
   },
+  "voicePlaybackHeading": {
+    "description": "Asistanın sesinin nasıl çalınacağını kontrol eden ayar grubunun başlığı.",
+    "message": "Ses çalma"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ses Ayarları"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Sesi değiştir",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Hiçbir Say, Pi sesi seçilmediğinde ve asistan bunun yerine kendi yerleşik seslerinden biriyle yanıt verdiğinde Sesler kontrol çubuğunda gösterilir; $host$, Pi gibi asistanın adıdır.",
     "message": "Sesiniz: $host$'un kendi sesi",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Ayarlar Sesler kontrol çubuğunda tek satırlık klavye ipucu. Simgeler tuşlardır: Space, yukarı/aşağı okları ve Shift+Space.",
     "message": "Dinlemek için Space, sesler arasında geçmek için ↑↓, geri dönmek için ⇧Space."
+  },
+  "voicesListenHint": {
+    "message": "Ücretsiz bir örnek dinlemek için bir sese tıklayın. Beğendiğiniz bir ses bulduğunuzda “Kullan” seçeneğini seçin.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Dinleme seçenekleri",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Bir host'un stüdyosunda, o host'un ses kataloğu yüklenemediğinde görünen hata durumu; $host$ asistanın adıdır.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Sesiniz kaydedilemedi. Lütfen tekrar deneyin.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Kayıtlı sesiniz şu anda kullanılamıyor. Daha sonra tekrar deneyin veya başka bir ses seçin.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Ayarlar > AI Chat sekmesinde ses kataloğu bölümünün alt başlığı.",
     "message": "Her sitede yanıtları sesli okuyan sesi seçin."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Ayarlar > AI Chat sekmesinde ses kataloğu bölümünün başlığı.",
     "message": "Sesler"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$ için sesiniz artık $name$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Ayarlar ses kataloğunda uygun fiyatlı katmandaki sesler için grup başlığı. CSS tarafından büyük harfle gösterilir.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "$host$ için kullan",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$ için yerleşik sesi kullan",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Ayarlar ses kataloğunda, her ana bilgisayar için yer alan “bu sesi kullan” düğmesinin erişilebilir etiketi; $name$ ses, $host$ asistan (örn. Pi, Claude).",
     "message": "$host$ üzerinde $name$ kullan",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Tarayıcı, ses algılama modelini çalıştırmak için gereken başlangıç WebAssembly belleğini sağlamadığında oluşturulan hata.",
     "message": "Ses algılama başlatılamıyor: bu tarayıcıda WebAssembly belleği kullanılamıyor."
-  },
-  "voicesListeningOptions": {
-    "message": "Dinleme seçenekleri",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Ücretsiz bir örnek dinlemek için bir sese tıklayın. Beğendiğiniz bir ses bulduğunuzda “Kullan” seçeneğini seçin.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "$host$ için kullan",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$ için sesiniz artık $name$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Sesiniz kaydedilemedi. Lütfen tekrar deneyin.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "$host$ için yerleşik sesi kullan",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Kayıtlı sesiniz şu anda kullanılamıyor. Daha sonra tekrar deneyin veya başka bir ses seçin.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Sesi değiştir",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

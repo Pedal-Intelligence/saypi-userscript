@@ -15,6 +15,11 @@ import {
   isDefaultPending,
   withHostDrained,
 } from "../onboarding/voiceDefaults";
+import {
+  DEFAULT_TTS_PLAYBACK_RATE,
+  resolveTtsPlaybackRate,
+} from "../tts/playbackRate";
+import { DEFAULT_TTS_VOLUME, resolveTtsVolumeLevel } from "../tts/quietVolume";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -32,7 +37,7 @@ const LOCAL_STORAGE_KEYS = [
   "prefer", "language", "discretionaryMode", "nickname",
   "autoSubmit", "allowInterruptions", "soundEffects", "theme",
   "shareData", "voiceId", VOICE_PREFERENCES_KEY, "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords",
-  "autoReadAloudChatGPT", "quietMode"
+  "autoReadAloudChatGPT", "quietMode", "ttsPlaybackRate", "ttsVolume"
 ];
 
 // Add a flag to mark that sync-to-local migration has completed
@@ -197,6 +202,19 @@ class UserPreferenceModule {
     this.getStoredValue("quietMode", false, 'local').then((value) => {
       this.cache.setCachedValue("quietMode", value);
       EventBus.emit("userPreferenceChanged", { quietMode: value });
+    });
+
+    // Voice playback speed and volume (#96 / #117) — resolved on the way in so
+    // a corrupt stored value can never reach an <audio> element.
+    this.getStoredValue("ttsPlaybackRate", DEFAULT_TTS_PLAYBACK_RATE, 'local').then((value) => {
+      const rate = resolveTtsPlaybackRate(value);
+      this.cache.setCachedValue("ttsPlaybackRate", rate);
+      EventBus.emit("userPreferenceChanged", { ttsPlaybackRate: rate });
+    });
+    this.getStoredValue("ttsVolume", DEFAULT_TTS_VOLUME, 'local').then((value) => {
+      const volume = resolveTtsVolumeLevel(value);
+      this.cache.setCachedValue("ttsVolume", volume);
+      EventBus.emit("userPreferenceChanged", { ttsVolume: volume });
     });
 
     // Auto Read Aloud for ChatGPT (default true)
@@ -382,6 +400,20 @@ class UserPreferenceModule {
           EventBus.emit("userPreferenceChanged", { quietMode: request.quietMode });
         }
 
+        if ("ttsPlaybackRate" in request) {
+          const rate = resolveTtsPlaybackRate(request.ttsPlaybackRate);
+          this.cache.setCachedValue("ttsPlaybackRate", rate);
+          actions.push(this.setStoredValue("ttsPlaybackRate", rate, 'local'));
+          EventBus.emit("userPreferenceChanged", { ttsPlaybackRate: rate });
+        }
+
+        if ("ttsVolume" in request) {
+          const volume = resolveTtsVolumeLevel(request.ttsVolume);
+          this.cache.setCachedValue("ttsVolume", volume);
+          actions.push(this.setStoredValue("ttsVolume", volume, 'local'));
+          EventBus.emit("userPreferenceChanged", { ttsVolume: volume });
+        }
+
         if ("autoReadAloudChatGPT" in request) {
           this.cache.setCachedValue("autoReadAloudChatGPT", request.autoReadAloudChatGPT);
           actions.push(this.setStoredValue("autoReadAloudChatGPT", request.autoReadAloudChatGPT, 'local'));
@@ -480,6 +512,18 @@ class UserPreferenceModule {
                     this.cache.setCachedValue("autoReadAloudChatGPT", newValue);
                     eventData = { autoReadAloudChatGPT: newValue };
                     break;
+                  case "ttsPlaybackRate": {
+                    const rate = resolveTtsPlaybackRate(newValue);
+                    this.cache.setCachedValue("ttsPlaybackRate", rate);
+                    eventData = { ttsPlaybackRate: rate };
+                    break;
+                  }
+                  case "ttsVolume": {
+                    const level = resolveTtsVolumeLevel(newValue);
+                    this.cache.setCachedValue("ttsVolume", level);
+                    eventData = { ttsVolume: level };
+                    break;
+                  }
                   // keepSegments removed (dev-only via env)
                   default: continue; // Should not happen if LOCAL_STORAGE_KEYS is correct
                 }
@@ -720,6 +764,57 @@ class UserPreferenceModule {
     this.cache.setCachedValue("quietMode", enabled);
     EventBus.emit("userPreferenceChanged", { quietMode: enabled });
     return this.setStoredValue("quietMode", enabled, 'local');
+  }
+
+  // Voice playback speed (LOCAL) — #96
+  public async getTtsPlaybackRate(): Promise<number> {
+    const cached = this.cache.getCachedValue("ttsPlaybackRate", null);
+    if (cached !== null) {
+      return Promise.resolve(resolveTtsPlaybackRate(cached));
+    }
+    const stored = await this.getStoredValue("ttsPlaybackRate", DEFAULT_TTS_PLAYBACK_RATE, 'local');
+    const rate = resolveTtsPlaybackRate(stored);
+    this.cache.setCachedValue("ttsPlaybackRate", rate);
+    return rate;
+  }
+
+  public getCachedTtsPlaybackRate(): number {
+    return resolveTtsPlaybackRate(
+      this.cache.getCachedValue("ttsPlaybackRate", DEFAULT_TTS_PLAYBACK_RATE)
+    );
+  }
+
+  public setTtsPlaybackRate(rate: number): Promise<void> {
+    const resolved = resolveTtsPlaybackRate(rate);
+    this.cache.setCachedValue("ttsPlaybackRate", resolved);
+    EventBus.emit("userPreferenceChanged", { ttsPlaybackRate: resolved });
+    return this.setStoredValue("ttsPlaybackRate", resolved, 'local');
+  }
+
+  // Voice playback volume, 0-100 (LOCAL) — #117. Quiet mode (#437) attenuates
+  // this level rather than replacing it; see resolveTtsVolume.
+  public async getTtsVolume(): Promise<number> {
+    const cached = this.cache.getCachedValue("ttsVolume", null);
+    if (cached !== null) {
+      return Promise.resolve(resolveTtsVolumeLevel(cached));
+    }
+    const stored = await this.getStoredValue("ttsVolume", DEFAULT_TTS_VOLUME, 'local');
+    const volume = resolveTtsVolumeLevel(stored);
+    this.cache.setCachedValue("ttsVolume", volume);
+    return volume;
+  }
+
+  public getCachedTtsVolume(): number {
+    return resolveTtsVolumeLevel(
+      this.cache.getCachedValue("ttsVolume", DEFAULT_TTS_VOLUME)
+    );
+  }
+
+  public setTtsVolume(volume: number): Promise<void> {
+    const resolved = resolveTtsVolumeLevel(volume);
+    this.cache.setCachedValue("ttsVolume", resolved);
+    EventBus.emit("userPreferenceChanged", { ttsVolume: resolved });
+    return this.setStoredValue("ttsVolume", resolved, 'local');
   }
 
   // keepSegments removed (dev-only via env)

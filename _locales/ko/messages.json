@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "현재 Safari에서는 다국어 음성이 지원되지 않습니다."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "어시스턴트 음성이 말하는 속도를 설정하는 슬라이더의 라벨입니다.",
+    "message": "속도"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "음성 재생 속도 슬라이더를 설명하는 툴팁입니다.",
+    "message": "Say, Pi 음성의 말하기 속도입니다. 다음 답변부터 적용되며 Pi 자체 음성에는 적용되지 않습니다."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$에 의해 구동되는 텍스트-투-스피치",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS 음성"
+  },
+  "ttsVolumeLabel": {
+    "description": "어시스턴트 음성의 크기를 설정하는 슬라이더의 라벨입니다.",
+    "message": "볼륨"
+  },
+  "ttsVolumeTooltip": {
+    "description": "음성 재생 볼륨 슬라이더를 설명하는 툴팁입니다.",
+    "message": "시스템 볼륨을 기준으로 한 Say, Pi 음성의 크기입니다. 다음 답변부터 적용되며 Pi 자체 음성에는 적용되지 않습니다."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "음성 일시 정지 -"
   },
+  "voicePlaybackHeading": {
+    "description": "어시스턴트 음성 재생 방식을 설정하는 항목 그룹의 제목입니다.",
+    "message": "음성 재생"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "음성 설정"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "음성 변경",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Say, Pi 음성을 선택하지 않아 어시스턴트가 자체 내장 음성으로 답변할 때 Voices 컨트롤 바에 표시됩니다. $host$는 어시스턴트 이름입니다(예: Pi).",
     "message": "내 음성: $host$ 기본 음성",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "설정의 음성(Voices) 제어 막대에 표시되는 한 줄 키보드 힌트입니다. 기호는 키를 뜻합니다: Space, 위/아래 화살표, Shift+Space.",
     "message": "Space로 듣기, ↑↓로 음성 이동, ⇧Space로 다시 전환"
+  },
+  "voicesListenHint": {
+    "message": "음성을 클릭하면 무료 샘플을 들을 수 있습니다. 마음에 드는 음성을 찾으면 ‘사용’을 선택하세요.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "듣기 옵션",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "특정 호스트의 스튜디오 안에서 해당 호스트의 음성 카탈로그 로드가 실패했을 때의 오류 상태; $host$는 어시스턴트.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "음성을 저장하지 못했습니다. 다시 시도해 주세요.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "저장한 음성을 지금은 사용할 수 없습니다. 나중에 다시 시도하거나 다른 음성을 선택하세요.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "설정의 AI Chat 탭에서 음성 카탈로그 섹션 부제목.",
     "message": "각 사이트에서 답변을 읽어줄 음성을 선택하세요."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "설정의 AI Chat 탭에서 음성 카탈로그 섹션 제목.",
     "message": "음성"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$에서 사용할 음성이 $name$(으)로 설정되었습니다.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "설정 음성 카탈로그에서 가성비 등급 음성 그룹 제목. CSS로 대문자로 렌더링됨.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "$host$에서 사용",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$의 기본 음성 사용",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "설정 음성 카탈로그에서 호스트별 ‘이 음성 사용’ 버튼의 접근성 라벨. $name$은 음성, $host$는 어시스턴트(예: Pi, Claude).",
     "message": "$host$에서 $name$ 사용",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "브라우저가 음성 감지 모델을 실행하는 데 필요한 초기 WebAssembly 메모리를 제공하지 않을 때 발생하는 오류.",
     "message": "음성 감지를 시작할 수 없어요: 이 브라우저에서는 WebAssembly 메모리를 사용할 수 없어요."
-  },
-  "voicesListeningOptions": {
-    "message": "듣기 옵션",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "음성을 클릭하면 무료 샘플을 들을 수 있습니다. 마음에 드는 음성을 찾으면 ‘사용’을 선택하세요.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "$host$에서 사용",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$에서 사용할 음성이 $name$(으)로 설정되었습니다.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "음성을 저장하지 못했습니다. 다시 시도해 주세요.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "$host$의 기본 음성 사용",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "저장한 음성을 지금은 사용할 수 없습니다. 나중에 다시 시도하거나 다른 음성을 선택하세요.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "음성 변경",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

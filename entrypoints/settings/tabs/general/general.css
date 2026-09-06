@@ -1,2 +1,100 @@
 /* General tab specific styles */
 
+/* Voice playback (#96 speed / #117 volume).
+   A quiet section label groups the two sliders; each row keeps the card and
+   `.wraper` layout the toggles above it use, so the group reads as part of the
+   same list rather than a new kind of control. */
+.preference-group {
+  width: 100%;
+  max-width: 504px;
+}
+
+.preference-group-heading {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0.75rem 0 0.125rem;
+  padding-left: 1rem;
+}
+
+.range-control {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+/* Long labels (German "Geschwindigkeit") plus a slider plus a readout is the
+   tightest row on the page, so let both columns give: the label keeps less
+   trailing padding than a toggle needs, and the slider shrinks before anything
+   overflows a 390px viewport. */
+#voice-playback-preference .wraper {
+  grid-template-columns: minmax(0, auto) minmax(0, auto);
+}
+
+#voice-playback-preference .label-text {
+  padding-right: 0.5rem;
+  min-width: 0;
+}
+
+/* `.control`'s `margin-left: auto` (the toggles' right-alignment) makes the
+   cell size to max-content and overflow its grid track instead of shrinking;
+   `space-between` already puts this column on the right, so drop the margin
+   and let the slider take up the slack. */
+#voice-playback-preference .control {
+  margin-left: 0;
+}
+
+/* Slider: a thin neutral track with a thumb in the same blue as a checked
+   toggle. Track and thumb are drawn explicitly — the UA's own track all but
+   disappears against the white card. */
+.range-control .range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 0 1 auto;
+  width: 150px;
+  min-width: 64px;
+  height: 4px;
+  border-radius: 999px;
+  background: #dbe2ea;
+  cursor: pointer;
+}
+
+.range-control .range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: rgb(11, 87, 208);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+}
+
+.range-control .range-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: #dbe2ea;
+}
+
+.range-control .range-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: rgb(11, 87, 208);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+}
+
+.range-control .range-slider:focus-visible {
+  outline: 2px solid rgb(11, 87, 208);
+  outline-offset: 4px;
+}
+
+.range-control .range-readout {
+  min-width: 3.25rem;
+  text-align: right;
+  font-size: 0.875rem;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}

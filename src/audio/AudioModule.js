@@ -10,7 +10,8 @@ import { isSafari } from "../UserAgentModule.ts";
 // SlowResponseHandler and adapter are imported dynamically for Pi.ai only
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
-import { ttsVolumeForQuietMode } from "../tts/quietVolume.ts";
+import { resolveTtsVolume } from "../tts/quietVolume.ts";
+import { loadTtsSource } from "./ttsPlayback.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
 import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 import { BrowserCompatibilityModule } from "../compat/BrowserCompatibilityModule.ts";
@@ -762,11 +763,18 @@ export default class AudioModule {
       // Track this explicit load independently of the URL retained for reload.
       // Stop/completion revoke the shared-player exemption; pause preserves it.
       this.sharedPlaybackSource = url;
-      // Fallback to in-page audio. Quiet/whisper mode plays the reply softly (#437).
-      audioElement.src = url;
-      audioElement.volume = ttsVolumeForQuietMode(
-        UserPreferenceModule.getInstance().getCachedQuietMode()
-      );
+      // Fallback to in-page audio, at the user's chosen speed (#96) and volume
+      // (#117) — quiet/whisper mode plays the reply softly on top of that (#437).
+      // loadTtsSource owns the src-then-rate ordering the media load algorithm
+      // demands.
+      const preferences = UserPreferenceModule.getInstance();
+      loadTtsSource(audioElement, url, {
+        volume: resolveTtsVolume({
+          volume: preferences.getCachedTtsVolume(),
+          quietMode: preferences.getCachedQuietMode(),
+        }),
+        playbackRate: preferences.getCachedTtsPlaybackRate(),
+      });
       if (play) {
         const playbackController = new AbortController();
         this.pendingPlaybackController = playbackController;
