@@ -7,13 +7,14 @@ import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
  * catalog grows; the full catalog lives one click deeper (extension settings).
  *
  * GET /voices now carries a curation manifest (saypi-api #293): `section` gives
- * the tier, `featured` marks the in-host shortlist, and `deprecated` retires a
- * voice. The client obeys those fields when present and falls back to the local
- * price/rank heuristic when they are absent, so it renders correctly against
- * both new and old server deployments (the additive-optional contract). Two
- * invariants the manifest can never override: a deprecated voice keeps
- * rendering (and working) if it is the user's current selection
- * (grandfathering), and the menu never renders empty.
+ * the tier, `featured` marks the in-host shortlist, `deprecated` retires a
+ * voice, and `availability` reports the provider's live health (#321). The
+ * client obeys those fields when present and falls back to the local price/rank
+ * heuristic when they are absent, so it renders correctly against both new and
+ * old server deployments (the additive-optional contract). Two invariants the
+ * manifest can never override: a voice that is retired OR temporarily
+ * unreachable keeps rendering (and working) if it is the user's current
+ * selection (grandfathering), and the menu never renders empty.
  */
 
 export type VoiceTier = "hd" | "everyday";
@@ -71,16 +72,45 @@ export function getVoiceTier(voice: SpeechSynthesisVoiceRemote): VoiceTier {
 }
 
 /**
- * Drop retired (deprecated) voices before a catalog is offered to new selectors
- * — EXCEPT the user's current voice, which must always keep rendering
- * (grandfathering, design §5). The server keeps synthesising TTS for prior
- * selectors; this governs only what the menus and settings catalog show.
+ * Is the server telling us this voice cannot speak right now (saypi-api #321)?
+ *
+ * Strictly `"unavailable"` — a hard-down provider. Everything else fails OPEN:
+ * absent, `null`, `"degraded"` (erroring but still serving, which the server
+ * deliberately does not de-feature), and any value a future server might send
+ * that this client doesn't recognise. The server sends `null` whenever health
+ * is unknown *on purpose*, so silence must never be read as trouble — hiding a
+ * working voice is worse than briefly offering a broken one, because a user
+ * cannot route around a voice they cannot see.
+ */
+export function isVoiceUnavailable(voice: SpeechSynthesisVoiceRemote): boolean {
+  return voice.availability === "unavailable";
+}
+
+/**
+ * Drop voices that shouldn't be offered to a NEW selector — retired
+ * (`deprecated`) ones, and ones whose provider is currently hard-down
+ * (`availability: "unavailable"`) — EXCEPT the user's current voice, which must
+ * always keep rendering (grandfathering, design §5).
+ *
+ * This is the single seam every surface goes through: the in-host shortlist
+ * (via `curateShortlist`), its fill-to-cap padding, user-pin membership, and
+ * the settings studio's full catalog. The server already drops unavailable
+ * voices from `featured`/`recommended`, so the residue this closes is
+ * client-side: padding that seats a non-featured voice when the server features
+ * fewer than the cap, a pinned voice the user chose before the outage, and the
+ * studio rail, which renders the whole catalog rather than the shortlist.
+ *
+ * The server keeps synthesising TTS for prior selectors; this governs only what
+ * the menus and settings catalog OFFER.
  */
 export function visibleCatalog(
   voices: SpeechSynthesisVoiceRemote[],
   currentVoiceId: string | null
 ): SpeechSynthesisVoiceRemote[] {
-  return voices.filter((v) => !v.deprecated || v.id === currentVoiceId);
+  return voices.filter(
+    (v) =>
+      v.id === currentVoiceId || (!v.deprecated && !isVoiceUnavailable(v))
+  );
 }
 
 export interface CuratedShortlist {

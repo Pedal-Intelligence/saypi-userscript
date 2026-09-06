@@ -16,6 +16,7 @@ import venusSvgContent from "../icons/lucide-venus.svg?raw";
 import { logger } from "../LoggingModule";
 import {
   curateShortlist,
+  isVoiceUnavailable,
   getVoiceTier,
   CLAUDE_MENU_CAP,
 } from "../tts/VoiceCuration";
@@ -315,8 +316,18 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     description.classList.add("text-text-500", "pr-4", "text-xs", "overflow-hidden", "text-ellipsis", "max-w-[340px]");
     // Determine the appropriate description text
     if (voice) {
-      const desc = voice.description || "";
-      description.innerText = desc || getMessage("ttsVoice");
+      // Grandfathering means an unavailable voice reaches this menu only when
+      // it is the one the user has saved (#568). Say so in place of the blurb
+      // — this row is the only place they will learn their voice has gone
+      // quiet, and every other row in the menu is a working alternative.
+      if (isVoiceUnavailable(voice)) {
+        item.classList.add("saypi-voice-unavailable");
+        item.title = getMessage("voicesSavedUnavailable");
+        description.innerText = getMessage("voicesSavedUnavailable");
+      } else {
+        const desc = voice.description || "";
+        description.innerText = desc || getMessage("ttsVoice");
+      }
     } else {
       if (isSignInPrompt) {
         description.innerText = getMessage("signInForTTS");

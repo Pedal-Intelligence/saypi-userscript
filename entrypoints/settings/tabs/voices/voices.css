@@ -225,6 +225,13 @@
   font-weight: 600;
   color: #2c5a42;
 }
+/* The saved voice's provider is hard-down (#568). Muted, not alarming — the
+   voice works again the moment the provider recovers, so this is a status line
+   beside the name, not an error state. Same ink as .voice-fallback. */
+.voice-current-unavailable {
+  font-size: 13px;
+  color: rgba(36, 29, 20, 0.66);
+}
 .voice-current-choice .voice-your-voice {
   font-size: 17px;
   font-weight: 600;
