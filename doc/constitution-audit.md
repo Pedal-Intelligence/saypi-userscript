@@ -137,8 +137,8 @@ Prior runs: 2026-07-02 (pre-procedure precedent → PR #461, issues #462–#465)
 
 ## Cadence
 
-Monthly — chartered as a scheduled cloud routine in `doc/scheduled-routines.md`
-(first Monday of the month, 06:30 UTC), with the same activation gate as the weekly
-routine. **Interim fallback:** until the routine is activated, any session may run
-the audit manually from this doc when a month has elapsed since the newest report in
-`doc/audit-reports/`.
+Monthly — this runs itself, as a scheduled cloud routine (`doc/scheduled-routines.md`,
+first Monday of the month at 06:30 UTC, active since 2026-09-06). **Manual fallback:**
+any session may still run the audit by hand from this doc — worth doing when a month
+has elapsed since the newest report in `doc/audit-reports/` and the scheduled run has
+not produced one.
