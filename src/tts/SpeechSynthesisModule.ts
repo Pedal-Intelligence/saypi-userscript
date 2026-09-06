@@ -150,29 +150,44 @@ class SpeechSynthesisModule {
   }
 
   /**
-   * Has this context told us, explicitly, that it is signed out?
+   * Would a request from here carry a credential this context has already
+   * disowned?
    *
-   * Only a context that injected {@link setAuthStateReader} can answer yes —
-   * and injecting one is an assertion that the JwtManager singleton here is
-   * NOT the truth. On the settings page it is not: a sign-out broadcast
-   * deliberately leaves the singleton's token in place so that a settings tab
-   * cannot destroy the extension-wide refresh alarm (#227). That token is
-   * still live, and `callApi` — directly, or via the background proxy — builds
-   * its `Authorization` header from a manager, never from this reader. So
-   * without this check the catalog fetch below would leave the page carrying
-   * the previous account's credentials and come back with their voice list,
-   * under a UI that has already said "sign in for TTS". The quota panel avoids
-   * exactly this by asking the background and returning before any fetch.
+   * Three things have to be true at once, and the conjunction is the point.
    *
-   * Deliberately NOT applied when no reader was injected. There the singleton
-   * IS the truth, but "the singleton says no token" is a CLIENT-side expiry
-   * judgement about a stateless bearer — the server is the honest arbiter of
-   * what an anonymous caller may see, and this repo verifies no server
-   * behaviour that would let the client answer for it. Content scripts keep
-   * asking, exactly as before.
+   * 1. A reader was injected — {@link setAuthStateReader} — which is an
+   *    assertion that the JwtManager singleton is NOT the truth in this
+   *    context. Only the settings page says that today.
+   * 2. That reader says signed out.
+   * 3. The manager would nonetheless still attach an `Authorization` header.
+   *
+   * On the settings page all three hold after a sign-out broadcast, by design:
+   * the page records the sign-out in its own state and deliberately does NOT
+   * clear the singleton, because `clear()` would destroy the extension-wide
+   * refresh alarm the background owns (#227). `callApi` builds its header from
+   * a manager — this page's on the direct path, the background's on the
+   * proxied one — and never from the reader, so the catalog fetch would leave
+   * carrying the previous account's bearer and come back with their voice
+   * list, under a UI that has already said "sign in for TTS". The quota panel
+   * avoids exactly this by asking the background and returning before any
+   * fetch.
+   *
+   * Condition 3 is what keeps this narrow, and it is load-bearing. A page that
+   * was NEVER signed in holds nothing to leak, and suppressing its request
+   * would only deny an anonymous visitor whatever catalog the server is
+   * willing to serve one — a judgement that belongs to the server, not to a
+   * client reading a stateless bearer's client-side expiry. (Layer 3 proves
+   * this is not hypothetical: the mock API serves `/voices` to an
+   * unauthenticated caller, and the E2E settings page never signs in.)
+   * Condition 1 keeps content scripts on exactly their previous behaviour,
+   * where the singleton IS the truth and the server is still the arbiter.
    */
-  private toldSignedOut(): boolean {
-    return this.authStateReader !== null && !this.authStateReader();
+  private wouldCarryStaleCredentials(): boolean {
+    return (
+      this.authStateReader !== null &&
+      !this.authStateReader() &&
+      getJwtManagerSync().getAuthHeader() !== null
+    );
   }
 
   /**
@@ -219,11 +234,11 @@ class SpeechSynthesisModule {
     const appId = this.resolveChatbotKey(chatbot, chatbotIdOverride);
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
     this.syncVoicesCacheWithAuthState();
-    // Nothing to ask for, and asking would cost more than an empty list — see
-    // toldSignedOut(). Placed after the fingerprint sync so the caches are
-    // still dropped on the way through, and before the cache read so a stale
-    // entry cannot answer either.
-    if (this.toldSignedOut()) {
+    // The request would authenticate itself against this context's own
+    // judgement — see wouldCarryStaleCredentials(). Placed after the
+    // fingerprint sync so the caches are still dropped on the way through, and
+    // before the cache read so a stale entry cannot answer either.
+    if (this.wouldCarryStaleCredentials()) {
       return [];
     }
     const cached = this.voicesCache.get(cacheKey);

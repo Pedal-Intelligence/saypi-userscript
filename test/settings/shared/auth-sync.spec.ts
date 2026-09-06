@@ -489,6 +489,33 @@ describe("settings-page auth reconciliation (#227)", () => {
     expect(voices).toEqual([]);
   });
 
+  it("still asks when the page holds no credential to leak (never signed in)", async () => {
+    // The narrow half of the guard above, and the one Layer 3 caught: a
+    // settings page that was never signed in has nothing stale in hand, so
+    // there is no reason to answer for the server about what an anonymous
+    // caller may see. Suppressing here would only empty the rail for a
+    // signed-out visitor — which is exactly what the E2E harness is (its mock
+    // API serves /voices without auth, and nothing ever signs in).
+    const service = new TextToSpeechService("https://api.saypi.ai");
+    const speech = new SpeechSynthesisModule(
+      service,
+      {} as unknown as AudioStreamManager,
+      {} as unknown as UserPreferenceModule
+    );
+    speech.setAuthStateReader(() => isSettingsAuthenticated());
+
+    installSettingsAuthSync();
+    await settingsAuthSyncSettled();
+    expect(isSettingsAuthenticated()).toBe(false); // sanity: signed out...
+    expect(getJwtManagerSync().getAuthHeader()).toBeNull(); // ...and empty-handed
+
+    const anonymousCatalog = [{ id: "voice-free", name: "Free" }];
+    callApiMock.mockImplementation(async () => voicesResponse(anonymousCatalog));
+
+    expect(await speech.getVoices(undefined, "claude")).toEqual(anonymousCatalog);
+    expect(callApiMock).toHaveBeenCalledTimes(1);
+  });
+
   it("flips the open Voices tab from signed in to signed out, with no reload (AC 1)", async () => {
     // The whole chain, end to end: a real background sign-out broadcast, the
     // real reconciler, and a real VoicesController reading the real
