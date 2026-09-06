@@ -769,8 +769,8 @@
     "message": "Missä yleensä puhut?"
   },
   "onboarding_footer": {
-    "description": "Ensimmäisen käyttökerran opastussivun alatunnisteen teksti. $tab$ on Asetukset-välilehden nimi, jossa tämän oppaan linkki on.",
-    "message": "Voit avata tämän oppaan uudelleen milloin tahansa Say, Pi -asetuksista $tab$-välilehdeltä. Yksityisyytesi on tärkeä — ääntä tallennetaan vain aktiivisen puhelun aikana.",
+    "description": "Esmakordse tutvustuslehe jalusetekst, mis selgitab tagasipääsu ja seda, millal heli salvestatakse. $tab$ on seadetekaardi nimi, kus asub selle juhendi link.",
+    "message": "Selle juhendi saad alati uuesti avada Say, Pi seadetes vahekaardil $tab$. Privaatsus on oluline — salvestame heli kõne ajal ja ülaltoodud mikrofonitesti ajal, kuid heli jääb sinu brauserisse.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Testaa mikrofonisi"
   },
   "onboarding_micTestDone": {
-    "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti valmistuu onnistuneesti.",
-    "message": "Hyvä — mikrofonisi toimii. 🎉"
+    "description": "Olek, mida näidatakse pärast seda, kui tutvustuse mikrofonitest tuvastas kuuldava sisendi.",
+    "message": "Hästi — kuulsime sind! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti mittaa sisääntuloa.",
     "message": "Kuunnellaan — sano jotain. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Olek, mida näidatakse, kui tutvustuse mikrofonitest käivitati, kuid kuuldavat sisendit ei tuvastatud.",
+    "message": "Me ei kuulnud midagi. Kontrolli, et brauseris oleks valitud õige mikrofon ja et see poleks vaigistatud, seejärel proovi uuesti."
   },
   "onboarding_micTestRequesting": {
     "description": "Tila, joka näytetään, kun käyttöönoton mikrofonitesti odottaa lupaa.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Painikkeen teksti, jolla käyttöönoton mikrofonitesti pysäytetään sen ollessa käynnissä.",
     "message": "Lopeta testi"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Olek, mida näidatakse, kui tutvustuse mikrofonitest peatati enne sisendi tuvastamist.",
+    "message": "Test peatati enne, kui midagi kuulsime. Käivita see uuesti ja ütle paar sõna."
   },
   "onboarding_step1Body": {
     "description": "Ensimmäisen opastusvaiheen teksti, jossa kerrotaan, miten laajennus kiinnitetään ja mitä työkalupalkkiin kiinnitetty painike avaa.",
@@ -815,8 +823,8 @@
     "message": "Kiinnitä Say, Pi työkalupalkkiin"
   },
   "onboarding_step2Body": {
-    "description": "Toisen opastusvaiheen teksti, jossa kerrotaan sivulla olevan puhelupainikkeen sijainti ja miten äänikeskustelu aloitetaan.",
-    "message": "Siirry johonkin alla tuetuista avustajista. Say, Pi lisää chat-sivulle oman puhelupainikkeen kirjoituskentän viereen — napauta sitä ja sano hei. Pyydämme mikrofonin käyttöoikeutta ensimmäisellä kerralla — se on odotettua, ja kuuntelemme vain aktiivisen puhelun aikana."
+    "description": "Teise tutvustusetapi sisu, mis selgitab lehe-sisese helistamisnupu asukohta ja häälvestluse alustamist.",
+    "message": "Ava mõni allolev toetatud assistent. Say, Pi lisab vestluslehele oma helistamisnupu sisestusvälja kõrvale — puuduta seda ja ütle tere. Esimesel korral küsime mikrofonile juurdepääsu — see on ootuspärane. Peale alloleva testi kuulame ainult kõne ajal."
   },
   "onboarding_step2Title": {
     "description": "Toisen opastusvaiheen otsikko (keskustelun aloittaminen).",

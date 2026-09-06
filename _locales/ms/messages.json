@@ -769,8 +769,8 @@
     "message": "Di mana anda biasanya akan bercakap?"
   },
   "onboarding_footer": {
-    "description": "Teks pengaki pada halaman panduan permulaan. $tab$ ialah nama tab Tetapan yang mengandungi pautan kembali ke panduan ini.",
-    "message": "Anda boleh membuka semula panduan ini pada bila-bila masa daripada tetapan Say, Pi, di tab $tab$. Privasi anda penting — audio hanya dirakam semasa panggilan aktif.",
+    "description": "Teks pengaki pada halaman onboarding kali pertama, meliputi cara kembali dan masa audio dirakam. $tab$ ialah nama tab Tetapan yang mengandungi pautan kembali ke panduan ini.",
+    "message": "Anda boleh membuka semula panduan ini pada bila-bila masa daripada tetapan Say, Pi, di tab $tab$. Privasi anda penting — kami merakam audio semasa panggilan dan semasa ujian mikrofon di atas, yang kekal dalam pelayar anda.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Uji mikrofon anda"
   },
   "onboarding_micTestDone": {
-    "description": "Status yang dipaparkan selepas ujian mikrofon onboarding berjaya diselesaikan.",
-    "message": "Bagus — mikrofon anda berfungsi. 🎉"
+    "description": "Status yang dipaparkan selepas ujian mikrofon onboarding mengesan input audio.",
+    "message": "Bagus — kami dapat mendengar anda! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status yang dipaparkan semasa ujian mikrofon onboarding mengukur input.",
     "message": "Mendengar — sebut sesuatu. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status yang dipaparkan apabila ujian mikrofon onboarding dijalankan tetapi tidak mengesan input audio.",
+    "message": "Kami tidak mendengar apa-apa. Semak bahawa mikrofon yang betul dipilih dalam pelayar anda dan tidak diredamkan, kemudian cuba lagi."
   },
   "onboarding_micTestRequesting": {
     "description": "Status yang dipaparkan semasa ujian mikrofon onboarding menunggu kebenaran.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Label butang untuk menghentikan ujian mikrofon onboarding semasa ia sedang berjalan.",
     "message": "Hentikan ujian"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status yang dipaparkan apabila ujian mikrofon onboarding dihentikan sebelum mengesan sebarang input.",
+    "message": "Ujian dihentikan sebelum kami mendengar apa-apa. Mulakannya semula dan ucapkan beberapa perkataan."
   },
   "onboarding_step1Body": {
     "description": "Teks langkah pertama panduan permulaan yang menerangkan cara menyemat sambungan dan perkara yang dibuka oleh butang bar alat yang disemat.",
@@ -815,8 +823,8 @@
     "message": "Pin Say, Pi pada bar alat anda"
   },
   "onboarding_step2Body": {
-    "description": "Teks langkah kedua panduan permulaan yang menerangkan lokasi butang panggilan pada halaman dan cara memulakan perbualan suara.",
-    "message": "Buka salah satu pembantu yang disokong di bawah. Say, Pi menambah butang panggilan pada halaman sembang, di sebelah tempat anda menaip — ketik dan ucapkan helo. Kami akan meminta akses mikrofon pada kali pertama — itu perkara biasa, dan kami hanya mendengar semasa anda sedang membuat panggilan."
+    "description": "Teks langkah onboarding kedua yang menerangkan lokasi butang panggilan dalam halaman dan cara memulakan perbualan suara.",
+    "message": "Buka salah satu pembantu yang disokong di bawah. Say, Pi menambah butang panggilan pada halaman sembang, di sebelah tempat anda menaip — ketiknya dan ucapkan hai. Kami akan meminta akses mikrofon kali pertama — itu perkara biasa. Di luar ujian di bawah, kami hanya mendengar semasa anda dalam panggilan."
   },
   "onboarding_step2Title": {
     "description": "Tajuk untuk langkah onboarding kedua (mulakan perbualan).",

@@ -769,8 +769,8 @@
     "message": "Saan ka karaniwang magsasalita?"
   },
   "onboarding_footer": {
-    "description": "Teksto sa ibaba ng pahina ng onboarding sa unang paggamit. Ang $tab$ ay pangalan ng tab na Mga Setting na may link pabalik sa gabay na ito.",
-    "message": "Maaari mong buksan muli ang gabay na ito anumang oras sa mga setting ng Say, Pi, sa tab na $tab$. Mahalaga ang iyong privacy — kumukuha lang ng audio habang may aktibong tawag.",
+    "description": "Footer text sa onboarding page sa unang paggamit, tungkol sa paraan ng pagbabalik at kung kailan kinukuha ang audio. Ang $tab$ ay pangalan ng tab na Settings na may link pabalik sa gabay na ito.",
+    "message": "Maaari mong buksan muli ang gabay na ito anumang oras mula sa settings ng Say, Pi, sa tab na $tab$. Mahalaga sa amin ang iyong privacy—kumukuha kami ng audio habang may tawag at habang isinasagawa ang pagsubok ng mikropono sa itaas, na nananatili sa iyong browser.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Subukan ang mikropono mo"
   },
   "onboarding_micTestDone": {
-    "description": "Status na ipinapakita pagkatapos matagumpay na matapos ang onboarding mic test.",
-    "message": "Ayos — gumagana ang mikropono mo! 🎉"
+    "description": "Status na ipinapakita matapos masukat ng pagsubok ng mikropono sa onboarding ang naririnig na input.",
+    "message": "Ayos—narinig ka namin! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status na ipinapakita habang sinusukat ng onboarding mic test ang input.",
     "message": "Nakikinig — magsalita ka! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status na ipinapakita kapag walang naririnig na input na nasukat sa pagsubok ng mikropono sa onboarding.",
+    "message": "Wala kaming narinig. Tingnan kung tamang mikropono ang napili sa iyong browser at hindi ito naka-mute, pagkatapos ay subukan muli."
   },
   "onboarding_micTestRequesting": {
     "description": "Status na ipinapakita habang naghihintay ng pahintulot ang onboarding mic test.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Label ng button para ihinto ang onboarding mic test habang tumatakbo.",
     "message": "Itigil ang test"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status na ipinapakita kapag itinigil ang pagsubok ng mikropono sa onboarding bago ito makasukat ng anumang tunog.",
+    "message": "Huminto ang pagsubok bago kami makarinig. Simulan itong muli at magsabi ng ilang salita."
   },
   "onboarding_step1Body": {
     "description": "Nilalaman ng unang hakbang sa onboarding na nagpapaliwanag kung paano i-pin ang extension at kung ano ang binubuksan ng naka-pin na button sa toolbar.",
@@ -815,8 +823,8 @@
     "message": "I-pin ang Say, Pi sa toolbar mo"
   },
   "onboarding_step2Body": {
-    "description": "Nilalaman ng ikalawang hakbang sa onboarding na nagpapaliwanag kung nasaan ang in-page call button at kung paano magsimula ng voice conversation.",
-    "message": "Pumunta sa isa sa mga sinusuportahang assistant sa ibaba. Nagdaragdag ang Say, Pi ng sariling call button sa chat page, malapit sa pinagta-type-an mo — i-tap ito at bumati. Hihingi kami ng access sa mikropono sa unang pagkakataon — normal ito, at nakikinig lang kami habang aktibo kang nasa isang tawag."
+    "description": "Nilalaman ng ikalawang hakbang ng onboarding na nagpapaliwanag kung nasaan ang button ng tawag sa page at kung paano magsimula ng voice conversation.",
+    "message": "Pumunta sa isa sa mga sinusuportahang assistant sa ibaba. Idinadagdag ng Say, Pi ang sarili nitong button ng tawag sa chat page, sa tabi ng iyong tina-type—i-tap ito at bumati. Hihingi kami ng access sa mikropono sa unang pagkakataon—inaasahan iyon, at bukod sa pagsubok sa ibaba, nakikinig lang kami habang may tawag ka."
   },
   "onboarding_step2Title": {
     "description": "Pamagat ng pangalawang onboarding step (magsimula ng usapan).",

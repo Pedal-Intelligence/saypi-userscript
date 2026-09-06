@@ -128,4 +128,40 @@ describe("onboarding first-run copy", () => {
       expect(message("onboarding_envSaveFailed")).not.toBe("");
     });
   });
+
+  describe("the microphone test claims only what it measured (#615)", () => {
+    it("says we heard you, not that the hardware is verified", () => {
+      // The old "your microphone works!" fired on any stop, including one
+      // before the first sample. The success line now reports the measurement.
+      const done = message("onboarding_micTestDone");
+      expect(done).toMatch(/heard/i);
+      expect(done).not.toMatch(/works/i);
+    });
+
+    it("gives a next step when it heard nothing", () => {
+      const noInput = message("onboarding_micTestNoInput");
+      expect(noInput).not.toBe("");
+      expect(noInput).toMatch(/microphone/i);
+      // A dead end ("we heard nothing.") is only half the message.
+      expect(noInput).toMatch(/try again|check/i);
+    });
+
+    it("has its own words for a test cancelled before it measured anything", () => {
+      const stopped = message("onboarding_micTestStopped");
+      expect(stopped).not.toBe("");
+      expect(stopped).not.toBe(message("onboarding_micTestNoInput"));
+      expect(stopped).not.toBe(message("onboarding_micTestDone"));
+    });
+
+    it("counts the local test in the page's account of when we capture audio", () => {
+      // getUserMedia({ audio: true }) runs here, outside any call — so
+      // "audio is only captured during an active call" was not true.
+      const footer = message("onboarding_footer");
+      expect(footer).toMatch(/test/i);
+      expect(footer).not.toMatch(/only captured during an active call/i);
+      expect(message("onboarding_step2Body")).not.toMatch(
+        /we only listen while you're actively in a call/i
+      );
+    });
+  });
 });

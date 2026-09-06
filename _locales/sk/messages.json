@@ -769,8 +769,8 @@
     "message": "Kde sa budeš zvyčajne rozprávať?"
   },
   "onboarding_footer": {
-    "description": "Text v pätičke úvodnej stránky pri prvom spustení. $tab$ je názov karty Nastavenia, na ktorej sa nachádza odkaz späť na túto príručku.",
-    "message": "Túto príručku môžete kedykoľvek znova otvoriť v nastaveniach Say, Pi na karte $tab$. Na vašom súkromí nám záleží — zvuk sa zaznamenáva iba počas aktívneho hovoru.",
+    "description": "Text päty na stránke úvodného sprievodcu, ktorý vysvetľuje, ako sa vrátiť k sprievodcovi a kedy sa zaznamenáva zvuk. $tab$ je názov karty nastavení, na ktorej sa nachádza odkaz späť na tohto sprievodcu.",
+    "message": "Tohto sprievodcu môžete kedykoľvek znova otvoriť v nastaveniach Say, Pi na karte $tab$. Na vašom súkromí nám záleží — zvuk zaznamenávame počas hovoru a testu mikrofónu vyššie, pričom zostáva vo vašom prehliadači.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Otestovať mikrofón"
   },
   "onboarding_micTestDone": {
-    "description": "Stav zobrazený po úspešnom dokončení testu mikrofónu v úvodnom sprievodcovi.",
-    "message": "Super — mikrofón funguje! 🎉"
+    "description": "Stav zobrazený po tom, čo test mikrofónu v úvodnom sprievodcovi zaznamenal počuteľný vstup.",
+    "message": "Výborne — počuli sme vás 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Stav zobrazený počas toho, ako test mikrofónu v úvodnom sprievodcovi meria vstup.",
     "message": "Počúvam — povedz niečo! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Stav zobrazený po tom, čo test mikrofónu v úvodnom sprievodcovi prebehol, ale nezaznamenal počuteľný vstup.",
+    "message": "Nič sme nepočuli. Skontrolujte, či je v prehliadači vybraný správny mikrofón a či nie je stlmený, potom to skúste znova."
   },
   "onboarding_micTestRequesting": {
     "description": "Stav zobrazený počas toho, ako test mikrofónu v úvodnom sprievodcovi čaká na povolenie.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Názov tlačidla na zastavenie testu mikrofónu v úvodnom sprievodcovi, kým beží.",
     "message": "Zastaviť test"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Stav zobrazený po zastavení testu mikrofónu v úvodnom sprievodcovi pred zaznamenaním akéhokoľvek zvuku.",
+    "message": "Test sa zastavil skôr, než sme niečo počuli. Spustite ho znova a povedzte pár slov."
   },
   "onboarding_step1Body": {
     "description": "Text prvého kroku úvodného sprievodcu s vysvetlením, ako pripnúť rozšírenie a čo otvorí pripnuté tlačidlo na paneli nástrojov.",
@@ -815,8 +823,8 @@
     "message": "Pripnite si Say, Pi na panel nástrojov"
   },
   "onboarding_step2Body": {
-    "description": "Text druhého kroku úvodného sprievodcu s vysvetlením, kde sa na stránke nachádza tlačidlo hovoru a ako začať hlasovú konverzáciu.",
-    "message": "Prejdite na jedného z podporovaných asistentov nižšie. Say, Pi pridá na stránku chatu vlastné tlačidlo hovoru vedľa poľa na písanie — klepnite naň a pozdravte. Pri prvom použití požiadame o prístup k mikrofónu — je to očakávané a počúvame len počas aktívneho hovoru."
+    "description": "Text druhého kroku úvodného sprievodcu vysvetľujúci, kde nájsť tlačidlo hovoru na stránke a ako začať hlasovú konverzáciu.",
+    "message": "Prejdite k jednému z podporovaných asistentov nižšie. Say, Pi pridá na stránku chatu vlastné tlačidlo hovoru vedľa poľa na písanie — ťuknite naň a pozdravte. Pri prvom použití požiadame o prístup k mikrofónu — je to očakávané. Mimo testu nižšie počúvame iba počas hovoru."
   },
   "onboarding_step2Title": {
     "description": "Názov druhého kroku úvodného nastavenia (začatie konverzácie).",

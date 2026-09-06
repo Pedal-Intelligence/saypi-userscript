@@ -769,8 +769,8 @@
     "message": "Dove parlerai di solito?"
   },
   "onboarding_footer": {
-    "description": "Testo a piè di pagina nella pagina introduttiva al primo avvio. $tab$ è il nome della scheda delle impostazioni che contiene il link a questa guida.",
-    "message": "Puoi riaprire questa guida in qualsiasi momento dalle impostazioni di Say, Pi, nella scheda $tab$. La tua privacy è importante: l'audio viene acquisito solo durante una chiamata attiva.",
+    "description": "Testo a piè di pagina della pagina di onboarding al primo avvio, con informazioni su come tornare alla guida e su quando viene acquisito l'audio. $tab$ è il nome della scheda Impostazioni che contiene il link a questa guida.",
+    "message": "Puoi riaprire questa guida in qualsiasi momento dalle impostazioni di Say, Pi, nella scheda $tab$. La tua privacy è importante: acquisiamo l'audio durante una chiamata e durante il test del microfono qui sopra; l'audio resta nel browser.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Prova il microfono"
   },
   "onboarding_micTestDone": {
-    "description": "Stato mostrato dopo il completamento corretto del test del microfono nell'onboarding.",
-    "message": "Bene, il microfono funziona. 🎉"
+    "description": "Stato mostrato dopo che il test del microfono dell'onboarding ha rilevato input udibile.",
+    "message": "Bene: ti abbiamo sentito 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Stato mostrato mentre il test del microfono nell'onboarding misura l'input.",
     "message": "In ascolto — di' qualcosa. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Stato mostrato quando il test del microfono dell'onboarding è stato eseguito ma non ha rilevato alcun input udibile.",
+    "message": "Non abbiamo sentito nulla. Controlla che nel browser sia selezionato il microfono giusto e che non sia disattivato, poi riprova."
   },
   "onboarding_micTestRequesting": {
     "description": "Stato mostrato mentre il test del microfono nell'onboarding attende l'autorizzazione.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Etichetta del pulsante per interrompere il test del microfono nell'onboarding mentre è in corso.",
     "message": "Interrompi test"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Stato mostrato quando il test del microfono dell'onboarding è stato interrotto prima di rilevare input.",
+    "message": "Il test è stato interrotto prima che sentissimo qualcosa. Riavvialo e pronuncia alcune parole."
   },
   "onboarding_step1Body": {
     "description": "Testo del primo passaggio di onboarding, che spiega come fissare l’estensione e cosa apre il pulsante fissato nella barra degli strumenti.",
@@ -815,8 +823,8 @@
     "message": "Fissa Say, Pi alla barra degli strumenti"
   },
   "onboarding_step2Body": {
-    "description": "Testo del secondo passaggio di onboarding, che spiega dove si trova il pulsante di chiamata nella pagina e come avviare una conversazione vocale.",
-    "message": "Apri uno degli assistenti supportati qui sotto. Say, Pi aggiunge un pulsante di chiamata alla pagina della chat, accanto al campo in cui scrivi: toccalo e saluta. La prima volta chiederemo l’accesso al microfono: è previsto e ascoltiamo solo mentre partecipi attivamente a una chiamata."
+    "description": "Testo del secondo passaggio dell'onboarding che spiega dove si trova il pulsante per chiamare nella pagina e come avviare una conversazione vocale.",
+    "message": "Apri uno degli assistenti supportati qui sotto. Say, Pi aggiunge il proprio pulsante per chiamare alla pagina della chat, accanto al campo in cui scrivi: toccalo e saluta. La prima volta ti chiederemo l'accesso al microfono: è normale e, al di fuori del test qui sotto, ascoltiamo solo durante una chiamata."
   },
   "onboarding_step2Title": {
     "description": "Titolo del secondo passaggio di onboarding (iniziare una conversazione).",

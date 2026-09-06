@@ -769,8 +769,8 @@
     "message": "Var pratar du oftast?"
   },
   "onboarding_footer": {
-    "description": "Sidfotstext på introduktionssidan som visas första gången. $tab$ är namnet på inställningsfliken som innehåller länken tillbaka till den här guiden.",
-    "message": "Du kan öppna den här guiden igen när som helst i Say, Pis inställningar, på fliken $tab$. Din integritet är viktig – ljud spelas bara in under ett aktivt samtal.",
+    "description": "Sidfotstext på sidan som visas första gången, om hur man hittar tillbaka och när ljud spelas in. $tab$ är namnet på fliken Inställningar där länken tillbaka till guiden finns.",
+    "message": "Du kan öppna guiden igen när som helst från inställningarna för Say, Pi, på fliken $tab$. Din integritet är viktig — vi spelar in ljud under ett samtal och under mikrofontestet ovan, som stannar i din webbläsare.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Testa din mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Status som visas efter att mikrofontestet i introduktionen har slutförts.",
-    "message": "Bra — din mikrofon fungerar. 🎉"
+    "description": "Status som visas efter att mikrofontestet vid introduktionen registrerat hörbart ljud.",
+    "message": "Bra — vi hörde dig! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status som visas medan mikrofontestet i introduktionen mäter ljudnivån.",
     "message": "Lyssnar — säg något. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status som visas när mikrofontestet vid introduktionen kördes men inte registrerade något hörbart ljud.",
+    "message": "Vi hörde inget. Kontrollera att rätt mikrofon är vald i webbläsaren och att den inte är avstängd, och försök sedan igen."
   },
   "onboarding_micTestRequesting": {
     "description": "Status som visas medan mikrofontestet i introduktionen väntar på behörighet.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Knappetikett för att stoppa mikrofontestet i introduktionen medan det körs.",
     "message": "Stoppa testet"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status som visas när mikrofontestet vid introduktionen stoppades innan det registrerade något.",
+    "message": "Testet stoppades innan vi hörde något. Starta det igen och säg några ord."
   },
   "onboarding_step1Body": {
     "description": "Brödtext i det första introduktionssteget som förklarar hur tillägget nålas fast och vad den nålade verktygsikonen öppnar.",
@@ -815,8 +823,8 @@
     "message": "Fäst Say, Pi i verktygsfältet"
   },
   "onboarding_step2Body": {
-    "description": "Brödtext i det andra introduktionssteget som förklarar var samtalsknappen på sidan finns och hur du startar ett röstsamtal.",
-    "message": "Gå till en av assistenterna nedan. Say, Pi lägger till en egen samtalsknapp på chatsidan, intill där du skriver – tryck på den och säg hej. Första gången ber vi om mikrofonåtkomst – det är normalt, och vi lyssnar bara medan du aktivt deltar i ett samtal."
+    "description": "Brödtext för det andra introduktionssteget, som förklarar var samtalsknappen på sidan finns och hur man startar ett röstsamtal.",
+    "message": "Gå till en av assistenterna som stöds nedan. Say, Pi lägger till en egen samtalsknapp på chatsidan, bredvid där du skriver — tryck på den och säg hej. Vi ber om mikrofonåtkomst första gången — det är förväntat, och utanför testet nedan lyssnar vi bara när du deltar i ett samtal."
   },
   "onboarding_step2Title": {
     "description": "Rubrik för det andra introduktionssteget (starta en konversation).",

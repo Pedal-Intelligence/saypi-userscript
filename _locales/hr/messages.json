@@ -769,8 +769,8 @@
     "message": "Gdje ćeš najčešće razgovarati?"
   },
   "onboarding_footer": {
-    "description": "Tekst podnožja na stranici vodiča pri prvom pokretanju. $tab$ je naziv kartice Postavke koja sadrži poveznicu natrag na ovaj vodič.",
-    "message": "Ovaj vodič možete ponovno otvoriti u bilo kojem trenutku u postavkama usluge Say, Pi, na kartici $tab$. Vaša je privatnost važna — zvuk se snima samo tijekom aktivnog poziva.",
+    "description": "Tekst podnožja stranice uvoda pri prvom pokretanju koji objašnjava kako se vratiti na vodič i kada se snima zvuk. $tab$ je naziv kartice Postavke na kojoj se nalazi poveznica natrag na ovaj vodič.",
+    "message": "Ovaj vodič možete ponovno otvoriti u bilo kojem trenutku u postavkama aplikacije Say, Pi, na kartici $tab$. Vaša privatnost nam je važna — zvuk snimamo tijekom poziva i tijekom gornjeg testa mikrofona, a snimke ostaju u vašem pregledniku.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Testiraj mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Status prikazan nakon uspješnog završetka uvodnog testa mikrofona.",
-    "message": "Super — mikrofon radi. 🎉"
+    "description": "Status koji se prikazuje nakon što test mikrofona u uvodu zabilježi čujni ulaz.",
+    "message": "Odlično — čujemo vas! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status prikazan dok uvodni test mikrofona mjeri ulaz.",
     "message": "Slušam — reci nešto. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status koji se prikazuje kada test mikrofona u uvodu završi, ali ne zabilježi čujni ulaz.",
+    "message": "Nismo ništa čuli. Provjerite je li u pregledniku odabran pravi mikrofon i je li uključen, pa pokušajte ponovno."
   },
   "onboarding_micTestRequesting": {
     "description": "Status prikazan dok uvodni test mikrofona čeka dopuštenje.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Oznaka gumba za zaustavljanje uvodnog testa mikrofona dok je u tijeku.",
     "message": "Zaustavi test"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status koji se prikazuje kada se test mikrofona u uvodu zaustavi prije nego što išta zabilježi.",
+    "message": "Test je zaustavljen prije nego što smo išta čuli. Pokrenite ga ponovno i izgovorite nekoliko riječi."
   },
   "onboarding_step1Body": {
     "description": "Tekst prvog koraka uvođenja koji objašnjava kako prikvačiti proširenje i što otvara prikvačeni gumb na alatnoj traci.",
@@ -815,8 +823,8 @@
     "message": "Prikvačite Say, Pi na alatnu traku"
   },
   "onboarding_step2Body": {
-    "description": "Tekst drugog koraka uvođenja koji objašnjava gdje se nalazi gumb za poziv na stranici i kako započeti glasovni razgovor.",
-    "message": "Otvorite jednog od podržanih pomoćnika u nastavku. Say, Pi dodaje vlastiti gumb za poziv na stranicu razgovora, pokraj polja za unos — dodirnite ga i pozdravite. Prvi put zatražit ćemo pristup mikrofonu — to je očekivano i slušamo samo dok ste aktivno u pozivu."
+    "description": "Tekst drugog koraka uvoda koji objašnjava gdje se nalazi gumb za poziv na stranici i kako započeti glasovni razgovor.",
+    "message": "Otvorite jednog od podržanih pomoćnika u nastavku. Say, Pi dodaje vlastiti gumb za poziv na stranicu razgovora, pokraj polja za unos — dodirnite ga i pozdravite. Prvi ćemo vas put zatražiti pristup mikrofonu — to je očekivano, a izvan testa u nastavku slušamo samo dok ste u pozivu."
   },
   "onboarding_step2Title": {
     "description": "Naslov drugog onboarding koraka (započinjanje razgovora).",

@@ -769,8 +769,8 @@
     "message": "Gdzie najczęściej będziesz rozmawiać?"
   },
   "onboarding_footer": {
-    "description": "Tekst stopki na stronie wprowadzającej wyświetlanej przy pierwszym uruchomieniu. $tab$ to nazwa karty Ustawienia zawierającej odnośnik do tego przewodnika.",
-    "message": "Możesz w każdej chwili ponownie otworzyć ten przewodnik w ustawieniach Say, Pi, na karcie $tab$. Twoja prywatność ma znaczenie — dźwięk jest przechwytywany tylko podczas aktywnego połączenia.",
+    "description": "Stopka strony wprowadzenia przy pierwszym uruchomieniu, opisująca sposób powrotu do przewodnika i sytuacje, w których nagrywany jest dźwięk. $tab$ to nazwa karty ustawień zawierającej odsyłacz do tego przewodnika.",
+    "message": "Ten przewodnik możesz ponownie otworzyć w dowolnym momencie w ustawieniach Say, Pi, na karcie $tab$. Twoja prywatność jest ważna — nagrywamy dźwięk podczas połączenia oraz podczas powyższego testu mikrofonu, który odbywa się w przeglądarce.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Przetestuj mikrofon"
   },
   "onboarding_micTestDone": {
-    "description": "Status wyświetlany po pomyślnym zakończeniu testu mikrofonu podczas wdrożenia.",
-    "message": "Super, mikrofon działa 🎉"
+    "description": "Status wyświetlany po wykryciu słyszalnego dźwięku przez test mikrofonu podczas wprowadzenia.",
+    "message": "Dobrze — słyszymy Cię 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status wyświetlany, gdy test mikrofonu podczas wdrożenia mierzy sygnał wejściowy.",
     "message": "Słucham — powiedz coś 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status wyświetlany, gdy test mikrofonu podczas wprowadzenia nie wykrył słyszalnego dźwięku.",
+    "message": "Nic nie usłyszeliśmy. Sprawdź, czy w przeglądarce wybrano właściwy mikrofon i czy nie jest wyciszony, a następnie spróbuj ponownie."
   },
   "onboarding_micTestRequesting": {
     "description": "Status wyświetlany, gdy test mikrofonu podczas wdrożenia czeka na uprawnienie.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Etykieta przycisku zatrzymania testu mikrofonu podczas wdrożenia, gdy jest uruchomiony.",
     "message": "Zatrzymaj test"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status wyświetlany, gdy test mikrofonu podczas wprowadzenia zatrzymano, zanim cokolwiek wykrył.",
+    "message": "Test zatrzymano, zanim cokolwiek usłyszeliśmy. Uruchom go ponownie i powiedz kilka słów."
   },
   "onboarding_step1Body": {
     "description": "Treść pierwszego kroku wprowadzenia wyjaśniająca, jak przypiąć rozszerzenie i co otwiera przypięty przycisk na pasku narzędzi.",
@@ -816,7 +824,7 @@
   },
   "onboarding_step2Body": {
     "description": "Treść drugiego kroku wprowadzenia wyjaśniająca, gdzie znajduje się przycisk połączenia na stronie i jak rozpocząć rozmowę głosową.",
-    "message": "Przejdź do jednego z obsługiwanych asystentów poniżej. Say, Pi doda własny przycisk połączenia na stronie czatu, obok pola wpisywania tekstu — dotknij go i przywitaj się. Przy pierwszym użyciu poprosimy o dostęp do mikrofonu — to normalne, a słuchamy tylko podczas aktywnego połączenia."
+    "message": "Przejdź do jednego z obsługiwanych asystentów poniżej. Say, Pi doda własny przycisk połączenia na stronie czatu, obok pola wpisywania — dotknij go i przywitaj się. Przy pierwszym użyciu poprosimy o dostęp do mikrofonu — to normalne. Poza poniższym testem słuchamy tylko podczas połączenia."
   },
   "onboarding_step2Title": {
     "description": "Tytuł drugiego kroku onboardingu (rozpoczęcie rozmowy).",

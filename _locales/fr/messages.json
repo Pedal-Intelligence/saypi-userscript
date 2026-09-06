@@ -769,8 +769,8 @@
     "message": "Où parlerez-vous le plus souvent ?"
   },
   "onboarding_footer": {
-    "description": "Texte de bas de page de la page de prise en main au premier lancement. $tab$ est le nom de l’onglet des paramètres qui contient le lien vers ce guide.",
-    "message": "Vous pouvez rouvrir ce guide à tout moment dans les paramètres de Say, Pi, sous l’onglet $tab$. Votre vie privée compte : l’audio n’est capturé que pendant un appel actif.",
+    "description": "Texte de bas de page de l’écran d’intégration initiale, indiquant comment revenir au guide et quand l’audio est enregistré. $tab$ est le nom de l’onglet des réglages qui contient le lien vers ce guide.",
+    "message": "Vous pouvez rouvrir ce guide à tout moment depuis les réglages de Say, Pi, dans l’onglet $tab$. Le respect de votre vie privée compte — nous enregistrons l’audio pendant un appel et pendant le test du microphone ci-dessus, qui reste dans votre navigateur.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Tester votre micro"
   },
   "onboarding_micTestDone": {
-    "description": "Statut affiché après la fin réussie du test micro d’onboarding.",
-    "message": "Parfait, votre micro fonctionne 🎉"
+    "description": "État affiché après que le test du microphone de l’intégration a détecté un son audible.",
+    "message": "Parfait — nous vous avons entendu 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Statut affiché pendant que le test micro d’onboarding mesure l’entrée.",
     "message": "Écoute — dites quelque chose 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "État affiché lorsque le test du microphone de l’intégration n’a détecté aucun son audible.",
+    "message": "Nous n’avons rien entendu. Vérifiez que le bon microphone est sélectionné dans votre navigateur et qu’il n’est pas désactivé, puis réessayez."
   },
   "onboarding_micTestRequesting": {
     "description": "Statut affiché pendant que le test micro d’onboarding attend l’autorisation.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Libellé du bouton pour arrêter le test micro d’onboarding pendant qu’il est en cours.",
     "message": "Arrêter le test"
+  },
+  "onboarding_micTestStopped": {
+    "description": "État affiché lorsque le test du microphone de l’intégration a été arrêté avant de mesurer un son.",
+    "message": "Le test s’est arrêté avant que nous entendions quoi que ce soit. Relancez-le et dites quelques mots."
   },
   "onboarding_step1Body": {
     "description": "Corps de la première étape d’intégration expliquant comment épingler l’extension et ce qu’ouvre le bouton épinglé de la barre d’outils.",
@@ -815,8 +823,8 @@
     "message": "Épinglez Say, Pi à votre barre d’outils"
   },
   "onboarding_step2Body": {
-    "description": "Corps de la deuxième étape d’intégration expliquant où trouver le bouton d’appel dans la page et comment démarrer une conversation vocale.",
-    "message": "Ouvrez l’un des assistants compatibles ci-dessous. Say, Pi ajoute un bouton d’appel à la page de discussion, près du champ de saisie : appuyez dessus et dites bonjour. L’accès au micro vous sera demandé la première fois — c’est normal, et nous n’écoutons que pendant un appel actif."
+    "description": "Corps de la deuxième étape de l’intégration, expliquant où se trouve le bouton d’appel dans la page et comment démarrer une conversation vocale.",
+    "message": "Ouvrez l’un des assistants compatibles ci-dessous. Say, Pi ajoute son propre bouton d’appel à la page de discussion, à côté du champ de saisie — appuyez dessus et dites bonjour. Nous demanderons l’accès au microphone la première fois — c’est normal. En dehors du test ci-dessous, nous vous écoutons uniquement pendant un appel."
   },
   "onboarding_step2Title": {
     "description": "Titre de la deuxième étape d’onboarding (démarrer une conversation).",

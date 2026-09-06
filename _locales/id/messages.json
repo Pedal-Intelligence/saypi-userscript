@@ -769,8 +769,8 @@
     "message": "Biasanya Anda akan berbicara di mana?"
   },
   "onboarding_footer": {
-    "description": "Teks footer di halaman panduan saat pertama kali dijalankan. $tab$ adalah nama tab Setelan yang berisi tautan kembali ke panduan ini.",
-    "message": "Anda dapat membuka kembali panduan ini kapan saja dari setelan Say, Pi, di tab $tab$. Privasi Anda penting — audio hanya direkam selama panggilan aktif.",
+    "description": "Teks footer di halaman panduan saat pertama kali digunakan, yang menjelaskan cara kembali dan kapan audio direkam. $tab$ adalah nama tab Setelan yang berisi tautan kembali ke panduan ini.",
+    "message": "Anda dapat membuka kembali panduan ini kapan saja dari setelan Say, Pi, di tab $tab$. Privasi Anda penting — kami merekam audio selama panggilan dan saat pengujian mikrofon di atas. Rekaman tetap berada di browser Anda.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Uji mikrofon Anda"
   },
   "onboarding_micTestDone": {
-    "description": "Status yang ditampilkan setelah uji mikrofon onboarding selesai dengan sukses.",
-    "message": "Bagus — mikrofon Anda berfungsi. 🎉"
+    "description": "Status yang ditampilkan setelah pengujian mikrofon pada panduan awal mendeteksi input suara.",
+    "message": "Bagus — kami mendengar suara Anda 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status yang ditampilkan saat uji mikrofon onboarding mengukur input.",
     "message": "Mendengarkan — coba bicara sesuatu. 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status yang ditampilkan saat pengujian mikrofon pada panduan awal selesai, tetapi tidak mendeteksi input suara.",
+    "message": "Kami tidak mendengar apa pun. Periksa apakah mikrofon yang benar dipilih di browser dan tidak dibisukan, lalu coba lagi."
   },
   "onboarding_micTestRequesting": {
     "description": "Status yang ditampilkan saat uji mikrofon onboarding menunggu izin.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Label tombol untuk menghentikan uji mikrofon onboarding saat sedang berjalan.",
     "message": "Hentikan uji"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status yang ditampilkan saat pengujian mikrofon pada panduan awal dihentikan sebelum mendeteksi input suara.",
+    "message": "Pengujian dihentikan sebelum kami mendengar apa pun. Mulai lagi dan ucapkan beberapa kata."
   },
   "onboarding_step1Body": {
     "description": "Isi langkah onboarding pertama yang menjelaskan cara menyematkan ekstensi dan fungsi tombol toolbar yang disematkan.",
@@ -815,8 +823,8 @@
     "message": "Sematkan Say, Pi ke toolbar Anda"
   },
   "onboarding_step2Body": {
-    "description": "Isi langkah onboarding kedua yang menjelaskan lokasi tombol panggilan di halaman dan cara memulai percakapan suara.",
-    "message": "Buka salah satu asisten yang didukung di bawah. Say, Pi menambahkan tombol panggilan di halaman chat, di dekat tempat Anda mengetik — ketuk tombol itu dan ucapkan salam. Kami akan meminta akses mikrofon untuk pertama kalinya — ini normal, dan kami hanya mendengarkan saat Anda sedang melakukan panggilan."
+    "description": "Isi langkah kedua panduan awal yang menjelaskan lokasi tombol panggilan di halaman dan cara memulai percakapan suara.",
+    "message": "Buka salah satu asisten yang didukung di bawah. Say, Pi menambahkan tombol panggilan sendiri di halaman chat, di sebelah tempat Anda mengetik — ketuk tombol itu dan ucapkan salam. Kami akan meminta akses mikrofon pertama kali — itu normal. Di luar pengujian di bawah, kami hanya mendengarkan saat Anda sedang melakukan panggilan."
   },
   "onboarding_step2Title": {
     "description": "Judul langkah onboarding kedua (memulai percakapan).",

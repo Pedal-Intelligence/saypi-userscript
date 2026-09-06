@@ -769,8 +769,8 @@
     "message": "Hol szoktál általában beszélni?"
   },
   "onboarding_footer": {
-    "description": "Az első indításkor megjelenő útmutatóoldal láblécének szövege. A $tab$ annak a Beállítások lapnak a neve, amelyen az útmutatóra visszavezető hivatkozás található.",
-    "message": "Ezt az útmutatót bármikor újra megnyithatod a Say, Pi beállításaiban, a(z) $tab$ lapon. Fontos a magánszférád — hangot csak aktív hívás közben rögzítünk.",
+    "description": "Az első indításkor megjelenő bemutatóoldal láblécszövege, amely a visszatérési útvonalat és a hangrögzítés időpontját ismerteti. A $tab$ annak a Beállítások lapnak a neve, amelyen az útmutatóra visszavezető hivatkozás található.",
+    "message": "Ezt az útmutatót bármikor újra megnyithatod a Say, Pi beállításaiban, a $tab$ lapon. Fontos számunkra a magánszférád — hívás közben és a fenti mikrofonteszt alatt hangot rögzítünk, amely a böngésződben marad.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Mikrofon tesztelése"
   },
   "onboarding_micTestDone": {
-    "description": "Állapot, amely az onboarding mikrofonteszt sikeres befejezése után jelenik meg.",
-    "message": "Szuper — működik a mikrofonod. 🎉"
+    "description": "A bemutató mikrofontesztje által érzékelt hallható bemenet után megjelenő állapotüzenet.",
+    "message": "Szuper — hallottunk téged! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Állapot, amely akkor jelenik meg, amikor az onboarding mikrofonteszt méri a bemenetet.",
     "message": "Figyelek — mondj valamit! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Akkor megjelenő állapotüzenet, amikor a bemutató mikrofontesztje lefutott, de nem érzékelt hallható bemenetet.",
+    "message": "Nem hallottunk semmit. Ellenőrizd, hogy a megfelelő mikrofon van-e kiválasztva a böngésződben, és nincs-e némítva, majd próbáld újra."
   },
   "onboarding_micTestRequesting": {
     "description": "Állapot, amely akkor jelenik meg, amikor az onboarding mikrofonteszt engedélyre vár.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Gombfelirat az onboarding mikrofonteszt leállításához, miközben fut.",
     "message": "Teszt leállítása"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Akkor megjelenő állapotüzenet, amikor a bemutató mikrofontesztjét még azelőtt leállították, hogy bármit érzékelt volna.",
+    "message": "A teszt leállt, mielőtt bármit hallottunk volna. Indítsd újra, és mondj néhány szót."
   },
   "onboarding_step1Body": {
     "description": "Az első bevezető lépés szövege, amely bemutatja a bővítmény kitűzését és a kitűzött eszköztárgomb által megnyitható beállításokat.",
@@ -815,8 +823,8 @@
     "message": "Rögzítsd a Say, Pi-t az eszköztáradra"
   },
   "onboarding_step2Body": {
-    "description": "A második bevezető lépés szövege, amely bemutatja az oldalon található hívásgomb helyét és a hangbeszélgetés indítását.",
-    "message": "Nyisd meg az alábbi támogatott asszisztensek egyikét. A Say, Pi saját hívásgombot ad a csevegőoldalhoz, a gépelési mező mellé – koppints rá, és köszönj. Első alkalommal mikrofon-hozzáférést kérünk – ez várható, és csak akkor hallgatunk, amikor aktív hívásban vagy."
+    "description": "A második bemutatólépés szövege, amely leírja, hol található az oldalon a hívásgomb, és hogyan indítható hangbeszélgetés.",
+    "message": "Nyisd meg az alábbi támogatott asszisztensek egyikét. A Say, Pi saját hívásgombot ad a csevegőoldalhoz, közvetlenül a gépelési mező mellé — koppints rá, és köszönj. Első alkalommal mikrofonhozzáférést kérünk — ez normális. Az alábbi teszten kívül csak hívás közben hallgatunk."
   },
   "onboarding_step2Title": {
     "description": "A második bevezető lépés címe (beszélgetés indítása).",

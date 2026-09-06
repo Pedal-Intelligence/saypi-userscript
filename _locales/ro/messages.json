@@ -769,8 +769,8 @@
     "message": "Unde vorbești de obicei?"
   },
   "onboarding_footer": {
-    "description": "Textul din partea de jos a paginii de configurare inițială. $tab$ este numele filei Setări care conține linkul către acest ghid.",
-    "message": "Poți redeschide acest ghid oricând din setările Say, Pi, în fila $tab$. Confidențialitatea ta contează — sunetul este capturat doar în timpul unui apel activ.",
+    "description": "Textul de subsol al paginii de configurare inițială, despre revenirea la ghid și momentele în care este captat sunetul. $tab$ este numele filei Setări care conține linkul către acest ghid.",
+    "message": "Poți redeschide acest ghid oricând din setările Say, Pi, din fila $tab$. Confidențialitatea ta contează — captăm sunet în timpul unui apel și în timpul testului de microfon de mai sus, care rămâne în browserul tău.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Testează-ți microfonul"
   },
   "onboarding_micTestDone": {
-    "description": "Stare afișată după ce testul de microfon din onboarding se încheie cu succes.",
-    "message": "Super — microfonul tău funcționează! 🎉"
+    "description": "Starea afișată după ce testul de microfon al configurării inițiale a detectat sunet.",
+    "message": "Gata — te-am auzit! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Stare afișată în timp ce testul de microfon din onboarding măsoară semnalul de intrare.",
     "message": "Ascult — spune ceva! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Starea afișată când testul de microfon al configurării inițiale nu a detectat niciun sunet.",
+    "message": "Nu am auzit nimic. Verifică dacă în browser este selectat microfonul corect și dacă nu este dezactivat, apoi încearcă din nou."
   },
   "onboarding_micTestRequesting": {
     "description": "Stare afișată în timp ce testul de microfon din onboarding așteaptă permisiunea.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Etichetă de buton pentru a opri testul de microfon din onboarding în timp ce rulează.",
     "message": "Oprește testul"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Starea afișată când testul de microfon al configurării inițiale a fost oprit înainte să detecteze ceva.",
+    "message": "Testul s-a oprit înainte să auzim ceva. Pornește-l din nou și spune câteva cuvinte."
   },
   "onboarding_step1Body": {
     "description": "Textul primului pas de inițiere, care explică fixarea extensiei și ce deschide butonul fixat din bara de instrumente.",
@@ -815,8 +823,8 @@
     "message": "Fixează Say, Pi în bara de instrumente"
   },
   "onboarding_step2Body": {
-    "description": "Textul celui de-al doilea pas de inițiere, care explică unde se află butonul de apel din pagină și cum se începe o conversație vocală.",
-    "message": "Accesați unul dintre asistenții acceptați de mai jos. Say, Pi adaugă un buton de apel pe pagina conversației, lângă câmpul în care scrieți — apăsați-l și spuneți salut. Prima dată vă vom cere acces la microfon — este normal, iar noi ascultăm doar cât timp participați activ la un apel."
+    "description": "Textul celui de-al doilea pas al configurării inițiale, care explică unde se află butonul de apel din pagină și cum începi o conversație vocală.",
+    "message": "Accesează unul dintre asistenții acceptați de mai jos. Say, Pi adaugă propriul buton de apel pe pagina conversației, lângă câmpul în care scrii — apasă-l și spune salut. Prima dată îți vom cere acces la microfon — este normal, iar în afara testului de mai jos ascultăm doar cât timp ești într-un apel."
   },
   "onboarding_step2Title": {
     "description": "Titlul celui de-al doilea pas de onboarding (începerea unei conversații).",

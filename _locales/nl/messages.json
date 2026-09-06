@@ -769,8 +769,8 @@
     "message": "Waar praat je meestal?"
   },
   "onboarding_footer": {
-    "description": "Voettekst op de onboardingpagina bij het eerste gebruik. $tab$ is de naam van het tabblad Instellingen met de link naar deze handleiding.",
-    "message": "Je kunt deze handleiding altijd opnieuw openen via de instellingen van Say, Pi, op het tabblad $tab$. Je privacy is belangrijk — audio wordt alleen tijdens een actief gesprek opgenomen.",
+    "description": "Voettekst op de onboardingpagina bij het eerste gebruik, over hoe je teruggaat en wanneer audio wordt opgenomen. $tab$ is de naam van het tabblad Instellingen met de link naar deze handleiding.",
+    "message": "Je kunt deze handleiding altijd opnieuw openen via de instellingen van Say, Pi, op het tabblad $tab$. Je privacy is belangrijk — we nemen audio op tijdens een gesprek en tijdens de microfoontest hierboven; die opname blijft in je browser.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Je microfoon testen"
   },
   "onboarding_micTestDone": {
-    "description": "Status die wordt getoond nadat de onboarding-microfoontest succesvol is afgerond.",
-    "message": "Mooi — je microfoon werkt! 🎉"
+    "description": "Status die wordt getoond nadat de microfoontest tijdens de onboarding hoorbare invoer heeft gemeten.",
+    "message": "Mooi — we hoorden je! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status die wordt getoond terwijl de onboarding-microfoontest het invoerniveau meet.",
     "message": "Luisteren — zeg iets! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Status die wordt getoond wanneer de microfoontest tijdens de onboarding geen hoorbare invoer heeft gemeten.",
+    "message": "We hoorden niets. Controleer of in je browser de juiste microfoon is geselecteerd en niet is gedempt. Probeer het daarna opnieuw."
   },
   "onboarding_micTestRequesting": {
     "description": "Status die wordt getoond terwijl de onboarding-microfoontest wacht op toestemming.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Knoplabel om de onboarding-microfoontest te stoppen terwijl die actief is.",
     "message": "Test stoppen"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Status die wordt getoond wanneer de microfoontest tijdens de onboarding is gestopt voordat er iets werd gemeten.",
+    "message": "De test is gestopt voordat we iets hoorden. Start de test opnieuw en zeg een paar woorden."
   },
   "onboarding_step1Body": {
     "description": "Tekst van de eerste onboardingstap waarin wordt uitgelegd hoe je de extensie vastzet en wat de vastgezette werkbalkknop opent.",
@@ -815,8 +823,8 @@
     "message": "Zet Say, Pi vast op je werkbalk"
   },
   "onboarding_step2Body": {
-    "description": "Tekst van de tweede onboardingstap waarin wordt uitgelegd waar de belknop op de pagina staat en hoe je een spraakgesprek start.",
-    "message": "Ga naar een van de ondersteunde assistenten hieronder. Say, Pi voegt een eigen belknop toe aan de chatpagina, naast het invoerveld — tik erop en zeg hallo. De eerste keer vragen we om toegang tot je microfoon — dat is normaal. We luisteren alleen terwijl je actief in gesprek bent."
+    "description": "Tekst van de tweede onboardingstap die uitlegt waar de belknop op de pagina staat en hoe je een spraakgesprek start.",
+    "message": "Ga naar een van de ondersteunde assistenten hieronder. Say, Pi voegt een eigen belknop toe aan de chatpagina, naast het tekstveld — tik erop en zeg hallo. De eerste keer vragen we toegang tot je microfoon — dat is normaal. Buiten de test hieronder luisteren we alleen tijdens een gesprek."
   },
   "onboarding_step2Title": {
     "description": "Titel van de tweede onboardingstap (een gesprek starten).",

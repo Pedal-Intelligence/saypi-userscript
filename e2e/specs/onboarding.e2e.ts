@@ -31,12 +31,23 @@ test("welcome works offline with local artwork, quiet mode and the microphone te
   await expect.poll(() => serviceWorker.evaluate(async () => (await chrome.storage.local.get("quietMode")).quietMode)).toBe(false);
 
   const meter = page.locator("#onboarding-mic-meter");
+  const meterFill = page.locator("#onboarding-mic-meter-fill");
+  const micStatus = page.locator("#onboarding-mic-test-status");
   await expect(meter).toBeHidden();
   await page.getByRole("button", { name: "Test your microphone", exact: true }).click();
   await expect(meter).toBeVisible();
-  await expect(page.locator("#onboarding-mic-test-status")).toContainText("Listening");
+  await expect(micStatus).toContainText("Listening");
+  // Wait until the fake microphone has been heard past AUDIBLE_RMS (0.01 ->
+  // 2.5% of the meter) before stopping. That makes the outcome the measured
+  // one rather than a race with the first frame, and it is the only layer that
+  // can prove the threshold clears a real AnalyserNode reading real audio —
+  // the unit tests inject their own levels (#615).
+  await expect
+    .poll(() => meterFill.evaluate((el) => parseFloat((el as HTMLElement).style.width) || 0))
+    .toBeGreaterThanOrEqual(2.5);
   await page.getByRole("button", { name: "Stop test", exact: true }).click();
   await expect(meter).toBeHidden();
+  await expect(micStatus).toContainText("we heard you");
   await expect(page.getByRole("button", { name: "Test your microphone", exact: true })).toBeEnabled();
 
   await page.setViewportSize({ width: 360, height: 800 });

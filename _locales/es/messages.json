@@ -769,8 +769,8 @@
     "message": "¿Dónde sueles hablar?"
   },
   "onboarding_footer": {
-    "description": "Texto del pie de página de la guía de incorporación inicial. $tab$ es el nombre de la pestaña de ajustes que contiene el enlace a esta guía.",
-    "message": "Puedes volver a abrir esta guía en cualquier momento desde los ajustes de Say, Pi, en la pestaña $tab$. Tu privacidad importa: el audio solo se captura durante una llamada activa.",
+    "description": "Texto al pie de la página de bienvenida inicial que explica cómo volver a la guía y cuándo se captura audio. $tab$ es el nombre de la pestaña de ajustes que contiene el enlace a esta guía.",
+    "message": "Puedes volver a abrir esta guía en cualquier momento desde los ajustes de Say, Pi, en la pestaña $tab$. Tu privacidad importa: capturamos audio durante una llamada y durante la prueba del micrófono de arriba, que permanece en tu navegador.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Probar tu micrófono"
   },
   "onboarding_micTestDone": {
-    "description": "Estado que se muestra cuando la prueba de micrófono finaliza correctamente.",
-    "message": "Bien, tu micrófono funciona 🎉"
+    "description": "Estado que se muestra después de que la prueba del micrófono de bienvenida detecta una entrada audible.",
+    "message": "Bien: te hemos oído 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Estado que se muestra mientras la prueba de micrófono mide la entrada.",
     "message": "Escuchando: di algo 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Estado que se muestra cuando la prueba del micrófono de bienvenida se ejecutó, pero no detectó ninguna entrada audible.",
+    "message": "No hemos oído nada. Comprueba que has seleccionado el micrófono correcto en el navegador y que no está silenciado. Después, inténtalo de nuevo."
   },
   "onboarding_micTestRequesting": {
     "description": "Estado que se muestra mientras la prueba de micrófono espera el permiso.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Etiqueta del botón para detener la prueba de micrófono mientras se está ejecutando.",
     "message": "Detener prueba"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Estado que se muestra cuando la prueba del micrófono de bienvenida se detuvo antes de detectar algo.",
+    "message": "La prueba se detuvo antes de que oyéramos nada. Iníciala de nuevo y di unas palabras."
   },
   "onboarding_step1Body": {
     "description": "Texto del primer paso de bienvenida, que explica cómo fijar la extensión y qué abre el botón fijado en la barra de herramientas.",
@@ -815,8 +823,8 @@
     "message": "Fija Say, Pi en la barra de herramientas"
   },
   "onboarding_step2Body": {
-    "description": "Texto del segundo paso de bienvenida, que explica dónde está el botón de llamada en la página y cómo iniciar una conversación de voz.",
-    "message": "Ve a uno de los asistentes compatibles de abajo. Say, Pi añade su propio botón de llamada a la página del chat, junto al campo donde escribes: tócalo y saluda. La primera vez pediremos acceso al micrófono; es normal y solo escuchamos mientras participas activamente en una llamada."
+    "description": "Texto del segundo paso de bienvenida que explica dónde está el botón de llamada en la página y cómo iniciar una conversación de voz.",
+    "message": "Ve a uno de los asistentes compatibles de abajo. Say, Pi añade su propio botón de llamada a la página del chat, junto al campo donde escribes: tócalo y saluda. La primera vez te pediremos acceso al micrófono; es normal. Fuera de la prueba de abajo, solo escuchamos mientras estás en una llamada."
   },
   "onboarding_step2Title": {
     "description": "Título del segundo paso de incorporación (iniciar una conversación).",

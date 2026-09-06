@@ -8,13 +8,25 @@
  */
 import { rmsToMeterPercent } from "./audioLevel";
 
+/** What a finished run of the meter actually observed (#615). */
+export interface MicMeterResult {
+  /** How many level readings were taken. Zero means the run measured nothing. */
+  samples: number;
+  /** The loudest reading seen (RMS 0..1); 0 when nothing was measured. */
+  peakLevel: number;
+}
+
 export interface MicMeterDeps {
   /** Returns the current RMS level (0..1). */
   readLevel: () => number;
   /** Called each frame with the clamped meter percentage (0..100). */
   onLevel: (percent: number) => void;
-  /** Called once when the meter finishes (duration elapsed or stopped) for cleanup. */
-  onDone?: () => void;
+  /**
+   * Called once when the meter finishes (duration elapsed or stopped), with
+   * what the run measured — so a caller can tell "heard you" from "heard
+   * nothing" from "never got started" rather than assuming success.
+   */
+  onDone?: (result: MicMeterResult) => void;
   /** Schedules the next frame; returns a cancel handle. */
   schedule: (cb: () => void) => number;
   /** Cancels a scheduled frame. */
@@ -34,6 +46,8 @@ export function startMicMeter(deps: MicMeterDeps): MicMeterHandle {
   const startedAt = deps.now();
   let handle: number | null = null;
   let finished = false;
+  let samples = 0;
+  let peakLevel = 0;
 
   function finish(): void {
     if (finished) return;
@@ -42,12 +56,17 @@ export function startMicMeter(deps: MicMeterDeps): MicMeterHandle {
       deps.cancel(handle);
       handle = null;
     }
-    deps.onDone?.();
+    deps.onDone?.({ samples, peakLevel });
   }
 
   function frame(): void {
     if (finished) return;
-    deps.onLevel(rmsToMeterPercent(deps.readLevel()));
+    const level = deps.readLevel();
+    samples += 1;
+    // Written as a comparison rather than Math.max so a NaN reading is ignored
+    // instead of poisoning the peak.
+    if (level > peakLevel) peakLevel = level;
+    deps.onLevel(rmsToMeterPercent(level));
     if (deps.now() - startedAt >= durationMs) {
       finish();
       return;

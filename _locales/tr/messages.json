@@ -769,8 +769,8 @@
     "message": "Genelde nerede konuşacaksınız?"
   },
   "onboarding_footer": {
-    "description": "İlk kullanım tanıtım sayfasındaki alt bilgi metni. $tab$, bu kılavuza dönüş bağlantısını içeren Ayarlar sekmesinin adıdır.",
-    "message": "Bu kılavuzu istediğiniz zaman Say, Pi ayarlarında $tab$ sekmesinden yeniden açabilirsiniz. Gizliliğiniz önemlidir — ses yalnızca etkin bir arama sırasında alınır.",
+    "description": "İlk kullanım tanıtım sayfasının alt metni; geri dönüş yolunu ve sesin ne zaman kaydedildiğini açıklar. $tab$, bu kılavuza dönüş bağlantısının bulunduğu Ayarlar sekmesinin adıdır.",
+    "message": "Bu kılavuzu istediğiniz zaman Say, Pi ayarlarında $tab$ sekmesinden yeniden açabilirsiniz. Gizliliğiniz önemlidir — arama sırasında ve yukarıdaki mikrofon testi sırasında ses kaydederiz; kayıt tarayıcınızda kalır.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Mikrofonunuzu test edin"
   },
   "onboarding_micTestDone": {
-    "description": "Tanıtım mikrofon testi başarıyla tamamlandıktan sonra gösterilen durum.",
-    "message": "Güzel — mikrofonunuz çalışıyor 🎉"
+    "description": "Tanıtım mikrofonu testi duyulabilir bir giriş ölçtükten sonra gösterilen durum.",
+    "message": "Harika — sizi duyduk! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Tanıtım mikrofon testi girişi ölçerken gösterilen durum.",
     "message": "Dinliyor — bir şey söyleyin 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Tanıtım mikrofonu testi çalıştığında ancak duyulabilir bir giriş algılanmadığında gösterilen durum.",
+    "message": "Hiçbir şey duyamadık. Tarayıcınızda doğru mikrofonun seçili ve mikrofonun sessizde olmadığını kontrol edip tekrar deneyin."
   },
   "onboarding_micTestRequesting": {
     "description": "Tanıtım mikrofon testi izin beklerken gösterilen durum.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Tanıtım mikrofon testi çalışırken durdurmak için düğme etiketi.",
     "message": "Testi durdur"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Tanıtım mikrofonu testi herhangi bir giriş ölçemeden durdurulduğunda gösterilen durum.",
+    "message": "Hiçbir şey duyamadan test durduruldu. Yeniden başlatıp birkaç kelime söyleyin."
   },
   "onboarding_step1Body": {
     "description": "Uzantının nasıl sabitleneceğini ve sabitlenen araç çubuğu düğmesinin neyi açtığını açıklayan ilk başlangıç adımının metni.",
@@ -815,8 +823,8 @@
     "message": "Say, Pi'yi araç çubuğunuza sabitleyin"
   },
   "onboarding_step2Body": {
-    "description": "Sayfa içindeki arama düğmesinin nerede olduğunu ve sesli görüşmenin nasıl başlatılacağını açıklayan ikinci başlangıç adımının metni.",
-    "message": "Aşağıdaki desteklenen asistanlardan birine gidin. Say, Pi sohbet sayfasına, yazdığınız yerin yanına kendi arama düğmesini ekler — dokunun ve merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz — bu normaldir; yalnızca etkin olarak görüşme yaptığınız sırada dinleriz."
+    "description": "Sayfa içi arama düğmesinin nerede olduğunu ve sesli görüşmenin nasıl başlatılacağını açıklayan ikinci tanıtım adımının metni.",
+    "message": "Aşağıdaki desteklenen asistanlardan birine gidin. Say, Pi sohbet sayfasına, yazdığınız yerin yanına kendi arama düğmesini ekler — dokunup merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz; bu normaldir. Aşağıdaki test dışında yalnızca arama sırasında dinleriz."
   },
   "onboarding_step2Title": {
     "description": "İkinci tanıtım adımının başlığı (sohbete başlama).",

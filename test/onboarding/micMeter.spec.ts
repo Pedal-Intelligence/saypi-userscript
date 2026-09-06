@@ -118,3 +118,67 @@ describe("startMicMeter (#437)", () => {
     expect(onDone).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("what the meter actually measured (#615)", () => {
+  it("reports the loudest reading and how many it took", () => {
+    const h = harness();
+    const onDone = vi.fn();
+    const levels = [0.05, 0.3, 0.1];
+    let i = 0;
+    startMicMeter({
+      readLevel: () => levels[Math.min(i++, levels.length - 1)],
+      onLevel: () => {},
+      onDone,
+      schedule: h.schedule,
+      cancel: h.cancel,
+      now: h.now,
+      durationMs: 500,
+    });
+
+    h.tick();
+    h.tick();
+    h.tick();
+    h.advance(600);
+    h.tick();
+
+    expect(onDone).toHaveBeenCalledWith({ samples: 4, peakLevel: 0.3 });
+  });
+
+  it("reports nothing measured when stopped before the first frame", () => {
+    const h = harness();
+    const onDone = vi.fn();
+    const meter = startMicMeter({
+      readLevel: () => 0.4,
+      onLevel: () => {},
+      onDone,
+      schedule: h.schedule,
+      cancel: h.cancel,
+      now: h.now,
+      durationMs: 10000,
+    });
+
+    meter.stop();
+
+    expect(onDone).toHaveBeenCalledWith({ samples: 0, peakLevel: 0 });
+  });
+
+  it("keeps the peak at zero for a silent source", () => {
+    const h = harness();
+    const onDone = vi.fn();
+    const meter = startMicMeter({
+      readLevel: () => 0,
+      onLevel: () => {},
+      onDone,
+      schedule: h.schedule,
+      cancel: h.cancel,
+      now: h.now,
+      durationMs: 10000,
+    });
+
+    h.tick();
+    h.tick();
+    meter.stop();
+
+    expect(onDone).toHaveBeenCalledWith({ samples: 2, peakLevel: 0 });
+  });
+});

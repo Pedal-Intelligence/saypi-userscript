@@ -769,8 +769,8 @@
     "message": "Bạn thường nói chuyện ở đâu?"
   },
   "onboarding_footer": {
-    "description": "Văn bản chân trang trên trang hướng dẫn thiết lập lần đầu. $tab$ là tên của thẻ Cài đặt chứa liên kết quay lại hướng dẫn này.",
-    "message": "Bạn có thể mở lại hướng dẫn này bất cứ lúc nào trong phần cài đặt của Say, Pi, tại thẻ $tab$. Quyền riêng tư của bạn rất quan trọng — âm thanh chỉ được thu trong cuộc gọi đang hoạt động.",
+    "description": "Chân trang của trang hướng dẫn trong lần chạy đầu tiên, nêu cách quay lại và thời điểm âm thanh được thu. $tab$ là tên tab Cài đặt có liên kết quay lại hướng dẫn này.",
+    "message": "Bạn có thể mở lại hướng dẫn này bất cứ lúc nào từ phần cài đặt của Say, Pi, trong tab $tab$. Quyền riêng tư của bạn rất quan trọng — chúng tôi thu âm trong cuộc gọi và trong bài kiểm tra micrô ở trên; âm thanh vẫn ở trong trình duyệt của bạn.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Thử mic của bạn"
   },
   "onboarding_micTestDone": {
-    "description": "Trạng thái hiển thị sau khi bài kiểm tra mic trong phần giới thiệu hoàn tất thành công.",
-    "message": "Ổn rồi — mic của bạn hoạt động! 🎉"
+    "description": "Trạng thái hiển thị sau khi bài kiểm tra micrô trong hướng dẫn phát hiện âm thanh đầu vào.",
+    "message": "Tốt lắm — chúng tôi đã nghe thấy bạn 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Trạng thái hiển thị khi bài kiểm tra mic trong phần giới thiệu đang đo tín hiệu đầu vào.",
     "message": "Đang nghe — hãy nói gì đó! 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Trạng thái hiển thị khi bài kiểm tra micrô trong hướng dẫn đã chạy nhưng không phát hiện âm thanh đầu vào.",
+    "message": "Chúng tôi không nghe thấy gì. Kiểm tra xem bạn đã chọn đúng micrô trong trình duyệt và micrô không bị tắt tiếng, rồi thử lại."
   },
   "onboarding_micTestRequesting": {
     "description": "Trạng thái hiển thị khi bài kiểm tra mic trong phần giới thiệu đang chờ cấp quyền.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Nhãn nút để dừng bài kiểm tra mic trong phần giới thiệu khi đang chạy.",
     "message": "Dừng thử"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Trạng thái hiển thị khi bài kiểm tra micrô trong hướng dẫn bị dừng trước khi đo được âm thanh.",
+    "message": "Bài kiểm tra đã dừng trước khi chúng tôi nghe thấy gì. Hãy bắt đầu lại và nói vài từ."
   },
   "onboarding_step1Body": {
     "description": "Nội dung bước hướng dẫn đầu tiên, giải thích cách ghim tiện ích và nội dung nút trên thanh công cụ sau khi ghim.",
@@ -815,8 +823,8 @@
     "message": "Ghim Say, Pi vào thanh công cụ"
   },
   "onboarding_step2Body": {
-    "description": "Nội dung bước hướng dẫn thứ hai, giải thích vị trí nút gọi trên trang và cách bắt đầu cuộc trò chuyện bằng giọng nói.",
-    "message": "Mở một trong các trợ lý được hỗ trợ bên dưới. Say, Pi thêm nút gọi riêng vào trang trò chuyện, cạnh ô nhập — nhấn nút và nói xin chào. Lần đầu, chúng tôi sẽ yêu cầu quyền truy cập micrô — điều đó là bình thường, và chúng tôi chỉ lắng nghe khi bạn đang chủ động trong cuộc gọi."
+    "description": "Nội dung bước hướng dẫn thứ hai, giải thích vị trí của nút gọi trên trang và cách bắt đầu trò chuyện bằng giọng nói.",
+    "message": "Mở một trong các trợ lý được hỗ trợ bên dưới. Say, Pi sẽ thêm nút gọi ngay trên trang trò chuyện, cạnh ô nhập — nhấn vào đó và nói xin chào. Lần đầu, chúng tôi sẽ xin quyền dùng micrô — điều này là bình thường; ngoài bài kiểm tra bên dưới, chúng tôi chỉ lắng nghe khi bạn đang gọi."
   },
   "onboarding_step2Title": {
     "description": "Tiêu đề của bước hướng dẫn thứ hai (bắt đầu cuộc trò chuyện).",

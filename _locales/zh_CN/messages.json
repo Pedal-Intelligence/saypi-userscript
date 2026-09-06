@@ -769,8 +769,8 @@
     "message": "你通常会在哪里说话？"
   },
   "onboarding_footer": {
-    "description": "首次运行引导页面上的页脚文本。$tab$ 是包含返回本指南链接的设置标签页名称。",
-    "message": "你可以随时在 Say, Pi 的设置中的“$tab$”标签页重新打开本指南。你的隐私很重要——只有在通话进行期间才会采集音频。",
+    "description": "首次运行引导页面的页脚文字，说明返回路径以及何时会采集音频。$tab$ 是包含返回此指南链接的设置标签页名称。",
+    "message": "你随时可以在 Say, Pi 的设置中，从 $tab$ 标签页重新打开此指南。我们重视你的隐私——通话期间以及上方的麦克风测试期间会采集音频，音频会保留在浏览器中。",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "测试你的麦克风"
   },
   "onboarding_micTestDone": {
-    "description": "新手引导麦克风测试成功完成后显示的状态。",
-    "message": "很好，你的麦克风能用 🎉"
+    "description": "引导麦克风测试检测到可听输入后显示的状态。",
+    "message": "很好——我们听到你了！🎉"
   },
   "onboarding_micTestListening": {
     "description": "新手引导麦克风测试正在测量输入时显示的状态。",
     "message": "正在聆听——说点什么吧 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "引导麦克风测试运行后未检测到可听输入时显示的状态。",
+    "message": "我们没有听到任何声音。请检查浏览器中是否选择了正确的麦克风，以及麦克风是否静音，然后重试。"
   },
   "onboarding_micTestRequesting": {
     "description": "新手引导麦克风测试等待权限时显示的状态。",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "麦克风测试运行时用于停止的新手引导按钮标签。",
     "message": "停止测试"
+  },
+  "onboarding_micTestStopped": {
+    "description": "引导麦克风测试在检测到任何声音前停止时显示的状态。",
+    "message": "测试在我们听到声音前停止了。请重新开始并说几句话。"
   },
   "onboarding_step1Body": {
     "description": "第一个引导步骤的正文，说明如何固定扩展，以及固定后的工具栏按钮会打开什么。",
@@ -816,7 +824,7 @@
   },
   "onboarding_step2Body": {
     "description": "第二个引导步骤的正文，说明页面内通话按钮的位置以及如何开始语音对话。",
-    "message": "前往下方支持的任一助手。Say, Pi 会在聊天页面的输入框旁添加通话按钮——点击它并打声招呼。首次使用时，我们会请求麦克风权限，这是正常的；只有你主动通话时，我们才会收听。"
+    "message": "前往下方支持的任一助手。Say, Pi 会在聊天页面的输入框旁添加通话按钮——点按它并打个招呼。首次使用时，我们会请求麦克风权限——这是正常的；除下方测试外，我们只会在通话期间监听。"
   },
   "onboarding_step2Title": {
     "description": "第二步引导的标题（开始对话）。",

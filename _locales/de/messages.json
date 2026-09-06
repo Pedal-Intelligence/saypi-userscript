@@ -769,8 +769,8 @@
     "message": "Wo wirst du meist sprechen?"
   },
   "onboarding_footer": {
-    "description": "Fußzeile auf der Einführungsseite beim ersten Start. $tab$ ist der Name des Einstellungs-Tabs, der den Link zurück zu dieser Anleitung enthält.",
-    "message": "Du kannst diese Anleitung jederzeit in den Einstellungen von Say, Pi auf dem Tab $tab$ erneut öffnen. Deine Privatsphäre ist uns wichtig – Audio wird nur während eines aktiven Anrufs erfasst.",
+    "description": "Fußzeilentext der Onboarding-Seite beim ersten Start. Er erklärt, wie die Anleitung erneut geöffnet werden kann und wann Audio aufgenommen wird. $tab$ ist der Name der Registerkarte in den Einstellungen, die den Link zurück zu dieser Anleitung enthält.",
+    "message": "Du kannst diese Anleitung jederzeit in den Einstellungen von Say, Pi auf der Registerkarte $tab$ erneut öffnen. Deine Privatsphäre ist uns wichtig – wir nehmen während eines Anrufs und während des obigen Mikrofontests Audio auf. Die Aufnahme bleibt in deinem Browser.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -791,12 +791,16 @@
     "message": "Mikrofon testen"
   },
   "onboarding_micTestDone": {
-    "description": "Status, der angezeigt wird, nachdem der Mikrofontest im Onboarding erfolgreich abgeschlossen wurde.",
-    "message": "Super – dein Mikrofon funktioniert 🎉"
+    "description": "Statusmeldung, nachdem der Mikrofontest beim Onboarding eine hörbare Eingabe festgestellt hat.",
+    "message": "Prima – wir haben dich gehört! 🎉"
   },
   "onboarding_micTestListening": {
     "description": "Status, der angezeigt wird, während der Mikrofontest im Onboarding die Eingabe misst.",
     "message": "Höre zu – sag etwas 🎙️"
+  },
+  "onboarding_micTestNoInput": {
+    "description": "Statusmeldung, wenn der Mikrofontest beim Onboarding ausgeführt wurde, aber keine hörbaren Eingaben festgestellt hat.",
+    "message": "Wir haben nichts gehört. Prüfe, ob in deinem Browser das richtige Mikrofon ausgewählt und nicht stummgeschaltet ist, und versuche es erneut."
   },
   "onboarding_micTestRequesting": {
     "description": "Status, der angezeigt wird, während der Mikrofontest im Onboarding auf die Berechtigung wartet.",
@@ -805,6 +809,10 @@
   "onboarding_micTestStop": {
     "description": "Schaltflächenbeschriftung, um den laufenden Mikrofontest im Onboarding zu stoppen.",
     "message": "Test stoppen"
+  },
+  "onboarding_micTestStopped": {
+    "description": "Statusmeldung, wenn der Mikrofontest beim Onboarding beendet wurde, bevor er etwas messen konnte.",
+    "message": "Der Test wurde beendet, bevor wir etwas gehört haben. Starte ihn erneut und sag ein paar Worte."
   },
   "onboarding_step1Body": {
     "description": "Text des ersten Einführungsschritts: erklärt, wie die Erweiterung angeheftet wird und was die angeheftete Schaltfläche in der Symbolleiste öffnet.",
@@ -815,8 +823,8 @@
     "message": "Say, Pi an die Symbolleiste anheften"
   },
   "onboarding_step2Body": {
-    "description": "Text des zweiten Einführungsschritts: erklärt, wo sich die Anruftaste auf der Seite befindet und wie eine Sprachunterhaltung gestartet wird.",
-    "message": "Öffne einen der unterstützten Assistenten unten. Say, Pi fügt der Chatseite neben dem Eingabefeld eine eigene Anruftaste hinzu – tippe darauf und sag Hallo. Beim ersten Mal bitten wir um Mikrofonzugriff. Das ist normal: Wir hören nur zu, solange du aktiv telefonierst."
+    "description": "Text des zweiten Onboarding-Schritts, der erklärt, wo sich die Anruftaste auf der Seite befindet und wie eine Sprachunterhaltung gestartet wird.",
+    "message": "Öffne einen der unten unterstützten Assistenten. Say, Pi fügt der Chatseite neben dem Eingabefeld eine eigene Anruftaste hinzu – tippe darauf und sag Hallo. Beim ersten Mal fragen wir nach Mikrofonzugriff – das ist normal. Außerhalb des Tests unten hören wir nur zu, während du telefonierst."
   },
   "onboarding_step2Title": {
     "description": "Titel des zweiten Onboarding-Schritts (ein Gespräch starten).",

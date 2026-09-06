@@ -6,8 +6,12 @@
  * unit-testable; the default acquire does getUserMedia + AnalyserNode in a real
  * browser. Reuses the slice-3a mic-error classifier for a friendly denial path.
  */
-import { computeRms } from "./audioLevel";
-import { startMicMeter, type MicMeterHandle } from "./micMeter";
+import { computeRms, isAudible } from "./audioLevel";
+import {
+  startMicMeter,
+  type MicMeterHandle,
+  type MicMeterResult,
+} from "./micMeter";
 import {
   classifyMicError,
   describeMicRecovery,
@@ -63,6 +67,20 @@ async function defaultAcquire(): Promise<MicSource> {
   };
 }
 
+/**
+ * The status a finished run earned, from what it measured (#615).
+ *
+ * The test used to announce "your microphone works!" whenever the meter
+ * stopped — including a Stop pressed before the first sample, and a source
+ * that read zero throughout. It can only vouch for what it heard, so:
+ * nothing measured, nothing heard, and heard-you are three different answers.
+ */
+export function micTestOutcomeKey(result: MicMeterResult): string {
+  if (result.samples === 0) return "onboarding_micTestStopped";
+  if (!isAudible(result.peakLevel)) return "onboarding_micTestNoInput";
+  return "onboarding_micTestDone";
+}
+
 /** Attaches click handling to the mic-test button. Returns a disposer. */
 export function wireMicTest(els: MicTestElements, opts: MicTestWiringOptions): () => void {
   const acquire = opts.acquire ?? defaultAcquire;
@@ -115,7 +133,7 @@ export function wireMicTest(els: MicTestElements, opts: MicTestWiringOptions): (
       onLevel: (pct) => {
         els.fill.style.width = `${pct}%`;
       },
-      onDone: () => reset("onboarding_micTestDone"),
+      onDone: (result) => reset(micTestOutcomeKey(result)),
       schedule,
       cancel,
       now,
