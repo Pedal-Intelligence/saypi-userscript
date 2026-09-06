@@ -5,6 +5,41 @@ import { shortenTranscript } from "../TextModule";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
 
+/** True when the tab is in the background, where animation frames are suspended. */
+function isDocumentHidden(): boolean {
+  return typeof document !== "undefined" && document.hidden === true;
+}
+
+/**
+ * Schedules the next step of the prompt-typing animation (issue #101).
+ *
+ * Browsers do not run `requestAnimationFrame` callbacks in a hidden tab, so a
+ * chain of frames stalls the moment the user switches away — and with it the
+ * `saypi:autoSubmit` that ends the chain, stranding the transcript unsent in
+ * the composer. While a frame is pending we therefore also watch for the tab
+ * going hidden and hand over to `onHidden`, which finishes the turn in one step
+ * (nobody is watching an animation they cannot see).
+ *
+ * Whichever path fires first wins and the other becomes a no-op, so exactly one
+ * of them runs — including when the browser flushes the parked frame on the
+ * user's return. In a visible tab the frame always wins, leaving foreground
+ * behaviour unchanged.
+ */
+function scheduleTypingStep(onFrame: () => void, onHidden: () => void): void {
+  let settled = false;
+  const settle = (step: () => void) => {
+    if (settled) return;
+    settled = true;
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+    step();
+  };
+  function onVisibilityChange() {
+    if (isDocumentHidden()) settle(onHidden);
+  }
+  document.addEventListener("visibilitychange", onVisibilityChange);
+  requestAnimationFrame(() => settle(onFrame));
+}
+
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
     private assistantResponseCache = new WeakMap<HTMLElement, AssistantResponse>();
@@ -231,6 +266,15 @@ ${internalMonologueInstruction}
       }
       // Avoid reading from the live DOM each frame; build locally to prevent duplication
       let typedSoFar = "";
+      // The tab went into the background mid-animation: type the remainder in
+      // one step so the turn still completes (issue #101).
+      const finishWithoutAnimation = () => {
+        if (sentences.length > 0) {
+          sentences.length = 0;
+          this.setText(text);
+        }
+        if (submit) EventBus.emit("saypi:autoSubmit");
+      };
       const typeNextSentenceOrSubmit = () => {
         if (sentences.length === 0) {
           if (submit) EventBus.emit("saypi:autoSubmit");
@@ -240,9 +284,10 @@ ${internalMonologueInstruction}
         typedSoFar += nextSentence;
         // Replace all content with the accumulated text to avoid racing with external edits
         this.setText(typedSoFar);
-        requestAnimationFrame(typeNextSentenceOrSubmit);
+        scheduleTypingStep(typeNextSentenceOrSubmit, finishWithoutAnimation);
       };
-      if (sentences.length === 0) {
+      if (sentences.length === 0 || isDocumentHidden()) {
+        // Nothing to animate, or no one to see it: type and submit in one step.
         this.enterTextAndSubmit(text, submit);
       } else {
         typeNextSentenceOrSubmit();
