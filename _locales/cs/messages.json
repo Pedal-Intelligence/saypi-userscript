@@ -789,16 +789,16 @@
     "message": "Zastavit test"
   },
   "onboarding_step1Body": {
-    "description": "Text prvního kroku úvodního nastavení vysvětlující, jak rozšíření připnout.",
-    "message": "Klikněte na ikonu dílku 🧩 vpravo nahoře v prohlížeči a pak na připínáček 📌 vedle Say, Pi. Tlačítko hovoru tak budete mít na jedno kliknutí."
+    "description": "Text prvního kroku úvodního průvodce s vysvětlením, jak rozšíření připnout a co otevře připnuté tlačítko na panelu nástrojů.",
+    "message": "Klikněte na ikonu puzzle 🧩 v pravém horním rohu prohlížeče a potom na špendlík 📌 vedle Say, Pi. Nastavení Say, Pi — hlas, tichý režim a další — tak budete mít na jedno kliknutí."
   },
   "onboarding_step1Title": {
     "description": "Název prvního kroku úvodního nastavení (připnutí rozšíření).",
     "message": "Připněte si Say, Pi na panel nástrojů"
   },
   "onboarding_step2Body": {
-    "description": "Text druhého kroku úvodního nastavení vysvětlující, jak začít hlasovou konverzaci.",
-    "message": "Přejděte na jednoho z podporovaných asistentů níže, potom klepněte na tlačítko hovoru Say, Pi a pozdravte. Poprvé vás požádáme o přístup k mikrofonu — to je očekávané a posloucháme jen tehdy, když jste aktivně v hovoru."
+    "description": "Text druhého kroku úvodního průvodce s vysvětlením, kde najít tlačítko hovoru na stránce a jak zahájit hlasovou konverzaci.",
+    "message": "Přejděte k jednomu z podporovaných asistentů níže. Say, Pi přidá na stránku chatu vlastní tlačítko hovoru vedle pole pro psaní — klepněte na něj a pozdravte. Při prvním použití požádáme o přístup k mikrofonu. Je to očekávané a posloucháme jen během aktivního hovoru."
   },
   "onboarding_step2Title": {
     "description": "Název druhého kroku úvodního nastavení (zahájení konverzace).",

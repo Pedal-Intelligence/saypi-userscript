@@ -789,16 +789,16 @@
     "message": "Zaustavi test"
   },
   "onboarding_step1Body": {
-    "description": "Tekst prvog onboarding koraka koji objašnjava kako prikvačiti proširenje.",
-    "message": "Kliknite ikonu slagalice 🧩 u gornjem desnom kutu preglednika, zatim pribadaču 📌 pokraj Say, Pi. Tako je gumb za poziv uvijek na jedan klik."
+    "description": "Tekst prvog koraka uvođenja koji objašnjava kako prikvačiti proširenje i što otvara prikvačeni gumb na alatnoj traci.",
+    "message": "Kliknite ikonu slagalice 🧩 u gornjem desnom kutu preglednika, a zatim pribadaču 📌 pokraj Say, Pi. Tako su postavke za Say, Pi — glas, tihi način rada i ostalo — dostupne jednim klikom."
   },
   "onboarding_step1Title": {
     "description": "Naslov prvog onboarding koraka (prikvačivanje proširenja).",
     "message": "Prikvačite Say, Pi na alatnu traku"
   },
   "onboarding_step2Body": {
-    "description": "Tekst drugog onboarding koraka koji objašnjava kako započeti glasovni razgovor.",
-    "message": "Idite na jednog od podržanih asistenata u nastavku, zatim dodirnite gumb za poziv Say, Pi i pozdravite se. Prvi put ćemo zatražiti pristup mikrofonu — to je očekivano, a slušamo samo dok ste aktivno u pozivu."
+    "description": "Tekst drugog koraka uvođenja koji objašnjava gdje se nalazi gumb za poziv na stranici i kako započeti glasovni razgovor.",
+    "message": "Otvorite jednog od podržanih pomoćnika u nastavku. Say, Pi dodaje vlastiti gumb za poziv na stranicu razgovora, pokraj polja za unos — dodirnite ga i pozdravite. Prvi put zatražit ćemo pristup mikrofonu — to je očekivano i slušamo samo dok ste aktivno u pozivu."
   },
   "onboarding_step2Title": {
     "description": "Naslov drugog onboarding koraka (započinjanje razgovora).",

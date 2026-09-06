@@ -789,16 +789,16 @@
     "message": "Hentikan uji"
   },
   "onboarding_step1Body": {
-    "description": "Isi langkah onboarding pertama yang menjelaskan cara menyematkan ekstensi.",
-    "message": "Klik ikon kepingan puzzle 🧩 di kanan atas browser Anda, lalu ikon semat 📌 di sebelah Say, Pi. Itu membuat tombol panggilan selalu satu klik saja."
+    "description": "Isi langkah onboarding pertama yang menjelaskan cara menyematkan ekstensi dan fungsi tombol toolbar yang disematkan.",
+    "message": "Klik ikon potongan puzzle 🧩 di kanan atas browser, lalu ikon pin 📌 di sebelah Say, Pi. Dengan begitu, pengaturan Say, Pi — suara, mode senyap, dan lainnya — cukup satu klik."
   },
   "onboarding_step1Title": {
     "description": "Judul langkah onboarding pertama (menyematkan ekstensi).",
     "message": "Sematkan Say, Pi ke toolbar Anda"
   },
   "onboarding_step2Body": {
-    "description": "Isi langkah onboarding kedua yang menjelaskan cara memulai percakapan suara.",
-    "message": "Buka salah satu asisten yang didukung di bawah ini, lalu ketuk tombol panggilan Say, Pi dan sapa. Kami akan meminta akses mikrofon pada kali pertama — itu wajar, dan kami hanya mendengarkan saat Anda sedang dalam panggilan."
+    "description": "Isi langkah onboarding kedua yang menjelaskan lokasi tombol panggilan di halaman dan cara memulai percakapan suara.",
+    "message": "Buka salah satu asisten yang didukung di bawah. Say, Pi menambahkan tombol panggilan di halaman chat, di dekat tempat Anda mengetik — ketuk tombol itu dan ucapkan salam. Kami akan meminta akses mikrofon untuk pertama kalinya — ini normal, dan kami hanya mendengarkan saat Anda sedang melakukan panggilan."
   },
   "onboarding_step2Title": {
     "description": "Judul langkah onboarding kedua (memulai percakapan).",

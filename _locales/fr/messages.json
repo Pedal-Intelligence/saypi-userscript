@@ -789,16 +789,16 @@
     "message": "Arrêter le test"
   },
   "onboarding_step1Body": {
-    "description": "Texte de la première étape d’onboarding expliquant comment épingler l’extension.",
-    "message": "Cliquez sur l’icône pièce de puzzle 🧩 en haut à droite de votre navigateur, puis sur l’épingle 📌 à côté de Say, Pi. Le bouton d’appel reste ainsi à un clic."
+    "description": "Corps de la première étape d’intégration expliquant comment épingler l’extension et ce qu’ouvre le bouton épinglé de la barre d’outils.",
+    "message": "Cliquez sur l’icône puzzle 🧩 en haut à droite de votre navigateur, puis sur l’épingle 📌 à côté de Say, Pi. Vos réglages Say, Pi — voix, mode silencieux et autres — restent ainsi accessibles en un clic."
   },
   "onboarding_step1Title": {
     "description": "Titre de la première étape d’onboarding (épingler l’extension).",
     "message": "Épinglez Say, Pi à votre barre d’outils"
   },
   "onboarding_step2Body": {
-    "description": "Texte de la deuxième étape d’onboarding expliquant comment démarrer une conversation vocale.",
-    "message": "Allez sur l’un des assistants pris en charge ci-dessous, puis appuyez sur le bouton d’appel Say, Pi et dites bonjour. Nous demanderons l’accès au micro la première fois — c’est normal, et nous n’écoutons que pendant un appel actif."
+    "description": "Corps de la deuxième étape d’intégration expliquant où trouver le bouton d’appel dans la page et comment démarrer une conversation vocale.",
+    "message": "Ouvrez l’un des assistants compatibles ci-dessous. Say, Pi ajoute un bouton d’appel à la page de discussion, près du champ de saisie : appuyez dessus et dites bonjour. L’accès au micro vous sera demandé la première fois — c’est normal, et nous n’écoutons que pendant un appel actif."
   },
   "onboarding_step2Title": {
     "description": "Titre de la deuxième étape d’onboarding (démarrer une conversation).",

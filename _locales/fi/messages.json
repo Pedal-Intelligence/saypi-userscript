@@ -789,16 +789,16 @@
     "message": "Lopeta testi"
   },
   "onboarding_step1Body": {
-    "description": "Ensimmäisen opastusvaiheen leipäteksti, joka selittää, miten laajennus kiinnitetään.",
-    "message": "Napsauta selaimen oikeassa yläkulmassa olevaa palapeli 🧩 -kuvaketta ja sitten Say, Pi:n vieressä olevaa nastaa 📌. Näin puhelupainike on yhden klikkauksen päässä."
+    "description": "Ensimmäisen opastusvaiheen teksti, jossa kerrotaan, miten laajennus kiinnitetään ja mitä työkalupalkkiin kiinnitetty painike avaa.",
+    "message": "Napsauta selaimen oikean yläkulman palapelikuvaketta 🧩 ja sitten Say, Pi -laajennuksen vieressä olevaa kiinnityskuvaketta 📌. Näin Say, Pi -asetukset — ääni, hiljainen tila ja muut — ovat aina yhden napsautuksen päässä."
   },
   "onboarding_step1Title": {
     "description": "Ensimmäisen opastusvaiheen otsikko (laajennuksen kiinnittäminen).",
     "message": "Kiinnitä Say, Pi työkalupalkkiin"
   },
   "onboarding_step2Body": {
-    "description": "Toisen opastusvaiheen leipäteksti, joka selittää, miten äänikeskustelu aloitetaan.",
-    "message": "Siirry johonkin alla olevista tuetuista avustajista, napauta sitten Say, Pi:n puhelupainiketta ja tervehdi. Pyydämme ensimmäisellä kerralla mikrofonin käyttöoikeutta — se kuuluu asiaan, ja kuuntelemme vain silloin, kun olet aktiivisesti puhelussa."
+    "description": "Toisen opastusvaiheen teksti, jossa kerrotaan sivulla olevan puhelupainikkeen sijainti ja miten äänikeskustelu aloitetaan.",
+    "message": "Siirry johonkin alla tuetuista avustajista. Say, Pi lisää chat-sivulle oman puhelupainikkeen kirjoituskentän viereen — napauta sitä ja sano hei. Pyydämme mikrofonin käyttöoikeutta ensimmäisellä kerralla — se on odotettua, ja kuuntelemme vain aktiivisen puhelun aikana."
   },
   "onboarding_step2Title": {
     "description": "Toisen opastusvaiheen otsikko (keskustelun aloittaminen).",

@@ -789,16 +789,16 @@
     "message": "Parar teste"
   },
   "onboarding_step1Body": {
-    "description": "Texto do primeiro passo do onboarding explicando como fixar a extensão.",
-    "message": "Clique no ícone de peça de quebra-cabeça 🧩 no canto superior direito do navegador e depois no alfinete 📌 ao lado de Say, Pi. Assim, o botão de chamada fica a um clique."
+    "description": "Texto da primeira etapa de integração, explicando como fixar a extensão e o que o botão fixado na barra de ferramentas abre.",
+    "message": "Clique no ícone de quebra-cabeça 🧩 no canto superior direito do navegador e depois no alfinete 📌 ao lado de Say, Pi. Assim, as configurações do Say, Pi — voz, modo silencioso e o restante — ficam a um clique de distância."
   },
   "onboarding_step1Title": {
     "description": "Título do primeiro passo do onboarding (fixar a extensão).",
     "message": "Fixe o Say, Pi na barra de ferramentas"
   },
   "onboarding_step2Body": {
-    "description": "Texto do segundo passo do onboarding explicando como iniciar uma conversa por voz.",
-    "message": "Acesse um dos assistentes compatíveis abaixo, toque no botão de chamada do Say, Pi e diga oi. Na primeira vez, vamos pedir acesso ao microfone — isso é esperado, e só ouvimos enquanto você estiver em uma chamada."
+    "description": "Texto da segunda etapa de integração, explicando onde fica o botão de chamada na página e como iniciar uma conversa por voz.",
+    "message": "Acesse um dos assistentes compatíveis abaixo. Say, Pi adiciona um botão de chamada à página do chat, ao lado do campo de texto — toque nele e diga olá. Pediremos acesso ao microfone na primeira vez — isso é esperado, e só ouvimos enquanto você estiver em uma chamada."
   },
   "onboarding_step2Title": {
     "description": "Título do segundo passo do onboarding (iniciar uma conversa).",

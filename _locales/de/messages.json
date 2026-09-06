@@ -789,16 +789,16 @@
     "message": "Test stoppen"
   },
   "onboarding_step1Body": {
-    "description": "Text des ersten Onboarding-Schritts, der erklärt, wie man die Erweiterung anheftet.",
-    "message": "Klicke oben rechts im Browser auf das Puzzle-🧩-Symbol, dann auf die Pin-📌 neben Say, Pi. So ist die Anruf-Schaltfläche nur einen Klick entfernt."
+    "description": "Text des ersten Einführungsschritts: erklärt, wie die Erweiterung angeheftet wird und was die angeheftete Schaltfläche in der Symbolleiste öffnet.",
+    "message": "Klicke oben rechts im Browser auf das Puzzle-Symbol 🧩 und dann auf die Stecknadel 📌 neben Say, Pi. So sind deine Say, Pi-Einstellungen – Stimme, Ruhemodus und mehr – mit einem Klick erreichbar."
   },
   "onboarding_step1Title": {
     "description": "Titel des ersten Onboarding-Schritts (die Erweiterung anheften).",
     "message": "Say, Pi an die Symbolleiste anheften"
   },
   "onboarding_step2Body": {
-    "description": "Text des zweiten Onboarding-Schritts, der erklärt, wie man ein Sprachgespräch startet.",
-    "message": "Geh zu einem der unten unterstützten Assistenten, tippe dann auf die Say, Pi Anruf-Schaltfläche und sag hallo. Beim ersten Mal fragen wir nach Mikrofonzugriff — das ist normal, und wir hören nur zu, während du aktiv in einem Anruf bist."
+    "description": "Text des zweiten Einführungsschritts: erklärt, wo sich die Anruftaste auf der Seite befindet und wie eine Sprachunterhaltung gestartet wird.",
+    "message": "Öffne einen der unterstützten Assistenten unten. Say, Pi fügt der Chatseite neben dem Eingabefeld eine eigene Anruftaste hinzu – tippe darauf und sag Hallo. Beim ersten Mal bitten wir um Mikrofonzugriff. Das ist normal: Wir hören nur zu, solange du aktiv telefonierst."
   },
   "onboarding_step2Title": {
     "description": "Titel des zweiten Onboarding-Schritts (ein Gespräch starten).",

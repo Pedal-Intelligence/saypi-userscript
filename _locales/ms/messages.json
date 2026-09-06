@@ -789,16 +789,16 @@
     "message": "Hentikan ujian"
   },
   "onboarding_step1Body": {
-    "description": "Isi langkah onboarding pertama yang menerangkan cara untuk pin sambungan.",
-    "message": "Klik ikon kepingan puzzle 🧩 di bahagian kanan atas pelayar anda, kemudian pin 📌 di sebelah Say, Pi. Ini memastikan butang panggilan hanya satu klik sahaja."
+    "description": "Teks langkah pertama panduan permulaan yang menerangkan cara menyemat sambungan dan perkara yang dibuka oleh butang bar alat yang disemat.",
+    "message": "Klik ikon teka-teki 🧩 di bahagian kanan atas pelayar anda, kemudian ikon pin 📌 di sebelah Say, Pi. Ini memastikan tetapan Say, Pi anda — suara, mod senyap dan lain-lain — sentiasa boleh dicapai dengan satu klik."
   },
   "onboarding_step1Title": {
     "description": "Tajuk untuk langkah onboarding pertama (pin sambungan).",
     "message": "Pin Say, Pi pada bar alat anda"
   },
   "onboarding_step2Body": {
-    "description": "Isi langkah onboarding kedua yang menerangkan cara untuk memulakan perbualan suara.",
-    "message": "Pergi ke salah satu pembantu yang disokong di bawah, kemudian ketik butang panggilan Say, Pi dan ucapkan hai. Kami akan meminta akses mikrofon kali pertama — itu memang dijangka, dan kami hanya mendengar apabila anda sedang aktif dalam panggilan."
+    "description": "Teks langkah kedua panduan permulaan yang menerangkan lokasi butang panggilan pada halaman dan cara memulakan perbualan suara.",
+    "message": "Buka salah satu pembantu yang disokong di bawah. Say, Pi menambah butang panggilan pada halaman sembang, di sebelah tempat anda menaip — ketik dan ucapkan helo. Kami akan meminta akses mikrofon pada kali pertama — itu perkara biasa, dan kami hanya mendengar semasa anda sedang membuat panggilan."
   },
   "onboarding_step2Title": {
     "description": "Tajuk untuk langkah onboarding kedua (mulakan perbualan).",

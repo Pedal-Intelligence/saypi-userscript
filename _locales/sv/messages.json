@@ -789,16 +789,16 @@
     "message": "Stoppa testet"
   },
   "onboarding_step1Body": {
-    "description": "Brödtext för det första introduktionssteget som förklarar hur man fäster tillägget.",
-    "message": "Klicka på pusselbiten 🧩 uppe till höger i webbläsaren och sedan på nålen 📌 bredvid Say, Pi. Då är samtalsknappen bara ett klick bort."
+    "description": "Brödtext i det första introduktionssteget som förklarar hur tillägget nålas fast och vad den nålade verktygsikonen öppnar.",
+    "message": "Klicka på pusselbiten 🧩 uppe till höger i webbläsaren och sedan på nålen 📌 bredvid Say, Pi. Då har du Say, Pi-inställningarna – röst, tyst läge och resten – ett klick bort."
   },
   "onboarding_step1Title": {
     "description": "Rubrik för det första introduktionssteget (fäst tillägget).",
     "message": "Fäst Say, Pi i verktygsfältet"
   },
   "onboarding_step2Body": {
-    "description": "Brödtext för det andra introduktionssteget som förklarar hur man startar en röstkonversation.",
-    "message": "Gå till någon av assistenterna som stöds nedan, tryck på Say, Pi-samtalsknappen och säg hej. Vi ber om åtkomst till mikrofonen första gången, det är som det ska, och vi lyssnar bara när du är aktivt med i ett samtal."
+    "description": "Brödtext i det andra introduktionssteget som förklarar var samtalsknappen på sidan finns och hur du startar ett röstsamtal.",
+    "message": "Gå till en av assistenterna nedan. Say, Pi lägger till en egen samtalsknapp på chatsidan, intill där du skriver – tryck på den och säg hej. Första gången ber vi om mikrofonåtkomst – det är normalt, och vi lyssnar bara medan du aktivt deltar i ett samtal."
   },
   "onboarding_step2Title": {
     "description": "Rubrik för det andra introduktionssteget (starta en konversation).",

@@ -789,16 +789,16 @@
     "message": "Zatrzymaj test"
   },
   "onboarding_step1Body": {
-    "description": "Treść pierwszego kroku onboardingu wyjaśniająca, jak przypiąć rozszerzenie.",
-    "message": "Kliknij ikonę puzzla 🧩 w prawym górnym rogu przeglądarki, a potem pinezkę 📌 obok Say, Pi. Dzięki temu przycisk rozmowy będzie o jedno kliknięcie."
+    "description": "Treść pierwszego kroku wprowadzenia wyjaśniająca, jak przypiąć rozszerzenie i co otwiera przypięty przycisk na pasku narzędzi.",
+    "message": "Kliknij ikonę puzzla 🧩 w prawym górnym rogu przeglądarki, a następnie pinezkę 📌 obok Say, Pi. Dzięki temu ustawienia Say, Pi — głos, tryb cichy i reszta — będą dostępne za jednym kliknięciem."
   },
   "onboarding_step1Title": {
     "description": "Tytuł pierwszego kroku onboardingu (przypięcie rozszerzenia).",
     "message": "Przypnij Say, Pi do paska narzędzi"
   },
   "onboarding_step2Body": {
-    "description": "Treść drugiego kroku onboardingu wyjaśniająca, jak rozpocząć rozmowę głosową.",
-    "message": "Wejdź do jednego z obsługiwanych asystentów poniżej, a potem kliknij przycisk połączenia Say, Pi i przywitaj się. Przy pierwszym razie poprosimy o dostęp do mikrofonu — to normalne, a słuchamy tylko wtedy, gdy jesteś aktywnie w połączeniu."
+    "description": "Treść drugiego kroku wprowadzenia wyjaśniająca, gdzie znajduje się przycisk połączenia na stronie i jak rozpocząć rozmowę głosową.",
+    "message": "Przejdź do jednego z obsługiwanych asystentów poniżej. Say, Pi doda własny przycisk połączenia na stronie czatu, obok pola wpisywania tekstu — dotknij go i przywitaj się. Przy pierwszym użyciu poprosimy o dostęp do mikrofonu — to normalne, a słuchamy tylko podczas aktywnego połączenia."
   },
   "onboarding_step2Title": {
     "description": "Tytuł drugiego kroku onboardingu (rozpoczęcie rozmowy).",

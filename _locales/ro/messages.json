@@ -789,16 +789,16 @@
     "message": "Oprește testul"
   },
   "onboarding_step1Body": {
-    "description": "Conținutul primului pas de onboarding care explică cum să fixezi extensia.",
-    "message": "Dă clic pe pictograma piesă de puzzle 🧩 din dreapta sus a browserului, apoi pe acul 📌 de lângă Say, Pi. Așa butonul de apel rămâne la un clic distanță."
+    "description": "Textul primului pas de inițiere, care explică fixarea extensiei și ce deschide butonul fixat din bara de instrumente.",
+    "message": "Faceți clic pe pictograma puzzle 🧩 din dreapta sus a browserului, apoi pe acul 📌 de lângă Say, Pi. Astfel, setările Say, Pi — vocea, modul silențios și restul — rămân la un clic distanță."
   },
   "onboarding_step1Title": {
     "description": "Titlul primului pas de onboarding (fixarea extensiei).",
     "message": "Fixează Say, Pi în bara de instrumente"
   },
   "onboarding_step2Body": {
-    "description": "Conținutul celui de-al doilea pas de onboarding care explică cum să pornești o conversație vocală.",
-    "message": "Mergi la unul dintre asistenții acceptați de mai jos, apoi apasă butonul de apel Say, Pi și spune salut. Îți vom cere acces la microfon prima dată — e normal, iar noi ascultăm doar cât timp ești într-un apel."
+    "description": "Textul celui de-al doilea pas de inițiere, care explică unde se află butonul de apel din pagină și cum se începe o conversație vocală.",
+    "message": "Accesați unul dintre asistenții acceptați de mai jos. Say, Pi adaugă un buton de apel pe pagina conversației, lângă câmpul în care scrieți — apăsați-l și spuneți salut. Prima dată vă vom cere acces la microfon — este normal, iar noi ascultăm doar cât timp participați activ la un apel."
   },
   "onboarding_step2Title": {
     "description": "Titlul celui de-al doilea pas de onboarding (începerea unei conversații).",

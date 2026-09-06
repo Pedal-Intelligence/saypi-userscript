@@ -789,16 +789,16 @@
     "message": "Test stoppen"
   },
   "onboarding_step1Body": {
-    "description": "Tekst van de eerste onboardingstap die uitlegt hoe je de extensie vastzet.",
-    "message": "Klik op het puzzelstukje 🧩-pictogram rechtsboven in je browser, en daarna op de punaise 📌 naast Say, Pi. Zo staat de belknop altijd op één klik afstand."
+    "description": "Tekst van de eerste onboardingstap waarin wordt uitgelegd hoe je de extensie vastzet en wat de vastgezette werkbalkknop opent.",
+    "message": "Klik rechtsboven in je browser op het puzzelstukje 🧩 en daarna op de punaise 📌 naast Say, Pi. Zo heb je je Say, Pi-instellingen — stem, stille modus en de rest — met één klik bij de hand."
   },
   "onboarding_step1Title": {
     "description": "Titel van de eerste onboardingstap (de extensie vastzetten).",
     "message": "Zet Say, Pi vast op je werkbalk"
   },
   "onboarding_step2Body": {
-    "description": "Tekst van de tweede onboardingstap die uitlegt hoe je een spraakgesprek start.",
-    "message": "Ga naar een van de ondersteunde assistants hieronder, tik op de Say, Pi-belknop en zeg hallo. De eerste keer vragen we om microfoontoegang — dat is normaal, en we luisteren alleen terwijl je actief in een gesprek zit."
+    "description": "Tekst van de tweede onboardingstap waarin wordt uitgelegd waar de belknop op de pagina staat en hoe je een spraakgesprek start.",
+    "message": "Ga naar een van de ondersteunde assistenten hieronder. Say, Pi voegt een eigen belknop toe aan de chatpagina, naast het invoerveld — tik erop en zeg hallo. De eerste keer vragen we om toegang tot je microfoon — dat is normaal. We luisteren alleen terwijl je actief in gesprek bent."
   },
   "onboarding_step2Title": {
     "description": "Titel van de tweede onboardingstap (een gesprek starten).",

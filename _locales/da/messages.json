@@ -789,16 +789,16 @@
     "message": "Stop test"
   },
   "onboarding_step1Body": {
-    "description": "Brødtekst til første onboarding-trin, der forklarer hvordan du fastgør udvidelsen.",
-    "message": "Klik på puslespilsikonet 🧩 øverst til højre i din browser, og klik derefter på nålen 📌 ved siden af Say, Pi. Så er opkaldsknappen kun ét klik væk."
+    "description": "Brødtekst til første onboarding-trin, der forklarer, hvordan udvidelsen fastgøres, og hvad den fastgjorte knap på værktøjslinjen åbner.",
+    "message": "Klik på puslespilsbrikken 🧩 øverst til højre i browseren og derefter på nålen 📌 ved siden af Say, Pi. Så er dine Say, Pi-indstillinger — stemme, lydløs tilstand og resten — altid ét klik væk."
   },
   "onboarding_step1Title": {
     "description": "Titel på første onboarding-trin (fastgør udvidelsen).",
     "message": "Fastgør Say, Pi til værktøjslinjen"
   },
   "onboarding_step2Body": {
-    "description": "Brødtekst til andet onboarding-trin, der forklarer hvordan man starter en stemmesamtale.",
-    "message": "Gå til en af de understøttede assistenter nedenfor, tryk på Say, Pi-opkaldsknappen, og sig hej. Første gang beder vi om adgang til mikrofonen, og det er forventet, og vi lytter kun, mens du aktivt er i et opkald."
+    "description": "Brødtekst til andet onboarding-trin, der forklarer, hvor opkaldsknappen på siden findes, og hvordan man starter en talesamtale.",
+    "message": "Gå til en af de understøttede assistenter nedenfor. Say, Pi føjer sin egen opkaldsknap til chatsiden ved siden af tekstfeltet — tryk på den, og sig hej. Første gang beder vi om adgang til mikrofonen — det er forventet, og vi lytter kun, mens du aktivt er i et opkald."
   },
   "onboarding_step2Title": {
     "description": "Titel på andet onboarding-trin (start en samtale).",

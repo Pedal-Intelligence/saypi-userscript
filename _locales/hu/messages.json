@@ -789,16 +789,16 @@
     "message": "Teszt leállítása"
   },
   "onboarding_step1Body": {
-    "description": "Az első bevezető lépés szövege, amely elmagyarázza, hogyan kell kitűzni a bővítményt.",
-    "message": "Kattints a böngésző jobb felső sarkában a kirakós 🧩 ikonra, majd a Say, Pi melletti kitűzés 📌 ikonra. Így a hívásgomb egy kattintásra lesz."
+    "description": "Az első bevezető lépés szövege, amely bemutatja a bővítmény kitűzését és a kitűzött eszköztárgomb által megnyitható beállításokat.",
+    "message": "Kattints a böngésző jobb felső sarkában lévő puzzle-darab 🧩 ikonra, majd a Say, Pi melletti kitűzőre 📌. Így a Say, Pi beállításai – a hang, a csendes mód és a többi – egy kattintásra lesznek."
   },
   "onboarding_step1Title": {
     "description": "Az első bevezető lépés címe (a bővítmény kitűzése).",
     "message": "Rögzítsd a Say, Pi-t az eszköztáradra"
   },
   "onboarding_step2Body": {
-    "description": "A második bevezető lépés szövege, amely elmagyarázza, hogyan kell hangos beszélgetést indítani.",
-    "message": "Menj az alábbi támogatott asszisztensek egyikéhez, majd nyomd meg a Say, Pi hívásgombját, és köszönj. Az első alkalommal mikrofonhozzáférést kérünk, ez rendben van, és csak akkor figyelünk, amikor aktív hívásban vagy."
+    "description": "A második bevezető lépés szövege, amely bemutatja az oldalon található hívásgomb helyét és a hangbeszélgetés indítását.",
+    "message": "Nyisd meg az alábbi támogatott asszisztensek egyikét. A Say, Pi saját hívásgombot ad a csevegőoldalhoz, a gépelési mező mellé – koppints rá, és köszönj. Első alkalommal mikrofon-hozzáférést kérünk – ez várható, és csak akkor hallgatunk, amikor aktív hívásban vagy."
   },
   "onboarding_step2Title": {
     "description": "A második bevezető lépés címe (beszélgetés indítása).",

@@ -789,16 +789,16 @@
     "message": "Testi durdur"
   },
   "onboarding_step1Body": {
-    "description": "Uzantının nasıl sabitleneceğini açıklayan ilk tanıtım adımının metni.",
-    "message": "Tarayıcınızın sağ üstündeki yapboz parçası 🧩 simgesine, sonra Say, Pi'nin yanındaki sabitleme 📌 simgesine tıklayın. Böylece arama düğmesi tek tık uzağınızda kalır."
+    "description": "Uzantının nasıl sabitleneceğini ve sabitlenen araç çubuğu düğmesinin neyi açtığını açıklayan ilk başlangıç adımının metni.",
+    "message": "Tarayıcınızın sağ üstündeki yapboz 🧩 simgesine, ardından Say, Pi'nin yanındaki raptiyeye 📌 tıklayın. Böylece Say, Pi ayarlarınız — ses, sessiz mod ve diğerleri — tek tık uzağınızda olur."
   },
   "onboarding_step1Title": {
     "description": "İlk tanıtım adımının başlığı (uzantıyı sabitleme).",
     "message": "Say, Pi'yi araç çubuğunuza sabitleyin"
   },
   "onboarding_step2Body": {
-    "description": "Sesli konuşmanın nasıl başlatılacağını açıklayan ikinci tanıtım adımının metni.",
-    "message": "Aşağıdaki desteklenen asistanlardan birine gidin, ardından Say, Pi arama düğmesine dokunup merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz; bu normal, ve yalnızca aktif bir aramadayken dinleriz."
+    "description": "Sayfa içindeki arama düğmesinin nerede olduğunu ve sesli görüşmenin nasıl başlatılacağını açıklayan ikinci başlangıç adımının metni.",
+    "message": "Aşağıdaki desteklenen asistanlardan birine gidin. Say, Pi sohbet sayfasına, yazdığınız yerin yanına kendi arama düğmesini ekler — dokunun ve merhaba deyin. İlk seferde mikrofon erişimi isteyeceğiz — bu normaldir; yalnızca etkin olarak görüşme yaptığınız sırada dinleriz."
   },
   "onboarding_step2Title": {
     "description": "İkinci tanıtım adımının başlığı (sohbete başlama).",

@@ -789,16 +789,16 @@
     "message": "Detener prueba"
   },
   "onboarding_step1Body": {
-    "description": "Texto del primer paso de incorporación que explica cómo fijar la extensión.",
-    "message": "Haz clic en el icono de pieza de rompecabezas 🧩 en la esquina superior derecha del navegador y luego en la chincheta 📌 junto a Say, Pi. Así el botón de llamada queda a un clic."
+    "description": "Texto del primer paso de bienvenida, que explica cómo fijar la extensión y qué abre el botón fijado en la barra de herramientas.",
+    "message": "Haz clic en el icono de pieza de puzle 🧩 en la esquina superior derecha del navegador y, después, en el pin 📌 junto a Say, Pi. Así tendrás los ajustes de Say, Pi —voz, modo silencioso y demás— a un clic."
   },
   "onboarding_step1Title": {
     "description": "Título del primer paso de incorporación (fijar la extensión).",
     "message": "Fija Say, Pi en la barra de herramientas"
   },
   "onboarding_step2Body": {
-    "description": "Texto del segundo paso de incorporación que explica cómo iniciar una conversación por voz.",
-    "message": "Ve a uno de los asistentes compatibles de abajo, luego toca el botón de llamada de Say, Pi y di hola. Te pediremos acceso al micrófono la primera vez, es normal, y solo escuchamos mientras estés en una llamada."
+    "description": "Texto del segundo paso de bienvenida, que explica dónde está el botón de llamada en la página y cómo iniciar una conversación de voz.",
+    "message": "Ve a uno de los asistentes compatibles de abajo. Say, Pi añade su propio botón de llamada a la página del chat, junto al campo donde escribes: tócalo y saluda. La primera vez pediremos acceso al micrófono; es normal y solo escuchamos mientras participas activamente en una llamada."
   },
   "onboarding_step2Title": {
     "description": "Título del segundo paso de incorporación (iniciar una conversación).",

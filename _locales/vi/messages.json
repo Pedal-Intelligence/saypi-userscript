@@ -789,16 +789,16 @@
     "message": "Dừng thử"
   },
   "onboarding_step1Body": {
-    "description": "Nội dung của bước hướng dẫn đầu tiên giải thích cách ghim tiện ích.",
-    "message": "Nhấn biểu tượng mảnh ghép 🧩 ở góc trên bên phải trình duyệt, rồi nhấn ghim 📌 cạnh Say, Pi. Như vậy nút gọi chỉ cách một lần nhấn."
+    "description": "Nội dung bước hướng dẫn đầu tiên, giải thích cách ghim tiện ích và nội dung nút trên thanh công cụ sau khi ghim.",
+    "message": "Nhấn biểu tượng mảnh ghép 🧩 ở góc trên bên phải trình duyệt, rồi nhấn ghim 📌 bên cạnh Say, Pi. Thao tác này giúp bạn mở cài đặt Say, Pi — giọng nói, chế độ im lặng và các mục khác — chỉ bằng một lần nhấn."
   },
   "onboarding_step1Title": {
     "description": "Tiêu đề của bước hướng dẫn đầu tiên (ghim tiện ích).",
     "message": "Ghim Say, Pi vào thanh công cụ"
   },
   "onboarding_step2Body": {
-    "description": "Nội dung của bước hướng dẫn thứ hai giải thích cách bắt đầu cuộc trò chuyện bằng giọng nói.",
-    "message": "Vào một trong các trợ lý được hỗ trợ bên dưới, rồi nhấn nút gọi Say, Pi và chào một câu. Lần đầu chúng tôi sẽ xin quyền micrô — điều đó là bình thường, và chúng tôi chỉ nghe khi bạn đang trong cuộc gọi."
+    "description": "Nội dung bước hướng dẫn thứ hai, giải thích vị trí nút gọi trên trang và cách bắt đầu cuộc trò chuyện bằng giọng nói.",
+    "message": "Mở một trong các trợ lý được hỗ trợ bên dưới. Say, Pi thêm nút gọi riêng vào trang trò chuyện, cạnh ô nhập — nhấn nút và nói xin chào. Lần đầu, chúng tôi sẽ yêu cầu quyền truy cập micrô — điều đó là bình thường, và chúng tôi chỉ lắng nghe khi bạn đang chủ động trong cuộc gọi."
   },
   "onboarding_step2Title": {
     "description": "Tiêu đề của bước hướng dẫn thứ hai (bắt đầu cuộc trò chuyện).",

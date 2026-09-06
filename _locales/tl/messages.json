@@ -789,16 +789,16 @@
     "message": "Itigil ang test"
   },
   "onboarding_step1Body": {
-    "description": "Nilalaman ng unang onboarding step na nagpapaliwanag kung paano i-pin ang extension.",
-    "message": "I-click ang puzzle-piece 🧩 icon sa kanang-itaas ng browser mo, tapos ang pin 📌 sa tabi ng Say, Pi. Para isang click na lang ang call button."
+    "description": "Nilalaman ng unang hakbang sa onboarding na nagpapaliwanag kung paano i-pin ang extension at kung ano ang binubuksan ng naka-pin na button sa toolbar.",
+    "message": "I-click ang puzzle-piece 🧩 icon sa kanang itaas ng browser, pagkatapos ay ang pin 📌 sa tabi ng Say, Pi. Dahil dito, isang click na lang ang mga setting ng Say, Pi — boses, quiet mode at iba pa."
   },
   "onboarding_step1Title": {
     "description": "Pamagat ng unang onboarding step (i-pin ang extension).",
     "message": "I-pin ang Say, Pi sa toolbar mo"
   },
   "onboarding_step2Body": {
-    "description": "Nilalaman ng pangalawang onboarding step na nagpapaliwanag kung paano magsimula ng voice conversation.",
-    "message": "Pumunta sa isa sa mga supported na assistant sa ibaba, tapos i-tap ang Say, Pi call button at bumati. Hihingi kami ng access sa mikropono sa unang beses — normal iyon, at nakikinig lang kami habang aktibo kang nasa tawag."
+    "description": "Nilalaman ng ikalawang hakbang sa onboarding na nagpapaliwanag kung nasaan ang in-page call button at kung paano magsimula ng voice conversation.",
+    "message": "Pumunta sa isa sa mga sinusuportahang assistant sa ibaba. Nagdaragdag ang Say, Pi ng sariling call button sa chat page, malapit sa pinagta-type-an mo — i-tap ito at bumati. Hihingi kami ng access sa mikropono sa unang pagkakataon — normal ito, at nakikinig lang kami habang aktibo kang nasa isang tawag."
   },
   "onboarding_step2Title": {
     "description": "Pamagat ng pangalawang onboarding step (magsimula ng usapan).",
