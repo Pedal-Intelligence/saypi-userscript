@@ -1,5 +1,6 @@
 import {
   ElementTextStream,
+  getNestedText,
   InputStreamOptions,
   LateChangeEvent,
   TextContent,
@@ -748,7 +749,7 @@ class ChatHistoryNewMessageObserver
 
   /**
    * Adopt a reply that was ALREADY on screen when this observer attached — but
-   * only if Pi is in fact still writing it.
+   * only if the host is in fact still writing it.
    *
    * pi.ai has no chat-history element at all until a conversation exists, so on
    * the FIRST turn of a NEW conversation the whole history — containers and all
@@ -760,46 +761,75 @@ class ChatHistoryNewMessageObserver
    * (#365).
    *
    * Nothing in the host's markup reliably says "still writing", so we let the
-   * message answer for itself: watch it, and take it over the moment MORE text
-   * is added. A finished message never grows, so opening a settled thread
-   * adopts nothing — which is what keeps this from re-reading, aloud, messages
-   * the user has already seen.
+   * message answer for itself: watch it, and take it over the moment more text
+   * is added. "More" is the whole safety property here — a finished message
+   * never grows — so it is measured against the text that was on screen when we
+   * started watching, and measured on the ELEMENT rather than on the emitted
+   * chunk. The chunk cannot answer the question: a host stream with no
+   * per-token deltas re-emits the entire finished message as its first (and
+   * only) chunk, and a stream that has not been told about the initial text
+   * reports its first mutation as an addition of everything it can see. Both
+   * look exactly like growth, and neither is.
+   *
+   * Only offered for a host whose chat history can be born mid-turn, and only
+   * for the first such container — see
+   * {@link ChatHistorySpeechManager.registerPresentChatHistoryListener}.
    */
   async adoptIfStillWriting(message: AssistantResponse): Promise<void> {
     const content = await message.decoratedContent();
-    // includeInitialText:false — we are asking "does MORE text arrive?", and the
-    // text already on screen is not an answer to that.
+    // The baseline: everything already written when we joined. Read it BEFORE
+    // the probe exists, so no mutation can slip in between.
+    const textOnArrival = getNestedText(content);
     const probe = message.createTextStream(content, {
       includeInitialText: false,
     });
     this.continuationProbe?.disconnect();
     this.continuationProbe = probe;
 
+    let subscription: Subscription | null = null;
+    let released = false;
     const release = () => {
+      released = true;
+      subscription?.unsubscribe();
+      subscription = null;
       probe.disconnect();
       if (this.continuationProbe === probe) {
         this.continuationProbe = null;
       }
     };
 
-    const subscription = probe.getStream().subscribe({
-      next: (text: TextContent) => {
-        // Growth only. A rewrite of text that is already there (`changed`) is
-        // how a host re-render looks, and is not evidence of a live reply.
-        if (text.changed || !text.text.trim()) return;
-        subscription.unsubscribe();
-        release();
-        // The message is live after all, so the offer to generate its audio is
-        // stale. includeInitialText:true so the user hears the whole answer,
-        // not only the part written after we joined — which also keeps the
-        // completed text's hash matching the message's, so the speech is cached
-        // (and charged) once.
-        message.clearIncompleteSpeech();
-        void this.beginStreamingSpeech(message, { includeInitialText: true });
-      },
+    const onProbeActivity = () => {
+      if (released) return;
+      const textNow = getNestedText(content);
+      const grew =
+        textNow.length > textOnArrival.length &&
+        textNow.startsWith(textOnArrival) &&
+        textNow.slice(textOnArrival.length).trim().length > 0;
+      // Not growth: a re-render, a rewrite, a lazily-attached citation, or a
+      // whole-message re-emission. The reply is settled; leave it alone.
+      if (!grew) return;
+      release();
+      // The message is live after all, so the offer to generate its audio is
+      // stale. includeInitialText:true so the user hears the whole answer,
+      // not only the part written after we joined — which also keeps the
+      // completed text's hash matching the message's, so the speech is cached
+      // (and charged) once.
+      message.clearIncompleteSpeech();
+      void this.beginStreamingSpeech(message, { includeInitialText: true });
+    };
+
+    subscription = probe.getStream().subscribe({
+      next: onProbeActivity,
       error: release,
       complete: release,
     });
+    // A block-capture stream emits and completes from inside subscribe(), i.e.
+    // before the line above has assigned `subscription`. Tidy up here instead
+    // of from a handler that could not yet see it.
+    if (released) {
+      subscription?.unsubscribe();
+      subscription = null;
+    }
   }
 
   teardown(): void {

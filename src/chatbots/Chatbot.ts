@@ -13,6 +13,20 @@ export interface Chatbot {
   getPastChatHistorySelector(): string; // can be identical to chat history
   getRecentChatHistorySelector(): string; // can be identical to chat history
   /**
+   * Can this host's chat history come into existence in the MIDDLE of a turn —
+   * i.e. can we first attach to it while a reply is already being written?
+   *
+   * Only pi.ai does, as far as we have verified: it renders no chat history at
+   * all until a conversation exists, so the first turn of a new conversation
+   * builds the containers around a reply that is already streaming (#365).
+   * Every other host has its history on screen before a turn starts, so a
+   * message found during setup there is settled history and must be left alone.
+   *
+   * Optional, and false when omitted: a host opts IN to the mid-turn adoption
+   * in {@link ChatHistorySpeechManager.registerPresentChatHistoryListener}.
+   */
+  mountsChatHistoryMidTurn?(): boolean;
+  /**
    * Selector for the host's own in-chat voice menu container, if it has one.
    * Optional: a host with no in-chat voice surface (Pi, since 2026-07-30)
    * omits this and {@link getVoiceMenu} together, and VoiceMenuUIManager then

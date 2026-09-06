@@ -51,6 +51,11 @@ export abstract class AbstractChatbot implements Chatbot {
       return false;
     }
 
+    /** See {@link Chatbot.mountsChatHistoryMidTurn}. Only pi.ai overrides this. */
+    mountsChatHistoryMidTurn(): boolean {
+      return false;
+    }
+
     protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse;
 
     getAssistantResponse(element: HTMLElement, includeInitialText?: boolean, isStreaming?: boolean): AssistantResponse {

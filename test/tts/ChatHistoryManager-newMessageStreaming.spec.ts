@@ -6,6 +6,8 @@ import {
 } from "../../src/tts/SpeechSynthesisModule";
 import EventBus from "../../src/events/EventBus";
 import { PiAIChatbot } from "../../src/chatbots/Pi";
+import { ClaudeChatbot } from "../../src/chatbots/Claude";
+import ChatGPTChatbot from "../../src/chatbots/ChatGPT";
 import {
   audioProviders,
   SayPiSpeech,
@@ -326,5 +328,193 @@ describe("the first turn of a new conversation, joined mid-reply", () => {
     expect(writingEvents).toBe(0);
     expect(createSpeechStreamOrPlaceholder).not.toHaveBeenCalled();
     expect(spokenText).toEqual([]);
+  });
+
+  it("ignores a re-render of a settled reply that adds no new text", async () => {
+    // The same settled thread, but this time the host TOUCHES the message
+    // without adding to it: a paragraph node is replaced and refilled with the
+    // identical text, which is what a re-render (or a lazily-attached citation,
+    // or a highlighting pass) looks like from a MutationObserver.
+    //
+    // "Still writing" means the reply GREW. A mutation on its own means only
+    // that the host redrew something — adopting on that would re-read, aloud
+    // and at a fresh synthesis charge, a message the user has already seen.
+    const present = chatHistoryMidReply(
+      "A finished answer from an earlier session."
+    );
+    manager = new ChatHistorySpeechManager(new PiAIChatbot(), chatHistory);
+    await settle();
+
+    const reply = present.querySelector(".break-anywhere") as HTMLElement;
+    const paragraph = reply.querySelector(
+      ".whitespace-pre-wrap"
+    ) as HTMLElement;
+    const rerendered = paragraph.cloneNode(true) as HTMLElement;
+    paragraph.replaceWith(rerendered);
+    rerendered.setAttribute("data-rendered", "true");
+    await settle();
+    await settle();
+
+    expect(writingEvents).toBe(0);
+    expect(createSpeechStreamOrPlaceholder).not.toHaveBeenCalled();
+    expect(spokenText).toEqual([]);
+  });
+});
+
+/**
+ * Opening an ALREADY-SETTLED conversation on Claude and ChatGPT.
+ *
+ * The mid-reply adoption above lives in `ChatHistorySpeechManager`, which every
+ * host shares — and on Claude and ChatGPT the "recent" container IS the whole
+ * chat history (`getRecentChatHistorySelector()` returns the same selector as
+ * `getPastChatHistorySelector()`). So the last message offered to the adoption
+ * path is not a reply caught mid-write: it is the last message of whatever
+ * finished thread the user just opened, already read and already paid for.
+ *
+ * ChatGPT makes the danger concrete. Its block capture emits the finished text
+ * synchronously from the stream's constructor as soon as the turn's action bar
+ * exists, and the stream is a ReplaySubject, so a subscriber attaching
+ * afterwards still receives it. An adoption path that treats any emission as
+ * growth therefore re-synthesises and re-reads the last assistant message on
+ * every resumed conversation — the #245 regression.
+ *
+ * Neither host may synthesise anything, or announce writing, when nothing is
+ * being written.
+ */
+describe("an already-settled conversation on the other hosts", () => {
+  const mockVoice: SpeechSynthesisVoiceRemote = {
+    id: "shimmer",
+    name: "Shimmer",
+    lang: "en",
+    localService: false,
+    default: false,
+    price: 0.3,
+    price_per_thousand_chars_in_usd: 0.3,
+    price_per_thousand_chars_in_credits: 300,
+    powered_by: "OpenAI",
+    voiceURI: "",
+  };
+
+  let manager: ChatHistorySpeechManager;
+  let createSpeechStreamOrPlaceholder: ReturnType<typeof vi.fn>;
+  let spokenText: string[];
+  let writingEvents: number;
+  let textAddedListener: (event: TextAddedEvent) => void;
+  let writingListener: () => void;
+  /**
+   * Anything thrown inside an rxjs `next` handler is reported as an uncaught
+   * exception rather than surfacing at the call site, so the probe's own
+   * mishaps would otherwise be invisible to these assertions.
+   */
+  let uncaught: unknown[];
+  const captureUncaught = (error: unknown) => uncaught.push(error);
+
+  const settle = () => new Promise((r) => setTimeout(r, 50));
+
+  /** claude.ai: a finished reply — `data-is-streaming` is false, controls are up. */
+  const settledClaudeThread = (text: string): HTMLElement => {
+    const chatHistory = document.createElement("div");
+    const message = document.createElement("div");
+    message.setAttribute("data-is-streaming", "false");
+    const content = document.createElement("div");
+    content.className = "font-claude-response";
+    content.textContent = text;
+    message.appendChild(content);
+    const actionBar = document.createElement("div");
+    actionBar.className = "flex items-stretch";
+    message.appendChild(actionBar);
+    chatHistory.appendChild(message);
+    document.body.appendChild(chatHistory);
+    return chatHistory;
+  };
+
+  /** chatgpt.com: a finished turn — the copy button in its action bar says so. */
+  const settledChatGPTThread = (text: string): HTMLElement => {
+    const thread = document.createElement("div");
+    thread.id = "thread";
+    const turnList = document.createElement("div");
+    const turn = document.createElement("div");
+    turn.setAttribute("data-testid", "conversation-turn-2");
+    const assistant = document.createElement("div");
+    assistant.setAttribute("data-turn", "assistant");
+    assistant.setAttribute("data-turn-id", "turn-2");
+    const markdown = document.createElement("div");
+    markdown.className = "markdown";
+    markdown.textContent = text;
+    assistant.appendChild(markdown);
+    const actionBar = document.createElement("div");
+    const copy = document.createElement("button");
+    copy.setAttribute("data-testid", "copy-turn-action-button");
+    actionBar.appendChild(copy);
+    assistant.appendChild(actionBar);
+    turn.appendChild(assistant);
+    turnList.appendChild(turn);
+    thread.appendChild(turnList);
+    document.body.appendChild(thread);
+    return turnList;
+  };
+
+  beforeEach(() => {
+    document.body.innerHTML = "";
+
+    const utterance: SpeechUtterance = new SayPiSpeech(
+      "utterance-id",
+      "en",
+      mockVoice,
+      "https://api.saypi.ai/speak/utterance-id/stream"
+    );
+    createSpeechStreamOrPlaceholder = vi.fn(async () => utterance);
+
+    spokenText = [];
+    writingEvents = 0;
+    textAddedListener = (event: TextAddedEvent) => spokenText.push(event.text);
+    writingListener = () => (writingEvents += 1);
+    EventBus.on("saypi:tts:text:added", textAddedListener);
+    EventBus.on("saypi:piWriting", writingListener);
+    uncaught = [];
+    process.on("uncaughtException", captureUncaught);
+
+    vi.spyOn(SpeechSynthesisModule, "getInstance").mockReturnValue({
+      getActiveAudioProvider: vi.fn(async () => audioProviders.SayPi),
+      createSpeechStreamOrPlaceholder,
+      createSpeech: vi.fn(),
+      speak: vi.fn(),
+    } as unknown as SpeechSynthesisModule);
+  });
+
+  afterEach(() => {
+    EventBus.off("saypi:tts:text:added", textAddedListener);
+    EventBus.off("saypi:piWriting", writingListener);
+    process.off("uncaughtException", captureUncaught);
+    manager?.teardown();
+    vi.restoreAllMocks();
+  });
+
+  it("does not re-read the last message when a Claude thread is opened", async () => {
+    const chatHistory = settledClaudeThread("An answer from yesterday.");
+    manager = new ChatHistorySpeechManager(new ClaudeChatbot(), chatHistory);
+    await settle();
+    await settle();
+
+    expect(writingEvents).toBe(0);
+    expect(createSpeechStreamOrPlaceholder).not.toHaveBeenCalled();
+    expect(spokenText).toEqual([]);
+    expect(uncaught).toEqual([]);
+  });
+
+  it("does not re-read the last message when a ChatGPT thread is opened", async () => {
+    // ChatGPT's block capture hands its subscriber the whole finished message
+    // the moment it is constructed — synchronously, from inside subscribe(),
+    // with no mutation involved at all. Nothing here is being written, so
+    // nothing may be synthesised, announced, or thrown.
+    const chatHistory = settledChatGPTThread("An answer from yesterday.");
+    manager = new ChatHistorySpeechManager(new ChatGPTChatbot(), chatHistory);
+    await settle();
+    await settle();
+
+    expect(writingEvents).toBe(0);
+    expect(createSpeechStreamOrPlaceholder).not.toHaveBeenCalled();
+    expect(spokenText).toEqual([]);
+    expect(uncaught).toEqual([]);
   });
 });

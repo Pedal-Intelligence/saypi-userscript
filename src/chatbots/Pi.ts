@@ -130,6 +130,16 @@ class PiAIChatbot extends AbstractChatbot {
     return "div.t-body-chat";
   }
 
+  /**
+   * pi.ai renders no `div.t-body-chat` at all until a conversation exists, so
+   * the first turn of a NEW conversation builds the chat history — element,
+   * past and present containers — while Pi is already writing the answer. That
+   * is the one place a settled-looking message can still be growing (#365).
+   */
+  override mountsChatHistoryMidTurn(): boolean {
+    return true;
+  }
+
   getPastChatHistorySelector(): string {
     // Direct-child combinator (`>`): the 2nd DIRECT child of the chat history
     // container. Without `>`, the descendant combinator matches the first nested
