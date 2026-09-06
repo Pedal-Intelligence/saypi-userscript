@@ -37,17 +37,32 @@ Anything needing the founder gets the `awaiting-founder` label + an ask comment 
 
 ## Activation status & how to (re)create it
 
-**Status: specified, not yet active — blocked on a founder-only step.** Creating a
-cloud routine that references this repo requires the founder's GitHub account to be
-connected for cloud sessions (the API refuses otherwise, even for a disabled routine).
+**Status: ACTIVE since 2026-09-06.** The founder-only blocker (a GitHub account
+connected for cloud sessions) is cleared, and both routines exist:
 
-To activate:
-1. Founder: run `/web-setup` in Claude Code (or install the Claude GitHub App on
-   `Pedal-Intelligence/saypi-userscript` via https://claude.ai/code/onboarding?magic=github-app-setup).
-2. Any agent session: create the routine via the `RemoteTrigger` tool —
-   `action: "create"` with `cron_expression: "0 6 * * 1"`, the Default cloud
-   environment, `model: claude-sonnet-5`, this repo as the git source, and the prompt
-   below. Verify the first run's output at https://claude.ai/code/routines.
+| Routine | Trigger id | Cron (UTC) |
+| --- | --- | --- |
+| Weekly maintenance | `trig_01VgDQW3FWV5Ln4HUutsHBRt` | `0 6 * * 1` |
+| Monthly constitution audit | `trig_01RoxWz7WbEqtHxe4y62A99M` | `30 6 1-7 * 1` |
+
+Both run `claude-sonnet-5` in the Default cloud environment against this repo, with
+tools limited to `Bash, Read, Glob, Grep, Edit, Write, TodoWrite` — no browser or MCP
+tools, which is the mechanical half of "provably excludes Layer 4". Manage them at
+https://claude.ai/code/routines.
+
+To (re)create one, use the `RemoteTrigger` tool with `action: "create"` and the prompt
+below. **The repository goes in `job_config.ccr.session_context.sources`**, as
+`[{ "git_repository": { "url": … } }]`, alongside `model` and `allowed_tools` — a
+`git_source` key at the `ccr` level is accepted by the API and then silently dropped,
+leaving a routine with no checkout that fails on its first run.
+
+**Verified 2026-09-06** by a forced run of the monthly routine, which is safe to fire
+on demand because its prompt exits early when the date gate does not hold: the sandbox
+provisioned, the repo cloned, `AGENTS.md` was read, the routine determined that
+2026-09-06 was a Sunday rather than the first Monday, and it exited in 25s having
+written nothing and filed nothing. That exercises provisioning, checkout and prompt
+delivery end to end without side effects. The weekly routine's own first scheduled run
+is its first real exercise.
 
 **The routine prompt** (self-contained; keep in sync with the step list above):
 
@@ -75,14 +90,13 @@ To activate:
 
 **Cadence:** first Monday of the month, 06:30 UTC (offset from the weekly routine's
 06:00 slot so the two never contend).
-**Where it runs:** a Claude Code cloud routine, same shape and **same activation
-gate** as the weekly routine above (blocked on the founder's GitHub connect; see
-"Activation status"). Cron: `30 6 1-7 * 1` (day-of-month 1–7 AND Monday — on GitHub-
+**Where it runs:** a Claude Code cloud routine, same shape as the weekly routine above
+and active since 2026-09-06 (see "Activation status" for both trigger ids). Cron: `30 6 1-7 * 1` (day-of-month 1–7 AND Monday — on GitHub-
 style cron semantics that ORs DOM/DOW, the prompt below re-checks "is this the first
 Monday?" and exits early otherwise).
-**Interim fallback (active now):** until the cloud routine exists, any session may —
-and should, when a month has elapsed since the newest report in
-`doc/audit-reports/` — run the audit manually from the procedure doc.
+**Manual fallback:** any session may still run the audit by hand from the procedure
+doc — worth doing when a month has elapsed since the newest report in
+`doc/audit-reports/` and the scheduled run has not produced one.
 
 **What it does:** exactly `doc/constitution-audit.md` (#535) — the three-lens audit:
 (a) governance docs vs reality, (b) Layer-3 harness health (`npm run e2e:build &&
