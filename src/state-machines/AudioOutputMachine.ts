@@ -44,6 +44,7 @@ type AudioOutputEvent =
   | { type: "canplaythrough" }
   | { type: "seeked" }
   | { type: "emptied" }
+  | { type: "restoreNative" }
   | ChangeProviderEvent
   | ChangeVoiceEvent
   | ReplayingAudioEvent
@@ -167,6 +168,10 @@ export const audioOutputMachine = setup({
   id: "audioOutput",
   initial: "idle",
   on: {
+    restoreNative: {
+      target: ".idle",
+      actions: ["clearSkip", "clearReplaying"],
+    },
     changeProvider: {
       actions: "setProvider",
     },

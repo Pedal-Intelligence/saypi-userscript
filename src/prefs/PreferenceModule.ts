@@ -454,6 +454,10 @@ class UserPreferenceModule {
                       voicePreferences: sanitized,
                       voiceId: voiceChatbotId ? sanitized[voiceChatbotId] ?? null : null,
                       voiceChatbotId: voiceChatbotId ?? null,
+                      // Only removing THIS host's saved choice is a native-return
+                      // request; startup, auth and other-host writes are passive.
+                      nativeVoiceRequested: Boolean(voiceChatbotId &&
+                        changes[key].oldValue?.[voiceChatbotId] && !sanitized[voiceChatbotId]),
                     };
                     break;
                   case "enableTTS": 
@@ -969,6 +973,7 @@ class UserPreferenceModule {
         audioProvider: audioProviders.getDefaultForChatbot(chatbotId),
         voicePreferences: preferences,
         voiceChatbotId: chatbotId,
+        nativeVoiceRequested: true,
       });
       return;
     }
@@ -982,6 +987,7 @@ class UserPreferenceModule {
       audioProvider: audioProviders.getDefaultForChatbot(chatbotId),
       voicePreferences: updatedPreferences,
       voiceChatbotId: chatbotId,
+        nativeVoiceRequested: true,
     });
   }
   

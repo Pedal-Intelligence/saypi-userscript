@@ -20,6 +20,7 @@ import { audioProviders } from "../tts/SpeechModel.ts";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule.ts";
 import { isVoiceSampleUrl } from "../tts/SpeechSourceParsers.ts";
 import { PiNativeAudioGuard, audioSource, isPiNativeSpeechSource } from "./PiNativeAudioGuard.ts";
+import { piAutoRead } from "../chatbots/pi/PiAutoRead.ts";
 import { AudioSelectionSync } from "./AudioSelectionSync.ts";
 
 const INITIAL_PLAYBACK_BUFFER_TIMEOUT_MS = 5000;
@@ -208,14 +209,26 @@ export default class AudioModule {
       this.selectionSync = new AudioSelectionSync({
         hostId: chatbot.getID(),
         resolve: () => SpeechSynthesisModule.getInstance().getActiveAudioSelection(chatbot),
-        apply: (selection) => this.applyAudioSelection(selection),
+        apply: (selection, intent) => this.applyAudioSelection(selection, intent),
         onError: (error) => logger.error("[AudioModule] Could not reconcile voice selection", error),
       });
     }
     await this.selectionSync.start();
   }
 
-  applyAudioSelection({ provider, voice }) {
+  applyAudioSelection({ provider, voice }, { nativeVoiceRequested = false } = {}) {
+    // Keep a pending return alive through duplicate storage/auth notifications,
+    // but let a newer voice choice cancel it before releasing any native mute.
+    const previous = this.appliedSelection;
+    const changed = previous?.provider !== provider || (previous.voice?.id ?? null) !== (voice?.id ?? null);
+    if (changed) {
+      this.nativeRestoreRequest = null;
+      this.nativeRestoreHold = false;
+    }
+    const restoreNative = nativeVoiceRequested && provider === audioProviders.Pi && ChatbotIdentifier.isChatbotType("pi");
+    const offscreenSource = this.lastAudioUrl;
+    if (restoreNative && this.useOffscreenAudio && offscreenSource) this.nativeRestoreHold = true;
+    this.appliedSelection = { provider, voice };
     this.audioOutputActor?.send({ type: "changeVoice", voice });
     this.audioOutputActor?.send({ type: "changeProvider", provider });
     this.voiceConverter.send({ type: "changeVoice", voice });
@@ -224,25 +237,79 @@ export default class AudioModule {
 
     // Auth refreshes and other hosts' storage writes can resolve the same
     // selection again. Preserve intentional historical replays in that case.
-    const previous = this.appliedSelection;
-    this.appliedSelection = { provider, voice };
-    if (previous?.provider === provider && (previous.voice?.id ?? null) === (voice?.id ?? null)) return;
-
-    const offscreenSource = this.lastAudioUrl;
-    if (this.useOffscreenAudio && offscreenSource && !isVoiceSampleUrl(offscreenSource) &&
-        (!provider.matches(offscreenSource) || (voice && !voice.matchesSource(offscreenSource)))) {
+    let previousPlaybackStopped;
+    if (this.useOffscreenAudio && offscreenSource && (nativeVoiceRequested ||
+        (changed && !isVoiceSampleUrl(offscreenSource) &&
+          (!provider.matches(offscreenSource) || (voice && !voice.matchesSource(offscreenSource)))))) {
       this.lastAudioUrl = null;
-      this.offscreenBridge.stopAudio().catch((error) => {
+      this.offscreenPlaybackCancelled = true;
+      previousPlaybackStopped = this.offscreenBridge.stopAudio().catch((error) => {
         logger.error("[AudioModule] Could not stop the previous voice", error);
+        return false;
+      }).then(stopped => {
+        // The bridge reports transport failures as false, not just rejection.
+        // Retain the source so a later explicit return retries the stop first.
+        if (stopped === false && this.nativeRestoreHold && !this.lastAudioUrl) this.lastAudioUrl = offscreenSource;
+        return stopped;
       });
     }
 
     // Firefox/Safari share the page player with SayPi. Muting would silence
     // our speech too, but an already-playing native source must still stop.
     const source = this.audioElement?.currentSrc || this.audioElement?.src;
-    if (!this.useOffscreenAudio && source && !isVoiceSampleUrl(source) &&
-        (!provider.matches(source) || (voice && !voice.matchesSource(source)))) {
+    if (!this.useOffscreenAudio && source &&
+        ((nativeVoiceRequested && !isPiNativeSpeechSource(source)) ||
+        (changed && !isVoiceSampleUrl(source) &&
+          (!provider.matches(source) || (voice && !voice.matchesSource(source)))))) {
       this.stopOnscreenAudio();
+    }
+
+    if (restoreNative && !this.nativeRestoreRequest) {
+      // A user request is stronger than passive auth/startup reconciliation:
+      // release inherited mutes, skip/replay state and canceled custom events.
+      this.offscreenPlaybackCancelled = true;
+      this.audioOutputActor?.send({ type: "restoreNative" });
+      const request = {};
+      this.nativeRestoreRequest = request;
+      void this.restorePiNativePlayback(request, previousPlaybackStopped).catch(error => {
+        logger.error("[AudioModule] Could not resume Pi's native speech", error);
+      }).finally(() => {
+        if (this.nativeRestoreRequest === request) this.nativeRestoreRequest = null;
+      });
+    }
+  }
+
+  async restorePiNativePlayback(request, previousPlaybackStopped) {
+    if (previousPlaybackStopped && await previousPlaybackStopped === false) return;
+    const isCurrent = () => this.nativeRestoreRequest === request && this.appliedSelection?.provider === audioProviders.Pi;
+    if (!isCurrent()) return;
+    // A muted native player may already be running. Release it only after the
+    // custom stream has stopped, including capture events during that wait.
+    this.nativeRestoreHold = false;
+    this.piNativeAudioGuard.restoreNative([...document.querySelectorAll("audio")]);
+    // Reuse Pi's read-before-write control without call-start's skipNext policy.
+    await piAutoRead.setAudioOutputEnabled(true);
+    // The menu can mount asynchronously. A newer custom choice must win, and
+    // Pi may have replaced or started the player while enabling auto-read.
+    if (!isCurrent()) return;
+    const canResume = candidate => candidate?.isConnected &&
+      isPiNativeSpeechSource(audioSource(candidate)) && !candidate.ended && candidate.readyState >= 1;
+    let audio = this.audioElement;
+    if (!canResume(audio)) {
+      // Shared-page custom playback can keep the module bound while Pi inserts
+      // its next native player. Reuse that retained reply instead of waiting for
+      // another insertion or a page refresh. Never resume every coexisting player.
+      audio = [...document.querySelectorAll("audio")].reverse().find(canResume);
+    }
+    if (!audio) return;
+    if (audio !== this.audioElement) this.swapAudioElement(audio);
+    audio.muted = false;
+    const actor = this.audioOutputActor;
+    actor?.send({ type: "loadstart", source: audioSource(audio) });
+    actor?.send({ type: "loadedmetadata" });
+    if (audio.paused) await audio.play();
+    if (isCurrent() && audio === this.audioElement && !audio.paused) {
+      actor?.send({ type: "play", source: audioSource(audio) });
     }
   }
 
@@ -331,7 +398,7 @@ export default class AudioModule {
     if (ChatbotIdentifier.isChatbotType("pi")) {
       this.piNativeAudioGuard ??= new PiNativeAudioGuard();
       this.piNativeAudioGuard.reconcile([...document.querySelectorAll("audio")], {
-        customVoice: this.providerIsSayPi, offscreen: this.useOffscreenAudio, tracked: this.audioElement,
+        customVoice: this.providerIsSayPi || this.nativeRestoreHold, offscreen: this.useOffscreenAudio, tracked: this.audioElement,
         sharedOutput: this.isSharedPlayback(this.audioElement) ? this.audioElement : null,
       });
       return;
@@ -461,7 +528,7 @@ export default class AudioModule {
   }
 
   shouldIgnoreHostPlayback(audio) {
-    return this.providerIsSayPi && ChatbotIdentifier.isChatbotType("pi") &&
+    return (this.providerIsSayPi || this.nativeRestoreHold) && ChatbotIdentifier.isChatbotType("pi") &&
       isPiNativeSpeechSource(audioSource(audio)) && !this.isSharedPlayback(audio);
   }
 
@@ -521,15 +588,8 @@ export default class AudioModule {
       "audio:load",
       async (detail) => {
         logger.debug("audio:load", detail, this.useOffscreenAudio ? "offscreen" : "in-page");
-        this.lastAudioUrl = detail.url;
-        if (this.useOffscreenAudio) {
-          // Use offscreen bridge if available - now use loadAudio instead of playAudio
-          await this.offscreenBridge.loadAudio(detail.url, true);
-        } else {
-          // Fallback to in-page audio
-          const audio = this.findAudioElement(document) || new Audio();
-          this.loadAudio(audio, detail.url);
-        }
+        const audio = this.useOffscreenAudio ? this.audioElement : this.findAudioElement(document) || new Audio();
+        await this.loadAudio(audio, detail.url);
       },
       this
     );
@@ -541,7 +601,7 @@ export default class AudioModule {
           : this.lastAudioUrl;
           
         if (url) {
-          await this.offscreenBridge.loadAudio(url, reloadAudioRequest?.playImmediately !== false);
+          await this.loadAudio(this.audioElement, url, reloadAudioRequest?.playImmediately !== false);
         }
       } else {
         // For in-page audio
@@ -689,6 +749,7 @@ export default class AudioModule {
     if (url) {
       // Store the last URL for potential cache busting on reload
       this.lastAudioUrl = url;
+      this.offscreenPlaybackCancelled = false;
 
       this.cancelPendingPlayback();
 
@@ -1047,6 +1108,7 @@ export default class AudioModule {
     // Register listeners for standard events
     standardEvents.forEach((event) => {
       EventBus.on(`audio:offscreen:${event}`, (detail) => {
+        if (this.offscreenPlaybackCancelled) return;
         logger.debug(`[AudioModule] Forwarding offscreen event to audio output actor: ${event}`);
         outputActor.send({ type: event });
       }, this);
@@ -1055,6 +1117,7 @@ export default class AudioModule {
     // Register listeners for sourced events  
     sourcedEvents.forEach((event) => {
       EventBus.on(`audio:offscreen:${event}`, (detail) => {
+        if (this.offscreenPlaybackCancelled) return;
         logger.debug(`[AudioModule] Forwarding offscreen sourced event to audio output actor: ${event}`, detail);
         const eventDetail = { source: detail?.source || 'offscreen' };
         outputActor.send({ type: event, ...eventDetail });
@@ -1063,6 +1126,7 @@ export default class AudioModule {
     
     // Handle special case for 'playing' event which maps to 'play' 
     EventBus.on("audio:offscreen:playing", (detail) => {
+      if (this.offscreenPlaybackCancelled) return;
       logger.debug("[AudioModule] Forwarding offscreen 'playing' event as 'play' to audio output actor", detail);
       const eventDetail = { source: detail?.source || 'offscreen' };
       outputActor.send({ type: "play", ...eventDetail });

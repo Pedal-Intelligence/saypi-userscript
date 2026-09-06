@@ -220,7 +220,7 @@ describe("AudioModule removal-observer wiring", () => {
     expect(source).toMatch(/applyHostAudioMute\(\)\s*\{/);
     expect(source).toMatch(/shouldMuteHostAudio\(\{/);
     const onProviderChange = source.match(
-      /applyAudioSelection\(\{ provider, voice \}\)\s*\{[\s\S]*?\n {2}\}/
+      /applyAudioSelection\(\{ provider, voice \}, \{ nativeVoiceRequested = false \} = \{\}\)\s*\{[\s\S]*?\n {2}\}/
     )?.[0];
     expect(onProviderChange).toMatch(/providerIsSayPi = /);
     expect(onProviderChange).toMatch(/this\.applyHostAudioMute\(\)/);

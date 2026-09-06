@@ -348,3 +348,9 @@ tests, but it also carries risk that unit tests don't:
 When this suite is red, first reproduce locally with `npm run e2e:build &&
 npm run test:e2e`; if it's green locally but red on CI, suspect timing/flake and
 inspect the uploaded Playwright trace before changing any test.
+
+
+`specs/pi-native-restore.e2e.ts` covers the actual Settings custom→native→custom
+round trip against real media: an inherited muted, paused Pi reply must resume
+without reloading, with auto-read initially on or off. The host control is a
+local DOM contract fixture; no real Pi messages or user credits are consumed.
