@@ -35,6 +35,24 @@ const OPUS_CONFIG: AudioEncoderConfig = {
 let opusSupportPromise: Promise<boolean> | undefined;
 
 /**
+ * Thrown when an encode finished without a single Opus chunk reaching the muxer.
+ *
+ * The muxer will happily finalize a valid-but-audio-less WebM in that case, and
+ * the server can only answer it with `invalid_audio` — so every transcription
+ * from an affected install fails (#630, seen on Firefox 154). Callers treat this
+ * like any other encode failure and upload the PCM WAV instead.
+ */
+export class OpusEmptyOutputError extends Error {
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message);
+    this.name = "OpusEmptyOutputError";
+    if (options && "cause" in options) {
+      (this as { cause?: unknown }).cause = options.cause;
+    }
+  }
+}
+
+/**
  * Whether this context can encode Opus via native WebCodecs. Probed once and
  * cached (the answer is fixed for the lifetime of the page/document).
  */
@@ -65,8 +83,9 @@ async function probeOpusSupport(): Promise<boolean> {
 /**
  * Encode 16 kHz mono Float32 PCM samples to a WebM/Opus Blob.
  *
- * @throws if WebCodecs Opus is unavailable or encoding fails — callers fall back
- *   to PCM WAV rather than failing the upload.
+ * @throws if WebCodecs Opus is unavailable, encoding fails, or the encode
+ *   produced no audio chunks (#630) — callers fall back to PCM WAV rather than
+ *   uploading a file the server cannot decode.
  */
 export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
   if (!(await isOpusUploadSupported())) {
@@ -82,6 +101,13 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
       sampleRate: SAMPLE_RATE,
     },
   });
+
+  // An encoder that emits nothing still yields a well-formed, empty container,
+  // so success is measured by chunks actually muxed — not by flush() resolving.
+  let chunksMuxed = 0;
+  // The browser owns the `output` callback: anything thrown inside it is
+  // swallowed and would otherwise vanish. Keep the first one for diagnosis.
+  let outputError: unknown;
 
   await new Promise<void>((resolve, reject) => {
     let settled = false;
@@ -106,7 +132,14 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
     try {
       encoder = new AudioEncoder({
         // `meta` carries the OpusHead (decoderConfig.description) webm-muxer needs.
-        output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+        output: (chunk, meta) => {
+          try {
+            muxer.addAudioChunk(chunk, meta);
+            chunksMuxed++;
+          } catch (e) {
+            outputError ??= e;
+          }
+        },
         error: (e) => settle(e),
       });
       encoder.configure(OPUS_CONFIG);
@@ -126,6 +159,31 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
       settle(e);
     }
   });
+
+  if (chunksMuxed === 0) {
+    logger.warn(
+      "[OpusEncoder] Opus encode produced no audio chunks; uploading WAV instead",
+      {
+        samples: audioData.length,
+        chunks: 0,
+        cause: outputError,
+        userAgent:
+          typeof navigator === "undefined" ? undefined : navigator.userAgent,
+      }
+    );
+    // Name the swallowed cause in the message too: for an affected install this
+    // error is the only signal that reaches a client log.
+    const reason =
+      outputError instanceof Error
+        ? `: ${outputError.message}`
+        : outputError !== undefined
+          ? `: ${String(outputError)}`
+          : "";
+    throw new OpusEmptyOutputError(
+      `Opus encode produced no audio chunks for ${audioData.length} samples${reason}`,
+      { cause: outputError }
+    );
+  }
 
   muxer.finalize();
   return new Blob([target.buffer], { type: "audio/webm" });
