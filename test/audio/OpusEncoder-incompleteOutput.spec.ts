@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
  * happens: `output` never fires, and `output` fires but the muxer throws inside
  * it (a throw the browser swallows, since it owns the callback).
  */
-describe("OpusEncoder — empty-output guard (#630)", () => {
+describe("OpusEncoder — incomplete-output guard (#630)", () => {
   const g = globalThis as any;
   const originalAudioEncoder = g.AudioEncoder;
   const originalAudioData = g.AudioData;
@@ -58,12 +58,12 @@ describe("OpusEncoder — empty-output guard (#630)", () => {
     stubEncoder(() => {
       /* flush resolves without ever invoking output — the Firefox 154 signature */
     });
-    const { encodeToOpusWebM, OpusEmptyOutputError } = await import(
+    const { encodeToOpusWebM, OpusIncompleteOutputError } = await import(
       "../../src/audio/OpusEncoder"
     );
 
     const samples = new Float32Array(1600); // 100ms @ 16 kHz
-    await expect(encodeToOpusWebM(samples)).rejects.toBeInstanceOf(OpusEmptyOutputError);
+    await expect(encodeToOpusWebM(samples)).rejects.toBeInstanceOf(OpusIncompleteOutputError);
   });
 
   it("reports the input sample count so the affected installs are visible in logs", async () => {
@@ -76,7 +76,7 @@ describe("OpusEncoder — empty-output guard (#630)", () => {
 
     expect(warn).toHaveBeenCalledTimes(1);
     const [message, detail] = warn.mock.calls[0];
-    expect(String(message)).toMatch(/no audio/i);
+    expect(String(message)).toMatch(/complete stream/i);
     expect(detail).toMatchObject({ samples: 4321, chunks: 0 });
   });
 
@@ -105,5 +105,113 @@ describe("OpusEncoder — empty-output guard (#630)", () => {
     const { encodeToOpusWebM } = await import("../../src/audio/OpusEncoder");
 
     await expect(encodeToOpusWebM(new Float32Array(1600))).rejects.toThrow(/detached buffer/);
+  });
+
+  it("rejects a partial encode where one chunk muxed and the next threw", async () => {
+    // The swallow is per-invocation: an encoder can deliver chunk 1 fine and
+    // throw on chunk 2. Finalizing then yields a TRUNCATED file that decodes
+    // to a partial transcript — a wrong answer is worse than no answer, and
+    // the user is billed for it either way.
+    stubEncoder((output) => {
+      const meta = { decoderConfig: { description: new Uint8Array([1, 2, 3]) } };
+      const bytes = new Uint8Array([1, 2, 3, 4]);
+      output(
+        new g.EncodedAudioChunk({
+          type: "key",
+          timestamp: 0,
+          duration: 20000,
+          byteLength: bytes.byteLength,
+          copyTo(dest: Uint8Array) {
+            dest.set(bytes);
+          },
+        }),
+        meta
+      );
+      try {
+        output(
+          new g.EncodedAudioChunk({
+            type: "delta",
+            timestamp: 20000,
+            duration: 20000,
+            byteLength: 4,
+            copyTo() {
+              throw new Error("detached buffer");
+            },
+          }),
+          meta
+        );
+      } catch {
+        /* swallowed, exactly as the browser does */
+      }
+    });
+    const { encodeToOpusWebM } = await import("../../src/audio/OpusEncoder");
+
+    await expect(encodeToOpusWebM(new Float32Array(1600))).rejects.toThrow(/detached buffer/);
+  });
+
+  it("reports how many chunks did land, so partial and total failures are distinguishable", async () => {
+    stubEncoder((output) => {
+      const bytes = new Uint8Array([1, 2, 3, 4]);
+      const meta = { decoderConfig: { description: new Uint8Array([1, 2, 3]) } };
+      output(
+        new g.EncodedAudioChunk({
+          type: "key",
+          timestamp: 0,
+          duration: 20000,
+          byteLength: bytes.byteLength,
+          copyTo(dest: Uint8Array) {
+            dest.set(bytes);
+          },
+        }),
+        meta
+      );
+      try {
+        output(
+          new g.EncodedAudioChunk({
+            type: "delta",
+            timestamp: 20000,
+            duration: 20000,
+            byteLength: 4,
+            copyTo() {
+              throw new Error("detached buffer");
+            },
+          }),
+          meta
+        );
+      } catch {
+        /* swallowed */
+      }
+    });
+    const { encodeToOpusWebM } = await import("../../src/audio/OpusEncoder");
+    const { logger } = await import("../../src/LoggingModule");
+    const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
+
+    await expect(encodeToOpusWebM(new Float32Array(1600))).rejects.toThrow();
+
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][1]).toMatchObject({ samples: 1600, chunks: 1 });
+  });
+
+  it("closes the codec resources before rejecting", async () => {
+    const closed: string[] = [];
+    g.AudioEncoder = class {
+      static isConfigSupported = vi.fn().mockResolvedValue({ supported: true });
+      constructor(_init: unknown) {}
+      configure() {}
+      encode() {}
+      async flush() {}
+      close() {
+        closed.push("encoder");
+      }
+    };
+    g.AudioData = class {
+      close() {
+        closed.push("frame");
+      }
+    };
+    const { encodeToOpusWebM } = await import("../../src/audio/OpusEncoder");
+
+    await expect(encodeToOpusWebM(new Float32Array(1600))).rejects.toThrow();
+    expect(closed).toEqual(expect.arrayContaining(["encoder", "frame"]));
   });
 });
