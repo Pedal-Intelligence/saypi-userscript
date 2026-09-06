@@ -71,14 +71,17 @@ const AUTH_EVENT = "saypi:auth:status-changed";
 let toldSignedOut = false;
 
 /**
- * The SESSION the last reconciliation settled on: `authenticated:userId`.
+ * The SESSION the last reconciliation settled on — `user:<id>`, or
+ * `signed-out`, which has no identity to carry.
  *
- * Identity, not the raw token, and for two reasons. Both signals can describe
- * the same change — the background broadcasts AND writes storage — and it
- * re-broadcasts on every service-worker wake, so without this one sign-in
- * would repaint the Voices tab (and re-fetch its catalog) two or three times.
- * And the background swaps the token every ~15 minutes on a routine refresh,
- * which is a new token but the same session: nothing the tabs need to redraw.
+ * Identity rather than the raw token, and for three reasons. Both signals can
+ * describe the same change — the background broadcasts AND writes storage —
+ * and it re-broadcasts on every service-worker wake, so without this one
+ * sign-in would repaint the Voices tab (and re-fetch its catalog) two or three
+ * times. The background swaps the token every ~15 minutes on a routine
+ * refresh, which is a new token but the same session. And a sign-out arrives
+ * as up to two events (the broadcast, then the storage wipe), which is one
+ * sign-out however it is spelled.
  */
 let lastSignature: string | null = null;
 
@@ -128,24 +131,30 @@ async function storedToken(): Promise<string | null> {
   }
 }
 
+const SIGNED_OUT = "signed-out";
+
 /**
- * WHO the stored token belongs to — the only part of it a settings tab cares
- * about. Falls back to the raw token when the claims cannot be read, which
- * errs towards treating an opaque change as a new session.
+ * WHICH SESSION the stored token belongs to — the only part of it a settings
+ * tab cares about. Falls back to the raw token when the claims cannot be read,
+ * which errs towards treating an opaque change as a new session.
  */
-function identityOf(token: string | null): string {
-  if (!token) return "";
+function sessionOf(token: string | null): string {
+  if (!token) return SIGNED_OUT;
   try {
     const payload = token.split(".")[1];
     const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
-    return String(JSON.parse(json).userId ?? token);
+    return `user:${JSON.parse(json).userId ?? token}`;
   } catch {
-    return token;
+    return `user:${token}`;
   }
 }
 
 async function reconcileNow(isAuthenticated: boolean): Promise<void> {
-  const signature = `${isAuthenticated}:${identityOf(await storedToken())}`;
+  // Signed out carries no identity: the broadcast and the storage wipe that
+  // follows it are one sign-out, whichever order they land in.
+  const signature = isAuthenticated
+    ? sessionOf(await storedToken())
+    : SIGNED_OUT;
   const sessionChanged = signature !== lastSignature;
   lastSignature = signature;
 
@@ -190,8 +199,7 @@ function reconcile(isAuthenticated: boolean): Promise<void> {
  * a change.
  */
 async function seed(): Promise<void> {
-  const token = await storedToken();
-  lastSignature = `${!!token}:${identityOf(token)}`;
+  lastSignature = sessionOf(await storedToken());
 }
 
 /**

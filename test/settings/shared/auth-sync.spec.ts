@@ -312,6 +312,22 @@ describe("settings-page auth reconciliation (#227)", () => {
     expect(seen).toEqual([]);
   });
 
+  it("announces one sign-out however many events spell it", async () => {
+    const tokenA = await openSettingsSignedInAs("user-a");
+    const seen: boolean[] = [];
+    EventBus.on("saypi:auth:status-changed", (auth: boolean) => seen.push(auth));
+
+    // The broadcast can reach the page before the storage wipe it describes,
+    // so the page sees "signed out, token still there" and then "signed out,
+    // token gone". Two events, one sign-out.
+    await broadcastAuthStatus(false);
+    seedStorage({});
+    await storageChanged(tokenA, undefined);
+
+    expect(isSettingsAuthenticated()).toBe(false);
+    expect(seen).toEqual([false]);
+  });
+
   it("keeps the page's token current across a routine refresh without repainting the tabs", async () => {
     const tokenA = await openSettingsSignedInAs("user-a");
     const seen: boolean[] = [];
