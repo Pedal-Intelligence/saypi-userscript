@@ -81,10 +81,10 @@ describe('ChatGPT auto Read Aloud', () => {
     const clickSpy = vi.spyOn(btn, 'click');
     actionBar.appendChild(btn);
 
-    // Allow mutation observer microtask to run
-    await new Promise((r) => setTimeout(r, 10));
-
-    expect(clickSpy).toHaveBeenCalledTimes(1);
+    // Poll for the effect rather than sleeping a fixed 10ms (#642): the
+    // observer callback plus the decoration chain is asynchronous, so a fixed
+    // wait is load-sensitive by construction and fails on a busy runner.
+    await vi.waitFor(() => expect(clickSpy).toHaveBeenCalledTimes(1));
   });
 
   it('does not click for older assistant turns; only newest gets auto-click', async () => {
@@ -131,12 +131,12 @@ describe('ChatGPT auto Read Aloud', () => {
     const newClickSpy = vi.spyOn(newBtn, 'click');
     newActionBar.appendChild(newBtn);
 
-    // Allow mutation observers to react
-    await new Promise((r) => setTimeout(r, 10));
-
-    // Expect only the newest message to be auto-clicked
+    // Poll for the click we DO expect (#642). That doubles as the barrier for
+    // the assertion below: once the newest message has been clicked, the
+    // observers have run, so a still-unclicked older message is a real result
+    // rather than one we simply did not wait long enough to see.
+    await vi.waitFor(() => expect(newClickSpy).toHaveBeenCalledTimes(1));
     expect(oldClickSpy).toHaveBeenCalledTimes(0);
-    expect(newClickSpy).toHaveBeenCalledTimes(1);
   });
 
   it('clicks when only a Replay-labeled button exists (no data-testid)', async () => {
@@ -162,9 +162,8 @@ describe('ChatGPT auto Read Aloud', () => {
     const clickSpy = vi.spyOn(btn, 'click');
     actionBar.appendChild(btn);
 
-    await new Promise((r) => setTimeout(r, 10));
+    await vi.waitFor(() => expect(clickSpy).toHaveBeenCalledTimes(1)); // #642
 
-    expect(clickSpy).toHaveBeenCalledTimes(1);
   });
 
   it('does NOT auto-click for old/completed messages without isStreaming flag', async () => {
@@ -191,8 +190,10 @@ describe('ChatGPT auto Read Aloud', () => {
     const clickSpy = vi.spyOn(btn, 'click');
     actionBar.appendChild(btn);
 
-    // Allow mutation observer microtask to run
-    await new Promise((r) => setTimeout(r, 10));
+    // A negative needs elapsed time, not polling — vi.waitFor would pass at
+    // once without proving anything. Give the observers room to misbehave;
+    // 10ms was short enough that this could pass for the wrong reason (#642).
+    await new Promise((r) => setTimeout(r, 100));
 
     // Should NOT auto-click for old messages
     expect(clickSpy).toHaveBeenCalledTimes(0);
@@ -340,10 +341,8 @@ describe('ChatGPT auto Read Aloud', () => {
     const clickSpy = vi.spyOn(btn, 'click');
     actionBar.appendChild(btn);
 
-    await new Promise((r) => setTimeout(r, 10));
-
     // It must be read aloud even though it arrived via the old-message path.
-    expect(clickSpy).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => expect(clickSpy).toHaveBeenCalledTimes(1)); // #642
   });
 
   it('does NOT auto-click a message already present when the call started (#245 not regressed)', async () => {
@@ -375,7 +374,8 @@ describe('ChatGPT auto Read Aloud', () => {
     const clickSpy = vi.spyOn(btn, 'click');
     actionBar.appendChild(btn);
 
-    await new Promise((r) => setTimeout(r, 10));
+    // As above: proving silence takes elapsed time, not polling (#642).
+    await new Promise((r) => setTimeout(r, 100));
 
     // A message present at call start must stay silent.
     expect(clickSpy).toHaveBeenCalledTimes(0);

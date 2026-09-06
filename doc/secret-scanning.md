@@ -72,16 +72,26 @@ Consequences:
    vendor API keys, `private-key`, …) still applies to the fixtures, so a
    future capture embedding a real token still fails.
 
-### Fixture hygiene (capture-time redaction — follow-up)
+### Fixture hygiene (capture-time redaction)
 
-The durable fix for fixture noise is upstream of the scanner: the DOM
-capture recorder (`scripts/dom-capture/`) should **redact at capture time**
-— strip or placeholder session tokens, cookies, JWTs, email addresses, and
-account/org/device identifiers before a fixture is ever written to disk (the
-#541 review recommendation). Until that lands, treat any newly recorded
-fixture as suspect: run the local scan before committing it, and scrub with
-the #541 placeholder convention (`REDACTED` scalars, the `alg:none`
-placeholder JWT) rather than adding allowlist entries.
+The durable fix for fixture noise sits upstream of the scanner: the DOM
+capture recorder (`scripts/dom-capture/recorder.js`) **redacts at capture
+time** (#552), replacing JWTs, `Bearer` credentials, email addresses,
+UUIDs, `user-`/`org-`/`session-` ids, credential-shaped query parameters and
+long high-entropy runs with the #541 placeholder convention (`REDACTED`
+scalars, the `alg:none` placeholder JWT) before a record is ever written to
+disk. It is on by default; the record carries `"redaction": {"enabled": true}`
+to prove it. The table of classes and markers is in
+`doc/autonomous-dev-loop.md` → "Capturing real-host DOM".
+
+**It is a safety net, not a guarantee.** It is keyword- and shape-driven, so
+conversation content (deliberately), free-text PII, short/low-entropy secrets
+and novel credential shapes still pass through. A newly recorded fixture is
+therefore still reviewed, not trusted: run the local scan before committing
+it, read the diff, and scrub anything the recorder missed with the same
+placeholder convention rather than adding an allowlist entry. A record stamped
+`"redaction": {"enabled": false}` (the `start(sel, { redact: false })` debug
+opt-out) must never be committed at all.
 
 ## Running locally
 

@@ -20,7 +20,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 //   npm run bench:vad -- corpus-real
 const corpusName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : "corpus";
 const corpusDir = resolve(here, corpusName);
-const PRESETS = ["highSensitivity", "balanced", "conservative", "none"];
+// The sweep is the set of presets the extension actually ships (#571 removed
+// `conservative`); `runClip` looks each name up in the real VAD_CONFIGS, so a name
+// that no longer exists there would silently benchmark as "no overrides".
+const PRESETS = ["highSensitivity", "balanced", "none"];
 
 const fmtPct = (x: number | null) => (x === null ? "  —  " : `${(x * 100).toFixed(0)}%`.padStart(5));
 const fmtMs = (x: number | null) => (x === null ? "  —  " : `${Math.round(x)}ms`.padStart(6));

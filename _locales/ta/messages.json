@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "சஃபாரியில் தற்போது பன்மொழி குரல்கள் ஆதரிக்கப்படவில்லை."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "உதவியாளரின் குரல் எவ்வளவு வேகமாகப் பேசுகிறது என்பதை அமைக்கும் ஸ்லைடருக்கான பெயர்.",
+    "message": "வேகம்"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "குரல் இயக்க வேக ஸ்லைடரை விளக்கும் உதவிக்குறிப்பு.",
+    "message": "Say, Pi-யின் குரல்கள் எவ்வளவு வேகமாகப் பேச வேண்டும் என்பதைக் கட்டுப்படுத்துகிறது. அடுத்த பதிலிலிருந்து அமலாகும்; Pi-யின் சொந்தக் குரலுக்கு இது பொருந்தாது."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$ ஆல் முதலேற்றப்பட்ட உரை-கு-பேச்சு",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts குரல்"
+  },
+  "ttsVolumeLabel": {
+    "description": "உதவியாளரின் குரல் எவ்வளவு சத்தமாக இருக்க வேண்டும் என்பதை அமைக்கும் ஸ்லைடருக்கான பெயர்.",
+    "message": "ஒலி அளவு"
+  },
+  "ttsVolumeTooltip": {
+    "description": "குரல் இயக்க ஒலியளவு ஸ்லைடரை விளக்கும் உதவிக்குறிப்பு.",
+    "message": "உங்கள் கணினி ஒலியளவை ஒப்பிடும்போது Say, Pi-யின் குரல்கள் எவ்வளவு சத்தமாக இருக்க வேண்டும் என்பதைக் கட்டுப்படுத்துகிறது. அடுத்த பதிலிலிருந்து அமலாகும்; Pi-யின் சொந்தக் குரலுக்கு இது பொருந்தாது."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "குரல் இடைநிறுத்தப்பட்டது -"
   },
+  "voicePlaybackHeading": {
+    "description": "உதவியாளரின் குரல் எவ்வாறு இயக்கப்படுகிறது என்பதைக் கட்டுப்படுத்தும் அமைப்புகளின் குழுவுக்கான தலைப்பு.",
+    "message": "குரல் இயக்கம்"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "குரல் அமைப்புகள்"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "குரலை மாற்று",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Say, Pi குரல் எதுவும் தேர்ந்தெடுக்கப்படாமல், உதவியாளர் அதன் உள்ளமைந்த சொந்தக் குரல்களில் ஒன்றில் பதிலளிக்கும்போது Voices கட்டுப்பாட்டுப் பட்டியில் காட்டப்படும்; $host$ என்பது உதவியாளர், எடுத்துக்காட்டாக Pi.",
     "message": "உங்கள் குரல்: $host$ இன் சொந்தக் குரல்",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "அமைப்புகள் குரல்கள் கட்டுப்பாட்டு பட்டியில் உள்ள ஒரு வரி விசைப்பலகை குறிப்பு. குறியீடுகள் விசைகள்: Space, மேல்/கீழ் அம்புகள், மற்றும் Shift+Space.",
     "message": "கேட்க Space ஐ அழுத்தவும், குரல்களுக்கு இடையில் நகர ↑↓, மீண்டும் மாற்ற ⇧Space."
+  },
+  "voicesListenHint": {
+    "message": "இலவச மாதிரியைக் கேட்க ஒரு குரலைக் கிளிக் செய்யவும். உங்களுக்குப் பிடித்த குரலைக் கண்டறிந்ததும் “பயன்படுத்து” என்பதைத் தேர்ந்தெடுக்கவும்.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "கேட்பதற்கான விருப்பங்கள்",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "ஒரு ஹோஸ்டின் ஸ்டூடியோவுக்குள் அந்த ஹோஸ்டின் குரல் பட்டியல் ஏற்றப்படாதபோது காட்டப்படும் பிழை நிலை; $host$ என்பது உதவியாளர்.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "உங்கள் குரலைச் சேமிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "நீங்கள் சேமித்த குரல் தற்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும் அல்லது வேறொரு குரலைத் தேர்ந்தெடுக்கவும்.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "அமைப்புகள் AI Chat தாவலில் உள்ள குரல் பட்டியல் பகுதியின் துணைத்தலைப்பு.",
     "message": "ஒவ்வொரு தளத்திலும் பதில்களை ஒலிப்பாக வாசிக்கும் குரலைத் தேர்வு செய்யுங்கள்."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "அமைப்புகள் AI Chat தாவலில் உள்ள குரல் பட்டியல் பகுதியின் தலைப்பு.",
     "message": "குரல்கள்"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$-க்கான உங்கள் குரல் இப்போது $name$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "அமைப்புகள் குரல் பட்டியலில் value-tier குரல்களுக்கான குழுத் தலைப்பு. CSS மூலம் uppercase-ஆக ரெண்டர் செய்யப்படுகிறது.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "$host$-க்குப் பயன்படுத்து",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$-இன் சொந்தக் குரலைப் பயன்படுத்து",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "அமைப்புகள் குரல் பட்டியலில், ஒவ்வொரு ஹோஸ்ட்-க்கும் இருக்கும் 'இந்தக் குரலைப் பயன்படுத்து' பொத்தானுக்கான அணுகல்தன்மை லேபல்; $name$ என்பது குரல், $host$ என்பது உதவியாளர் (எ.கா. Pi, Claude).",
     "message": "$host$-இல் $name$-ஐ பயன்படுத்து",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "குரல்-கண்டறிதல் மாதிரியை இயக்க தேவையான ஆரம்ப WebAssembly நினைவகத்தை உலாவி வழங்காதபோது ஏற்படும் பிழை.",
     "message": "குரல் கண்டறிதல் தொடங்க முடியாது: இந்த உலாவியில் WebAssembly நினைவகம் கிடைக்கவில்லை."
-  },
-  "voicesListeningOptions": {
-    "message": "கேட்பதற்கான விருப்பங்கள்",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "இலவச மாதிரியைக் கேட்க ஒரு குரலைக் கிளிக் செய்யவும். உங்களுக்குப் பிடித்த குரலைக் கண்டறிந்ததும் “பயன்படுத்து” என்பதைத் தேர்ந்தெடுக்கவும்.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "$host$-க்குப் பயன்படுத்து",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$-க்கான உங்கள் குரல் இப்போது $name$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "உங்கள் குரலைச் சேமிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "$host$-இன் சொந்தக் குரலைப் பயன்படுத்து",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "நீங்கள் சேமித்த குரல் தற்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும் அல்லது வேறொரு குரலைத் தேர்ந்தெடுக்கவும்.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "குரலை மாற்று",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

@@ -338,6 +338,52 @@ snapshot.
 Refresh deliberately when a host redesigns — a stale fixture is a signal to
 re-capture, not a contract violation.
 
+### Redaction (on by default) — what it does and does not promise
+
+Captures come from pages the founder is signed into, so the recorder redacts as
+it copies (#552). Every point where host content is copied — the resting
+snapshot, attribute values, element text, and mutation `value`/`added`/`removed`
+payloads — runs through it, and the record is stamped `"redaction": {"enabled":
+true}`.
+
+What it replaces, with stable and obviously-fake markers:
+
+| Class | Marker |
+| --- | --- |
+| JWTs (`eyJ…`) | the `alg:none` placeholder from the #541 scrub |
+| `Bearer` / `Basic` / `Token` credentials | `Bearer REDACTED` |
+| Email addresses | `redacted@example.com` |
+| UUIDs (message/device/conversation ids) | `00000000-0000-4000-8000-0000000000NN`, numbered per distinct source id so the fixture keeps its "these two refer to the same thing" topology |
+| `user-…` / `org-…` / `session-…` account ids | `user-REDACTED`, `org-REDACTED`, … |
+| `?access_token=…`-style credential query params | `access_token=REDACTED` |
+| Long random-looking runs (32+ chars, mixed classes, entropy ≥ 4.2; or 32+ hex) | `REDACTED-SECRET` |
+| Any attribute whose *name* says credential (`data-auth-token`, `api-key`, …) | `REDACTED` |
+| The value of an `<input>`/`<textarea>` whose `type` or naming says credential | `REDACTED` |
+
+**What it does NOT catch — read this before committing a capture.** It is a
+heuristic safety net, not a guarantee:
+
+- **Conversation content is not redacted, by design.** Message text *is* the
+  fixture; scrubbing it would leave nothing to test against. Capture from a
+  throwaway thread, and read what you are about to commit.
+- **Names, addresses, phone numbers and other free-text PII** in page copy pass
+  through untouched.
+- **Short or low-entropy secrets** (an 8-character code, a numeric OTP sitting in
+  a `<div>`) look exactly like ordinary content and survive.
+- **Novel credential shapes** — a host-specific opaque cookie value under a name
+  none of the keyword lists know — survive.
+- The long-secret rule trades recall for fidelity: the entropy floor is set to
+  preserve long host selectors, so a *low*-entropy token can slip through.
+
+So: capture-time redaction plus `gitleaks` (`doc/secret-scanning.md`) plus a read
+of the diff. None of the three is sufficient alone.
+
+**Opting out.** `window.__domCapture.start(sel, { redact: false })` records
+verbatim, for debugging a suspected redaction false positive. The record is
+stamped `"redaction": {"enabled": false}` with a `warning`, and `start()` returns
+a banner saying so. **An unredacted record must never be committed** — read it,
+learn what you needed, throw it away.
+
 ## Reloading and driving the mic without the founder (DEV-only hooks)
 
 Two of the loop's recurring founder asks now have in-extension, DEV-only escape

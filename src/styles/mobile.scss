@@ -132,30 +132,30 @@ html.immersive-view {
     display: none;
   }
 }
-html.mobile-device .chat-message .message-action-bar .saypi-tts-controls,
-html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {
-  /* on mobile, speech controls are in a popup menu instead */
-  display: none;
-}
-/* styling for the speech controls in the popup menu */
-html.mobile-device .chat-message .message-action-bar .saypi-cost-container,
-html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+/* SayPi's per-message TTS controls used to be hidden here, and the cost readout
+   re-laid-out as a full-width menu row, because on mobile they were relocated into
+   a long-press popup menu. That menu is gone — its emitter (`watchForPopupMenu`)
+   was removed in #427 and the `PopupMenu` class itself in #428 — so both rules had
+   stopped relocating anything and were simply deleting the controls from every
+   phone (#94). They now render inline in the message action bar exactly as they do
+   on desktop, styled by messages.scss.
 
-  .saypi-cost {
-    order: 2;
-    flex-grow: 1;
-    .vertical-separator {
-      display: none;
-    }
-  }
+   The one thing mobile still needs is an overflow guard. The action bar is a flex
+   row of the host's own buttons plus ours, and on a ~390px screen that row can run
+   past the right edge — the literal symptom #94 was filed for ("the button may
+   appear off the screen"). Allow it to wrap onto a second line instead. This is a
+   no-op whenever the row already fits, and stays scoped to mobile so desktop keeps
+   its single-line bar.
 
-  .saypi-pricing-link {
-    order: 1;
-    margin-left: 10px;
-  }
+   Scoped to `body.pi` deliberately. `.message-action-bar` is a marker this
+   extension puts on whatever `getActionBarSelector()` finds, on every host — and
+   on Claude that selector is Claude's own native flex container. Only pi.ai
+   actually receives `.saypi-tts-controls` (PiMessageControls.decorateControls is
+   the sole injector), so only pi.ai's bar gains our buttons and can overflow
+   because of them. Writing `flex-wrap` onto the other hosts' native chrome would
+   be changing their layout to fix a problem they do not have. */
+html.mobile-device body.pi .chat-message .message-action-bar {
+  flex-wrap: wrap;
 }
 
 /* Allow settings button on Firefox Android (popup now opens as a tab) */

@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Liukusäätimen otsikko, jolla määritetään, kuinka nopeasti avustajan ääni puhuu.",
+    "message": "Nopeus"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Työkaluohje, joka selittää puheen toistonopeuden liukusäätimen.",
+    "message": "Kuinka nopeasti Say, Pi -äänet puhuvat. Koskee seuraavaa vastausta, ei Pi:n omaa ääntä."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Tekstistä puheeksi -toiminto, joka on käyttämä $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -ääni"
+  },
+  "ttsVolumeLabel": {
+    "description": "Liukusäätimen otsikko, jolla määritetään avustajan äänen voimakkuus.",
+    "message": "Äänenvoimakkuus"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Työkaluohje, joka selittää puheen toistoäänenvoimakkuuden liukusäätimen.",
+    "message": "Kuinka voimakkaalla Say, Pi -äänet kuuluvat järjestelmän äänenvoimakkuuteen nähden. Koskee seuraavaa vastausta, ei Pi:n omaa ääntä."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Ääni pysähtyi -"
   },
+  "voicePlaybackHeading": {
+    "description": "Otsikko asetusten ryhmälle, joka hallitsee avustajan äänen toistoa.",
+    "message": "Äänen toisto"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ääni -asetukset"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Vaihda ääntä",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Näytetään Äänet-ohjauspalkissa, kun Say, Pi -ääntä ei ole valittu ja avustaja vastaa sen omalla sisäänrakennetulla äänellä; $host$ on avustaja, esimerkiksi Pi.",
     "message": "Ääni: $host$:n oma",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Yhden rivin pikanäppäinvihje asetusten Äänet-ohjauspalkissa. Merkit ovat näppäimiä: välilyönti, ylös/alas-nuolet ja Shift+välilyönti.",
     "message": "Paina välilyöntiä kuunnellaksesi, ↑↓ siirtyäksesi äänien välillä, ⇧Välilyönti palataksesi takaisin."
+  },
+  "voicesListenHint": {
+    "message": "Kuuntele ilmainen näyte napsauttamalla ääntä. Valitse ”Käytä”, kun löydät mieluisan äänen.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Kuunteluasetukset",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Virhetila yhden isännän studiossa, kun kyseisen isännän ääniluetteloa ei saatu ladattua; $host$ on avustaja.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Ääntäsi ei voitu tallentaa. Yritä uudelleen.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Alaotsikko äänikatalogiosioon asetusten AI Chat -välilehdessä",
     "message": "Valitse ääni, joka lukee vastaukset ääneen kullekin sivustolle."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Otsikko äänikatalogiosioon asetusten AI Chat -välilehdessä",
     "message": "Äänet"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ on nyt äänesi palvelussa $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Ryhmäotsikko edullisemman tason äänille asetusten äänikatalogissa. CSS muuntaa isoiksi kirjaimiksi.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Käytä palvelussa $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Käytä palvelun $host$ omaa ääntä",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Saavutettava nimi asetusten ääniluettelon isäntäkohtaiselle ”käytä tätä ääntä” -painikkeelle; $name$ on ääni, $host$ on avustaja (esim. Pi, Claude).",
     "message": "Käytä ääntä $name$ kohteessa $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Virhe, joka heitetään, kun selain ei tarjoa alkuperäistä WebAssembly-muistia, jota tarvitaan puheentunnistusmallin ajamiseen.",
     "message": "Puheentunnistus ei voi käynnistyä: WebAssembly-muisti ei ole käytettävissä tässä selaimessa."
-  },
-  "voicesListeningOptions": {
-    "message": "Kuunteluasetukset",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Kuuntele ilmainen näyte napsauttamalla ääntä. Valitse ”Käytä”, kun löydät mieluisan äänen.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Käytä palvelussa $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ on nyt äänesi palvelussa $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Ääntäsi ei voitu tallentaa. Yritä uudelleen.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Käytä palvelun $host$ omaa ääntä",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Tallentamasi ääni ei ole juuri nyt saatavilla. Yritä myöhemmin uudelleen tai valitse toinen ääni.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Vaihda ääntä",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

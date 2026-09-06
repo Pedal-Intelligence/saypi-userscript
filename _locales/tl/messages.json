@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Kasalukuyang hindi sinusuportahan sa Safari ang mga multilingguwal na boses."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Label para sa slider na nagtatakda kung gaano kabilis magsalita ang boses ng assistant.",
+    "message": "Bilis"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Tooltip na nagpapaliwanag sa slider ng bilis ng pag-playback ng boses.",
+    "message": "Kung gaano kabilis magsalita ang mga boses ng Say, Pi. Mula sa susunod na tugon ito ilalapat, hindi sa sariling boses ni Pi."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Teksto-sa-talumpati na pinapatakbo ng $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Voice"
+  },
+  "ttsVolumeLabel": {
+    "description": "Label para sa slider na nagtatakda kung gaano kalakas ang boses ng assistant.",
+    "message": "Lakas ng tunog"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Tooltip na nagpapaliwanag sa slider ng volume ng pag-playback ng boses.",
+    "message": "Kung gaano kalakas ang mga boses ng Say, Pi kumpara sa volume ng system mo. Mula sa susunod na tugon ito ilalapat, hindi sa sariling boses ni Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Tumigil ang boses -"
   },
+  "voicePlaybackHeading": {
+    "description": "Pamagat para sa pangkat ng mga setting na kumokontrol kung paano pinapatugtog ang boses ng assistant.",
+    "message": "Pag-playback ng boses"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Mga setting ng boses"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Palitan ang boses",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Ipinapakita sa control bar ng Mga Boses kapag walang napiling boses ng SayPi at sumasagot ang assistant gamit ang isa sa sarili nitong built-in na boses; ang $host$ ay ang assistant, gaya ng Pi.",
     "message": "Boses mo: sariling boses ni $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Isang-linyang keyboard hint sa control bar ng Voices sa settings. Ang mga glyph ay mga key: Space, ang pataas/pababang arrow, at Shift+Space.",
     "message": "Pindutin ang Space para makinig, ↑↓ para lumipat sa mga boses, ⇧Space para bumalik."
+  },
+  "voicesListenHint": {
+    "message": "Mag-click ng boses para makarinig ng libreng sample. Piliin ang “Gamitin” kapag nakahanap ka ng gusto mo.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Mga opsyon sa pakikinig",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Error state sa loob ng studio ng isang host kapag hindi na-load ang voice catalog ng host na iyon; $host$ ang assistant.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Hindi na-save ang boses mo. Pakisubukang muli.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Hindi available ngayon ang naka-save mong boses. Subukang muli mamaya, o pumili ng ibang boses.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Subheading para sa seksyon ng voice catalog sa settings AI Chat tab",
     "message": "Piliin ang boses na magbabasa nang malakas ng mga sagot sa bawat site."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Heading para sa seksyon ng voice catalog sa settings AI Chat tab",
     "message": "Mga boses"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ na ang boses mo para sa $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Heading ng grupo para sa value-tier na mga boses sa settings voice catalog. Nirender na uppercase ng CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Gamitin para sa $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Gamitin ang sariling boses ng $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Accessible label para sa button na 'gamitin ang boses na ito' kada host sa voice catalog ng settings; $name$ ang boses, $host$ ang assistant (hal. Pi, Claude).",
     "message": "Gamitin ang $name$ sa $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Error na ibinabato kapag hindi inilalantad ng browser ang initial WebAssembly memory na kailangan para patakbuhin ang voice-detection model.",
     "message": "Hindi makapagsimula ang voice detection: hindi available ang WebAssembly memory sa browser na ito."
-  },
-  "voicesListeningOptions": {
-    "message": "Mga opsyon sa pakikinig",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Mag-click ng boses para makarinig ng libreng sample. Piliin ang “Gamitin” kapag nakahanap ka ng gusto mo.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Gamitin para sa $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ na ang boses mo para sa $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Hindi na-save ang boses mo. Pakisubukang muli.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Gamitin ang sariling boses ng $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Hindi available ngayon ang naka-save mong boses. Subukang muli mamaya, o pumili ng ibang boses.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Palitan ang boses",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

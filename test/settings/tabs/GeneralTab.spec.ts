@@ -117,6 +117,75 @@ describe('GeneralTab', () => {
     });
   });
 
+  describe('voice playback controls (#96/#117)', () => {
+    const tick = () => new Promise(resolve => setTimeout(resolve, 10));
+
+    it('loads the saved speed and volume into the sliders and readouts', async () => {
+      await chromeMock.storage.set({ ttsPlaybackRate: 1.5, ttsVolume: 40 });
+
+      await generalTab.init();
+
+      const speed = container.querySelector<HTMLInputElement>('#tts-playback-rate');
+      const volume = container.querySelector<HTMLInputElement>('#tts-volume');
+      expect(speed?.value).toBe('1.5');
+      expect(volume?.value).toBe('40');
+      expect(container.querySelector('#tts-playback-rate-value')?.textContent).toContain('1.5');
+      expect(container.querySelector('#tts-volume-value')?.textContent).toContain('40');
+    });
+
+    it('defaults to 1.0x and 100% when nothing is saved', async () => {
+      await generalTab.init();
+
+      expect(container.querySelector<HTMLInputElement>('#tts-playback-rate')?.value).toBe('1');
+      expect(container.querySelector<HTMLInputElement>('#tts-volume')?.value).toBe('100');
+    });
+
+    it('normalises a corrupt saved value rather than showing it', async () => {
+      await chromeMock.storage.set({ ttsPlaybackRate: 99, ttsVolume: 'loud' });
+
+      await generalTab.init();
+
+      expect(container.querySelector<HTMLInputElement>('#tts-playback-rate')?.value).toBe('2');
+      expect(container.querySelector<HTMLInputElement>('#tts-volume')?.value).toBe('100');
+    });
+
+    it('updates the readout while dragging, without writing to storage on every frame', async () => {
+      await generalTab.init();
+
+      const speed = container.querySelector<HTMLInputElement>('#tts-playback-rate')!;
+      speed.value = '1.3';
+      speed.dispatchEvent(new Event('input'));
+      await tick();
+
+      expect(container.querySelector('#tts-playback-rate-value')?.textContent).toContain('1.3');
+      expect(chromeMock.storage._getState().ttsPlaybackRate).toBeUndefined();
+    });
+
+    it('saves the speed and tells the open chat tab about it', async () => {
+      await generalTab.init();
+
+      const speed = container.querySelector<HTMLInputElement>('#tts-playback-rate')!;
+      speed.value = '1.5';
+      speed.dispatchEvent(new Event('change'));
+      await tick();
+
+      expect(chromeMock.storage._getState().ttsPlaybackRate).toBe(1.5);
+      expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(123, { ttsPlaybackRate: 1.5 });
+    });
+
+    it('saves the volume and tells the open chat tab about it', async () => {
+      await generalTab.init();
+
+      const volume = container.querySelector<HTMLInputElement>('#tts-volume')!;
+      volume.value = '25';
+      volume.dispatchEvent(new Event('change'));
+      await tick();
+
+      expect(chromeMock.storage._getState().ttsVolume).toBe(25);
+      expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(123, { ttsVolume: 25 });
+    });
+  });
+
   describe('analytics toggle', () => {
     it('should load saved analytics preference', async () => {
       await chromeMock.storage.set({ shareData: true });

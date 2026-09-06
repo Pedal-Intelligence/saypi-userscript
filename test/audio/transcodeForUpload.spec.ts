@@ -2,7 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock the Opus path so the transcode orchestration can be exercised without
 // real WebCodecs (JSDOM has none). The real encode is covered at Layer 3.
-vi.mock("../../src/audio/OpusEncoder", () => ({
+vi.mock("../../src/audio/OpusEncoder", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../src/audio/OpusEncoder")>()),
   isOpusUploadSupported: vi.fn(),
   encodeToOpusWebM: vi.fn(),
 }));
@@ -12,7 +13,12 @@ import {
   convertToWavBlob,
   convertToWavBuffer,
 } from "../../src/audio/AudioEncoder";
-import { isOpusUploadSupported, encodeToOpusWebM } from "../../src/audio/OpusEncoder";
+import {
+  isOpusUploadSupported,
+  encodeToOpusWebM,
+  OpusIncompleteOutputError,
+} from "../../src/audio/OpusEncoder";
+import { logger } from "../../src/LoggingModule";
 
 const frames = new Float32Array([0, 0.5, -0.5, 0.25, -0.25, 1, -1]);
 
@@ -72,5 +78,21 @@ describe("transcodeForUpload — WAV→Opus at the network boundary (#414)", () 
     const out = await transcodeForUpload(input);
     expect(out).toBe(input);
     expect(out.type).toBe("audio/wav");
+  });
+
+  it("uploads the WAV when the encoder emitted no audio, without re-reporting it (#630)", async () => {
+    vi.mocked(isOpusUploadSupported).mockResolvedValue(true);
+    vi.mocked(encodeToOpusWebM).mockRejectedValue(
+      new OpusIncompleteOutputError("Opus encode produced no audio chunks for 1600 samples")
+    );
+    const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
+
+    const input = wavBlob();
+    const out = await transcodeForUpload(input);
+
+    expect(out).toBe(input);
+    expect(out.type).toBe("audio/wav");
+    // OpusEncoder already warned with the sample count and browser.
+    expect(warn).not.toHaveBeenCalled();
   });
 });

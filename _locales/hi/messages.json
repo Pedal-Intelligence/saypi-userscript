@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "सफ़ारी में वर्तमान में बहुभाषी आवाज़ें समर्थित नहीं हैं।"
   },
+  "ttsPlaybackRateLabel": {
+    "description": "सहायक की आवाज़ कितनी तेज़ बोलती है, यह तय करने वाले स्लाइडर का लेबल।",
+    "message": "गति"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "वॉइस प्लेबैक गति स्लाइडर समझाने वाला टूलटिप।",
+    "message": "Say, Pi की आवाज़ें कितनी तेज़ बोलेंगी। अगले उत्तर से लागू होगा, Pi की अपनी आवाज़ पर नहीं।"
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "टेक्स्ट-टू-स्पीच $ttsEngine$ द्वारा संचालित",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "टीटीएस आवाज"
+  },
+  "ttsVolumeLabel": {
+    "description": "सहायक की आवाज़ कितनी तेज़ सुनाई देती है, यह तय करने वाले स्लाइडर का लेबल।",
+    "message": "वॉल्यूम"
+  },
+  "ttsVolumeTooltip": {
+    "description": "वॉइस प्लेबैक वॉल्यूम स्लाइडर समझाने वाला टूलटिप।",
+    "message": "Say, Pi की आवाज़ें आपके सिस्टम वॉल्यूम के सापेक्ष कितनी तेज़ सुनाई देंगी। अगले उत्तर से लागू होगा, Pi की अपनी आवाज़ पर नहीं।"
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "आवाज रोका -"
   },
+  "voicePlaybackHeading": {
+    "description": "सहायक की आवाज़ कैसे चलाई जाती है, इससे जुड़ी सेटिंग्स के समूह का शीर्षक।",
+    "message": "आवाज़ चलाना"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "आवाज सेटिंग्स"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "आवाज़ बदलें",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Voices नियंत्रण पट्टी में तब दिखाया जाता है, जब Say, Pi की कोई आवाज़ चुनी न हो और सहायक अपनी अंतर्निहित आवाज़ों में से किसी एक में जवाब दे; $host$ सहायक का नाम है, जैसे Pi।",
     "message": "आपकी आवाज़: $host$ की अपनी",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "सेटिंग्स के Voices कंट्रोल बार में एक लाइन का कीबोर्ड संकेत। ये चिन्ह कुंजियाँ हैं: Space, ऊपर/नीचे वाले तीर, और Shift+Space।",
     "message": "सुनने के लिए Space दबाएँ, आवाज़ों में जाने के लिए ↑↓, वापस स्विच करने के लिए ⇧Space"
+  },
+  "voicesListenHint": {
+    "message": "मुफ़्त नमूना सुनने के लिए किसी आवाज़ पर क्लिक करें। पसंद की आवाज़ मिलने पर “उपयोग करें” चुनें।",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "सुनने के विकल्प",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "किसी एक होस्ट के स्टूडियो के अंदर त्रुटि स्थिति, जब उस होस्ट का वॉइस कैटलॉग लोड नहीं हो पाया; $host$ असिस्टेंट है।",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "आपकी आवाज़ सहेजी नहीं जा सकी। कृपया फिर से कोशिश करें।",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "आपकी सहेजी गई आवाज़ अभी उपलब्ध नहीं है। बाद में फिर से कोशिश करें या दूसरी आवाज़ चुनें।",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "सेटिंग्स के AI Chat टैब में आवाज़ कैटलॉग सेक्शन के लिए उपशीर्षक",
     "message": "हर साइट पर जवाबों को ज़ोर से पढ़ने वाली आवाज़ चुनें।"
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "सेटिंग्स के AI Chat टैब में आवाज़ कैटलॉग सेक्शन के लिए शीर्षक",
     "message": "आवाज़ें"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$host$ के लिए अब आपकी आवाज़ $name$ है।",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "सेटिंग्स आवाज़ कैटलॉग में वैल्यू-टियर आवाज़ों के लिए समूह शीर्षक। CSS द्वारा अपरकेस में रेंडर होता है।",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "$host$ के लिए उपयोग करें",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "$host$ की अपनी आवाज़ का उपयोग करें",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "सेटिंग्स वॉइस कैटलॉग में प्रति-होस्ट 'इस आवाज़ का उपयोग करें' बटन के लिए सुलभ लेबल; $name$ आवाज़ है, $host$ असिस्टेंट है (जैसे Pi, Claude)।",
     "message": "$host$ पर $name$ उपयोग करें",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "एरर, जब ब्राउज़र वॉइस-डिटेक्शन मॉडल चलाने के लिए ज़रूरी शुरुआती WebAssembly मेमोरी उपलब्ध नहीं कराता।",
     "message": "वॉइस डिटेक्शन शुरू नहीं हो सकता: इस ब्राउज़र में WebAssembly मेमोरी उपलब्ध नहीं है।"
-  },
-  "voicesListeningOptions": {
-    "message": "सुनने के विकल्प",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "मुफ़्त नमूना सुनने के लिए किसी आवाज़ पर क्लिक करें। पसंद की आवाज़ मिलने पर “उपयोग करें” चुनें।",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "$host$ के लिए उपयोग करें",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$host$ के लिए अब आपकी आवाज़ $name$ है।",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "आपकी आवाज़ सहेजी नहीं जा सकी। कृपया फिर से कोशिश करें।",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "$host$ की अपनी आवाज़ का उपयोग करें",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "आपकी सहेजी गई आवाज़ अभी उपलब्ध नहीं है। बाद में फिर से कोशिश करें या दूसरी आवाज़ चुनें।",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "आवाज़ बदलें",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

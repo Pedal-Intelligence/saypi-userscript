@@ -3,7 +3,7 @@ import { logger } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isFirefox, isSafari, isMobileChromium, likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
-import { ttsVolumeForQuietMode } from "../tts/quietVolume.ts";
+import { resolveTtsVolume } from "../tts/quietVolume.ts";
 
 /**
  * Bridge class that connects the content script to the offscreen document for audio playback
@@ -405,11 +405,17 @@ export default class OffscreenAudioBridge {
       return false;
     }
     
-    // Quiet/whisper mode plays the assistant's reply softly (#437).
-    const volume = ttsVolumeForQuietMode(
-      UserPreferenceModule.getInstance().getCachedQuietMode()
-    );
-    return await this._sendMessageToOffscreen("AUDIO_LOAD_REQUEST", { url, autoPlay, volume });
+    // The user's chosen volume (#117), attenuated further by quiet/whisper mode
+    // (#437), and their chosen speed (#96). Both ride every load request: the
+    // offscreen <audio> element is shared by all tabs, so it must be told what
+    // THIS tab wants rather than keeping whatever the last one left.
+    const preferences = UserPreferenceModule.getInstance();
+    const volume = resolveTtsVolume({
+      volume: preferences.getCachedTtsVolume(),
+      quietMode: preferences.getCachedQuietMode(),
+    });
+    const playbackRate = preferences.getCachedTtsPlaybackRate();
+    return await this._sendMessageToOffscreen("AUDIO_LOAD_REQUEST", { url, autoPlay, volume, playbackRate });
   }
 
   /**

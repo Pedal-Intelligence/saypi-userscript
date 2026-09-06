@@ -10,6 +10,13 @@ Layout: `host-dom/<host>/<YYYY-MM-DD>/<scenario>.json`
 Each file records a resting snapshot **and** the live mutation stream around an
 interaction — capturing dynamic behavior, not just a still frame.
 
+Captures are **redacted at capture time** (#552): tokens, emails, UUIDs and
+account ids are replaced with stable fake markers before the record is written,
+and each file carries `"redaction": {"enabled": true}` to say so. That is a
+heuristic safety net, not a guarantee — conversation text is preserved on
+purpose, and short or novel secrets can survive — so still read a capture before
+committing it (`doc/secret-scanning.md` → "Fixture hygiene").
+
 **These are not API contracts.** Host DOM drifts over time. A fixture that no
 longer matches a host is a signal to re-capture deliberately (re-run the
 recorder), not evidence of a regression in our code. Keep older dated captures

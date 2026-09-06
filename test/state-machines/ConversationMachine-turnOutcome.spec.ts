@@ -2,15 +2,21 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createTestActor } from './support/testActor';
 
 // ---------------------------------------------------------------------------
-// Turn-outcome emission wiring (issue #505).
+// Turn-outcome emission wiring (issues #505, #510).
 //
 // The resume window lives entirely in ConversationMachine: it OPENS when the
-// endpointing auto-submit fires (converting.submitting) and CLOSES on the single
-// transition that leaves responding.piThinking:
-//   - piThinking -> piWriting / piSpeaking : the response started (response_started_at = now)
-//   - piThinking -> userInterrupting        : the user resumed first (user_resumed, resumed_at)
-//   - PI_THINKING_TIMEOUT_MS fallback         : response never started (response_started_at = null)
-// piThinking is entered/left exactly once per turn, so exactly one event fires.
+// endpointing auto-submit fires (converting.submitting) and CLOSES when the
+// assistant becomes AUDIBLE, or when the turn ends without ever becoming audible:
+//   - piThinking -> piSpeaking              : TTS start (response_started_at = now)
+//   - piWriting  -> piSpeaking              : TTS start (response_started_at = now)
+//   - piWriting  -> listening (stopped writing) : completed unspoken
+//                                             (response_started_at = text-appear)
+//   - piThinking/piWriting -> userInterrupting : the user resumed first
+//                                             (user_resumed, resumed_at)
+//   - PI_THINKING_TIMEOUT_MS fallback       : response never started (null)
+// piThinking -> piWriting only ARMS the fallback timestamp; it does not close the
+// window (#510). Each turn traverses exactly one of the closing transitions above,
+// so exactly one event fires per turn.
 //
 // These tests assert the machine hands the right observation to postTurnOutcome
 // (mocked). The correlation data (session id, last sequence number, score,
@@ -159,18 +165,28 @@ describe('ConversationMachine: turn-outcome emission', () => {
     vi.useRealTimers();
   });
 
-  it('emits response-started with the turn snapshot when the reply text appears (piWriting)', () => {
+  it('holds the window open while the reply text streams, closing it at TTS start (#510)', () => {
     driveToPiThinking(service);
     expect(service.state.matches({ responding: 'piThinking' })).toBe(true);
 
     service.send('saypi:piWriting');
+    const textAppearedAt = Date.now();
+
+    // Text on screen is not yet a response the user can hear: window still open.
+    expect(postTurnOutcomeMock).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1_200); // TTS synthesis lag
+    service.send('saypi:piSpeaking');
+    const ttsStartedAt = Date.now();
 
     expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
     const arg = postTurnOutcomeMock.mock.calls[0][0];
     expect(arg.trigger).toBe('auto');
     expect(arg.userResumed).toBe(false);
     expect(arg.resumedAt).toBeNull();
-    expect(typeof arg.responseStartedAt).toBe('number');
+    // The window closes at TTS start, not at text-appear.
+    expect(arg.responseStartedAt).toBe(ttsStartedAt);
+    expect(arg.responseStartedAt).toBeGreaterThan(textAppearedAt);
     // correlation snapshot from context
     expect(arg.sessionId).toBe('sess-1');
     expect(arg.lastSequenceNumber).toBe(1);
@@ -180,14 +196,79 @@ describe('ConversationMachine: turn-outcome emission', () => {
     expect(arg.lastSpeechEndedAt).toBeGreaterThan(0);
   });
 
-  it('emits response-started when TTS begins (piSpeaking)', () => {
+  it('emits response-started when TTS begins without a writing signal (piThinking -> piSpeaking)', () => {
     driveToPiThinking(service);
     service.send('saypi:piSpeaking');
 
     expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
     const arg = postTurnOutcomeMock.mock.calls[0][0];
     expect(arg.userResumed).toBe(false);
-    expect(typeof arg.responseStartedAt).toBe('number');
+    expect(arg.responseStartedAt).toBe(Date.now());
+  });
+
+  it('emits exactly once for a spoken turn, not again when the speech ends', () => {
+    driveToPiThinking(service);
+    service.send('saypi:piWriting');
+    expect(postTurnOutcomeMock).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(500);
+    service.send('saypi:piSpeaking');
+    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
+
+    service.send('saypi:piStoppedSpeaking');
+
+    expect(service.state.matches('listening')).toBe(true);
+    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('falls back to text-appear time when the response completes unspoken (TTS off)', () => {
+    driveToPiThinking(service);
+
+    service.send('saypi:piWriting');
+    const textAppearedAt = Date.now();
+    expect(postTurnOutcomeMock).not.toHaveBeenCalled(); // window still open
+    vi.advanceTimersByTime(3_000); // the reply streams to the page, no TTS ever starts
+    service.send('saypi:piStoppedWriting');
+
+    expect(service.state.matches('listening')).toBe(true);
+    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
+    const arg = postTurnOutcomeMock.mock.calls[0][0];
+    expect(arg.userResumed).toBe(false);
+    expect(arg.resumedAt).toBeNull();
+    // Nothing was ever audible, so the response start is when the text appeared —
+    // NOT when the response finished.
+    expect(arg.responseStartedAt).toBe(textAppearedAt);
+  });
+
+  it('counts a resume while the reply is still only on screen as a resume (#510)', () => {
+    driveToPiThinking(service);
+    service.send('saypi:piWriting');
+    vi.advanceTimersByTime(400);
+
+    // The user has SEEN the reply but HEARD nothing, and starts talking again:
+    // a plausible false finish, which v1 mis-filed as an out-of-scope barge-in.
+    service.send('saypi:userSpeaking');
+
+    expect(service.state.matches({ responding: 'userInterrupting' })).toBe(true);
+    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
+    const arg = postTurnOutcomeMock.mock.calls[0][0];
+    expect(arg.userResumed).toBe(true);
+    expect(arg.resumedAt).toBe(Date.now());
+    // Nothing was ever spoken, so there is no response-start to report.
+    expect(arg.responseStartedAt).toBeNull();
+
+    // And the resumed turn does not emit a second time when TTS later starts.
+    service.send({ type: 'saypi:userStoppedSpeaking', duration: 100 });
+    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not emit when the call is hung up mid-writing (window abandoned)', () => {
+    driveToPiThinking(service);
+    service.send('saypi:piWriting');
+
+    service.send('saypi:hangup');
+
+    expect(service.state.matches('inactive')).toBe(true);
+    expect(postTurnOutcomeMock).not.toHaveBeenCalled();
   });
 
   it('emits a resume (false-finish) when the user speaks again before the response starts', () => {
@@ -220,20 +301,23 @@ describe('ConversationMachine: turn-outcome emission', () => {
   });
 
   it('does NOT re-emit a stale snapshot when piThinking is entered outside the auto-submit path', () => {
-    // Turn 1: a real auto-submit -> response starts -> one emit, then back to listening.
+    // Turn 1: a real auto-submit -> response completes -> one emit, then back to listening.
     driveToPiThinking(service);
     service.send('saypi:piWriting');
-    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
     service.send('saypi:piStoppedWriting');
+    expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1);
     expect(service.state.matches('listening')).toBe(true);
 
     // A later, non-SayPi-submit thinking episode (e.g. the assistant starts
     // responding to a manually-typed message) enters responding.piThinking via
     // the listening `saypi:piThinking` handler — NOT via converting.submitting, so
-    // no fresh snapshot is taken. The prior turn's snapshot must not be re-emitted.
+    // no fresh snapshot is taken. The prior turn's snapshot must not be re-emitted,
+    // at any of the window-closing transitions.
     service.send('saypi:piThinking');
     expect(service.state.matches({ responding: 'piThinking' })).toBe(true);
     service.send('saypi:piWriting');
+    service.send('saypi:piSpeaking');
+    service.send('saypi:piStoppedSpeaking');
 
     expect(postTurnOutcomeMock).toHaveBeenCalledTimes(1); // still only turn 1's emit
   });
@@ -248,6 +332,7 @@ describe('ConversationMachine: turn-outcome emission', () => {
     expect(service.state.matches({ responding: 'piThinking' })).toBe(true);
 
     service.send('saypi:piWriting');
+    service.send('saypi:piSpeaking');
 
     expect(postTurnOutcomeMock).not.toHaveBeenCalled();
   });

@@ -47,8 +47,10 @@ regexes = [
 # here. Scope: ONLY the generic-api-key rule, ONLY these fixture paths. Every
 # specific rule (jwt, openai-api-key, aws-*, github-*, private-key, ...) still
 # applies to these files, so a real captured token still fails the scan.
-# Belt-and-braces: the DOM capture recorder is to redact tokens/PII at capture
-# time (doc/secret-scanning.md, "Fixture hygiene").
+# These files are pre-#552 manual page-saves. The DOM capture recorder now
+# redacts tokens/PII at capture time (doc/secret-scanning.md, "Fixture
+# hygiene"), so this allowlist covers history, not new captures — it can shrink
+# as these files are re-captured or retired.
 [[allowlists]]
 description = "generic-api-key keyword+entropy false positives in recorded third-party DOM fixtures (public experiment/gate ids)"
 targetRules = ["generic-api-key"]

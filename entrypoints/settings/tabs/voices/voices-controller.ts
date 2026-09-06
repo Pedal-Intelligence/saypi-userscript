@@ -1050,6 +1050,17 @@ export class VoicesController {
       scope.remove();
       current.appendChild(this.renderFallbackVoice(vm));
     }
+    // The saved voice still resolves, but its provider is hard-down (#568).
+    // Say so next to the name rather than removing the row: the user needs to
+    // know why their voice has gone quiet, and that the fix is one pick away.
+    if (selectedRemote && vm.currentUnavailable) {
+      const note = document.createElement("span");
+      note.className = "voice-current-unavailable";
+      note.setAttribute("role", "status");
+      note.dataset.i18n = "voicesSavedUnavailable";
+      note.textContent = getMessage("voicesSavedUnavailable");
+      current.appendChild(note);
+    }
     if (vm.host.hasOwnVoice && this.deps.unsetVoice && (selectedRemote || vm.unavailable)) {
       const native = document.createElement("button");
       native.type = "button";

@@ -54,6 +54,84 @@ export function GeneralPanel() {
         </label>
       </div>
 
+      {/*
+        Voice playback (#96 speed / #117 volume). A quiet section label over two
+        rows that keep the same card + `.wraper` shape as the toggles above, so
+        the group reads as part of the list rather than a new kind of control.
+        The readouts carry NO `data-i18n`: replaceI18n() rewrites every such
+        element's text on each tab load and would wipe the value out.
+      */}
+      <div id="voice-playback-preference" class="preference-group">
+        <h3
+          class="preference-group-heading"
+          data-i18n="voicePlaybackHeading"
+        >
+          Voice playback
+        </h3>
+
+        <div
+          class="user-preference-item w-full max-w-lg"
+          id="tts-playback-rate-preference"
+        >
+          <label
+            class="wraper"
+            for="tts-playback-rate"
+            data-i18n-attr="title:ttsPlaybackRateTooltip"
+            title="How fast Say, Pi's voices speak. Takes effect from the next reply."
+          >
+            <span class="label-text" data-i18n="ttsPlaybackRateLabel">
+              Speed
+            </span>
+            <div class="control range-control">
+              <input
+                type="range"
+                class="range-slider"
+                id="tts-playback-rate"
+                name="ttsPlaybackRate"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value="1"
+              />
+              <output class="range-readout" id="tts-playback-rate-value" for="tts-playback-rate">
+                1.0&#215;
+              </output>
+            </div>
+          </label>
+        </div>
+
+        <div
+          class="user-preference-item w-full max-w-lg"
+          id="tts-volume-preference"
+        >
+          <label
+            class="wraper"
+            for="tts-volume"
+            data-i18n-attr="title:ttsVolumeTooltip"
+            title="How loud Say, Pi's voices are, relative to your system volume."
+          >
+            <span class="label-text" data-i18n="ttsVolumeLabel">
+              Volume
+            </span>
+            <div class="control range-control">
+              <input
+                type="range"
+                class="range-slider"
+                id="tts-volume"
+                name="ttsVolume"
+                min="0"
+                max="100"
+                step="5"
+                value="100"
+              />
+              <output class="range-readout" id="tts-volume-value" for="tts-volume">
+                100%
+              </output>
+            </div>
+          </label>
+        </div>
+      </div>
+
       <div
         class="user-preference-item w-full max-w-lg"
         id="analytics-consent-preference-item"

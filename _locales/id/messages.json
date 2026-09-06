@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "Suara multibahasa saat ini tidak didukung di Safari."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Label untuk penggeser yang mengatur seberapa cepat suara asisten berbicara.",
+    "message": "Kecepatan"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Tooltip yang menjelaskan penggeser kecepatan pemutaran suara.",
+    "message": "Seberapa cepat suara Say, Pi berbicara. Berlaku mulai balasan berikutnya, tetapi tidak untuk suara Pi."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Teks-ke-ucapan didukung oleh $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Suara tts"
+  },
+  "ttsVolumeLabel": {
+    "description": "Label untuk penggeser yang mengatur seberapa keras suara asisten terdengar.",
+    "message": "Volume"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Tooltip yang menjelaskan penggeser volume pemutaran suara.",
+    "message": "Seberapa keras suara Say, Pi terdengar dibandingkan volume sistem Anda. Berlaku mulai balasan berikutnya, tetapi tidak untuk suara Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Suara berhenti -"
   },
+  "voicePlaybackHeading": {
+    "description": "Judul untuk grup setelan yang mengatur cara suara asisten diputar.",
+    "message": "Pemutaran suara"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Pengaturan Suara"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Ganti suara",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Ditampilkan di bilah kontrol Suara saat tidak ada suara Say, Pi yang dipilih dan asisten menjawab dengan salah satu suara bawaannya; $host$ adalah nama asisten, misalnya Pi.",
     "message": "Suara Anda: bawaan $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Petunjuk keyboard satu baris di bilah kontrol Suara pada setelan. Glif adalah tombol: Space, panah atas/bawah, dan Shift+Space.",
     "message": "Tekan Space untuk mendengarkan, ↑↓ untuk berpindah antar suara, ⇧Space untuk beralih kembali."
+  },
+  "voicesListenHint": {
+    "message": "Klik suara untuk mendengar sampel gratis. Pilih “Gunakan” saat menemukan yang Anda suka.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Opsi mendengarkan",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Status error di dalam studio milik satu host saat katalog suara host tersebut gagal dimuat; $host$ adalah asisten.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Suara Anda tidak dapat disimpan. Silakan coba lagi.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Suara yang Anda simpan sedang tidak tersedia. Coba lagi nanti, atau pilih suara lain.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Subjudul untuk bagian katalog suara di tab setelan AI Chat",
     "message": "Pilih suara yang membacakan balasan dengan lantang di setiap situs."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Judul untuk bagian katalog suara di tab setelan AI Chat",
     "message": "Suara"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ kini menjadi suara Anda untuk $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Judul grup untuk suara tingkat hemat di katalog suara setelan. Dirender huruf besar oleh CSS.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Gunakan untuk $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Gunakan suara bawaan $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Label aksesibel untuk tombol per-host 'gunakan suara ini' di katalog suara pengaturan; $name$ adalah suara, $host$ adalah asisten (misalnya Pi, Claude).",
     "message": "Gunakan $name$ di $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Error yang muncul ketika browser tidak menyediakan memori WebAssembly awal yang diperlukan untuk menjalankan model pendeteksi suara.",
     "message": "Pendeteksian suara tidak dapat dimulai: memori WebAssembly tidak tersedia di browser ini."
-  },
-  "voicesListeningOptions": {
-    "message": "Opsi mendengarkan",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Klik suara untuk mendengar sampel gratis. Pilih “Gunakan” saat menemukan yang Anda suka.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Gunakan untuk $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ kini menjadi suara Anda untuk $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Suara Anda tidak dapat disimpan. Silakan coba lagi.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Gunakan suara bawaan $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Suara yang Anda simpan sedang tidak tersedia. Coba lagi nanti, atau pilih suara lain.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Ganti suara",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

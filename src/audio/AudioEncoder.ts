@@ -1,5 +1,9 @@
 import { encodeWAV, decodePcm16Wav } from "./WavEncoder";
-import { isOpusUploadSupported, encodeToOpusWebM } from "./OpusEncoder";
+import {
+  isOpusUploadSupported,
+  encodeToOpusWebM,
+  OpusIncompleteOutputError,
+} from "./OpusEncoder";
 import { logger } from "../LoggingModule";
 
 /**
@@ -61,10 +65,16 @@ export async function transcodeForUpload(audioBlob: Blob): Promise<Blob> {
     if (!samples || samples.length === 0) return audioBlob;
     return await encodeToOpusWebM(samples);
   } catch (e) {
-    logger.warn(
-      "[AudioEncoder] Opus transcode failed; uploading 16-bit PCM WAV",
-      e
-    );
+    // The incomplete-output case (#630) already warned with the sample count,
+    // chunk count and browser, so don't report the same occurrence twice.
+    if (e instanceof OpusIncompleteOutputError) {
+      logger.debug("[AudioEncoder] Opus stream incomplete; uploading WAV", e);
+    } else {
+      logger.warn(
+        "[AudioEncoder] Opus transcode failed; uploading 16-bit PCM WAV",
+        e
+      );
+    }
     return audioBlob;
   }
 }

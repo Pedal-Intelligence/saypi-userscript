@@ -1259,6 +1259,14 @@
     "description": "Message shown when TTS is disabled in Safari",
     "message": "V Safari momentálně nejsou podporovány vícejazyčné hlasy."
   },
+  "ttsPlaybackRateLabel": {
+    "description": "Popisek posuvníku, který určuje rychlost řeči hlasu asistenta.",
+    "message": "Rychlost"
+  },
+  "ttsPlaybackRateTooltip": {
+    "description": "Nápověda vysvětlující posuvník rychlosti přehrávání hlasu.",
+    "message": "Jak rychle hlasy Say, Pi mluví. Platí od další odpovědi, nikoli pro vlastní hlas Pi."
+  },
   "ttsPoweredBy": {
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Text-to-speech poháněný $ttsEngine$",
@@ -1326,6 +1334,14 @@
   "ttsVoice": {
     "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS hlas"
+  },
+  "ttsVolumeLabel": {
+    "description": "Popisek posuvníku, který určuje hlasitost hlasu asistenta.",
+    "message": "Hlasitost"
+  },
+  "ttsVolumeTooltip": {
+    "description": "Nápověda vysvětlující posuvník hlasitosti přehrávání hlasu.",
+    "message": "Jak hlasité jsou hlasy Say, Pi vzhledem k hlasitosti systému. Platí od další odpovědi, nikoli pro vlastní hlas Pi."
   },
   "unlockButton": {
     "description": "The title (tooltip) of the button to unlock the screen.",
@@ -1641,6 +1657,10 @@
     "description": "Text shown when voice is paused due to insufficient credits",
     "message": "Hlas se zastavil -"
   },
+  "voicePlaybackHeading": {
+    "description": "Nadpis skupiny nastavení určujících, jak se přehrává hlas asistenta.",
+    "message": "Přehrávání hlasu"
+  },
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Nastavení hlasu"
@@ -1797,6 +1817,10 @@
       }
     }
   },
+  "voicesChangeVoice": {
+    "message": "Změnit hlas",
+    "description": "Action beside the current voice that opens the full voice catalog."
+  },
   "voicesFallbackHostVoice": {
     "description": "Zobrazuje se na liště Ovládání hlasu, když není vybrán hlas Say, Pi a asistent odpovídá jedním ze svých vlastních vestavěných hlasů; $host$ je asistent, například Pi.",
     "message": "Váš hlas: vlastní hlas $host$",
@@ -1850,6 +1874,14 @@
   "voicesKeyboardHint": {
     "description": "Jednořádková nápověda ke klávesnici v ovládací liště Hlasů v nastavení. Glyfy jsou klávesy: mezerník, šipky nahoru/dolů a Shift+mezerník.",
     "message": "Stiskněte mezerník pro poslech, ↑↓ pro pohyb mezi hlasy, ⇧mezerník pro přepnutí zpět."
+  },
+  "voicesListenHint": {
+    "message": "Kliknutím na hlas si poslechnete bezplatnou ukázku. Až najdete hlas, který se vám líbí, zvolte „Použít“.",
+    "description": "Instruction for auditioning voices without changing the saved choice."
+  },
+  "voicesListeningOptions": {
+    "message": "Možnosti poslechu",
+    "description": "Disclosure for optional sample playback controls and keyboard help."
   },
   "voicesLoadError": {
     "description": "Chybový stav uvnitř studia jednoho hostitele, když se nepodařilo načíst katalog hlasů pro daného hostitele; $host$ je asistent.",
@@ -1997,6 +2029,14 @@
       }
     }
   },
+  "voicesSaveFailed": {
+    "message": "Hlas se nepodařilo uložit. Zkuste to prosím znovu.",
+    "description": "Voice preference could not be saved; current choice is unchanged."
+  },
+  "voicesSavedUnavailable": {
+    "message": "Váš uložený hlas je momentálně nedostupný. Zkuste to později nebo vyberte jiný hlas.",
+    "description": "Saved voice cannot currently be resolved; its preference is preserved."
+  },
   "voicesSectionDescription": {
     "description": "Podnadpis sekce katalogu hlasů v nastavení na kartě AI Chat",
     "message": "Vyberte hlas, který bude na jednotlivých webech číst odpovědi nahlas."
@@ -2008,6 +2048,20 @@
   "voicesSectionTitle": {
     "description": "Nadpis sekce katalogu hlasů v nastavení na kartě AI Chat",
     "message": "Hlasy"
+  },
+  "voicesSelectedOnHost": {
+    "message": "$name$ je nyní váš hlas pro $host$.",
+    "description": "Confirmation after a voice choice is saved.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Shimmer"
+      },
+      "host": {
+        "content": "$2",
+        "example": "Pi"
+      }
+    }
   },
   "voicesShelfEveryday": {
     "description": "Nadpis skupiny pro dostupnější hlasy v katalogu hlasů v nastavení. CSS jej vykreslí velkými písmeny.",
@@ -2135,6 +2189,26 @@
       }
     }
   },
+  "voicesUseForHost": {
+    "message": "Použít pro $host$",
+    "description": "Commit the previewed voice for the named assistant.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "voicesUseNativeHost": {
+    "message": "Použít vlastní hlas služby $host$",
+    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
+    "placeholders": {
+      "host": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "voicesUseOnHost": {
     "description": "Popisek pro čtečky obrazovky pro tlačítko „použít tento hlas“ pro konkrétního hostitele v katalogu hlasů v nastavení; $name$ je hlas, $host$ je asistent (např. Pi, Claude).",
     "message": "Použít $name$ u $host$",
@@ -2172,59 +2246,5 @@
   "webAssemblyMemoryUnavailable": {
     "description": "Chyba vyhozená, když prohlížeč neposkytuje počáteční paměť WebAssembly potřebnou pro spuštění modelu detekce hlasu.",
     "message": "Detekci hlasu nelze spustit: v tomto prohlížeči není k dispozici paměť WebAssembly."
-  },
-  "voicesListeningOptions": {
-    "message": "Možnosti poslechu",
-    "description": "Disclosure for optional sample playback controls and keyboard help."
-  },
-  "voicesListenHint": {
-    "message": "Kliknutím na hlas si poslechnete bezplatnou ukázku. Až najdete hlas, který se vám líbí, zvolte „Použít“.",
-    "description": "Instruction for auditioning voices without changing the saved choice."
-  },
-  "voicesUseForHost": {
-    "message": "Použít pro $host$",
-    "description": "Commit the previewed voice for the named assistant.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSelectedOnHost": {
-    "message": "$name$ je nyní váš hlas pro $host$.",
-    "description": "Confirmation after a voice choice is saved.",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Shimmer"
-      },
-      "host": {
-        "content": "$2",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSaveFailed": {
-    "message": "Hlas se nepodařilo uložit. Zkuste to prosím znovu.",
-    "description": "Voice preference could not be saved; current choice is unchanged."
-  },
-  "voicesUseNativeHost": {
-    "message": "Použít vlastní hlas služby $host$",
-    "description": "Clear the SayPi voice override and use the assistant’s own voice.",
-    "placeholders": {
-      "host": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "voicesSavedUnavailable": {
-    "message": "Váš uložený hlas je momentálně nedostupný. Zkuste to později nebo vyberte jiný hlas.",
-    "description": "Saved voice cannot currently be resolved; its preference is preserved."
-  },
-  "voicesChangeVoice": {
-    "message": "Změnit hlas",
-    "description": "Action beside the current voice that opens the full voice catalog."
   }
 }

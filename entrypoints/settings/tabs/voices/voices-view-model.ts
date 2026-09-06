@@ -8,6 +8,7 @@ import {
 import {
   CLAUDE_MENU_CAP,
   curateShortlist,
+  isVoiceUnavailable,
   visibleCatalog,
 } from "../../../../src/tts/VoiceCuration";
 
@@ -102,6 +103,19 @@ export interface StudioViewModel {
    * (built-ins and grandfathered voices aren't in the catalog).
    */
   stagedCurrent: SpeechSynthesisVoiceRemote | null;
+  /**
+   * The staged voice resolves, but the server says its provider is hard-down
+   * right now (`availability: "unavailable"`, #568).
+   *
+   * Deliberately NOT folded into `unavailable` above: that one means "a saved
+   * choice exists and cannot be resolved from the catalog at all", and the two
+   * want opposite treatment. An unresolvable choice has nothing to show; this
+   * one has a voice to keep showing — grandfathered into the rail, named in the
+   * control bar, and labelled so the user knows why it has gone quiet and that
+   * they can pick another right here. Silently vanishing the voice someone is
+   * using is worse than showing it with a note.
+   */
+  currentUnavailable: boolean;
   featuredIds: string[];
   /** The resolved pin set (server defaults ⊕ user overlay). */
   pinned: Set<string>;
@@ -258,6 +272,7 @@ export function viewModel(
     catalog,
     hasBuiltins,
     unavailable: data.unavailable ?? false,
+    currentUnavailable: stagedCurrent ? isVoiceUnavailable(stagedCurrent) : false,
     currentId,
     stagedCurrent,
     featuredIds,

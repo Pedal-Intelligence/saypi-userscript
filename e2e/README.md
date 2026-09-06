@@ -61,10 +61,44 @@ step is a browsable report, not an empty directory (#463). `workers: 1` /
 `fullyParallel: false` — the harness binds mock servers and a fake-mic device
 per run, so the specs run serially.
 
+## Specs
+
+Every file in `e2e/specs/`. "Gate" is the merge posture: **Required** specs run in
+the `npm run test:e2e` suite that the e2e workflow gates merges on; **On-demand**
+specs are matched only by their own config and never run in CI.
+
+| Spec | What it proves | Gate |
+| --- | --- | --- |
+| `chat-adjacent-dictation.e2e.ts` | `hey.pi.ai` — where pi.ai bounces logged-out visitors — gets *universal dictation*, not the chat call button: the real manifest decides which script injects, and the dictation button lands on a real field (#559) | Required |
+| `decoration.e2e.ts` | The bundled content script detects Pi on the mock page and injects `#saypi-callButton`. Doubles as the GA-less bootstrap guard (telemetry must fail soft, #292) and proves the `__SAYPI_BUILD_STAMP__` Vite define really replaced the token in a real build (#312) | Required |
+| `dictation-stt.e2e.ts` | The full voice-input path against the local mocks: fake mic → `getUserMedia` → offscreen Silero-v5 VAD → `onSpeechEnd` → SW POSTs `/transcribe` → transcript drafted into `#saypi-prompt` | Required |
+| `mobile-tts-controls.e2e.ts` | Against the **real built CSS** at a 390x844 phone viewport: SayPi's per-message TTS controls render, stay inside the viewport, are hit-testable and meet the 24px target size — the vestigial popup-menu `display:none` that removed them from every phone is gone (#94) | Required |
+| `mock-isolation.e2e.ts` | The per-test mock reset holds: a fresh test observes **zero** `/transcribe` state, so no spec's hit-count assertion can be satisfied by an earlier spec's traffic (#462) | Required |
+| `offscreen-shutdown.e2e.ts` | An idle offscreen auto-shutdown closes the document but keeps the live content-script port, so the next `VAD_SPEECH_END` stays routable (#308) | Required |
+| `onboarding.e2e.ts` | The welcome page works fully offline: local artwork and Poppins load with the context offline and zero external requests, the environment radio writes `quietMode` to storage, the microphone test runs, and the narrow viewport doesn't overflow | Required |
+| `opus-upload.e2e.ts` | A synthetic voice turn uploads **WebM/Opus** when this Chromium supports WebCodecs Opus encoding, and falls back to 16-bit PCM WAV when it doesn't — either way a transcript must land, so the encode can never break the upload (#414 / #417) | Required |
+| `pi-action-buttons.e2e.ts` | Against the **real built CSS**: SayPi's redundant copy button is hidden now that pi.ai ships its own, and the telemetry button is visually seamless with pi.ai's native action-bar buttons (size, radius, padding, colour, icon size) | Required |
+| `pi-audio-ownership.e2e.ts` | An open Pi conversation follows a voice chosen in a *different* extension document: host muting, simultaneous native players, SPA navigation, ownership surviving a reload, and native playback resuming when the override is cleared | Required |
+| `pi-call-button.e2e.ts` | Against the **real built CSS**: the call button carries no vertical margin (so it doesn't inflate Pi's composer by 16px) and the active-call button keeps its visible grey disc while disabled | Required |
+| `pi-native-restore.e2e.ts` | The Settings custom→native→custom round trip against real media: an inherited muted, paused Pi reply resumes without a page reload, with auto-read initially on *and* off | Required |
+| `pi-voice-settings.e2e.ts` | The real content script on Pi's mock settings route: a stored SayPi voice reads correctly in light and dark, "Change voice" opens the catalog without committing, and a native Pi card runs Pi's own handler *and* clears the SayPi override in real `chrome.storage.local` | Required |
+| `settings-layout.e2e.ts` | Settings layout stability: the header stays anchored across tab switches with real (non-overlay) scrollbars — the ~7px shunt of #582/#583 — and no tab overflows horizontally at 390/735/736px, including the longer `de` and `el` catalogs | Required |
+| `settings-opens-in-tab.e2e.ts` | The `openPopup` runtime message opens settings as a normal browser **tab** (not a popup window), dedupes to the already-open tab, and `options_ui` is registered in the manifest | Required |
+| `settings.e2e.ts` | The Preact settings page bootstraps for real: the header mounts, every tab panel renders content on selection, the Voices rail draws every voice the mock catalog serves, and nothing throws a `pageerror` | Required |
+| `settings.visual.ts` | Pixel baselines per settings tab via `toHaveScreenshot`, auth/quota/status regions masked. Platform-specific committed baselines — a local pre-flight tool, deliberately **not** a cross-platform CI check | On-demand |
+| `sw-recycle.e2e.ts` | An idle MV3 service-worker recycle (forced via CDP `Target.closeTarget`) raises **no** "VAD service disconnected" alarm and voice input self-heals on the next call (#307) | Required |
+| `synthetic-audio-stt.e2e.ts` | The **in-extension** synthetic audio source drives the whole pipeline with no microphone: `saypi:dev-feed-speech` → offscreen latch → WAV decoded to a `MediaStream` → VAD → mock STT → transcript. This is the spec to copy for a mic-less voice turn (`doc/synthetic-voice-turn.md`) | Required |
+| `telemetry-gate.e2e.ts` | Against the **real built CSS**: the telemetry button stays hidden on the most-recent message until that voice turn actually recorded metrics (gated on `body.saypi-recent-telemetry`), so a greeting never shows it | Required |
+| `tooltip-contrast.e2e.ts` | Against the **real built CSS**: `.saypi-tooltip` renders as an opaque dark pill on the claude.ai mock host, which defines no `--black` — the undefined-`var()`-computes-to-`transparent` bug | Required |
+| `voices-rail.e2e.ts` | What the Voices audition room *does*: DOM focus landing on the rail, `Space` alone sounding a voice (asserted on the heard counter), the arming rule in both directions, rows ordered by measured pitch on a shared reference line, wrapping at 320px, inflated-copy locales, and `Play all` walking the queue | Required |
+| `voices-release.e2e.ts` | The release-candidate voice journey under **normal** autoplay policy: a saved native choice survives reopening, keyboard preview doesn't commit, `Enter` commits only its host, switch-back compares without committing, and an open studio refreshes an external choice | Required |
+
 ## Settings page (Preact migration)
 
 The settings UI (`entrypoints/settings/**`) was migrated from imperative HTML
-strings to Preact components. Two specs cover it — they load the real
+strings to Preact components. Six specs cover it (`settings`, `settings-layout`,
+`settings-opens-in-tab`, `voices-rail`, `voices-release`, and the on-demand
+`settings.visual`) — they load the real
 `settings.html` over `chrome-extension://<id>/…`, so the *full* bootstrap runs
 with the extension runtime live (`browser.runtime.getURL`, chunk loading, the
 Preact mounts, and the imperative controllers that wire them by id). That's the
@@ -72,36 +106,15 @@ thing a static file server can't show and unit tests can't reach: a page that
 mounts but renders wrong (e.g. the PR4f header that lost a CSS utility) or a
 panel left empty by a chunk/import break.
 
-- **`specs/settings.e2e.ts` — REQUIRED (in the CI gate).** Asserts the header
-  mounts, every tab panel renders content on selection, and there are **no
-  uncaught page errors**. Robust and deterministic: it keys on DOM presence, not
-  pixels, and treats network 404s (the hermetic env has no auth/status backend)
-  as expected — only `pageerror` (a thrown mount/controller) fails it. It seeds
-  `chrome.storage.local` with a consent decision so the General tab renders its
-  steady state rather than the first-run consent gate (whose hero overlays the
-  sidebar). On the Voices tab it goes one step further than "has children" —
-  the mock API now serves a catalog, so it asserts the rail drew every voice in
-  it. That panel's content is network-bound, and a dead fetch used to render an
-  empty state that a child count happily accepted.
+Those specs are inventoried in the table above; two things about them don't fit
+in a table cell:
 
-- **`specs/voices-rail.e2e.ts` — REQUIRED (in the CI gate).** What the Voices
-  rail *does*, as opposed to whether it mounted: DOM focus landing on the rail
-  when the tab is activated (and `Space` alone then sounding a voice, asserted
-  on the **heard counter**, which only moves past a real playback threshold),
-  the arming rule in both directions, the pitch ordering and the shared
-  reference line measured off laid-out boxes, the twins staying apart at rest,
-  and `Play all` walking the queue. All of it needs a real browser: jsdom has no
-  layout, no `decodeAudioData` and no media element, so the rail's ~2650 unit
-  tests stop exactly where this starts. **It cannot prove sticky autoplay
-  activation** — `launch-args.ts` passes `--autoplay-policy=no-user-gesture-required`
-  to every Layer-3 Chrome, so chained playback is licensed here regardless; see
-  the header comment in the spec.
-
-- **`specs/voices-release.e2e.ts` — REQUIRED (in the CI gate).** Covers saved
-  choice, native return, cross-document refresh, narrow-layout labels, and real
-  media progress during preview/comparison/Play all. It opts out of the harness’s
-  autoplay bypass and first requires a gestureless ordinary-page negative control
-  to fail, so its positive sequence result establishes normal-policy behavior.
+- **`voices-rail.e2e.ts` cannot prove sticky autoplay activation.**
+  `launch-args.ts` passes `--autoplay-policy=no-user-gesture-required` to every
+  Layer-3 Chrome, so chained playback is licensed there regardless. See the
+  spec's header comment. `voices-release.e2e.ts` is the one that opts *out* of
+  that bypass, and first requires a gestureless ordinary-page negative control
+  to fail, so its positive result establishes normal-policy behaviour.
 
 - **`specs/settings.visual.ts` — ON-DEMAND (NOT in the CI gate).** Pixel
   baselines per tab via `toHaveScreenshot`, with auth/quota/status regions
@@ -141,33 +154,7 @@ panel left empty by a chunk/import break.
         │    --use-file-for-fake-audio-capture=<speech-16k-mono.wav>
         │    --headless=new
         ▼
-  Specs
-     decoration.e2e.ts   page.goto(https://pi.ai/talk) -> #saypi-callButton appears
-     dictation-stt.e2e.ts fake mic (WAV) -> getUserMedia -> offscreen Silero-v5 VAD
-                          -> onSpeechEnd -> SW POSTs /transcribe (mock echoes a
-                          transcript) -> draft written into #saypi-prompt.value
-     mock-isolation.e2e.ts a fresh test observes ZERO mock /transcribe state —
-                          guards the per-test reset the context fixture performs,
-                          so no spec's hits/content-type assertion can be
-                          satisfied by another spec's traffic (#462)
-     chat-adjacent-dictation.e2e.ts page.goto(https://hey.pi.ai/) -> the CHAT
-                          script's `https://pi.ai/*` doesn't match, so only the
-                          universal script injects -> .saypi-dictation-button
-                          appears and #saypi-callButton does NOT (#559)
-     tooltip-contrast.e2e.ts page.goto(https://claude.ai/new) -> body.claude ->
-                          the real built CSS renders .saypi-tooltip as an opaque
-                          dark pill (guards the host-CSS-var contrast bug)
-     sw-recycle.e2e.ts    force an idle MV3 service-worker recycle (CDP
-                          Target.closeTarget) -> assert NO "VAD disconnected"
-                          alarm + voice input self-heals on next call (#307)
-     offscreen-shutdown.e2e.ts force the offscreen idle auto-shutdown -> assert
-                          the document closes but the live content-script port
-                          survives (so VAD_SPEECH_END stays routable) (#308)
-     voices-rail.e2e.ts   settings.html -> Voices -> the mock /voices catalog +
-                          its three real MP3s -> the rail takes DOM focus, Space
-                          sounds a voice (heard counter moves), arrows stay
-                          silent until armed, the prints share one reference
-                          line and ascend by measured pitch, Play all walks
+  Specs (e2e/specs/*.e2e.ts — every one inventoried in "Specs" above)
 ```
 
 The pivotal trick is **`--host-resolver-rules`**: the extension is built with the
@@ -209,26 +196,7 @@ instead of silently calling the real internet.
 | `support/voices.ts` | drive-the-rail helpers: `openVoicesRail` (waits out catalog → prints → pitch re-sort, never sleeps) and a MutationObserver-backed **play log**, which is how a spec proves a voice did *not* sound |
 | `support/lifecycle.ts` | MV3 lifecycle drivers (`evictServiceWorker`, `reacquireServiceWorker`, `isWorkerDead`, `triggerOffscreenShutdown`, `hasOffscreenDocument`, `getConnectedTabCount`) — see the section below |
 | `support/lifecycle-targets.ts` | pure CDP-target predicates (`isExtensionServiceWorkerTarget`, `pickExtensionServiceWorkerTarget`); unit-tested in the **required** gate (`test/e2e/lifecycle-targets.spec.ts`) |
-| `specs/*.e2e.ts` | the tests |
-
-`specs/pi-voice-settings.e2e.ts` exercises the actual content script on Pi's
-mock settings route: a stored SayPi voice appears in a readable notice in both
-themes, Change voice opens the candidate catalog without changing the stored
-choice, and a native Pi card both runs Pi's own selection handler and clears the
-SayPi override in real `chrome.storage.local`. It also covers a native id arriving
-through a storage change, without treating it as a SayPi override, and returning
-to Pi from an unresolved saved voice. The test
-attaches light/dark screenshots; it measures contrast from the built extension
-CSS and representative host-theme utilities rather than keeping pixel baselines.
-
-`specs/pi-audio-ownership.e2e.ts` keeps real native media playing on the mock Pi
-conversation while a separate extension document changes the saved voice. It
-checks immediate host muting, direct/nested insertion of simultaneous native
-players, SPA navigation, saved ownership after reload, and native playback after
-clearing the override. All three native media clocks advance while muted, then
-resume audible playback together when native ownership returns. The test waits for fresh-install
-seeding before representing an existing user, so a late onboarding writer cannot
-silently adopt a default during the return-to-Pi assertion.
+| `specs/*.e2e.ts`, `specs/*.visual.ts` | the tests — see [Specs](#specs) for the full inventory |
 
 ## The dual-env gotcha (read this before editing launch/build config)
 
@@ -349,8 +317,3 @@ When this suite is red, first reproduce locally with `npm run e2e:build &&
 npm run test:e2e`; if it's green locally but red on CI, suspect timing/flake and
 inspect the uploaded Playwright trace before changing any test.
 
-
-`specs/pi-native-restore.e2e.ts` covers the actual Settings custom→native→custom
-round trip against real media: an inherited muted, paused Pi reply must resume
-without reloading, with auto-read initially on or off. The host control is a
-local DOM contract fixture; no real Pi messages or user credits are consumed.
