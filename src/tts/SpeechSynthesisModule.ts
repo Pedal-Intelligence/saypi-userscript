@@ -115,7 +115,9 @@ class SpeechSynthesisModule {
    * settings page deliberately keeps a token it has been told is dead and
    * tracks the truth beside it (entrypoints/settings/shared/auth-sync.ts,
    * #227). Without this hook the fingerprint below would stay `user:A` after a
-   * sign-out and go on serving the previous account's voice list.
+   * sign-out and go on serving the previous account's voice list — and
+   * {@link getVoices} would go on FETCHING it, carrying that account's still-
+   * live bearer out of a page that has been told the session is over.
    *
    * Per-instance, not static: each extension context has its own module
    * instance, so the settings page sets this without any reach into the
@@ -145,6 +147,32 @@ class SpeechSynthesisModule {
       return "anonymous";
     }
     return `user:${jwtManager.getClaims()?.userId ?? "authenticated"}`;
+  }
+
+  /**
+   * Has this context told us, explicitly, that it is signed out?
+   *
+   * Only a context that injected {@link setAuthStateReader} can answer yes —
+   * and injecting one is an assertion that the JwtManager singleton here is
+   * NOT the truth. On the settings page it is not: a sign-out broadcast
+   * deliberately leaves the singleton's token in place so that a settings tab
+   * cannot destroy the extension-wide refresh alarm (#227). That token is
+   * still live, and `callApi` — directly, or via the background proxy — builds
+   * its `Authorization` header from a manager, never from this reader. So
+   * without this check the catalog fetch below would leave the page carrying
+   * the previous account's credentials and come back with their voice list,
+   * under a UI that has already said "sign in for TTS". The quota panel avoids
+   * exactly this by asking the background and returning before any fetch.
+   *
+   * Deliberately NOT applied when no reader was injected. There the singleton
+   * IS the truth, but "the singleton says no token" is a CLIENT-side expiry
+   * judgement about a stateless bearer — the server is the honest arbiter of
+   * what an anonymous caller may see, and this repo verifies no server
+   * behaviour that would let the client answer for it. Content scripts keep
+   * asking, exactly as before.
+   */
+  private toldSignedOut(): boolean {
+    return this.authStateReader !== null && !this.authStateReader();
   }
 
   /**
@@ -191,6 +219,13 @@ class SpeechSynthesisModule {
     const appId = this.resolveChatbotKey(chatbot, chatbotIdOverride);
     const cacheKey = appId ?? UNKNOWN_CHATBOT_CACHE_KEY;
     this.syncVoicesCacheWithAuthState();
+    // Nothing to ask for, and asking would cost more than an empty list — see
+    // toldSignedOut(). Placed after the fingerprint sync so the caches are
+    // still dropped on the way through, and before the cache read so a stale
+    // entry cannot answer either.
+    if (this.toldSignedOut()) {
+      return [];
+    }
     const cached = this.voicesCache.get(cacheKey);
     if (cached && (cached.voices.length > 0 ||
       Date.now() - cached.fetchedAt < VOICE_CATALOG_RETRY_DELAY_MS)) {

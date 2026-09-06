@@ -259,11 +259,12 @@ function auditionThrough(
 // carry an explicit chatbot id — the no-arg default resolves to "web" here.
 function defaultDeps(): VoiceStudioDeps {
   const speech = SpeechSynthesisModule.getInstance();
-  // The TTS module keys its voice cache on who is signed in, and on this page
-  // the JwtManager singleton is not that answer: a sign-out broadcast leaves
-  // its token in place on purpose (#227). Hand the module the settings-scoped
-  // truth, or the rail re-reads the catalog and is served the previous
-  // account's list straight back out of the cache.
+  // The TTS module keys its voice cache on who is signed in — and decides
+  // whether to fetch a catalog at all — and on this page the JwtManager
+  // singleton is not that answer: a sign-out broadcast leaves its token in
+  // place on purpose (#227). Hand the module the settings-scoped truth, or the
+  // rail re-reads the catalog: served the previous account's list out of the
+  // cache, or fetched fresh on that account's still-live bearer.
   speech.setAuthStateReader(isSettingsAuthenticated);
   const prefs = UserPreferenceModule.getInstance();
   const storage = defaultLocalStorage();

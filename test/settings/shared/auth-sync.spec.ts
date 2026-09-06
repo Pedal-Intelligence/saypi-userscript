@@ -12,7 +12,8 @@ import {
 import EventBus from "../../../src/events/EventBus";
 import { getJwtManagerSync } from "../../../src/JwtManager";
 import { SpeechSynthesisModule } from "../../../src/tts/SpeechSynthesisModule";
-import type { TextToSpeechService } from "../../../src/tts/TextToSpeechService";
+import { TextToSpeechService } from "../../../src/tts/TextToSpeechService";
+import { callApi } from "../../../src/ApiClient";
 import type { AudioStreamManager } from "../../../src/tts/AudioStreamManager";
 import type { UserPreferenceModule } from "../../../src/prefs/PreferenceModule";
 import { mockVoices } from "../../data/Voices";
@@ -49,6 +50,25 @@ vi.mock("../../../src/ConfigModule", () => ({
     apiServerUrl: "https://api.saypi.ai",
   },
 }));
+
+/**
+ * `callApi` is the REQUEST LAYER — the one place that attaches
+ * `Authorization` (directly, or by handing the request to the background
+ * proxy that attaches it). Spying here rather than on the TTS service is the
+ * whole point of the outbound-request test below: it can distinguish "the
+ * page decided not to ask" from "the page asked and the server said no".
+ */
+vi.mock("../../../src/ApiClient", () => ({
+  callApi: vi.fn(),
+}));
+const callApiMock = vi.mocked(callApi);
+
+/** A `/voices` response as the API returns one. */
+const voicesResponse = (voices: unknown[]) =>
+  new Response(JSON.stringify(voices), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
 
 const b64url = (obj: object) =>
   Buffer.from(JSON.stringify(obj))
@@ -412,11 +432,61 @@ describe("settings-page auth reconciliation (#227)", () => {
       userAVoices
     );
 
-    // Signed out, a /voices request comes back empty (mapped from 401).
-    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
+    // A signed-out page must not serve user A's list back out of the cache.
+    // The service stub is re-armed with A's voices ON PURPOSE: if the module
+    // asked for them it would get them, so an empty result here can only mean
+    // the cache was dropped AND the fetch was not made. (What the SERVER would
+    // answer an unauthenticated caller is not something this repo verifies —
+    // the outbound-request test below is what pins the client's behaviour.)
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve(userAVoices));
     await broadcastAuthStatus(false);
 
     expect(await speechSynthesisModule.getVoices(undefined, "claude")).toEqual([]);
+    expect(textToSpeechServiceMock.getVoices).not.toHaveBeenCalled();
+  });
+
+  it("sends NO outbound request from a page that has been told it is signed out (AC 3)", async () => {
+    // The gap the rendering half does not close. `isSettingsAuthenticated()`
+    // gates what the tab DRAWS and which cache entry it reads, but the fetch
+    // underneath ran on a different authority: SpeechSynthesisModule.getVoices
+    // -> TextToSpeechService.getVoices -> callApi, and callApi's Authorization
+    // header comes from the JwtManager singleton this design deliberately
+    // never clears (or, on the proxied path, from the background's own).
+    //
+    // So a sign-out — which now clears the catalog cache and re-renders, where
+    // before the tab simply froze until reload — used to put a real request on
+    // the wire for a page that had just been told the session was over.
+    //
+    // Everything below the module is production code; only callApi is a spy,
+    // because it is the request layer and the assertion is about the request.
+    const service = new TextToSpeechService("https://api.saypi.ai");
+    const speech = new SpeechSynthesisModule(
+      service,
+      {} as unknown as AudioStreamManager,
+      {} as unknown as UserPreferenceModule
+    );
+    speech.setAuthStateReader(() => isSettingsAuthenticated());
+
+    await openSettingsSignedInAs("user-a");
+    const userAVoices = [{ id: "voice-a", name: "A" }];
+    // A fresh Response per call — a body can only be read once.
+    callApiMock.mockImplementation(async () => voicesResponse(userAVoices));
+
+    // Control: signed in, the page really does fetch.
+    expect(await speech.getVoices(undefined, "claude")).toEqual(userAVoices);
+    expect(callApiMock).toHaveBeenCalledTimes(1);
+
+    await broadcastAuthStatus(false);
+    callApiMock.mockClear();
+
+    const voices = await speech.getVoices(undefined, "claude");
+
+    // The assertion this test exists for: nothing left the page.
+    expect(callApiMock).not.toHaveBeenCalled();
+    // And this is why that matters — the singleton is still holding user A's
+    // live bearer, on purpose (#227), so a request here would have carried it.
+    expect(getJwtManagerSync().getAuthHeader()).toMatch(/^Bearer /);
+    expect(voices).toEqual([]);
   });
 
   it("flips the open Voices tab from signed in to signed out, with no reload (AC 1)", async () => {

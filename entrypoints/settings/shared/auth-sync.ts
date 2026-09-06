@@ -46,9 +46,16 @@ import { getJwtManagerSync } from "../../../src/JwtManager";
  * token, the background's alarm and the stored recovery credentials alone.
  * Consumers read {@link isSettingsAuthenticated} instead of
  * `getJwtManagerSync().isAuthenticated()`, so a token the page has been told
- * is dead does not make a tab render as the previous user — including the TTS
- * module's voice-cache fingerprint, which the studio's deps point at this
- * state for the same reason (`SpeechSynthesisModule.setAuthStateReader`).
+ * is dead does not make a tab render as the previous user — nor FETCH as one:
+ * the studio's deps point the TTS module at this state
+ * (`SpeechSynthesisModule.setAuthStateReader`), which both keys its voice
+ * cache and stops the catalog request going out at all. That last part is not
+ * optional. `callApi` builds its `Authorization` header from a JwtManager —
+ * this page's on the direct path, the background's on the proxied one — and
+ * never from this state, so a request issued while the page is told signed out
+ * can still leave carrying the previous account's credentials. The only place
+ * the page can honestly stop it is before the request is made, which is what
+ * the quota panel already does (ask the background, return before any fetch).
  *
  * ## What this page DOES do to the alarm, and why that is the safe half
  *
