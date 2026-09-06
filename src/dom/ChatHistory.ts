@@ -1,5 +1,7 @@
 import {
   ElementTextStream,
+  getNestedText,
+  InputStreamOptions,
   LateChangeEvent,
   TextContent,
   ToolUseEvent,
@@ -671,6 +673,23 @@ class ChatHistoryNewMessageObserver
       return await this.streamSpeechFromHistory(this.speechHistory, message);
     }
 
+    return await this.beginStreamingSpeech(message);
+  }
+
+  /**
+   * Take ownership of a message that is being written RIGHT NOW: create its
+   * utterance, announce the writing to the conversation, and feed the arriving
+   * text to the synthesiser.
+   *
+   * Split out of {@link streamSpeech} so a reply that was already part-written
+   * when we attached can reach the same path without having to pass the
+   * new-arrival checks it would fail — see {@link adoptIfStillWriting}.
+   */
+  private async beginStreamingSpeech(
+    message: AssistantResponse,
+    streamOptions?: InputStreamOptions
+  ): Promise<StreamedSpeech | null> {
+    const snippet = message.text.substring(0, 10);
     const provider = await this.speechSynthesis.getActiveAudioProvider(
       this.chatbot
     );
@@ -722,9 +741,95 @@ class ChatHistoryNewMessageObserver
       },
       (lateChange) => {
         message.decorateIncompleteSpeech(true);
-      }
+      },
+      streamOptions
     );
     return new AssistantSpeech(utterance);
+  }
+
+  /**
+   * Adopt a reply that was ALREADY on screen when this observer attached — but
+   * only if the host is in fact still writing it.
+   *
+   * pi.ai has no chat-history element at all until a conversation exists, so on
+   * the FIRST turn of a NEW conversation the whole history — containers and all
+   * — is born mid-turn, and the speech manager attaches to a reply that is
+   * already part-written. The one-shot "what is already here" pass reads it as
+   * settled history: the message gets its controls, but nothing streams it. No
+   * `saypi:piWriting` is emitted, so the prompt sits on "thinking…" until the
+   * 15s safety net, and the reply is never spoken in the user's chosen voice
+   * (#365).
+   *
+   * Nothing in the host's markup reliably says "still writing", so we let the
+   * message answer for itself: watch it, and take it over the moment more text
+   * is added. "More" is the whole safety property here — a finished message
+   * never grows — so it is measured against the text that was on screen when we
+   * started watching, and measured on the ELEMENT rather than on the emitted
+   * chunk. The chunk cannot answer the question: a host stream with no
+   * per-token deltas re-emits the entire finished message as its first (and
+   * only) chunk, and a stream that has not been told about the initial text
+   * reports its first mutation as an addition of everything it can see. Both
+   * look exactly like growth, and neither is.
+   *
+   * Only offered for a host whose chat history can be born mid-turn, and only
+   * for the first such container — see
+   * {@link ChatHistorySpeechManager.registerPresentChatHistoryListener}.
+   */
+  async adoptIfStillWriting(message: AssistantResponse): Promise<void> {
+    const content = await message.decoratedContent();
+    // The baseline: everything already written when we joined. Read it BEFORE
+    // the probe exists, so no mutation can slip in between.
+    const textOnArrival = getNestedText(content);
+    const probe = message.createTextStream(content, {
+      includeInitialText: false,
+    });
+    this.continuationProbe?.disconnect();
+    this.continuationProbe = probe;
+
+    let subscription: Subscription | null = null;
+    let released = false;
+    const release = () => {
+      released = true;
+      subscription?.unsubscribe();
+      subscription = null;
+      probe.disconnect();
+      if (this.continuationProbe === probe) {
+        this.continuationProbe = null;
+      }
+    };
+
+    const onProbeActivity = () => {
+      if (released) return;
+      const textNow = getNestedText(content);
+      const grew =
+        textNow.length > textOnArrival.length &&
+        textNow.startsWith(textOnArrival) &&
+        textNow.slice(textOnArrival.length).trim().length > 0;
+      // Not growth: a re-render, a rewrite, a lazily-attached citation, or a
+      // whole-message re-emission. The reply is settled; leave it alone.
+      if (!grew) return;
+      release();
+      // The message is live after all, so the offer to generate its audio is
+      // stale. includeInitialText:true so the user hears the whole answer,
+      // not only the part written after we joined — which also keeps the
+      // completed text's hash matching the message's, so the speech is cached
+      // (and charged) once.
+      message.clearIncompleteSpeech();
+      void this.beginStreamingSpeech(message, { includeInitialText: true });
+    };
+
+    subscription = probe.getStream().subscribe({
+      next: onProbeActivity,
+      error: release,
+      complete: release,
+    });
+    // A block-capture stream emits and completes from inside subscribe(), i.e.
+    // before the line above has assigned `subscription`. Tidy up here instead
+    // of from a handler that could not yet see it.
+    if (released) {
+      subscription?.unsubscribe();
+      subscription = null;
+    }
   }
 
   teardown(): void {
@@ -737,11 +842,15 @@ class ChatHistoryNewMessageObserver
     super.disconnect();
     this.toolUseSubscription?.unsubscribe();
     this.toolUseSubscription = null;
+    this.continuationProbe?.disconnect();
+    this.continuationProbe = null;
     this.clearToolUseIndicator();
     this.teardown();
   }
 
   private textStream: ElementTextStream | null = null;
+  /** The "is this reply still being written?" watch — see adoptIfStillWriting. */
+  private continuationProbe: ElementTextStream | null = null;
   private toolUseSubscription: Subscription | null = null;
   private activeToolIndicatorElement: HTMLElement | null = null;
 
@@ -751,7 +860,8 @@ class ChatHistoryNewMessageObserver
     utterance: SpeechUtterance,
     onStart: () => void,
     onEnd: (fullText: string) => void,
-    onError?: (lateChange: LateChangeEvent) => void
+    onError?: (lateChange: LateChangeEvent) => void,
+    streamOptions?: InputStreamOptions
   ): void {
     // If we're already observing an element, disconnect from it
     if (this.textStream) {
@@ -762,7 +872,7 @@ class ChatHistoryNewMessageObserver
     this.clearToolUseIndicator();
 
     // Start observing the new element
-    this.textStream = message.createTextStream(messageContent);
+    this.textStream = message.createTextStream(messageContent, streamOptions);
     let streamStartTime: number = Date.now();
     let firstChunkTime: number | null = null;
     let lastChunkTime: number | null = null;

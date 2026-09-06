@@ -38,6 +38,12 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private newMessageObserver: ChatHistoryAdditionsObserver | null = null;
   /** The present container `newMessageObserver` is bound to, for idempotence. */
   private observedPresentContainer: Element | null = null;
+  /**
+   * Whether a message has already been offered to the mid-turn adoption path
+   * (#365). Only the first populated container this manager binds can be the
+   * one it joined mid-write; every later binding is a settled thread.
+   */
+  private adoptionOffered = false;
   private static pendingSpeeches: Map<
     string,
     {
@@ -264,6 +270,34 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     });
     this.observers.push(newMessagesObserver);
     this.newMessageObserver = newMessagesObserver;
+
+    // The container does not always mount BETWEEN turns. On the first turn of a
+    // new pi.ai conversation there is no chat history to find until the turn is
+    // already under way, so the last message above may be Pi's answer caught
+    // half-written — settled-looking, but still growing. Offer it to the
+    // additions observer, which takes it over only if more text actually
+    // arrives (#365).
+    //
+    // Narrowly, though. This method is shared by every host, and on Claude and
+    // ChatGPT the "recent" container IS the whole chat history, so without a
+    // gate the last message of any thread the user opens would be offered up —
+    // settled, already read, already paid for. Two conditions keep that from
+    // happening:
+    //   - the host must be one whose history can be born mid-turn at all, and
+    //   - it must be the FIRST populated container this manager binds, which is
+    //     the only binding that can have happened during a turn we joined late.
+    //     (A manager is built per chat-history element, and pi.ai replaces that
+    //     element per conversation, so this is once per conversation.)
+    // The growth check in adoptIfStillWriting is what makes it safe even then.
+    const lastInitialMessage = initialMessages[initialMessages.length - 1];
+    if (
+      lastInitialMessage &&
+      !this.adoptionOffered &&
+      this.chatbot.mountsChatHistoryMidTurn?.()
+    ) {
+      this.adoptionOffered = true;
+      void newMessagesObserver.adoptIfStillWriting(lastInitialMessage);
+    }
     return newMessagesObserver;
   }
 
