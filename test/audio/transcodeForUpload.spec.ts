@@ -16,7 +16,7 @@ import {
 import {
   isOpusUploadSupported,
   encodeToOpusWebM,
-  OpusEmptyOutputError,
+  OpusIncompleteOutputError,
 } from "../../src/audio/OpusEncoder";
 import { logger } from "../../src/LoggingModule";
 
@@ -83,7 +83,7 @@ describe("transcodeForUpload — WAV→Opus at the network boundary (#414)", () 
   it("uploads the WAV when the encoder emitted no audio, without re-reporting it (#630)", async () => {
     vi.mocked(isOpusUploadSupported).mockResolvedValue(true);
     vi.mocked(encodeToOpusWebM).mockRejectedValue(
-      new OpusEmptyOutputError("Opus encode produced no audio chunks for 1600 samples")
+      new OpusIncompleteOutputError("Opus encode produced no audio chunks for 1600 samples")
     );
     const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
 

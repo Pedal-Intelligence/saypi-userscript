@@ -35,17 +35,20 @@ const OPUS_CONFIG: AudioEncoderConfig = {
 let opusSupportPromise: Promise<boolean> | undefined;
 
 /**
- * Thrown when an encode finished without a single Opus chunk reaching the muxer.
+ * Thrown when an encode did not deliver a complete Opus stream to the muxer —
+ * either no chunk arrived at all, or one was dropped part-way through.
  *
- * The muxer will happily finalize a valid-but-audio-less WebM in that case, and
- * the server can only answer it with `invalid_audio` — so every transcription
- * from an affected install fails (#630, seen on Firefox 154). Callers treat this
- * like any other encode failure and upload the PCM WAV instead.
+ * The muxer finalizes whatever it was given, so neither case fails on its own:
+ * no chunks yields a valid-but-audio-less WebM the server can only answer with
+ * `invalid_audio` (#630, seen on Firefox 154), and a dropped chunk yields a
+ * truncated file that decodes to a partial transcript — a wrong answer, billed
+ * the same as a right one. Callers treat this like any other encode failure and
+ * upload the PCM WAV instead.
  */
-export class OpusEmptyOutputError extends Error {
+export class OpusIncompleteOutputError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message);
-    this.name = "OpusEmptyOutputError";
+    this.name = "OpusIncompleteOutputError";
     if (options && "cause" in options) {
       (this as { cause?: unknown }).cause = options.cause;
     }
@@ -83,9 +86,9 @@ async function probeOpusSupport(): Promise<boolean> {
 /**
  * Encode 16 kHz mono Float32 PCM samples to a WebM/Opus Blob.
  *
- * @throws if WebCodecs Opus is unavailable, encoding fails, or the encode
- *   produced no audio chunks (#630) — callers fall back to PCM WAV rather than
- *   uploading a file the server cannot decode.
+ * @throws if WebCodecs Opus is unavailable, encoding fails, or the encode did
+ *   not deliver a complete stream (#630) — callers fall back to PCM WAV rather
+ *   than uploading a file the server cannot decode, or can decode wrongly.
  */
 export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
   if (!(await isOpusUploadSupported())) {
@@ -105,8 +108,9 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
   // An encoder that emits nothing still yields a well-formed, empty container,
   // so success is measured by chunks actually muxed — not by flush() resolving.
   let chunksMuxed = 0;
-  // The browser owns the `output` callback: anything thrown inside it is
-  // swallowed and would otherwise vanish. Keep the first one for diagnosis.
+  // The browser owns the `output` callback, so anything thrown inside it is
+  // swallowed per invocation and would otherwise vanish. Keep the first one:
+  // it is both the diagnosis and the signal that this stream lost a chunk.
   let outputError: unknown;
 
   await new Promise<void>((resolve, reject) => {
@@ -160,12 +164,15 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
     }
   });
 
-  if (chunksMuxed === 0) {
+  // Reject on a dropped chunk too, not just on silence: finalizing a stream
+  // that lost a chunk uploads a truncated file, which transcribes to something
+  // plausible and wrong. `chunks` in the log tells the two apart.
+  if (chunksMuxed === 0 || outputError !== undefined) {
     logger.warn(
-      "[OpusEncoder] Opus encode produced no audio chunks; uploading WAV instead",
+      "[OpusEncoder] Opus encode did not produce a complete stream; uploading WAV instead",
       {
         samples: audioData.length,
-        chunks: 0,
+        chunks: chunksMuxed,
         cause: outputError,
         userAgent:
           typeof navigator === "undefined" ? undefined : navigator.userAgent,
@@ -179,8 +186,12 @@ export async function encodeToOpusWebM(audioData: Float32Array): Promise<Blob> {
         : outputError !== undefined
           ? `: ${String(outputError)}`
           : "";
-    throw new OpusEmptyOutputError(
-      `Opus encode produced no audio chunks for ${audioData.length} samples${reason}`,
+    const what =
+      chunksMuxed === 0
+        ? "produced no audio chunks"
+        : `dropped a chunk after muxing ${chunksMuxed}`;
+    throw new OpusIncompleteOutputError(
+      `Opus encode ${what} for ${audioData.length} samples${reason}`,
       { cause: outputError }
     );
   }
