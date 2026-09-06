@@ -37,6 +37,8 @@ import {
   checkSourceEntries,
   chooseReleaseCommit,
   PUBLISH_STORES,
+  listingUrlsFrom,
+  probeListingUrls,
 } from "./release-lib.mjs";
 import { submitToStore } from "./release-publish.mjs";
 
@@ -88,6 +90,32 @@ function loadStores() {
   return JSON.parse(readFileSync(STORES_PATH, "utf8"));
 }
 
+/**
+ * Probe every listing URL from stores.json (homepage/support/privacy/…) several times.
+ * Prints one line per URL; returns the number of failing URLs. Used by preflight
+ * (blocking) and re-run by submit (abort before upload) — see release-lib.mjs.
+ */
+async function checkListingUrls() {
+  const urls = listingUrlsFrom(loadStores());
+  if (!urls.length) {
+    warn(`no listingUrls in stores.json — the store validates them at publish time (add them)`);
+    return 0;
+  }
+  const results = await probeListingUrls(urls, { fetchImpl: globalThis.fetch });
+  let failing = 0;
+  for (const r of results) {
+    if (r.ok) ok(`listing URL ${r.label}: ${r.url} (200 ×${r.attempts})`);
+    else {
+      failing++;
+      bad(`listing URL ${r.label}: ${r.url} — ${r.failures.join("; ")}`);
+    }
+  }
+  if (failing) {
+    bad(`${failing} listing URL(s) unhealthy — the store rejects the publish with an opaque "does not meet the requirements" error. Fix the site (or the URL in the store listing + stores.json) first.`);
+  }
+  return failing;
+}
+
 function gather() {
   const baseline = baselineTag();
   const pkg = pkgVersion();
@@ -99,7 +127,7 @@ function gather() {
 
 // ── Commands ──────────────────────────────────────────────────────────────────────
 
-function cmdPreflight() {
+async function cmdPreflight() {
   log(`${C.bold}Release preflight${C.reset}\n`);
   let problems = 0;
 
@@ -144,6 +172,9 @@ function cmdPreflight() {
   } catch {
     log(`${C.dim}  (gh unavailable — skipped CI status check)${C.reset}`);
   }
+
+  log(`\n${C.bold}Listing URLs${C.reset} ${C.dim}(validated by the stores at publish time)${C.reset}`);
+  problems += await checkListingUrls();
 
   const { baseline, pkg, decision } = gather();
   log(`\n${C.bold}Version state${C.reset}`);
@@ -472,6 +503,10 @@ async function cmdSubmit({ store, version, yes, dryRun }) {
   if (!dryRun) requireYes(`submit ${store}`, { yes });
   const v = version || pkgVersion();
   log(`${C.bold}${dryRun ? "Dry-run" : "Submitting"} ${store} — v${v}${C.reset}`);
+  if (await checkListingUrls()) {
+    bad(`aborting ${store} ${dryRun ? "dry-run" : "submission"} before upload — listing URLs must answer 200.`);
+    process.exit(1);
+  }
   const releaseNotes = existsSync(RELEASE_NOTES_PATH) ? readFileSync(RELEASE_NOTES_PATH, "utf8").trim() : "";
   const approvalNotes =
     "Built with Node >=22 / npm >=10: `npm ci && npm run build:firefox`. Source in source-code.zip " +

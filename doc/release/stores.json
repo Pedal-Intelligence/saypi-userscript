@@ -1,6 +1,17 @@
 {
   "_comment": "Single source of truth for store identity + per-store submission facts. Consumed by scripts/release.mjs (renderPacket) and any future browser-driver / publishing-API path. Update when a store changes its flow or when the Edge product ID is captured. Facts verified 2026-06-20 — see references/*.md for sources.",
-  "order": ["chrome", "edge", "firefox"],
+  "order": [
+    "chrome",
+    "edge",
+    "firefox"
+  ],
+  "listingUrls_comment": "Every URL entered on ANY store listing (homepage, support, privacy policy, terms, promo video, …). Chrome validates these at PUBLISH time and rejects with an opaque INVALID_ARGUMENT when one isn't a clean 200 (v1.14.0, 2026-09-06: an intermittent 404 on /docs). `release:preflight` probes each 3× and blocks; `release:submit` re-checks before upload. Use the FINAL url (no redirects), and add new URLs here whenever a listing gains one.",
+  "listingUrls": {
+    "homepage": "https://www.saypi.ai",
+    "support": "https://www.saypi.ai/docs",
+    "privacyPolicy": "https://www.saypi.ai/legal/privacy",
+    "terms": "https://www.saypi.ai/legal/terms"
+  },
   "stores": {
     "chrome": {
       "displayName": "🟢 Chrome Web Store",
@@ -29,7 +40,8 @@
       ],
       "gotchas": [
         "No \"what's new\" field — users do not see the changelog on Chrome.",
-        "Package = the CONTENTS of .output/chrome-mv3 zipped with manifest.json at the root (package-extension.sh already does this)."
+        "Package = the CONTENTS of .output/chrome-mv3 zipped with manifest.json at the root (package-extension.sh already does this).",
+        "The store validates every listing URL (homepage/support/privacy/…) at PUBLISH time; a non-200 fails the publish with the opaque \"Your submission does not meet the requirements to be published in the store\" (v1.14.0). `release:preflight` / `release:submit` probe the URLs in `listingUrls` first."
       ],
       "api": {
         "exists": true,

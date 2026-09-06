@@ -669,3 +669,68 @@ export function webExtSignArgs({ sourceDir, artifactsDir, sourceCode, metadataFi
 }
 
 export const PUBLISH_STORES = ["chrome", "edge", "firefox"];
+
+// ── Listing-URL liveness (lesson from the v1.14.0 wet run) ───────────────────────
+//
+// The Chrome Web Store validates every URL on the listing (homepage, support, privacy
+// policy, terms, promo video, …) at PUBLISH time and refuses the submission with an
+// opaque `INVALID_ARGUMENT: Your submission does not meet the requirements` when one of
+// them doesn't answer 200. v1.14.0 tripped this because the site was *intermittently*
+// serving a 404 for the support route. So: probe every listing URL up front, several
+// times, and treat anything but a clean 200 (redirects included — the store's fetcher
+// is not guaranteed to follow them) as a release blocker.
+
+/** Flatten `stores.json`'s `listingUrls` block into [{ label, url }]. */
+export function listingUrlsFrom(stores = {}) {
+  const block = stores.listingUrls ?? {};
+  return Object.entries(block)
+    .filter(([, url]) => typeof url === "string" && url.length > 0)
+    .map(([label, url]) => ({ label, url }));
+}
+
+/**
+ * Interpret one probe outcome. `redirected`/`finalUrl` come from fetch's Response;
+ * `error` is a thrown network error's message.
+ * @param {{ status?: number, redirected?: boolean, finalUrl?: string, url?: string, error?: string }} [probe]
+ * @returns {{ ok: boolean, detail: string }}
+ */
+export function interpretUrlProbe({ status, redirected = false, finalUrl, url, error } = {}) {
+  if (error) return { ok: false, detail: `network error: ${error}` };
+  if (redirected && finalUrl && finalUrl !== url) {
+    return { ok: false, detail: `redirects to ${finalUrl} — store validators may not follow; use the final URL` };
+  }
+  if (status === 200) return { ok: true, detail: "200" };
+  return { ok: false, detail: `HTTP ${status}` };
+}
+
+/**
+ * Probe each URL `attempts` times (the v1.14.0 failure was intermittent, so a single
+ * 200 proves nothing). A URL passes only if EVERY attempt is a clean 200. Pure w.r.t.
+ * I/O: the caller injects `fetchImpl` (and an optional `sleep`), so tests need no network.
+ */
+/**
+ * @param {Array<{ label: string, url: string }>} urls
+ * @param {{ fetchImpl?: (url: string, init?: any) => Promise<{ status: number, redirected: boolean, url: string }>, attempts?: number, delayMs?: number, sleep?: (ms: number) => Promise<void> }} [opts]
+ * @returns {Promise<Array<{ label: string, url: string, ok: boolean, attempts: number, failures: string[] }>>}
+ */
+export async function probeListingUrls(urls = [], { fetchImpl, attempts = 3, delayMs = 750, sleep } = {}) {
+  if (typeof fetchImpl !== "function") throw new Error("probeListingUrls needs a fetchImpl");
+  const wait = sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
+  const results = [];
+  for (const { label, url } of urls) {
+    const failures = [];
+    for (let i = 0; i < attempts; i++) {
+      if (i > 0) await wait(delayMs);
+      let verdict;
+      try {
+        const res = await fetchImpl(url, { method: "GET", redirect: "follow" });
+        verdict = interpretUrlProbe({ status: res.status, redirected: res.redirected, finalUrl: res.url, url });
+      } catch (e) {
+        verdict = interpretUrlProbe({ url, error: e?.message ?? String(e) });
+      }
+      if (!verdict.ok) failures.push(`attempt ${i + 1}: ${verdict.detail}`);
+    }
+    results.push({ label, url, ok: failures.length === 0, attempts, failures });
+  }
+  return results;
+}

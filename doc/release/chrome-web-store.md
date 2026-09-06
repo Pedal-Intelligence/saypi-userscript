@@ -26,6 +26,22 @@ Canonical answers live in `doc/WEB_STORE_PERMISSIONS.md`. The tab is sticky but 
 - **Data-usage disclosures** (which data types) + **certifications** (not sold; used only for the single purpose; no creditworthiness use).
 - **Privacy policy URL:** https://saypi.ai/legal/privacy
 
+## Listing URLs are validated at publish time
+
+The `:publish` step (API **and** dashboard) fetches every URL on the listing — homepage,
+support, privacy policy, terms, promo video — and fails the whole submission with an opaque
+`INVALID_ARGUMENT: Your submission does not meet the requirements to be published in the
+store. Check the Developer Dashboard for steps to resolve.` if any of them isn't a clean
+200. The package upload itself succeeds, so the API gives no hint; only the dashboard's
+Store listing tab shows the red flag on the offending field.
+
+**v1.14.0 (2026-09-06):** the support URL `https://www.saypi.ai/docs` was intermittently
+serving a 404, so the first `release:submit -- chrome --yes` was refused. Now guarded:
+`release:preflight` probes each URL in `stores.json` → `listingUrls` three times and
+blocks on any non-200 (redirects count as failures — use the final URL), and
+`release:submit` re-runs the same check before uploading. **Whenever a listing gains a
+new URL on any store, add it to `listingUrls`.**
+
 ## Package & limits
 - `.zip` of the **contents** of `.output/chrome-mv3/` with `manifest.json` at the **root** (package-extension.sh does this).
 - Version bump mandatory (see above). No practical ZIP-size limit for us (the AMO 5 MB non-binary limit is a *Firefox* constraint, not Chrome).
