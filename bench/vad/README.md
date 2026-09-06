@@ -33,7 +33,8 @@ so it can import the real TypeScript gate.) There are **two corpora**:
 
 ## What it does
 
-For each corpus clip × each preset (`highSensitivity`, `balanced`, `conservative`, `none`):
+For each corpus clip × each preset the extension ships (`highSensitivity`, `balanced`,
+`none`):
 
 1. Resample + frame the audio with vad-web's `Resampler` (512-sample / 32 ms frames).
 2. Run each frame through the **real Silero v5** model → per-frame speech probability.
@@ -85,10 +86,17 @@ reproduction of that fallback path.
 |---|---|---|---|---|
 | highSensitivity | 0% | 17% | 60 ms | 425 ms |
 | balanced | 0% | 0% | 88 ms | 357 ms |
-| conservative | 0% | 0% | 112 ms | 245 ms |
+| ~~conservative~~ (removed, #571) | 0% | 0% | 112 ms | 245 ms |
 | none (v5 default) | 13% | 0% | 91 ms | 589 ms |
 
 (raw and gated are identical on this corpus — see below.)
+
+> **The `conservative` rows below are a historical record, not a reproducible result.**
+> That preset was deleted in #571 — it was tuned but permanently unreachable, and being
+> stricter about *opening* is the wrong axis for the noisy-room symptom that was actually
+> reported (see #572). Re-running the benchmark today sweeps three presets, not four; the
+> `conservative` numbers are kept because they document the shape of the FRR/FAR dial
+> beyond `balanced`, which is still the evidence a future retune starts from.
 
 - **Real speech peaks high — even quiet, even on `highSensitivity`.** Every speech clip,
   including the gain-0.18 quiet variants, peaked **0.89–0.999**. That's a large margin over
@@ -97,8 +105,8 @@ reproduction of that fallback path.
   clean; far-mic/noisy quiet speech could peak lower — exactly what a real corpus would test.)
 - **`highSensitivity` is the only preset that false-accepts** (the pink-ish hiss, which
   opened a segment peaking **0.653**), consistent with #420's concern that the most
-  trigger-happy preset is the riskiest. `balanced`/`conservative` reject it via their
-  stricter threshold + `minSpeechFrames`.
+  trigger-happy preset is the riskiest. `balanced` (and the then-existing `conservative`)
+  reject it via their stricter threshold + `minSpeechFrames`.
 - **The #420 gate neither helped nor hurt on this corpus** (raw FAR == gated FAR, 0 added
   FRR). The gate's drop band is *just above* each preset's opening threshold
   `[threshold, threshold+0.05)`; the seed's negatives are either clearly non-speech (peak ≈
@@ -136,7 +144,7 @@ generated `manifest.json` (with per-clip source/license/attribution) are tracked
 |---|---|---|
 | highSensitivity | 3% | 59% → **56%** |
 | balanced | 8% | 41% → 41% |
-| conservative | 23% | 29% → 29% |
+| ~~conservative~~ (removed, #571) | 23% | 29% → 29% |
 | none (v5 default) | 50% | 26% → 26% |
 
 (Latency is omitted for real clips — we have no frame-level word boundaries; latency lives
@@ -149,7 +157,8 @@ This is the data the synthetic seed couldn't give, and it changes the picture:
   audio exposes the actual trade-off, and `balanced` sits at its knee.
 - **Music is the worst false-accept source — and `highSensitivity` admits *all* of it.**
   Per negative type on `highSensitivity` (raw): **music 8/8 (100%)**, noise 12/24 (50%),
-  silence 0/2. `balanced` cuts music to 5/8 and noise to 9/24; `conservative` to 3/8 and 7/24. Since
+  silence 0/2. `balanced` cuts music to 5/8 and noise to 9/24 (the removed `conservative`
+  cut them to 3/8 and 7/24). Since
   generic web pages frequently have **background music/video playing**, binding the
   trigger-happiest preset to them is the worst possible match — exactly #420's gap-#3 concern,
   now measured.
@@ -179,11 +188,17 @@ dedicated chat sites `balanced`. The data says that's backwards for the noisy co
 `highSensitivity` → `balanced`. **Leave chat sites at `balanced`** — they're the core product
 and the quietest context (a focused voice conversation), so there's no data-backed reason to
 make them *more* trigger-happy, and changing them carries more risk than reward. Net: `balanced`
-everywhere; `highSensitivity` becomes a reserved preset (like `conservative`).
+everywhere by default; `highSensitivity` is no longer any context's default, and is now
+reached only by the explicit quiet/whisper-mode opt-in (#437).
 
 Still-open refinements (not blockers): a **noise/SNR-adaptive** or **mobile-vs-desktop** axis
 (the corpus isn't device-labelled, so that needs its own data), and broadening the corpus with
-café/keyboard ambient and non-English speech.
+café/keyboard ambient and non-English speech. Note that the adaptive axis no longer has a
+preset waiting in the wings — #571 deleted `conservative` rather than leave tuned-but-dead
+configuration in the file, so wiring an adaptive split means re-deriving its thresholds from
+data in the same change. It should also reckon with #572: this harness's FRR only counts
+clips that produced *no* segment, so it is blind to a segment that opens correctly and then
+terminates mid-utterance — the symptom a stricter-opening preset would make worse.
 
 ## Files
 

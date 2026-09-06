@@ -14,19 +14,29 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  * false-accept risk; a VAD-quality benchmark to re-tune these numbers is #420 item 3.
  *
  * Wiring status (which presets a code path actually selects) — see `selectVADPreset`:
- *  - `balanced`: the preset every context uses today (#420 item 4). The VAD-quality
+ *  - `balanced`: the preset every context uses by default (#420 item 4). The VAD-quality
  *    benchmark (bench/vad/README.md) put it at the knee of the false-reject/false-accept
  *    trade-off, so it is the host-agnostic default.
- *  - `highSensitivity`: previously bound to dictation/generic pages, but the benchmark
- *    showed it false-accepts ~59% of real non-speech there (100% of music) for only a
- *    marginal false-reject edge — so it is now **reserved, unselected** (the gap-#3 fix).
- *  - `conservative`: a valid noisy-environment preset that **no code path selects yet**.
- *    Kept (not deleted) because #420 item 4 plans to wire it to a noise/SNR estimate.
+ *  - `highSensitivity`: selected only when the user turns on quiet/whisper mode (#437).
+ *    It was previously bound to dictation/generic pages too, but the benchmark showed it
+ *    false-accepts ~59% of real non-speech there (100% of music) for only a marginal
+ *    false-reject edge, so it is no longer any context's default (the gap-#3 fix).
  *  - `none`: the no-override fallback `initializeVAD` resolves to when no (or an
  *    unknown) preset is requested — it inherits the library's v5 defaults verbatim.
- * (Both `highSensitivity` and `conservative` stay locked by test so they can't rot.)
+ *
+ * Every tuned preset above is reachable, and `test/vad/VADConfigs.spec.ts` locks that
+ * as an invariant. A preset no context can select is dead configuration that still
+ * reads as an available option to whoever tunes this file next — #571 removed one such
+ * (`conservative`, tuned for noisy rooms and wired to nothing for months). If you add a
+ * preset, wire it in the same change.
+ *
+ * When you do, treat **opening** and **closing** as opposed axes rather than one
+ * sensitivity dial: raising `positiveSpeechThreshold` makes the VAD harder to trigger on
+ * background noise, whereas *lowering* `negativeSpeechThreshold` and lengthening
+ * `redemptionFrames` is what stops it cutting a sentence short mid-utterance (#572). A
+ * single preset that is stricter about opening is strictly worse for chopping.
  */
-export type VADPreset = "highSensitivity" | "balanced" | "conservative" | "none";
+export type VADPreset = "highSensitivity" | "balanced" | "none";
 
 /**
  * Parameter presets for different use-cases.
@@ -55,16 +65,6 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     redemptionFrames: 10, //          320 ms tail (vs v5 768 ms)
     minSpeechFrames: 3, //            96 ms min (vs v5 288 ms)
     preSpeechPadFrames: 2, //         64 ms pre-roll (vs v5 96 ms)
-    submitUserSpeechOnPause: false,
-  },
-  conservative: {
-    model: "v5",
-    // Noisy environments – lower sensitivity (reserved; not yet selected — see header).
-    positiveSpeechThreshold: 0.6, //  vs v5 default 0.5 — needs clearer speech to open
-    negativeSpeechThreshold: 0.45, // vs v5 default 0.35
-    redemptionFrames: 8, //           256 ms tail (vs v5 768 ms)
-    minSpeechFrames: 4, //            128 ms min (vs v5 288 ms)
-    preSpeechPadFrames: 1, //         32 ms pre-roll (vs v5 96 ms)
     submitUserSpeechOnPause: false,
   },
   none: {
