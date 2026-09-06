@@ -110,6 +110,49 @@ describe("edgeSubmit (Edge v1.1 orchestration)", () => {
     expect(publishCall[1].headers["Content-Type"]).toBeUndefined();
   });
 
+  it("#628: a transient `fetch failed` on the publish poll is retried, not reported as a failure", async () => {
+    vi.useFakeTimers();
+    try {
+      const fetch = fetchSequence([
+        { status: 202, headers: { location: "op-upload" } },
+        { json: { status: "Succeeded" } },
+        { status: 202, headers: { location: "op-pub" } },
+      ]);
+      // 4th call (first publish poll) is the transient network error; 5th succeeds.
+      fetch.mockRejectedValueOnce(new TypeError("fetch failed"));
+      fetch.mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ status: "Succeeded" }), headers: { get: () => null } });
+      vi.stubGlobal("fetch", fetch);
+      const logs: string[] = [];
+      const p = edgeSubmit({ zipPath: "x.zip", env: EDGE_ENV, dryRun: false, log: (m: string) => logs.push(m) });
+      await vi.runAllTimersAsync();
+      await expect(p).resolves.toMatch(/submitted to certification/i);
+      expect(fetch).toHaveBeenCalledTimes(5);
+      expect(logs.some((l) => /publish poll attempt 1 failed \(fetch failed\)/.test(l))).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("#628: when the poll never reaches Edge, the error says the op may have succeeded and names the poll URL", async () => {
+    vi.useFakeTimers();
+    try {
+      const fetch = fetchSequence([
+        { status: 202, headers: { location: "op-upload" } },
+        { json: { status: "Succeeded" } },
+        { status: 202, headers: { location: "op-pub" } },
+      ]);
+      for (let i = 0; i < 4; i++) fetch.mockRejectedValueOnce(new TypeError("fetch failed"));
+      vi.stubGlobal("fetch", fetch);
+      const p = edgeSubmit({ zipPath: "x.zip", env: EDGE_ENV, dryRun: false, log: noop });
+      const assertion = expect(p).rejects.toThrow(/publish status could NOT be confirmed.*may still have succeeded.*op-pub.*InProgressSubmission/s);
+      await vi.runAllTimersAsync();
+      await assertion;
+      expect(fetch).toHaveBeenCalledTimes(3 + 4);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("surfaces a Failed operation with its errorCode", async () => {
     const fetch = fetchSequence([
       { status: 202, headers: { location: "op-upload" } },
