@@ -4,11 +4,14 @@ Find a voice that feels right for your conversations.
 • Explore the Voices tab, listen to free samples, and compare voices before choosing. Listening never changes the voice you've saved.
 • See which voice is in use and choose it for Pi or Claude. Your choices stay separate for each assistant.
 • Browse the full collection in one place. HD voices are clearly marked, with a reminder of how they use your allowance.
+• Better value voices from OpenAI, so your TTS credits go further.
 • Switch back to Pi's own voices directly from its voice settings or Say, Pi's Voices tab.
+• Settings now open in their own browser tab, so there's room to browse, and a warmer welcome greets you on first install.
 
 🐛 More dependable conversations
-• Your saved voice survives temporary catalog problems.
-• Clearer voice status and controls follow the latest Pi, Claude, and ChatGPT layouts.
-• More reliable audio startup, response playback, and dictation.
+• Your saved voice survives temporary catalog problems, and playback follows along when you change voice or sign in mid-conversation.
+• When Say, Pi is speaking for Pi, Pi's own voice stays quiet — and comes back the moment you switch to it.
+• Dictation keeps your text field in view, and voice controls follow the latest Pi, Claude, and ChatGPT layouts.
+• More reliable audio startup and response playback.
 
 Plus the usual under-the-hood work to keep Say, Pi fast and dependable.
