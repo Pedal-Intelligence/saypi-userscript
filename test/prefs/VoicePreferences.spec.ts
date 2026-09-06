@@ -327,3 +327,38 @@ describe('UserPreferenceModule new-install default voice (Marin, 2026-07-05)', (
     expect(store[VOICE_DEFAULT_PENDING_KEY]).toEqual(['pi']); // drained by the off
   });
 });
+
+
+describe('explicit native return intent', () => {
+  it.each([
+    [{ pi: 'shimmer', claude: 'alloy' }, { claude: 'alloy' }, true],
+    [{ claude: 'alloy' }, {}, false],
+    [undefined, {}, false],
+    [{ pi: 'shimmer' }, { pi: 'alloy' }, false],
+  ])('marks only this host removal (%j → %j)', async (oldValue, newValue, expected) => {
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    const { ChatbotIdentifier } = await import('../../src/chatbots/ChatbotIdentifier');
+    vi.spyOn(ChatbotIdentifier, 'getAppId').mockReturnValue('pi');
+    const { default: EventBus } = await import('../../src/events/EventBus');
+    const events: any[] = [];
+    EventBus.on('userPreferenceChanged', (detail: unknown) => events.push(detail));
+    let listener: any;
+    (globalThis as any).chrome.storage.onChanged = { addListener: (fn: any) => { listener = fn; } };
+    (prefs as any).registerMessageListeners();
+    listener({ voicePreferences: { oldValue, newValue } }, 'local');
+    expect(events.at(-1)).toMatchObject({ nativeVoiceRequested: expected, voiceChatbotId: 'pi' });
+    EventBus.removeAllListeners();
+  });
+
+  it('keeps an explicit local native request even when no override is stored', async () => {
+    const prefs = prefsModule.UserPreferenceModule.getInstance();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    const { default: EventBus } = await import('../../src/events/EventBus');
+    const events: any[] = [];
+    EventBus.on('userPreferenceChanged', (detail: unknown) => events.push(detail));
+    await prefs.unsetVoice('pi');
+    expect(events.at(-1)).toMatchObject({ nativeVoiceRequested: true, voiceChatbotId: 'pi', voiceId: null });
+    EventBus.removeAllListeners();
+  });
+});

@@ -16,6 +16,16 @@ export function audioSource(audio: HTMLAudioElement): string {
 export class PiNativeAudioGuard {
   private originalMute = new Map<HTMLAudioElement, boolean>();
 
+  /** An explicit native choice supersedes a stale mute inherited at startup. */
+  restoreNative(elements: HTMLAudioElement[]): void {
+    for (const audio of elements) {
+      if (audio.isConnected && isPiNativeSpeechSource(audioSource(audio))) {
+        this.originalMute.delete(audio);
+        audio.muted = false;
+      }
+    }
+  }
+
   reconcile(elements: HTMLAudioElement[], state: {
     customVoice: boolean;
     offscreen: boolean;

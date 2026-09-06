@@ -48,10 +48,30 @@ describe("reconciling the running audio selection", () => {
     resolve = vi.fn(async () => selection);
     onError = vi.fn();
     sync = new AudioSelectionSync({ hostId: "pi", resolve: () => resolve(),
-      apply: value => audio.applyAudioSelection(value), onError });
+      apply: (value, intent) => audio.applyAudioSelection(value, intent), onError });
   });
 
   afterEach(() => { actor.stop(); EventBus.removeAllListeners(); vi.restoreAllMocks(); });
+
+  it("delivers an explicit native request through a concurrent auth refresh", async () => {
+    const apply = vi.spyOn(audio, "applyAudioSelection");
+    await sync.start(); apply.mockClear();
+    EventBus.emit("userPreferenceChanged", { voiceId: null, voiceChatbotId: "pi", nativeVoiceRequested: true });
+    EventBus.emit("saypi:auth:status-changed", true);
+    await vi.waitFor(() => expect(apply).toHaveBeenCalledWith(native, { nativeVoiceRequested: true }));
+  });
+
+  it("a newer custom choice cancels an outstanding explicit native request", async () => {
+    await sync.start();
+    const apply = vi.spyOn(audio, "applyAudioSelection");
+    const old = deferred<AudioSelection>(); resolve.mockReturnValueOnce(old.promise);
+    EventBus.emit("userPreferenceChanged", { voiceId: null, voiceChatbotId: "pi", nativeVoiceRequested: true });
+    selection = custom;
+    EventBus.emit("userPreferenceChanged", { voiceId: "shimmer", voiceChatbotId: "pi" });
+    await vi.waitFor(() => expect(apply).toHaveBeenCalledWith(custom, { nativeVoiceRequested: false }));
+    old.resolve(native); await Promise.resolve();
+    expect(actor.state.context.provider).toBe(audioProviders.SayPi);
+  });
 
   it("reads a saved custom choice when playback starts after the settings event", async () => {
     selection = custom;

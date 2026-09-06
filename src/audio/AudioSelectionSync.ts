@@ -10,11 +10,12 @@ export type AudioSelection = {
 export class AudioSelectionSync {
   private revision = 0;
   private started = false;
+  private nativeVoiceRequested = false;
 
   constructor(private readonly deps: {
     hostId: string;
     resolve: () => Promise<AudioSelection>;
-    apply: (selection: AudioSelection) => void;
+    apply: (selection: AudioSelection, intent: { nativeVoiceRequested: boolean }) => void;
     onError: (error: unknown) => void;
   }) {}
 
@@ -25,9 +26,12 @@ export class AudioSelectionSync {
         voicePreferences?: unknown;
         voiceId?: unknown;
         voiceChatbotId?: string;
+        nativeVoiceRequested?: boolean;
       } | undefined) => {
         if (!detail || (detail.voicePreferences === undefined && detail.voiceId === undefined)) return;
         if (detail.voiceChatbotId && detail.voiceChatbotId !== this.deps.hostId) return;
+        if (detail.nativeVoiceRequested) this.nativeVoiceRequested = true;
+        else if (detail.voiceId != null) this.nativeVoiceRequested = false;
         void this.refresh();
       });
       EventBus.on("saypi:auth:status-changed", () => { void this.refresh(); });
@@ -41,7 +45,11 @@ export class AudioSelectionSync {
     const revision = ++this.revision;
     try {
       const selection = await this.deps.resolve();
-      if (revision === this.revision) this.deps.apply(selection);
+      if (revision === this.revision) {
+        const nativeVoiceRequested = this.nativeVoiceRequested;
+        this.nativeVoiceRequested = false;
+        this.deps.apply(selection, { nativeVoiceRequested });
+      }
     } catch (error) {
       if (revision === this.revision) this.deps.onError(error);
     }
