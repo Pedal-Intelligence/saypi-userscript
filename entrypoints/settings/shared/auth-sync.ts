@@ -43,15 +43,28 @@ import { getJwtManagerSync } from "../../../src/JwtManager";
  *
  * So the sign-out path here records the signed-out state in SETTINGS-SCOPED
  * state and emits the same EventBus event, leaving the singleton's in-memory
- * token — and the background's alarm and recovery credentials — alone.
+ * token, the background's alarm and the stored recovery credentials alone.
  * Consumers read {@link isSettingsAuthenticated} instead of
  * `getJwtManagerSync().isAuthenticated()`, so a token the page has been told
- * is dead can never make a tab render or fetch as the previous user.
+ * is dead does not make a tab render as the previous user — including the TTS
+ * module's voice-cache fingerprint, which the studio's deps point at this
+ * state for the same reason (`SpeechSynthesisModule.setAuthStateReader`).
  *
- * The becoming-authenticated path DOES reuse `handleAuthStatusUpdate(true)`:
- * its authenticated branch is only `loadFromStorage()` plus the EventBus emit.
- * Storage already holds the new token, and the refresh it reschedules matches
- * what the background scheduled anyway.
+ * ## What this page DOES do to the alarm, and why that is the safe half
+ *
+ * The invariant is "never clear the alarm without re-creating it", not "never
+ * touch it". The becoming-authenticated path reuses
+ * `handleAuthStatusUpdate(true)`, whose branch is `loadFromStorage()` plus the
+ * EventBus emit — and `loadFromStorage()` calls `scheduleRefresh()`, which
+ * clears the alarm and immediately re-creates it from the same stored
+ * `tokenExpiresAt` the background computed from. So the schedule survives;
+ * only the bare `clear()` of the sign-out branch destroys it. (This is not new
+ * behaviour: the singleton's constructor runs the same `loadFromStorage()` on
+ * every settings-page load.) Two honest edges come with it: `scheduleRefresh`
+ * is invoked un-awaited, so closing the tab inside its millisecond-wide gap
+ * leaves no alarm until the background's next wake; and a token already within
+ * a minute of expiry sends it down `performRefresh()` instead, so the page can
+ * refresh a token the background was about to refresh itself.
  *
  * ## Ordering is load-bearing
  *
@@ -71,7 +84,7 @@ const AUTH_EVENT = "saypi:auth:status-changed";
 let toldSignedOut = false;
 
 /**
- * The SESSION the last reconciliation settled on — `user:<id>`, or
+ * The SESSION the last reconciliation settled on — `user:<id>/<plan>`, or
  * `signed-out`, which has no identity to carry.
  *
  * Identity rather than the raw token, and for three reasons. Both signals can
@@ -82,6 +95,12 @@ let toldSignedOut = false;
  * refresh, which is a new token but the same session. And a sign-out arrives
  * as up to two events (the broadcast, then the storage wipe), which is one
  * sign-out however it is spelled.
+ *
+ * The plan rides along because an upgrade is a change this page must show —
+ * the quota panel's entitlement copy and bars are drawn from it — and it moves
+ * only when the user's plan actually changes. The quota NUMBERS deliberately
+ * do not: they fall with every transcription, so keying on them would put the
+ * 15-minute repaint back and then some.
  */
 let lastSignature: string | null = null;
 
@@ -107,6 +126,10 @@ export function isSettingsAuthenticated(): boolean {
  * Subscribe to settings-page auth changes. The callback runs after the page's
  * auth state has been reconciled, so it may read {@link isSettingsAuthenticated}
  * (and the JwtManager singleton, on the authenticated path) synchronously.
+ *
+ * The `isAuthenticated` argument is ADVISORY — it is what the background said,
+ * which can briefly run ahead of the storage write it describes. Read
+ * {@link isSettingsAuthenticated} for the state to render from.
  */
 export function onSettingsAuthChange(
   fn: (isAuthenticated: boolean) => void
@@ -117,7 +140,10 @@ export function onSettingsAuthChange(
   };
 }
 
-/** Resolves once every reconciliation queued so far has run. */
+/**
+ * Visible only for testing: resolves once every reconciliation queued so far
+ * has run. Production never needs to wait — the listeners are fire-and-forget.
+ */
 export function settingsAuthSyncSettled(): Promise<void> {
   return queue.then(() => {});
 }
@@ -135,15 +161,23 @@ const SIGNED_OUT = "signed-out";
 
 /**
  * WHICH SESSION the stored token belongs to — the only part of it a settings
- * tab cares about. Falls back to the raw token when the claims cannot be read,
- * which errs towards treating an opaque change as a new session.
+ * tab cares about.
+ *
+ * Decoded here rather than through `JwtManager.getClaims()` because the
+ * question is about the token in STORAGE, not the one the singleton is holding
+ * — comparing the two is the entire point. Falls back to the raw token when
+ * the claims cannot be read, which errs towards treating an opaque change as a
+ * new session.
  */
 function sessionOf(token: string | null): string {
   if (!token) return SIGNED_OUT;
   try {
     const payload = token.split(".")[1];
-    const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
-    return `user:${JSON.parse(json).userId ?? token}`;
+    const claims = JSON.parse(
+      atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
+    );
+    // `||`, not `??`: an empty id is as unusable as a missing one.
+    return `user:${claims.userId || token}/${claims.planId ?? ""}`;
   } catch {
     return `user:${token}`;
   }

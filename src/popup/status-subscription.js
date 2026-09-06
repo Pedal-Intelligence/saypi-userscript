@@ -197,7 +197,15 @@ function updateQuotaProgress(status, type = 'tts') {
   }
 
   const quotaProgress = document.querySelector(`.quota-progress.${type}`);
-  
+  // The quota bars live in the General tab, and tabs are mounted lazily — a
+  // deep link straight into Voices ("More voices…") never builds them. Reading
+  // the status is still worth doing (it is what tells the header the truth),
+  // but there is nothing here to paint it into (#227).
+  if (!quotaProgress) {
+    quotaStatuses[type] = status;
+    return;
+  }
+
   const progressLabel = quotaProgress.querySelector(
     `#premium-status .progress-label .label`
   );
@@ -582,6 +590,12 @@ window.updateUnauthenticatedDisplay = updateUnauthenticatedDisplay;
 // settings page (#227). getQuotaStatus() re-checks auth with the background
 // and then either hides the bars (signed out) or refetches the numbers, so a
 // new account never inherits the previous one's quota display.
+//
+// Deliberately NOT folded into updateQuotaDisplayForAuthState below, which
+// only shows or hides what is already painted. That one runs on every General
+// tab load; making it refetch would put an API call on a path that already has
+// fresh numbers. This one runs when the session changed, which is exactly when
+// the numbers are stale.
 window.refreshQuotaStatus = initializeStatusSubscription;
 window.updateQuotaDisplayForAuthState = async function() {
   await checkAuthenticationStatus();

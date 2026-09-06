@@ -105,6 +105,31 @@ class SpeechSynthesisModule {
   private voicesLoading: Map<string, Promise<void>> = new Map();
   /** Auth state the caches were populated under — see {@link syncVoicesCacheWithAuthState}. */
   private voicesCacheAuthFingerprint: string | null = null;
+  /**
+   * Where "am I signed in?" comes from, when the JwtManager singleton is not
+   * the honest answer.
+   *
+   * A content script's singleton IS the honest answer — its reconciler clears
+   * the stale token on sign-out. An extension page's is not: clearing there
+   * would destroy the extension-wide refresh alarm the background owns, so the
+   * settings page deliberately keeps a token it has been told is dead and
+   * tracks the truth beside it (entrypoints/settings/shared/auth-sync.ts,
+   * #227). Without this hook the fingerprint below would stay `user:A` after a
+   * sign-out and go on serving the previous account's voice list.
+   *
+   * Per-instance, not static: each extension context has its own module
+   * instance, so the settings page sets this without any reach into the
+   * content scripts'.
+   */
+  private authStateReader: (() => boolean) | null = null;
+
+  /**
+   * Teach this module where auth truth lives in this context. Idempotent;
+   * called by the settings page's studio deps.
+   */
+  public setAuthStateReader(read: () => boolean): void {
+    this.authStateReader = read;
+  }
 
   /**
    * The voice list is auth-dependent: signed-out requests 401 → [], and each
@@ -113,7 +138,10 @@ class SpeechSynthesisModule {
    */
   private currentAuthFingerprint(): string {
     const jwtManager = getJwtManagerSync();
-    if (!jwtManager.isAuthenticated()) {
+    const authenticated = this.authStateReader
+      ? this.authStateReader()
+      : jwtManager.isAuthenticated();
+    if (!authenticated) {
       return "anonymous";
     }
     return `user:${jwtManager.getClaims()?.userId ?? "authenticated"}`;

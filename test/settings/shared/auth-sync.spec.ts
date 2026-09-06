@@ -240,6 +240,13 @@ describe("settings-page auth reconciliation (#227)", () => {
     // the singleton already held it.
     expect(getJwtManagerSync().getAuthHeader()).toBe(`Bearer ${token}`);
     expect(seen).toEqual([{ header: `Bearer ${token}`, settings: true }]);
+    // The invariant that actually protects the background's schedule: this
+    // path DOES clear the alarm (loadFromStorage → scheduleRefresh), and must
+    // always put it back. Only the sign-out branch's bare clear() is banned.
+    expect(alarms.create).toHaveBeenCalledWith(
+      JWT_REFRESH_ALARM,
+      expect.anything()
+    );
   });
 
   it("picks up a sign-in seen only as a storage write (no broadcast reached the page)", async () => {
@@ -359,6 +366,29 @@ describe("settings-page auth reconciliation (#227)", () => {
     expect(seen).toEqual([]);
   });
 
+  it("collapses a broadcast and its storage write that arrive back to back", async () => {
+    // The background does both for one sign-in, and neither ordering is
+    // guaranteed. Here they land before the first reconciliation has even
+    // finished its storage read — the case every other test in this file
+    // skips, because they await in between. (The signature check-and-set is
+    // what makes this safe, not the queue: the queue is there so two
+    // reconciliations can never interleave INSIDE loadFromStorage.)
+    installSettingsAuthSync();
+    await settingsAuthSyncSettled();
+    const seen: boolean[] = [];
+    EventBus.on("saypi:auth:status-changed", (auth: boolean) => seen.push(auth));
+
+    const token = makeJwt({ userId: "user-a" });
+    seedStorage({ jwtToken: token, tokenExpiresAt: Date.now() + 15 * 60_000 });
+    const { onMessage, onStorage } = capturedListeners();
+    onMessage({ type: "AUTH_STATUS_CHANGED", isAuthenticated: true });
+    onStorage({ jwtToken: { oldValue: undefined, newValue: token } }, "local");
+    await settingsAuthSyncSettled();
+
+    expect(isSettingsAuthenticated()).toBe(true);
+    expect(seen).toEqual([true]);
+  });
+
   it("stops listening once uninstalled", async () => {
     const uninstall = installSettingsAuthSync();
     await settingsAuthSyncSettled();
@@ -366,6 +396,27 @@ describe("settings-page auth reconciliation (#227)", () => {
 
     expect(browser.runtime.onMessage.removeListener).toHaveBeenCalled();
     expect(browser.storage.onChanged.removeListener).toHaveBeenCalled();
+  });
+
+  it("stops serving the previous account's catalog after a sign-out (AC 3)", async () => {
+    // The page deliberately keeps the singleton's token on sign-out, so the
+    // TTS module's auth fingerprint would otherwise stay `user:A` and go on
+    // serving user A's cached voice list — including their custom voices —
+    // under a "sign in for TTS" label. The settings page hands the module its
+    // own view of auth instead.
+    speechSynthesisModule.setAuthStateReader(() => isSettingsAuthenticated());
+    await openSettingsSignedInAs("user-a");
+    const userAVoices = [mockVoices[0]];
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve(userAVoices));
+    expect(await speechSynthesisModule.getVoices(undefined, "claude")).toEqual(
+      userAVoices
+    );
+
+    // Signed out, a /voices request comes back empty (mapped from 401).
+    textToSpeechServiceMock.getVoices = vi.fn(() => Promise.resolve([]));
+    await broadcastAuthStatus(false);
+
+    expect(await speechSynthesisModule.getVoices(undefined, "claude")).toEqual([]);
   });
 
   it("flips the open Voices tab from signed in to signed out, with no reload (AC 1)", async () => {
