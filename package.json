@@ -31,6 +31,8 @@
     "bench:vad": "node --experimental-strip-types --no-warnings bench/vad/run.ts",
     "bench:vad:corpus": "node bench/vad/generate-corpus.mjs",
     "bench:vad:fetch-real": "node bench/vad/fetch-real-corpus.mjs",
+    "bench:vad:segmentation": "node --experimental-strip-types --no-warnings bench/vad/segmentation.ts",
+    "bench:vad:fetch-segmentation": "node bench/vad/fetch-segmentation-corpus.mjs",
     "e2e:build": "node --experimental-strip-types scripts/e2e-build.mjs",
     "test:e2e": "playwright test --config e2e/playwright.config.ts",
     "e2e:build:firefox": "node scripts/e2e-firefox-build.mjs",

@@ -8,18 +8,29 @@
 // Run: npm run bench:vad   (node --experimental-strip-types --no-warnings bench/vad/run.ts)
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, basename } from "node:path";
 // @ts-ignore — pure JS libs
 import { decodeWav } from "./lib/wav.mjs";
 // @ts-ignore
 import { summarize } from "./lib/metrics.mjs";
 import { loadV5Model, runClip, RUNNER_FRAME_MS } from "./lib/runner.ts";
+import { loadSileroModel } from "./lib/segmenter.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 // Optional corpus dir arg (defaults to the committed synthetic seed):
 //   npm run bench:vad -- corpus-real
 const corpusName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : "corpus";
 const corpusDir = resolve(here, corpusName);
+// Optional model variants (#655): `--model <onnx>` swaps in another Silero file with the v5
+// I/O contract (e.g. v6); `--context` feeds each frame the previous 64 samples, as upstream
+// Silero and vad-web ≥0.0.31 do (0.0.24, what ships, does not).
+const flag = (name: string) => {
+  const i = process.argv.indexOf(name);
+  return i >= 0 ? process.argv[i + 1] : undefined;
+};
+const modelPath = flag("--model");
+const withContext = process.argv.includes("--context");
+const variant = [modelPath ? basename(modelPath, ".onnx") : "", withContext ? "ctx" : ""].filter(Boolean).join("+");
 // The sweep is the set of presets the extension actually ships (#571 removed
 // `conservative`); `runClip` looks each name up in the real VAD_CONFIGS, so a name
 // that no longer exists there would silently benchmark as "no overrides".
@@ -34,7 +45,7 @@ async function main() {
     manifest.clips;
 
   process.stdout.write(`Loading Silero v5 model…\n`);
-  const model = await loadV5Model();
+  const model = modelPath || withContext ? await loadSileroModel(modelPath, { withContext }) : await loadV5Model();
 
   const records: any[] = [];
   const perClip: any[] = [];
@@ -98,7 +109,7 @@ async function main() {
   }
 
   // --- Machine-readable report (git-ignored artifact) ---
-  const reportPath = resolve(here, `report.${corpusName}.json`);
+  const reportPath = resolve(here, `report.${corpusName}${variant ? "." + variant : ""}.json`);
   writeFileSync(
     reportPath,
     JSON.stringify({ corpus: manifest.note, frameMs: RUNNER_FRAME_MS, summary, perClip }, null, 2) + "\n"
