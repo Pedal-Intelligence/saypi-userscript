@@ -100,6 +100,8 @@ doc/dom/chatgpt/sidebar.header.menu-tiny.html
 # Fetched REAL corpus audio (license-clean but not committed; `npm run bench:vad:fetch-real`)
 /bench/vad/corpus-real/
 /bench/vad/.fetch-tmp/
+# #655 fragmentation-benchmark corpora (AMI + LibriSpeech; `npm run bench:vad:fetch-segmentation`)
+/bench/vad/corpus-segmentation/
 
 # Local tunnel config — never track (carries a personal authtoken)
 ngrok.yml

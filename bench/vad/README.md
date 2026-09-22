@@ -200,10 +200,126 @@ data in the same change. It should also reckon with #572: this harness's FRR onl
 clips that produced *no* segment, so it is blind to a segment that opens correctly and then
 terminates mid-utterance — the symptom a stricter-opening preset would make worse.
 
+## Fragmentation: does the VAD cut one thought into several uploads? (#655)
+
+The FRR/FAR benchmark above scores one verdict per clip, so a sentence cut into three
+uploads counts as a pass. `segmentation.ts` measures that failure directly, on continuous
+speech:
+
+```bash
+npm run bench:vad:fetch-segmentation   # AMI headsets + annotations, LibriSpeech test-clean (~800 MB, once)
+npm run bench:vad:segmentation         # shipped model (v5, as vad-web 0.0.24 feeds it)
+npm run bench:vad:segmentation -- --context                                   # + the 64-sample context fix
+npm run bench:vad:segmentation -- --context --model <silero_vad_v6.onnx> --label silero_v6
+```
+
+It runs the model once per clip and caches per-frame probabilities, then replays them
+through vad-web's **real** `FrameProcessor` under each candidate config. Sweeping a dozen
+configs therefore costs seconds, and every threshold and redemption rule is the shipped
+code. Clip lengths are measured as the server sees them: pre-speech pad + speech + the
+whole silence tail.
+
+Three corpora:
+
+- **AMI** (spontaneous meeting speech, 8 close-talk headset channels, ~2.8 h). A
+  **dialogue act** (one annotated "thought") is the ground truth for "should have been one
+  upload". A segment belongs to the speaker only if it contains one of their words, which
+  filters out crosstalk. (AMI's word times abut, with pauses folded into the word
+  durations, so they mark ownership but not where the silences are.)
+- **LibriSpeech test-clean** (2,620 read utterances). Each is one continuous span, so any
+  split is a cut. Readers pause less than people thinking aloud, so this is the
+  dictation-like lower bound.
+- **Pause sweep** (macOS `say`, two phrases around an inserted silence of 150–1000 ms). This
+  shows the mechanism: the pause length at which each config starts splitting.
+
+**`--context`**: vad-web 0.0.24 (what ships) passes Silero bare 512-sample frames. Upstream
+Silero, and vad-web from 0.0.31 (ricky0123/vad#263), prefix each frame with the previous 64
+samples. The flag benchmarks the model as it is meant to be fed. `run.ts` takes the same
+`--context` / `--model` flags, so the FAR/FRR trade-off can be re-measured for any variant.
+
+### Findings (2026-09-22)
+
+**Validation.** On AMI, the shipped config reproduces production:
+
+| | Benchmark (AMI) | Production |
+|---|---|---|
+| Clips ≤ 1 s | 40% | 31% on Pi, 38% on ChatGPT |
+| Short fragments that are mid-turn cuts | 55% | about 45–50% on Pi (saypi-api Stream A) |
+
+LibriSpeech gives 4% ≤ 1 s, close to dictation's 5%. The VAD preset is identical in both
+modes, so the gap is **speech style**: conversation is spontaneous speech full of
+300–700 ms hesitations, while dictation is composed. The **320 ms tail** splits
+spontaneous speech at those hesitations. In the pause sweep, the shipped preset splits a
+sentence at any pause ≥ 400 ms (56%) and nearly always at ≥ 500 ms (89%).
+
+**AMI, per model × policy** (acts split = share of dialogue acts cut into 2+ uploads;
+short cuts = mid-turn fragments with ≤ 0.6 s of speech; latency = extra delay on each
+turn's final upload vs today):
+
+| model | policy | acts split | clips/turn | short cuts | + end latency |
+|---|---|---|---|---|---|
+| v5 as shipped | 320 ms tail (**today**) | 30% | 2.86 | 138 | 0 |
+| v5 as shipped | 512 ms tail | 22% | 2.47 | 104 | +192 ms |
+| v5 as shipped | 640 ms tail | 18% | 2.24 | 80 | +320 ms |
+| v5 as shipped | 768 ms tail | 16% | 2.08 | 67 | +448 ms |
+| v5 + context | 320 ms tail | 27% | 2.85 | 87 | 0 |
+| v5 + context | 640 ms tail | 14% | 2.00 | 42 | +320 ms |
+| **v6 + context** | 320 ms tail | 22% | 2.47 | 78 | 0 |
+| **v6 + context** | 512 ms tail | 16% | 2.02 | 52 | +192 ms |
+| **v6 + context** | 640 ms tail | 11% | 1.76 | 40 | +320 ms |
+| v5 as shipped | hold short (≤ 1.5 s) segments +640 ms | 24% | 2.33 | 58 | +419 ms avg, on 65% of turns |
+
+What the table says:
+
+- **The silence tail is the main lever.** Lengthening it cuts fragmentation steadily, at a
+  latency cost equal to the extra tail on every turn.
+- **Silero v6, fed correctly, needs less tail for the same result.** At the shipped
+  320 ms, v6 + context matches v5 at 512 ms. v6 + context at 512 ms matches v5 at about
+  768 ms.
+- **The context fix cuts different things on synthetic and real speech.** In the pause
+  sweep it splits *earlier*: the model drops faster on true silence. On real speech it
+  splits *less*: the model stays up through breathy trailing frames. Real speech is what
+  matters.
+- **Holding short segments is a measured no.** It pays its latency on exactly the genuine
+  short turns ("yes", "okay"), which make up about half of AMI turn endings, and it still
+  cuts more thoughts than a plain longer tail at similar average cost. It only looks good
+  on LibriSpeech, which has no short turns.
+
+Caveats:
+
+- AMI is meeting speech on headset mics, not a laptop mic talking to Pi.
+- 268 turns and 640 dialogue acts is a modest sample.
+- Short-fragment counts are judged on the speech span, not the clip. A longer tail inflates
+  every clip, so "clips ≤ 1 s" is not comparable across tail lengths.
+- None of the above measures false-accepts. That comes from the FAR/FRR benchmark, below.
+
+**The same model variants on the real FAR/FRR corpus** (`run.ts corpus-real`, `balanced`
+thresholds unchanged, raw = gated):
+
+| model | FRR (clipped speech) | FAR (noise/music opened a segment) | music FA | noise FA |
+|---|---|---|---|---|
+| v5 as shipped | 8% | 41% | 5/8 | 9/26 |
+| v5 + context | 6% | 18% | 2/8 | 4/26 |
+| **v6 + context** | **0%** | **15%** | 1/8 | 4/26 |
+
+The missing context was costing the shipped model on **every** axis at once. It clipped
+more short words, opened on more noise, and chopped more sentences. Our sub-0.5 thresholds
+were tuned against that degraded model. Silero v6, fed as upstream intends, improves all
+three without touching the silence tail. So the upgrade (vad-web ≥ 0.0.31, `model: "v6"`)
+comes before any tail change, and a longer tail on top of it is a separate
+latency-for-accuracy decision.
+
 ## Files
 
-- `run.ts` — CLI entry; `npm run bench:vad [-- <corpus-dir>]`. Orchestrates corpus ×
-  presets, prints the table, writes `report.<corpus>.json` (git-ignored).
+- `run.ts` — CLI entry; `npm run bench:vad [-- <corpus-dir>] [--context] [--model <onnx>]`.
+  Orchestrates corpus × presets, prints the table, writes `report.<corpus>[.<variant>].json`
+  (git-ignored).
+- `segmentation.ts` — the #655 fragmentation benchmark (see above); `lib/segmenter.ts`
+  (probability cache + FrameProcessor replay + the context wrapper) and
+  `lib/fragmentation.mjs` (pure attribution / hold metrics, unit-tested in
+  `test/bench/vad-fragmentation.spec.ts`).
+- `fetch-segmentation-corpus.mjs` — fetch AMI + LibriSpeech into the git-ignored
+  `corpus-segmentation/`.
 - `lib/runner.ts` — the offline runner (real v5 model + frame processor + admission gate).
 - `lib/metrics.mjs` — pure FRR/FAR/latency aggregation (unit-tested).
 - `lib/wav.mjs` — minimal WAV decode/encode (no deps).
