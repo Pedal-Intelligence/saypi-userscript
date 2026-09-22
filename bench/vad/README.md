@@ -210,7 +210,7 @@ speech:
 npm run bench:vad:fetch-segmentation   # AMI headsets + annotations, LibriSpeech test-clean (~800 MB, once)
 npm run bench:vad:segmentation         # shipped model (v5, as vad-web 0.0.24 feeds it)
 npm run bench:vad:segmentation -- --context                                   # + the 64-sample context fix
-npm run bench:vad:segmentation -- --context --model <silero_vad_v6.onnx> --label silero_v6
+npm run bench:vad:segmentation -- --context --model bench/vad/corpus-segmentation/silero_vad_v6.onnx --label silero_v6
 ```
 
 It runs the model once per clip and caches per-frame probabilities, then replays them
@@ -236,6 +236,9 @@ Three corpora:
 Silero, and vad-web from 0.0.31 (ricky0123/vad#263), prefix each frame with the previous 64
 samples. The flag benchmarks the model as it is meant to be fed. `run.ts` takes the same
 `--context` / `--model` flags, so the FAR/FRR trade-off can be re-measured for any variant.
+The fetch script also downloads the Silero v6 file that vad-web 0.0.31 ships (sha1-checked).
+vad-web 0.0.31's v5 file is byte-identical to the one we ship today, so the v5 rows need no
+download.
 
 ### Findings (2026-09-22)
 
@@ -301,6 +304,10 @@ thresholds unchanged, raw = gated):
 | v5 as shipped | 8% | 41% | 5/8 | 9/26 |
 | v5 + context | 6% | 18% | 2/8 | 4/26 |
 | **v6 + context** | **0%** | **15%** | 1/8 | 4/26 |
+
+(Small n: FRR 8% → 0% is 5 of 64 isolated words, and FAR is out of 34 clips. The direction
+agrees across all three metrics and both corpora; the exact magnitudes shouldn't be quoted
+as precise.)
 
 The missing context was costing the shipped model on **every** axis at once. It clipped
 more short words, opened on more noise, and chopped more sentences. Our sub-0.5 thresholds
