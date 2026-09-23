@@ -16,11 +16,11 @@ import { hasOffscreenDocument } from "../support/lifecycle";
  *     offscreen VAD_USE_SYNTHETIC_AUDIO latch (clipUrl = bundled WAV)
  *       ->  click call  ->  initializeVAD builds a MediaStream from the WAV via
  *         AudioContext.decodeAudioData (the real-browser path unit tests can't run)
- *           ->  MicVAD.new({ stream })  ->  Silero-v5  ->  onSpeechEnd
+ *           ->  MicVAD.new (getStream -> that stream)  ->  Silero-v6  ->  onSpeechEnd
  *             ->  SW POSTs the mock /transcribe  ->  DEFAULT_TRANSCRIPT in #saypi-prompt
  *
- * This isolates the synthetic path: arming sets mergedOptions.stream, so vad-web
- * uses the provided stream and ignores getUserMedia entirely — the launch-flag
+ * This isolates the synthetic path: when armed, vad_handler hands vad-web the synthetic
+ * stream instead of opening the mic, so getUserMedia is never called — the launch-flag
  * fake mic is bypassed. If createSyntheticSpeechStream were broken, VAD init would
  * fail and no transcript would ever appear.
  */
@@ -56,7 +56,7 @@ test("in-extension synthetic audio -> VAD -> mock STT -> transcript in prompt", 
   // synthetic stream instead of the (launch-flag) microphone.
   await page.click("#saypi-callButton");
 
-  // The synthetic clip drives Silero-v5 -> onSpeechEnd -> SW POSTs /transcribe.
+  // The synthetic clip drives Silero-v6 -> onSpeechEnd -> SW POSTs /transcribe.
   await expect
     .poll(() => getTranscribeHits(serviceWorker), {
       timeout: 30_000,

@@ -1,63 +1,69 @@
 # Voice Activity Detection (VAD)
 
-This directory contains the Voice Activity Detection implementation using ONNX Runtime and Silero VAD models.
+This directory holds SayPi's voice activity detection: the Silero VAD model, run in the
+browser by ONNX Runtime (WebAssembly) through `@ricky0123/vad-web`.
 
-## Why We Keep All 4 WASM Files
+## What ships
 
-The extension includes 4 WASM file variants totaling 37MB. These are **all necessary** and cannot be reduced.
+| File | Size | What it is |
+|---|---|---|
+| `silero_vad_v6.onnx` | 2.3 MB | Silero VAD v6, the speech-detection model (committed in `public/`) |
+| `ort-wasm-simd-threaded.wasm` | 14 MB | ONNX Runtime's WebAssembly engine (copied from `node_modules` at build time) |
+| `ort-wasm-simd-threaded.mjs` | 24 KB | Its JavaScript glue, loaded with `import()` (copied likewise) |
+| `vad.worklet.bundle.min.js` | 2 KB | vad-web's audio worklet (added by `wxt.config.ts`) |
 
-### What Are These Files?
+All of them are served from the extension root (WXT copies `public/` there). They can't come
+from a CDN: MV3 forbids remote code, and the host page's CSP would block it anyway.
+`copy-onnx-files.js` copies the two ORT files, and fails the build if either is missing.
 
-- **WASM files** = ONNX Runtime (the inference engine that runs ML models)
-- **ONNX files** = VAD models (speech detection weights/data)
+### Why one WASM file (it used to be four)
 
-### The 4 WASM Variants
+Up to onnxruntime-web 1.18 the package shipped four WASM builds (plain, SIMD, threaded,
+SIMD+threaded, about 37 MB together) and picked one at runtime. From 1.19 on, ORT ships a
+single `ort-wasm-simd-threaded.wasm` for the CPU backend, which runs single-threaded when
+`env.wasm.numThreads = 1`. We always set that, because MV3's CSP forbids the blob-backed worker
+that threading needs. It requires WebAssembly SIMD, which every browser we support has
+(Chrome/Edge 91+, Firefox 89+). The other `ort-wasm-simd-threaded.*` variants in the package
+(asyncify, JSEP/WebGPU, JSPI) are for backends we don't use and are not copied.
 
-1. **`ort-wasm.wasm` (8.8MB)**
-   - Base version: No SIMD, no threading
-   - Fallback for older browsers
-   - Maximum compatibility
+## The model, and how it's fed
 
-2. **`ort-wasm-threaded.wasm` (8.7MB)**
-   - Adds Web Workers threading support
-   - Better performance on multi-core systems
-   - Requires SharedArrayBuffer support
-
-3. **`ort-wasm-simd.wasm` (9.5MB)**
-   - Adds SIMD (Single Instruction, Multiple Data) support
-   - Faster mathematical operations
-   - Significantly improves inference speed
-
-4. **`ort-wasm-simd-threaded.wasm` (9.5MB)**
-   - Combines both SIMD + threading
-   - **Best performance** for modern browsers
-   - Used by Chrome, Edge, Firefox (desktop)
-
-### Runtime Selection
-
-ONNX Runtime **dynamically selects** the best WASM file at runtime based on browser capabilities:
-
-```
-Modern Chrome/Edge/Firefox → ort-wasm-simd-threaded.wasm (fastest)
-Older browsers with SIMD   → ort-wasm-simd.wasm
-Browsers with threading    → ort-wasm-threaded.wasm
-Legacy browsers            → ort-wasm.wasm (slowest but compatible)
-```
-
-This ensures:
-- ✅ Maximum performance on capable browsers
-- ✅ Graceful degradation on older browsers
-- ✅ Universal compatibility
-
-**Do not remove any of these WASM files** - they are all required for cross-browser support.
+Every preset runs **Silero v6** (`VADConfigs.ts`). v6 has the same inputs as v5 (512-sample
+frames at 16 kHz, a `[2,1,128]` state tensor), and each frame must be prefixed with the last 64
+samples of the previous one. vad-web 0.0.24 skipped that context window, so until #655 we ran
+v5 on degraded input. Fixing it and moving to v6, at unchanged thresholds, took clipped short
+words from 8% to 0% and noise/music false-accepts from 41% to 15% on our benchmark corpus. See
+`bench/vad/README.md` for the numbers and how to reproduce them.
 
 ## Architecture
 
-- `OnscreenVADClient.ts` - VAD client for content scripts (when CSP allows)
-- `OffscreenVADClient.ts` - VAD client using offscreen documents (for strict CSP sites like Claude.ai)
-- `VADClientInterface.ts` - Common interface for both implementations
+- `OffscreenVADClient.ts` — Chrome/Edge: talks to the VAD running in the offscreen document
+  (`src/offscreen/vad_handler.ts`), which escapes the host page's CSP.
+- `OnscreenVADClient.ts` — Firefox and other browsers without offscreen documents: runs the VAD
+  in the content script itself.
+- `VADClientInterface.ts` — the interface both implement.
+- `micStreamLifecycle.ts` — both clients open the mic and the AudioContext themselves, build
+  the audio graph at initialize (one start→pause), and hold the mic open across pause/resume.
+  That is vad-web 0.0.24's contract. 0.0.27+ would reopen the mic every assistant turn and
+  defer graph setup (and its failures) to the first start.
+- `ortRuntime.ts` — the `ortConfig` both clients use: single-threaded, no proxy worker.
+- `VADConfigs.ts` — presets and `selectVADPreset`. `segmentAdmission.ts` — the #420 gate.
+
+### Firefox specifics (in-page VAD)
+
+- **Audio processor:** vad-web's AudioWorklet can't run from a Firefox content script
+  (`addModule` aborts, and frames arrive as cross-realm ArrayBuffers). The in-page client
+  therefore asks for `processorType: "ScriptProcessor"` on Firefox, which is what vad-web 0.0.24
+  silently fell back to there all along.
+- **Model bytes:** `RequestInterceptor.js` copies the fetched model into a same-realm
+  ArrayBuffer so ORT's `instanceof` check passes. Its file list must name the model we load.
+- **Asset paths must be right on their own:** ORT loads its `.mjs` glue with `import()`, which
+  RequestInterceptor's fetch rewrite can't redirect.
+
+`npm run test:e2e:firefox` starts the in-page VAD in a real headless Firefox with a fake mic, so
+a regression in any of these fails CI.
 
 ## Dependencies
 
-- `@ricky0123/vad-web` - Silero VAD models and ONNX Runtime wrapper
-- `onnxruntime-web` - ONNX Runtime for WebAssembly
+- `@ricky0123/vad-web` — the MicVAD wrapper, frame processor and Silero model wrappers.
+- `onnxruntime-web` — pinned to the version vad-web resolves, so npm keeps a single copy.

@@ -89,7 +89,7 @@ describe("#420 SegmentStatsTracker (per-segment speech-probability accumulation)
   });
 
   it("can be re-pointed at a new positiveSpeechThreshold (preset chosen after construction)", () => {
-    const tracker = new SegmentStatsTracker();
+    const tracker = new SegmentStatsTracker(0.4);
     tracker.setPositiveSpeechThreshold(0.6);
     tracker.beginSegment();
     tracker.observe(0.55); // below the new bar

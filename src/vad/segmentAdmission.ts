@@ -20,11 +20,9 @@
  * this logic so the gate behaves identically on Chrome/Edge and Firefox/mobile.
  */
 
-/** A 16 kHz Silero v5 frame is 512 samples = 32 ms. Exposed for ms↔frame reasoning. */
+/** A 16 kHz Silero v5/v6 frame is 512 samples = 32 ms. Exposed for ms↔frame reasoning. */
 export const VAD_FRAME_MS = 32;
 
-/** Silero v5's own default positive ("this is speech") threshold; the fallback bar. */
-export const SILERO_V5_DEFAULT_POSITIVE_THRESHOLD = 0.5;
 
 export interface SegmentSpeechStats {
   /** Highest per-frame speech probability across the segment (0..1). The most robust signal. */
@@ -129,7 +127,8 @@ export class SegmentStatsTracker {
   private frames = 0;
   private speechFrames = 0;
 
-  constructor(positiveSpeechThreshold: number = SILERO_V5_DEFAULT_POSITIVE_THRESHOLD) {
+  /** `positiveSpeechThreshold`: the active preset's bar (every preset defines one). */
+  constructor(positiveSpeechThreshold: number) {
     this.positiveSpeechThreshold = positiveSpeechThreshold;
   }
 

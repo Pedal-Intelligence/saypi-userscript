@@ -108,7 +108,7 @@ function setupVADEventListeners() {
     speechFrameCount?: number;
   }) => {
     // #420 — distinguish an admission-gate drop (real-ish audio dropped for low peak
-    // confidence) from a genuine library misfire (sub-minSpeechFrames blip), so a
+    // confidence) from a genuine library misfire (sub-minSpeechMs blip), so a
     // dropped-quiet-speech regression is visible in the logs rather than silent.
     if (info?.reason?.startsWith("admission-gate")) {
       logger.info(

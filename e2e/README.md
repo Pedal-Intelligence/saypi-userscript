@@ -71,7 +71,7 @@ specs are matched only by their own config and never run in CI.
 | --- | --- | --- |
 | `chat-adjacent-dictation.e2e.ts` | `hey.pi.ai` — where pi.ai bounces logged-out visitors — gets *universal dictation*, not the chat call button: the real manifest decides which script injects, and the dictation button lands on a real field (#559) | Required |
 | `decoration.e2e.ts` | The bundled content script detects Pi on the mock page and injects `#saypi-callButton`. Doubles as the GA-less bootstrap guard (telemetry must fail soft, #292) and proves the `__SAYPI_BUILD_STAMP__` Vite define really replaced the token in a real build (#312) | Required |
-| `dictation-stt.e2e.ts` | The full voice-input path against the local mocks: fake mic → `getUserMedia` → offscreen Silero-v5 VAD → `onSpeechEnd` → SW POSTs `/transcribe` → transcript drafted into `#saypi-prompt` | Required |
+| `dictation-stt.e2e.ts` | The full voice-input path against the local mocks: fake mic → `getUserMedia` → offscreen Silero-v6 VAD → `onSpeechEnd` → SW POSTs `/transcribe` → transcript drafted into `#saypi-prompt` | Required |
 | `mobile-tts-controls.e2e.ts` | Against the **real built CSS** at a 390x844 phone viewport: SayPi's per-message TTS controls render, stay inside the viewport, are hit-testable and meet the 24px target size — the vestigial popup-menu `display:none` that removed them from every phone is gone (#94) | Required |
 | `mock-isolation.e2e.ts` | The per-test mock reset holds: a fresh test observes **zero** `/transcribe` state, so no spec's hit-count assertion can be satisfied by an earlier spec's traffic (#462) | Required |
 | `offscreen-shutdown.e2e.ts` | An idle offscreen auto-shutdown closes the document but keeps the live content-script port, so the next `VAD_SPEECH_END` stays routable (#308) | Required |
@@ -228,7 +228,7 @@ to be in the compiled bundle goes in the `.env.development.local` written by
 
 The deterministic speech clip lives at `fixtures/audio/speech-16k-mono.wav`.
 Regeneration (macOS `say` + `ffmpeg`), format spec, and the reasons it must be
-*real* 16 kHz mono speech (Silero-v5 won't fire on a tone) are documented in
+*real* 16 kHz mono speech (Silero won't fire on a tone) are documented in
 [fixtures/audio/README.md](fixtures/audio/README.md). The clip is self-generated
 and license-clean. If you change the spoken text or format, update that README's
 spec table and the transcript expectation in the spec.

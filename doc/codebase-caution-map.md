@@ -129,10 +129,10 @@ The md5 of a message's "readable text" keys both the speech cache *and* the char
 
 ### D. VAD tuning & the WASM/asset invariants
 
-- **Deleting a "redundant" WASM/ONNX variant, or dropping `wasm-unsafe-eval`, to slim the bundle.** All four WASM files are runtime-selected per browser/CPU; removing one (or the CSP directive) breaks VAD init on some path with no local repro. `src/vad/README.md` ("Do not remove any of these"), `doc/WEB_STORE_PERMISSIONS.md`.
-- **Trimming `preSpeechPadFrames`/`redemptionFrames` or nudging `positiveSpeechThreshold` for "snappier" latency.** Re-clips the first/last word (`#260`) or re-admits ASR hallucinations (`#420`); values are locked by `test/vad/VADConfigs.spec.ts` — "just updating the lock test" to make it pass defeats the guard.
+- **Deleting the ORT `.wasm`/`.mjs` pair, or dropping `wasm-unsafe-eval`, to slim the bundle.** Since #655 (onnxruntime-web 1.30) ORT ships exactly one CPU build, `ort-wasm-simd-threaded.wasm`, plus the `.mjs` glue it `import()`s; both are required, and so is the CSP directive. Two newer traps sit alongside it. (a) The VAD asset base must be the extension root (`getURL("")`): ORT's `import()` can't be rescued by `RequestInterceptor`'s fetch rewrite, which is what had hidden a wrong `public/` base on Firefox. (b) ORT files in `public/` are git-ignored, so stale ones from an older build ship unless `copy-onnx-files.js` removes them (it does). `src/vad/README.md`, `doc/WEB_STORE_PERMISSIONS.md`.
+- **Trimming `preSpeechPadMs`/`redemptionMs` or nudging `positiveSpeechThreshold` for "snappier" latency.** Re-clips the first/last word (`#260`) or re-admits ASR hallucinations (`#420`); values are locked by `test/vad/VADConfigs.spec.ts` — "just updating the lock test" to make it pass defeats the guard.
 - **Trusting `doc/vad/silero-vad-v5-optimization-guide.md`'s millisecond math.** The doc itself is the trap: its numbers are v4 (frameSamples 1536, ~96ms/frame); the real v5 default is 512 samples = 32ms/frame. `VADConfigs.ts`'s header is the source of truth (§7 flags the doc for correction).
-- **Assuming `startVAD` inherits the selected preset.** Offscreen `initializeVAD` defaults to `'none'`; onscreen defaults to `'balanced'` — the two have already drifted, so behavior differs by browser.
+- **Assuming `startVAD` inherits the selected preset.** It didn't: after an offscreen auto-shutdown the re-created document initialized from a preset-less START and fell back to `'none'` (vad-web's defaults; a 1400 ms tail on 0.0.27+). Since #655 `OffscreenVADClient` re-sends its init options with every START, both clients fall back to `'balanced'`, and `none` is gone. Keep the preset flowing with START if you touch that message.
 
 ### E. XState v5 machines (the control plane)
 

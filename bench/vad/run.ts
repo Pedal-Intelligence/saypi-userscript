@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // VAD-quality benchmark CLI (#420 item 3). Replays the labelled seed corpus through
-// the real Silero v5 model + each SayPi preset, and reports the four numbers that a
+// the real Silero model (v6, as shipped) + each SayPi preset, and reports the four numbers that a
 // threshold decision rests on — false-reject rate (clipped real speech), false-accept
 // rate (non-speech opening a segment), and speech-onset / tail latency — for BOTH the
 // raw VAD and the #420 admission gate, so the gate's effect on the trade-off is visible.
@@ -13,7 +13,7 @@ import { dirname, resolve, basename } from "node:path";
 import { decodeWav } from "./lib/wav.mjs";
 // @ts-ignore
 import { summarize } from "./lib/metrics.mjs";
-import { loadV5Model, runClip, RUNNER_FRAME_MS } from "./lib/runner.ts";
+import { runClip, RUNNER_FRAME_MS } from "./lib/runner.ts";
 import { loadSileroModel } from "./lib/segmenter.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -21,19 +21,19 @@ const here = dirname(fileURLToPath(import.meta.url));
 //   npm run bench:vad -- corpus-real
 const corpusName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : "corpus";
 const corpusDir = resolve(here, corpusName);
-// Optional model variants (#655): `--model <onnx>` swaps in another Silero file with the v5
-// I/O contract (e.g. v6); `--context` feeds each frame the previous 64 samples, as upstream
-// Silero and vad-web ≥0.0.31 do (0.0.24, what ships, does not).
+// Optional model variants (#655). The default is what ships: Silero v6 via vad-web's wrapper.
+// `--model <onnx>` swaps in another file with the v5/v6 I/O contract; `--no-context` feeds
+// bare frames as vad-web 0.0.24 did (with the v5 file, that is the pre-#655 configuration).
 const flag = (name: string) => {
   const i = process.argv.indexOf(name);
   return i >= 0 ? process.argv[i + 1] : undefined;
 };
 const modelPath = flag("--model");
-const withContext = process.argv.includes("--context");
-const variant = [modelPath ? basename(modelPath, ".onnx") : "", withContext ? "ctx" : ""].filter(Boolean).join("+");
-// The sweep is the set of presets the extension actually ships (#571 removed
-// `conservative`); `runClip` looks each name up in the real VAD_CONFIGS, so a name
-// that no longer exists there would silently benchmark as "no overrides".
+const bareFrames = process.argv.includes("--no-context");
+const variant = [modelPath ? basename(modelPath, ".onnx") : "", bareFrames ? "bare" : ""].filter(Boolean).join("+");
+// The sweep is the set of presets the extension ships (#571 removed `conservative`), plus
+// "none": vad-web's own frame defaults, as a baseline row. `runClip` looks each name up in
+// the real VAD_CONFIGS and falls back to no overrides, which is what "none" relies on.
 const PRESETS = ["highSensitivity", "balanced", "none"];
 
 const fmtPct = (x: number | null) => (x === null ? "  —  " : `${(x * 100).toFixed(0)}%`.padStart(5));
@@ -44,8 +44,8 @@ async function main() {
   const clips: Array<{ file: string; label: string; speechStartMs?: number; speechEndMs?: number; note?: string }> =
     manifest.clips;
 
-  process.stdout.write(`Loading Silero v5 model…\n`);
-  const model = modelPath || withContext ? await loadSileroModel(modelPath, { withContext }) : await loadV5Model();
+  process.stdout.write(`Loading ${modelPath ? basename(modelPath) : "silero_vad_v6.onnx"}${bareFrames ? " (bare frames)" : ""}…\n`);
+  const model = await loadSileroModel(modelPath, { bareFrames });
 
   const records: any[] = [];
   const perClip: any[] = [];

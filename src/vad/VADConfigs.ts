@@ -1,17 +1,23 @@
 import type { RealTimeVADOptions } from "@ricky0123/vad-web";
 
 /**
- * Preset names for tuning Silero VAD v5 parameters.
+ * Preset names for tuning the Silero VAD.
  *
- * Frame timing: at the v5 frame size of 512 samples @ 16 kHz, **1 frame = 32 ms**, so
- * every frame-count below is annotated with its wall-clock equivalent. The Silero v5
- * defaults each value departs from (`defaultV5FrameProcessorOptions`) are: positive
- * 0.5, negative 0.35, redemptionFrames 24 (768 ms), minSpeechFrames 9 (288 ms),
- * preSpeechPadFrames 3 (96 ms). Our tuned presets are uniformly MORE aggressive
- * (lower thresholds, shorter redemption, far fewer min-speech-frames) — the right
- * direction for short, latency-sensitive conversational clips, at the cost of more
- * false-accepts. The #420 admission gate (`segmentAdmission.ts`) backstops that
- * false-accept risk; a VAD-quality benchmark to re-tune these numbers is #420 item 3.
+ * Model: every preset runs **Silero v6** (vad-web 0.0.31, #655). vad-web 0.0.24, which we
+ * shipped before, fed the v5 model bare 512-sample frames without the 64-sample context
+ * window Silero expects (ricky0123/vad#263), so the model saw degraded input. On the #420
+ * real corpus, moving to v6 with the context fix, at *unchanged* thresholds, took clipped
+ * short words from 8% to 0% and noise/music false-accepts from 41% to 15%. On
+ * conversational speech it also cut the share of thoughts split into several uploads from
+ * 30% to 22% (bench/vad/README.md, "Fragmentation").
+ *
+ * Units: durations are milliseconds (vad-web ≥0.0.27). The library converts each to frames
+ * with `Math.floor(ms / 32)`, since a v5/v6 frame is 512 samples @ 16 kHz = **32 ms**, so
+ * keep every value a multiple of 32 (the spec enforces it). The library's own frame defaults
+ * are: positive 0.3, negative 0.25, redemption 1400 ms, minSpeech 400 ms, preSpeechPad 800 ms.
+ * Our presets are far tighter: a short silence tail and a low minimum-speech bar, for short,
+ * latency-sensitive conversational clips. The #420 admission gate (`segmentAdmission.ts`) backstops the extra false-accept
+ * risk.
  *
  * Wiring status (which presets a code path actually selects) — see `selectVADPreset`:
  *  - `balanced`: the preset every context uses by default (#420 item 4). The VAD-quality
@@ -21,8 +27,12 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  *    It was previously bound to dictation/generic pages too, but the benchmark showed it
  *    false-accepts ~59% of real non-speech there (100% of music) for only a marginal
  *    false-reject edge, so it is no longer any context's default (the gap-#3 fix).
- *  - `none`: the no-override fallback `initializeVAD` resolves to when no (or an
- *    unknown) preset is requested — it inherits the library's v5 defaults verbatim.
+ *
+ * There is no "library defaults" preset. Both VAD clients fall back to `balanced` when no (or
+ * an unknown) preset is requested. An old `none` preset (the library's defaults) turned out to
+ * be reachable in production (#655): an offscreen document that auto-shut-down while idle was
+ * re-created by a START that carried no preset. Under vad-web 0.0.27+ those defaults mean a
+ * 1400 ms tail.
  *
  * Every tuned preset above is reachable, and `test/vad/VADConfigs.spec.ts` locks that
  * as an invariant. A preset no context can select is dead configuration that still
@@ -33,14 +43,14 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  * When you do, treat **opening** and **closing** as opposed axes rather than one
  * sensitivity dial: raising `positiveSpeechThreshold` makes the VAD harder to trigger on
  * background noise, whereas *lowering* `negativeSpeechThreshold` and lengthening
- * `redemptionFrames` is what stops it cutting a sentence short mid-utterance (#572). A
+ * `redemptionMs` is what stops it cutting a sentence short mid-utterance (#572, #655). A
  * single preset that is stricter about opening is strictly worse for chopping.
  */
-export type VADPreset = "highSensitivity" | "balanced" | "none";
+export type VADPreset = "highSensitivity" | "balanced";
 
 /**
  * Parameter presets for different use-cases.
- * Only a subset of RealTimeVADOptions dealing with FrameProcessorOptions are included here.
+ * Only the model choice and the FrameProcessorOptions subset of RealTimeVADOptions are included here.
  * These objects are spread on top of the base MicVAD options when a preset is selected.
  *
  * NOTE: these exact values are locked by `test/vad/VADConfigs.spec.ts` (#420 item 2) —
@@ -48,27 +58,24 @@ export type VADPreset = "highSensitivity" | "balanced" | "none";
  */
 export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
   highSensitivity: {
-    model: "v5",
-    // Highly responsive – ideal for dictation / very short utterances.
-    positiveSpeechThreshold: 0.35, // vs v5 default 0.5 — opens on quieter speech
-    negativeSpeechThreshold: 0.2, //  vs v5 default 0.35
-    redemptionFrames: 12, //          384 ms tail (vs v5 768 ms) — ends sooner
-    minSpeechFrames: 2, //            64 ms min (vs v5 288 ms) — accepts very short phrases
-    preSpeechPadFrames: 3, //         96 ms pre-roll (= v5 default)
+    model: "v6",
+    // Highly responsive: quiet/whispered speech (quiet mode, #437).
+    positiveSpeechThreshold: 0.35, // opens on quieter speech than balanced
+    negativeSpeechThreshold: 0.2,
+    redemptionMs: 384, //             12 frames of silence tail
+    minSpeechMs: 64, //               2 frames: accepts very short phrases
+    preSpeechPadMs: 96, //            3 frames of pre-roll
     submitUserSpeechOnPause: false,
   },
   balanced: {
-    model: "v5",
-    // Default – good general-purpose trade-off.
-    positiveSpeechThreshold: 0.4, //  vs v5 default 0.5
-    negativeSpeechThreshold: 0.25, // vs v5 default 0.35
-    redemptionFrames: 10, //          320 ms tail (vs v5 768 ms)
-    minSpeechFrames: 3, //            96 ms min (vs v5 288 ms)
-    preSpeechPadFrames: 2, //         64 ms pre-roll (vs v5 96 ms)
+    model: "v6",
+    // Default: every host and dictation (selectVADPreset).
+    positiveSpeechThreshold: 0.4,
+    negativeSpeechThreshold: 0.25,
+    redemptionMs: 320, //             10 frames of silence tail
+    minSpeechMs: 96, //               3 frames
+    preSpeechPadMs: 64, //            2 frames of pre-roll
     submitUserSpeechOnPause: false,
-  },
-  none: {
-    // No-override fallback: inherit all base options from Silero VAD v5.
   },
 };
 

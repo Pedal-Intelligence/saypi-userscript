@@ -14,7 +14,7 @@
 //   - Synthetic pause sweep (macOS `say` with [[slnc N]]): the pause length at which each
 //     config starts splitting two phrases.
 //
-// Run: npm run bench:vad:segmentation [-- --model <path-to-onnx>] [--label v6]
+// Run: npm run bench:vad:segmentation [-- --model <path-to-onnx>] [--no-context] [--label name]
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -41,11 +41,12 @@ const argVal = (name: string) => {
 };
 const dataDir = resolve(argVal("--data") ?? join(here, "corpus-segmentation"));
 const modelPath = argVal("--model");
-// --context feeds each frame with the previous 64 samples, as upstream Silero does and as
-// vad-web ≥0.0.31 does (0.0.24, what ships today, does not — see withSileroContext).
-const withContext = args.includes("--context");
+// The default is what ships: Silero v6, fed with its 64-sample context by vad-web's wrapper.
+// --no-context replays vad-web 0.0.24's bare frames (the pre-#655 configuration, with the v5
+// file: --model node_modules/@ricky0123/vad-web/dist/silero_vad_v5.onnx --no-context).
+const bareFrames = args.includes("--no-context");
 const modelLabel =
-  (argVal("--label") ?? (modelPath ? basename(modelPath, ".onnx") : "silero_v5")) + (withContext ? "+ctx" : "");
+  (argVal("--label") ?? (modelPath ? basename(modelPath, ".onnx") : "silero_vad_v6")) + (bareFrames ? "+bare" : "");
 const cacheDir = join(dataDir, ".probs", modelLabel);
 mkdirSync(cacheDir, { recursive: true });
 
@@ -56,13 +57,14 @@ const shipped = (name: "balanced" | "highSensitivity"): SegmenterConfig => {
   return {
     positiveSpeechThreshold: c.positiveSpeechThreshold,
     negativeSpeechThreshold: c.negativeSpeechThreshold,
-    redemptionFrames: c.redemptionFrames,
-    minSpeechFrames: c.minSpeechFrames,
-    preSpeechPadFrames: c.preSpeechPadFrames,
+    redemptionMs: c.redemptionMs,
+    minSpeechMs: c.minSpeechMs,
+    preSpeechPadMs: c.preSpeechPadMs,
   };
 };
 const balanced = shipped("balanced");
-const withR = (r: number, extra: Partial<SegmenterConfig> = {}): SegmenterConfig => ({ ...balanced, redemptionFrames: r, ...extra });
+/** Balanced with an r-frame (r × 32 ms) silence tail. */
+const withR = (r: number, extra: Partial<SegmenterConfig> = {}): SegmenterConfig => ({ ...balanced, redemptionMs: r * FRAME_MS, ...extra });
 
 type Policy = { name: string; config: SegmenterConfig; hold?: { maxHeldSpeechMs: number; holdMs: number } };
 export const CONFIGS: Policy[] = [
@@ -88,7 +90,7 @@ export const CONFIGS: Policy[] = [
 /** Uploads under a policy, each with `heldMs` = extra wait vs the shipped 320 ms tail. */
 async function uploadsFor(probs: Float32Array, p: Policy): Promise<Array<Segment & { heldMs: number }>> {
   const segs = await segmentProbs(probs, p.config);
-  const tailExtra = (p.config.redemptionFrames - balanced.redemptionFrames) * FRAME_MS;
+  const tailExtra = p.config.redemptionMs - balanced.redemptionMs;
   const out = p.hold ? coalesceShortSegments(segs, FRAME_MS, p.hold) : segs.map((s) => ({ ...s, heldMs: 0 }));
   return out.map((s: any) => ({ ...s, heldMs: s.heldMs + tailExtra }));
 }
@@ -100,7 +102,7 @@ async function probsFor(key: string, load: () => { samples: Float32Array; sample
     const buf = readFileSync(path);
     return new Float32Array(buf.buffer, buf.byteOffset, buf.byteLength / 4);
   }
-  model ??= await loadSileroModel(modelPath, { withContext });
+  model ??= await loadSileroModel(modelPath, { bareFrames });
   const { samples, sampleRate } = load();
   const probs = await computeFrameProbs(model, samples, sampleRate);
   writeFileSync(path, Buffer.from(probs.buffer));

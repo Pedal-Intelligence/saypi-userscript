@@ -10,42 +10,48 @@ import {
  * #420 item 2 — Lock the VAD preset values. They were hand-tuned in one commit (PR
  * #158, "detect shorter phrases") with no benchmark and no test, so they could
  * silently drift. This pins the exact numbers so any change to them is a DELIBERATE,
- * reviewed decision — and documents the invariant ordering between presets. (The
- * numbers themselves stay as-is; re-tuning waits on the VAD-quality benchmark, item 3.)
+ * reviewed decision — and documents the invariant ordering between presets.
+ *
+ * #655 moved the presets onto Silero v6 (vad-web 0.0.31) with the thresholds unchanged, and
+ * vad-web 0.0.27 turned the frame counts into milliseconds. The values below are the old
+ * frame counts × 32 ms, so segmentation timing is unchanged by the upgrade itself.
  */
 
 describe("#420 VAD_CONFIGS preset values are locked", () => {
   it("highSensitivity matches the committed tuning", () => {
     expect(VAD_CONFIGS.highSensitivity).toEqual({
-      model: "v5",
+      model: "v6",
       positiveSpeechThreshold: 0.35,
       negativeSpeechThreshold: 0.2,
-      redemptionFrames: 12,
-      minSpeechFrames: 2,
-      preSpeechPadFrames: 3,
+      redemptionMs: 384,
+      minSpeechMs: 64,
+      preSpeechPadMs: 96,
       submitUserSpeechOnPause: false,
     });
   });
 
   it("balanced matches the committed tuning", () => {
     expect(VAD_CONFIGS.balanced).toEqual({
-      model: "v5",
+      model: "v6",
       positiveSpeechThreshold: 0.4,
       negativeSpeechThreshold: 0.25,
-      redemptionFrames: 10,
-      minSpeechFrames: 3,
-      preSpeechPadFrames: 2,
+      redemptionMs: 320,
+      minSpeechMs: 96,
+      preSpeechPadMs: 64,
       submitUserSpeechOnPause: false,
     });
   });
 
-  it("'none' inherits all library defaults (empty override)", () => {
-    expect(VAD_CONFIGS.none).toEqual({});
+  it("has no 'none' fallback preset (#655)", () => {
+    // A missing/unknown preset now falls back to balanced in both clients. The old `none`
+    // (vad-web's defaults) was reachable in production after an offscreen auto-shutdown,
+    // and under vad-web 0.0.27+ those defaults are a 1400 ms tail and a 400 ms minimum.
+    expect(Object.keys(VAD_CONFIGS).sort()).toEqual(["balanced", "highSensitivity"]);
   });
 });
 
 describe("#420 VAD_CONFIGS preset ordering invariants", () => {
-  const tuned = (Object.keys(VAD_CONFIGS) as VADPreset[]).filter((p) => p !== "none");
+  const tuned = Object.keys(VAD_CONFIGS) as VADPreset[];
 
   it("positive speech threshold rises from highSensitivity → balanced", () => {
     expect(VAD_CONFIGS.highSensitivity.positiveSpeechThreshold!).toBeLessThan(
@@ -61,21 +67,30 @@ describe("#420 VAD_CONFIGS preset ordering invariants", () => {
     });
   });
 
-  it("every tuned preset pins the v5 model and disables submitUserSpeechOnPause", () => {
+  it("every tuned preset pins the v6 model and disables submitUserSpeechOnPause", () => {
     tuned.forEach((preset) => {
-      expect(VAD_CONFIGS[preset].model).toBe("v5");
+      expect(VAD_CONFIGS[preset].model).toBe("v6");
       expect(VAD_CONFIGS[preset].submitUserSpeechOnPause).toBe(false);
+    });
+  });
+
+  it("every duration is a whole number of 32 ms frames", () => {
+    // vad-web converts with Math.floor(ms / 32), so an off-grid value silently rounds
+    // DOWN — e.g. 500 ms would really be 480 ms. Keep the configured number honest.
+    tuned.forEach((preset) => {
+      const { redemptionMs, minSpeechMs, preSpeechPadMs } = VAD_CONFIGS[preset];
+      [redemptionMs, minSpeechMs, preSpeechPadMs].forEach((ms) => expect(ms! % 32).toBe(0));
     });
   });
 
   it("more sensitive presets allow a longer redemption tail and fewer min speech frames", () => {
     // The aggressive presets deliberately favour NOT clipping short/quiet phrases:
     // a longer redemption window and a lower minimum-speech-frames bar.
-    expect(VAD_CONFIGS.highSensitivity.redemptionFrames!).toBeGreaterThan(
-      VAD_CONFIGS.balanced.redemptionFrames!
+    expect(VAD_CONFIGS.highSensitivity.redemptionMs!).toBeGreaterThan(
+      VAD_CONFIGS.balanced.redemptionMs!
     );
-    expect(VAD_CONFIGS.highSensitivity.minSpeechFrames!).toBeLessThan(
-      VAD_CONFIGS.balanced.minSpeechFrames!
+    expect(VAD_CONFIGS.highSensitivity.minSpeechMs!).toBeLessThan(
+      VAD_CONFIGS.balanced.minSpeechMs!
     );
   });
 });
@@ -124,9 +139,6 @@ describe("#437 selectVADPreset quiet/whisper mode", () => {
  * above, while `selectVADPreset` could only ever return `balanced` or
  * `highSensitivity`. This pins the invariant so the next unreachable preset fails CI
  * on the commit that adds it, instead of lingering as plausible-looking dead tuning.
- *
- * `none` is excluded on purpose: it is not a *selection*, it is the no-override
- * fallback `initializeVAD` resolves to when no (or an unknown) preset is requested.
  */
 describe("#571 every tuned preset is reachable through selectVADPreset", () => {
   /** The complete input space of the selector: two booleans, quietMode also absent. */
@@ -136,7 +148,7 @@ describe("#571 every tuned preset is reachable through selectVADPreset", () => {
 
   it("the reachable set is exactly the tuned presets (no dead tuning, no phantom name)", () => {
     const reachable = new Set(everyContext.map(selectVADPreset));
-    const tuned = (Object.keys(VAD_CONFIGS) as VADPreset[]).filter((p) => p !== "none");
+    const tuned = Object.keys(VAD_CONFIGS) as VADPreset[];
 
     expect([...reachable].sort()).toEqual([...tuned].sort());
   });

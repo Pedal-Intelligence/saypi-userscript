@@ -5,7 +5,7 @@ the page's microphone during the Layer 3 headless E2E run. The harness launches
 Chromium with `--use-fake-device-for-media-stream` plus
 `--use-file-for-fake-audio-capture=<this file>`, so `getUserMedia()` returns this
 clip instead of a real mic. The clip drives the real offscreen WASM-VAD
-(Silero-v5) → mock STT path that the dictation spec asserts on.
+(Silero-v6) → mock STT path that the dictation spec asserts on.
 
 This single file is the **fallback** capture clip for the launch-flag path. The
 primary path — the in-extension synthetic source armed by `saypi:dev-feed-speech`
@@ -35,7 +35,7 @@ emits an `onSpeechEnd` segment rather than getting cut off at end-of-file.
 
 ## Why real speech, not a tone
 
-The offscreen VAD uses the **Silero-v5** speech-detection model, which classifies
+The offscreen VAD uses the **Silero-v6** speech-detection model, which classifies
 frames as *speech* vs *non-speech*. A sine tone or noise burst is loud but is
 **not** speech, so Silero would never fire `onSpeechEnd` and no segment would be
 captured. A genuine spoken utterance is required for the VAD path to trigger and

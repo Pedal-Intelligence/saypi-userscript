@@ -7,6 +7,8 @@ public/*.js
 public/*.js.LICENSE.txt
 public/*.js.map
 public/*.wasm
+# ORT glue copied from node_modules by copy-onnx-files.js at build time (#655)
+public/ort-wasm*.mjs
 src/audio/vad-configs.json
 src/audio/capabilities-test.json
 .DS_Store

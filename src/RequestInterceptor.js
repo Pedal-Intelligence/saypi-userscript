@@ -1,14 +1,11 @@
 import { getResourceUrl } from "./ResourceModule.ts";
 
+// The VAD's own assets (vad-web 0.0.31 + onnxruntime-web 1.30, #655). The model entry also
+// scopes the Firefox same-realm ArrayBuffer shim below, so it must name the model we load.
 const filesToRedirect = [
-  "silero_vad.onnx",
-  "silero_vad_v5.onnx",
-  "silero_vad_legacy.onnx",
-  "ort-wasm-simd.wasm",
-  "ort.min.js.map",
-  "vad.worklet.bundle.js",
+  "silero_vad_v6.onnx",
+  "ort-wasm-simd-threaded.wasm",
   "vad.worklet.bundle.min.js",
-  "ort-wasm.wasm",
 ];
 
 // Shim Response.arrayBuffer to ensure same-realm ArrayBuffer for model files in Firefox

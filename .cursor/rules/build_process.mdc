@@ -16,19 +16,19 @@ alwaysApply: false
 - **Key steps executed by build**
   - `scripts/update-manifest.js` adjusts content scripts, WER matches, env
   - `i18n-validate.cjs` sanity-checks locale files
-  - `copy-onnx-files.js` copies ort-wasm*.{wasm,mjs} to `public/`
+  - `copy-onnx-files.js` copies `ort-wasm-simd-threaded.{wasm,mjs}` to `public/` (see src/vad/README.md)
   - Webpack emits:
     - `public/saypi.user.js`
     - `public/offscreen/*.js`
-    - copied model assets: `silero_vad*.onnx`, `ort-wasm*`, `vad.worklet.bundle*.js`, `lucide.min.js`
+    - copied model assets: `silero_vad_v6.onnx`, `ort-wasm-simd-threaded.{wasm,mjs}`, `vad.worklet.bundle.min.js`, `lucide.min.js`
 
 - **Dynamic chunk loading**
   - The extension sets runtime public path via `src/webpack-public-path.js` (first entry) so chunks load from `chrome-extension://.../public/` not the host.
   - `manifest.json` must include `public/*.js`, `public/*.mjs` in `web_accessible_resources`.
 
 - **VAD/ONNX specifics**
-  - Prefer ORT wasm from `@ricky0123/vad-web`'s nested `onnxruntime-web` version. Webpack CopyPlugin copies nested first, then falls back to top-level with `noErrorOnMissing`.
-  - Offscreen VAD handler sets `baseAssetPath` and `onnxWASMBasePath` to `chrome.runtime.getURL("public/")`.
+  - `onnxruntime-web` is pinned to the version `@ricky0123/vad-web` resolves, so npm keeps one copy; `copy-onnx-files.js` still prefers a nested copy if they ever diverge.
+  - Both VAD clients set `baseAssetPath` and `onnxWASMBasePath` to `chrome.runtime.getURL("")` (the build root; there is no `public/` dir in the output). ORT imports its `.mjs` glue from there with `import()`, which no fetch rewrite can redirect.
 
 - **Clean install**
   - Reproducible: `rm -rf node_modules && npm ci`

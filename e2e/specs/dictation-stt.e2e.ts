@@ -9,7 +9,7 @@ import {
 /**
  * Slice b: the full voice-input path, end to end, against the local mocks.
  *
- *   fake mic (looped WAV)  ->  getUserMedia  ->  offscreen Silero-v5 VAD
+ *   fake mic (looped WAV)  ->  getUserMedia  ->  offscreen Silero-v6 VAD
  *     ->  onSpeechEnd  ->  SW POSTs audio to the mock /transcribe
  *       ->  mock echoes DEFAULT_TRANSCRIPT  ->  draftPrompt writes #saypi-prompt.value
  *
@@ -31,7 +31,7 @@ test("fake audio -> VAD -> mock STT -> transcript in prompt", async ({ context, 
   await page.click("#saypi-callButton");
 
   // Localizer #1 — VAD/audio fired: the fake mic loops the clip; once the
-  // offscreen Silero-v5 model fires onSpeechEnd the SW POSTs to the mock
+  // offscreen Silero-v6 model fires onSpeechEnd the SW POSTs to the mock
   // /transcribe. Read the mock's hit counter from the SW context (the upload is
   // SW/offscreen-issued and invisible to page.on("response")). Asserting this
   // BEFORE the prompt wait makes a CI failure self-localize: no hit ⇒ VAD/fake-

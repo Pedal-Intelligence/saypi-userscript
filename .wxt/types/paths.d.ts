@@ -32,6 +32,7 @@ declare module "wxt/browser" {
     | "/content-scripts/saypi-universal.js"
     | "/content-scripts/saypi.js"
     | "/d54c339478aa04913da7.svg"
+    | "/fonts/poppins/OFL.txt"
     | "/icons/logos/claude.png"
     | "/icons/logos/elevenlabs.svg"
     | "/icons/logos/inflection.ai.png"
@@ -46,11 +47,10 @@ declare module "wxt/browser" {
     | "/offscreen.html"
     | "/onboarding.html"
     | "/ort-wasm-simd-threaded.mjs"
+    | "/ort-wasm-simd-threaded.wasm"
     | "/permissions.html"
     | "/settings.html"
-    | "/silero_vad.onnx"
-    | "/silero_vad_legacy.onnx"
-    | "/silero_vad_v5.onnx"
+    | "/silero_vad_v6.onnx"
   type HtmlPublicPath = Extract<PublicPath, `${string}.html`>
   export interface WxtRuntime {
     getURL(path: PublicPath): string;

@@ -29,6 +29,10 @@ export class OffscreenVADClient implements VADClientInterface {
   // Whether a VAD session is currently active (between start() and stop()/destroy()).
   // Used to tell a genuine mid-call port loss apart from a routine idle recycle.
   private isActive: boolean = false;
+  // The options (preset) of the last initialize(), re-sent with every start: the offscreen
+  // document may have auto-shut-down while idle, and the one START re-creates must build the
+  // VAD with the same preset rather than a fallback (#655).
+  private initOptions: any = {};
   private statusIndicator: VADStatusIndicator;
 
   constructor() {
@@ -238,6 +242,7 @@ export class OffscreenVADClient implements VADClientInterface {
   }
 
   public initialize(options: any = {}): Promise<{ success: boolean, error?: string, mode?: string }> {
+    this.initOptions = options;
     // If port is not connected or doesn't exist, establish a new connection
     if (!this.port || !this.isPortConnected) {
       logger.debug("[SayPi OffscreenVADClient] Port was disconnected or not initialized. Reconnecting...");
@@ -271,7 +276,7 @@ export class OffscreenVADClient implements VADClientInterface {
         if (!success) this.isActive = false;
         resolve({ success, error });
       };
-      this.sendMessage({ type: "VAD_START_REQUEST" });
+      this.sendMessage({ type: "VAD_START_REQUEST", options: this.initOptions });
     });
   }
 

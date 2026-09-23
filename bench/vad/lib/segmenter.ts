@@ -16,25 +16,26 @@
 // uploaded length includes the silence tail.
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
+import { dirname } from "node:path";
 
 const require = createRequire(import.meta.url);
-const ort = require("onnxruntime-web");
-const { SileroV5 } = require("@ricky0123/vad-web/dist/models/v5.js");
-const { FrameProcessor, defaultV5FrameProcessorOptions } = require(
-  "@ricky0123/vad-web/dist/frame-processor.js"
-);
+// The same entry vad-web uses (`onnxruntime-web/wasm`), so the bench runs the WASM backend.
+const ort = require("onnxruntime-web/wasm");
+const { Silero } = require("@ricky0123/vad-web/dist/models/silero.js");
+const { FrameProcessor } = require("@ricky0123/vad-web/dist/frame-processor.js");
 const { Resampler } = require("@ricky0123/vad-web/dist/resampler.js");
 const { Message } = require("@ricky0123/vad-web/dist/messages.js");
 
-export const FRAME_SAMPLES = 512; // Silero v5 frame @ 16 kHz
+export const FRAME_SAMPLES = 512; // Silero v5/v6 frame @ 16 kHz
 export const FRAME_MS = (FRAME_SAMPLES / 16000) * 1000; // 32 ms
 
+/** vad-web's FrameProcessorOptions (ms-based since 0.0.27), minus submitUserSpeechOnPause. */
 export interface SegmenterConfig {
   positiveSpeechThreshold: number;
   negativeSpeechThreshold: number;
-  redemptionFrames: number;
-  minSpeechFrames: number;
-  preSpeechPadFrames: number;
+  redemptionMs: number;
+  minSpeechMs: number;
+  preSpeechPadMs: number;
 }
 
 export interface Segment {
@@ -69,44 +70,35 @@ async function quietOrt<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 /**
- * Load a Silero model with the v5 I/O contract (input [1,512], state [2,1,128], sr).
- * Defaults to the v5 file vad-web ships; pass another path to benchmark a drop-in model
- * with the same interface (e.g. Silero v6).
+ * Load a Silero model the way the extension runs it: vad-web's `Silero` wrapper (v5/v6
+ * I/O contract), which feeds each 512-sample frame with the previous frame's last 64
+ * samples. Defaults to the v6 file the extension ships.
+ *
+ * `bareFrames` replays how vad-web 0.0.24 fed the model before #655: bare 512-sample frames
+ * with no context window. Keep it so the before/after comparison in bench/vad/README.md
+ * stays reproducible (pair it with the v5 file for the exact old configuration).
  */
-export async function loadSileroModel(onnxPath?: string, { withContext = false } = {}) {
-  const ortDist = require.resolve("onnxruntime-web/package.json").replace(/package\.json$/, "dist/");
+export async function loadSileroModel(onnxPath?: string, { bareFrames = false } = {}) {
+  // ORT ≥1.19's exports map hides package.json; its entry file sits in dist/.
+  const ortDist = dirname(require.resolve("onnxruntime-web/wasm")) + "/";
   ort.env.wasm.wasmPaths = ortDist;
   ort.env.wasm.numThreads = 1;
   ort.env.wasm.proxy = false;
   ort.env.logLevel = "error";
-  const path = onnxPath ?? require.resolve("@ricky0123/vad-web/dist/silero_vad_v5.onnx");
+  const path = onnxPath ?? require.resolve("@ricky0123/vad-web/dist/silero_vad_v6.onnx");
   const modelFetcher = async () => readFileSync(path).buffer;
-  const model = await quietOrt(() => SileroV5.new(ort, modelFetcher));
-  return withContext ? withSileroContext(model) : model;
+  const model = await quietOrt(() => Silero.new(ort, modelFetcher));
+  return bareFrames ? withoutContext(model) : model;
 }
 
-export const SILERO_CONTEXT_SAMPLES = 64;
-
-/**
- * Feed the model the way upstream Silero (v5 and v6) expects: each 512-sample frame
- * prefixed with the last 64 samples of the previous frame. vad-web 0.0.24's SileroV5
- * wrapper passes the bare 512-sample frame, so the model never sees that context; vad-web
- * 0.0.31 fixed this (ricky0123/vad#263). Wraps a loaded vad-web model in place.
- */
-export function withSileroContext(model: any) {
-  let context = new Float32Array(SILERO_CONTEXT_SAMPLES);
-  const bareProcess = model.process;
-  const bareReset = model.reset_state;
-  model.reset_state = () => {
-    context = new Float32Array(SILERO_CONTEXT_SAMPLES);
-    bareReset();
-  };
+/** Swap in vad-web 0.0.24's frame feeding: the bare frame, no 64-sample context. */
+function withoutContext(model: any) {
   model.process = async (frame: Float32Array) => {
-    const input = new Float32Array(SILERO_CONTEXT_SAMPLES + frame.length);
-    input.set(context, 0);
-    input.set(frame, SILERO_CONTEXT_SAMPLES);
-    context = frame.slice(frame.length - SILERO_CONTEXT_SAMPLES);
-    return bareProcess(input);
+    const input = new ort.Tensor("float32", frame, [1, frame.length]);
+    const out = await model._session.run({ input, state: model._state, sr: model._sr });
+    model._state = out.stateN;
+    const isSpeech = out.output.data[0];
+    return { isSpeech, notSpeech: 1 - isSpeech };
   };
   return model;
 }
@@ -141,12 +133,7 @@ const DUMMY_FRAME = new Float32Array(FRAME_SAMPLES);
 export async function segmentProbs(probs: Float32Array, config: SegmenterConfig): Promise<Segment[]> {
   let i = 0;
   const stubModel = async () => ({ isSpeech: probs[i], notSpeech: 1 - probs[i] });
-  const fp = new FrameProcessor(stubModel, () => {}, {
-    ...defaultV5FrameProcessorOptions,
-    ...config,
-    frameSamples: FRAME_SAMPLES,
-    submitUserSpeechOnPause: false,
-  });
+  const fp = new FrameProcessor(stubModel, () => {}, { ...config, submitUserSpeechOnPause: false }, FRAME_MS);
   fp.resume();
 
   const segments: Segment[] = [];

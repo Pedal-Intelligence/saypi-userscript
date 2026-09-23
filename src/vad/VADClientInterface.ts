@@ -28,7 +28,7 @@ export interface VADClientCallbacks {
     meanSpeechProb?: number;
     speechFrameCount?: number;
   }) => void;
-  // #420 — onVADMisfire fires for both a library misfire (sub-minSpeechFrames blip,
+  // #420 — onVADMisfire fires for both a library misfire (sub-minSpeechMs blip,
   // no info) AND an admission-gate drop (info present: reason + the segment's stats),
   // so a dropped-real-speech regression is distinguishable from genuine non-speech.
   onVADMisfire?: (info?: VADMisfireInfo) => void;
