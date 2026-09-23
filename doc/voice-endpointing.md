@@ -10,7 +10,7 @@ Signals
 
 Timing Model
 - File: src/TimerModule.ts:1
-  - `initialDelay = max(maxDelay * (1 - pFinishedSpeaking) * (1 - tempo), MIN_INITIAL_DELAY_MS)`
+  - `initialDelay = max(maxDelay * (1 - pFinishedSpeaking) * (1 - TEMPO_WEIGHT * tempo), MIN_INITIAL_DELAY_MS)`
   - `finalDelay = max(initialDelay - elapsedSinceStop, 0)`
 - The wait is patience, spent where the model says the user may NOT be finished: a low
   `pFinishedSpeaking` ("probably mid-sentence") holds the turn open; a high score submits
@@ -21,6 +21,10 @@ Timing Model
   against an overconfident score when transcription returns faster than the floor).
   - `pFinishedSpeaking` absent means no signal → treated as 0 (maximum patience).
   - `tempo` defaults to 0 (neutral); both inputs are clamped to [0,1] inside calculateDelay.
+  - `TEMPO_WEIGHT` is 0.5: tempo is a bounded discount that can at most halve the wait,
+    never erase it. Only `pFinishedSpeaking` can take the wait down to the floor. (#656 —
+    with a straight `(1 - tempo)` factor, a tempo saturated at 1.0 by a noisy WPM on a
+    short clip zeroed the patience, so a p = 0.03 fragment submitted on the floor.)
 
 Where It Runs
 - File: src/state-machines/ConversationMachine.ts:1522
