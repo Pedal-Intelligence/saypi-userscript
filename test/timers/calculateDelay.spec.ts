@@ -1,11 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { calculateDelay, MIN_INITIAL_DELAY_MS } from '../../src/TimerModule';
+import { calculateDelay, MIN_INITIAL_DELAY_MS, TEMPO_WEIGHT } from '../../src/TimerModule';
 
 // Policy under test (#521): the endpointing wait is patience — spend it where the
-// model says the user may NOT be finished. initialDelay = maxDelay · (1 − p) · (1 − tempo),
+// model says the user may NOT be finished.
+//   initialDelay = maxDelay · (1 − p) · (1 − TEMPO_WEIGHT · tempo),
 // floored at MIN_INITIAL_DELAY_MS, then reduced by the time already elapsed since the
 // user stopped speaking. The pre-#521 formula was proportional to p (patience spent
-// where it was least needed); these tests pin the corrected direction.
+// where it was least needed); these tests pin the corrected direction. Tempo is a
+// bounded discount (#656): it can shorten the wait, never erase the endpointing score.
 describe('TimerModule.calculateDelay', () => {
   const BASE_TIME = 1_000_000; // ms
   const MAX_DELAY = 7000;
@@ -29,10 +31,10 @@ describe('TimerModule.calculateDelay', () => {
     expect(waitWhenUnfinished).toBeGreaterThan(waitWhenFinished);
   });
 
-  it('computes maxDelay · (1 − p) · (1 − tempo) when above the floor', () => {
-    // 7000 · (1 − 0.2) · (1 − 0.5) = 2800ms
+  it('computes maxDelay · (1 − p) · (1 − TEMPO_WEIGHT · tempo) when above the floor', () => {
+    // 7000 · (1 − 0.2) · (1 − 0.5 · 0.5) = 4200ms
     const delay = calculateDelay(BASE_TIME, 0.2, 0.5, MAX_DELAY);
-    expect(delay).toBe(2800);
+    expect(delay).toBeCloseTo(4200, 6);
   });
 
   it('subtracts time already elapsed since the user stopped speaking', () => {
@@ -49,9 +51,32 @@ describe('TimerModule.calculateDelay', () => {
     expect(delay).toBe(MIN_INITIAL_DELAY_MS);
   });
 
-  it('floors the initial delay when tempo = 1 zeroes the tempo factor', () => {
-    const delay = calculateDelay(BASE_TIME, 0.2, 1, MAX_DELAY);
-    expect(delay).toBe(MIN_INITIAL_DELAY_MS);
+  describe('tempo is a bounded discount, never an override (#656)', () => {
+    it('keeps holding the turn for a mid-sentence fragment whose tempo saturated at 1.0', () => {
+      // The 2026-09-22 session: a clip scored p = 0.03 (the model was nearly certain
+      // the user was mid-sentence) with tempo pinned at 1.0 by a noisy WPM on a short
+      // clip. Transcription took ~0.95s. With tempo as a straight multiplier the wait
+      // collapsed to the 500ms floor, already consumed by the latency → instant submit,
+      // and the user resumed speaking. Bounded: 7000 · 0.97 · (1 − 0.5 · 1) = 3395ms.
+      const stoppedAt = BASE_TIME - 950;
+      const delay = calculateDelay(stoppedAt, 0.03, 1, MAX_DELAY);
+      expect(delay).toBeCloseTo(3395 - 950, 6);
+    });
+
+    it('at most halves the patience, whatever the tempo', () => {
+      expect(TEMPO_WEIGHT).toBe(0.5);
+      for (const p of [0, 0.03, 0.2, 0.5, 0.8]) {
+        const neutral = calculateDelay(BASE_TIME, p, 0, MAX_DELAY);
+        const saturated = calculateDelay(BASE_TIME, p, 1, MAX_DELAY);
+        expect(saturated).toBeLessThan(neutral);
+        expect(saturated).toBeCloseTo(Math.max(neutral * (1 - TEMPO_WEIGHT), MIN_INITIAL_DELAY_MS), 6);
+      }
+    });
+
+    it('still reaches the floor when the model itself says the user finished', () => {
+      // The floor is now reached only through pFinishedSpeaking, never through tempo alone.
+      expect(calculateDelay(BASE_TIME, 1, 1, MAX_DELAY)).toBe(MIN_INITIAL_DELAY_MS);
+    });
   });
 
   it('lets elapsed time consume the floor (no fixed latency after transcription)', () => {
