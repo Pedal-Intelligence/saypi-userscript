@@ -134,7 +134,8 @@ Detail + gotchas in `chrome-web-store.md`, `edge-addons.md`, `firefox-amo.md`. K
   **auto-publishes on approval** (no go-live gate). Capture the **Edge Product ID** into
   `stores.json` on first run.
 - **AMO** requires uploading **`source-code.zip`** (+ build steps in Notes for Reviewers);
-  the onnxruntime `eval` warning is non-blocking.
+  the onnxruntime `eval` warning is non-blocking (and should no longer appear since the
+  onnxruntime-web 1.30 upgrade, #655).
 
 **Or — headless via the publishing APIs (#412).** Once credentials are provisioned (one-time, per
 `publishing-credentials.md`), skip the dashboards entirely: `release:submit -- <store> --dry-run`

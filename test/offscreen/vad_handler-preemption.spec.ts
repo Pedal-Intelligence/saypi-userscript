@@ -19,6 +19,8 @@ const { fakeVad, sendMessage } = vi.hoisted(() => {
     configurable: true,
     value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [] })) },
   });
+  // ...and no AudioContext; the clients create one per VAD (micStreamLifecycle).
+  (globalThis as any).AudioContext = class { close = async () => {}; };
   const sendMessage = vi.fn();
   (globalThis as any).chrome = {
     runtime: {
@@ -108,6 +110,10 @@ describe("#320 vad_handler wiring: preemption + owner-guarded teardown", () => {
       targetTabId: 1,
       origin: "offscreen-document",
     });
+
+    // Initialize warms the audio graph with one start→pause (#655); only calls made
+    // after this point are the ones under test.
+    fakeVad.pause.mockClear();
 
     // Tab 1 (now displaced) tears down its call. Neither its stop nor its destroy
     // may touch the shared VAD instance that tab 2 (the new owner) is using — that

@@ -253,9 +253,9 @@ async function main() {
     while (Date.now() < vadDeadline) {
       vad = await driver.executeScript(VAD_PROBE_SCRIPT);
       if (/fail|error/i.test(vad.status + " " + vad.detail)) break;
-      // "Initialized (Mode: onscreen)" once MicVAD.new resolves; "Waiting for speech"
-      // once start() has built the audio graph.
-      if (/Waiting for speech|Initialized \(Mode: onscreen/.test(vad.detail)) {
+      // "Waiting for speech" appears only once start() has built the audio graph, which
+      // is the step that broke (#655). "Initialized" (after MicVAD.new) isn't enough.
+      if (/Waiting for speech/.test(vad.detail)) {
         vadReady = true;
         break;
       }

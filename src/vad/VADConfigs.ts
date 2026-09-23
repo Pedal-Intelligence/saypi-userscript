@@ -13,11 +13,10 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  *
  * Units: durations are milliseconds (vad-web ≥0.0.27). The library converts each to frames
  * with `Math.floor(ms / 32)`, since a v5/v6 frame is 512 samples @ 16 kHz = **32 ms**, so
- * keep every value a multiple of 32 (the spec enforces it). The library's own frame
- * defaults, which the `none` preset inherits, are: positive 0.3, negative 0.25, redemption
- * 1400 ms, minSpeech 400 ms, preSpeechPad 800 ms. Our tuned presets are far tighter: a short
- * silence tail and a low minimum-speech bar, for short, latency-sensitive conversational
- * clips. The #420 admission gate (`segmentAdmission.ts`) backstops the extra false-accept
+ * keep every value a multiple of 32 (the spec enforces it). The library's own frame defaults
+ * are: positive 0.3, negative 0.25, redemption 1400 ms, minSpeech 400 ms, preSpeechPad 800 ms.
+ * Our presets are far tighter: a short silence tail and a low minimum-speech bar, for short,
+ * latency-sensitive conversational clips. The #420 admission gate (`segmentAdmission.ts`) backstops the extra false-accept
  * risk.
  *
  * Wiring status (which presets a code path actually selects) — see `selectVADPreset`:
@@ -28,10 +27,12 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  *    It was previously bound to dictation/generic pages too, but the benchmark showed it
  *    false-accepts ~59% of real non-speech there (100% of music) for only a marginal
  *    false-reject edge, so it is no longer any context's default (the gap-#3 fix).
- *  - `none`: the no-override fallback `initializeVAD` resolves to when no (or an
- *    unknown) preset is requested. It inherits the library's frame defaults verbatim but
- *    pins the model, because the library's default model ("legacy") is a file we no
- *    longer ship.
+ *
+ * There is no "library defaults" preset. Both VAD clients fall back to `balanced` when no (or
+ * an unknown) preset is requested. An old `none` preset (the library's defaults) turned out to
+ * be reachable in production (#655): an offscreen document that auto-shut-down while idle was
+ * re-created by a START that carried no preset. Under vad-web 0.0.27+ those defaults mean a
+ * 1400 ms tail.
  *
  * Every tuned preset above is reachable, and `test/vad/VADConfigs.spec.ts` locks that
  * as an invariant. A preset no context can select is dead configuration that still
@@ -45,7 +46,7 @@ import type { RealTimeVADOptions } from "@ricky0123/vad-web";
  * `redemptionMs` is what stops it cutting a sentence short mid-utterance (#572, #655). A
  * single preset that is stricter about opening is strictly worse for chopping.
  */
-export type VADPreset = "highSensitivity" | "balanced" | "none";
+export type VADPreset = "highSensitivity" | "balanced";
 
 /**
  * Parameter presets for different use-cases.
@@ -75,10 +76,6 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     minSpeechMs: 96, //               3 frames
     preSpeechPadMs: 64, //            2 frames of pre-roll
     submitUserSpeechOnPause: false,
-  },
-  none: {
-    // No-override fallback: the library's frame defaults, on the model we ship.
-    model: "v6",
   },
 };
 

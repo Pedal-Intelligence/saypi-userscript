@@ -37,7 +37,7 @@ For each corpus clip × each preset the extension ships (`highSensitivity`, `bal
 `none`):
 
 1. Resample + frame the audio with vad-web's `Resampler` (512-sample / 32 ms frames).
-2. Run each frame through the **real Silero v5** model → per-frame speech probability.
+2. Run each frame through the **real Silero** model (v6, as shipped since #655) → per-frame speech probability.
 3. Drive vad-web's **real `FrameProcessor`** with the preset's thresholds → speech
    start/end segments, exactly as the offscreen/onscreen VAD clients do.
 4. Feed each frame's probability into SayPi's **real `SegmentStatsTracker`** and run

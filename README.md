@@ -156,7 +156,7 @@ The build system produces an optimized bundle under 2MB (excluding binary assets
 
 - **Core bundles**: 8 files, ~1.2MB total (main: 450KB, vendors: 700KB)
 - **Dynamic chunks**: Lazy-loaded for chatbot-specific features
-- **Binary assets**: 4 WASM files (37MB), 3 ONNX models (5MB)—excluded from Firefox AMO size limits
+- **Binary assets**: 1 ONNX Runtime WASM file (14MB) and 1 Silero VAD model (2.3MB)—excluded from Firefox AMO size limits
 - **Code splitting**: Vendor libraries separated for optimal caching
 
 See [CLAUDE.md](CLAUDE.md#build-output) for detailed bundle analysis.

@@ -1,5 +1,6 @@
-import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
-import { destroyMicVad, heldStreamOptions, openMicStream, releaseMicStream } from "./micStreamLifecycle";
+import type { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
+import { createWarmMicVad, destroyMicVad, openVadAudio, releaseVadAudio, type VadAudio } from "./micStreamLifecycle";
+import { configureSingleThreadedOrt } from "./ortRuntime";
 import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
@@ -87,8 +88,9 @@ interface MyRealTimeVADCallbacks {
 
 export class OnscreenVADClient implements VADClientInterface {
   private vadInstance: MicVAD | null = null;
-  // Opened at initialize and held until destroy, as before vad-web 0.0.27 (micStreamLifecycle).
-  private micStream: MediaStream | null = null;
+  // Mic stream + AudioContext, opened at initialize and held until destroy, as before
+  // vad-web 0.0.27 (see micStreamLifecycle).
+  private vadAudio: VadAudio | null = null;
   private callbacks: VADClientCallbacks = {};
   private statusIndicator: VADStatusIndicator;
   private speechStartTime: number = 0;
@@ -210,6 +212,7 @@ export class OnscreenVADClient implements VADClientInterface {
       // caught that and fell back to ScriptProcessor, so that is what Firefox has always
       // used; 0.0.27+ no longer falls back, so ask for it explicitly (#655).
       processorType: isFirefox() ? "ScriptProcessor" : "auto",
+      ortConfig: configureSingleThreadedOrt,
     } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
@@ -226,7 +229,7 @@ export class OnscreenVADClient implements VADClientInterface {
     }
 
     // #420 — count speech frames against the active preset's positive threshold
-    // (presets with no override fall back to the Silero v5 default).
+    // (presets with no override fall back to vad-web's default bar).
     this.statsTracker.setPositiveSpeechThreshold(
       VAD_CONFIGS[this.preset]?.positiveSpeechThreshold ?? VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD
     );
@@ -234,8 +237,9 @@ export class OnscreenVADClient implements VADClientInterface {
     const mode = "onscreen";
     try {
       logger.log("[SayPi OnscreenVADClient] Initializing VAD...");
-      this.micStream ??= await openMicStream();
-      this.vadInstance = await MicVAD.new({ ...this.getVADOptions(), ...heldStreamOptions(this.micStream) });
+      this.vadAudio = await openVadAudio();
+      this.vadInstance = await createWarmMicVad(this.getVADOptions(), this.vadAudio);
+      this.statsTracker.reset(); // drop any frames observed while warming the audio graph
       this.isInitialized = true;
       logger.log("[SayPi OnscreenVADClient] MicVAD instance created.");
 
@@ -243,8 +247,7 @@ export class OnscreenVADClient implements VADClientInterface {
       this.callbacks.onInitialized?.(true, undefined, mode);
       return { success: true, mode };
     } catch (error: any) {
-      releaseMicStream(this.micStream);
-      this.micStream = null;
+      this.releaseInstance();
       logger.reportError(error, { function: 'OnscreenVADClient.initialize' }, "VAD initialization failed");
 
       // Create user-friendly error messages for known compatibility issues
@@ -276,8 +279,8 @@ export class OnscreenVADClient implements VADClientInterface {
     
     try {
       logger.log("[SayPi OnscreenVADClient] Starting VAD...");
-      // Async since vad-web 0.0.27: the first start() builds the audio graph, so a failure
-      // there must land in the catch below rather than escape as an unhandled rejection.
+      // The graph was built at initialize (createWarmMicVad), so this only reconnects the held
+      // stream; it is async since vad-web 0.0.27, so await it to catch a failure.
       await this.vadInstance.start();
       this.isStarted = true;
       
@@ -289,6 +292,8 @@ export class OnscreenVADClient implements VADClientInterface {
       return { success: true };
     } catch (error: any) {
       logger.reportError(error, { function: 'OnscreenVADClient.start' }, "Error starting VAD");
+      // Don't keep an instance that failed to start; the next initialize() rebuilds it.
+      this.releaseInstance();
       
       const detail = getMessage('vadDetailStartError', error.message || "Unknown error");
       this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), detail);
@@ -317,7 +322,7 @@ export class OnscreenVADClient implements VADClientInterface {
     
     try {
       logger.log("[SayPi OnscreenVADClient] Stopping VAD...");
-      await this.vadInstance.pause(); // keeps the mic open (heldStreamOptions); destroy releases it
+      await this.vadInstance.pause(); // keeps the mic open (heldAudioOptions); destroy releases it
       // #420 — pause() with submitUserSpeechOnPause:false fires no callback, so an
       // in-flight segment's tracker state would otherwise persist; reset it so the
       // "idle between segments" invariant holds even if a call stops mid-utterance.
@@ -344,23 +349,27 @@ export class OnscreenVADClient implements VADClientInterface {
     }
   }
 
-  public destroy(): void {
-    this.statusIndicator.updateStatus(getMessage('vadStatusShuttingDown'), getMessage('vadDetailReleasingVADResources'));
-    
-    logger.log("[SayPi OnscreenVADClient] Destroying VAD...");
-    
+  /** Destroy the VAD instance and release the mic and AudioContext it ran on. */
+  private releaseInstance(): void {
     if (this.vadInstance) {
       void destroyMicVad(this.vadInstance, (error) =>
         logger.warn("[SayPi OnscreenVADClient] MicVAD.destroy failed", error)
       );
       this.vadInstance = null;
     }
-    releaseMicStream(this.micStream);
-    this.micStream = null;
-
+    releaseVadAudio(this.vadAudio);
+    this.vadAudio = null;
     this.statsTracker.reset(); // #420 — don't carry segment state across a destroy
     this.isInitialized = false;
     this.isStarted = false;
+  }
+
+  public destroy(): void {
+    this.statusIndicator.updateStatus(getMessage('vadStatusShuttingDown'), getMessage('vadDetailReleasingVADResources'));
+    
+    logger.log("[SayPi OnscreenVADClient] Destroying VAD...");
+    
+    this.releaseInstance();
     
     this.statusIndicator.updateStatus(getMessage('vadStatusDestroyed'), getMessage('vadDetailVADServiceShutdown'));
     setTimeout(() => this.statusIndicator.hide(), 2000);

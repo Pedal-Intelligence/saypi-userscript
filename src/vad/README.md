@@ -42,8 +42,11 @@ words from 8% to 0% and noise/music false-accepts from 41% to 15% on our benchma
 - `OnscreenVADClient.ts` — Firefox and other browsers without offscreen documents: runs the VAD
   in the content script itself.
 - `VADClientInterface.ts` — the interface both implement.
-- `micStreamLifecycle.ts` — both clients open the mic themselves and hold it open across
-  pause/resume, as vad-web 0.0.24 did (0.0.27+ would reopen it every assistant turn).
+- `micStreamLifecycle.ts` — both clients open the mic and the AudioContext themselves, build
+  the audio graph at initialize (one start→pause), and hold the mic open across pause/resume.
+  That is vad-web 0.0.24's contract. 0.0.27+ would reopen the mic every assistant turn and
+  defer graph setup (and its failures) to the first start.
+- `ortRuntime.ts` — the `ortConfig` both clients use: single-threaded, no proxy worker.
 - `VADConfigs.ts` — presets and `selectVADPreset`. `segmentAdmission.ts` — the #420 gate.
 
 ### Firefox specifics (in-page VAD)

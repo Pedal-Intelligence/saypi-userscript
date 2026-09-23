@@ -46,4 +46,15 @@ for (const file of ORT_FILES) {
 // A build without these files loads fine and then fails the first time the VAD starts,
 // so fail the build instead.
 if (failed) process.exit(1);
+
+// public/ is copied wholesale into the build, and ORT files are git-ignored there. So a
+// checkout that ever built an older ORT still holds its files (ORT 1.14 left three extra
+// ~9 MB WASM variants), and they would ship: a bigger package, and one AMO's
+// rebuild-from-clean-source check wouldn't reproduce. Remove any ORT file we don't copy.
+for (const file of fs.readdirSync(destDir)) {
+  if (file.startsWith('ort-wasm') && !ORT_FILES.includes(file)) {
+    fs.rmSync(path.join(destDir, file));
+    console.log(`✓ Removed stale ${file}`);
+  }
+}
 console.log(`Finished copying ${ORT_FILES.length} ONNX runtime files.`);

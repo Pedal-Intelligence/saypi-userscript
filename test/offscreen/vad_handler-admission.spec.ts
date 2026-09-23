@@ -11,9 +11,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  *    speech bar plus the gate margin) is dropped as VAD_MISFIRE — the audio array is
  *    never even sent, which is the whole point of gating here rather than server-side.
  *
- * These tests start the VAD without a preset, so it runs the `none` fallback, whose bar
- * is vad-web's default positive threshold: 0.3 since vad-web 0.0.27 (#655), giving a
- * gate floor of 0.35.
+ * These tests start the VAD without a preset, so it runs the `balanced` fallback (#655):
+ * bar 0.4, gate floor 0.45.
  */
 
 const { sendMessage, micVadNew } = vi.hoisted(() => {
@@ -22,6 +21,8 @@ const { sendMessage, micVadNew } = vi.hoisted(() => {
     configurable: true,
     value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [] })) },
   });
+  // ...and no AudioContext; the clients create one per VAD (micStreamLifecycle).
+  (globalThis as any).AudioContext = class { close = async () => {}; };
   const sendMessage = vi.fn();
   (globalThis as any).chrome = {
     runtime: {
@@ -88,7 +89,7 @@ describe("#420 vad_handler admission gate", () => {
     expect(speechEnds).toHaveLength(1);
     const msg = speechEnds[0];
     expect(msg.peakSpeechProb).toBeCloseTo(0.95, 5);
-    expect(msg.speechFrameCount).toBe(2); // 0.8 + 0.95 clear the 0.3 bar; 0.2 does not
+    expect(msg.speechFrameCount).toBe(2); // 0.8 + 0.95 clear the 0.4 bar; 0.2 does not
     expect(msg.meanSpeechProb).toBeCloseTo((0.8 + 0.95 + 0.2) / 3, 5);
     // No misfire for a real utterance.
     expect(messagesOfType("VAD_MISFIRE")).toHaveLength(0);
@@ -96,10 +97,10 @@ describe("#420 vad_handler admission gate", () => {
 
   it("drops a low-confidence segment as VAD_MISFIRE without ever sending the audio", () => {
     const cb = activeCallbacks();
-    // A segment that opened at the 0.3 bar but only ever reached 0.33 (< floor 0.35).
-    cb.onFrameProcessed(frame(0.31));
+    // A segment that opened at the 0.4 bar but only ever reached 0.43 (< floor 0.45).
+    cb.onFrameProcessed(frame(0.41));
     cb.onSpeechStart();
-    cb.onFrameProcessed(frame(0.33));
+    cb.onFrameProcessed(frame(0.43));
     cb.onFrameProcessed(frame(0.1));
     cb.onSpeechEnd(new Float32Array([0.1, -0.1, 0.2]));
 

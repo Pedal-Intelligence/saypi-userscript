@@ -16,6 +16,8 @@ const { fakeVad, micVadNew } = vi.hoisted(() => {
     configurable: true,
     value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [] })) },
   });
+  // ...and no AudioContext; the clients create one per VAD (micStreamLifecycle).
+  (globalThis as any).AudioContext = class { close = async () => {}; };
   const fakeVad = { start: vi.fn(), pause: vi.fn(), destroy: vi.fn() };
   return { fakeVad, micVadNew: vi.fn(async (_opts?: any) => fakeVad) };
 });
@@ -154,6 +156,13 @@ describe("#655 OnscreenVADClient asset paths + audio processor", () => {
     browser.firefox = true;
     await new OnscreenVADClient().initialize({ preset: "balanced" });
     expect(lastOptions().processorType).toBe("ScriptProcessor");
+  });
+
+  it("runs ORT single-threaded, like the offscreen handler", async () => {
+    await new OnscreenVADClient().initialize({ preset: "balanced" });
+    const runtime = { env: { logLevel: "warning", wasm: { proxy: true, numThreads: 4 } } };
+    lastOptions().ortConfig(runtime);
+    expect(runtime.env.wasm).toEqual({ proxy: false, numThreads: 1 });
   });
 
   it("lets vad-web pick (AudioWorklet) in other in-page browsers", async () => {

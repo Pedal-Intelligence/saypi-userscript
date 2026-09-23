@@ -22,7 +22,7 @@ Canonical answers live in `doc/WEB_STORE_PERMISSIONS.md`. The tab is sticky but 
 - **Single purpose** (free text).
 - **Per-permission justification** for each manifest permission (storage, cookies, offscreen, tabs, audio, contextMenus).
 - **Host-permission justification** (`https://api.saypi.ai/*`, `https://www.saypi.ai/*`).
-- **Remote code:** select **"No, I am not using remote code."** (MV3 forbids it; our build bundles everything — the onnxruntime `eval` is tree-shaken out.)
+- **Remote code:** select **"No, I am not using remote code."** (MV3 forbids it; our build bundles everything. ORT's WASM and its `.mjs` glue ship in the package and load from the extension's own origin, and since onnxruntime-web 1.30 (#655) the bundles contain no `eval`.)
 - **Data-usage disclosures** (which data types) + **certifications** (not sold; used only for the single purpose; no creditworthiness use).
 - **Privacy policy URL:** https://saypi.ai/legal/privacy
 

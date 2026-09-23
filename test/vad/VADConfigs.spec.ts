@@ -42,14 +42,16 @@ describe("#420 VAD_CONFIGS preset values are locked", () => {
     });
   });
 
-  it("'none' inherits the library's frame defaults, but on the model we ship", () => {
-    // vad-web's own default model is "legacy"; we don't ship that file (#655).
-    expect(VAD_CONFIGS.none).toEqual({ model: "v6" });
+  it("has no 'none' fallback preset (#655)", () => {
+    // A missing/unknown preset now falls back to balanced in both clients. The old `none`
+    // (vad-web's defaults) was reachable in production after an offscreen auto-shutdown,
+    // and under vad-web 0.0.27+ those defaults are a 1400 ms tail and a 400 ms minimum.
+    expect(Object.keys(VAD_CONFIGS).sort()).toEqual(["balanced", "highSensitivity"]);
   });
 });
 
 describe("#420 VAD_CONFIGS preset ordering invariants", () => {
-  const tuned = (Object.keys(VAD_CONFIGS) as VADPreset[]).filter((p) => p !== "none");
+  const tuned = Object.keys(VAD_CONFIGS) as VADPreset[];
 
   it("positive speech threshold rises from highSensitivity → balanced", () => {
     expect(VAD_CONFIGS.highSensitivity.positiveSpeechThreshold!).toBeLessThan(
@@ -137,9 +139,6 @@ describe("#437 selectVADPreset quiet/whisper mode", () => {
  * above, while `selectVADPreset` could only ever return `balanced` or
  * `highSensitivity`. This pins the invariant so the next unreachable preset fails CI
  * on the commit that adds it, instead of lingering as plausible-looking dead tuning.
- *
- * `none` is excluded on purpose: it is not a *selection*, it is the no-override
- * fallback `initializeVAD` resolves to when no (or an unknown) preset is requested.
  */
 describe("#571 every tuned preset is reachable through selectVADPreset", () => {
   /** The complete input space of the selector: two booleans, quietMode also absent. */
@@ -149,7 +148,7 @@ describe("#571 every tuned preset is reachable through selectVADPreset", () => {
 
   it("the reachable set is exactly the tuned presets (no dead tuning, no phantom name)", () => {
     const reachable = new Set(everyContext.map(selectVADPreset));
-    const tuned = (Object.keys(VAD_CONFIGS) as VADPreset[]).filter((p) => p !== "none");
+    const tuned = Object.keys(VAD_CONFIGS) as VADPreset[];
 
     expect([...reachable].sort()).toEqual([...tuned].sort());
   });
