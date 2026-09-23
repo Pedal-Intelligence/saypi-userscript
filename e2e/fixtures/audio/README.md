@@ -25,13 +25,16 @@ run-to-run. `speech-16k-mono.wav` here is a mirror of pool clip `01.wav`.
 | Encoding        | 16-bit PCM (`pcm_s16le`, Microsoft PCM)         |
 | Channels        | Mono (1 channel)                                |
 | Sample rate     | 16 kHz (16000 Hz)                               |
-| Content         | ~5-7 s of real speech + 0.5 s trailing silence   |
+| Content         | ~5-7 s of real speech + ~1.2 s trailing silence  |
 | Size            | < 256 KB                                         |
 
 The format is dictated by Chromium's fake-audio-capture requirement (it expects a
 plain RIFF/WAVE PCM file) and by the VAD model's preferred input (16 kHz mono).
-The 0.5 s of trailing silence gives the VAD a clear speech-then-silence edge so it
-emits an `onSpeechEnd` segment rather than getting cut off at end-of-file.
+The ~1.2 s of trailing silence gives the VAD a clear speech-then-silence edge so it
+emits an `onSpeechEnd` segment rather than getting cut off at end-of-file. It has to be
+comfortably longer than the longest preset silence tail (576 ms, quiet mode, #655):
+Chromium's fake-audio-capture loops the file, so this silence is all the VAD gets before
+the speech starts again. At the old 0.5 s, a 512 ms tail had no margin at the loop seam.
 
 ## Why real speech, not a tone
 

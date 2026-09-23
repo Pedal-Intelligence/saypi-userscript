@@ -262,11 +262,11 @@ sentence at any pause ≥ 400 ms (56%) and nearly always at ≥ 500 ms (89%).
 
 **AMI, per model × policy** (acts split = share of dialogue acts cut into 2+ uploads;
 short cuts = mid-turn fragments with ≤ 0.6 s of speech; latency = extra delay on each
-turn's final upload vs today):
+turn's final upload vs the pre-#655 320 ms tail):
 
 | model | policy | acts split | clips/turn | short cuts | + end latency |
 |---|---|---|---|---|---|
-| v5 as shipped | 320 ms tail (**today**) | 30% | 2.86 | 138 | 0 |
+| v5 as shipped | 320 ms tail (**pre-#655**) | 30% | 2.86 | 138 | 0 |
 | v5 as shipped | 512 ms tail | 22% | 2.47 | 104 | +192 ms |
 | v5 as shipped | 640 ms tail | 18% | 2.24 | 80 | +320 ms |
 | v5 as shipped | 768 ms tail | 16% | 2.08 | 67 | +448 ms |
