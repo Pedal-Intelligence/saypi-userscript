@@ -4,8 +4,19 @@ import {
   admitSegment,
   admissionPeakFloor,
   DEFAULT_ADMISSION_CONFIG,
+  VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD,
   type SegmentSpeechStats,
 } from "../../src/vad/segmentAdmission";
+// @ts-ignore — the library's CJS internals have no deep-import type declarations.
+import { defaultFrameProcessorOptions } from "@ricky0123/vad-web/dist/frame-processor.js";
+
+describe("#655 the gate's fallback bar tracks the installed vad-web", () => {
+  it("equals the library's default positiveSpeechThreshold (what the `none` preset runs at)", () => {
+    // vad-web 0.0.27 moved this default from 0.5 to 0.3. If an upgrade moves it again,
+    // update VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD rather than letting the gate drift.
+    expect(VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD).toBe(defaultFrameProcessorOptions.positiveSpeechThreshold);
+  });
+});
 
 /**
  * #420 — The Silero VAD computes a per-frame speech probability that, until now, we

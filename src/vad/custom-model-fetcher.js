@@ -19,9 +19,9 @@
  *
  *   import { customModelFetcher } from "./vad/custom-model-fetcher";
  *   const options = {
- *     baseAssetPath: chrome.runtime.getURL("public/"),
- *     onnxWASMBasePath: chrome.runtime.getURL("public/"),
- *     model: "v5",
+ *     baseAssetPath: chrome.runtime.getURL(""),
+ *     onnxWASMBasePath: chrome.runtime.getURL(""),
+ *     model: "v6",
  *     modelFetcher: (url) => customModelFetcher(url)
  *   };
  *   const vad = await MicVAD.new(options);

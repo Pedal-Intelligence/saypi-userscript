@@ -26,18 +26,14 @@ Remote code is any JavaScript or WebAssembly that is not included in the extensi
 ### Evidence
 
 #### WASM Files
-✅ All 4 ONNX WASM runtime files are **bundled locally** in the extension package:
+✅ The ONNX Runtime WebAssembly engine and its glue module are **bundled locally** in the extension package:
 - `ort-wasm-simd-threaded.wasm`
-- `ort-wasm-simd.wasm`
-- `ort-wasm-threaded.wasm`
-- `ort-wasm.wasm`
+- `ort-wasm-simd-threaded.mjs` (loaded with `import()` from the extension's own origin)
 
-✅ All 3 ONNX model files are **bundled locally**:
-- `silero_vad.onnx`
-- `silero_vad_legacy.onnx`
-- `silero_vad_v5.onnx`
+✅ The ONNX model file is **bundled locally**:
+- `silero_vad_v6.onnx`
 
-See [src/vad/README.md](../src/vad/README.md) for details on why all 4 WASM variants are required.
+See [src/vad/README.md](../src/vad/README.md) for what each file is and why one WASM build suffices.
 
 #### JavaScript/TypeScript Code
 ✅ No `eval()` calls in our source code

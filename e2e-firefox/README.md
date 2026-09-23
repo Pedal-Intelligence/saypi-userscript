@@ -19,11 +19,18 @@ plain-HTTP localhost fixture page, and a focused text field gets a visible
 `.saypi-dictation-button`. The smoke also blurs and immediately refocuses the
 field, then verifies visibility after the delayed blur handler has run (#622).
 
+- It then presses the button with Firefox's fake microphone enabled
+  (`media.navigator.streams.fake`) and asserts the **in-page VAD starts and keeps
+  running** for a few seconds (#655). Firefox has no offscreen document, so this
+  is the only automated check that onnxruntime-web's WASM + `.mjs` glue, the
+  Silero model and the audio processor load in a Gecko content script. It caught
+  two vad-web 0.0.31 regressions before they shipped.
 - Manifest rejection, bundle-load errors, content-script injection breakage on
-  Gecko, and decoration regressions all fail the smoke.
+  Gecko, decoration regressions and in-page VAD startup failures all fail the smoke.
 - **Not covered (yet):** chat-host decoration (needs the mock-Pi slice —
   `network.dns.localDomains` + `acceptInsecureCerts`, slice 2 in the decision
-  doc) and the voice pipeline (fake mic → VAD → STT — stretch slice).
+  doc), and speech detection → STT. The fake mic plays a tone, not speech, so
+  the VAD starting is as far as this goes.
 
 ## Run it locally
 

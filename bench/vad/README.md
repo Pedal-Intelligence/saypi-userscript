@@ -8,7 +8,7 @@ raw VAD and the **#420 admission gate** (`src/vad/segmentAdmission.ts`).
 
 This is the analogue of the server-side ASR WER/RTF benchmark (`saypi-benchmarks`), but it
 lives **here** on purpose: the thing being measured is the *client's* gating — the exact
-Silero v5 model, `@ricky0123/vad-web` frame processor, `VAD_CONFIGS` presets, and SayPi
+Silero model (v6 since #655), `@ricky0123/vad-web` frame processor, `VAD_CONFIGS` presets, and SayPi
 admission gate that ship in the extension. The harness imports those real modules and runs
 the real ONNX model offline, so the numbers reflect the code users actually run — not a
 reimplementation that could drift.
@@ -21,8 +21,8 @@ npm run bench:vad:fetch-real      # fetch the REAL corpus (~2.4 GB download, onc
 npm run bench:vad -- corpus-real  # replay the real corpus
 ```
 
-No microphone, no browser — it loads the bundled `silero_vad_v5.onnx` via `onnxruntime-web`
-in Node and replays a corpus. Deterministic: the model and corpus are fixed, so the
+No microphone, no browser — it loads the shipped Silero model (`silero_vad_v6.onnx`, through
+vad-web's own model wrapper) via `onnxruntime-web` in Node and replays a corpus. Deterministic: the model and corpus are fixed, so the
 false-reject / false-accept numbers are reproducible. (Run via `node --experimental-strip-types`
 so it can import the real TypeScript gate.) There are **two corpora**:
 
@@ -208,9 +208,9 @@ speech:
 
 ```bash
 npm run bench:vad:fetch-segmentation   # AMI headsets + annotations, LibriSpeech test-clean (~800 MB, once)
-npm run bench:vad:segmentation         # shipped model (v5, as vad-web 0.0.24 feeds it)
-npm run bench:vad:segmentation -- --context                                   # + the 64-sample context fix
-npm run bench:vad:segmentation -- --context --model bench/vad/corpus-segmentation/silero_vad_v6.onnx --label silero_v6
+npm run bench:vad:segmentation         # what ships: Silero v6, fed with its 64-sample context
+# The pre-#655 configuration (v5, bare frames as vad-web 0.0.24 fed it):
+npm run bench:vad:segmentation -- --model node_modules/@ricky0123/vad-web/dist/silero_vad_v5.onnx --no-context
 ```
 
 It runs the model once per clip and caches per-frame probabilities, then replays them
@@ -232,15 +232,20 @@ Three corpora:
 - **Pause sweep** (macOS `say`, two phrases around an inserted silence of 150–1000 ms). This
   shows the mechanism: the pause length at which each config starts splitting.
 
-**`--context`**: vad-web 0.0.24 (what ships) passes Silero bare 512-sample frames. Upstream
-Silero, and vad-web from 0.0.31 (ricky0123/vad#263), prefix each frame with the previous 64
-samples. The flag benchmarks the model as it is meant to be fed. `run.ts` takes the same
-`--context` / `--model` flags, so the FAR/FRR trade-off can be re-measured for any variant.
-The fetch script also downloads the Silero v6 file that vad-web 0.0.31 ships (sha1-checked).
-vad-web 0.0.31's v5 file is byte-identical to the one we ship today, so the v5 rows need no
-download.
+**Model feeding.** Upstream Silero, and vad-web from 0.0.31 (ricky0123/vad#263), prefix each
+512-sample frame with the previous frame's last 64 samples; both benchmarks load the model
+through vad-web's own wrapper, so they do the same. vad-web 0.0.24, which the extension ran
+until #655, passed bare frames. `--no-context` replays that. `--model <onnx>` swaps in another
+file with the v5/v6 interface; vad-web ships v5 and v6 in `node_modules/@ricky0123/vad-web/dist/`.
+`run.ts` takes the same flags, so the FAR/FRR trade-off can be re-measured for any variant. The
+fetch script also downloads the v6 file (sha1-checked); it is identical to the one in `public/`.
 
 ### Findings (2026-09-22)
+
+These were measured before the upgrade, to decide it. "v5 as shipped" is the pre-#655
+configuration (`--model …/silero_vad_v5.onnx --no-context`); "v6 + context" is what the
+extension runs now, and the benchmarks' default. The ported harness reproduces both rows
+exactly.
 
 **Validation.** On AMI, the shipped config reproduces production:
 
@@ -318,16 +323,16 @@ latency-for-accuracy decision.
 
 ## Files
 
-- `run.ts` — CLI entry; `npm run bench:vad [-- <corpus-dir>] [--context] [--model <onnx>]`.
+- `run.ts` — CLI entry; `npm run bench:vad [-- <corpus-dir>] [--model <onnx>] [--no-context]`.
   Orchestrates corpus × presets, prints the table, writes `report.<corpus>[.<variant>].json`
   (git-ignored).
 - `segmentation.ts` — the #655 fragmentation benchmark (see above); `lib/segmenter.ts`
-  (probability cache + FrameProcessor replay + the context wrapper) and
+  (model loading, probability cache, FrameProcessor replay) and
   `lib/fragmentation.mjs` (pure attribution / hold metrics, unit-tested in
   `test/bench/vad-fragmentation.spec.ts`).
 - `fetch-segmentation-corpus.mjs` — fetch AMI + LibriSpeech into the git-ignored
   `corpus-segmentation/`.
-- `lib/runner.ts` — the offline runner (real v5 model + frame processor + admission gate).
+- `lib/runner.ts` — the offline runner (real model + frame processor + admission gate).
 - `lib/metrics.mjs` — pure FRR/FAR/latency aggregation (unit-tested).
 - `lib/wav.mjs` — minimal WAV decode/encode (no deps).
 - `generate-corpus.mjs` — regenerate the committed **synthetic seed** corpus.

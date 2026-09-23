@@ -14,6 +14,14 @@
  * Firefox. See e2e-firefox/README.md and
  * doc/specs/2026-07-07-firefox-coverage-decision.md (#527).
  *
+ * It then presses the button and asserts the in-page VAD initializes (#655).
+ * Firefox has no offscreen document, so the VAD runs in the content script:
+ * onnxruntime-web's WASM + `.mjs` glue, the Silero model fetched through the
+ * cross-realm ArrayBuffer shim, and the audio worklet all load there, under
+ * Gecko's rules. Chrome's Layer 3 can't see any of that. Firefox's fake-mic
+ * prefs stand in for a microphone; the tone it plays isn't speech, so this
+ * proves the VAD *starts*, not that it detects anything.
+ *
  * Run: npm run e2e:build:firefox && npm run test:e2e:firefox
  * Env: FIREFOX_BIN — optional path to the Firefox binary (CI sets it from
  *      browser-actions/setup-firefox; locally Selenium finds the system install).
@@ -35,6 +43,8 @@ const artifactsDir = resolve(import.meta.dirname, "artifacts");
 // Content-script boot + decoration, generous for CI. Overridable for local
 // fail-path testing (e.g. SAYPI_SMOKE_TIMEOUT_MS=5000).
 const DECORATION_TIMEOUT_MS = Number(process.env.SAYPI_SMOKE_TIMEOUT_MS) || 45_000;
+// Model + ~14 MB of WASM compile in a cold headless Firefox; generous for CI.
+const VAD_TIMEOUT_MS = Number(process.env.SAYPI_SMOKE_VAD_TIMEOUT_MS) || 60_000;
 const POLL_INTERVAL_MS = 500;
 
 /** Hosts the built bundle believes it talks to (see the "dual-env gotcha" in
@@ -83,6 +93,10 @@ async function buildDriver() {
   // stdout (via geckodriver) in this process's output — without this a
   // content-script crash on CI is an opaque "button never appeared".
   options.setPreference("devtools.console.stdout.content", true);
+  // A fake, pre-authorised microphone, so pressing the dictation button can start
+  // the in-page VAD in a headless run (#655).
+  options.setPreference("media.navigator.streams.fake", true);
+  options.setPreference("media.navigator.permission.disabled", true);
   if (process.env.FIREFOX_BIN) {
     options.setBinary(process.env.FIREFOX_BIN);
   }
@@ -116,6 +130,12 @@ async function installUnpackedAddon(driver, dir) {
     new Command("install addon").setParameter("path", dir).setParameter("temporary", true),
   );
 }
+
+/** Where the in-page VAD reports its state (OnscreenVADClient → VADStatusIndicator). */
+const VAD_PROBE_SCRIPT = `
+  const text = (sel) => (document.querySelector(sel) || {}).textContent || "";
+  return { status: text(".saypi-vad-status-text"), detail: text(".saypi-vad-status-details") };
+`;
 
 /** One decoration probe, evaluated in the page. */
 const PROBE_SCRIPT = `
@@ -221,6 +241,42 @@ async function main() {
       `[e2e-firefox] PASS: .saypi-dictation-button visible on the focused input ` +
         `(probe: ${JSON.stringify(state)})`,
     );
+
+    // Press the button (it listens for mousedown) and wait for the VAD to come up.
+    await driver.executeScript(`
+      document.querySelector(".saypi-dictation-button")
+        .dispatchEvent(new MouseEvent("mousedown", { bubbles: true, cancelable: true, button: 0 }));
+    `);
+    const vadDeadline = Date.now() + VAD_TIMEOUT_MS;
+    let vad = null;
+    let vadReady = false;
+    while (Date.now() < vadDeadline) {
+      vad = await driver.executeScript(VAD_PROBE_SCRIPT);
+      if (/fail|error/i.test(vad.status + " " + vad.detail)) break;
+      // "Initialized (Mode: onscreen)" once MicVAD.new resolves; "Waiting for speech"
+      // once start() has built the audio graph.
+      if (/Waiting for speech|Initialized \(Mode: onscreen/.test(vad.detail)) {
+        vadReady = true;
+        break;
+      }
+      await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+    }
+    if (!vadReady) {
+      await dumpFailureArtifacts(driver, vad);
+      throw new Error(
+        `The in-page VAD did not initialize within ${VAD_TIMEOUT_MS / 1000}s ` +
+          `(last status: ${JSON.stringify(vad)}). See ${artifactsDir}.`,
+      );
+    }
+    // Let the model run on a few seconds of fake-mic frames: an inference or resampling
+    // failure would surface here rather than at start.
+    await new Promise((r) => setTimeout(r, 3000));
+    vad = await driver.executeScript(VAD_PROBE_SCRIPT);
+    if (/fail|error/i.test(vad.status + " " + vad.detail)) {
+      await dumpFailureArtifacts(driver, vad);
+      throw new Error(`The in-page VAD failed after starting: ${JSON.stringify(vad)}`);
+    }
+    console.log(`[e2e-firefox] PASS: in-page VAD initialized and running (status: ${JSON.stringify(vad)})`);
   } finally {
     if (driver) await driver.quit().catch(() => {});
     server.close();

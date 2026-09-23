@@ -29,7 +29,7 @@ Facts current 2026-06-20; sources at the bottom.
 
 ## Validation (addons-linter)
 - **Errors block; warnings don't.** Manifest schema problems are errors.
-- Our **onnxruntime `eval()` warning is a non-blocking warning** (a `DANGEROUS_EVAL`/`UNSAFE_VAR_ASSIGNMENT`-class finding from a third-party lib, tree-shaken out of the ship build). If it surfaces, **explain it in Notes for Reviewers** so manual review isn't slowed.
+- Our **onnxruntime `eval()` warning is a non-blocking warning** (a `DANGEROUS_EVAL`/`UNSAFE_VAR_ASSIGNMENT`-class finding from a third-party lib, tree-shaken out of the ship build). If it surfaces, **explain it in Notes for Reviewers** so manual review isn't slowed. Since the onnxruntime-web 1.30 upgrade (#655) the built bundles contain no `eval(`/`new Function(` at all (checked on the Firefox dev build), so expect it to stop appearing. Note that the ORT glue now ships as `ort-wasm-simd-threaded.mjs`, loaded with `import()` from the extension's own origin: third-party (onnxruntime-web, MIT), unmodified from npm.
 
 ## Review & go-live
 - "Up to 24h to sign & publish, **longer if selected for manual review**" (manual queues historically a few days). All add-ons remain subject to later manual review.

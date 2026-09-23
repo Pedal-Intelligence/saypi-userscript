@@ -1,51 +1,49 @@
 #!/usr/bin/env node
 
 /**
- * This script copies required ONNX runtime files from node_modules to the public directory.
- * It should be run as part of the build process to ensure all necessary files are available.
+ * Copy the ONNX Runtime files the VAD loads at runtime from node_modules into public/,
+ * so they ship as extension resources (they can't come from a CDN: MV3 forbids remote
+ * code, and host-page CSP would block it anyway). Run by predev/prebuild and the e2e builds.
+ *
+ * Since onnxruntime-web 1.19, ORT ships ONE WebAssembly build for our use:
+ * `ort-wasm-simd-threaded.wasm`, plus its `.mjs` glue. It runs single-threaded when we set
+ * `env.wasm.numThreads = 1`, which we do, because MV3's CSP forbids the blob-backed worker
+ * that threading needs. The other `ort-wasm-simd-threaded.*` variants in the package
+ * (asyncify, JSEP/WebGPU, JSPI) are for backends we don't use, so they are not copied.
+ * (Before #655 we shipped ORT 1.14's four variants, about 37 MB; this is about 14 MB.)
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Get the directory name in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Define source and destination directories
-// Prefer the version nested under vad-web to match its pinned ORT version
+// vad-web depends on onnxruntime-web directly; npm dedupes it to our pinned top-level copy,
+// but prefer a nested copy if the versions ever diverge, since that is the one vad-web loads.
 const nestedOrtDir = path.join(__dirname, 'node_modules', '@ricky0123', 'vad-web', 'node_modules', 'onnxruntime-web', 'dist');
 const topLevelOrtDir = path.join(__dirname, 'node_modules', 'onnxruntime-web', 'dist');
 const sourceDir = fs.existsSync(nestedOrtDir) ? nestedOrtDir : topLevelOrtDir;
 const destDir = path.join(__dirname, 'public');
 
-// Ensure destination directory exists
-if (!fs.existsSync(destDir)) {
-  fs.mkdirSync(destDir, { recursive: true });
-}
+const ORT_FILES = ['ort-wasm-simd-threaded.wasm', 'ort-wasm-simd-threaded.mjs'];
 
-// Files to copy - both .wasm and .mjs files
+fs.mkdirSync(destDir, { recursive: true });
 console.log('Copying ONNX runtime files from:', sourceDir);
 
-// Get all files from the source directory that match the patterns
-const onnxFiles = fs.readdirSync(sourceDir).filter(
-  file => (file.startsWith('ort-wasm') && (file.endsWith('.wasm') || file.endsWith('.mjs')))
-);
-
-// Copy each file
-let copiedCount = 0;
-onnxFiles.forEach(file => {
-  const sourcePath = path.join(sourceDir, file);
-  const destPath = path.join(destDir, file);
-  
+let failed = 0;
+for (const file of ORT_FILES) {
   try {
-    fs.copyFileSync(sourcePath, destPath);
+    fs.copyFileSync(path.join(sourceDir, file), path.join(destDir, file));
     console.log(`✓ Copied ${file}`);
-    copiedCount++;
   } catch (err) {
     console.error(`✗ Failed to copy ${file}: ${err.message}`);
+    failed++;
   }
-});
+}
 
-console.log(`Finished copying ${copiedCount} ONNX runtime files.`);
+// A build without these files loads fine and then fails the first time the VAD starts,
+// so fail the build instead.
+if (failed) process.exit(1);
+console.log(`Finished copying ${ORT_FILES.length} ONNX runtime files.`);

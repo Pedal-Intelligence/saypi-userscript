@@ -418,7 +418,7 @@ from the page main world, which the MCP `javascript_tool` *can* reach. Source:
 
   Under the hood the content bridge forwards to the SW, which arms the offscreen
   `VAD_USE_SYNTHETIC_AUDIO` latch for the tab; `initializeVAD` then passes the
-  synthetic `MediaStream` to `MicVAD.new({ stream })`, bypassing `getUserMedia`.
+  synthetic `MediaStream` to MicVAD in place of the mic (vad_handler's `getStream`), bypassing `getUserMedia`.
   Layer 3 calls the same mechanism on the SW directly via
   `__saypiOffscreenTestHooks.feedSyntheticSpeech(tabId)`
   (`e2e/specs/synthetic-audio-stt.e2e.ts`).

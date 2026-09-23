@@ -1,5 +1,7 @@
 import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
-import * as ort from "onnxruntime-web";
+// Type-only: vad-web hands its own ORT instance (`onnxruntime-web/wasm`) to `ortConfig`,
+// and that is the instance to configure. A value import here would bundle a second ORT.
+import type * as ort from "onnxruntime-web/wasm";
 import { logger } from "../LoggingModule.js";
 import { debounce } from "../utils/debounce";
 import { incrementUsage, decrementUsage, resetUsageCounter, registerMessageHandler } from "./media_coordinator";
@@ -8,23 +10,14 @@ import {
   SegmentStatsTracker,
   admitSegment,
   DEFAULT_ADMISSION_CONFIG,
-  SILERO_V5_DEFAULT_POSITIVE_THRESHOLD,
+  VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD,
 } from "../vad/segmentAdmission";
 import { resolveVadStream, type SyntheticAudioLatch } from "./synthetic-audio";
+import { destroyMicVad, heldStreamOptions, openMicStream, releaseMicStream } from "../vad/micStreamLifecycle";
 
 const globalScope = globalThis as Record<PropertyKey, unknown>;
-const ORT_LOG_CONFIGURED = Symbol.for("saypi.vad.ortLogConfigured");
 const HANDLER_LOADED = Symbol.for("saypi.vad.handlerLoaded");
 const HANDLERS_REGISTERED = Symbol.for("saypi.vad.handlersRegistered");
-
-if (!globalScope[ORT_LOG_CONFIGURED]) {
-  try {
-    ort.env.logLevel = 'error';
-    globalScope[ORT_LOG_CONFIGURED] = true;
-  } catch (error) {
-    logger.warn("[SayPi VAD Handler] Failed to configure ONNX runtime log level", error);
-  }
-}
 
 if (globalScope[HANDLER_LOADED]) {
   logger.debug("[SayPi VAD Handler] Script already loaded; reusing singletons.");
@@ -58,6 +51,8 @@ interface MyRealTimeVADCallbacks {
 
 let currentVadTabId: number | null = null;
 let vadInstance: MicVAD | null = null;
+// The mic (or DEV synthetic) stream the VAD listens to. We open and release it ourselves
+// so it stays open across pause/resume, as it did before vad-web 0.0.27 (micStreamLifecycle).
 let stream: MediaStream | null = null;
 let speechStartTime = 0;
 let lastFrameProbabilities: { isSpeech: number; notSpeech: number } | null = null;
@@ -66,7 +61,7 @@ let activePreset: VADPreset = "none";
 // #420 — accumulates each segment's peak/mean speech probability + speech-frame count
 // from the per-frame VAD callbacks, so the admission gate can drop near-threshold
 // non-speech BEFORE the audio is serialised across the offscreen→content IPC.
-const segmentStats = new SegmentStatsTracker(SILERO_V5_DEFAULT_POSITIVE_THRESHOLD);
+const segmentStats = new SegmentStatsTracker(VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD);
 
 // DEV-only: when armed (via VAD_USE_SYNTHETIC_AUDIO), the next VAD init is fed a
 // bundled WAV instead of the live mic, so the agent can drive a voice turn with
@@ -290,7 +285,7 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
     // #420 — count speech frames against the active preset's positive threshold
     // (the "none" preset has no override, so fall back to the Silero v5 default).
     segmentStats.setPositiveSpeechThreshold(
-      VAD_CONFIGS[preset]?.positiveSpeechThreshold ?? SILERO_V5_DEFAULT_POSITIVE_THRESHOLD
+      VAD_CONFIGS[preset]?.positiveSpeechThreshold ?? VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD
     );
 
     const existingOrtConfig = mergedOptions.ortConfig;
@@ -298,12 +293,13 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
       configureOrtRuntime(runtime, existingOrtConfig);
     };
 
-    // DEV-only: when armed, feed a synthetic stream so MicVAD.new skips getUserMedia.
+    // DEV-only: when armed, a synthetic stream stands in for the mic.
     const syntheticStream = await resolveVadStream(syntheticAudioLatch);
     if (syntheticStream) {
-      (mergedOptions as Partial<RealTimeVADOptions>).stream = syntheticStream;
       logger.log("[SayPi VAD Handler] Using synthetic audio stream (DEV — no live mic)");
     }
+    stream = syntheticStream ?? (await openMicStream());
+    Object.assign(mergedOptions, heldStreamOptions(stream));
 
     const optionSummary = Object.fromEntries(
       Object.entries({
@@ -313,9 +309,9 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
         onnxWASMBasePath: mergedOptions.onnxWASMBasePath,
         positiveSpeechThreshold: mergedOptions.positiveSpeechThreshold,
         negativeSpeechThreshold: mergedOptions.negativeSpeechThreshold,
-        redemptionFrames: mergedOptions.redemptionFrames,
-        minSpeechFrames: mergedOptions.minSpeechFrames,
-        preSpeechPadFrames: mergedOptions.preSpeechPadFrames,
+        redemptionMs: mergedOptions.redemptionMs,
+        minSpeechMs: mergedOptions.minSpeechMs,
+        preSpeechPadMs: mergedOptions.preSpeechPadMs,
         submitUserSpeechOnPause: mergedOptions.submitUserSpeechOnPause,
       }).filter(([, value]) => value !== undefined)
     );
@@ -326,6 +322,8 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
     activePreset = preset;
     return { success: true, mode: preset };
   } catch (error: any) {
+    releaseMicStream(stream);
+    stream = null;
     logger.reportError(error, { function: 'initializeVAD' }, "VAD initialization failed");
     return { success: false, error: error.message || "VAD initialization error", mode: "failed" };
   }
@@ -398,7 +396,9 @@ export async function startVAD(tabId: number) {
   try {
     if (vadInstance) {
       logger.log("[SayPi VAD Handler] Starting VAD...");
-      vadInstance.start();
+      // Async since vad-web 0.0.27: the first start() builds the audio graph (AudioContext +
+      // worklet), so a failure there must reach the catch below, not escape unhandled.
+      await vadInstance.start();
       return { success: true };
     }
     decrementUsage('vad');
@@ -421,7 +421,7 @@ export async function stopVAD(sourceTabId?: number) {
   if (vadInstance) {
     try {
       logger.log("[SayPi VAD Handler] Stopping VAD...");
-      vadInstance.pause(); // Use pause, or destroy if it's a full stop
+      await vadInstance.pause(); // keeps the mic open (heldStreamOptions); destroy releases it
       // #420 — pause() with submitUserSpeechOnPause:false fires no callback, so reset
       // the tracker here to keep it idle between segments if a call stops mid-utterance.
       segmentStats.reset();
@@ -446,13 +446,13 @@ export function destroyVAD(sourceTabId?: number) {
   logger.log("[SayPi VAD Handler] Destroying VAD...");
   segmentStats.reset(); // #420 — don't carry segment state across a destroy
   if (vadInstance) {
-    vadInstance.destroy();
+    void destroyMicVad(vadInstance, (error) =>
+      logger.warn("[SayPi VAD Handler] MicVAD.destroy failed", error)
+    );
     vadInstance = null;
   }
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-    stream = null;
-  }
+  releaseMicStream(stream);
+  stream = null;
   currentVadTabId = null;
   resetUsageCounter('vad'); // Reset the counter completely
   

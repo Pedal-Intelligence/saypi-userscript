@@ -14,6 +14,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  */
 
 const { fakeVad, sendMessage } = vi.hoisted(() => {
+  // The VAD clients open the mic themselves (micStreamLifecycle); JSDOM has no getUserMedia.
+  Object.defineProperty(globalThis.navigator, "mediaDevices", {
+    configurable: true,
+    value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [] })) },
+  });
   const sendMessage = vi.fn();
   (globalThis as any).chrome = {
     runtime: {
@@ -30,7 +35,6 @@ const { fakeVad, sendMessage } = vi.hoisted(() => {
 vi.mock("@ricky0123/vad-web", () => ({
   MicVAD: { new: vi.fn(async () => fakeVad) },
 }));
-vi.mock("onnxruntime-web", () => ({ env: { logLevel: "error", wasm: {} } }));
 vi.mock("../../src/LoggingModule.js", () => ({
   logger: { log: vi.fn(), debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn(), reportError: vi.fn() },
 }));

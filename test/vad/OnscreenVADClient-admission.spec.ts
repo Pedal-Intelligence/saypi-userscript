@@ -11,6 +11,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
  */
 
 const { fakeVad, micVadNew } = vi.hoisted(() => {
+  // The VAD clients open the mic themselves (micStreamLifecycle); JSDOM has no getUserMedia.
+  Object.defineProperty(globalThis.navigator, "mediaDevices", {
+    configurable: true,
+    value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [] })) },
+  });
   const fakeVad = { start: vi.fn(), pause: vi.fn(), destroy: vi.fn() };
   return { fakeVad, micVadNew: vi.fn(async (_opts?: any) => fakeVad) };
 });
@@ -32,8 +37,10 @@ vi.mock("../../src/ui/VADStatusIndicator", () => ({
     }
   },
 }));
+const { browser } = vi.hoisted(() => ({ browser: { firefox: false } }));
 vi.mock("../../src/UserAgentModule", () => ({
-  getBrowserInfo: () => ({ name: "Chrome", isMobile: false }),
+  getBrowserInfo: () => ({ name: browser.firefox ? "Firefox" : "Chrome", isMobile: false }),
+  isFirefox: () => browser.firefox,
 }));
 vi.mock("../../src/chatbots/ChatbotIdentifier", () => ({
   ChatbotIdentifier: { identifyChatbot: () => "pi", isInDictationMode: () => false },
@@ -111,5 +118,46 @@ describe("#420 OnscreenVADClient admission gate + stat forwarding", () => {
       "vadStatusMisfire",
       "vadDetailAudioTooFaint"
     );
+  });
+});
+
+/**
+ * #655 — the in-page client is the Firefox path, and vad-web 0.0.31 broke it twice over:
+ *  - ORT 1.30 loads its `.mjs` glue with import(), which RequestInterceptor's fetch rewrite
+ *    can't redirect, so the old `public/` asset base (a directory the build doesn't have)
+ *    stopped being rescued. Assets must be addressed at the extension root.
+ *  - vad-web ≥0.0.27 no longer falls back from AudioWorklet to ScriptProcessor when the
+ *    worklet fails, which it always does in a Firefox content script. 0.0.24's silent
+ *    fallback is what Firefox actually ran, so Firefox must now ask for ScriptProcessor.
+ * The e2e-firefox smoke proves both in a real Firefox; these pin the options.
+ */
+describe("#655 OnscreenVADClient asset paths + audio processor", () => {
+  beforeEach(() => {
+    (global as any).chrome = {
+      runtime: { getURL: (p: string) => `moz-extension://test/${p}` },
+    };
+    micVadNew.mockClear();
+  });
+
+  afterEach(() => {
+    browser.firefox = false;
+    delete (global as any).chrome;
+  });
+
+  it("loads the model, ORT and the worklet from the extension root, not public/", async () => {
+    await new OnscreenVADClient().initialize({ preset: "balanced" });
+    expect(lastOptions().baseAssetPath).toBe("moz-extension://test/");
+    expect(lastOptions().onnxWASMBasePath).toBe("moz-extension://test/");
+  });
+
+  it("uses ScriptProcessor on Firefox, where the AudioWorklet can't run from a content script", async () => {
+    browser.firefox = true;
+    await new OnscreenVADClient().initialize({ preset: "balanced" });
+    expect(lastOptions().processorType).toBe("ScriptProcessor");
+  });
+
+  it("lets vad-web pick (AudioWorklet) in other in-page browsers", async () => {
+    await new OnscreenVADClient().initialize({ preset: "balanced" });
+    expect(lastOptions().processorType).toBe("auto");
   });
 });

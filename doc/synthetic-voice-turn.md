@@ -76,7 +76,7 @@ must say **VERDICT: usable** before `verify`. Full guide:
 
 - **Hooks:** `src/dev/devReload.ts` (`saypi:dev-feed-speech`, `saypi:dev-reload`).
 - **Synthetic mic:** `src/offscreen/synthetic-audio.ts` + `src/offscreen/vad_handler.ts`
-  (fed to `MicVAD.new({ stream })`); clip at `public/audio/synthetic-speech.wav`.
+  (handed to MicVAD in place of the mic via `getStream`); clip at `public/audio/synthetic-speech.wav`.
 - **SW hook (Layer 3):** `__saypiOffscreenTestHooks.feedSyntheticSpeech(tabId)` in
   `src/svc/background.ts`.
 - **Runners:** `scripts/layer4cdp.mjs` (real hosts), `e2e/` (hermetic).

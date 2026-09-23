@@ -13,7 +13,7 @@ import { dirname, resolve, basename } from "node:path";
 import { decodeWav } from "./lib/wav.mjs";
 // @ts-ignore
 import { summarize } from "./lib/metrics.mjs";
-import { loadV5Model, runClip, RUNNER_FRAME_MS } from "./lib/runner.ts";
+import { runClip, RUNNER_FRAME_MS } from "./lib/runner.ts";
 import { loadSileroModel } from "./lib/segmenter.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -21,16 +21,16 @@ const here = dirname(fileURLToPath(import.meta.url));
 //   npm run bench:vad -- corpus-real
 const corpusName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : "corpus";
 const corpusDir = resolve(here, corpusName);
-// Optional model variants (#655): `--model <onnx>` swaps in another Silero file with the v5
-// I/O contract (e.g. v6); `--context` feeds each frame the previous 64 samples, as upstream
-// Silero and vad-web ≥0.0.31 do (0.0.24, what ships, does not).
+// Optional model variants (#655). The default is what ships: Silero v6 via vad-web's wrapper.
+// `--model <onnx>` swaps in another file with the v5/v6 I/O contract; `--no-context` feeds
+// bare frames as vad-web 0.0.24 did (with the v5 file, that is the pre-#655 configuration).
 const flag = (name: string) => {
   const i = process.argv.indexOf(name);
   return i >= 0 ? process.argv[i + 1] : undefined;
 };
 const modelPath = flag("--model");
-const withContext = process.argv.includes("--context");
-const variant = [modelPath ? basename(modelPath, ".onnx") : "", withContext ? "ctx" : ""].filter(Boolean).join("+");
+const bareFrames = process.argv.includes("--no-context");
+const variant = [modelPath ? basename(modelPath, ".onnx") : "", bareFrames ? "bare" : ""].filter(Boolean).join("+");
 // The sweep is the set of presets the extension actually ships (#571 removed
 // `conservative`); `runClip` looks each name up in the real VAD_CONFIGS, so a name
 // that no longer exists there would silently benchmark as "no overrides".
@@ -45,7 +45,7 @@ async function main() {
     manifest.clips;
 
   process.stdout.write(`Loading Silero v5 model…\n`);
-  const model = modelPath || withContext ? await loadSileroModel(modelPath, { withContext }) : await loadV5Model();
+  const model = await loadSileroModel(modelPath, { bareFrames });
 
   const records: any[] = [];
   const perClip: any[] = [];

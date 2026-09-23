@@ -99,7 +99,7 @@
     ]
   },
   "dependencies": {
-    "@ricky0123/vad-web": "^0.0.24",
+    "@ricky0123/vad-web": "0.0.31",
     "axios": "^1.4.0",
     "chai": "^4.3.10",
     "cheerio": "^1.0.0-rc.12",
@@ -109,7 +109,7 @@
     "js-md5": "^0.8.3",
     "lodash": "^4.17.21",
     "lucide": "^0.536.0",
-    "onnxruntime-web": "1.14.0",
+    "onnxruntime-web": "1.30.0",
     "preact": "^10.29.2",
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",

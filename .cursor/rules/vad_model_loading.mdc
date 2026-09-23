@@ -11,15 +11,16 @@ alwaysApply: true
 
 - **Solution (current)**
   - In `src/RequestInterceptor.js`, do NOT rewrap `Response`/`Blob`.
-  - Patch `Response.prototype.arrayBuffer()` to copy into a same‑realm `ArrayBuffer` only for model URLs (`silero_*.onnx`).
+  - Patch `Response.prototype.arrayBuffer()` to copy into a same‑realm `ArrayBuffer` only for model URLs (the `filesToRedirect` list, which must name the model we load: `silero_vad_v6.onnx`).
   - Keep `Accept: application/wasm` for `.wasm`; skip forcing response headers to avoid cross‑realm issues.
 
 - **Alternative**
   - Use `src/vad/custom-model-fetcher.js` and pass as `modelFetcher` to `MicVAD.new({...})` to coerce the model buffer locally.
 
 - **Asset paths**
-  - `baseAssetPath` and `onnxWASMBasePath` must be `chrome.runtime.getURL("public/")`.
-  - Ensure `public/*` is listed in `manifest.json` `web_accessible_resources`.
+  - `baseAssetPath` and `onnxWASMBasePath` must be `chrome.runtime.getURL("")`: WXT copies `public/` to the build root. ORT ≥1.19 loads `ort-wasm-simd-threaded.mjs` with `import()`, which RequestInterceptor cannot redirect, so a wrong base fails outright.
+  - The assets must be in `web_accessible_resources` (wxt.config.ts).
+  - Firefox content scripts can't run vad-web's AudioWorklet; `OnscreenVADClient` requests `processorType: "ScriptProcessor"` there.
 
 - **Why not set Content-Type?**
   - `.onnx` Content-Type is irrelevant for `arrayBuffer()` and ORT. Rewrapping to set it introduces cross‑realm objects.
@@ -27,5 +28,5 @@ alwaysApply: true
 
 - **When changing VAD loading**
   - If removing the shim, wire `customModelFetcher` via VAD options (both onscreen and offscreen clients).
-  - Test Firefox desktop and Android: confirm model loads, no TypeError, VAD starts.
+  - Run `npm run e2e:build:firefox && npm run test:e2e:firefox` (starts the in-page VAD in headless Firefox), and check Firefox Android by hand.
 

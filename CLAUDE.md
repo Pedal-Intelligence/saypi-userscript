@@ -65,8 +65,8 @@ The layout is discoverable (`src/chatbots/`, `src/audio/`, `src/vad/`, `src/tts/
 > `public/` is the static-asset **source** dir (ONNX/WASM/icons), **not** build output. To inspect actual artifacts, run a build and list `.output/`. Never hand-edit `.output/`, `dist/`, `.wxt/`, or generated files in `public/`.
 
 **Binary assets (not counted toward AMO's 5MB non-binary limit):**
-- 4 WASM files - See [src/vad/README.md](src/vad/README.md) for why all 4 are required
-- 3 ONNX models - Silero VAD models for speech detection
+- 1 WASM file (`ort-wasm-simd-threaded.wasm`, ~14 MB, plus its small `.mjs` glue) - ONNX Runtime, copied from `node_modules` at build time; see [src/vad/README.md](src/vad/README.md)
+- 1 ONNX model (`silero_vad_v6.onnx`) - Silero VAD v6, committed in `public/`
 
 ### Testing
 
