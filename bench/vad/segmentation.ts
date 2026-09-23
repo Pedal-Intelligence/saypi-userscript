@@ -65,12 +65,18 @@ const shipped = (name: "balanced" | "highSensitivity"): SegmenterConfig => {
 const balanced = shipped("balanced");
 /** Balanced with an r-frame (r × 32 ms) silence tail. */
 const withR = (r: number, extra: Partial<SegmenterConfig> = {}): SegmenterConfig => ({ ...balanced, redemptionMs: r * FRAME_MS, ...extra });
+/**
+ * The pre-#655 tail. Latency columns are "extra vs this", so the tables stay comparable
+ * across the #655 tail change (the shipped `balanced` tail is 512 ms since then).
+ */
+const PRE_655 = withR(10);
 
 type Policy = { name: string; config: SegmenterConfig; hold?: { maxHeldSpeechMs: number; holdMs: number } };
 export const CONFIGS: Policy[] = [
-  { name: "balanced (shipped, 320ms)", config: balanced },
-  { name: "quiet mode (highSens, 384ms)", config: shipped("highSensitivity") },
-  { name: "balanced neg0.15", config: withR(10, { negativeSpeechThreshold: 0.15 }) },
+  { name: "tail 320ms (pre-#655)", config: PRE_655 },
+  { name: `balanced (shipped, ${balanced.redemptionMs}ms)`, config: balanced },
+  { name: `quiet mode (highSens, ${shipped("highSensitivity").redemptionMs}ms)`, config: shipped("highSensitivity") },
+  { name: "tail 320ms neg0.15", config: withR(10, { negativeSpeechThreshold: 0.15 }) },
   { name: "tail 448ms (r14)", config: withR(14) },
   { name: "tail 512ms (r16)", config: withR(16) },
   { name: "tail 640ms (r20)", config: withR(20) },
@@ -80,17 +86,17 @@ export const CONFIGS: Policy[] = [
   // out on purpose: that drops real one-word turns as misfires, which reads as "fewer short
   // fragments" when it is really lost speech — the #420 FRR finding.)
   { name: "0.5/0.35 thresholds, 768ms", config: withR(24, { positiveSpeechThreshold: 0.5, negativeSpeechThreshold: 0.35 }) },
-  // Adaptive hold on top of the shipped 320 ms tail: only short segments wait longer.
-  { name: "hold ≤700ms speech +448ms", config: balanced, hold: { maxHeldSpeechMs: 700, holdMs: 448 } },
-  { name: "hold ≤1s speech +448ms", config: balanced, hold: { maxHeldSpeechMs: 1000, holdMs: 448 } },
-  { name: "hold ≤1.5s speech +640ms", config: balanced, hold: { maxHeldSpeechMs: 1500, holdMs: 640 } },
+  // Adaptive hold on top of the pre-#655 320 ms tail: only short segments wait longer.
+  { name: "hold ≤700ms speech +448ms", config: PRE_655, hold: { maxHeldSpeechMs: 700, holdMs: 448 } },
+  { name: "hold ≤1s speech +448ms", config: PRE_655, hold: { maxHeldSpeechMs: 1000, holdMs: 448 } },
+  { name: "hold ≤1.5s speech +640ms", config: PRE_655, hold: { maxHeldSpeechMs: 1500, holdMs: 640 } },
   { name: "tail 448 + hold ≤1s +448ms", config: withR(14), hold: { maxHeldSpeechMs: 1000, holdMs: 448 } },
 ];
 
-/** Uploads under a policy, each with `heldMs` = extra wait vs the shipped 320 ms tail. */
+/** Uploads under a policy, each with `heldMs` = extra wait vs the pre-#655 320 ms tail. */
 async function uploadsFor(probs: Float32Array, p: Policy): Promise<Array<Segment & { heldMs: number }>> {
   const segs = await segmentProbs(probs, p.config);
-  const tailExtra = p.config.redemptionMs - balanced.redemptionMs;
+  const tailExtra = p.config.redemptionMs - PRE_655.redemptionMs;
   const out = p.hold ? coalesceShortSegments(segs, FRAME_MS, p.hold) : segs.map((s) => ({ ...s, heldMs: 0 }));
   return out.map((s: any) => ({ ...s, heldMs: s.heldMs + tailExtra }));
 }

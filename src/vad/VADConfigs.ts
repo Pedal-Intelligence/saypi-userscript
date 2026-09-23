@@ -62,7 +62,8 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     // Highly responsive: quiet/whispered speech (quiet mode, #437).
     positiveSpeechThreshold: 0.35, // opens on quieter speech than balanced
     negativeSpeechThreshold: 0.2,
-    redemptionMs: 384, //             12 frames of silence tail
+    redemptionMs: 576, //             18 frames of silence tail: longer than balanced, since
+    //                                   quiet speech dips under the bar more often
     minSpeechMs: 64, //               2 frames: accepts very short phrases
     preSpeechPadMs: 96, //            3 frames of pre-roll
     submitUserSpeechOnPause: false,
@@ -72,7 +73,12 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     // Default: every host and dictation (selectVADPreset).
     positiveSpeechThreshold: 0.4,
     negativeSpeechThreshold: 0.25,
-    redemptionMs: 320, //             10 frames of silence tail
+    // 16 frames of silence tail. Why 512 (#655): at 320 ms the VAD split spontaneous
+    // speech at ordinary 400–500 ms hesitations, so a Pi turn averaged ~5 uploads and ~45%
+    // of sub-second clips were mid-sentence cuts. On the AMI benchmark (bench/vad) with v6,
+    // 512 ms takes thoughts split from 22% to 16% and clips per turn from 2.47 to 2.02, for
+    // +192 ms on each turn's final upload; 640 ms buys 11% for +320 ms. 512 is the knee.
+    redemptionMs: 512,
     minSpeechMs: 96, //               3 frames
     preSpeechPadMs: 64, //            2 frames of pre-roll
     submitUserSpeechOnPause: false,

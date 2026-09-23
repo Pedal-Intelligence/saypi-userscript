@@ -2,8 +2,10 @@
 // Regenerate the pool of synthetic-speech clips used to drive a voice TURN with no
 // human at the mic (Layer 3 hermetic E2E + Layer 4 real-host loops). Each phrase is
 // baked to a deterministic 16 kHz / mono / 16-bit PCM WAV — the format Chromium's
-// fake-audio-capture wants and the Silero-v5 VAD prefers — with 0.5 s of trailing
-// silence so the VAD sees a clean speech→silence edge and fires `onSpeechEnd`.
+// fake-audio-capture wants and the Silero VAD prefers — with ~1.2 s of trailing
+// silence so the VAD sees a clean speech→silence edge and fires `onSpeechEnd`. It must
+// comfortably exceed the longest preset silence tail (576 ms, quiet mode, #655): Chromium's
+// fake-audio-capture LOOPS the file, so the silence inside it is all the VAD ever gets.
 //
 // macOS-only (uses the built-in `say` synthesizer) + ffmpeg. Never runs in CI — the
 // WAVs are committed. Output is bit-exact reproducible (`-map_metadata -1`,
@@ -111,7 +113,7 @@ function bake({ text, voice }, outPath) {
     "-c:a",
     "pcm_s16le",
     "-af",
-    "apad=pad_dur=0.5",
+    "apad=pad_dur=1.2",
     "-map_metadata",
     "-1",
     "-flags",

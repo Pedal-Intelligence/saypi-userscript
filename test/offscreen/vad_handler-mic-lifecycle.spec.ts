@@ -45,6 +45,7 @@ vi.mock("../../src/offscreen/media_coordinator", () => ({
 }));
 
 import { startVAD, stopVAD, destroyVAD } from "../../src/offscreen/vad_handler";
+import { VAD_CONFIGS } from "../../src/vad/VADConfigs";
 
 const lastOptions = () => micVadNew.mock.calls.at(-1)![0] as any;
 
@@ -129,10 +130,10 @@ describe("#655 offscreen VAD owns its mic + AudioContext and builds the graph at
 
   it("builds a re-created VAD with the preset carried on START, and falls back to balanced", async () => {
     await startVAD(1, { preset: "highSensitivity" });
-    expect(lastOptions()).toMatchObject({ positiveSpeechThreshold: 0.35, redemptionMs: 384 });
+    expect(lastOptions()).toMatchObject(VAD_CONFIGS.highSensitivity);
 
     destroyVAD(1);
     await startVAD(1);
-    expect(lastOptions()).toMatchObject({ positiveSpeechThreshold: 0.4, redemptionMs: 320 });
+    expect(lastOptions()).toMatchObject(VAD_CONFIGS.balanced);
   });
 });
