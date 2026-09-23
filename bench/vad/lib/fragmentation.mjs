@@ -33,7 +33,7 @@ export const SHORT_SPEECH_MS = 600;
  * "Short" is judged on the speech span, not the clip: the uploaded clip includes the
  * silence tail, so comparing clip lengths across tail settings is rigged (a 0.4 s "yes"
  * is a 0.8 s clip at a 320 ms tail and a 1.2 s clip at 768 ms). SHORT_SPEECH_MS = 600 ms
- * is what the server's "≤ 1 s" bucket holds under the shipped 320 ms tail + 64 ms pad.
+ * is what the server's "≤ 1 s" bucket held under the pre-#655 320 ms tail + 64 ms pad.
  */
 export function attributeSegmentsToUnits(segs, frameMs, words, acts, turns) {
   const f2s = (f) => (f * frameMs) / 1000;

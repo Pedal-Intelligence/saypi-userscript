@@ -13,8 +13,9 @@ import {
  * reviewed decision — and documents the invariant ordering between presets.
  *
  * #655 moved the presets onto Silero v6 (vad-web 0.0.31) with the thresholds unchanged, and
- * vad-web 0.0.27 turned the frame counts into milliseconds. The values below are the old
- * frame counts × 32 ms, so segmentation timing is unchanged by the upgrade itself.
+ * vad-web 0.0.27 turned the frame counts into milliseconds. #655 then lengthened the silence
+ * tails (balanced 320 → 512 ms, quiet mode 384 → 576 ms): a 320 ms tail cut spontaneous
+ * speech at ordinary 400–500 ms hesitations into several uploads.
  */
 
 describe("#420 VAD_CONFIGS preset values are locked", () => {
@@ -23,7 +24,7 @@ describe("#420 VAD_CONFIGS preset values are locked", () => {
       model: "v6",
       positiveSpeechThreshold: 0.35,
       negativeSpeechThreshold: 0.2,
-      redemptionMs: 384,
+      redemptionMs: 576,
       minSpeechMs: 64,
       preSpeechPadMs: 96,
       submitUserSpeechOnPause: false,
@@ -35,7 +36,7 @@ describe("#420 VAD_CONFIGS preset values are locked", () => {
       model: "v6",
       positiveSpeechThreshold: 0.4,
       negativeSpeechThreshold: 0.25,
-      redemptionMs: 320,
+      redemptionMs: 512,
       minSpeechMs: 96,
       preSpeechPadMs: 64,
       submitUserSpeechOnPause: false,
