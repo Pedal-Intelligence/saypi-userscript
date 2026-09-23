@@ -13,7 +13,6 @@ import {
   SegmentStatsTracker,
   admitSegment,
   DEFAULT_ADMISSION_CONFIG,
-  VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD,
 } from "./segmentAdmission";
 
 logger.debug("[SayPi OnscreenVADClient] Client loaded.");
@@ -100,7 +99,7 @@ export class OnscreenVADClient implements VADClientInterface {
 
   // #420 — accumulates each segment's speech-probability stats so the admission gate
   // (shared with the offscreen handler) can drop near-threshold non-speech.
-  private statsTracker = new SegmentStatsTracker(VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD);
+  private statsTracker = new SegmentStatsTracker(VAD_CONFIGS.balanced.positiveSpeechThreshold!);
 
   // Debounced sender for VAD frame events, max once per 100ms
   private debouncedSendFrameProcessed = debounce(
@@ -231,7 +230,7 @@ export class OnscreenVADClient implements VADClientInterface {
     // #420 — count speech frames against the active preset's positive threshold
     // (presets with no override fall back to vad-web's default bar).
     this.statsTracker.setPositiveSpeechThreshold(
-      VAD_CONFIGS[this.preset]?.positiveSpeechThreshold ?? VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD
+      VAD_CONFIGS[this.preset].positiveSpeechThreshold!
     );
 
     const mode = "onscreen";

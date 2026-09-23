@@ -23,13 +23,6 @@
 /** A 16 kHz Silero v5/v6 frame is 512 samples = 32 ms. Exposed for ms↔frame reasoning. */
 export const VAD_FRAME_MS = 32;
 
-/**
- * vad-web's own default positive ("this is speech") threshold: the bar the `none` preset
- * (no override) actually runs at, so it's the gate's fallback. It is 0.3 since vad-web
- * 0.0.27; it was 0.5 before, which is why this was once named for Silero v5. The spec
- * checks it against the installed library, so an upgrade that moves it fails loudly.
- */
-export const VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD = 0.3;
 
 export interface SegmentSpeechStats {
   /** Highest per-frame speech probability across the segment (0..1). The most robust signal. */
@@ -134,7 +127,8 @@ export class SegmentStatsTracker {
   private frames = 0;
   private speechFrames = 0;
 
-  constructor(positiveSpeechThreshold: number = VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD) {
+  /** `positiveSpeechThreshold`: the active preset's bar (every preset defines one). */
+  constructor(positiveSpeechThreshold: number) {
     this.positiveSpeechThreshold = positiveSpeechThreshold;
   }
 

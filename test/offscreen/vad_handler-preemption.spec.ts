@@ -100,8 +100,10 @@ describe("#320 vad_handler wiring: preemption + owner-guarded teardown", () => {
   });
 
   it("notifies the displaced tab on takeover, and a non-owner's stop/destroy does NOT tear down the shared VAD", async () => {
-    // Tab 1 starts a call.
+    // Tab 1 starts a call. Initialize warms the audio graph with one start→pause (#655);
+    // clear it so every pause below, including any from tab 2's takeover, is under test.
     await startVAD(1);
+    fakeVad.pause.mockClear();
 
     // Tab 2 starts a call → it wins the shared mic; tab 1 must be notified.
     await startVAD(2);
@@ -110,10 +112,6 @@ describe("#320 vad_handler wiring: preemption + owner-guarded teardown", () => {
       targetTabId: 1,
       origin: "offscreen-document",
     });
-
-    // Initialize warms the audio graph with one start→pause (#655); only calls made
-    // after this point are the ones under test.
-    fakeVad.pause.mockClear();
 
     // Tab 1 (now displaced) tears down its call. Neither its stop nor its destroy
     // may touch the shared VAD instance that tab 2 (the new owner) is using — that

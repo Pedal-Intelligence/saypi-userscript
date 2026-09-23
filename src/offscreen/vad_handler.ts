@@ -7,7 +7,6 @@ import {
   SegmentStatsTracker,
   admitSegment,
   DEFAULT_ADMISSION_CONFIG,
-  VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD,
 } from "../vad/segmentAdmission";
 import { resolveVadStream, type SyntheticAudioLatch } from "./synthetic-audio";
 import { createWarmMicVad, destroyMicVad, openVadAudio, releaseVadAudio, type VadAudio } from "../vad/micStreamLifecycle";
@@ -60,7 +59,7 @@ let activePreset: VADPreset = "balanced";
 // #420 — accumulates each segment's peak/mean speech probability + speech-frame count
 // from the per-frame VAD callbacks, so the admission gate can drop near-threshold
 // non-speech BEFORE the audio is serialised across the offscreen→content IPC.
-const segmentStats = new SegmentStatsTracker(VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD);
+const segmentStats = new SegmentStatsTracker(VAD_CONFIGS.balanced.positiveSpeechThreshold!);
 
 // DEV-only: when armed (via VAD_USE_SYNTHETIC_AUDIO), the next VAD init is fed a
 // bundled WAV instead of the live mic, so the agent can drive a voice turn with
@@ -258,14 +257,15 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
     logger.log("[SayPi VAD Handler] VAD already initialized.");
     return { success: true, mode: "existing" };
   }
+  // This init's own audio: on failure, release exactly what this attempt opened, even if a
+  // destroy + re-init replaced the module-level `vadAudio` meanwhile.
+  let audio: VadAudio | null = null;
   try {
     logger.log("[SayPi VAD Handler] Initializing VAD with default options...");
     const preset: VADPreset = initOptions.preset && VAD_CONFIGS[initOptions.preset] ? initOptions.preset : "balanced";
     const mergedOptions = { ...vadCallbackOptions, ...VAD_CONFIGS[preset], ...vadBundleOptions };
     // #420 — count speech frames against the active preset's positive threshold.
-    segmentStats.setPositiveSpeechThreshold(
-      VAD_CONFIGS[preset].positiveSpeechThreshold ?? VAD_LIBRARY_DEFAULT_POSITIVE_THRESHOLD
-    );
+    segmentStats.setPositiveSpeechThreshold(VAD_CONFIGS[preset].positiveSpeechThreshold!);
 
     mergedOptions.ortConfig = configureSingleThreadedOrt;
 
@@ -274,7 +274,8 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
     if (syntheticStream) {
       logger.log("[SayPi VAD Handler] Using synthetic audio stream (DEV — no live mic)");
     }
-    vadAudio = await openVadAudio(syntheticStream);
+    audio = await openVadAudio(syntheticStream);
+    vadAudio = audio;
 
     const optionSummary = Object.fromEntries(
       Object.entries({
@@ -292,15 +293,15 @@ async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
     );
 
     logger.debug("[SayPi VAD Handler] VAD option summary", optionSummary);
-    const audio = vadAudio;
-    vadInstance = await withOrtWarningRollup(() => createWarmMicVad(mergedOptions, audio));
+    const openedAudio = audio;
+    vadInstance = await withOrtWarningRollup(() => createWarmMicVad(mergedOptions, openedAudio));
     segmentStats.reset(); // drop any frames observed while warming the audio graph
     logger.log("[SayPi VAD Handler] MicVAD instance created with preset: " + preset);
     activePreset = preset;
     return { success: true, mode: preset };
   } catch (error: any) {
-    releaseVadAudio(vadAudio);
-    vadAudio = null;
+    releaseVadAudio(audio);
+    if (vadAudio === audio) vadAudio = null;
     logger.reportError(error, { function: 'initializeVAD' }, "VAD initialization failed");
     return { success: false, error: error.message || "VAD initialization error", mode: "failed" };
   }
