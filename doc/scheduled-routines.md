@@ -23,7 +23,10 @@ credentialed session.
    against the repo; files an issue per confirmed drift.
 3. **Dependency/security** — `npm audit --omit=dev` + `npm outdated`; issues for
    actionable findings only; never bumps anything itself.
-4. **Release readiness** — read-only `npm run release:plan`; reports unreleased
+4. **Release readiness** — `git fetch origin --tags` first (a fresh cloud checkout
+   has no local `v*` tags; without this, `release:plan`'s baseline lookup silently
+   falls back to the *entire* commit history instead of "since the last release" —
+   issue #665), then read-only `npm run release:plan`; reports unreleased
    user-facing merges. Opens release-candidate issues **only if** the founder has
    accepted Stage 1 of the release-delegation proposal on issue #523
    (`doc/release/delegation-criteria.md` once PR #538 lands).
@@ -77,7 +80,9 @@ is its first real exercise.
 > Do, in order: (1) backlog triage as chartered; (2) doc-drift spot-check, one issue
 > per confirmed drift per the Issue Authoring Standard; (3) `npm ci`, then
 > `npm audit --omit=dev` + `npm outdated`, issues for actionable findings only —
-> never bump a dependency yourself; (4) read-only `npm run release:plan`, reporting
+> never bump a dependency yourself; (4) `git fetch origin --tags` (a fresh checkout
+> has no local tags, which silently breaks the baseline below — issue #665), then
+> read-only `npm run release:plan`, reporting
 > unreleased user-facing merges — no RC issues unless #523 Stage 1 is founder-accepted; (5) `npm run release:status --
 > --json`, expecting SKIPPED without credentials; (6) the #534 credential-freshness
 > check if it exists. HARD RULES: never run Layer-4/real-host harnesses (layer4cdp,
