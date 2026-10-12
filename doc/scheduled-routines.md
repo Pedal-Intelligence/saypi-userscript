@@ -48,10 +48,21 @@ connected for cloud sessions) is cleared, and both routines exist:
 | Weekly maintenance | `trig_01VgDQW3FWV5Ln4HUutsHBRt` | `0 6 * * 1` |
 | Monthly constitution audit | `trig_01RoxWz7WbEqtHxe4y62A99M` | `30 6 1-7 * 1` |
 
-Both run `claude-sonnet-5` in the Default cloud environment against this repo, with
-tools limited to `Bash, Read, Glob, Grep, Edit, Write, TodoWrite` — no browser or MCP
-tools, which is the mechanical half of "provably excludes Layer 4". Manage them at
-https://claude.ai/code/routines.
+Both run `claude-sonnet-5` in the Default cloud environment against this repo.
+**Corrected 2026-10-12 (issue #654):** there is no tool allowlist on either trigger.
+Querying the trigger definitions directly (`mcp__Claude_Code_Remote__get_trigger` /
+`list_triggers`) shows both carry the full session tool surface — `Bash`, `Agent`,
+`Artifact`, `Workflow`, `ToolSearch`, `ScheduleWakeup`, `SendUserFile`, `Skill`,
+`ListAgents`, the `github` MCP server, plus nine more MCP connectors (`Google_Calendar`,
+`Slack`, `Gmail`, `Google_Drive`, `Figma`, `Vercel`, `Linear`, `Claude_Code_Remote`,
+`Format`) each with an empty `permitted_tools` (i.e. unrestricted). There is **no
+mechanical exclusion of Layer 4** — `Bash` alone is sufficient to invoke
+`layer4cdp`/`dev-rig`/the sweeps. The "never run Layer-4, never message a live chat
+host" guarantee is enforced entirely by this file's routine prompt (the HARD RULES
+each fired session is instructed to follow), the same trust basis as every other
+"never" in `AGENTS.md`, not a tool-level allowlist. Treat "hermetic" as a prompted
+behavior, not a provable one, until/unless the trigger's `mcp_connections` are
+actually pared down. Manage the triggers at https://claude.ai/code/routines.
 
 To (re)create one, use the `RemoteTrigger` tool with `action: "create"` and the prompt
 below. **The repository goes in `job_config.ccr.session_context.sources`**, as
